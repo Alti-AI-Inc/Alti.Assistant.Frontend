@@ -94,7 +94,7 @@ export default function Component() {
         </div>
       ) : (
         <div className="flex h-screen w-full items-center justify-center bg-white">
-          <div className="flex min-w-md items-center justify-center">
+          <div className="flex w-full max-w-md items-center justify-center">
             <div className="rounded-large flex w-full max-w-lg flex-col gap-4 px-8 pt-6 pb-10">
               <p className="pb-4 text-center text-3xl font-semibold">
                 Register
