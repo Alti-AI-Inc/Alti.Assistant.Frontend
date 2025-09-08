@@ -225,7 +225,7 @@ const SideNav = ({
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Apps
+               Connect apps
               </span>
             </Button>
             <Button
@@ -236,7 +236,7 @@ const SideNav = ({
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Knowledge
+               My knowledge
               </span>
             </Button>
 
