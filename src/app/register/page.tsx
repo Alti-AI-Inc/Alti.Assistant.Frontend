@@ -162,7 +162,7 @@ export default function Component() {
                   </Button>
                 </form>
               </Form>
-              <p className="text-small flex items-center space-x-2 text-center">
+              <p className="text-small flex items-center space-x-2 justify-center text-center">
                 <span>Already have an account?</span>
                 <Link href="/login" className="text-[#00f] underline">
                   Login
