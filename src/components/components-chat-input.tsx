@@ -9,17 +9,17 @@ import { Input } from './ui/input';
 const options = [
   {
     id: 1,
-    title: 'Deep research',
+    title: 'Research',
     value: 'deep-research',
   },
   {
     id: 2,
-    title: 'Code generation',
+    title: 'Code',
     value: 'code-generation',
   },
   {
     id: 3,
-    title: 'Task automation',
+    title: 'Task',
     value: 'task-automation',
   },
 ];
