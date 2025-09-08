@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
 import {
   BookA,
+  BotMessageSquare,
   ChevronDown,
   CircleDollarSign,
   EllipsisVertical,
@@ -229,6 +230,17 @@ const SideNav = ({
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
                 My knowledge
+              </span>
+            </Button>
+            <Button
+              onClick={() => router.push('/my-chatbots')}
+              className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+            >
+              <BotMessageSquare />{' '}
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                My chatbots
               </span>
             </Button>
 
