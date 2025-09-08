@@ -1,12 +1,5 @@
 import { create } from 'zustand';
 
-export type ModalType =
-  | 'logout'
-  | 'change-password'
-  | 'search-chats'
-  | 'rename-chat'
-  | null;
-
 interface ModalStore {
   isOpen: boolean;
   type: ModalType;
