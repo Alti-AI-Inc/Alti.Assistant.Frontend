@@ -59,7 +59,7 @@ export function ChatInputComponent() {
             <div className="flex items-center space-x-2">
               <div className="flex justify-center">
                 <label htmlFor="file-input-alt" className="">
-                  <Plus className="cursor-pointer rounded-full border-2 border-gray-300 size-7.5 p-0.5" />
+                  <Plus className="cursor-pointer rounded-full border-2 border-gray-300 size-6 p-0.5" />
                 </label>
                 <Input
                   type="file"
@@ -75,7 +75,7 @@ export function ChatInputComponent() {
                 <Button
                   key={option.id}
                   className={cn(
-                    'text-black h-auto rounded-full border border-gray-300 hover:text-white bg-white py-1 text-sm font-normal',
+                    'text-black h-6 rounded-full border border-gray-300 hover:text-white bg-white py-1 text-sm font-normal',
 
                     {
                       'bg-black text-white text-sm': option.value === selectedOption,
@@ -91,10 +91,10 @@ export function ChatInputComponent() {
               {message ? (
                 <ArrowRight
                   type="submit"
-                  className="size-7.5 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
+                  className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
                 />
               ) : (
-                <Mic className="size-7.5 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white" />
+                <Mic className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white" />
               )}
             </div>
           </div>
