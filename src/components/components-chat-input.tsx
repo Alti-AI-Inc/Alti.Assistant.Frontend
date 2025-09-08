@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { ArrowRight, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from './ui/button';
+import { Input } from './ui/input';
 
 const options = [
   {
@@ -39,24 +40,23 @@ export function ChatInputComponent() {
     <div className="mx-auto w-full max-w-3xl">
       <form onSubmit={handleSubmit}>
         <div className="rounded-2xl border-2 border-gray-200 px-4 shadow-sm">
-          <input
-            type="file"
+          <Input
+            type="text"
+            placeholder='Chat with alti'
             className="min-h-12 w-full border-none px-2 py-2 shadow-none outline-none focus-visible:ring-0"
           />
           <div className="flex items-end justify-between py-2">
             <div className="flex items-center space-x-2">
               <div className="flex justify-center">
-                <label
-                  htmlFor="file-input-alt"
-                  className=""
-                >
+                <label htmlFor="file-input-alt" className="">
                   <Plus className="cursor-pointer rounded-full border-2 border-gray-300 p-0.5" />
                 </label>
-                <input
+                <Input
                   type="file"
                   // multiple
                   // onChange={handleFileSelect}
-                  className="hidden"
+                  className="hidden placeholder:hidden"
+                  placeholder=''
                   id="file-input-alt"
                 />
               </div>
