@@ -142,7 +142,7 @@ export default function Component() {
             </p>
           </div>
         </div>
-        <div className="hidden translate-x-[20%] items-center justify-center lg:flex">
+        {/* <div className="hidden translate-x-[20%] items-center justify-center lg:flex">
           <video
             src="/assets/login-register.mov"
             autoPlay
@@ -150,7 +150,7 @@ export default function Component() {
             muted
             className="h-[350px] object-cover object-left"
           ></video>
-        </div>
+        </div> */}
       </div>
     </>
   );
