@@ -1,5 +1,4 @@
 'use client';
-import RenameChat from '@/components/RenameChat';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,8 +6,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useModalStore } from '@/stores/useModalStore';
 import { EllipsisVertical, Pencil, Share, Trash2 } from 'lucide-react';
-import { useState } from 'react';
 
 type Chat = {
   id: number;
@@ -16,77 +15,56 @@ type Chat = {
   descritpion: string;
 };
 
+const chats: Chat[] = [
+  {
+    id: 1,
+    title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
+    descritpion:
+      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
+  },
+  {
+    id: 2,
+    title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
+    descritpion:
+      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
+  },
+  {
+    id: 3,
+    title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
+    descritpion:
+      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
+  },
+  {
+    id: 4,
+    title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
+    descritpion:
+      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
+  },
+  {
+    id: 5,
+    title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
+    descritpion:
+      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
+  },
+  {
+    id: 6,
+    title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
+    descritpion:
+      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
+  },
+  {
+    id: 7,
+    title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
+    descritpion:
+      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
+  },
+];
+
 const Page = () => {
-  const [chats, setChats] = useState<Chat[]>([
-    {
-      id: 1,
-      title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-      descritpion:
-        ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
-    },
-    {
-      id: 2,
-      title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-      descritpion:
-        ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
-    },
-    {
-      id: 3,
-      title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-      descritpion:
-        ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
-    },
-    {
-      id: 4,
-      title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-      descritpion:
-        ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
-    },
-    {
-      id: 5,
-      title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-      descritpion:
-        ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
-    },
-    {
-      id: 6,
-      title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-      descritpion:
-        ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
-    },
-    {
-      id: 7,
-      title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-      descritpion:
-        ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
-    },
-  ]);
-  const [renameChatModalOpen, setRenameChatModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<number | null>(null);
-
-  const handleRenameChatClick = (item: Chat) => {
-    setRenameChatModalOpen(true);
-    setSelectedItem(item.id);
-  };
-
-  const handleRenameChat = (title: string) => {
-    setChats(prevChats =>
-      prevChats.map(chat =>
-        chat.id === selectedItem ? { ...chat, title } : chat,
-      ),
-    );
-    setRenameChatModalOpen(false);
-  };
+  const { onOpen } = useModalStore();
 
   return (
     <>
-      <RenameChat
-        open={renameChatModalOpen}
-        setOpen={setRenameChatModalOpen}
-        title={chats.find(chat => chat.id === selectedItem)?.title || ''}
-        setTitle={handleRenameChat}
-      />
-
       <div className="grid grid-cols-1 gap-4 p-6 sm:grid-cols-2 md:grid-cols-3">
         {chats.map(chat => (
           <div
@@ -103,15 +81,14 @@ const Page = () => {
                   <DropdownMenuItem>
                     <Share className="text-black" /> Share
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="relative">
-                    <Pencil className="text-black" />{' '}
-                    <div>
-                      <span
-                        className="absolute inset-0"
-                        onClick={() => handleRenameChatClick(chat)}
-                      ></span>
-                      Rename
-                    </div>
+                  <DropdownMenuItem
+                    onClick={() =>
+                      onOpen({
+                        type: 'rename-chat',
+                      })
+                    }
+                  >
+                    <Pencil className="text-black" /> Rename
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
 
@@ -122,7 +99,7 @@ const Page = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <h2 className="line-clamp-1 font-bold mt-6">{chat.title}</h2>
+            <h2 className="mt-6 line-clamp-1 font-bold">{chat.title}</h2>
             <p className="line-clamp-2">{chat.descritpion}</p>
           </div>
         ))}

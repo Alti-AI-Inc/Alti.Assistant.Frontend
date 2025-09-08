@@ -7,18 +7,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { useModalStore } from '@/stores/useModalStore';
 import { useRouter } from 'next/navigation';
 
-export function Logout({
-  open,
-  setOpen,
-}: {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export function Logout() {
+  const { onClose, isOpen } = useModalStore();
   const router = useRouter();
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       {/* <DialogTrigger asChild>
         <Button className="w-full justify-start">Logout</Button>
       </DialogTrigger> */}
@@ -27,12 +23,19 @@ export function Logout({
           <DialogTitle>Logout</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 pt-4">
-          <h1 className="">
-            Are you sure you want to logout?
-          </h1>
-          <div className="flex w-full justify-end mt-4 gap-4">
-            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button onClick={() => router.push('/')}>Logout</Button>
+          <h1 className="">Are you sure you want to logout?</h1>
+          <div className="mt-4 flex w-full justify-end gap-4">
+            <Button variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                router.push('/');
+                onClose();
+              }}
+            >
+              Logout
+            </Button>
           </div>
         </div>
       </DialogContent>

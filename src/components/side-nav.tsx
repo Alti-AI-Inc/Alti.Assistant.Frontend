@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { useModalStore } from '@/stores/useModalStore';
 import {
   BookA,
   ChevronDown,
@@ -28,8 +29,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { Logout } from './logout';
-import SearchChats from './SearchChats';
 import { Button } from './ui/button';
 
 const previousChatHistory = [
@@ -120,9 +119,8 @@ const SideNav = ({
   toggleSidebar: Dispatch<SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
+  const { onOpen } = useModalStore();
   const [logoHovered, setLogoHovered] = useState(false);
-  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
-  const [searchChatModalOpen, setSearchChatModalOpen] = useState(false);
 
   const handleLogoMouseEnter = () => {
     if (hideSidebar) {
@@ -131,15 +129,6 @@ const SideNav = ({
   };
   return !isLoggeIn ? (
     <>
-      {logoutModalOpen && (
-        <Logout open={logoutModalOpen} setOpen={setLogoutModalOpen} />
-      )}
-      {searchChatModalOpen && (
-        <SearchChats
-          open={searchChatModalOpen}
-          setOpen={setSearchChatModalOpen}
-        />
-      )}
       <nav className={cn(!hideSidebar && 'overflow-y-scroll')}>
         <div className="bg-secondary sticky top-0 z-30 pt-4 pb-2">
           <div
@@ -194,9 +183,12 @@ const SideNav = ({
                 New chat
               </span>
             </Button>
-            {/* <SearchChats hideSidebar={hideSidebar} /> */}
             <Button
-              onClick={() => setSearchChatModalOpen(true)}
+              onClick={() =>
+                onOpen({
+                  type: 'search-chats',
+                })
+              }
               className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
             >
               <Search />{' '}
@@ -225,7 +217,7 @@ const SideNav = ({
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-               Connect apps
+                Connect apps
               </span>
             </Button>
             <Button
@@ -236,7 +228,7 @@ const SideNav = ({
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-               My knowledge
+                My knowledge
               </span>
             </Button>
 
@@ -316,7 +308,13 @@ const SideNav = ({
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={() => setLogoutModalOpen(true)}>
+                <DropdownMenuItem
+                  onClick={() =>
+                    onOpen({
+                      type: 'logout',
+                    })
+                  }
+                >
                   <LogOut className="text-black" /> Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
