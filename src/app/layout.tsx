@@ -1,4 +1,3 @@
-import { ThemeProvider } from '@/components/theme-provider';
 import type { Metadata } from 'next';
 import { Exo_2 } from 'next/font/google';
 import './globals.css';
@@ -21,14 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistExo2.variable} bg-secondary antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   );
