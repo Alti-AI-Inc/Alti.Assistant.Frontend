@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import {
+  BookA,
   ChevronDown,
   CircleDollarSign,
   EllipsisVertical,
@@ -20,7 +21,7 @@ import {
   Settings,
   Share,
   SquarePen,
-  Trash2
+  Trash2,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -193,14 +194,25 @@ const SideNav = ({
               </span>
             </Button>
             <Button
-              onClick={() => router.push('/saved-chats')}
+              onClick={() => router.push('/apps')}
               className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
             >
-             <LayoutGrid />{' '}
+              <LayoutGrid />{' '}
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
                 Apps
+              </span>
+            </Button>
+            <Button
+              onClick={() => router.push('/knowledge')}
+              className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+            >
+              <BookA />{' '}
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                Knowledge
               </span>
             </Button>
 
