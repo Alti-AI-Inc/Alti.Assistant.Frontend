@@ -255,7 +255,7 @@ const SideNav = ({
           </div>
         </div>
         <div
-          className={cn('flex flex-1 flex-col px-4', hideSidebar && 'hidden')}
+          className={cn('flex flex-1 bg-secondary flex-col px-4', hideSidebar && 'hidden')}
         >
           <div className="mt-2">
             {previousChatHistory.map(chat => (

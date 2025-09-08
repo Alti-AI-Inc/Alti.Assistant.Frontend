@@ -1,4 +1,5 @@
 import { ModalProvider } from '@/components/modals/ModalProvider';
+import Providers from '@/components/Providers';
 import type { Metadata } from 'next';
 import { Exo_2 } from 'next/font/google';
 import './globals.css';
@@ -20,9 +21,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistExo2.variable} bg-secondary antialiased`}>
-        {children}
-        <ModalProvider/>
+      <body className={`${geistExo2.variable} antialiased`}>
+        <Providers>
+          {children}
+          <ModalProvider />
+        </Providers>
       </body>
     </html>
   );

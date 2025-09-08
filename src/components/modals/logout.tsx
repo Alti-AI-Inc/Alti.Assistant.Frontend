@@ -8,16 +8,22 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useModalStore } from '@/stores/useModalStore';
+import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export function Logout() {
   const { onClose, isOpen } = useModalStore();
   const router = useRouter();
+
+  const handleLogOut = async () => {
+    await signOut({
+      redirect: false,
+    });
+    router.push('/login');
+    onClose();
+  };
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      {/* <DialogTrigger asChild>
-        <Button className="w-full justify-start">Logout</Button>
-      </DialogTrigger> */}
       <DialogContent className="sm:max-w-[380px]">
         <DialogHeader>
           <DialogTitle>Logout</DialogTitle>
@@ -28,14 +34,7 @@ export function Logout() {
             <Button variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button
-              onClick={() => {
-                router.push('/');
-                onClose();
-              }}
-            >
-              Logout
-            </Button>
+            <Button onClick={handleLogOut}>Logout</Button>
           </div>
         </div>
       </DialogContent>
