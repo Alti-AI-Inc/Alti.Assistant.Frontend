@@ -11,9 +11,8 @@ import { cn } from '@/lib/utils';
 import {
   ChevronDown,
   CircleDollarSign,
-  CircleUserRound,
   EllipsisVertical,
-  House,
+  LayoutGrid,
   LogOut,
   MessageSquare,
   PanelLeftClose,
@@ -21,8 +20,7 @@ import {
   Settings,
   Share,
   SquarePen,
-  SquareUserRound,
-  Trash2,
+  Trash2
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -153,7 +151,7 @@ const SideNav = ({
               ) : (
                 <Link href="/">
                   <Image
-                    src="/assets/Icon Logo Black.png"
+                    src="/assets/logo-icon.png"
                     alt="logo"
                     height={25}
                     width={25}
@@ -195,38 +193,17 @@ const SideNav = ({
               </span>
             </Button>
             <Button
-              onClick={() => router.push('/saved-listings')}
+              onClick={() => router.push('/saved-chats')}
               className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
             >
-              <House />{' '}
+             <LayoutGrid />{' '}
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Saved listings
+                Apps
               </span>
             </Button>
-            <Button
-              onClick={() => router.push('/saved-listings')}
-              className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <SquareUserRound />{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Real estate agents
-              </span>
-            </Button>
-            <Button
-              onClick={() => router.push('/saved-listings')}
-              className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <CircleUserRound />{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Mortgage brokers
-              </span>
-            </Button>
+
             <div
               className={cn(
                 'mt-10 pl-4 text-sm text-gray-500',

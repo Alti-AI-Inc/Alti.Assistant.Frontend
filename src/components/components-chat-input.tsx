@@ -1,31 +1,31 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from './ui/button';
 
 const options = [
   {
     id: 1,
-    title: 'Buy',
-    value: 'buy',
+    title: 'Deep research',
+    value: 'deep-research',
   },
   {
     id: 2,
-    title: 'Sell',
-    value: 'sell',
+    title: 'Code generation',
+    value: 'code-generation',
   },
   {
     id: 3,
-    title: 'Mortgage',
-    value: 'mortgage',
+    title: 'Task automation',
+    value: 'task-automation',
   },
 ];
 
 export function ChatInputComponent() {
   const [message, setMessage] = useState('');
-  const [selectedOption, setSelectedOption] = useState(options[0].value);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,11 +40,27 @@ export function ChatInputComponent() {
       <form onSubmit={handleSubmit}>
         <div className="rounded-2xl border-2 border-gray-200 px-4 shadow-sm">
           <input
+            type="file"
             className="min-h-12 w-full border-none px-2 py-2 shadow-none outline-none focus-visible:ring-0"
-            placeholder="Chat with real home"
           />
           <div className="flex items-end justify-between py-2">
             <div className="flex items-center space-x-2">
+              <div className="flex justify-center">
+                <label
+                  htmlFor="file-input-alt"
+                  className=""
+                >
+                  <Plus className="cursor-pointer rounded-full border-2 border-gray-300 p-0.5" />
+                </label>
+                <input
+                  type="file"
+                  // multiple
+                  // onChange={handleFileSelect}
+                  className="hidden"
+                  id="file-input-alt"
+                />
+              </div>
+              {/* <Plus className="cursor-pointer rounded-full border-2 border-gray-300 p-0.5" /> */}
               {options.map(option => (
                 <Button
                   key={option.id}
