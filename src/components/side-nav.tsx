@@ -176,7 +176,7 @@ const SideNav = ({
 
             <PanelLeftClose
               className={cn(
-                'size-5 cursor-pointer text-black transition-transform duration-300',
+                'size-5 cursor-pointer text-gray-500 transition-transform duration-300',
                 hideSidebar && 'hidden',
               )}
               onClick={() => toggleSidebar(pre => !pre)}
