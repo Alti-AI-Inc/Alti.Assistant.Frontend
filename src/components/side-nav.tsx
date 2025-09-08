@@ -18,6 +18,7 @@ import {
   MessageSquare,
   PanelLeftClose,
   Pencil,
+  Search,
   Settings,
   Share,
   SquarePen,
@@ -27,6 +28,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
+import { Logout } from './logout';
 import SearchChats from './SearchChats';
 import { Button } from './ui/button';
 
@@ -119,6 +121,8 @@ const SideNav = ({
 }) => {
   const router = useRouter();
   const [logoHovered, setLogoHovered] = useState(false);
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+  const [searchChatModalOpen, setSearchChatModalOpen] = useState(false);
 
   const handleLogoMouseEnter = () => {
     if (hideSidebar) {
@@ -127,6 +131,15 @@ const SideNav = ({
   };
   return !isLoggeIn ? (
     <>
+      {logoutModalOpen && (
+        <Logout open={logoutModalOpen} setOpen={setLogoutModalOpen} />
+      )}
+      {searchChatModalOpen && (
+        <SearchChats
+          open={searchChatModalOpen}
+          setOpen={setSearchChatModalOpen}
+        />
+      )}
       <nav className={cn(!hideSidebar && 'overflow-y-scroll')}>
         <div className="bg-secondary sticky top-0 z-30 pt-4 pb-2">
           <div
@@ -145,7 +158,7 @@ const SideNav = ({
               {logoHovered && hideSidebar ? (
                 <PanelLeftClose
                   className={cn(
-                    'size-6 cursor-pointer p-0.5 text-gray-500 transition-transform duration-300',
+                    'size-[21px] cursor-pointer text-black transition-transform duration-300',
                   )}
                   onClick={() => toggleSidebar(pre => !pre)}
                 />
@@ -154,8 +167,8 @@ const SideNav = ({
                   <Image
                     src="/assets/logo-icon.png"
                     alt="logo"
-                    height={25}
-                    width={25}
+                    height={20}
+                    width={20}
                   />
                 </Link>
               )}
@@ -163,13 +176,13 @@ const SideNav = ({
 
             <PanelLeftClose
               className={cn(
-                'size-5 cursor-pointer text-gray-500 transition-transform duration-300',
+                'size-5 cursor-pointer text-black transition-transform duration-300',
                 hideSidebar && 'hidden',
               )}
               onClick={() => toggleSidebar(pre => !pre)}
             />
           </div>
-          <div className={cn('space-y-0.5 px-1 pt-10', hideSidebar && 'px-0')}>
+          <div className={cn('space-y-0.5 px-1 pt-6', hideSidebar && 'px-0')}>
             <Button
               onClick={() => router.push('/')}
               className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
@@ -181,7 +194,18 @@ const SideNav = ({
                 New chat
               </span>
             </Button>
-            <SearchChats hideSidebar={hideSidebar} />
+            {/* <SearchChats hideSidebar={hideSidebar} /> */}
+            <Button
+              onClick={() => setSearchChatModalOpen(true)}
+              className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+            >
+              <Search />{' '}
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                Search chats
+              </span>
+            </Button>
             <Button
               onClick={() => router.push('/saved-chats')}
               className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
@@ -218,7 +242,7 @@ const SideNav = ({
 
             <div
               className={cn(
-                'mt-10 pl-4 text-sm text-gray-500',
+                'mt-6 pl-4 text-sm text-gray-500',
                 hideSidebar && 'hidden',
               )}
             >
@@ -292,7 +316,7 @@ const SideNav = ({
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLogoutModalOpen(true)}>
                   <LogOut className="text-black" /> Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -91,7 +91,7 @@ const Page = () => {
         {chats.map(chat => (
           <div
             key={chat.id}
-            className="group relative mt-6 space-y-2 rounded-md bg-gray-100 p-6"
+            className="group relative space-y-2 rounded-md bg-gray-100 p-6"
           >
             <div className="absolute top-2 right-2">
               <DropdownMenu>
@@ -122,7 +122,7 @@ const Page = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <h2 className="line-clamp-1 pt-4 font-bold">{chat.title}</h2>
+            <h2 className="line-clamp-1 font-bold mt-6">{chat.title}</h2>
             <p className="line-clamp-2">{chat.descritpion}</p>
           </div>
         ))}

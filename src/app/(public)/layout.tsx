@@ -15,8 +15,8 @@ export default function PublicLayout({
       <div className="flex flex-wrap">
         <div
           className={cn(
-            'sticky top-0 left-0 flex h-screen w-72 flex-none flex-col transition-all duration-300 ease-in-out',
-            hideSidebar ? 'w-10' : 'w-72',
+            'sticky top-0 left-0 flex h-screen w-68 flex-none flex-col transition-all duration-300 ease-in-out',
+            hideSidebar ? 'w-10' : 'w-68',
           )}
         >
           <SideNav hideSidebar={hideSidebar} toggleSidebar={toggleSidebar} />
