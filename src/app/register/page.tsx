@@ -22,6 +22,7 @@ const formSchema = z.object({
   }),
 });
 
+// import { RegisterUser } from '@/actions/register';
 import { RegisterUser } from '@/actions/register';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -48,6 +49,18 @@ export default function Component() {
     console.log({ values });
 
     try {
+      //  const res = await fetch(
+      //   `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+      //   {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify({ email:values.email, password:values.password, confirmPassword:values.confirmPassword }),
+      //   },
+      // );
+      // const data = await res.json();
+      // console.log(data);
       const response = await RegisterUser({
         email: values.email,
         password: values.password,
