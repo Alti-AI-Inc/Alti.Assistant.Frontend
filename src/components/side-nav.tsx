@@ -122,7 +122,7 @@ const SideNav = ({
 }) => {
   const { data } = useSession();
   const userId = data?.user?.id;
-  // console.log(data?.user?.id);
+  // console.log(data?.accessToken);
   const router = useRouter();
   const { onOpen } = useModalStore();
   const [logoHovered, setLogoHovered] = useState(false);

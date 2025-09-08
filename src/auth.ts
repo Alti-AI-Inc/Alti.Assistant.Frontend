@@ -1,6 +1,17 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
+declare module 'next-auth' {
+  interface User {
+    accessToken?: string;
+    id?: string;
+  }
+  interface Session {
+    accessToken?: string;
+    user: User;
+  }
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
@@ -10,7 +21,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        console.log('credentials in auth ts ---->', { credentials });
         if (!credentials?.email || !credentials?.password) return null;
         try {
           const response = await fetch(
@@ -28,10 +38,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           );
           if (!response.ok) return null;
           const user = await response.json();
-          console.log('user in auth ts ---->', user);
+
           return {
-            id: user._id,
-            accessToken: user.accessToken,
+            id: user.data._id,
+            accessToken: user.data.accessToken,
           };
         } catch (error) {
           console.log(error);
@@ -42,19 +52,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   pages: {
     signIn: '/login',
-    // signOut:'/login',
-    // signUp:'/register'
   },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.accessToken = user.accessToken as string;
       }
       return token;
     },
     async session({ session, token }) {
       session.user.id = token.id as string;
-      // token=user.accessToken
+      session.accessToken = token.accessToken as string;
       return session;
     },
   },
