@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
 import {
   BookA,
-  BotMessageSquare,
+  Bot,
   ChevronDown,
   CircleDollarSign,
   EllipsisVertical,
@@ -24,7 +24,7 @@ import {
   Settings,
   Share,
   SquarePen,
-  Trash2,
+  Trash2
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -236,7 +236,7 @@ const SideNav = ({
               onClick={() => router.push('/my-chatbots')}
               className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
             >
-              <BotMessageSquare />{' '}
+             <Bot />{' '}
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
