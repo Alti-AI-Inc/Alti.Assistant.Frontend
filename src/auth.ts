@@ -30,8 +30,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const user = await response.json();
           console.log('user in auth ts ---->', user);
           return {
-            id: user.id,
-            email: user.email,
+            id: user._id,
+            accessToken: user.accessToken,
           };
         } catch (error) {
           console.log(error);
@@ -54,6 +54,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }) {
       session.user.id = token.id as string;
+      // token=user.accessToken
       return session;
     },
   },

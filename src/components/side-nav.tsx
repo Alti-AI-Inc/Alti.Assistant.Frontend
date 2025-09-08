@@ -24,8 +24,9 @@ import {
   Settings,
   Share,
   SquarePen,
-  Trash2
+  Trash2,
 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -119,6 +120,9 @@ const SideNav = ({
   hideSidebar: boolean;
   toggleSidebar: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const { data } = useSession();
+  const userId = data?.user?.id;
+  // console.log(data?.user?.id);
   const router = useRouter();
   const { onOpen } = useModalStore();
   const [logoHovered, setLogoHovered] = useState(false);
@@ -236,7 +240,7 @@ const SideNav = ({
               onClick={() => router.push('/my-chatbots')}
               className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
             >
-             <Bot />{' '}
+              <Bot />{' '}
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
@@ -255,7 +259,10 @@ const SideNav = ({
           </div>
         </div>
         <div
-          className={cn('flex flex-1 bg-secondary flex-col px-4', hideSidebar && 'hidden')}
+          className={cn(
+            'bg-secondary flex flex-1 flex-col px-4',
+            hideSidebar && 'hidden',
+          )}
         >
           <div className="mt-2">
             {previousChatHistory.map(chat => (
@@ -293,13 +300,25 @@ const SideNav = ({
             hideSidebar && 'hidden',
           )}
         >
-          {isLoggeIn ? (
+          {!userId ? (
             <div className="flex items-center space-x-2">
-              <Button variant="default" className="w-20 bg-gray-200 text-black">
-                Login
+              <Button
+                variant="default"
+                className="relative w-20 bg-black text-white"
+              >
+                <Link href="/login">
+                  Login
+                  <span className="absolute inset-0"></span>
+                </Link>
               </Button>
-              <Button variant="default" className="w-20 bg-gray-200 text-black">
-                Register
+              <Button
+                variant="default"
+                className="relative w-20 bg-black text-white"
+              >
+                <Link href="/register">
+                  Register
+                  <span className="absolute inset-0"></span>
+                </Link>
               </Button>
             </div>
           ) : (

@@ -43,21 +43,21 @@ export default function Component() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+
     try {
       const response = await signIn('credentials', {
         email: values.email,
         password: values.password,
         redirect: false,
       });
-      console.log({ response });
+      // console.log({ response });
       if (response.ok) {
         router.push('/');
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   }
   return (
