@@ -3,7 +3,7 @@
 import { getTranscription } from '@/actions/transcription';
 // import { getTranscription } from '@/actions/transcription';
 import { motion } from 'framer-motion';
-import { ArrowUp, LoaderCircle, Mic } from 'lucide-react';
+import { ArrowUp, LoaderCircle, Mic, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRef, useState } from 'react';
 
@@ -19,9 +19,12 @@ export default function AudioRecorder({
     null,
   );
   const audioChunks = useRef<Blob[]>([]);
+  const cancelRef = useRef(false);
 
   const startRecording = async () => {
     if (!navigator.mediaDevices) return;
+
+    cancelRef.current = false;
 
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const recorder = new MediaRecorder(stream);
@@ -33,11 +36,14 @@ export default function AudioRecorder({
     };
 
     recorder.onstop = async () => {
-      const blob = new Blob(audioChunks.current, { type: 'audio/webm' });
-      audioChunks.current = [];
-
       // release mic
       stream.getTracks().forEach(track => track.stop());
+      if (cancelRef.current) {
+        audioChunks.current = [];
+        return;
+      }
+      const blob = new Blob(audioChunks.current, { type: 'audio/webm' });
+      audioChunks.current = [];
 
       const formData = new FormData();
       formData.append('file', blob, 'recording.webm');
@@ -46,13 +52,9 @@ export default function AudioRecorder({
       formData.append('temperature', '0');
       formData.append('user', data?.user.id as string);
 
-      console.log({ formData });
-
-      // send to API
       try {
         const res = await getTranscription(formData);
 
-        console.log({ res });
         if (!res.text) throw new Error('Upload failed');
         setMessage(res?.text);
         // setMessage('lorem')
@@ -73,6 +75,14 @@ export default function AudioRecorder({
     mediaRecorder.stop();
     setLoadingText(true);
     setRecording(false);
+  };
+
+  const handleCancelRecording = () => {
+    if (!mediaRecorder) return;
+    cancelRef.current = true;
+    mediaRecorder.stop();
+    setRecording(false);
+    setLoadingText(false);
   };
 
   return (
@@ -103,10 +113,16 @@ export default function AudioRecorder({
           className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
         />
       ) : (
-        <ArrowUp
-          onClick={stopRecording}
-          className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
-        />
+        <div className="flex space-x-2">
+          <X
+            onClick={handleCancelRecording}
+            className="size-6 flex-none cursor-pointer rounded-full p-0.5 text-neutral-600"
+          />
+          <ArrowUp
+            onClick={stopRecording}
+            className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
+          />
+        </div>
       )}
     </div>
   );
