@@ -22,7 +22,6 @@ import {
   Settings,
   Share,
   SquarePen,
-  Store,
   Trash2
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -224,7 +223,7 @@ const SideNav = ({
                 Connect apps
               </span>
             </Button>
-            <Button
+            {/* <Button
               onClick={() => router.push('/agent-store')}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
             >
@@ -262,7 +261,7 @@ const SideNav = ({
               >
                 My agents
               </span>
-            </Button>
+            </Button> */}
             {/* <Button
               onClick={() => router.push('/my-chatbots')}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
