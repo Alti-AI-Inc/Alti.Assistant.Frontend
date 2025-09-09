@@ -206,7 +206,7 @@ const SideNav = ({
             </Button>
             <Button
               onClick={() => router.push('/saved-chats')}
-              className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
             >
               <MessageSquare />{' '}
               <span
