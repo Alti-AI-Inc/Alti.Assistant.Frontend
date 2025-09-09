@@ -40,36 +40,24 @@ const memroy = [
   {
     name: '1 Month Memory',
     price: 5,
-    subText: 'Remembers your chat history for 30 days.',
-    // description: 'Private assistant, smarter tools.',
-
     buttonText: 'Upgrade Memory',
     currentPlan: true,
   },
   {
     name: '3 Month Memory',
     price: 10,
-    subText: 'Remembers your chat history for 90 days.',
-    // description: 'Private assistant, smarter tools.',
-
     buttonText: 'Upgrade Memory',
     currentPlan: false,
   },
   {
     name: '6 Month Memory',
     price: 15,
-    subText: 'Remembers your chat history for 180 days.',
-    // description: 'Private assistant, smarter tools.',
-
     buttonText: 'Upgrade Memory',
     currentPlan: false,
   },
   {
     name: '12 Month Memory',
     price: 20,
-    subText: 'Remembers your chat history for a full year.',
-    // description: 'Private assistant, smarter tools.',
-
     buttonText: 'Upgrade Memory',
     currentPlan: false,
   },
@@ -78,7 +66,7 @@ const memroy = [
 const Pricing01 = () => {
   return (
     <div className="flex min-h-screen flex-col items-center px-6 py-12">
-      <h1 className="text-center mt-10 text-5xl font-semibold tracking-tighter">
+      <h1 className="mt-10 text-center text-5xl font-semibold tracking-tighter">
         Upgrade Plans
       </h1>
       <Tabs defaultValue="plan" className="mt-12 w-full sm:mt-16">
@@ -145,7 +133,6 @@ const Pricing01 = () => {
                 >
                   {plan.currentPlan ? 'Current Plan' : plan.buttonText}
                 </Button>
-                {/* <p className="mt-4 text-lg">{plan.subText}</p> */}
               </div>
             ))}
           </div>
