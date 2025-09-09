@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
 
@@ -10,10 +11,10 @@ const plans = [
     features: [
       'Web Search → unlimited',
       'Deep Research → 100',
-      'Code Generation → 250',
-      'Task Automation → 250 actions',
-      'My Chatbots → save up to 5 bots',
-      'My Knowledge → manual uploads up to 1GB',
+      'Code Generation → 1,000',
+      'Task Automation → 1,000 actions',
+      'My Chatbots → save up to 10 bots',
+      'My Knowledge → manual uploads',
     ],
     buttonText: 'Get Pro Plan',
     currentPlan: true,
@@ -26,57 +27,130 @@ const plans = [
     features: [
       'Web Search → unlimited',
       'Deep Research → 500',
-      'Code Generation → 1000',
-      'Task Automation → 1000 actions',
-      'My Chatbots → save up to 25 bots',
-      'My Knowledge → app connectors up to 10GB',
+      'Code Generation → 5,000',
+      'Task Automation → 5,000 actions',
+      'My Chatbots → save up to 50 bots',
+      'My Knowledge → app connectors',
     ],
     buttonText: 'Get Power Plan',
+    currentPlan: false,
+  },
+];
+const memroy = [
+  {
+    name: '1 Month Memory',
+    price: 5,
+    subText: 'Remembers your chat history for 30 days.',
+    // description: 'Private assistant, smarter tools.',
+
+    buttonText: 'Upgrade Memory',
+    currentPlan: true,
+  },
+  {
+    name: '3 Month Memory',
+    price: 10,
+    subText: 'Remembers your chat history for 90 days.',
+    // description: 'Private assistant, smarter tools.',
+
+    buttonText: 'Upgrade Memory',
+    currentPlan: false,
+  },
+  {
+    name: '6 Month Memory',
+    price: 15,
+    subText: 'Remembers your chat history for 180 days.',
+    // description: 'Private assistant, smarter tools.',
+
+    buttonText: 'Upgrade Memory',
+    currentPlan: false,
+  },
+  {
+    name: '12 Month Memory',
+    price: 20,
+    subText: 'Remembers your chat history for a full year.',
+    // description: 'Private assistant, smarter tools.',
+
+    buttonText: 'Upgrade Memory',
     currentPlan: false,
   },
 ];
 
 const Pricing01 = () => {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-6 py-12">
-      <h1 className="text-center text-5xl font-semibold tracking-tighter">
-        Plans that grow with you
+    <div className="flex min-h-screen flex-col items-center px-6 py-12">
+      <h1 className="text-center mt-10 text-5xl font-semibold tracking-tighter">
+        Upgrade Plans
       </h1>
-      <div className="mx-auto mt-12 grid max-w-[840px] grid-cols-1 gap-5 sm:mt-16 lg:grid-cols-2">
-        {plans.map(plan => (
-          <div key={plan.name} className="bg-secondary rounded-lg border p-6">
-            <h3 className="text-lg font-medium">{plan.name}</h3>
-            <p className="mt-2 text-4xl font-bold">
-              ${plan.price}{' '}
-              <span className="text-muted-foreground text-sm font-medium">
-                /month
-              </span>
-            </p>
-            <p className="text-muted-foreground mt-4 font-medium">
-              {plan.description}
-            </p>
-            <Button
-              // variant="outline"
-              // variant={plan.currentPlan ? "default" : "outline"}
-              size="lg"
-              className={cn(
-                'mt-4 mb-8 w-full bg-white text-black shadow-none hover:bg-white hover:text-black',
-                plan.currentPlan && 'bg-primary/90 hover:bg-primary/80 hover:text-white text-white',
-              )}
-            >
-              {plan.currentPlan ? 'Current Plan' : plan.buttonText}
-            </Button>
-            {/* <Separator className="my-4" /> */}
-            <ul className="space-y-2">
-              {plan.features.map(feature => (
-                <li key={feature} className="flex items-start gap-2">
-                  <Check className="mt-1 h-4 w-4 text-gray-600" /> {feature}
-                </li>
-              ))}
-            </ul>
+      <Tabs defaultValue="plan" className="mt-12 w-full sm:mt-16">
+        <TabsList className="mx-auto mb-6 w-full max-w-[280px]">
+          <TabsTrigger value="plan">Plans</TabsTrigger>
+          <TabsTrigger value="memory">Memory</TabsTrigger>
+        </TabsList>
+        <TabsContent value="plan">
+          <div className="mx-auto grid w-full max-w-[840px] grid-cols-1 gap-5 lg:grid-cols-2">
+            {plans.map(plan => (
+              <div
+                key={plan.name}
+                className="bg-secondary rounded-lg border p-6"
+              >
+                <h3 className="text-lg font-medium">{plan.name}</h3>
+                <p className="mt-2 text-4xl font-bold">
+                  ${plan.price}{' '}
+                  <span className="text-muted-foreground text-sm font-medium">
+                    /month
+                  </span>
+                </p>
+                <p className="text-muted-foreground mt-4 font-medium">
+                  {plan.description}
+                </p>
+                <Button
+                  size="lg"
+                  className={cn(
+                    'mt-4 mb-8 w-full bg-white text-black shadow-none hover:bg-white hover:text-black',
+                    plan.currentPlan &&
+                      'bg-primary/90 hover:bg-primary/80 text-white hover:text-white',
+                  )}
+                >
+                  {plan.currentPlan ? 'Current Plan' : plan.buttonText}
+                </Button>
+                {/* <Separator className="my-4" /> */}
+                <ul className="space-y-2">
+                  {plan.features.map(feature => (
+                    <li key={feature} className="flex items-start gap-2">
+                      <Check className="mt-1 h-4 w-4 text-gray-600" /> {feature}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </TabsContent>
+        <TabsContent value="memory">
+          <div className="mx-auto grid w-full max-w-[1200px] grid-cols-1 gap-5 lg:grid-cols-4">
+            {memroy.map(plan => (
+              <div
+                key={plan.name}
+                className="bg-secondary w-full rounded-lg border p-6"
+              >
+                <h3 className="text-lg font-medium">{plan.name}</h3>
+                <p className="mt-2 text-4xl font-bold">${plan.price} </p>
+
+                <Button
+                  size="lg"
+                  className={cn(
+                    'mt-4 w-full bg-white text-black shadow-none hover:bg-white hover:text-black',
+                    plan.currentPlan &&
+                      'bg-primary/90 hover:bg-primary/80 text-white hover:text-white',
+                  )}
+                >
+                  {plan.currentPlan ? 'Current Plan' : plan.buttonText}
+                </Button>
+                {/* <p className="mt-4 text-lg">{plan.subText}</p> */}
+              </div>
+            ))}
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
