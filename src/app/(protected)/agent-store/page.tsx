@@ -2,7 +2,7 @@
 const page = () => {
   return (
     <div>
-     apps page
+      Agent store page
     </div>
   )
 }

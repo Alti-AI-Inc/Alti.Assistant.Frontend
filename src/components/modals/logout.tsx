@@ -24,14 +24,18 @@ export function Logout() {
   };
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[380px]">
+      <DialogContent className="border-none ring-0 outline-none sm:max-w-[380px]">
         <DialogHeader>
           <DialogTitle>Logout</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 pt-4">
           <h1 className="">Are you sure you want to logout?</h1>
           <div className="mt-4 flex w-full justify-end gap-4">
-            <Button variant="outline" onClick={onClose}>
+            <Button
+              variant="outline"
+              className="focus-visible:ring-0"
+              onClick={onClose}
+            >
               Cancel
             </Button>
             <Button onClick={handleLogOut}>Logout</Button>
