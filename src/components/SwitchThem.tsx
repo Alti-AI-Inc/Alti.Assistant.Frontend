@@ -1,35 +1,27 @@
 'use client';
+import { MoonIcon, SunMediumIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { Button } from './ui/button';
-
-const items = [
-  {
-    id: 2,
-    title: 'Light',
-    value: 'light',
-  },
-  {
-    id: 3,
-    title: 'Dark',
-    value: 'dark',
-  },
-];
+import { Switch } from './ui/switch';
 
 const SwitchThem = () => {
   const { theme, setTheme } = useTheme();
   console.log({ theme });
   return (
-    <div className='space-x-2'>
-      {items.map(item => (
-        <Button
-          key={item.id}
-          variant={theme === item.value ? 'default' : 'outline'}
-          onClick={() => setTheme(item.value)}
-        >
-          {item.title}
-        </Button>
-      ))}
-    </div>
+    <Switch
+      icon={
+        theme === 'dark' ? (
+          <MoonIcon className="h-4 w-4" />
+        ) : (
+          <SunMediumIcon className="h-4 w-4" />
+        )
+      }
+      checked={theme === 'dark'}
+      onCheckedChange={(checked: boolean) =>
+        setTheme(checked ? 'dark' : 'light')
+      }
+      className="h-7 w-12"
+      thumbClassName="h-6 w-6 data-[state=checked]:translate-x-5"
+    />
   );
 };
 
