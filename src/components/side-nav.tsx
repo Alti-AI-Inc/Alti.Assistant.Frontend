@@ -13,11 +13,11 @@ import {
   BookA,
   Bot,
   ChevronDown,
-  CircleDollarSign,
   EllipsisVertical,
   LayoutGrid,
   LogOut,
   MessageSquare,
+  Orbit,
   PanelLeftClose,
   Pencil,
   Search,
@@ -365,16 +365,19 @@ const SideNav = ({
           ) : (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                >
                   My Account
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="start">
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <CircleDollarSign className="text-black" /> Upgrade plan
+                  <DropdownMenuItem onClick={() => router.push('/plans')}>
+                    <Orbit className="text-black" /> Plans
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push('/settings')}>
                     <Settings className="text-black" /> Settings
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
