@@ -1,4 +1,6 @@
 'use client';
+import ChangePassword from '@/components/ChangePassword';
+import SwitchThem from '@/components/SwitchThem';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 
@@ -30,9 +32,9 @@ const Page = () => {
             </Button>
           ))}
         </div>
-        <div className="flex-1 flex items-center justify-center">
-          {selectedOption === 1 && <h1>Theme</h1>}
-          {selectedOption === 2 && <h1>Password</h1>}
+        <div className="flex flex-1 items-center justify-center">
+          {selectedOption === 1 && <SwitchThem />}
+          {selectedOption === 2 && <ChangePassword />}
         </div>
       </div>
     </div>
