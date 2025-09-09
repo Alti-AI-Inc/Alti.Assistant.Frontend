@@ -69,7 +69,7 @@ const Pricing01 = () => {
       <h1 className="mt-10 text-center text-5xl font-semibold tracking-tighter">
         Upgrade Plans
       </h1>
-      <Tabs defaultValue="plan" className="mt-12 w-full sm:mt-16">
+      <Tabs defaultValue="plan" className="mt-8 w-full ">
         <TabsList className="mx-auto mb-6 w-full max-w-[280px]">
           <TabsTrigger value="plan">Plans</TabsTrigger>
           <TabsTrigger value="memory">Memory</TabsTrigger>
