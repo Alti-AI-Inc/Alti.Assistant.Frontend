@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@source "../../node_modules/streamdown/dist/index.js";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -121,7 +122,6 @@
   }
 }
 
-
 /* Webkit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
   width: 12px; /* Width of the entire scrollbar */
@@ -150,7 +150,6 @@
   min-height: 30px; /* Minimum thumb height */
 }
 
-
 /* Firefox */
 * {
   scrollbar-width: thin;
@@ -168,6 +167,5 @@ html {
   * {
     scrollbar-width: thin;
     scrollbar-color: #0000001a transparent;
-    
   }
 }

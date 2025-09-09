@@ -1,0 +1,20 @@
+'use server';
+
+export async function chatOpenAI(prompt: string, accessToken: string) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/openai/4nano/get-response`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt,
+      }),
+    },
+  );
+  const data = await response.json();
+  console.log({ data });
+  return data;
+}
