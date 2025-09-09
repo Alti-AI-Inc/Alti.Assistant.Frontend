@@ -27,6 +27,7 @@ import { RegisterUser } from '@/actions/register';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Mail } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -77,9 +78,19 @@ export default function Component() {
     }
   }
   return (
-    <>
+    <div>
+      <div className="h-20 p-10">
+        <Link href="/">
+          <Image
+            src="/assets/logo-icon.png"
+            alt="logo"
+            height={60}
+            width={60}
+          />
+        </Link>
+      </div>
       {showSuccessMessage ? (
-        <div className="flex h-screen items-center justify-center">
+        <div className="flex h-[calc(100vh_-_80px)] items-center justify-center">
           <div className="pb-6 text-center">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
               <Mail className="h-8 w-8 text-blue-600" />
@@ -93,7 +104,7 @@ export default function Component() {
           </div>
         </div>
       ) : (
-        <div className="flex h-screen w-full items-center justify-center bg-white">
+        <div className="flex h-[calc(100vh_-_80px)] w-full items-center justify-center bg-white">
           <div className="flex w-full max-w-md items-center justify-center">
             <div className="rounded-large flex w-full max-w-lg flex-col gap-4 px-8 pt-6 pb-10">
               <p className="pb-4 text-center text-3xl font-semibold">
@@ -175,7 +186,7 @@ export default function Component() {
                   </Button>
                 </form>
               </Form>
-              <p className="text-small flex items-center space-x-2 justify-center text-center">
+              <p className="text-small flex items-center justify-center space-x-2 text-center">
                 <span>Already have an account?</span>
                 <Link href="/login" className="text-[#00f] underline">
                   Login
@@ -183,17 +194,17 @@ export default function Component() {
               </p>
             </div>
           </div>
-          {/* <div className="hidden translate-x-[20%] items-center justify-center lg:flex">
-          <video
-            src="/assets/login-register.mov"
-            autoPlay
-            loop
-            muted
-            className="h-[350px] object-cover object-left"
-          ></video>
-        </div> */}
+          <div className="hidden translate-x-[20%] items-center justify-center lg:flex">
+            <video
+              src="/assets/login-register.mov"
+              autoPlay
+              loop
+              muted
+              className="h-[350px] object-cover object-left"
+            ></video>
+          </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

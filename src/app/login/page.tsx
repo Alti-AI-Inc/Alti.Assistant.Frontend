@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useModalStore } from '@/stores/useModalStore';
 import { signIn } from 'next-auth/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -61,8 +62,18 @@ export default function Component() {
     }
   }
   return (
-    <>
-      <div className="flex h-screen w-full items-center justify-center bg-white">
+    <div className="flex-1">
+      <div className="h-20 p-10">
+        <Link href="/">
+          <Image
+            src="/assets/logo-icon.png"
+            alt="logo"
+            height={60}
+            width={60}
+          />
+        </Link>
+      </div>
+      <div className="flex w-full h-[calc(100vh_-_80px)] items-center justify-center bg-white">
         <div className="flex w-full max-w-md items-center justify-center">
           <div className="rounded-large flex w-full max-w-lg flex-col gap-4 px-8 pt-6 pb-10">
             <p className="pb-4 text-center text-3xl font-semibold">Login</p>
@@ -142,7 +153,7 @@ export default function Component() {
             </p>
           </div>
         </div>
-        {/* <div className="hidden translate-x-[20%] items-center justify-center lg:flex">
+        <div className="hidden translate-x-[20%] items-center justify-center lg:flex">
           <video
             src="/assets/login-register.mov"
             autoPlay
@@ -150,8 +161,8 @@ export default function Component() {
             muted
             className="h-[350px] object-cover object-left"
           ></video>
-        </div> */}
+        </div>
       </div>
-    </>
+    </div>
   );
 }
