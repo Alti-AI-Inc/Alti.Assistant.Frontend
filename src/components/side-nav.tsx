@@ -374,8 +374,8 @@ const SideNav = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="start">
                 <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={() => router.push('/plans')}>
-                    <Orbit className="text-black" /> Plans
+                  <DropdownMenuItem onClick={() => router.push('/upgrade')}>
+                    <Orbit className="text-black" /> Upgrade
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/settings')}>
                     <Settings className="text-black" /> Settings
