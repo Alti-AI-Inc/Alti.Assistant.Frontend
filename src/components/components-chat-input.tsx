@@ -96,9 +96,7 @@ export function ChatInputComponent() {
                   className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
                 />
               ) : (
-                <AudioRecorder />
-                // <VoiceRecorder/>
-                // <Mic className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white" />
+                <AudioRecorder setMessage={setMessage} />
               )}
             </div>
           </div>
