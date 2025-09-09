@@ -69,7 +69,7 @@ const Pricing01 = () => {
       <h1 className="mt-10 text-center text-5xl font-semibold tracking-tighter">
         Upgrade Plans
       </h1>
-      <Tabs defaultValue="plan" className="mt-8 w-full ">
+      <Tabs defaultValue="plan" className="mt-8 w-full">
         <TabsList className="mx-auto mb-6 w-full max-w-[280px]">
           <TabsTrigger value="plan">Plans</TabsTrigger>
           <TabsTrigger value="memory">Memory</TabsTrigger>
@@ -114,7 +114,7 @@ const Pricing01 = () => {
           </div>
         </TabsContent>
         <TabsContent value="memory">
-          <div className="mx-auto grid w-full max-w-[1200px] grid-cols-1 gap-5 lg:grid-cols-4">
+          <div className="mx-auto grid w-full max-w-[1000px] grid-cols-1 gap-5 lg:grid-cols-4">
             {memroy.map(plan => (
               <div
                 key={plan.name}
