@@ -10,8 +10,6 @@ import {
 import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
 import {
-  BookA,
-  Bot,
   ChevronDown,
   EllipsisVertical,
   LayoutGrid,
@@ -25,7 +23,7 @@ import {
   Share,
   SquarePen,
   Store,
-  Trash2,
+  Trash2
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -265,7 +263,7 @@ const SideNav = ({
                 My agents
               </span>
             </Button>
-            <Button
+            {/* <Button
               onClick={() => router.push('/my-chatbots')}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
             >
@@ -287,7 +285,7 @@ const SideNav = ({
               >
                 My knowledge
               </span>
-            </Button>
+            </Button> */}
 
             <div
               className={cn(
