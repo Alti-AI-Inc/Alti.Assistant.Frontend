@@ -1,8 +1,9 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { ArrowRight, Mic, Plus } from 'lucide-react';
+import { ArrowRight, Plus } from 'lucide-react';
 import { useState } from 'react';
+import AudioRecorder from './AudioRecorder';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 
@@ -53,13 +54,13 @@ export function ChatInputComponent() {
             value={message}
             onChange={e => setMessage(e.target.value)}
             placeholder="Chat with alti"
-            className="min-h-12 w-full placeholder:text-sm border-none px-2 py-2 shadow-none outline-none focus-visible:ring-0"
+            className="min-h-12 w-full border-none px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
           />
           <div className="flex items-end justify-between py-2">
             <div className="flex items-center space-x-2">
               <div className="flex justify-center">
                 <label htmlFor="file-input-alt" className="">
-                  <Plus className="cursor-pointer rounded-full border-2 border-gray-300 size-6 p-0.5" />
+                  <Plus className="size-6 cursor-pointer rounded-full border-2 border-gray-300 p-0.5" />
                 </label>
                 <Input
                   type="file"
@@ -75,10 +76,11 @@ export function ChatInputComponent() {
                 <Button
                   key={option.id}
                   className={cn(
-                    'text-black h-6 rounded-full border border-gray-300 hover:text-white bg-white py-1 text-sm font-normal',
+                    'h-6 rounded-full border border-gray-300 bg-white py-1 text-sm font-normal text-black hover:text-white',
 
                     {
-                      'bg-black text-white text-sm': option.value === selectedOption,
+                      'bg-black text-sm text-white':
+                        option.value === selectedOption,
                     },
                   )}
                   onClick={() => handleSelectOption(option.value)}
@@ -94,7 +96,9 @@ export function ChatInputComponent() {
                   className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
                 />
               ) : (
-                <Mic className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white" />
+                <AudioRecorder />
+                // <VoiceRecorder/>
+                // <Mic className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white" />
               )}
             </div>
           </div>
