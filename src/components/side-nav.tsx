@@ -18,11 +18,12 @@ import {
   Orbit,
   PanelLeftClose,
   Pencil,
+  Scale,
   Search,
   Settings,
   Share,
   SquarePen,
-  Trash2
+  Trash2,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -362,10 +363,7 @@ const SideNav = ({
           ) : (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full"
-                >
+                <Button variant="outline" className="w-full">
                   My Account
                 </Button>
               </DropdownMenuTrigger>
@@ -373,6 +371,9 @@ const SideNav = ({
                 <DropdownMenuGroup>
                   <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                     <Orbit className="text-black" /> Upgrade
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push('/legal')}>
+                    <Scale className="text-black" /> Legal
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/settings')}>
                     <Settings className="text-black" /> Settings
