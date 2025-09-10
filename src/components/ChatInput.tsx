@@ -18,13 +18,23 @@ const options = [
   },
   {
     id: 2,
+    title: 'Task',
+    value: 'task-automation',
+  },
+  {
+    id: 3,
     title: 'Code',
     value: 'code-generation',
   },
   {
-    id: 3,
-    title: 'Task',
-    value: 'task-automation',
+    id: 4,
+    title: 'Image',
+    value: 'image-generation',
+  },
+  {
+    id: 5,
+    title: 'Video',
+    value: 'video-generation',
   },
 ];
 

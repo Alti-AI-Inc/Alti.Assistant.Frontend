@@ -9,12 +9,16 @@ const plans = [
     price: 20,
     description: 'Private assistant, smarter tools.',
     features: [
-      'Web Search → unlimited',
-      'Deep Research → 100',
-      'Code Generation → 1,000',
-      'Task Automation → 1,000 actions',
-      'My Chatbots → save up to 10 bots',
-      'My Knowledge → manual uploads',
+      'Web Search → 1,000',
+      'Deep Research → 10',
+      'Task Automation → 100 actions',
+      'Code Generation → 100',
+      'Image Generation → 10',
+      'Video Generation → 10 seconds',
+      'Persistent Memory → 1 month',
+
+      // 'My Chatbots → save up to 10 bots',
+      // 'My Knowledge → manual uploads',
     ],
     buttonText: 'Get Pro Plan',
     currentPlan: true,
@@ -25,12 +29,16 @@ const plans = [
     isRecommended: true,
     description: 'Advanced AI, deeper knowledge.',
     features: [
-      'Web Search → unlimited',
-      'Deep Research → 500',
-      'Code Generation → 5,000',
-      'Task Automation → 5,000 actions',
-      'My Chatbots → save up to 50 bots',
-      'My Knowledge → app connectors',
+      'Web Search → 5,000',
+      'Deep Research → 50',
+      'Task Automation → 500 actions',
+      'Code Generation → 500',
+      'Image Generation → 50',
+      'Video Generation → 50 seconds',
+      'Persistent Memory → 3 months',
+
+      // 'My Chatbots → save up to 50 bots',
+      // 'My Knowledge → app connectors',
     ],
     buttonText: 'Get Power Plan',
     currentPlan: false,
@@ -62,6 +70,162 @@ const memroy = [
     currentPlan: false,
   },
 ];
+const images = [
+  {
+    name: '50 Images',
+    price: 5,
+    buttonText: 'Upgrade Images',
+    currentPlan: true,
+  },
+  {
+    name: '100 Images',
+    price: 10,
+    buttonText: 'Upgrade Images',
+    currentPlan: false,
+  },
+  {
+    name: '250 Images',
+    price: 25,
+    buttonText: 'Upgrade Images',
+    currentPlan: false,
+  },
+  {
+    name: '500 Images',
+    price: 50,
+    buttonText: 'Upgrade Images',
+    currentPlan: false,
+  },
+];
+const videos = [
+  {
+    name: '30 Seconds',
+    price: 10,
+    buttonText: 'Upgrade Video',
+    currentPlan: true,
+  },
+  {
+    name: '90 Seconds',
+    price: 25,
+    buttonText: 'Upgrade Video',
+    currentPlan: false,
+  },
+  {
+    name: '180 Seconds',
+    price: 50,
+    buttonText: 'Upgrade Video',
+    currentPlan: false,
+  },
+  {
+    name: '360 Seconds',
+    price: 100,
+    buttonText: 'Upgrade Video',
+    currentPlan: false,
+  },
+];
+const codes = [
+  {
+    name: '100 Code Generation',
+    price: 10,
+    buttonText: 'Upgrade Code',
+    currentPlan: true,
+  },
+  {
+    name: '500 Code Generation',
+    price: 25,
+    buttonText: 'Upgrade Code',
+    currentPlan: false,
+  },
+  {
+    name: '1,000 Code Generation',
+    price: 50,
+    buttonText: 'Upgrade Code',
+    currentPlan: false,
+  },
+  {
+    name: '2,500 Code Generation',
+    price: 100,
+    buttonText: 'Upgrade Code',
+    currentPlan: false,
+  },
+];
+const researches = [
+  {
+    name: '25 Deep Research',
+    price: 10,
+    buttonText: 'Upgrade Research',
+    currentPlan: true,
+  },
+  {
+    name: '50 Deep Research',
+    price: 25,
+    buttonText: 'Upgrade Research',
+    currentPlan: false,
+  },
+  {
+    name: '100 Deep Research',
+    price: 50,
+    buttonText: 'Upgrade Research',
+    currentPlan: false,
+  },
+  {
+    name: '250 Deep Research',
+    price: 100,
+    buttonText: 'Upgrade Research',
+    currentPlan: false,
+  },
+];
+const searches = [
+  {
+    name: '25 Web Search',
+    price: 10,
+    buttonText: 'Upgrade Search',
+    currentPlan: true,
+  },
+  {
+    name: '50 Web Search',
+    price: 25,
+    buttonText: 'Upgrade Search',
+    currentPlan: false,
+  },
+  {
+    name: '100 Web Search',
+    price: 50,
+    buttonText: 'Upgrade Search',
+    currentPlan: false,
+  },
+  {
+    name: '250 Web Search',
+    price: 100,
+    buttonText: 'Upgrade Search',
+    currentPlan: false,
+  },
+];
+const tasks = [
+  {
+    name: '250 Task Automation',
+    price: 10,
+    buttonText: 'Upgrade Task',
+    currentPlan: true,
+  },
+  {
+    name: '1,000 Task Automation',
+    price: 25,
+    buttonText: 'Upgrade Task',
+    currentPlan: false,
+  },
+  {
+    name: '2,500 Task Automation',
+    price: 50,
+    buttonText: 'Upgrade Task',
+    currentPlan: false,
+  },
+  {
+    name: '10,000 Task Automation',
+    price: 100,
+    buttonText: 'Upgrade Task',
+    currentPlan: false,
+  },
+];
 
 const Pricing01 = () => {
   return (
@@ -70,8 +234,14 @@ const Pricing01 = () => {
         Upgrade Plans
       </h1>
       <Tabs defaultValue="plan" className="mt-8 w-full">
-        <TabsList className="mx-auto mb-6 w-full max-w-[280px]">
+        <TabsList className="mx-auto mb-6 w-full max-w-[840px]">
           <TabsTrigger value="plan">Plans</TabsTrigger>
+          <TabsTrigger value="search">Search</TabsTrigger>
+          <TabsTrigger value="research">Research</TabsTrigger>
+          <TabsTrigger value="task">Task</TabsTrigger>
+          <TabsTrigger value="code">Code</TabsTrigger>
+          <TabsTrigger value="image">Image</TabsTrigger>
+          <TabsTrigger value="video">Video</TabsTrigger>
           <TabsTrigger value="memory">Memory</TabsTrigger>
         </TabsList>
         <TabsContent value="plan">
@@ -114,7 +284,7 @@ const Pricing01 = () => {
           </div>
         </TabsContent>
         <TabsContent value="memory">
-          <div className="mx-auto grid w-full max-w-[1000px] grid-cols-1 gap-5 lg:grid-cols-4">
+          <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
             {memroy.map(plan => (
               <div
                 key={plan.name}
@@ -122,6 +292,180 @@ const Pricing01 = () => {
               >
                 <h3 className="text-lg font-medium">{plan.name}</h3>
                 <p className="mt-2 text-4xl font-bold">${plan.price} </p>
+
+                <Button
+                  size="lg"
+                  className={cn(
+                    'mt-4 w-full bg-white text-black shadow-none hover:bg-white hover:text-black',
+                    plan.currentPlan &&
+                      'bg-primary/90 hover:bg-primary/80 text-white hover:text-white',
+                  )}
+                >
+                  {plan.currentPlan ? 'Current Plan' : plan.buttonText}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="image">
+          <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
+            {images.map(plan => (
+              <div
+                key={plan.name}
+                className="bg-secondary w-full rounded-lg border p-6"
+              >
+                <h3 className="text-lg font-medium">{plan.name}</h3>
+                <p className="mt-2 text-4xl font-bold">
+                  ${plan.price}{' '}
+                  <span className="text-muted-foreground text-sm font-medium">
+                    /month
+                  </span>{' '}
+                </p>
+
+                <Button
+                  size="lg"
+                  className={cn(
+                    'mt-4 w-full bg-white text-black shadow-none hover:bg-white hover:text-black',
+                    plan.currentPlan &&
+                      'bg-primary/90 hover:bg-primary/80 text-white hover:text-white',
+                  )}
+                >
+                  {plan.currentPlan ? 'Current Plan' : plan.buttonText}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="video">
+          <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
+            {videos.map(plan => (
+              <div
+                key={plan.name}
+                className="bg-secondary w-full rounded-lg border p-6"
+              >
+                <h3 className="text-lg font-medium">{plan.name}</h3>
+                <p className="mt-2 text-4xl font-bold">
+                  ${plan.price}{' '}
+                  <span className="text-muted-foreground text-sm font-medium">
+                    /month
+                  </span>{' '}
+                </p>
+
+                <Button
+                  size="lg"
+                  className={cn(
+                    'mt-4 w-full bg-white text-black shadow-none hover:bg-white hover:text-black',
+                    plan.currentPlan &&
+                      'bg-primary/90 hover:bg-primary/80 text-white hover:text-white',
+                  )}
+                >
+                  {plan.currentPlan ? 'Current Plan' : plan.buttonText}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="code">
+          <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
+            {codes.map(plan => (
+              <div
+                key={plan.name}
+                className="bg-secondary w-full rounded-lg border p-6"
+              >
+                <h3 className="text-lg font-medium">{plan.name}</h3>
+                <p className="mt-2 text-4xl font-bold">
+                  ${plan.price}{' '}
+                  <span className="text-muted-foreground text-sm font-medium">
+                    /month
+                  </span>{' '}
+                </p>
+
+                <Button
+                  size="lg"
+                  className={cn(
+                    'mt-4 w-full bg-white text-black shadow-none hover:bg-white hover:text-black',
+                    plan.currentPlan &&
+                      'bg-primary/90 hover:bg-primary/80 text-white hover:text-white',
+                  )}
+                >
+                  {plan.currentPlan ? 'Current Plan' : plan.buttonText}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="research">
+          <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
+            {researches.map(plan => (
+              <div
+                key={plan.name}
+                className="bg-secondary w-full rounded-lg border p-6"
+              >
+                <h3 className="text-lg font-medium">{plan.name}</h3>
+                <p className="mt-2 text-4xl font-bold">
+                  ${plan.price}{' '}
+                  <span className="text-muted-foreground text-sm font-medium">
+                    /month
+                  </span>{' '}
+                </p>
+
+                <Button
+                  size="lg"
+                  className={cn(
+                    'mt-4 w-full bg-white text-black shadow-none hover:bg-white hover:text-black',
+                    plan.currentPlan &&
+                      'bg-primary/90 hover:bg-primary/80 text-white hover:text-white',
+                  )}
+                >
+                  {plan.currentPlan ? 'Current Plan' : plan.buttonText}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="search">
+          <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
+            {searches.map(plan => (
+              <div
+                key={plan.name}
+                className="bg-secondary w-full rounded-lg border p-6"
+              >
+                <h3 className="text-lg font-medium">{plan.name}</h3>
+                <p className="mt-2 text-4xl font-bold">
+                  ${plan.price}{' '}
+                  <span className="text-muted-foreground text-sm font-medium">
+                    /month
+                  </span>{' '}
+                </p>
+
+                <Button
+                  size="lg"
+                  className={cn(
+                    'mt-4 w-full bg-white text-black shadow-none hover:bg-white hover:text-black',
+                    plan.currentPlan &&
+                      'bg-primary/90 hover:bg-primary/80 text-white hover:text-white',
+                  )}
+                >
+                  {plan.currentPlan ? 'Current Plan' : plan.buttonText}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="task">
+          <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
+            {tasks.map(plan => (
+              <div
+                key={plan.name}
+                className="bg-secondary w-full rounded-lg border p-6"
+              >
+                <h3 className="text-lg font-medium">{plan.name}</h3>
+                <p className="mt-2 text-4xl font-bold">
+                  ${plan.price}{' '}
+                  <span className="text-muted-foreground text-sm font-medium">
+                    /month
+                  </span>{' '}
+                </p>
 
                 <Button
                   size="lg"
