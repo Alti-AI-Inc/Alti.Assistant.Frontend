@@ -5,7 +5,6 @@ import { Switch } from './ui/switch';
 
 const SwitchThem = () => {
   const { theme, setTheme } = useTheme();
-  console.log({ theme });
   return (
     <Switch
       icon={

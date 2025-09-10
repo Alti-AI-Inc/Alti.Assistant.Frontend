@@ -41,7 +41,7 @@ const options = [
 const ChatInput = () => {
   const { data } = useSession();
   const { onModalResponse } = useUserChatStore();
-  // console.log(data.data?.accessToken);
+  // console.log({data});
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState('');
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -58,9 +58,7 @@ const ChatInput = () => {
     setSubmitting(true);
     try {
       if (data?.accessToken) {
-        console.log({ message });
         const reponse = await chatOpenAI(message, data.accessToken);
-        console.log({ reponse });
         if (reponse.success) {
           onModalResponse(reponse.data);
         }

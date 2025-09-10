@@ -8,6 +8,7 @@ type ModalResponse = {
 interface ChatStore {
   userMessage: string;
   setUserMessage: (message: string) => void;
+  // chatsList:
   modalResponses: ModalResponse[];
   onModalResponse: (response: { prompt: string; reply: string }) => void;
   resetChat: () => void;
