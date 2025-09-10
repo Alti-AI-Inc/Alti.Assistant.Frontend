@@ -176,25 +176,25 @@ const researches = [
 ];
 const searches = [
   {
-    name: '25 Web Search',
+    name: '1,000 Web Search',
     price: 10,
     buttonText: 'Purchase Search',
     currentPlan: true,
   },
   {
-    name: '50 Web Search',
+    name: '2,500 Web Search',
     price: 25,
     buttonText: 'Purchase Search',
     currentPlan: false,
   },
   {
-    name: '100 Web Search',
+    name: '5,000 Web Search',
     price: 50,
     buttonText: 'Purchase Search',
     currentPlan: false,
   },
   {
-    name: '250 Web Search',
+    name: '10,000 Web Search',
     price: 100,
     buttonText: 'Purchase Search',
     currentPlan: false,
