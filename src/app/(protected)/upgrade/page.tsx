@@ -48,25 +48,25 @@ const memroy = [
   {
     name: '1 Month Memory',
     price: 5,
-    buttonText: 'Upgrade Memory',
+    buttonText: 'Purchase Memory',
     currentPlan: true,
   },
   {
     name: '3 Month Memory',
     price: 10,
-    buttonText: 'Upgrade Memory',
+    buttonText: 'Purchase Memory',
     currentPlan: false,
   },
   {
     name: '6 Month Memory',
     price: 15,
-    buttonText: 'Upgrade Memory',
+    buttonText: 'Purchase Memory',
     currentPlan: false,
   },
   {
     name: '12 Month Memory',
     price: 20,
-    buttonText: 'Upgrade Memory',
+    buttonText: 'Purchase Memory',
     currentPlan: false,
   },
 ];
@@ -74,25 +74,25 @@ const images = [
   {
     name: '50 Images',
     price: 5,
-    buttonText: 'Upgrade Images',
+    buttonText: 'Purchase Images',
     currentPlan: true,
   },
   {
     name: '100 Images',
     price: 10,
-    buttonText: 'Upgrade Images',
+    buttonText: 'Purchase Images',
     currentPlan: false,
   },
   {
     name: '250 Images',
     price: 25,
-    buttonText: 'Upgrade Images',
+    buttonText: 'Purchase Images',
     currentPlan: false,
   },
   {
     name: '500 Images',
     price: 50,
-    buttonText: 'Upgrade Images',
+    buttonText: 'Purchase Images',
     currentPlan: false,
   },
 ];
@@ -100,25 +100,25 @@ const videos = [
   {
     name: '30 Seconds',
     price: 10,
-    buttonText: 'Upgrade Video',
+    buttonText: 'Purchase Video',
     currentPlan: true,
   },
   {
     name: '90 Seconds',
     price: 25,
-    buttonText: 'Upgrade Video',
+    buttonText: 'Purchase Video',
     currentPlan: false,
   },
   {
     name: '180 Seconds',
     price: 50,
-    buttonText: 'Upgrade Video',
+    buttonText: 'Purchase Video',
     currentPlan: false,
   },
   {
     name: '360 Seconds',
     price: 100,
-    buttonText: 'Upgrade Video',
+    buttonText: 'Purchase Video',
     currentPlan: false,
   },
 ];
@@ -126,25 +126,25 @@ const codes = [
   {
     name: '100 Code Generation',
     price: 10,
-    buttonText: 'Upgrade Code',
+    buttonText: 'Purchase Code',
     currentPlan: true,
   },
   {
     name: '500 Code Generation',
     price: 25,
-    buttonText: 'Upgrade Code',
+    buttonText: 'Purchase Code',
     currentPlan: false,
   },
   {
     name: '1,000 Code Generation',
     price: 50,
-    buttonText: 'Upgrade Code',
+    buttonText: 'Purchase Code',
     currentPlan: false,
   },
   {
     name: '2,500 Code Generation',
     price: 100,
-    buttonText: 'Upgrade Code',
+    buttonText: 'Purchase Code',
     currentPlan: false,
   },
 ];
@@ -152,25 +152,25 @@ const researches = [
   {
     name: '25 Deep Research',
     price: 10,
-    buttonText: 'Upgrade Research',
+    buttonText: 'Purchase Research',
     currentPlan: true,
   },
   {
     name: '50 Deep Research',
     price: 25,
-    buttonText: 'Upgrade Research',
+    buttonText: 'Purchase Research',
     currentPlan: false,
   },
   {
     name: '100 Deep Research',
     price: 50,
-    buttonText: 'Upgrade Research',
+    buttonText: 'Purchase Research',
     currentPlan: false,
   },
   {
     name: '250 Deep Research',
     price: 100,
-    buttonText: 'Upgrade Research',
+    buttonText: 'Purchase Research',
     currentPlan: false,
   },
 ];
@@ -178,25 +178,25 @@ const searches = [
   {
     name: '25 Web Search',
     price: 10,
-    buttonText: 'Upgrade Search',
+    buttonText: 'Purchase Search',
     currentPlan: true,
   },
   {
     name: '50 Web Search',
     price: 25,
-    buttonText: 'Upgrade Search',
+    buttonText: 'Purchase Search',
     currentPlan: false,
   },
   {
     name: '100 Web Search',
     price: 50,
-    buttonText: 'Upgrade Search',
+    buttonText: 'Purchase Search',
     currentPlan: false,
   },
   {
     name: '250 Web Search',
     price: 100,
-    buttonText: 'Upgrade Search',
+    buttonText: 'Purchase Search',
     currentPlan: false,
   },
 ];
@@ -204,25 +204,25 @@ const tasks = [
   {
     name: '250 Task Automation',
     price: 10,
-    buttonText: 'Upgrade Task',
+    buttonText: 'Purchase Task',
     currentPlan: true,
   },
   {
     name: '1,000 Task Automation',
     price: 25,
-    buttonText: 'Upgrade Task',
+    buttonText: 'Purchase Task',
     currentPlan: false,
   },
   {
     name: '2,500 Task Automation',
     price: 50,
-    buttonText: 'Upgrade Task',
+    buttonText: 'Purchase Task',
     currentPlan: false,
   },
   {
     name: '10,000 Task Automation',
     price: 100,
-    buttonText: 'Upgrade Task',
+    buttonText: 'Purchase Task',
     currentPlan: false,
   },
 ];
@@ -291,7 +291,12 @@ const Pricing01 = () => {
                 className="bg-secondary w-full rounded-lg border p-6"
               >
                 <h3 className="text-lg font-medium">{plan.name}</h3>
-                <p className="mt-2 text-4xl font-bold">${plan.price} </p>
+                <p className="mt-2 text-4xl font-bold">
+                  ${plan.price}{' '}
+                  <span className="text-muted-foreground text-sm font-medium">
+                    /month
+                  </span>{' '}
+                </p>
 
                 <Button
                   size="lg"
