@@ -14,8 +14,8 @@ const plans = [
       'Task Automation → 100 actions',
       'Code Generation → 100',
       'Image Generation → 10',
+      'Audio Generation → 10 minutes',
       'Video Generation → 10 seconds',
-      'Persistent Memory → 1 month',
 
       // 'My Chatbots → save up to 10 bots',
       // 'My Knowledge → manual uploads',
@@ -34,8 +34,8 @@ const plans = [
       'Task Automation → 500 actions',
       'Code Generation → 500',
       'Image Generation → 50',
+      'Audio Generation → 50 minutes',
       'Video Generation → 50 seconds',
-      'Persistent Memory → 3 months',
 
       // 'My Chatbots → save up to 50 bots',
       // 'My Knowledge → app connectors',
@@ -46,42 +46,36 @@ const plans = [
 ];
 const memroy = [
   {
-    name: '1 Month Memory',
-    price: 5,
+    name: '1,000 Stored Chats',
+    price: 10,
     buttonText: 'Purchase Memory',
     currentPlan: true,
   },
   {
-    name: '3 Month Memory',
-    price: 10,
+    name: '5,000 Stored Chats',
+    price: 25,
     buttonText: 'Purchase Memory',
     currentPlan: false,
   },
   {
-    name: '6 Month Memory',
-    price: 15,
+    name: '10,000 Stored Chats',
+    price: 50,
     buttonText: 'Purchase Memory',
     currentPlan: false,
   },
   {
-    name: '12 Month Memory',
-    price: 20,
+    name: '25,000 Stored Chats',
+    price: 100,
     buttonText: 'Purchase Memory',
     currentPlan: false,
   },
 ];
 const images = [
   {
-    name: '50 Images',
-    price: 5,
-    buttonText: 'Purchase Images',
-    currentPlan: true,
-  },
-  {
     name: '100 Images',
     price: 10,
     buttonText: 'Purchase Images',
-    currentPlan: false,
+    currentPlan: true,
   },
   {
     name: '250 Images',
@@ -93,6 +87,38 @@ const images = [
     name: '500 Images',
     price: 50,
     buttonText: 'Purchase Images',
+    currentPlan: false,
+  },
+  {
+    name: '1,000 Images',
+    price: 100,
+    buttonText: 'Purchase Images',
+    currentPlan: false,
+  },
+];
+const audios = [
+  {
+    name: '30 Minutes',
+    price: 10,
+    buttonText: 'Purchase Audio',
+    currentPlan: true,
+  },
+  {
+    name: '90 Minutes',
+    price: 25,
+    buttonText: 'Purchase Audio',
+    currentPlan: false,
+  },
+  {
+    name: ' 210 Minutes',
+    price: 50,
+    buttonText: 'Purchase Audio',
+    currentPlan: false,
+  },
+  {
+    name: '480 Minutes',
+    price: 100,
+    buttonText: 'Purchase Audio',
     currentPlan: false,
   },
 ];
@@ -236,13 +262,14 @@ const Pricing01 = () => {
       <Tabs defaultValue="plan" className="mt-8 w-full">
         <TabsList className="mx-auto mb-6 w-full max-w-[840px]">
           <TabsTrigger value="plan">Plans</TabsTrigger>
+          <TabsTrigger value="memory">Memory</TabsTrigger>
           <TabsTrigger value="search">Search</TabsTrigger>
           <TabsTrigger value="research">Research</TabsTrigger>
           <TabsTrigger value="task">Task</TabsTrigger>
           <TabsTrigger value="code">Code</TabsTrigger>
           <TabsTrigger value="image">Image</TabsTrigger>
+          <TabsTrigger value="audio">Audio</TabsTrigger>
           <TabsTrigger value="video">Video</TabsTrigger>
-          <TabsTrigger value="memory">Memory</TabsTrigger>
         </TabsList>
         <TabsContent value="plan">
           <div className="mx-auto grid w-full max-w-[840px] grid-cols-1 gap-5 lg:grid-cols-2">
@@ -315,6 +342,35 @@ const Pricing01 = () => {
         <TabsContent value="image">
           <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
             {images.map(plan => (
+              <div
+                key={plan.name}
+                className="bg-secondary w-full rounded-lg border p-6"
+              >
+                <h3 className="text-lg font-medium">{plan.name}</h3>
+                <p className="mt-2 text-4xl font-bold">
+                  ${plan.price}{' '}
+                  <span className="text-muted-foreground text-sm font-medium">
+                    /month
+                  </span>{' '}
+                </p>
+
+                <Button
+                  size="lg"
+                  className={cn(
+                    'mt-4 w-full bg-white text-black shadow-none hover:bg-white hover:text-black',
+                    plan.currentPlan &&
+                      'bg-primary/90 hover:bg-primary/80 text-white hover:text-white',
+                  )}
+                >
+                  {plan.currentPlan ? 'Current Plan' : plan.buttonText}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="audio">
+          <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
+            {audios.map(plan => (
               <div
                 key={plan.name}
                 className="bg-secondary w-full rounded-lg border p-6"
