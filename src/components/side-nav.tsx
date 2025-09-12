@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import { useUserChatStore } from '@/stores/chatStore';
+import { useConversationsStore } from '@/stores/converstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {
   ChevronDown,
@@ -41,10 +41,9 @@ const SideNav = ({
 }) => {
   const { data } = useSession();
   const userId = data?.user?.id;
-  // console.log(data?.accessToken);
   const router = useRouter();
   const { onOpen } = useModalStore();
-  const { resetChat } = useUserChatStore();
+  const { activeConversation, setActiveConversation } = useConversationsStore();
   const [logoHovered, setLogoHovered] = useState(false);
 
   const handleLogoMouseEnter = () => {
@@ -52,6 +51,7 @@ const SideNav = ({
       setLogoHovered(true);
     }
   };
+  console.log({ activeConversation });
   return !isLoggeIn ? (
     <>
       <nav className={cn(!hideSidebar && 'overflow-y-scroll')}>
@@ -99,7 +99,7 @@ const SideNav = ({
           <div className={cn('space-y-0.5 px-1 pt-6', hideSidebar && 'px-0')}>
             <Button
               onClick={() => {
-                resetChat();
+                setActiveConversation(null);
                 router.push('/');
               }}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"

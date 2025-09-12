@@ -1,5 +1,5 @@
 import {
-  loadConversationsAction,
+  loadConversationListAction,
   loadSingleConversation,
 } from '@/actions/conversations';
 import { create } from 'zustand';
@@ -27,12 +27,17 @@ export type Conversation = {
   updatedAt: string;
 };
 
+export enum ROLES {
+  USER = 'user',
+  ASSISTANT = 'assistant',
+}
+
 // Messages inside an active conversation
 export type ConversationMessage = {
-  role: 'user' | 'assistant';
+  role: ROLES;
   content: string;
   timestamp: string; // ISO string
-  metadata: {
+  metadata?: {
     type: string;
     timestamp: string;
     model?: string;
@@ -41,50 +46,100 @@ export type ConversationMessage = {
 
 // Full active conversation
 export type ActiveConversation = {
-  _id: string;
-  conversationId: string;
-  userId: string;
-  title: string;
+  _id?: string;
+  conversationId?: string;
+  userId?: string;
+  title?: string;
   messages: ConversationMessage[];
   createdAt?: string;
   updatedAt?: string;
 };
 
 interface ConversationStore {
-  conversations: Conversation[];
+  conversationList: Conversation[];
   activeConversation: ActiveConversation | null;
-  isLoadingList: boolean;
+  isLoadingConversationList: boolean;
   isLoadingActiveConversation: boolean;
+  isLoadingResponse: boolean;
   error: string | null;
 
-  setConversations: (conversations: Conversation[]) => void;
+  setConversationList: (conversations: Conversation[]) => void;
   setActiveConversation: (conversation: ActiveConversation | null) => void;
-  setLoadingList: (loading: boolean) => void;
+  updateActiveConversation: (
+    message: string,
+    role: ROLES,
+    conversationId?: string,
+  ) => void;
+  setLoadingConversationList: (loading: boolean) => void;
   setLoadingActiveConversation: (loading: boolean) => void;
+  setLoadingResponse: (loading: boolean) => void;
   setError: (error: string | null) => void;
 }
 
 export const useConversationsStore = create<ConversationStore>()(
   persist(
     set => ({
-      conversations: [],
+      conversationList: [],
       activeConversation: null,
-      isLoadingList: false,
+      isLoadingConversationList: false,
       isLoadingActiveConversation: false,
+      isLoadingResponse: false,
       error: null,
 
-      setConversations: conversations => set({ conversations, error: null }),
+      setConversationList: conversations =>
+        set({ conversationList: conversations, error: null }),
       setActiveConversation: conversation =>
         set({ activeConversation: conversation }),
-      setLoadingList: isLoadingList => set({ isLoadingList }),
+      updateActiveConversation: (message, role, conversationId) =>
+        set(state => {
+          if (!state.activeConversation?.conversationId)
+            return {
+              ...state,
+              activeConversation: {
+                ...(conversationId && { conversationId }),
+                messages: [
+                  {
+                    role: role,
+                    content: message,
+                    timestamp: new Date().toISOString(),
+                  },
+                ],
+              },
+            };
+
+          const timestamp = new Date().toISOString();
+
+          const newMessages = [
+            ...(state.activeConversation?.messages || []),
+            {
+              role: role,
+              content: message,
+              timestamp,
+            },
+          ];
+
+          return {
+            ...state,
+            activeConversation: {
+              ...state.activeConversation,
+              messages: newMessages,
+              updatedAt: timestamp,
+            },
+          };
+        }),
+      setLoadingConversationList: isLoadingList =>
+        set({ isLoadingConversationList: isLoadingList }),
       setLoadingActiveConversation: isLoadingActiveConversation =>
         set({ isLoadingActiveConversation }),
+      setLoadingResponse: isLoadingResponse =>
+        set({ isLoadingResponse: isLoadingResponse }),
+
       setError: error => set({ error }),
     }),
     {
       name: 'conversation-storage',
       partialize: state => ({
-        conversations: state.conversations,
+        conversations: state.conversationList,
         activeConversation: state.activeConversation,
       }),
     },
@@ -94,20 +149,20 @@ export const useConversationsStore = create<ConversationStore>()(
 
 export const conversationHelpers = {
   // Load sidebar conversations
-  loadConversations: async (accessToken: string, force = false) => {
+  loadConversationList: async (accessToken: string, force = false) => {
     const store = useConversationsStore.getState();
 
-    if (!force && store.conversations.length > 0) {
+    if (!force && store.conversationList.length > 0) {
       return;
     }
 
-    store.setLoadingList(true);
+    if (!force) store.setLoadingConversationList(true);
 
     try {
-      const response = await loadConversationsAction(accessToken);
+      const response = await loadConversationListAction(accessToken);
 
       if (response.success) {
-        store.setConversations(response.data.conversations);
+        store.setConversationList(response.data.conversations);
       } else {
         store.setError(response.message);
       }
@@ -115,7 +170,7 @@ export const conversationHelpers = {
       store.setError('Failed to load conversations');
       console.error(err);
     } finally {
-      store.setLoadingList(false);
+      store.setLoadingConversationList(false);
     }
   },
 
@@ -147,6 +202,6 @@ export const conversationHelpers = {
   },
 
   reloadConversations: async (accessToken: string) => {
-    return conversationHelpers.loadConversations(accessToken, true);
+    return conversationHelpers.loadConversationList(accessToken, true);
   },
 };

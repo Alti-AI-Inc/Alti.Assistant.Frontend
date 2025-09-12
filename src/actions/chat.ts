@@ -1,5 +1,6 @@
 'use server';
 
+//conversationId : search-1756433998769-erbgyce0r
 export async function chatOpenAI(prompt: string, accessToken: string) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/openai/4nano/get-response`,

@@ -1,13 +1,18 @@
 'use client';
 
-import { chatOpenAI } from '@/actions/chat';
+import { PostConversation } from '@/actions/conversations';
 import AudioRecorder from '@/components/AudioRecorder';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { useUserChatStore } from '@/stores/chatStore';
-import { ArrowRight, LoaderCircle, Plus } from 'lucide-react';
+import {
+  conversationHelpers,
+  ROLES,
+  useConversationsStore,
+} from '@/stores/converstionsStore';
+import { ArrowRight, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const options = [
@@ -32,22 +37,27 @@ const options = [
     value: 'image-generation',
   },
   {
-    id: 4,
+    id: 5,
     title: 'Audio',
     value: 'audio-generation',
   },
   {
-    id: 5,
+    id: 6,
     title: 'Video',
     value: 'video-generation',
   },
 ];
 
-const ChatInput = () => {
+const ChatInput = ({ conversationId }: { conversationId?: string }) => {
+  const router = useRouter();
   const { data } = useSession();
-  const { onModalResponse } = useUserChatStore();
-  // console.log({data});
-  const [submitting, setSubmitting] = useState(false);
+  const {
+    updateActiveConversation,
+    conversationList,
+    setLoadingResponse,
+    activeConversation,
+  } = useConversationsStore();
+
   const [message, setMessage] = useState('');
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
@@ -60,14 +70,47 @@ const ChatInput = () => {
   };
 
   const handleSubmit = async () => {
-    setSubmitting(true);
+    if (message.trim() === '') return;
+    updateActiveConversation(message, ROLES.USER);
+    setMessage('');
+
+    setLoadingResponse(true);
+
+    if (!conversationId) {
+      router.push('/c/new-chat');
+    }
+
     try {
       if (data?.accessToken) {
-        const reponse = await chatOpenAI(message, data.accessToken);
-        if (reponse.success) {
-          onModalResponse(reponse.data);
+        const response = await PostConversation(
+          message,
+          data.accessToken,
+          conversationId === 'new-chat'
+            ? activeConversation?.conversationId || undefined
+            : conversationId,
+        );
+        if (response.data.responseMessage.answer) {
+          updateActiveConversation(
+            response.data.responseMessage.answer,
+            ROLES.ASSISTANT,
+          );
         }
-        setSubmitting(false);
+        const conversationExist = conversationList.find(
+          conversation =>
+            conversation.conversationId === response.data.conversationId,
+        );
+        if (!conversationExist) {
+          conversationHelpers.reloadConversations(data.accessToken);
+          // setConversationList([
+          //   {
+          //     title: message,
+          //     conversationId: response.data.conversationId,
+          //   } as Conversation,
+          //   ...conversationList,
+          // ]);
+        }
+
+        setLoadingResponse(false);
       }
     } catch (error) {
       console.log({ error });
@@ -76,17 +119,23 @@ const ChatInput = () => {
     if (message.trim()) {
       setMessage('');
     }
-    setSubmitting(false);
+
+    setLoadingResponse(false);
   };
 
   return (
-    <div className="mx-auto w-full max-w-3xl">
+    <div className="mx-auto w-full max-w-3xl bg-white">
       {/* <form> */}
       <div className="rounded-2xl border-2 border-gray-200 px-4 shadow-sm">
         <Input
           type="text"
           value={message}
           onChange={e => setMessage(e.target.value)}
+          onKeyPress={e => {
+            if (e.key === 'Enter') {
+              handleSubmit();
+            }
+          }}
           placeholder="Chat with alti"
           className="min-h-12 w-full border-none px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
         />
@@ -103,7 +152,7 @@ const ChatInput = () => {
                 id="file-input-alt"
               />
             </div>
-            {/* <Plus className="cursor-pointer rounded-full border-2 border-gray-300 p-0.5" /> */}
+
             {options.map(option => (
               <Button
                 key={option.id}
@@ -121,10 +170,9 @@ const ChatInput = () => {
               </Button>
             ))}
           </div>
+
           <div className="flex items-center space-x-2">
-            {submitting ? (
-              <LoaderCircle className="size-6 flex-none animate-spin cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white" />
-            ) : message ? (
+            {message ? (
               <ArrowRight
                 onClick={handleSubmit}
                 // type="submit"

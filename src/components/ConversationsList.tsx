@@ -20,11 +20,15 @@ const ConversationsList = () => {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const { conversations, isLoadingList } = useConversationsStore();
+  const {
+    setActiveConversation,
+    conversationList: conversations,
+    isLoadingConversationList: isLoadingList,
+  } = useConversationsStore();
 
   useEffect(() => {
     if (session?.accessToken) {
-      conversationHelpers.loadConversations(session?.accessToken);
+      conversationHelpers.loadConversationList(session?.accessToken);
     }
   }, [session?.accessToken]);
 
@@ -35,10 +39,9 @@ const ConversationsList = () => {
       )
     : [];
 
-  const handleChatClick = async (id: string) => {
-    // setCurrentConversation(id);
-    if (session?.accessToken)
-      conversationHelpers.loadActiveConversation(id, session?.accessToken);
+  const handleConversationClick = async (id: string) => {
+    setActiveConversation(null);
+
     router.push('/c/' + id);
   };
 
@@ -62,7 +65,7 @@ const ConversationsList = () => {
             >
               <span
                 className="flex-1 truncate px-1 py-2"
-                onClick={() => handleChatClick(chat.conversationId)}
+                onClick={() => handleConversationClick(chat.conversationId)}
               >
                 {' '}
                 {chat?.title?.replace(
