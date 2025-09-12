@@ -1,5 +1,6 @@
 'use client';
 import ChatInput from '@/components/ChatInput';
+import { cn } from '@/lib/utils';
 import {
   conversationHelpers,
   useConversationsStore,
@@ -71,13 +72,19 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
           {/* Loading message - visible in the messages area */}
           {(isLoadingResponse || isLoadingActiveConversation) && (
-            <div className="flex items-center justify-center py-4">
+            <div
+              className={cn(
+                'flex items-center py-4',
+                isLoadingActiveConversation && 'justify-center',
+                isLoadingResponse && 'justify-start',
+              )}
+            >
               <div className="flex items-center space-x-2 text-gray-500">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"></div>
                 <span>
                   {isLoadingActiveConversation
                     ? 'loading chat...'
-                    : 'alti is replying...'}{' '}
+                    : 'alti is thinking...'}{' '}
                 </span>
               </div>
             </div>
