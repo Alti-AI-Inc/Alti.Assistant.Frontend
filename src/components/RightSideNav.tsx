@@ -7,16 +7,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
   EllipsisVertical,
   PanelRightClose,
   Pencil,
+  Search,
   SquarePen,
-  Trash2
+  Trash2,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import SearchWorkflows from './modals/SearchWorkflows';
 import { Button } from './ui/button';
 
 const previousChatHistory = [
@@ -101,6 +102,7 @@ const RightSideNav = () => {
   const router = useRouter();
 
   const { isRightSidebarOpen, toggleRightSidebar } = useSidebarStore();
+  const { onOpen } = useModalStore();
 
   const hideSidebar = !isRightSidebarOpen;
 
@@ -127,7 +129,7 @@ const RightSideNav = () => {
               />
             </div>
           </div>
-          <div className={cn('space-y-0.5 px-1 pt-10', hideSidebar && 'px-0')}>
+          <div className={cn('space-y-0.5 px-1 pt-6', hideSidebar && 'px-0')}>
             <Button
               onClick={() => router.push('/')}
               className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
@@ -139,7 +141,21 @@ const RightSideNav = () => {
                 New workflow
               </span>
             </Button>
-            <SearchWorkflows hideSidebar={hideSidebar} />
+            <Button
+              onClick={() =>
+                onOpen({
+                  type: 'search-chats',
+                })
+              }
+              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+            >
+              <Search />{' '}
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                Search workflows
+              </span>
+            </Button>
 
             <Button
               // onClick={() => router.push("/saved-chats")}

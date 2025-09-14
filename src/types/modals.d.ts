@@ -4,4 +4,5 @@ type ModalType =
   | 'search-chats'
   | 'rename-chat'
   | 'forgot-password'
+  | 'search-workflows'
   | null;
