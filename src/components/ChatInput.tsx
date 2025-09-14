@@ -5,11 +5,7 @@ import AudioRecorder from '@/components/AudioRecorder';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import {
-  conversationHelpers,
-  ROLES,
-  useConversationsStore,
-} from '@/stores/converstionsStore';
+import { ROLES, useConversationsStore } from '@/stores/converstionsStore';
 import { ArrowRight, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -51,12 +47,8 @@ const options = [
 const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   const router = useRouter();
   const { data } = useSession();
-  const {
-    updateActiveConversation,
-    conversationList,
-    setLoadingResponse,
-    activeConversation,
-  } = useConversationsStore();
+  const { updateActiveConversation, setLoadingResponse } =
+    useConversationsStore();
 
   const [message, setMessage] = useState('');
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -76,38 +68,32 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
 
     setLoadingResponse(true);
 
-    if (!conversationId) {
-      router.push('/c/new-chat');
-    }
-
     try {
       if (data?.accessToken) {
         const response = await PostConversation(
           message,
           data.accessToken,
-          conversationId === 'new-chat'
-            ? activeConversation?.conversationId || undefined
-            : conversationId,
+          conversationId === 'new-chat' ? undefined : conversationId,
         );
         if (response.data.responseMessage.answer) {
+          if (conversationId === 'new-chat') {
+            updateActiveConversation(
+              message,
+              ROLES.USER,
+              response.data.conversationId,
+            );
+          }
+          const newId =
+            conversationId === 'new-chat'
+              ? response.data.conversationId
+              : conversationId;
           updateActiveConversation(
             response.data.responseMessage.answer,
             ROLES.ASSISTANT,
+            newId,
           );
-        }
-        const conversationExist = conversationList.find(
-          conversation =>
-            conversation.conversationId === response.data.conversationId,
-        );
-        if (!conversationExist) {
-          conversationHelpers.reloadConversations(data.accessToken);
-          // setConversationList([
-          //   {
-          //     title: message,
-          //     conversationId: response.data.conversationId,
-          //   } as Conversation,
-          //   ...conversationList,
-          // ]);
+          if (conversationId === 'new-chat')
+            router.replace(`/c/${response.data.conversationId}`);
         }
 
         setLoadingResponse(false);
@@ -124,7 +110,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   };
 
   return (
-    <div className="mx-auto w-full max-w-3xl bg-white">
+    <div className="mx-auto w-full max-w-[780px] bg-white">
       {/* <form> */}
       <div className="rounded-2xl border-2 border-gray-200 px-4 shadow-sm">
         <Input
@@ -171,7 +157,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
             ))}
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex w-40 items-center justify-end space-x-2">
             {message ? (
               <ArrowRight
                 onClick={handleSubmit}

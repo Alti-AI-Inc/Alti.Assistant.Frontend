@@ -21,7 +21,6 @@ const ConversationsList = () => {
   const { data: session } = useSession();
 
   const {
-    setActiveConversation,
     conversationList: conversations,
     isLoadingConversationList: isLoadingList,
   } = useConversationsStore();
@@ -40,8 +39,6 @@ const ConversationsList = () => {
     : [];
 
   const handleConversationClick = async (id: string) => {
-    setActiveConversation(null);
-
     router.push('/c/' + id);
   };
 
@@ -86,7 +83,16 @@ const ConversationsList = () => {
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
 
-                  <DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      return session?.accessToken
+                        ? conversationHelpers.deleteConversation(
+                            session?.accessToken,
+                            chat.conversationId,
+                          )
+                        : null;
+                    }}
+                  >
                     <Trash2 className="text-black" />{' '}
                     <span className="text-black">Delete</span>
                   </DropdownMenuItem>

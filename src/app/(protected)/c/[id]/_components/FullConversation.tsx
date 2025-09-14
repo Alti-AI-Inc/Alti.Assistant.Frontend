@@ -11,8 +11,12 @@ import { Streamdown } from 'streamdown';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
-  const { activeConversation, isLoadingActiveConversation, isLoadingResponse } =
-    useConversationsStore();
+  const {
+    activeConversation,
+    error,
+    isLoadingActiveConversation,
+    isLoadingResponse,
+  } = useConversationsStore();
   // console.log({ activeConversation });
   useEffect(() => {
     if (!data?.accessToken) return;
@@ -42,62 +46,75 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     scrollToBottom();
   }, [activeConversation?.messages, isLoadingResponse]);
 
-  // if (isLoadingActiveConversation) {
-  //   return <div>loading</div>;
-  // }
 
   return (
-    <div className="flex h-screen flex-col">
+    <div
+      className={cn(
+        'flex w-full flex-col',
+        activeConversation?.messages.length && 'h-screen',
+        isLoadingActiveConversation && 'h-screen',
+      )}
+    >
       {/* Messages container - takes remaining space and scrolls */}
-      <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
-        <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-6">
-          {activeConversation?.messages.length &&
-            activeConversation.messages.map((messages, idx) => (
-              <div key={idx} className="space-y-4">
-                {messages.role === 'user' && (
-                  <div className="flex items-center justify-end">
-                    <div className="w-fit max-w-[85%] rounded-2xl bg-gray-100 px-4 py-2 text-black shadow">
-                      {messages.content}
+      {activeConversation?.messages.length && (
+        <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
+          <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-6">
+            {activeConversation?.messages.length &&
+              activeConversation.messages.map((messages, idx) => (
+                <div key={idx} className="space-y-4">
+                  {messages.role === 'user' && (
+                    <div className="flex items-center justify-end">
+                      <div className="w-fit max-w-[85%] rounded-2xl bg-gray-100 px-4 py-2 text-black shadow">
+                        {messages.content}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {messages.role === 'assistant' && (
-                  <Streamdown className="w-fit max-w-[85%] rounded-lg">
-                    {messages.content}
-                  </Streamdown>
-                )}
-              </div>
-            ))}
+                  {messages.role === 'assistant' && (
+                    <Streamdown className="w-fit max-w-[85%] rounded-lg">
+                      {messages.content}
+                    </Streamdown>
+                  )}
+                </div>
+              ))}
 
-          {/* Loading message - visible in the messages area */}
-          {(isLoadingResponse || isLoadingActiveConversation) && (
-            <div
-              className={cn(
-                'flex items-center py-4',
-                isLoadingActiveConversation && 'justify-center',
-                isLoadingResponse && 'justify-start',
-              )}
-            >
-              <div className="flex items-center space-x-2 text-gray-500">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"></div>
-                <span>
-                  {isLoadingActiveConversation
-                    ? 'loading chat...'
-                    : 'alti is thinking...'}{' '}
-                </span>
+            {/* Loading message - visible in the messages area */}
+            {isLoadingResponse && (
+              <div
+                className={cn(
+                  'flex items-center py-4',
+                  isLoadingResponse && 'justify-start',
+                )}
+              >
+                <div className="flex items-center space-x-2 text-gray-500">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"></div>
+                  <span>alti is thinking...</span>
+                </div>
               </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
+            )}
+            <div ref={messagesEndRef} />
+          </div>
         </div>
-      </div>
+      )}
+      {isLoadingActiveConversation && (
+        <div
+          className={cn(
+            'flex h-[calc(100vh_-110px] flex-1 items-center justify-center py-4',
+          )}
+        >
+          <div className="flex items-center space-x-2 text-gray-500">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"></div>
+            <span>loading chat...</span>
+          </div>
+        </div>
+      )}
+      {error && <div className="my-6 text-center">{error}</div>}
 
       {/* Sticky chat input at bottom */}
       <div className="sticky bottom-0 bg-white px-4 pb-4">
-        <div className="mx-auto w-full max-w-3xl">
-          <ChatInput conversationId={conversationId} />
-        </div>
+        {/* <div className="mx-auto w-full max-w-3xl"> */}
+        <ChatInput conversationId={conversationId} />
+        {/* </div> */}
       </div>
     </div>
   );

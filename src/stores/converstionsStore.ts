@@ -1,9 +1,9 @@
 import {
+  deleteConversation,
   loadConversationListAction,
   loadSingleConversation,
 } from '@/actions/conversations';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 // Conversation list type (sidebar)
 export type Conversation = {
@@ -76,87 +76,73 @@ interface ConversationStore {
   setError: (error: string | null) => void;
 }
 
-export const useConversationsStore = create<ConversationStore>()(
-  persist(
-    set => ({
-      conversationList: [],
-      activeConversation: null,
-      isLoadingConversationList: false,
-      isLoadingActiveConversation: false,
-      isLoadingResponse: false,
-      error: null,
+export const useConversationsStore = create<ConversationStore>()(set => ({
+  conversationList: [],
+  activeConversation: null,
+  isLoadingConversationList: false,
+  isLoadingActiveConversation: false,
+  isLoadingResponse: false,
+  error: null,
 
-      setConversationList: conversations =>
-        set({ conversationList: conversations, error: null }),
-      setActiveConversation: conversation =>
-        set({ activeConversation: conversation }),
-      updateActiveConversation: (message, role, conversationId) =>
-        set(state => {
-          if (!state.activeConversation?.conversationId)
-            return {
-              ...state,
-              activeConversation: {
-                ...(conversationId && { conversationId }),
-                messages: [
-                  {
-                    role: role,
-                    content: message,
-                    timestamp: new Date().toISOString(),
-                  },
-                ],
+  setConversationList: conversations =>
+    set({ conversationList: conversations, error: null }),
+  setActiveConversation: conversation =>
+    set({ activeConversation: conversation }),
+  updateActiveConversation: (message, role, conversationId) =>
+    set(state => {
+      if (!state.activeConversation?.conversationId)
+        return {
+          ...state,
+          activeConversation: {
+            ...(conversationId && { conversationId }),
+            messages: [
+              {
+                role: role,
+                content: message,
+                timestamp: new Date().toISOString(),
               },
-            };
+            ],
+          },
+        };
 
-          const timestamp = new Date().toISOString();
+      const timestamp = new Date().toISOString();
 
-          const newMessages = [
-            ...(state.activeConversation?.messages || []),
-            {
-              role: role,
-              content: message,
-              timestamp,
-            },
-          ];
+      const newMessages = [
+        ...(state.activeConversation?.messages || []),
+        {
+          role: role,
+          content: message,
+          timestamp,
+        },
+      ];
 
-          return {
-            ...state,
-            activeConversation: {
-              ...state.activeConversation,
-              messages: newMessages,
-              updatedAt: timestamp,
-            },
-          };
-        }),
-      setLoadingConversationList: isLoadingList =>
-        set({ isLoadingConversationList: isLoadingList }),
-      setLoadingActiveConversation: isLoadingActiveConversation =>
-        set({ isLoadingActiveConversation }),
-      setLoadingResponse: isLoadingResponse =>
-        set({ isLoadingResponse: isLoadingResponse }),
-
-      setError: error => set({ error }),
+      return {
+        ...state,
+        activeConversation: {
+          ...state.activeConversation,
+          messages: newMessages,
+          updatedAt: timestamp,
+        },
+      };
     }),
-    {
-      name: 'conversation-storage',
-      partialize: state => ({
-        conversations: state.conversationList,
-        activeConversation: state.activeConversation,
-      }),
-    },
-  ),
-);
+  setLoadingConversationList: isLoadingList =>
+    set({ isLoadingConversationList: isLoadingList }),
+  setLoadingActiveConversation: isLoadingActiveConversation =>
+    set({ isLoadingActiveConversation }),
+  setLoadingResponse: isLoadingResponse =>
+    set({ isLoadingResponse: isLoadingResponse }),
+
+  setError: error => set({ error }),
+}));
+
 // ===== Helpers (outside store) =====
 
 export const conversationHelpers = {
   // Load sidebar conversations
-  loadConversationList: async (accessToken: string, force = false) => {
+  loadConversationList: async (accessToken: string) => {
     const store = useConversationsStore.getState();
 
-    if (!force && store.conversationList.length > 0) {
-      return;
-    }
-
-    if (!force) store.setLoadingConversationList(true);
+    store.setLoadingConversationList(true);
 
     try {
       const response = await loadConversationListAction(accessToken);
@@ -200,8 +186,23 @@ export const conversationHelpers = {
       store.setLoadingActiveConversation(false);
     }
   },
+  deleteConversation: async (accessToken: string, conversationId: string) => {
+    const store = useConversationsStore.getState();
+    store.setConversationList(
+      store.conversationList.filter(c => c.conversationId !== conversationId),
+    );
+    try {
+      const response = await deleteConversation(accessToken, conversationId);
+      console.log({ response });
+      if (!response.ok) {
+        const response = await loadConversationListAction(accessToken);
 
-  reloadConversations: async (accessToken: string) => {
-    return conversationHelpers.loadConversationList(accessToken, true);
+        if (response.success) {
+          store.setConversationList(response.data.conversations);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
   },
 };

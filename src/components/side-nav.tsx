@@ -43,7 +43,7 @@ const SideNav = ({
   const userId = data?.user?.id;
   const router = useRouter();
   const { onOpen } = useModalStore();
-  const { activeConversation, setActiveConversation } = useConversationsStore();
+  const { setActiveConversation } = useConversationsStore();
   const [logoHovered, setLogoHovered] = useState(false);
 
   const handleLogoMouseEnter = () => {
@@ -51,7 +51,7 @@ const SideNav = ({
       setLogoHovered(true);
     }
   };
-  console.log({ activeConversation });
+
   return !isLoggeIn ? (
     <>
       <nav className={cn(!hideSidebar && 'overflow-y-scroll')}>

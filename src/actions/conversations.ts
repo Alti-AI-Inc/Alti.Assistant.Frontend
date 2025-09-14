@@ -32,7 +32,6 @@ export async function PostConversation(
   return data;
 }
 
-
 export async function loadConversationListAction(accessToken: string) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/conversations`,
@@ -66,3 +65,30 @@ export async function loadSingleConversation(
   const data = await response.json();
   return data;
 }
+
+export const deleteConversation = async (
+  token: string | null | undefined,
+  conversationId: string,
+) => {
+  // const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/${model}/delete-single-response/${objectId}`;
+  const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/conversations/${conversationId}`;
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.json();
+    // if (!response.ok) {
+    //   const error = await response.json();
+    //   throw new Error(error.message || 'Failed to delete the session');
+    // }
+
+    console.log('Session deleted successfully');
+  } catch (error) {
+    console.error('Error deleting session:', error);
+    throw error;
+  }
+};
