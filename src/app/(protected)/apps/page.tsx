@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import React from 'react';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 
@@ -128,6 +129,9 @@ export default function AppIntegrationsGrid() {
                 <p className="mt-2 text-sm text-gray-500">
                   {app.fullDescription}
                 </p>
+                <Button className="mt-6 w-full" variant="outline">
+                  Connect
+                </Button>
               </CardContent>
             </Card>
 
