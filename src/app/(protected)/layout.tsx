@@ -1,27 +1,40 @@
 'use client';
 
-import SideNav from '@/components/side-nav';
+import LeftSideNav from '@/components/LeftSideNav';
+import RightSideNav from '@/components/RightSideNav';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useSidebarStore } from '@/stores/useSidebarStore';
+import { usePathname } from 'next/navigation';
 
 export default function ProtectedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [hideSidebar, toggleSidebar] = useState(false);
+  const pathname = usePathname();
+  const { isLeftSidebarOpen, isRightSidebarOpen } = useSidebarStore();
   return (
     <div>
       <div className="flex flex-wrap">
         <div
           className={cn(
-            'sticky top-0 left-0 flex h-screen bg-secondary w-68 flex-none flex-col transition-all duration-300 ease-in-out',
-            hideSidebar ? 'w-10' : 'w-68',
+            'bg-secondary sticky top-0 left-0 flex h-screen w-68 flex-none flex-col transition-all duration-300 ease-in-out',
+            !isLeftSidebarOpen ? 'w-10' : 'w-68',
           )}
         >
-          <SideNav hideSidebar={hideSidebar} toggleSidebar={toggleSidebar} />
+          <LeftSideNav />
         </div>
-        <main className="w-full bg-background flex-1">{children}</main>
+        <main className="bg-background w-full flex-1">{children}</main>
+        {pathname === '/workflows' && (
+          <div
+            className={cn(
+              'bg-secondary sticky top-0 right-0 flex h-screen w-68 flex-none flex-col transition-all duration-300 ease-in-out',
+              !isRightSidebarOpen ? 'w-10' : 'w-68',
+            )}
+          >
+            <RightSideNav />
+          </div>
+        )}
       </div>
     </div>
   );

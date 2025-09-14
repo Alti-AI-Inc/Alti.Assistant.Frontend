@@ -10,11 +10,12 @@ import {
 import { cn } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/converstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
+import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
-  ChevronDown,
   LayoutGrid,
   LogOut,
   MessageSquare,
+  Network,
   Orbit,
   PanelLeftClose,
   Scale,
@@ -26,24 +27,21 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import ConversationsList from './ConversationsList';
 import { Button } from './ui/button';
 
-const SideNav = ({
-  isLoggeIn,
-  hideSidebar,
-  toggleSidebar,
-}: {
-  isLoggeIn?: boolean;
-  hideSidebar: boolean;
-  toggleSidebar: Dispatch<SetStateAction<boolean>>;
-}) => {
+const LeftSideNav = () => {
   const { data } = useSession();
-  const userId = data?.user?.id;
   const router = useRouter();
+
   const { onOpen } = useModalStore();
   const { setActiveConversation } = useConversationsStore();
+  const { isLeftSidebarOpen, toggleLeftSidebar } = useSidebarStore();
+
+  const hideSidebar = !isLeftSidebarOpen;
+  const isLoggedIn = data?.accessToken;
+
   const [logoHovered, setLogoHovered] = useState(false);
 
   const handleLogoMouseEnter = () => {
@@ -52,65 +50,66 @@ const SideNav = ({
     }
   };
 
-  return !isLoggeIn ? (
+  return (
     <>
-      <nav className={cn(!hideSidebar && 'overflow-y-scroll')}>
-        <div className="bg-secondary sticky top-0 z-30 pt-4 pb-2">
+      <div className="bg-secondary pt-4 pb-2">
+        <div
+          className={cn(
+            'sticky top-0 z-30 flex items-center justify-between px-4 pt-2',
+            hideSidebar && 'justify-center',
+          )}
+        >
           <div
             className={cn(
-              'flex items-center justify-between px-4 pt-2',
-              hideSidebar && 'justify-center',
+              'flex flex-none items-center justify-center transition-all duration-300',
             )}
+            onMouseEnter={handleLogoMouseEnter}
+            onMouseLeave={() => setLogoHovered(false)}
           >
-            <div
-              className={cn(
-                'flex flex-none items-center justify-center transition-all duration-300',
-              )}
-              onMouseEnter={handleLogoMouseEnter}
-              onMouseLeave={() => setLogoHovered(false)}
-            >
-              {logoHovered && hideSidebar ? (
-                <PanelLeftClose
-                  className={cn(
-                    'size-[21px] cursor-pointer text-black transition-transform duration-300',
-                  )}
-                  onClick={() => toggleSidebar(pre => !pre)}
+            {logoHovered && hideSidebar ? (
+              <PanelLeftClose
+                className={cn(
+                  'size-[21px] cursor-pointer text-black transition-transform duration-300',
+                )}
+                onClick={toggleLeftSidebar}
+              />
+            ) : (
+              <Link href="/">
+                <Image
+                  src="/assets/logo-icon.png"
+                  alt="logo"
+                  height={20}
+                  width={20}
                 />
-              ) : (
-                <Link href="/">
-                  <Image
-                    src="/assets/logo-icon.png"
-                    alt="logo"
-                    height={20}
-                    width={20}
-                  />
-                </Link>
-              )}
-            </div>
-
-            <PanelLeftClose
-              className={cn(
-                'size-5 cursor-pointer text-gray-500 transition-transform duration-300',
-                hideSidebar && 'hidden',
-              )}
-              onClick={() => toggleSidebar(pre => !pre)}
-            />
+              </Link>
+            )}
           </div>
-          <div className={cn('space-y-0.5 px-1 pt-6', hideSidebar && 'px-0')}>
-            <Button
-              onClick={() => {
-                setActiveConversation(null);
-                router.push('/');
-              }}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+
+          <PanelLeftClose
+            className={cn(
+              'size-5 cursor-pointer text-gray-500 transition-transform duration-300',
+              hideSidebar && 'hidden',
+            )}
+            onClick={toggleLeftSidebar}
+          />
+        </div>
+        <div className={cn('space-y-0.5 px-1 pt-6', hideSidebar && 'px-0')}>
+          <Button
+            onClick={() => {
+              setActiveConversation(null);
+              router.push('/');
+            }}
+            className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+          >
+            <SquarePen />
+            <span
+              className={cn('text-sm font-normal', hideSidebar && 'hidden')}
             >
-              <SquarePen />
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                New chat
-              </span>
-            </Button>
+              New chat
+            </span>
+          </Button>
+
+          <div className={cn('space-y-0.5', !isLoggedIn && 'hidden')}>
             <Button
               onClick={() =>
                 onOpen({
@@ -146,6 +145,17 @@ const SideNav = ({
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
                 Connect apps
+              </span>
+            </Button>
+            <Button
+              onClick={() => router.push('/workflows')}
+              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+            >
+              <Network />{' '}
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                Workflows
               </span>
             </Button>
             {/* <Button
@@ -221,104 +231,84 @@ const SideNav = ({
             </div>
           </div>
         </div>
+      </div>
+
+      {isLoggedIn && (
         <div
           className={cn(
-            'bg-secondary flex flex-1 flex-col px-4',
+            'bg-secondary flex flex-1 flex-col overflow-y-scroll px-4',
             hideSidebar && 'hidden',
           )}
         >
           <ConversationsList />
         </div>
-        <div
-          className={cn(
-            'bg-secondary sticky bottom-0 z-30 flex h-20 items-center justify-center p-4 py-1.5',
-            hideSidebar && 'hidden',
-          )}
-        >
-          {!userId ? (
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="default"
-                className="relative w-20 bg-black text-white"
-              >
-                <Link href="/login">
-                  Login
-                  <span className="absolute inset-0"></span>
-                </Link>
-              </Button>
-              <Button
-                variant="default"
-                className="relative w-20 bg-black text-white"
-              >
-                <Link href="/register">
-                  Register
-                  <span className="absolute inset-0"></span>
-                </Link>
-              </Button>
-            </div>
-          ) : (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full">
-                  My Account
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="start">
-                <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={() => router.push('/upgrade')}>
-                    <Orbit className="text-black" /> Upgrade
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push('/legal')}>
-                    <Scale className="text-black" /> Legal
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push('/settings')}>
-                    <Settings className="text-black" /> Settings
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
+      )}
 
-                <DropdownMenuItem
-                  onClick={() =>
-                    onOpen({
-                      type: 'logout',
-                    })
-                  }
-                >
-                  <LogOut className="text-black" /> Logout
+      {!isLoggedIn && <div className="flex flex-1 flex-col"></div>}
+
+      <div
+        className={cn(
+          'bg-secondary sticky bottom-0 z-30 flex h-20 items-center justify-center p-4 py-1.5',
+          hideSidebar && 'hidden',
+        )}
+      >
+        {!isLoggedIn ? (
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="default"
+              className="relative w-20 bg-black text-white"
+            >
+              <Link href="/login">
+                Login
+                <span className="absolute inset-0"></span>
+              </Link>
+            </Button>
+            <Button
+              variant="default"
+              className="relative w-20 bg-black text-white"
+            >
+              <Link href="/register">
+                Register
+                <span className="absolute inset-0"></span>
+              </Link>
+            </Button>
+          </div>
+        ) : (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="w-full">
+                My Account
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="start">
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => router.push('/upgrade')}>
+                  <Orbit className="text-black" /> Upgrade
                 </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-        </div>
-      </nav>
-    </>
-  ) : (
-    <div className="ml-9">
-      <div className="relative w-full max-w-xs">
-        <select
-          className="bg-background mb-3 w-full appearance-none rounded-full py-2 pr-10 pl-4 text-xs shadow-sm focus:outline-none"
-          defaultValue="smug4b"
-        >
-          <option value="smug4b">Smug 4B</option>
-          <option value="option2">Lllma 3.1 8B</option>
-          <option value="option3">Gamma 2 9B</option>
-        </select>
-        <div className="pointer-events-none absolute inset-y-0 -top-2.5 right-0 flex items-center pr-3">
-          <ChevronDown className="h-4 w-4" />
-        </div>
+                <DropdownMenuItem onClick={() => router.push('/legal')}>
+                  <Scale className="text-black" /> Legal
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/settings')}>
+                  <Settings className="text-black" /> Settings
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem
+                onClick={() =>
+                  onOpen({
+                    type: 'logout',
+                  })
+                }
+              >
+                <LogOut className="text-black" /> Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
-      <ul className="flex flex-col gap-3 text-xs">
-        {Array.from({ length: 10 }, (_, i) => (
-          <li
-            key={i}
-            className="bg-background rounded-full px-4 py-2 shadow-sm"
-          >
-            Text history one{' '}
-          </li>
-        ))}
-      </ul>
-    </div>
+    </>
   );
 };
 
-export default SideNav;
+export default LeftSideNav;
