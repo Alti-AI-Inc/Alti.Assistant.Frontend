@@ -33,11 +33,6 @@ const options = [
     value: 'image-generation',
   },
   {
-    id: 5,
-    title: 'Audio',
-    value: 'audio-generation',
-  },
-  {
     id: 6,
     title: 'Video',
     value: 'video-generation',

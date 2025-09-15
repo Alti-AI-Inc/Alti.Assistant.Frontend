@@ -14,7 +14,6 @@ const plans = [
       'Task Automation → 100 actions',
       'Code Generation → 100',
       'Image Generation → 10',
-      'Audio Generation → 10 minutes',
       'Video Generation → 10 seconds',
 
       // 'My Chatbots → save up to 10 bots',
@@ -34,7 +33,6 @@ const plans = [
       'Task Automation → 500 actions',
       'Code Generation → 500',
       'Image Generation → 50',
-      'Audio Generation → 50 minutes',
       'Video Generation → 50 seconds',
 
       // 'My Chatbots → save up to 50 bots',
@@ -96,32 +94,7 @@ const images = [
     currentPlan: false,
   },
 ];
-const audios = [
-  {
-    name: '30 Minutes',
-    price: 10,
-    buttonText: 'Purchase Audio',
-    currentPlan: true,
-  },
-  {
-    name: '90 Minutes',
-    price: 25,
-    buttonText: 'Purchase Audio',
-    currentPlan: false,
-  },
-  {
-    name: ' 210 Minutes',
-    price: 50,
-    buttonText: 'Purchase Audio',
-    currentPlan: false,
-  },
-  {
-    name: '480 Minutes',
-    price: 100,
-    buttonText: 'Purchase Audio',
-    currentPlan: false,
-  },
-];
+
 const videos = [
   {
     name: '30 Seconds',
@@ -268,7 +241,6 @@ const Pricing01 = () => {
           <TabsTrigger value="task">Task</TabsTrigger>
           <TabsTrigger value="code">Code</TabsTrigger>
           <TabsTrigger value="image">Image</TabsTrigger>
-          <TabsTrigger value="audio">Audio</TabsTrigger>
           <TabsTrigger value="video">Video</TabsTrigger>
         </TabsList>
         <TabsContent value="plan">
@@ -368,35 +340,7 @@ const Pricing01 = () => {
             ))}
           </div>
         </TabsContent>
-        <TabsContent value="audio">
-          <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
-            {audios.map(plan => (
-              <div
-                key={plan.name}
-                className="bg-secondary w-full rounded-lg border p-6"
-              >
-                <h3 className="text-lg font-medium">{plan.name}</h3>
-                <p className="mt-2 text-4xl font-bold">
-                  ${plan.price}{' '}
-                  <span className="text-muted-foreground text-sm font-medium">
-                    /month
-                  </span>{' '}
-                </p>
 
-                <Button
-                  size="lg"
-                  className={cn(
-                    'mt-4 w-full bg-white text-black shadow-none hover:bg-white hover:text-black',
-                    plan.currentPlan &&
-                      'bg-primary/90 hover:bg-primary/80 text-white hover:text-white',
-                  )}
-                >
-                  {plan.currentPlan ? 'Current Plan' : plan.buttonText}
-                </Button>
-              </div>
-            ))}
-          </div>
-        </TabsContent>
         <TabsContent value="video">
           <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
             {videos.map(plan => (
