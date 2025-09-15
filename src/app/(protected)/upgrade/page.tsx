@@ -11,7 +11,7 @@ const plans = [
     features: [
       'Web Search → 1,000',
       'Deep Research → 10',
-      'Task Automation → 100 actions',
+      'Automations → 100',
       'Code Generation → 100',
       'Image Generation → 10',
       'Video Generation → 10 seconds',
@@ -30,7 +30,7 @@ const plans = [
     features: [
       'Web Search → 5,000',
       'Deep Research → 50',
-      'Task Automation → 500 actions',
+      'Automations → 500',
       'Code Generation → 500',
       'Image Generation → 50',
       'Video Generation → 50 seconds',
@@ -199,29 +199,29 @@ const searches = [
     currentPlan: false,
   },
 ];
-const tasks = [
+const automations = [
   {
-    name: '250 Task Automation',
+    name: '250 Automations',
     price: 10,
-    buttonText: 'Purchase Task',
+    buttonText: 'Purchase Automation',
     currentPlan: true,
   },
   {
-    name: '1,000 Task Automation',
+    name: '1,000 Automations',
     price: 25,
-    buttonText: 'Purchase Task',
+    buttonText: 'Purchase Automation',
     currentPlan: false,
   },
   {
-    name: '2,500 Task Automation',
+    name: '2,500 Automations',
     price: 50,
-    buttonText: 'Purchase Task',
+    buttonText: 'Purchase Automation',
     currentPlan: false,
   },
   {
-    name: '10,000 Task Automation',
+    name: '10,000 Automations',
     price: 100,
-    buttonText: 'Purchase Task',
+    buttonText: 'Purchase Automation',
     currentPlan: false,
   },
 ];
@@ -238,7 +238,7 @@ const Pricing01 = () => {
           <TabsTrigger value="memory">Memory</TabsTrigger>
           <TabsTrigger value="search">Search</TabsTrigger>
           <TabsTrigger value="research">Research</TabsTrigger>
-          <TabsTrigger value="task">Task</TabsTrigger>
+          <TabsTrigger value="automation">Automation</TabsTrigger>
           <TabsTrigger value="code">Code</TabsTrigger>
           <TabsTrigger value="image">Image</TabsTrigger>
           <TabsTrigger value="video">Video</TabsTrigger>
@@ -457,9 +457,9 @@ const Pricing01 = () => {
             ))}
           </div>
         </TabsContent>
-        <TabsContent value="task">
+        <TabsContent value="automation">
           <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
-            {tasks.map(plan => (
+            {automations.map(plan => (
               <div
                 key={plan.name}
                 className="bg-secondary w-full rounded-lg border p-6"
