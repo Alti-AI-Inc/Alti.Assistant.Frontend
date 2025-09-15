@@ -6,11 +6,13 @@ import {
   useConversationsStore,
 } from '@/stores/converstionsStore';
 import { useSession } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { Streamdown } from 'streamdown';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
+  const pathname = usePathname();
   const {
     activeConversation,
     error,
@@ -46,7 +48,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     scrollToBottom();
   }, [activeConversation?.messages, isLoadingResponse]);
 
-
+  const isHomePage = pathname === '/';
   return (
     <div
       className={cn(
@@ -108,7 +110,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
           </div>
         </div>
       )}
-      {error && <div className="my-6 text-center">{error}</div>}
+
+      {error && !isHomePage && <div className="my-6 text-center">{error}</div>}
 
       {/* Sticky chat input at bottom */}
       <div className="sticky bottom-0 bg-white px-4 pb-4">
