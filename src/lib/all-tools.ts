@@ -557,7 +557,7 @@ export const allTools = [
   {
     "title": "Spotify",
     "description": "Spotify is a digital music and podcast streaming service with millions of tracks, personalized playlists, and social sharing features.",
-    "image": "/assets/apps-logos/spotify.png"
+    "image": "/assets/apps-logos/spotify-icon.svg"
   },
   {
     "title": "Canvas",
@@ -692,7 +692,7 @@ export const allTools = [
   {
     "title": "ASIN Data API",
     "description": "ASIN Data API provides detailed product data from Amazon, including price, rank, reviews, and more, enabling real-time insights for e-commerce professionals, marketers, and data analysts.",
-    "image": "/assets/apps-logos/orig"
+    "image": "/assets/apps-logos/asin-data-api.jpeg"
   },
   {
     "title": "BaseLinker",
