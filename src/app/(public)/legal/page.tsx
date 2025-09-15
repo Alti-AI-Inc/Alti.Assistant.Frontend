@@ -2,9 +2,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function page() {
   const privacyPolicy = {
-    title: 'Privacy Policy for "inso"',
+    title: 'Privacy Policy for "chat alti"',
     intro:
-      'At inso, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy outlines how we collect, use, and safeguard the data you provide when using our website and mobile app.',
+      'At chat alti, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy outlines how we collect, use, and safeguard the data you provide when using our website and mobile app.',
     sections: [
       {
         heading: '1. Information We Collect',
@@ -12,7 +12,7 @@ export default function page() {
           {
             text: 'Registration Information:',
             description:
-              'When you create an account with inso, we collect your email address and a password of your choice.',
+              'When you create an account with chat alti, we collect your email address and a password of your choice.',
           },
           {
             text: 'User Interactions:',
@@ -27,12 +27,12 @@ export default function page() {
           {
             text: 'Account Creation:',
             description:
-              'We use your email address and password to create and maintain your inso account, allowing you to securely access our services.',
+              'We use your email address and password to create and maintain your chat alti account, allowing you to securely access our services.',
           },
           {
             text: 'Communication:',
             description:
-              'We may use your email address to send you important updates, notifications, and promotional messages related to inso. You can opt-out of receiving promotional emails at any time.',
+              'We may use your email address to send you important updates, notifications, and promotional messages related to chat alti. You can opt-out of receiving promotional emails at any time.',
           },
         ],
       },
@@ -62,7 +62,7 @@ export default function page() {
           {
             text: 'Access and Rectification:',
             description:
-              'You have the right to access and update your personal information at any time by logging into your inso account.',
+              'You have the right to access and update your personal information at any time by logging into your chat alti account.',
           },
           {
             text: 'Data Deletion:',
@@ -78,43 +78,43 @@ export default function page() {
       },
     ],
     conclusion:
-      'By using inso, you consent to the collection and use of your personal information as described in this Privacy Policy.',
+      'By using chat alti, you consent to the collection and use of your personal information as described in this Privacy Policy.',
   };
 
   const terms = {
-    title: 'Terms of Use for "inso"',
+    title: 'Terms of Use for "chat alti"',
     intro:
-      'By accessing or using the inso website or mobile app, you agree to be bound by these Terms of Use and our Privacy Policy.',
+      'By accessing or using the chat alti website or mobile app, you agree to be bound by these Terms of Use and our Privacy Policy.',
     sections: [
       {
         heading: '1. Acceptance of Terms',
         content:
-          'By accessing or using the inso website or mobile app, you agree to be bound by these Terms of Use and our Privacy Policy.',
+          'By accessing or using the chat alti website or mobile app, you agree to be bound by these Terms of Use and our Privacy Policy.',
       },
       {
         heading: '2. User Conduct',
         content:
-          'You agree to use inso only for lawful purposes and in compliance with all applicable laws and regulations. You must not use our services to create, store, or share any content that is illegal, harmful, or infringes upon the rights of others.',
+          'You agree to use chat alti only for lawful purposes and in compliance with all applicable laws and regulations. You must not use our services to create, store, or share any content that is illegal, harmful, or infringes upon the rights of others.',
       },
       {
         heading: '3. Intellectual Property',
         content:
-          'inso and its original content, features, and functionality are owned by us and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.',
+          'chat alti and its original content, features, and functionality are owned by us and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.',
       },
       {
         heading: '4. Disclaimer of Warranties',
         content:
-          'inso is provided on an "as is" and "as available" basis. We do not guarantee that our services will be uninterrupted, error-free, or completely secure.',
+          'chat alti is provided on an "as is" and "as available" basis. We do not guarantee that our services will be uninterrupted, error-free, or completely secure.',
       },
       {
         heading: '5. Limitation of Liability',
         content:
-          'To the fullest extent permitted by law, inso shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or relating to your use of our services.',
+          'To the fullest extent permitted by law, chat alti shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or relating to your use of our services.',
       },
       {
         heading: '6. Termination',
         content:
-          'We reserve the right to terminate or suspend your access to inso at any time and without prior notice if we believe you have violated these Terms of Use.',
+          'We reserve the right to terminate or suspend your access to chat alti at any time and without prior notice if we believe you have violated these Terms of Use.',
       },
       {
         heading: '7. Governing Law',
@@ -123,13 +123,13 @@ export default function page() {
       },
     ],
     conclusion:
-      'By using inso, you acknowledge that you have read, understood, and agree to be bound by these Terms of Use.',
+      'By using chat alti, you acknowledge that you have read, understood, and agree to be bound by these Terms of Use.',
   };
 
   const cookiesPolicy = {
-    title: 'INSO Cookies Policy',
+    title: 'Chat Alti Cookies Policy',
     intro:
-      'At inso, we strive to be transparent about how we collect and use data. This Cookies Policy explains how we use cookies and similar technologies when you access our website or mobile application. This policy should be read alongside our Privacy Policy and Terms of Use.',
+      'At chat alti, we strive to be transparent about how we collect and use data. This Cookies Policy explains how we use cookies and similar technologies when you access our website or mobile application. This policy should be read alongside our Privacy Policy and Terms of Use.',
     sections: [
       {
         heading: '1. What are Cookies?',
@@ -184,11 +184,11 @@ export default function page() {
       {
         heading: '5. Contact Us',
         content:
-          'If you have any questions about our use of cookies or this Cookies Policy, please contact our support team. By continuing to use inso, you consent to the use of cookies as described in this policy.',
+          'If you have any questions about our use of cookies or this Cookies Policy, please contact our support team. By continuing to use chat alti, you consent to the use of cookies as described in this policy.',
       },
     ],
     conclusion:
-      'By continuing to use inso, you consent to the use of cookies as described in this policy.',
+      'By continuing to use chat alti, you consent to the use of cookies as described in this policy.',
   };
 
   return (
