@@ -392,7 +392,7 @@ export const allTools = [
   {
     "title": "Zoominfo",
     "description": "AgencyZoom is for the P&C insurance agent that's looking to increase sales, boost retention and analyze agency & producer performance.",
-    "image": "/assets/apps-logos/zoominfo_round5_20250722.png"
+    "image": "/assets/apps-logos/zoominfo.ico"
   },
   {
     "title": "Intercom",
