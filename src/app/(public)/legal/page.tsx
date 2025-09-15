@@ -192,18 +192,20 @@ export default function page() {
   };
 
   return (
-    <Tabs defaultValue="privacyPolicy" className="mx-auto mt-10 w-4xl">
-      <TabsList className="mx-auto mb-10 grid w-[600px] grid-cols-3">
-        <TabsTrigger className="cursor-pointer" value="privacyPolicy">
-          Privacy Policy
-        </TabsTrigger>
-        <TabsTrigger className="cursor-pointer" value="termsOfUsage">
-          Terms of Use
-        </TabsTrigger>
-        <TabsTrigger className="cursor-pointer" value="cookiesPolicy">
-          Cookies Policy
-        </TabsTrigger>
-      </TabsList>
+    <Tabs defaultValue="privacyPolicy" className="mx-auto w-4xl pb-10">
+      <div className="sticky top-0 pt-10 z-10 bg-white">
+        <TabsList className="mx-auto mb-10 grid w-[600px] grid-cols-3">
+          <TabsTrigger className="cursor-pointer" value="privacyPolicy">
+            Privacy Policy
+          </TabsTrigger>
+          <TabsTrigger className="cursor-pointer" value="termsOfUsage">
+            Terms of Use
+          </TabsTrigger>
+          <TabsTrigger className="cursor-pointer" value="cookiesPolicy">
+            Cookies Policy
+          </TabsTrigger>
+        </TabsList>
+      </div>
       <TabsContent value="privacyPolicy">
         <div className="mx-auto rounded-lg">
           <p className="mb-4">{privacyPolicy.intro}</p>
