@@ -1,13 +1,12 @@
 'use client';
 
 import {
-  conversationHelpers,
-  useConversationsStore,
-} from '@/stores/useConverstionsStore';
+  useConversations,
+  useDeleteConversation,
+} from '@/hooks/useConversations';
 import { EllipsisVertical, Pencil, Share, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,23 +17,20 @@ import {
 
 const ConversationsList = () => {
   const router = useRouter();
+
   const { data: session } = useSession();
 
   const {
-    conversationList: conversations,
-    isLoadingConversationList: isLoadingList,
-  } = useConversationsStore();
-
-  useEffect(() => {
-    if (session?.accessToken) {
-      conversationHelpers.loadConversationList(session?.accessToken);
-    }
-  }, [session?.accessToken]);
+    data: conversations,
+    isLoading,
+    // error,
+  } = useConversations(session?.accessToken);
+  const deleteMutation = useDeleteConversation();
 
   const sortedConversations = conversations
     ? [...conversations].sort(
         (a, b) =>
-          new Date(b?.createdAt).getTime() - new Date(a?.createdAt).getTime(),
+          new Date(b?.updatedAt).getTime() - new Date(a?.updatedAt).getTime(),
       )
     : [];
 
@@ -44,11 +40,11 @@ const ConversationsList = () => {
 
   return (
     <div className="mt-2">
-      {isLoadingList
+      {isLoading
         ? [1, 2, 3, 4, 5, 6].map(e => (
             <div
               key={e}
-              className="bg-n-1 dark:bg-n-6 hover:dark:bg-n-5 my-1 flex animate-pulse cursor-pointer flex-col rounded-xl px-4 py-2 shadow"
+              className="dark:bg-n-6 hover:dark:bg-n-5 my-1 flex animate-pulse cursor-pointer flex-col rounded-xl bg-gray-100 px-4 py-2 shadow"
             >
               <div className="flex-1 overflow-hidden">
                 <div className="bg-n-4/50 flex h-3 w-[30%] justify-center rounded-xl dark:bg-slate-50" />
@@ -84,14 +80,8 @@ const ConversationsList = () => {
                   <DropdownMenuSeparator />
 
                   <DropdownMenuItem
-                    onClick={() => {
-                      return session?.accessToken
-                        ? conversationHelpers.deleteConversation(
-                            session?.accessToken,
-                            chat.conversationId,
-                          )
-                        : null;
-                    }}
+                    onClick={() => deleteMutation.mutate(chat.conversationId)}
+                    disabled={deleteMutation.isPending}
                   >
                     <Trash2 className="text-black" />{' '}
                     <span className="text-black">Delete</span>

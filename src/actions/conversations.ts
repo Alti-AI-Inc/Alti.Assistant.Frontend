@@ -32,7 +32,7 @@ export async function PostConversation(
   return data;
 }
 
-export async function loadConversationListAction(accessToken: string) {
+export async function fetchConversationList(accessToken: string) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/conversations`,
     {
@@ -41,11 +41,12 @@ export async function loadConversationListAction(accessToken: string) {
         Authorization: `Bearer ${accessToken}`,
         'content-type': 'application/json',
       },
-      next: { revalidate: 60 },
+      cache: 'no-store',
     },
   );
   const data = await response.json();
-  return data;
+  console.log('data in fetch conversation', { data });
+  return data.data.conversations;
 }
 
 export async function loadSingleConversation(
@@ -80,6 +81,7 @@ export const deleteConversation = async (
         'Content-Type': 'application/json',
       },
     });
+    console.log('delete response in server',{ response });
     return response.json();
     // if (!response.ok) {
     //   const error = await response.json();

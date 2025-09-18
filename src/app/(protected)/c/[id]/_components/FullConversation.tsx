@@ -1,10 +1,8 @@
 'use client';
 import ChatInput from '@/components/ChatInput';
+import { useActiveConversation } from '@/hooks/useConversations';
 import { cn } from '@/lib/utils';
-import {
-  conversationHelpers,
-  useConversationsStore,
-} from '@/stores/useConverstionsStore';
+import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
@@ -14,27 +12,20 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
   const pathname = usePathname();
   const {
-    activeConversation,
+    data: queryConversation,
+    isLoading,
     error,
-    isLoadingActiveConversation,
-    isLoadingResponse,
-  } = useConversationsStore();
-  // console.log({ activeConversation });
+  } = useActiveConversation(conversationId, data?.accessToken);
+
+  const { setActiveConversation, activeConversation, isLoadingResponse } =
+    useConversationsStore();
+
+  // Sync query result into Zustand
   useEffect(() => {
-    if (!data?.accessToken) return;
-    if (!conversationId) return;
-
-    // already loaded & matches active
-    if (conversationId === 'new-chat') return;
-    if (conversationId === activeConversation?.conversationId) return;
-
-    conversationHelpers.loadActiveConversation(
-      conversationId,
-      data.accessToken,
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.accessToken, conversationId]);
-
+    if (queryConversation) {
+      setActiveConversation(queryConversation);
+    }
+  }, [queryConversation, setActiveConversation]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -46,7 +37,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   // Auto-scroll when messages change or loading state changes
   useEffect(() => {
     scrollToBottom();
-  }, [activeConversation?.messages, isLoadingResponse]);
+  }, [activeConversation?.messages]);
 
   const isHomePage = pathname === '/';
   return (
@@ -54,7 +45,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       className={cn(
         'flex w-full flex-col',
         activeConversation?.messages.length && 'h-screen',
-        isLoadingActiveConversation && 'h-screen',
+        isLoading && 'h-screen',
       )}
     >
       {/* Messages container - takes remaining space and scrolls */}
@@ -82,12 +73,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
             {/* Loading message - visible in the messages area */}
             {isLoadingResponse && (
-              <div
-                className={cn(
-                  'flex items-center py-4',
-                  isLoadingResponse && 'justify-start',
-                )}
-              >
+              <div className="flex items-center justify-start py-4">
                 <div className="flex items-center space-x-2 text-gray-500">
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"></div>
                   <span>alti is thinking...</span>
@@ -98,7 +84,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
           </div>
         </div>
       )}
-      {isLoadingActiveConversation && (
+      {isLoading && (
         <div
           className={cn(
             'flex h-[calc(100vh_-110px] flex-1 items-center justify-center py-4',
@@ -111,7 +97,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         </div>
       )}
 
-      {error && !isHomePage && <div className="my-6 text-center">{error}</div>}
+      {error && !isHomePage && (
+        <div className="my-6 text-center">{error.message}</div>
+      )}
 
       {/* Sticky chat input at bottom */}
       <div className="sticky bottom-0 bg-white px-4 pb-4">

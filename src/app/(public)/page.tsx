@@ -2,10 +2,16 @@
 
 import { cn } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useEffect } from 'react';
 import FullConversation from '../(protected)/c/[id]/_components/FullConversation';
 
 function App() {
-  const { activeConversation } = useConversationsStore();
+  const { activeConversation, setActiveConversation } = useConversationsStore();
+
+  useEffect(() => {
+    setActiveConversation(null);
+  }, [setActiveConversation]);
+
   return (
     <div className={cn('flex h-screen flex-col items-center justify-center')}>
       {!activeConversation && (

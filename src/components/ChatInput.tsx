@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { ROLES, useConversationsStore } from '@/stores/useConverstionsStore';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowRight, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -42,8 +43,11 @@ const options = [
 const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   const router = useRouter();
   const { data } = useSession();
-  const { updateActiveConversation, setLoadingResponse } =
+  const queryClient = useQueryClient();
+
+    const { updateActiveConversation, setLoadingResponse, activeConversation } =
     useConversationsStore();
+
 
   const [message, setMessage] = useState('');
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -56,53 +60,72 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     }
   };
 
-  const handleSubmit = async () => {
-    if (message.trim() === '') return;
-    updateActiveConversation(message, ROLES.USER);
-    setMessage('');
+  const mutation = useMutation({
+    mutationFn: async (userMessage: string) => {
+      if (!data?.accessToken) throw new Error('No access token');
+      return await PostConversation(
+        userMessage,
+        data.accessToken,
+        conversationId === 'new-chat'
+          ? activeConversation?.conversationId || undefined
+          : conversationId,
+      );
+    },
+    onMutate: (userMessage) => {
+      // optimistic update: add user message immediately
+      updateActiveConversation(userMessage, ROLES.USER);
+      setLoadingResponse(true);
+    },
+    onSuccess: (response, userMessage) => {
+      if (!response?.data?.responseMessage?.answer) return;
 
-    setLoadingResponse(true);
+      const newId =
+        conversationId === 'new-chat'
+          ? response.data.conversationId
+          : conversationId;
 
-    try {
-      if (data?.accessToken) {
-        const response = await PostConversation(
-          message,
-          data.accessToken,
-          conversationId === 'new-chat' ? undefined : conversationId,
-        );
-        if (response.data.responseMessage.answer) {
-          if (conversationId === 'new-chat') {
-            updateActiveConversation(
-              message,
-              ROLES.USER,
-              response.data.conversationId,
-            );
-          }
-          const newId =
-            conversationId === 'new-chat'
-              ? response.data.conversationId
-              : conversationId;
-          updateActiveConversation(
-            response.data.responseMessage.answer,
-            ROLES.ASSISTANT,
-            newId,
-          );
-          if (conversationId === 'new-chat')
-            router.replace(`/c/${response.data.conversationId}`);
-        }
-
-        setLoadingResponse(false);
+      // if new conversation, update state with id
+      if (conversationId === 'new-chat') {
+        updateActiveConversation(userMessage, ROLES.USER, response.data.conversationId);
+        router.replace(`/c/${response.data.conversationId}`);
       }
-    } catch (error) {
-      console.log({ error });
-    }
 
-    if (message.trim()) {
+      // add assistant's response
+      updateActiveConversation(
+        response.data.responseMessage.answer,
+        ROLES.ASSISTANT,
+        newId,
+      );
+
+      // refresh sidebar conversations
+      queryClient.invalidateQueries({
+        queryKey: ['conversations', data?.accessToken],
+      });
+
+      // refresh active conversation
+      if (newId) {
+        queryClient.invalidateQueries({
+          queryKey: ['activeConversation', newId],
+        });
+      }
+
+      setLoadingResponse(false);
+    },
+    onError: (error) => {
+      console.error('Message post failed:', error);
+      setLoadingResponse(false);
+    },
+    onSettled: () => {
       setMessage('');
-    }
+    },
+  });
 
-    setLoadingResponse(false);
+  const handleSubmit = () => {
+    if (message.trim() === '') return;
+    mutation.mutate(message);
+    setMessage('');
   };
+
 
   return (
     <div className="mx-auto w-full max-w-[780px] bg-white">
