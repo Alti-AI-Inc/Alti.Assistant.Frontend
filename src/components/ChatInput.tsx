@@ -5,7 +5,7 @@ import AudioRecorder from '@/components/AudioRecorder';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { ROLES, useConversationsStore } from '@/stores/converstionsStore';
+import { ROLES, useConversationsStore } from '@/stores/useConverstionsStore';
 import { ArrowRight, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';

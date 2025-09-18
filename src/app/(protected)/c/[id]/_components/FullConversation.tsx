@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import {
   conversationHelpers,
   useConversationsStore,
-} from '@/stores/converstionsStore';
+} from '@/stores/useConverstionsStore';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';

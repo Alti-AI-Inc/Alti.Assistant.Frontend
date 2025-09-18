@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import { useConversationsStore } from '@/stores/converstionsStore';
+import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import {

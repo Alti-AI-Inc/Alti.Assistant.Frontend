@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { useConversationsStore } from '@/stores/converstionsStore';
+import { useConversationsStore } from '@/stores/useConverstionsStore';
 import FullConversation from '../(protected)/c/[id]/_components/FullConversation';
 
 function App() {
