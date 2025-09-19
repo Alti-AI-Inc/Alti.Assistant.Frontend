@@ -1,8 +1,9 @@
+'use client';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
-
-async function getVideoUrl(operationId: string): Promise<string> {
-  while (true) {
+// : Promise<string>
+async function getVideoUrl(operationId: string) {
+  // while (true) {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/video/operations`,
       {
@@ -21,14 +22,14 @@ async function getVideoUrl(operationId: string): Promise<string> {
 
     // Check if response exists and url does not contain storage.googleapis.com
     const videoUrl = data?.data?.response?.videoUrl;
-    console.log('video url', videoUrl);
+    // console.log('video url', videoUrl);
 
     if (videoUrl.includes('https://storage.googleapis.com/')) {
       return videoUrl; // ✅ exit loop & return final url
     }
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    // await new Promise(resolve => setTimeout(resolve, 5000));
   }
-}
+// }
 
 const VideoComponent = ({ operationId }: { operationId: string }) => {
   const [loading, setLoading] = useState(true);
