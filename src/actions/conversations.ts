@@ -1,33 +1,24 @@
 'use server';
 
-// "data": {
-//         "responseMessage": {
-//             "answer":string,
-//         },
-//         "conversationId":string,
-//         "messageCount": number,
-//     }
-
 export async function PostConversation(
+  apiUrl: string,
   message: string,
   accessToken: string,
   conversationId?: string,
 ) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        message,
-        ...(conversationId && { conversationId }),
-      }),
+  const response = await fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'content-type': 'application/json',
     },
-  );
+    body: JSON.stringify({
+      message,
+      ...(conversationId && { conversationId }),
+    }),
+  });
   const data = await response.json();
+  console.log('response in post conversation', data.data.responseMessage);
 
   return data;
 }
@@ -45,7 +36,6 @@ export async function fetchConversationList(accessToken: string) {
     },
   );
   const data = await response.json();
-  console.log('data in fetch conversation', { data });
   return data.data.conversations;
 }
 
@@ -81,7 +71,7 @@ export const deleteConversation = async (
         'Content-Type': 'application/json',
       },
     });
-    console.log('delete response in server',{ response });
+    console.log('delete response in server', { response });
     return response.json();
     // if (!response.ok) {
     //   const error = await response.json();

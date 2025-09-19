@@ -39,6 +39,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     scrollToBottom();
   }, [activeConversation?.messages]);
 
+  console.log(activeConversation?.messages);
+
   const isHomePage = pathname === '/';
   return (
     <div
@@ -53,20 +55,28 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
           <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-6">
             {activeConversation?.messages.length &&
-              activeConversation.messages.map((messages, idx) => (
+              activeConversation.messages.map((message, idx) => (
                 <div key={idx} className="space-y-4">
-                  {messages.role === 'user' && (
+                  {message.role === 'user' && (
                     <div className="flex items-center justify-end">
                       <div className="w-fit max-w-[85%] rounded-2xl bg-gray-100 px-4 py-2 text-black shadow">
-                        {messages.content}
+                        {message.content}
                       </div>
                     </div>
                   )}
 
-                  {messages.role === 'assistant' && (
-                    <Streamdown className="w-fit max-w-[85%] rounded-lg">
-                      {messages.content}
-                    </Streamdown>
+                  {message.role === 'assistant' &&
+                    message.content !== 'Image generated successfully' && (
+                      <Streamdown className="w-fit max-w-[85%] rounded-lg">
+                        {message.content}
+                      </Streamdown>
+                    )}
+                  {message.metadata?.images && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={message.metadata.images}
+                      alt={message.metadata.type}
+                    />
                   )}
                 </div>
               ))}

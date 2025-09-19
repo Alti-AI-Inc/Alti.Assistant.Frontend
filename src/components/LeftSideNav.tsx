@@ -55,7 +55,7 @@ const LeftSideNav = () => {
       <div className="bg-secondary pt-4 pb-2">
         <div
           className={cn(
-            'sticky top-0 z-30 flex items-center justify-between px-4 pt-2',
+            'bg-secondary sticky top-0 z-30 flex items-center justify-between px-4 pt-2',
             hideSidebar && 'justify-center',
           )}
         >

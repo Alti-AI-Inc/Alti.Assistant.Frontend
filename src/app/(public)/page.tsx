@@ -7,7 +7,8 @@ import FullConversation from '../(protected)/c/[id]/_components/FullConversation
 
 function App() {
   const { activeConversation, setActiveConversation } = useConversationsStore();
-
+  // const { data } = useSession();
+  // console.log(data?.accessToken);
   useEffect(() => {
     setActiveConversation(null);
   }, [setActiveConversation]);

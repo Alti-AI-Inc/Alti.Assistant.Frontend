@@ -5,7 +5,11 @@ import AudioRecorder from '@/components/AudioRecorder';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { ROLES, useConversationsStore } from '@/stores/useConverstionsStore';
+import {
+  OPTIONS,
+  ROLES,
+  useConversationsStore,
+} from '@/stores/useConverstionsStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowRight, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -16,27 +20,27 @@ const options = [
   {
     id: 1,
     title: 'Research',
-    value: 'deep-research',
+    value: OPTIONS.RESEARCH,
   },
   {
     id: 2,
     title: 'Task',
-    value: 'task-automation',
+    value: OPTIONS.TASK,
   },
   {
     id: 3,
     title: 'Code',
-    value: 'code-generation',
+    value: OPTIONS.CODE,
   },
   {
     id: 4,
     title: 'Image',
-    value: 'image-generation',
+    value: OPTIONS.IMAGE,
   },
   {
     id: 6,
     title: 'Video',
-    value: 'video-generation',
+    value: OPTIONS.VIDEO,
   },
 ];
 
@@ -45,14 +49,18 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   const { data } = useSession();
   const queryClient = useQueryClient();
 
-    const { updateActiveConversation, setLoadingResponse, activeConversation } =
-    useConversationsStore();
-
+  const {
+    updateActiveConversation,
+    setLoadingResponse,
+    selectedOption,
+    setSelectedOption,
+    activeConversation,
+  } = useConversationsStore();
 
   const [message, setMessage] = useState('');
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  // const [selectedOption, setSelectedOption] = useState<OPTIONS | null>(null);
 
-  const handleSelectOption = (value: string) => {
+  const handleSelectOption = (value: OPTIONS) => {
     if (selectedOption === value) {
       setSelectedOption(null);
     } else {
@@ -60,10 +68,16 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     }
   };
 
+  const apiUrl =
+    selectedOption === OPTIONS.IMAGE
+      ? `${process.env.NEXT_PUBLIC_API_URL}/image/generate`
+      : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
+
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
       if (!data?.accessToken) throw new Error('No access token');
       return await PostConversation(
+        apiUrl,
         userMessage,
         data.accessToken,
         conversationId === 'new-chat'
@@ -71,13 +85,13 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
           : conversationId,
       );
     },
-    onMutate: (userMessage) => {
+    onMutate: userMessage => {
       // optimistic update: add user message immediately
       updateActiveConversation(userMessage, ROLES.USER);
       setLoadingResponse(true);
     },
     onSuccess: (response, userMessage) => {
-      if (!response?.data?.responseMessage?.answer) return;
+      if (!response?.data?.responseMessage) return;
 
       const newId =
         conversationId === 'new-chat'
@@ -86,37 +100,56 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
 
       // if new conversation, update state with id
       if (conversationId === 'new-chat') {
-        updateActiveConversation(userMessage, ROLES.USER, response.data.conversationId);
+        updateActiveConversation(
+          userMessage,
+          ROLES.USER,
+          response.data.conversationId,
+        );
+        
         router.replace(`/c/${response.data.conversationId}`);
       }
 
       // add assistant's response
-      updateActiveConversation(
-        response.data.responseMessage.answer,
-        ROLES.ASSISTANT,
-        newId,
-      );
 
-      // refresh sidebar conversations
-      queryClient.invalidateQueries({
-        queryKey: ['conversations', data?.accessToken],
-      });
+      if (selectedOption === OPTIONS.IMAGE) {
+        updateActiveConversation(
+          response.data.responseMessage.text,
+          ROLES.ASSISTANT,
+          newId,
+          response.data.responseMessage.images,
+        );
+        setSelectedOption(OPTIONS.IMAGE);
+      } else {
+        updateActiveConversation(
+          response.data.responseMessage.answer,
+          ROLES.ASSISTANT,
+          newId,
+        );
+      }
 
-      // refresh active conversation
-      if (newId) {
+      if (newId === 'new-chat') {
+        // refresh sidebar conversations
         queryClient.invalidateQueries({
-          queryKey: ['activeConversation', newId],
+          queryKey: ['conversations', data?.accessToken],
         });
       }
 
+      // refresh active conversation
+      // if (newId) {
+      //   queryClient.invalidateQueries({
+      //     queryKey: ['activeConversation', newId],
+      //   });
+      // }
+
       setLoadingResponse(false);
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Message post failed:', error);
       setLoadingResponse(false);
     },
     onSettled: () => {
       setMessage('');
+      setLoadingResponse(false);
     },
   });
 
@@ -125,7 +158,6 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     mutation.mutate(message);
     setMessage('');
   };
-
 
   return (
     <div className="mx-auto w-full max-w-[780px] bg-white">

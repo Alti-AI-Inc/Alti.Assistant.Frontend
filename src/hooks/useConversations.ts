@@ -70,13 +70,16 @@ export function usePostMessage(conversationId?: string) {
 
   return useMutation({
     mutationFn: async ({
+      apiUrl,
       message,
       accessToken,
     }: {
+      apiUrl: string;
       message: string;
       accessToken: string;
     }) => {
       return await PostConversation(
+        apiUrl,
         message,
         accessToken,
         conversationId === 'new-chat'

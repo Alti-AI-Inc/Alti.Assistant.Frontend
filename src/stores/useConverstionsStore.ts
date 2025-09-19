@@ -5,15 +5,24 @@ export enum ROLES {
   ASSISTANT = 'assistant',
 }
 
+export enum OPTIONS {
+  RESEARCH = 'deep-research',
+  TASK = 'task-automation',
+  CODE = 'code-generation',
+  IMAGE = 'image-generation',
+  VIDEO = 'video-generation',
+}
+
 // Messages inside an active conversation
 export type ConversationMessage = {
   role: ROLES;
   content: string;
   timestamp: string; // ISO string
   metadata?: {
-    type: string;
-    timestamp: string;
+    type?: string;
+    timestamp?: string;
     model?: string;
+    images?: null | string;
   };
 };
 
@@ -33,12 +42,15 @@ interface ConversationStore {
   isLoadingActiveConversation: boolean;
   isLoadingResponse: boolean;
   error: string | null;
+  selectedOption: OPTIONS | null;
+  setSelectedOption: (opt: OPTIONS | null) => void;
 
   setActiveConversation: (conversation: ActiveConversation | null) => void;
   updateActiveConversation: (
     message: string,
     role: ROLES,
     conversationId?: string,
+    images?: string,
   ) => void;
   setLoadingActiveConversation: (loading: boolean) => void;
   setLoadingResponse: (loading: boolean) => void;
@@ -50,11 +62,13 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
   isLoadingActiveConversation: false,
   isLoadingResponse: false,
   error: null,
+  selectedOption: null,
+  setSelectedOption: opt => set({ selectedOption: opt }),
 
   setActiveConversation: conversation =>
     set({ activeConversation: conversation }),
 
-  updateActiveConversation: (message, role, conversationId) =>
+  updateActiveConversation: (message, role, conversationId, images) =>
     set(state => {
       if (!state.activeConversation?.conversationId) {
         // brand new conversation
@@ -66,6 +80,7 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
               {
                 role,
                 content: message,
+                // ...(images && { metadata: { images } }),
                 timestamp: new Date().toISOString(),
               },
             ],
@@ -80,6 +95,7 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
         {
           role,
           content: message,
+          ...(images && { metadata: { images } }),
           timestamp,
         },
       ];
@@ -97,8 +113,7 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
   setLoadingActiveConversation: isLoadingActiveConversation =>
     set({ isLoadingActiveConversation }),
 
-  setLoadingResponse: isLoadingResponse =>
-    set({ isLoadingResponse }),
+  setLoadingResponse: isLoadingResponse => set({ isLoadingResponse }),
 
   setError: error => set({ error }),
 }));
