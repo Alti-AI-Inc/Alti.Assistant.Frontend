@@ -47,16 +47,15 @@ export default function AudioRecorder({
 
       const formData = new FormData();
       formData.append('file', blob, 'recording.webm');
-      formData.append('model', 'whisper-1');
-      formData.append('response_format', 'json');
-      formData.append('temperature', '0');
       formData.append('user', data?.user.id as string);
 
       try {
         const res = await getTranscription(formData);
-
-        if (!res.text) throw new Error('Upload failed');
-        setMessage(res?.text);
+        console.log({ res });
+        // if (!res.text) throw new Error('Upload failed');
+        if (res.transcription) {
+          setMessage(res?.transcription);
+        }
         // setMessage('lorem')
       } catch (err) {
         setLoadingText(false);
