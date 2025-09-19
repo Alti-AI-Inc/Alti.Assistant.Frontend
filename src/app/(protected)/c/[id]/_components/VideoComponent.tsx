@@ -2,41 +2,39 @@
 import { getVideoUrl } from '@/actions/video';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
-// : Promise<string>
 
 const VideoComponent = ({ operationId }: { operationId: string }) => {
   const [loading, setLoading] = useState(true);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   useEffect(() => {
-  if (!operationId) return;
+    if (!operationId) return;
 
-  // eslint-disable-next-line prefer-const
-  let intervalId: string | number | NodeJS.Timeout | undefined;
+    // eslint-disable-next-line prefer-const
+    let intervalId: string | number | NodeJS.Timeout | undefined;
 
-  const checkStatus = async () => {
-    try {
-      const url = await getVideoUrl(operationId);
-      if (url) {
-        console.log('✅ Final video URL:', url);
-        setVideoUrl(url);
-        setLoading(false);
+    const checkStatus = async () => {
+      try {
+        const url = await getVideoUrl(operationId);
+        if (url) {
+          setVideoUrl(url);
+          setLoading(false);
 
-        // stop polling once we get the URL
-        clearInterval(intervalId);
+          // stop polling once we get the URL
+          clearInterval(intervalId);
+        }
+      } catch (err) {
+        console.error('❌ Error fetching video URL:', err);
       }
-    } catch (err) {
-      console.error('❌ Error fetching video URL:', err);
-    }
-  };
+    };
 
-  // run first immediately
-  checkStatus();
+    // run first immediately
+    checkStatus();
 
-  // keep polling every 30 seconds
-  intervalId = setInterval(checkStatus, 30000);
+    // keep polling every 30 seconds
+    intervalId = setInterval(checkStatus, 15000);
 
-  return () => clearInterval(intervalId); // cleanup on unmount
-}, [operationId]);
+    return () => clearInterval(intervalId); // cleanup on unmount
+  }, [operationId]);
 
   if (loading)
     return (

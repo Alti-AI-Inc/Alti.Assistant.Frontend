@@ -72,13 +72,6 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   //video-assistant
   //image-assistant
 
-  //   text: 'Video generated successfully',
-  //   video: {
-  //     name: 'projects/gen-lang-client-0159237802/locations/us-central1/publishers/google/models/veo-3.0-fast-generate-001/operations/7b8b005f-5660-4715-bded-66addbe08b5e'
-  //   },
-  //   type: 'generation'
-  // },
-
   const apiUrl =
     selectedOption === OPTIONS.IMAGE
       ? `${process.env.NEXT_PUBLIC_API_URL}/image/generate`
@@ -99,14 +92,11 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
       );
     },
     onMutate: userMessage => {
-      // optimistic update: add user message immediately
       updateActiveConversation(userMessage, ROLES.USER);
       setLoadingResponse(true);
     },
     onSuccess: (response, userMessage) => {
       if (!response?.data?.responseMessage) return;
-
-      // console.log('response', response.data);
 
       const newId =
         conversationId === 'new-chat'
@@ -136,31 +126,8 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
         {
           ...(images && { images }),
           ...(name && { videoName: name }),
-          // videoName: response.data.responseMessage.video?.name,
         },
       );
-
-      // if (selectedOption === OPTIONS.IMAGE) {
-      //   updateActiveConversation(
-      //     response.data.responseMessage.text,
-      //     ROLES.ASSISTANT,
-      //     newId,
-      //     { images: response.data.responseMessage.images },
-      //   );
-      // } else if (selectedOption === OPTIONS.VIDEO) {
-      //   updateActiveConversation(
-      //     response.data.responseMessage.text,
-      //     ROLES.ASSISTANT,
-      //     newId,
-      //     { videoName: response.data.responseMessage.video },
-      //   );
-      // } else {
-      //   updateActiveConversation(
-      //     response.data.responseMessage.answer,
-      //     ROLES.ASSISTANT,
-      //     newId,
-      //   );
-      // }
 
       if (response?.data) {
         // refresh sidebar conversations
@@ -168,13 +135,6 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
           queryKey: ['conversations', data?.accessToken],
         });
       }
-
-      // refresh active conversation
-      // if (newId) {
-      //   queryClient.invalidateQueries({
-      //     queryKey: ['activeConversation', newId],
-      //   });
-      // }
 
       setLoadingResponse(false);
     },
