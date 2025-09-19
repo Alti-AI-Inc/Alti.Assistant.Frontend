@@ -36,7 +36,7 @@ const LeftSideNav = () => {
   const router = useRouter();
 
   const { onOpen } = useModalStore();
-  const { setActiveConversation } = useConversationsStore();
+  const { setActiveConversation, setSelectedOption } = useConversationsStore();
   const { isLeftSidebarOpen, toggleLeftSidebar } = useSidebarStore();
 
   const hideSidebar = !isLeftSidebarOpen;
@@ -97,6 +97,7 @@ const LeftSideNav = () => {
           <Button
             onClick={() => {
               setActiveConversation(null);
+              setSelectedOption(null);
               router.push('/');
             }}
             className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"

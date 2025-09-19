@@ -53,7 +53,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       {/* Messages container - takes remaining space and scrolls */}
       {activeConversation?.messages.length && (
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
-          <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-6">
+          <div className="mx-auto w-full max-w-[796px] space-y-6 px-4 lg:pr-2 py-6">
             {activeConversation?.messages.length &&
               activeConversation.messages.map((message, idx) => (
                 <div key={idx} className="space-y-4">

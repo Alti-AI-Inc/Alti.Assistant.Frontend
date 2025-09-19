@@ -4,6 +4,7 @@ import {
   useConversations,
   useDeleteConversation,
 } from '@/hooks/useConversations';
+import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { EllipsisVertical, Pencil, Share, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -25,6 +26,7 @@ const ConversationsList = () => {
     // error,
   } = useConversations(session?.accessToken);
   const deleteMutation = useDeleteConversation();
+  const { setSelectedOption } = useConversationsStore();
 
   const sortedConversations = conversations
     ? [...conversations].sort(
@@ -34,6 +36,7 @@ const ConversationsList = () => {
     : [];
 
   const handleConversationClick = async (id: string) => {
+    setSelectedOption(null);
     router.push('/c/' + id);
   };
 

@@ -127,7 +127,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
         );
       }
 
-      if (newId === 'new-chat') {
+      if (conversationId === 'new-chat') {
         // refresh sidebar conversations
         queryClient.invalidateQueries({
           queryKey: ['conversations', data?.accessToken],
