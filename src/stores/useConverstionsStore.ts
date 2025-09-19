@@ -23,6 +23,9 @@ export type ConversationMessage = {
     timestamp?: string;
     model?: string;
     images?: null | string;
+    video?: {
+      name: string;
+    };
   };
 };
 
@@ -50,7 +53,10 @@ interface ConversationStore {
     message: string,
     role: ROLES,
     conversationId?: string,
-    images?: string,
+    extras?: {
+      images?: string;
+      videoName?: string;
+    },
   ) => void;
   setLoadingActiveConversation: (loading: boolean) => void;
   setLoadingResponse: (loading: boolean) => void;
@@ -68,7 +74,7 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
   setActiveConversation: conversation =>
     set({ activeConversation: conversation }),
 
-  updateActiveConversation: (message, role, conversationId, images) =>
+  updateActiveConversation: (message, role, conversationId, extras) =>
     set(state => {
       if (!state.activeConversation?.conversationId) {
         // brand new conversation
@@ -95,7 +101,10 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
         {
           role,
           content: message,
-          ...(images && { metadata: { images } }),
+          ...(extras?.images && { metadata: { images: extras.images } }),
+          ...(extras?.videoName && {
+            metadata: { video: { name: extras.videoName } },
+          }),
           timestamp,
         },
       ];

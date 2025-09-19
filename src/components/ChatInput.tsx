@@ -68,10 +68,23 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     }
   };
 
+  // research-agent
+  //video-assistant
+  //image-assistant
+
+  //   text: 'Video generated successfully',
+  //   video: {
+  //     name: 'projects/gen-lang-client-0159237802/locations/us-central1/publishers/google/models/veo-3.0-fast-generate-001/operations/7b8b005f-5660-4715-bded-66addbe08b5e'
+  //   },
+  //   type: 'generation'
+  // },
+
   const apiUrl =
     selectedOption === OPTIONS.IMAGE
       ? `${process.env.NEXT_PUBLIC_API_URL}/image/generate`
-      : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
+      : selectedOption === OPTIONS.VIDEO
+        ? `${process.env.NEXT_PUBLIC_API_URL}/video/generate`
+        : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
 
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
@@ -93,6 +106,8 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     onSuccess: (response, userMessage) => {
       if (!response?.data?.responseMessage) return;
 
+      // console.log('response', response.data);
+
       const newId =
         conversationId === 'new-chat'
           ? response.data.conversationId
@@ -105,29 +120,46 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
           ROLES.USER,
           response.data.conversationId,
         );
-        
+
         router.replace(`/c/${response.data.conversationId}`);
       }
 
       // add assistant's response
+      updateActiveConversation(
+        selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.VIDEO
+          ? response.data.responseMessage.text
+          : response.data.responseMessage.answer,
+        ROLES.ASSISTANT,
+        newId,
+        {
+          images: response.data.responseMessage.images,
+          videoName: response.data.responseMessage.video,
+        },
+      );
 
-      if (selectedOption === OPTIONS.IMAGE) {
-        updateActiveConversation(
-          response.data.responseMessage.text,
-          ROLES.ASSISTANT,
-          newId,
-          response.data.responseMessage.images,
-        );
-        setSelectedOption(OPTIONS.IMAGE);
-      } else {
-        updateActiveConversation(
-          response.data.responseMessage.answer,
-          ROLES.ASSISTANT,
-          newId,
-        );
-      }
+      // if (selectedOption === OPTIONS.IMAGE) {
+      //   updateActiveConversation(
+      //     response.data.responseMessage.text,
+      //     ROLES.ASSISTANT,
+      //     newId,
+      //     { images: response.data.responseMessage.images },
+      //   );
+      // } else if (selectedOption === OPTIONS.VIDEO) {
+      //   updateActiveConversation(
+      //     response.data.responseMessage.text,
+      //     ROLES.ASSISTANT,
+      //     newId,
+      //     { videoName: response.data.responseMessage.video },
+      //   );
+      // } else {
+      //   updateActiveConversation(
+      //     response.data.responseMessage.answer,
+      //     ROLES.ASSISTANT,
+      //     newId,
+      //   );
+      // }
 
-      if (conversationId === 'new-chat') {
+      if (response?.data) {
         // refresh sidebar conversations
         queryClient.invalidateQueries({
           queryKey: ['conversations', data?.accessToken],

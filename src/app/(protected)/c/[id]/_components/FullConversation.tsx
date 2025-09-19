@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { Streamdown } from 'streamdown';
+import VideoComponent from './VideoComponent';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
@@ -64,7 +65,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   )}
 
                   {message.role === 'assistant' &&
-                    message.content !== 'Image generated successfully' && (
+                    message.content !== 'Image generated successfully' &&
+                    message.content !== 'Video generated successfully' && (
                       <Streamdown className="w-fit max-w-[85%] rounded-lg">
                         {message.content}
                       </Streamdown>
@@ -74,6 +76,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     <img
                       src={message.metadata.images}
                       alt={message.metadata.type}
+                    />
+                  )}
+                  {message.metadata?.video?.name && (
+                    <VideoComponent
+                      operationId={message.metadata?.video?.name}
                     />
                   )}
                 </div>
