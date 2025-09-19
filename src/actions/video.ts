@@ -1,4 +1,4 @@
-'use server';
+'use client';
 
 export async function getVideoUrl(operationId: string) {
   // while (true) {

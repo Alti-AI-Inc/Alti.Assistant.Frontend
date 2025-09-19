@@ -8,13 +8,36 @@ const VideoComponent = ({ operationId }: { operationId: string }) => {
   const [loading, setLoading] = useState(true);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   useEffect(() => {
-    (async () => {
+  if (!operationId) return;
+
+  // eslint-disable-next-line prefer-const
+  let intervalId: string | number | NodeJS.Timeout | undefined;
+
+  const checkStatus = async () => {
+    try {
       const url = await getVideoUrl(operationId);
-      console.log('✅ Final video URL:', url);
-      setVideoUrl(url);
-      setLoading(false);
-    })();
-  }, [operationId]);
+      if (url) {
+        console.log('✅ Final video URL:', url);
+        setVideoUrl(url);
+        setLoading(false);
+
+        // stop polling once we get the URL
+        clearInterval(intervalId);
+      }
+    } catch (err) {
+      console.error('❌ Error fetching video URL:', err);
+    }
+  };
+
+  // run first immediately
+  checkStatus();
+
+  // keep polling every 30 seconds
+  intervalId = setInterval(checkStatus, 30000);
+
+  return () => clearInterval(intervalId); // cleanup on unmount
+}, [operationId]);
+
   if (loading)
     return (
       <div className={cn('flex flex-1 items-center justify-center py-4')}>

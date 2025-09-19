@@ -124,6 +124,8 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
         router.replace(`/c/${response.data.conversationId}`);
       }
 
+      const images = response.data?.responseMessage?.images;
+      const name = response.data?.responseMessage?.video?.name;
       // add assistant's response
       updateActiveConversation(
         selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.VIDEO
@@ -132,8 +134,9 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
         ROLES.ASSISTANT,
         newId,
         {
-          images: response.data.responseMessage.images,
-          videoName: response.data.responseMessage.video,
+          ...(images && { images }),
+          ...(name && { videoName: name }),
+          // videoName: response.data.responseMessage.video?.name,
         },
       );
 
