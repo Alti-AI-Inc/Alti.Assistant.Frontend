@@ -5,6 +5,7 @@ import AudioRecorder from '@/components/AudioRecorder';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+
 import {
   OPTIONS,
   ROLES,
@@ -15,6 +16,7 @@ import { ArrowRight, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { Textarea } from './ui/textarea';
 
 const options = [
   {
@@ -158,17 +160,16 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     <div className="mx-auto w-full max-w-[780px] bg-white">
       {/* <form> */}
       <div className="rounded-2xl border-2 border-gray-200 px-4 shadow-sm">
-        <Input
-          type="text"
+        <Textarea
           value={message}
           onChange={e => setMessage(e.target.value)}
           onKeyPress={e => {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && !e.shiftKey) {
               handleSubmit();
             }
           }}
           placeholder="Chat with alti"
-          className="min-h-12 w-full border-none px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+          className="max-h-[500px] min-h-12 w-full resize-none overflow-y-auto border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
         />
         <div className="flex items-end justify-between py-2">
           <div className="flex items-center space-x-2">
