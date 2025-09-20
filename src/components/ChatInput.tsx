@@ -60,7 +60,6 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   } = useConversationsStore();
 
   const [message, setMessage] = useState('');
-  // const [selectedOption, setSelectedOption] = useState<OPTIONS | null>(null);
 
   const handleSelectOption = (value: OPTIONS) => {
     if (selectedOption === value) {
@@ -79,7 +78,11 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
       ? `${process.env.NEXT_PUBLIC_API_URL}/image/generate`
       : selectedOption === OPTIONS.VIDEO
         ? `${process.env.NEXT_PUBLIC_API_URL}/video/generate`
-        : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
+        : selectedOption === OPTIONS.CODE
+          ? `${process.env.NEXT_PUBLIC_API_URL}/code/assistant`
+          : selectedOption === OPTIONS.RESEARCH
+            ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
+            : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
 
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
@@ -105,7 +108,6 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
           ? response.data.conversationId
           : conversationId;
 
-      // if new conversation, update state with id
       if (conversationId === 'new-chat') {
         updateActiveConversation(
           userMessage,
@@ -118,21 +120,24 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
 
       const images = response.data?.responseMessage?.images;
       const name = response.data?.responseMessage?.video?.name;
-      // add assistant's response
+      const reference = response.data?.responseMessage?.reference;
+
       updateActiveConversation(
         selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.VIDEO
           ? response.data.responseMessage.text
-          : response.data.responseMessage.answer,
+          : selectedOption === OPTIONS.CODE
+            ? response.data.responseMessage
+            : response.data.responseMessage.answer,
         ROLES.ASSISTANT,
         newId,
         {
           ...(images && { images }),
           ...(name && { videoName: name }),
+          ...(reference && { reference }),
         },
       );
 
       if (response?.data) {
-        // refresh sidebar conversations
         queryClient.invalidateQueries({
           queryKey: ['conversations', data?.accessToken],
         });
@@ -158,9 +163,9 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
 
   return (
     <div className="mx-auto w-full max-w-[780px] bg-white">
-      {/* <form> */}
       <div className="rounded-2xl border-2 border-gray-200 px-4 shadow-sm">
         <Textarea
+          name="message"
           value={message}
           onChange={e => setMessage(e.target.value)}
           onKeyPress={e => {
@@ -207,7 +212,6 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
             {message ? (
               <ArrowRight
                 onClick={handleSubmit}
-                // type="submit"
                 className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
               />
             ) : (
@@ -216,7 +220,6 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
           </div>
         </div>
       </div>
-      {/* </form> */}
     </div>
   );
 };

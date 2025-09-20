@@ -13,6 +13,14 @@ export enum OPTIONS {
   VIDEO = 'video-generation',
 }
 
+export interface Reference {
+  title: string;
+  url: string;
+  snippet: string;
+  relevanceScore: number;
+  searchQuery: string;
+}
+
 // Messages inside an active conversation
 export type ConversationMessage = {
   role: ROLES;
@@ -22,6 +30,7 @@ export type ConversationMessage = {
     type?: string;
     timestamp?: string;
     model?: string;
+    reference?: Reference[];
     images?: null | string;
     video?: {
       name: string;
@@ -56,6 +65,7 @@ interface ConversationStore {
     extras?: {
       images?: string;
       videoName?: string;
+      reference?: Reference[];
     },
   ) => void;
   setLoadingActiveConversation: (loading: boolean) => void;
@@ -104,6 +114,9 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
           ...(extras?.images && { metadata: { images: extras.images } }),
           ...(extras?.videoName && {
             metadata: { video: { name: extras.videoName } },
+          }),
+          ...(extras?.reference && {
+            metadata: { reference: extras.reference },
           }),
           timestamp,
         },

@@ -18,7 +18,7 @@ export async function PostConversation(
     }),
   });
   const data = await response.json();
-  console.log('response in post conversation', data.data);
+  console.log('response in post conversation', data);
 
   return data;
 }
