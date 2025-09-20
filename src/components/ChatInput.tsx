@@ -170,6 +170,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
           onChange={e => setMessage(e.target.value)}
           onKeyPress={e => {
             if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
               handleSubmit();
             }
           }}

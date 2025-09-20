@@ -84,7 +84,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       operationId={message.metadata?.video?.name}
                     />
                   )}
-                  {message.metadata?.reference?.length && (
+                  {!!message.metadata?.reference?.length && (
                     <ReferencesList references={message.metadata.reference} />
                   )}
                 </div>
