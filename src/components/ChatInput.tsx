@@ -49,6 +49,7 @@ const options = [
 const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   const router = useRouter();
   const { data } = useSession();
+  console.log(data?.accessToken);
   const queryClient = useQueryClient();
 
   const {

@@ -201,27 +201,27 @@ const searches = [
 ];
 const automations = [
   {
-    name: '250 Automations',
+    name: '250 Task Commands',
     price: 10,
-    buttonText: 'Purchase Automation',
+    buttonText: 'Purchase Task',
     currentPlan: true,
   },
   {
-    name: '1,000 Automations',
+    name: '1,000 Task Commands',
     price: 25,
-    buttonText: 'Purchase Automation',
+    buttonText: 'Purchase Task',
     currentPlan: false,
   },
   {
-    name: '2,500 Automations',
+    name: '2,500 Task Commands',
     price: 50,
-    buttonText: 'Purchase Automation',
+    buttonText: 'Purchase Task',
     currentPlan: false,
   },
   {
-    name: '10,000 Automations',
+    name: '10,000 Task Commands',
     price: 100,
-    buttonText: 'Purchase Automation',
+    buttonText: 'Purchase Task',
     currentPlan: false,
   },
 ];
@@ -238,7 +238,7 @@ const Pricing01 = () => {
           <TabsTrigger value="memory">Memory</TabsTrigger>
           <TabsTrigger value="search">Search</TabsTrigger>
           <TabsTrigger value="research">Research</TabsTrigger>
-          <TabsTrigger value="automation">Automation</TabsTrigger>
+          <TabsTrigger value="automation">Task</TabsTrigger>
           <TabsTrigger value="code">Code</TabsTrigger>
           <TabsTrigger value="image">Image</TabsTrigger>
           <TabsTrigger value="video">Video</TabsTrigger>

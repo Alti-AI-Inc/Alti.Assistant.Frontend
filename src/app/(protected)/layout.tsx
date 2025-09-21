@@ -1,18 +1,15 @@
 'use client';
 
 import LeftSideNav from '@/components/LeftSideNav';
-import RightSideNav from '@/components/RightSideNav';
 import { cn } from '@/lib/utils';
 import { useSidebarStore } from '@/stores/useSidebarStore';
-import { usePathname } from 'next/navigation';
 
 export default function ProtectedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const { isLeftSidebarOpen, isRightSidebarOpen } = useSidebarStore();
+  const { isLeftSidebarOpen } = useSidebarStore();
   return (
     <div>
       <div className="flex flex-wrap">
@@ -25,7 +22,7 @@ export default function ProtectedLayout({
           <LeftSideNav />
         </div>
         <main className="bg-background w-full flex-1">{children}</main>
-        {pathname === '/workflows' && (
+        {/* {pathname === '/workflows' && (
           <div
             className={cn(
               'bg-secondary sticky top-0 right-0 flex h-screen w-68 flex-none flex-col transition-all duration-300 ease-in-out',
@@ -34,7 +31,7 @@ export default function ProtectedLayout({
           >
             <RightSideNav />
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

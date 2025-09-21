@@ -15,13 +15,12 @@ import {
   LayoutGrid,
   LogOut,
   MessageSquare,
-  Network,
   Orbit,
   PanelLeftClose,
   Scale,
   Search,
   Settings,
-  SquarePen,
+  SquarePen
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -148,7 +147,7 @@ const LeftSideNav = () => {
                 Connect apps
               </span>
             </Button>
-            <Button
+            {/* <Button
               onClick={() => router.push('/workflows')}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
             >
@@ -158,7 +157,7 @@ const LeftSideNav = () => {
               >
                 Workflows
               </span>
-            </Button>
+            </Button> */}
             {/* <Button
               onClick={() => router.push('/agent-store')}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
