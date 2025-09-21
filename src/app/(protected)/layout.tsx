@@ -71,12 +71,14 @@ export default function ProtectedLayout({
           <SheetContent side="left" className="bg-secondary w-64 p-0">
             <SheetHeader>
               <SheetTitle>
-                <Image
-                  src="/assets/logo-icon.png"
-                  alt="logo"
-                  height={30}
-                  width={30}
-                />
+                <Link href="/">
+                  <Image
+                    src="/assets/logo-icon.png"
+                    alt="logo"
+                    height={30}
+                    width={30}
+                  />
+                </Link>
               </SheetTitle>
             </SheetHeader>
             <LeftSideNavMobile />
@@ -94,7 +96,7 @@ export default function ProtectedLayout({
             onClick={() => setDrawerOpen(!drawerOpen)}
             className="rounded-md p-2"
           >
-            <Menu className="h-6 w-6" />
+            {/* <Menu className="h-6 w-6" /> */}
           </button>
         ) : (
           <div />
