@@ -1,7 +1,7 @@
-"use client";
-import { ArrowRight, FileIcon, Plus, XIcon } from "lucide-react";
-import Image from "next/image";
-import React, { ChangeEvent } from "react";
+'use client';
+import { ArrowRight, FileIcon, Plus, XIcon } from 'lucide-react';
+import Image from 'next/image';
+import React, { ChangeEvent } from 'react';
 
 export default function Page() {
   const [preview, setPreview] = React.useState<string | null>(null);
@@ -13,7 +13,7 @@ export default function Page() {
     if (file) {
       setFileType(file.type);
       setFileName(file.name);
-      if (file.type.startsWith("image/")) {
+      if (file.type.startsWith('image/')) {
         const url = URL.createObjectURL(file);
         setPreview(url);
       } else {
@@ -23,7 +23,7 @@ export default function Page() {
   };
 
   return (
-    <div className="mx-auto -mt-10 flex min-h-[calc(100vh-80px)] flex-col items-center justify-center px-4">
+    <div className="mx-auto -mt-10 flex  min-h-[calc(100vh-80px)] flex-col items-center justify-center px-4 pr-12">
       <div className="w-full max-w-3xl">
         {/* Heading */}
         <h1 className="mb-6 text-center text-2xl font-semibold sm:text-3xl md:text-4xl">
@@ -32,7 +32,7 @@ export default function Page() {
 
         {/* Form */}
         <form>
-          <div className="rounded-2xl border-2 border-gray-200 px-3 sm:px-4 shadow-sm">
+          <div className="rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4 pr-12">
             {(preview || fileType) && (
               <div className="relative w-fit">
                 {preview ? (
@@ -46,7 +46,7 @@ export default function Page() {
                     />
                     <XIcon
                       size={20}
-                      className="absolute top-1 right-1 cursor-pointer bg-white rounded-full p-0.5"
+                      className="absolute top-1 right-1 cursor-pointer rounded-full bg-white p-0.5"
                       onClick={() => {
                         setPreview(null);
                         setFileType(null);
@@ -55,9 +55,9 @@ export default function Page() {
                     />
                   </>
                 ) : (
-                  <div className="flex items-center my-3 ms-2 rounded-lg border p-2 bg-gray-50 w-full justify-center">
+                  <div className="my-3 ms-2 flex w-full items-center justify-center rounded-lg border bg-gray-50 p-2">
                     <FileIcon size={22} className="text-gray-400" />
-                    <span className="ml-2 text-xs sm:text-sm break-all">
+                    <span className="ml-2 text-xs break-all sm:text-sm">
                       {fileName}
                     </span>
                     <XIcon
@@ -77,19 +77,19 @@ export default function Page() {
             {/* Input */}
             <input
               type="text"
-              className="w-full border-none px-2 py-2 outline-none text-sm sm:text-base"
+              className="w-full border-none px-2 py-2 text-sm outline-none sm:text-base"
               placeholder="Prompt your workflow"
             />
 
             {/* Footer */}
-            <div className="flex justify-between items-center py-2">
+            <div className="flex items-center justify-between py-2">
               {/* File upload */}
-              <div className="flex items-center relative">
+              <div className="relative flex items-center">
                 <Plus className="cursor-pointer rounded-full border-2 border-gray-300 p-0.5" />
                 <input
                   type="file"
                   onChange={handleFileChange}
-                  className="absolute left-0 top-0 h-full w-[24px] opacity-0 cursor-pointer"
+                  className="absolute top-0 left-0 h-full w-[24px] cursor-pointer opacity-0"
                 />
               </div>
 
