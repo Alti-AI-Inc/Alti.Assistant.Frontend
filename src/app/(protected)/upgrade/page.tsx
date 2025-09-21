@@ -11,10 +11,10 @@ const plans = [
     features: [
       'Web Search → 1,000',
       'Deep Research → 10',
-      'Automations → 100',
+      'Task Commands → 100',
       'Code Generation → 100',
       'Image Generation → 10',
-      'Video Generation → 10 seconds',
+      // 'Video Generation → 10 seconds',
 
       // 'My Chatbots → save up to 10 bots',
       // 'My Knowledge → manual uploads',
@@ -30,10 +30,10 @@ const plans = [
     features: [
       'Web Search → 5,000',
       'Deep Research → 50',
-      'Automations → 500',
+      'Task Commands → 500',
       'Code Generation → 500',
       'Image Generation → 50',
-      'Video Generation → 50 seconds',
+      // 'Video Generation → 50 seconds',
 
       // 'My Chatbots → save up to 50 bots',
       // 'My Knowledge → app connectors',
@@ -95,32 +95,32 @@ const images = [
   },
 ];
 
-const videos = [
-  {
-    name: '30 Seconds',
-    price: 10,
-    buttonText: 'Purchase Video',
-    currentPlan: true,
-  },
-  {
-    name: '90 Seconds',
-    price: 25,
-    buttonText: 'Purchase Video',
-    currentPlan: false,
-  },
-  {
-    name: '180 Seconds',
-    price: 50,
-    buttonText: 'Purchase Video',
-    currentPlan: false,
-  },
-  {
-    name: '360 Seconds',
-    price: 100,
-    buttonText: 'Purchase Video',
-    currentPlan: false,
-  },
-];
+// const videos = [
+//   {
+//     name: '30 Seconds',
+//     price: 10,
+//     buttonText: 'Purchase Video',
+//     currentPlan: true,
+//   },
+//   {
+//     name: '90 Seconds',
+//     price: 25,
+//     buttonText: 'Purchase Video',
+//     currentPlan: false,
+//   },
+//   {
+//     name: '180 Seconds',
+//     price: 50,
+//     buttonText: 'Purchase Video',
+//     currentPlan: false,
+//   },
+//   {
+//     name: '360 Seconds',
+//     price: 100,
+//     buttonText: 'Purchase Video',
+//     currentPlan: false,
+//   },
+// ];
 const codes = [
   {
     name: '100 Code Generation',
@@ -241,7 +241,7 @@ const Pricing01 = () => {
           <TabsTrigger value="automation">Task</TabsTrigger>
           <TabsTrigger value="code">Code</TabsTrigger>
           <TabsTrigger value="image">Image</TabsTrigger>
-          <TabsTrigger value="video">Video</TabsTrigger>
+          {/* <TabsTrigger value="video">Video</TabsTrigger> */}
         </TabsList>
         <TabsContent value="plan">
           <div className="mx-auto grid w-full max-w-[840px] grid-cols-1 gap-5 lg:grid-cols-2">
@@ -341,7 +341,7 @@ const Pricing01 = () => {
           </div>
         </TabsContent>
 
-        <TabsContent value="video">
+        {/* <TabsContent value="video">
           <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
             {videos.map(plan => (
               <div
@@ -369,7 +369,7 @@ const Pricing01 = () => {
               </div>
             ))}
           </div>
-        </TabsContent>
+        </TabsContent> */}
         <TabsContent value="code">
           <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
             {codes.map(plan => (
