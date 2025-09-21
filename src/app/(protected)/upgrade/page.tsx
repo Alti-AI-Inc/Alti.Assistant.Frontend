@@ -42,32 +42,32 @@ const plans = [
     currentPlan: false,
   },
 ];
-const memroy = [
-  {
-    name: '1,000 Stored Chats',
-    price: 10,
-    buttonText: 'Purchase Memory',
-    currentPlan: true,
-  },
-  {
-    name: '5,000 Stored Chats',
-    price: 25,
-    buttonText: 'Purchase Memory',
-    currentPlan: false,
-  },
-  {
-    name: '10,000 Stored Chats',
-    price: 50,
-    buttonText: 'Purchase Memory',
-    currentPlan: false,
-  },
-  {
-    name: '25,000 Stored Chats',
-    price: 100,
-    buttonText: 'Purchase Memory',
-    currentPlan: false,
-  },
-];
+// const memroy = [
+//   {
+//     name: '1,000 Stored Chats',
+//     price: 10,
+//     buttonText: 'Purchase Memory',
+//     currentPlan: true,
+//   },
+//   {
+//     name: '5,000 Stored Chats',
+//     price: 25,
+//     buttonText: 'Purchase Memory',
+//     currentPlan: false,
+//   },
+//   {
+//     name: '10,000 Stored Chats',
+//     price: 50,
+//     buttonText: 'Purchase Memory',
+//     currentPlan: false,
+//   },
+//   {
+//     name: '25,000 Stored Chats',
+//     price: 100,
+//     buttonText: 'Purchase Memory',
+//     currentPlan: false,
+//   },
+// ];
 const images = [
   {
     name: '100 Images',
@@ -235,7 +235,7 @@ const Pricing01 = () => {
       <Tabs defaultValue="plan" className="mt-8 w-full">
         <TabsList className="mx-auto mb-6 w-full max-w-[840px]">
           <TabsTrigger value="plan">Plans</TabsTrigger>
-          <TabsTrigger value="memory">Memory</TabsTrigger>
+          {/* <TabsTrigger value="memory">Memory</TabsTrigger> */}
           <TabsTrigger value="search">Search</TabsTrigger>
           <TabsTrigger value="research">Research</TabsTrigger>
           <TabsTrigger value="automation">Task</TabsTrigger>
@@ -282,7 +282,7 @@ const Pricing01 = () => {
             ))}
           </div>
         </TabsContent>
-        <TabsContent value="memory">
+        {/* <TabsContent value="memory">
           <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
             {memroy.map(plan => (
               <div
@@ -310,7 +310,7 @@ const Pricing01 = () => {
               </div>
             ))}
           </div>
-        </TabsContent>
+        </TabsContent> */}
         <TabsContent value="image">
           <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
             {images.map(plan => (
