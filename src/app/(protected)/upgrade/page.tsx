@@ -11,7 +11,7 @@ const plans = [
     features: [
       'Web Search → 1,000',
       'Deep Research → 10',
-      'Automations → 100',
+      'Task Commands → 100',
       'Code Generation → 100',
       'Image Generation → 10',
       'Video Generation → 10 seconds',
@@ -30,7 +30,7 @@ const plans = [
     features: [
       'Web Search → 5,000',
       'Deep Research → 50',
-      'Automations → 500',
+      'Task Commands → 500',
       'Code Generation → 500',
       'Image Generation → 50',
       'Video Generation → 50 seconds',
