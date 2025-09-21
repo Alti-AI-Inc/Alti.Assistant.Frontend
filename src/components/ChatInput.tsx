@@ -39,11 +39,11 @@ const options = [
     title: 'Image',
     value: OPTIONS.IMAGE,
   },
-  {
-    id: 6,
-    title: 'Video',
-    value: OPTIONS.VIDEO,
-  },
+  // {
+  //   id: 6,
+  //   title: 'Video',
+  //   value: OPTIONS.VIDEO,
+  // },
 ];
 
 const ChatInput = ({ conversationId }: { conversationId?: string }) => {
