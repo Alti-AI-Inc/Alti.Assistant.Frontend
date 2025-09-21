@@ -15,6 +15,7 @@ import {
   LayoutGrid,
   LogOut,
   MessageSquare,
+  Network,
   Orbit,
   PanelLeftClose,
   Scale,
@@ -147,7 +148,7 @@ const LeftSideNav = () => {
                 Connect apps
               </span>
             </Button>
-            {/* <Button
+            <Button
               onClick={() => router.push('/workflows')}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
             >
@@ -157,7 +158,7 @@ const LeftSideNav = () => {
               >
                 Workflows
               </span>
-            </Button> */}
+            </Button>
             {/* <Button
               onClick={() => router.push('/agent-store')}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
