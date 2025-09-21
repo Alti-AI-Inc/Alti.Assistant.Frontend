@@ -22,7 +22,7 @@ export default function ReferencesList({ references }: ReferencesProps) {
               rel="noopener noreferrer"
               className="text-primary font-medium underline"
             >
-              {ref.title}
+              {ref.title ? ref.title : ref.url}
             </Link>
           </li>
         ))}
