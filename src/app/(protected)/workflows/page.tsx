@@ -32,7 +32,7 @@ export default function Page() {
 
         {/* Form */}
         <form>
-          <div className="rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4 pr-12">
+          <div className="rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4 ">
             {(preview || fileType) && (
               <div className="relative w-fit">
                 {preview ? (
@@ -96,9 +96,9 @@ export default function Page() {
               {/* Submit button */}
               <button
                 type="submit"
-                className="flex items-center justify-center rounded-full border-2 border-gray-300 bg-black p-1.5 text-white"
+                className=""
               >
-                <ArrowRight className="h-5 w-5" />
+                <ArrowRight className="size-7 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-1 text-white" />
               </button>
             </div>
           </div>

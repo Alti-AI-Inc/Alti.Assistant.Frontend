@@ -21,7 +21,7 @@ export default function PublicLayout({
   return (
     <div className="flex min-h-screen flex-col">
       {/* Header - Mobile only */}
-      <header className="bg-secondary text-foreground flex items-center justify-between px-4 py-3 md:hidden">
+      <header className="bg-secondary text-foreground fixed top-0 left-0 z-50 flex w-full items-center justify-between px-4 py-3 md:hidden ">
         {/* Mobile Drawer (Sheet) */}
         <Sheet>
           <SheetTrigger asChild>
@@ -40,7 +40,6 @@ export default function PublicLayout({
                 />
               </SheetTitle>
             </SheetHeader>
-            {/* <LeftSideNav /> */}
             <LeftSideNavMobile />
           </SheetContent>
         </Sheet>
@@ -52,7 +51,7 @@ export default function PublicLayout({
         <div /> {/* placeholder for spacing */}
       </header>
 
-      <div className="flex flex-1">
+      <div className="flex flex-1 pt-[56px] md:pt-0">
         {/* Sidebar - Desktop only */}
         <div className="bg-secondary sticky top-0 left-0 hidden h-screen w-68 flex-col md:flex">
           <LeftSideNav />
