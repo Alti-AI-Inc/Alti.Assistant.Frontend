@@ -16,7 +16,8 @@ import LeftSideNavMobile from '@/components/LeftSideNavMobile';
 import { cn } from '@/lib/utils';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { usePathname } from 'next/navigation';
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
+import { useDrawerStore } from '@/stores/useDrawerStore';
 
 export default function ProtectedLayout({
   children,
@@ -27,7 +28,8 @@ export default function ProtectedLayout({
   const { isLeftSidebarOpen } = useSidebarStore();
 
   // Drawer state for workflows
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  // const [drawerOpen, setDrawerOpen] = useState(false);
+  const { isOpen: drawerOpen, toggle, close } = useDrawerStore();
   const drawerRef = useRef<HTMLDivElement>(null);
 
   // Swipe left to close drawer
@@ -36,26 +38,19 @@ export default function ProtectedLayout({
     if (!el) return;
 
     let startX = 0;
-
-    const handleTouchStart = (e: TouchEvent) => {
-      startX = e.touches[0].clientX;
-    };
-
+    const handleTouchStart = (e: TouchEvent) => (startX = e.touches[0].clientX);
     const handleTouchEnd = (e: TouchEvent) => {
       const endX = e.changedTouches[0].clientX;
-      if (startX - endX > 50) {
-        setDrawerOpen(false);
-      }
+      if (startX - endX > 50) close(); // use store
     };
 
     el.addEventListener('touchstart', handleTouchStart);
     el.addEventListener('touchend', handleTouchEnd);
-
     return () => {
       el.removeEventListener('touchstart', handleTouchStart);
       el.removeEventListener('touchend', handleTouchEnd);
     };
-  }, []);
+  }, [close]);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -87,15 +82,17 @@ export default function ProtectedLayout({
 
         {/* Center logo */}
         <Link href="/">
-          <Image src="/assets/logo-icon.png" alt="logo" height={20} width={20} />
+          <Image
+            src="/assets/logo-icon.png"
+            alt="logo"
+            height={20}
+            width={20}
+          />
         </Link>
 
         {/* Right Sidebar (mobile) only when /workflows */}
         {pathname === '/workflows' ? (
-          <button
-            onClick={() => setDrawerOpen(!drawerOpen)}
-            className="rounded-md p-2"
-          >
+          <button onClick={toggle} className="rounded-md p-2">
             {/* <Menu className="h-6 w-6" /> */}
           </button>
         ) : (
@@ -104,11 +101,11 @@ export default function ProtectedLayout({
       </header>
 
       {/* Body */}
-      <div className="flex flex-1 relative">
+      <div className="relative flex flex-1">
         {/* Left Sidebar - Desktop */}
         <div
           className={cn(
-            'bg-secondary sticky top-0 left-0 sm:hidden h-screen flex-col transition-all duration-300 ease-in-out hidden md:flex',
+            'bg-secondary sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out sm:hidden md:flex',
             isLeftSidebarOpen ? 'w-68' : 'w-16',
           )}
         >
@@ -125,30 +122,27 @@ export default function ProtectedLayout({
           <div
             ref={drawerRef}
             className={cn(
-              'absolute md:fixed top-[0px] md:top-0 right-0 h-[calc(100vh-56px)] md:h-screen bg-secondary shadow-lg transition-all duration-300 ease-in-out z-40',
-              drawerOpen ? 'w-64' : 'w-10'
+              'bg-secondary absolute top-[0px] right-0 z-40 h-[calc(100vh-56px)] shadow-lg transition-all duration-300 ease-in-out md:fixed md:top-0 md:h-screen',
+              drawerOpen ? 'w-64' : 'w-10',
             )}
           >
             {/* Toggle button */}
-            <button
-              onClick={() => setDrawerOpen(!drawerOpen)}
-              className="absolute -left-4 top-4 p-1"
-            >
+            <button onClick={toggle} className="absolute top-4 -left-4 p-1">
               {drawerOpen ? (
                 <PanelRightClose
                   size={20}
-                  className="size-6 cursor-pointer p-0.5 text-gray-500 transition-transform duration-300"
+                  className="size-6 cursor-pointer p-0.5 ml-7 text-gray-500 transition-transform duration-300"
                 />
               ) : (
                 <PanelLeftClose
                   size={20}
-                  className="size-6 cursor-pointer p-0.5 text-gray-500 transition-transform duration-300"
+                  className="size-6 cursor-pointer p-0.5 ml-5 text-gray-500 transition-transform duration-300"
                 />
               )}
             </button>
 
             {/* Drawer content */}
-            <div className="overflow-y-auto h-full p-2 pt-8">
+            <div className="h-full overflow-y-auto p-2 pt-8">
               <RightSideNav isOpen={drawerOpen} />
             </div>
           </div>
