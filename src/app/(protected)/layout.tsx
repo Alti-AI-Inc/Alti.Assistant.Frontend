@@ -66,7 +66,7 @@ export default function ProtectedLayout({
           <SheetContent side="left" className="bg-secondary w-64 p-0">
             <SheetHeader>
               <SheetTitle>
-                <Link href="/" >
+                <Link href="/">
                   <Image
                     src="/assets/logo-icon.png"
                     alt="logo"
@@ -118,11 +118,12 @@ export default function ProtectedLayout({
         </main>
 
         {/* Workflow Drawer - Desktop & Mobile */}
+        {/* Workflow Drawer - Desktop & Mobile */}
         {pathname === '/workflows' && (
           <div
             ref={drawerRef}
             className={cn(
-              'bg-secondary absolute top-[0px] right-0 z-40 h-[calc(100vh-56px)] shadow-lg transition-all duration-300 ease-in-out md:fixed md:top-0 md:h-screen',
+              'bg-secondary fixed top-[56px] right-0 z-40 h-[calc(100vh-56px)] shadow-lg transition-all duration-300 ease-in-out md:top-0 md:h-screen',
               drawerOpen ? 'w-64' : 'w-10',
             )}
           >
@@ -131,12 +132,12 @@ export default function ProtectedLayout({
               {drawerOpen ? (
                 <PanelRightClose
                   size={20}
-                  className="size-6 cursor-pointer p-0.5 ml-7 text-gray-500 transition-transform duration-300"
+                  className="ml-7 size-6 cursor-pointer p-0.5 text-gray-500 transition-transform duration-300"
                 />
               ) : (
                 <PanelLeftClose
                   size={20}
-                  className="size-6 cursor-pointer p-0.5 ml-5 text-gray-500 transition-transform duration-300"
+                  className="ml-5 size-6 cursor-pointer p-0.5 text-gray-500 transition-transform duration-300"
                 />
               )}
             </button>
