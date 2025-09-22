@@ -233,7 +233,7 @@ const Pricing01 = () => {
         Upgrade Plans
       </h1>
       <Tabs defaultValue="plan" className="mt-8 w-full">
-        <TabsList className="mx-auto mb-6 w-full max-w-[840px]">
+        <TabsList className="bg-muted/50 inline-flex-none mx-auto mb-6 grid h-auto w-full max-w-[840px] grid-cols-3 gap-2 rounded-lg p-2 sm:flex sm:flex-nowrap sm:justify-start">
           <TabsTrigger value="plan">Plans</TabsTrigger>
           <TabsTrigger value="memory">Memory</TabsTrigger>
           <TabsTrigger value="search">Search</TabsTrigger>
@@ -241,7 +241,6 @@ const Pricing01 = () => {
           <TabsTrigger value="automation">Automation</TabsTrigger>
           <TabsTrigger value="code">Code</TabsTrigger>
           <TabsTrigger value="image">Image</TabsTrigger>
-          <TabsTrigger value="video">Video</TabsTrigger>
         </TabsList>
         <TabsContent value="plan">
           <div className="mx-auto grid w-full max-w-[840px] grid-cols-1 gap-5 lg:grid-cols-2">

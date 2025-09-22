@@ -56,7 +56,6 @@ export default function PublicLayout({
         <div className="bg-secondary sticky top-0 left-0 hidden h-screen w-68 flex-col md:flex">
           <LeftSideNav />
         </div>
-
         {/* Main content */}
         <main className="bg-background w-full flex-1">{children}</main>
       </div>
