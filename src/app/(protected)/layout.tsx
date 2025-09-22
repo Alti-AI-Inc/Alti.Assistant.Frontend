@@ -66,7 +66,7 @@ export default function ProtectedLayout({
           <SheetContent side="left" className="bg-secondary w-64 p-0">
             <SheetHeader>
               <SheetTitle>
-                <Link href="/">
+                <Link href="/" >
                   <Image
                     src="/assets/logo-icon.png"
                     alt="logo"
@@ -106,7 +106,7 @@ export default function ProtectedLayout({
         <div
           className={cn(
             'bg-secondary sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out sm:hidden md:flex',
-            isLeftSidebarOpen ? 'w-68' : 'w-16',
+            isLeftSidebarOpen ? 'w-68' : 'w-10',
           )}
         >
           <LeftSideNav />

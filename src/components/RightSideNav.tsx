@@ -96,7 +96,6 @@ const previousChatHistory = [
   },
 ];
 
-
 export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
   const router = useRouter();
   const { onOpen } = useModalStore();
@@ -106,10 +105,10 @@ export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
     return (
       <nav className="flex flex-col items-center gap-6 px-2 pt-8">
         <button onClick={() => router.push('/')}>
-          <SquarePen className="h-5 w-5 " />
+          <SquarePen className="h-5 w-5" />
         </button>
         <button onClick={() => onOpen({ type: 'search-chats' })}>
-          <Search className="h-5 w-5 " />
+          <Search className="h-5 w-5" />
         </button>
       </nav>
     );
@@ -117,13 +116,13 @@ export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
 
   // Expanded → full view
   return (
-    <nav className="h-full overflow-y-auto px-2 pt-8">
+    <nav className="h-full overflow-y-auto px-2 pt-8 ">
       {/* Header actions */}
       <div className="bg-secondary sticky top-0 z-30 pb-2">
-        <div className="space-y-2">
+        <div className="space-y-2 ">
           <Button
             onClick={() => router.push('/')}
-            className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5  -ml-3"
+            className="-ml-3 flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
           >
             <SquarePen className="h-5 w-5" />
             New workflow
@@ -131,9 +130,9 @@ export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
 
           <Button
             onClick={() => onOpen({ type: 'search-chats' })}
-            className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 -ml-3"
+            className="-ml-3 flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
           >
-            <Search className=" h-5 w-5" />
+            <Search className="h-5 w-5" />
             Search workflows
           </Button>
 
