@@ -108,7 +108,7 @@ export default function ProtectedLayout({
         {/* Left Sidebar - Desktop */}
         <div
           className={cn(
-            'bg-secondary sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out md:flex',
+            'bg-secondary sticky top-0 left-0 sm:hidden h-screen flex-col transition-all duration-300 ease-in-out hidden md:flex',
             isLeftSidebarOpen ? 'w-68' : 'w-16',
           )}
         >

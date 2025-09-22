@@ -60,7 +60,7 @@ export default function PublicLayout({
         {/* Sidebar - Desktop only */}
         <div
           className={cn(
-            'bg-secondary sticky top-0 left-0 flex h-screen flex-col transition-all duration-300 ease-in-out',
+            'bg-secondary sticky top-0 left-0  h-screen flex-col transition-all duration-300 ease-in-out hidden md:flex',
             !isLeftSidebarOpen ? 'w-10' : 'w-68',
           )}
         >
