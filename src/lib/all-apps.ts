@@ -1,4 +1,12 @@
-export const allTools = [
+export type APP = {
+  title: string;
+  description: string;
+  image: string;
+  app_name: string;
+  isAvailable: boolean;
+};
+
+export const allApps: APP[] = [
   {
     title: 'Gmail',
     description:
