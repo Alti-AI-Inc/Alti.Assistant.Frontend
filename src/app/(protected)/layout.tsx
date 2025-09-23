@@ -2,10 +2,8 @@
 
 import LeftSideNav from '@/components/LeftSideNav';
 
+import LeftSideNavMobile from '@/components/LeftSideNavMobile';
 import RightSideNav from '@/components/RightSideNav';
-import { Menu, PanelLeftClose, PanelRightClose } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
 import {
   Sheet,
   SheetContent,
@@ -13,20 +11,20 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import LeftSideNavMobile from '@/components/LeftSideNavMobile';
 import { cn } from '@/lib/utils';
-import { useSidebarStore } from '@/stores/useSidebarStore';
-import { usePathname } from 'next/navigation';
-import { useRef, useEffect } from 'react';
 import { useDrawerStore } from '@/stores/useDrawerStore';
-
+import { useSidebarStore } from '@/stores/useSidebarStore';
+import { Menu, PanelLeftClose, PanelRightClose } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 
 export default function ProtectedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const pathname = usePathname();
   const { isLeftSidebarOpen } = useSidebarStore();
 
@@ -54,7 +52,6 @@ export default function ProtectedLayout({
       el.removeEventListener('touchend', handleTouchEnd);
     };
   }, [close]);
-
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -116,7 +113,6 @@ export default function ProtectedLayout({
           <LeftSideNav />
         </div>
 
-
         {/* Main content */}
         <main className="bg-background w-full flex-1 overflow-y-auto">
           {children}
@@ -125,7 +121,6 @@ export default function ProtectedLayout({
         {/* Workflow Drawer - Desktop & Mobile */}
         {/* Workflow Drawer - Desktop & Mobile */}
         {pathname === '/workflows' && (
-
           <div
             ref={drawerRef}
             className={cn(
@@ -153,7 +148,7 @@ export default function ProtectedLayout({
               <RightSideNav isOpen={drawerOpen} />
             </div>
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );
