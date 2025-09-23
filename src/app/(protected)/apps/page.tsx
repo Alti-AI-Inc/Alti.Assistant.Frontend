@@ -13,7 +13,9 @@ export default function AppIntegrationsGrid() {
   const filteredAndSorted = useMemo(() => {
     return allTools
       .filter(
-        app => app.title.toLowerCase().includes(query.toLowerCase()),
+        app =>
+          app.title.toLowerCase().includes(query.toLowerCase()) &&
+          app.isAvailable,
         // || app.description.toLowerCase().includes(query.toLowerCase()),
       )
       .sort((a, b) => a.title.localeCompare(b.title));
