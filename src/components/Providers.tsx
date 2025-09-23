@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { SessionProvider, useSession } from 'next-auth/react';
 import { ThemeProvider } from 'next-themes';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
@@ -29,8 +29,21 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 function AuthWatcher({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
+  const publicPaths = ['/login', '/register'];
 
-  if (session?.isTokenExpired) {
+  if (publicPaths.includes(pathname)) {
+    if (session?.accessToken && !session?.isTokenExpired) {
+      // already logged in -> redirect home
+      router.push('/');
+      return null;
+    }
+    // no token or expired -> allow them to see login/register
+    return <>{children}</>;
+  }
+
+  // CASE 2: User is on a protected page
+  if (!session?.accessToken || session?.isTokenExpired) {
     router.push('/login');
     return null;
   }

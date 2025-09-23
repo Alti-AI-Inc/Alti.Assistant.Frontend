@@ -31,8 +31,11 @@ import { useState } from 'react';
 export default function Component() {
   const router = useRouter();
   const { onOpen } = useModalStore();
+  // const { data: session } = useSession();
+  // console.log({ session });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,26 +44,83 @@ export default function Component() {
       password: '',
     },
   });
-  // 2. Define a submit handler.
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
+    setErrorMessage(null);
 
     try {
-      const response = await signIn('credentials', {
-        email: values.email,
-        password: values.password,
-        redirect: false,
-      });
-      // console.log({ response });
-      if (response.ok) {
-        router.push('/');
+      // 1) Call our API directly so we get the real error message (if any)
+      const apiRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: values.email,
+            password: values.password,
+          }),
+        },
+      );
+
+      const data = await apiRes.json();
+      console.log('API login response:', data);
+
+      if (!apiRes.ok) {
+        // show backend-provided error message(s)
+        setErrorMessage(
+          data?.message ?? data?.errorMessages?.[0]?.message ?? 'Login failed',
+        );
+        return;
       }
-    } catch (error) {
-      console.log(error);
+
+      // 2) Success — now tell NextAuth to sign in using the token we got
+      const signInRes = await signIn('credentials', {
+        redirect: false,
+        accessToken: data.data.accessToken, // forwarded to authorize()
+        id: data.data._id, // optional
+      });
+
+      console.log('signIn response:', signInRes);
+
+      if (signInRes?.ok) {
+        router.push('/');
+      } else {
+        // fallback - normally this shouldn't happen because authorize will return user for valid token
+        setErrorMessage(signInRes?.error ?? 'Sign in failed');
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMessage('Something went wrong. Try again.');
     } finally {
       setIsLoading(false);
     }
   }
+  // 2. Define a submit handler.
+  // async function onSubmit(values: z.infer<typeof formSchema>) {
+  //   setIsLoading(true);
+
+  //   try {
+  //     const response = await signIn('credentials', {
+  //       email: values.email,
+  //       password: values.password,
+  //       redirect: false,
+  //     });
+  //     console.log('response at login page', { response });
+  //     if (response.ok) {
+  //       router.push('/');
+  //     } else if (response?.error) {
+  //       console.log(response.error);
+  //       // set error from backend
+  //       setErrorMessage(response.error);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     setErrorMessage('Something went wrong. Try again.');
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // }
   return (
     <div className="flex-1">
       <div className="h-20 p-10">
@@ -73,7 +133,7 @@ export default function Component() {
           />
         </Link>
       </div>
-      <div className="flex w-full h-[calc(100vh_-_80px)] items-center justify-center bg-white">
+      <div className="flex h-[calc(100vh_-_80px)] w-full items-center justify-center bg-white">
         <div className="flex w-full max-w-md items-center justify-center">
           <div className="rounded-large flex w-full max-w-lg flex-col gap-4 px-8 pt-6 pb-10">
             <p className="pb-4 text-center text-3xl font-semibold">Login</p>
@@ -146,6 +206,9 @@ export default function Component() {
                 </Button>
               </form>
             </Form>
+            {errorMessage && (
+              <p className="text-center text-red-500">{errorMessage}</p>
+            )}
             <p className="text-small text-center">
               <Link href="/register" className="text-[#00f] underline">
                 Create an account
