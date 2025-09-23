@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+
 import {
   OPTIONS,
   ROLES,
@@ -21,18 +22,22 @@ import { ArrowRight, Plus, Menu } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { Textarea } from './ui/textarea';
 
 const options = [
+
   { id: 1, title: 'Research', value: OPTIONS.RESEARCH },
   { id: 2, title: 'Task', value: OPTIONS.TASK },
   { id: 3, title: 'Code', value: OPTIONS.CODE },
   { id: 4, title: 'Image', value: OPTIONS.IMAGE },
-  { id: 6, title: 'Video', value: OPTIONS.VIDEO },
+//   { id: 6, title: 'Video', value: OPTIONS.VIDEO },
+
 ];
 
 const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   const router = useRouter();
   const { data } = useSession();
+  console.log(data?.accessToken);
   const queryClient = useQueryClient();
 
   const {
@@ -53,8 +58,14 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     selectedOption === OPTIONS.IMAGE
       ? `${process.env.NEXT_PUBLIC_API_URL}/image/generate`
       : selectedOption === OPTIONS.VIDEO
-      ? `${process.env.NEXT_PUBLIC_API_URL}/video/generate`
-      : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
+
+        ? `${process.env.NEXT_PUBLIC_API_URL}/video/generate`
+        : selectedOption === OPTIONS.CODE
+          ? `${process.env.NEXT_PUBLIC_API_URL}/code/assistant`
+          : selectedOption === OPTIONS.RESEARCH
+            ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
+            : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
+
 
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
@@ -92,15 +103,21 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
       const images = response.data?.responseMessage?.images;
       const name = response.data?.responseMessage?.video?.name;
 
+      const reference = response.data?.responseMessage?.reference;
+
+
       updateActiveConversation(
         selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.VIDEO
           ? response.data.responseMessage.text
-          : response.data.responseMessage.answer,
+          : selectedOption === OPTIONS.CODE
+            ? response.data.responseMessage
+            : response.data.responseMessage.answer,
         ROLES.ASSISTANT,
         newId,
         {
           ...(images && { images }),
           ...(name && { videoName: name }),
+          ...(reference && { reference }),
         },
       );
 
@@ -128,19 +145,22 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   };
 
   return (
+
     <div className="mx-auto w-full max-w-[780px] bg-white px-2 sm:px-4">
       <div className="rounded-2xl border-2 border-gray-200 px-3 sm:px-4 shadow-sm">
-        <Input
-          type="text"
+        <Textarea
+          name="message"
+
           value={message}
           onChange={e => setMessage(e.target.value)}
           onKeyPress={e => {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
               handleSubmit();
             }
           }}
           placeholder="Chat with alti"
-          className="min-h-12 w-full border-none px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+          className="max-h-[500px] min-h-12 w-full resize-none overflow-y-auto border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
         />
         {/* Responsive container */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between py-2 gap-2">
@@ -166,6 +186,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               </Button>
             ))}
           </div>
+
 
           {/* Mobile layout */}
           <div className="flex sm:hidden w-full items-center justify-between gap-2">
@@ -215,6 +236,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
                 <AudioRecorder setMessage={setMessage} />
               )}
             </div>
+
           </div>
         </div>
       </div>

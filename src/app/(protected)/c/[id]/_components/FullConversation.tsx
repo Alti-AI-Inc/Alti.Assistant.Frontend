@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { Streamdown } from 'streamdown';
+import ReferencesList from './ReferenceList';
 import VideoComponent from './VideoComponent';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
@@ -82,6 +83,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     <VideoComponent
                       operationId={message.metadata?.video?.name}
                     />
+                  )}
+                  {!!message.metadata?.reference?.length && (
+                    <ReferencesList references={message.metadata.reference} />
                   )}
                 </div>
               ))}

@@ -1,6 +1,7 @@
 'use client';
 
 import LeftSideNav from '@/components/LeftSideNav';
+
 import RightSideNav from '@/components/RightSideNav';
 import { Menu, PanelLeftClose, PanelRightClose } from 'lucide-react';
 import Image from 'next/image';
@@ -19,11 +20,13 @@ import { usePathname } from 'next/navigation';
 import { useRef, useEffect } from 'react';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 
+
 export default function ProtectedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   const pathname = usePathname();
   const { isLeftSidebarOpen } = useSidebarStore();
 
@@ -51,6 +54,7 @@ export default function ProtectedLayout({
       el.removeEventListener('touchend', handleTouchEnd);
     };
   }, [close]);
+
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -112,6 +116,7 @@ export default function ProtectedLayout({
           <LeftSideNav />
         </div>
 
+
         {/* Main content */}
         <main className="bg-background w-full flex-1 overflow-y-auto">
           {children}
@@ -120,6 +125,7 @@ export default function ProtectedLayout({
         {/* Workflow Drawer - Desktop & Mobile */}
         {/* Workflow Drawer - Desktop & Mobile */}
         {pathname === '/workflows' && (
+
           <div
             ref={drawerRef}
             className={cn(
@@ -147,7 +153,7 @@ export default function ProtectedLayout({
               <RightSideNav isOpen={drawerOpen} />
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
