@@ -4,11 +4,17 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { allTools } from '@/lib/all-tools';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 
 export default function AppIntegrationsGrid() {
   const [query, setQuery] = useState('');
+  const { data: session } = useSession();
+  console.log({ session });
+
+  // console.log(allTools.length);//166
+  // console.log(allTools.filter(tool => tool.isAvailable).length); //166
 
   const filteredAndSorted = useMemo(() => {
     return allTools

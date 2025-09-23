@@ -2,10 +2,8 @@
 
 import LeftSideNav from '@/components/LeftSideNav';
 
+import LeftSideNavMobile from '@/components/LeftSideNavMobile';
 import RightSideNav from '@/components/RightSideNav';
-import { Menu, PanelLeftClose, PanelRightClose } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
 import {
   Sheet,
   SheetContent,
@@ -13,12 +11,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import LeftSideNavMobile from '@/components/LeftSideNavMobile';
 import { cn } from '@/lib/utils';
-import { useSidebarStore } from '@/stores/useSidebarStore';
-import { usePathname } from 'next/navigation';
-import { useRef, useEffect } from 'react';
 import { useDrawerStore } from '@/stores/useDrawerStore';
+import { useSidebarStore } from '@/stores/useSidebarStore';
+import { Menu, PanelLeftClose, PanelRightClose } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 
 
 export default function ProtectedLayout({
@@ -153,7 +153,7 @@ export default function ProtectedLayout({
               <RightSideNav isOpen={drawerOpen} />
             </div>
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken'; // backend-side safe
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
@@ -5,10 +6,23 @@ declare module 'next-auth' {
   interface User {
     accessToken?: string;
     id?: string;
+    role?: string;
+    iat?: number;
+    exp?: number;
   }
+
   interface Session {
     accessToken: string;
+    isTokenExpired: boolean;
     user: User;
+  }
+
+  interface JWT {
+    accessToken?: string;
+    user_id?: string;
+    role?: string;
+    iat?: number;
+    exp?: number;
   }
 }
 
@@ -55,15 +69,34 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
+      if (user?.accessToken) {
         token.id = user.id;
         token.accessToken = user.accessToken as string;
+
+        const decoded = jwt.decode(user.accessToken) as jwt.JwtPayload & {
+          _id?: string;
+          role?: string;
+          iat?: number;
+          exp?: number;
+        };
+
+        if (decoded) {
+          token.user_id = decoded._id;
+          token.role = decoded.role;
+          token.iat = decoded.iat;
+          token.exp = decoded.exp;
+        }
       }
       return token;
     },
     async session({ session, token }) {
-      session.user.id = token.id as string;
       session.accessToken = token.accessToken as string;
+      session.user.id = token.user_id as string;
+      session.user.role =
+        typeof token.role === 'string' ? token.role : undefined;
+      session.user.iat = token.iat;
+      session.user.exp = token.exp;
+      session.isTokenExpired = token.exp ? token.exp * 1000 < Date.now() : false;
       return session;
     },
   },
