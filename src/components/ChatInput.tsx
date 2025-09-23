@@ -35,7 +35,7 @@ const options = [
 const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   const router = useRouter();
   const { data } = useSession();
-  console.log(data?.accessToken);
+
   const queryClient = useQueryClient();
 
   const {
@@ -61,7 +61,9 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
           ? `${process.env.NEXT_PUBLIC_API_URL}/code/assistant`
           : selectedOption === OPTIONS.RESEARCH
             ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
-            : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
+            : selectedOption === OPTIONS.TASK
+              ? `${process.env.NEXT_PUBLIC_API_URL}/composio_v2/classify-and-execute`
+              : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
 
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
@@ -106,7 +108,9 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
           ? response.data.responseMessage.text
           : selectedOption === OPTIONS.CODE
             ? response.data.responseMessage
-            : response.data.responseMessage.answer,
+            : selectedOption === OPTIONS.TASK
+              ? response.data.responseMessage.message
+              : response.data.responseMessage.answer,
         ROLES.ASSISTANT,
         newId,
         {
