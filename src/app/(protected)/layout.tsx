@@ -20,13 +20,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
-
 export default function ProtectedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const pathname = usePathname();
   const { isLeftSidebarOpen } = useSidebarStore();
 
@@ -54,7 +52,6 @@ export default function ProtectedLayout({
       el.removeEventListener('touchend', handleTouchEnd);
     };
   }, [close]);
-
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -116,7 +113,6 @@ export default function ProtectedLayout({
           <LeftSideNav />
         </div>
 
-
         {/* Main content */}
         <main className="bg-background w-full flex-1 overflow-y-auto">
           {children}
@@ -125,7 +121,6 @@ export default function ProtectedLayout({
         {/* Workflow Drawer - Desktop & Mobile */}
         {/* Workflow Drawer - Desktop & Mobile */}
         {pathname === '/workflows' && (
-
           <div
             ref={drawerRef}
             className={cn(
