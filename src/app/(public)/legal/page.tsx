@@ -192,30 +192,33 @@ export default function page() {
   };
 
   return (
-    <Tabs defaultValue="privacyPolicy" className="mx-auto w-4xl pb-10">
-      <div className="sticky top-0 pt-10 z-10 bg-white">
-        <TabsList className="mx-auto mb-10 grid w-[600px] grid-cols-3">
-          <TabsTrigger className="cursor-pointer" value="privacyPolicy">
+    <Tabs defaultValue="privacyPolicy" className="mx-auto max-w-5xl px-4 pb-10">
+      {/* Sticky header with scrollable tab list */}
+      <div className="sticky top-0 z-10 bg-white pt-6">
+        <TabsList className="mx-auto mb-6 flex w-full max-w-full overflow-x-auto sm:grid sm:w-[600px] sm:grid-cols-3">
+          <TabsTrigger className="md:min-w-[150px] flex-1 cursor-pointer" value="privacyPolicy">
             Privacy Policy
           </TabsTrigger>
-          <TabsTrigger className="cursor-pointer" value="termsOfUsage">
+          <TabsTrigger className="md:min-w-[150px] flex-1 cursor-pointer" value="termsOfUsage">
             Terms of Use
           </TabsTrigger>
-          <TabsTrigger className="cursor-pointer" value="cookiesPolicy">
+          <TabsTrigger className="md:min-w-[150px] flex-1 cursor-pointer" value="cookiesPolicy">
             Cookies Policy
           </TabsTrigger>
         </TabsList>
       </div>
+
+      {/* Privacy Policy */}
       <TabsContent value="privacyPolicy">
-        <div className="mx-auto rounded-lg">
+        <div className="mx-auto rounded-lg text-sm sm:text-base">
           <p className="mb-4">{privacyPolicy.intro}</p>
           {privacyPolicy.sections.map((section, index) => (
             <div key={index} className="mb-6">
-              <h2 className="mb-4 text-xl font-semibold">{section.heading}</h2>
+              <h2 className="mb-3 text-lg font-semibold sm:text-xl">{section.heading}</h2>
               {Array.isArray(section.content) ? (
-                <ul className="mb-4 list-disc pl-6">
+                <ul className="mb-4 list-disc pl-6 space-y-2">
                   {section.content.map((item, idx) => (
-                    <li key={idx} className="mb-2">
+                    <li key={idx}>
                       <strong>{item.text}</strong> {item.description}
                     </li>
                   ))}
@@ -225,33 +228,35 @@ export default function page() {
               )}
             </div>
           ))}
-          <p className="mt-6 text-left">{privacyPolicy.conclusion}</p>
+          <p className="mt-6">{privacyPolicy.conclusion}</p>
         </div>
       </TabsContent>
+
+      {/* Terms of Use */}
       <TabsContent value="termsOfUsage">
-        <div className="mx-auto rounded-lg">
+        <div className="mx-auto rounded-lg text-sm sm:text-base">
           <p className="mb-4">{terms?.intro}</p>
           {terms.sections.map((section, index) => (
-            <div key={index} className="mb-4">
-              <h2 className="mb-4 text-xl font-semibold">{section?.heading}</h2>
+            <div key={index} className="mb-5">
+              <h2 className="mb-2 text-lg font-semibold sm:text-xl">{section?.heading}</h2>
               <p>{section?.content}</p>
             </div>
           ))}
-          <p className="mt-6 text-left">{terms?.conclusion}</p>
+          <p className="mt-6">{terms?.conclusion}</p>
         </div>
       </TabsContent>
+
+      {/* Cookies Policy */}
       <TabsContent value="cookiesPolicy">
-        <div className="mx-auto rounded-lg">
+        <div className="mx-auto rounded-lg text-sm sm:text-base">
           <p className="mb-4">{cookiesPolicy?.intro}</p>
           {cookiesPolicy.sections.map((section, index) => (
             <div key={index} className="mb-6">
-              <h2 className="mb-4 text-xl font-semibold">{section?.heading}</h2>
-              <div className="text-md">{section?.content}</div>
+              <h2 className="mb-3 text-lg font-semibold sm:text-xl">{section?.heading}</h2>
+              <div>{section?.content}</div>
             </div>
           ))}
-          <p className="mt-6 text-left font-medium">
-            {cookiesPolicy?.conclusion}
-          </p>
+          <p className="mt-6 font-medium">{cookiesPolicy?.conclusion}</p>
         </div>
       </TabsContent>
     </Tabs>

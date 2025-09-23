@@ -15,9 +15,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
+import { useDrawerStore } from '@/stores/useDrawerStore';
+// import { useDrawerStore } from '@/stores/useModalStore';
 
 const ConversationsList = () => {
   const router = useRouter();
+  const {  close } = useDrawerStore();
 
   const { data: session } = useSession();
 
@@ -36,9 +39,10 @@ const ConversationsList = () => {
     : [];
 
   const handleConversationClick = async (id: string) => {
-    setSelectedOption(null);
-    router.push('/c/' + id);
-  };
+  close(); // will close Zustand drawer
+  setSelectedOption(null);
+  router.push('/c/' + id);
+};
 
   return (
     <div className="mt-2">

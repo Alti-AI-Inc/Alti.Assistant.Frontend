@@ -12,7 +12,7 @@ const SearchChats = () => {
   const { isOpen, onClose } = useModalStore();
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-full max-w-4xl rounded-2xl">
+      <DialogContent className="w-[95%] max-w-4xl rounded-2xl">
         <DialogHeader>
           <DialogTitle className="sr-only">Search Chats</DialogTitle>
           <DialogDescription>

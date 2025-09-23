@@ -29,6 +29,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ConversationsList from './ConversationsList';
 import { Button } from './ui/button';
+import { useDrawerStore } from '@/stores/useDrawerStore';
 
 const LeftSideNav = () => {
   const { data } = useSession();
@@ -42,6 +43,7 @@ const LeftSideNav = () => {
   const isLoggedIn = data?.accessToken;
 
   const [logoHovered, setLogoHovered] = useState(false);
+  const { close } = useDrawerStore();
 
   const handleLogoMouseEnter = () => {
     if (hideSidebar) {
@@ -97,6 +99,7 @@ const LeftSideNav = () => {
             onClick={() => {
               setActiveConversation(null);
               setSelectedOption(null);
+              close();
               router.push('/');
             }}
             className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
@@ -111,11 +114,12 @@ const LeftSideNav = () => {
 
           <div className={cn('space-y-0.5', !isLoggedIn && 'hidden')}>
             <Button
-              onClick={() =>
+              onClick={() => {
                 onOpen({
                   type: 'search-chats',
-                })
-              }
+                });
+                close();
+              }}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
             >
               <Search />{' '}
@@ -126,7 +130,10 @@ const LeftSideNav = () => {
               </span>
             </Button>
             <Button
-              onClick={() => router.push('/saved-chats')}
+              onClick={() => {
+                router.push('/saved-chats');
+                close();
+              }}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
             >
               <MessageSquare />{' '}
@@ -137,7 +144,10 @@ const LeftSideNav = () => {
               </span>
             </Button>
             <Button
-              onClick={() => router.push('/apps')}
+              onClick={() => {
+                router.push('/apps');
+                setTimeout(() => close(), 50);
+              }}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
             >
               <LayoutGrid />{' '}
@@ -147,8 +157,10 @@ const LeftSideNav = () => {
                 Connect apps
               </span>
             </Button>
+
             {/* <Button
               onClick={() => router.push('/workflows')}
+
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
             >
               <Network />{' '}
