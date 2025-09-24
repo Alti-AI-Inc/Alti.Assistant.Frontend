@@ -6,6 +6,7 @@ import {
 } from '@/hooks/useConnectApps';
 import { APP } from '@/lib/all-apps';
 import { cn } from '@/lib/utils';
+import { LoaderCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -104,7 +105,14 @@ const AppCard = ({
             disabled={isAlreadyConnected || isPending || isWaiting}
             onClick={handleClick}
           >
-            {isAlreadyConnected ? 'connected' : 'Connect'}
+            {(isPending || isWaiting) && (
+              <LoaderCircle className="mr-2 animate-spin" />
+            )}
+            {isAlreadyConnected
+              ? 'Connected'
+              : isPending || isWaiting
+                ? 'Connecting...'
+                : 'Connect'}
           </Button>
         </CardContent>
       </Card>
