@@ -145,7 +145,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   };
 
   return (
-    <div className="mx-auto w-full max-w-[780px] bg-white px-2 sm:px-4">
+    <div className="mx-auto w-full max-w-[796px] space-y-6 px-4 lg:px-0 bg-white">
       <div className="rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4">
         <Textarea
           name="message"
