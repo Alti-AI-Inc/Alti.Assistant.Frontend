@@ -9,6 +9,7 @@ import { useEffect, useRef } from 'react';
 import { Streamdown } from 'streamdown';
 import ReferencesList from './ReferenceList';
 import VideoComponent from './VideoComponent';
+import VideoComponentForContent from './YoutubePlayer';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
@@ -42,6 +43,14 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   }, [activeConversation?.messages]);
 
   const isHomePage = pathname === '/';
+
+  const containsYouTubeUrl = (text: string) => {
+    const youtubeRegex =
+      /https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
+    const result = youtubeRegex.test(text);
+    return result;
+  };
+
   return (
     <div
       className={cn(
@@ -68,9 +77,15 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   {message.role === 'assistant' &&
                     message.content !== 'Image generated successfully' &&
                     message.content !== 'Video generated successfully' && (
-                      <Streamdown className="w-fit max-w-[85%] rounded-lg">
-                        {message.content}
-                      </Streamdown>
+                      <div>
+                        {containsYouTubeUrl(message.content) ? (
+                          <VideoComponentForContent content={message.content} />
+                        ) : (
+                          <Streamdown className="w-full max-w-[85%] rounded-lg">
+                            {message.content}
+                          </Streamdown>
+                        )}
+                      </div>
                     )}
                   {message.metadata?.images && (
                     // eslint-disable-next-line @next/next/no-img-element
