@@ -5,6 +5,8 @@ import {
   useDeleteConversation,
 } from '@/hooks/useConversations';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useDrawerStore } from '@/stores/useDrawerStore';
+import { useModalStore } from '@/stores/useModalStore';
 import { EllipsisVertical, Pencil, Share, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -15,12 +17,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import { useDrawerStore } from '@/stores/useDrawerStore';
 // import { useDrawerStore } from '@/stores/useModalStore';
 
 const ConversationsList = () => {
   const router = useRouter();
-  const {  close } = useDrawerStore();
+  const { close } = useDrawerStore();
 
   const { data: session } = useSession();
 
@@ -30,6 +31,7 @@ const ConversationsList = () => {
   } = useConversations(session?.accessToken);
   const deleteMutation = useDeleteConversation();
   const { setSelectedOption } = useConversationsStore();
+  const { onOpen } = useModalStore();
 
   const sortedConversations = conversations
     ? [...conversations].sort(
@@ -39,10 +41,10 @@ const ConversationsList = () => {
     : [];
 
   const handleConversationClick = async (id: string) => {
-  close(); // will close Zustand drawer
-  setSelectedOption(null);
-  router.push('/c/' + id);
-};
+    close(); // will close Zustand drawer
+    setSelectedOption(null);
+    router.push('/c/' + id);
+  };
 
   return (
     <div className="mt-2">
@@ -72,7 +74,12 @@ const ConversationsList = () => {
               <DropdownMenuSeparator />
 
               <DropdownMenuItem
-                onClick={() => deleteMutation.mutate(chat.conversationId)}
+                onClick={() =>
+                  onOpen({
+                    type: 'delete-conversation',
+                    actionId: chat.conversationId,
+                  })
+                }
                 disabled={deleteMutation.isPending}
               >
                 <Trash2 className="text-black" />{' '}

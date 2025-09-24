@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
@@ -20,7 +21,7 @@ import {
   Scale,
   Search,
   Settings,
-  SquarePen
+  SquarePen,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -29,7 +30,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ConversationsList from './ConversationsList';
 import { Button } from './ui/button';
-import { useDrawerStore } from '@/stores/useDrawerStore';
 
 const LeftSideNav = () => {
   const { data } = useSession();
