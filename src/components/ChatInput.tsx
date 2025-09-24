@@ -100,7 +100,8 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
 
       const images = response.data?.responseMessage?.images;
       const name = response.data?.responseMessage?.video?.name;
-
+      console.log('refrences--->', response.data?.responseMessage);
+      console.log('reponse data--->', response.data);
       const reference = response.data?.responseMessage?.reference;
 
       updateActiveConversation(
@@ -186,7 +187,6 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
 
           {/* Mobile layout */}
           <div className="flex w-full items-center justify-between gap-2 sm:hidden">
-           
             <div className="flex items-center gap-2">
               <label htmlFor="file-input-alt-mobile">
                 <Plus className="size-6 cursor-pointer rounded-full border-2 border-gray-300 p-0.5" />

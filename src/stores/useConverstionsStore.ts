@@ -16,6 +16,7 @@ export enum OPTIONS {
 export interface Reference {
   title: string;
   url: string;
+  source: string;
   snippet: string;
   relevanceScore: number;
   searchQuery: string;
