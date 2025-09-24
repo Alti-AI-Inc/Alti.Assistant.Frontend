@@ -26,15 +26,15 @@ export default function AppIntegrationsGrid() {
       .sort((a, b) => a.title.localeCompare(b.title));
   }, [query]);
 
-  const connectedSlugs = useMemo(
-    () =>
-      isLoading
-        ? new Set()
-        : !connections?.length
-          ? new Set()
-          : new Set(connections?.map(c => c.toolkit?.slug)),
-    [connections, isLoading],
-  );
+  const connectedSlugs = useMemo(() => {
+    if (isLoading || !connections?.length) return new Set();
+
+    return new Set(
+      connections
+        .filter(c => c.status === 'ACTIVE')
+        .map(c => c.toolkit?.slug),
+    );
+  }, [connections, isLoading]);
 
   return (
     <div className="p-8">

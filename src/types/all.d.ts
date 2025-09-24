@@ -6,3 +6,8 @@ type ModalType =
   | 'forgot-password'
   | 'search-workflows'
   | null;
+
+enum APP_STATUS {
+  ACTIVE = 'ACTIVE',
+  PENDING = 'pending',
+}

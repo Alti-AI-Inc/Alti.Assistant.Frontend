@@ -1,9 +1,5 @@
 'use server';
 
-enum APP_STATUS {
-  ACTIVE = 'ACTIVE',
-}
-
 export interface Connection {
   _id: string;
   userId: string;
@@ -27,6 +23,7 @@ interface InitiateResponse {
     };
     message: string;
   };
+  error: string;
 }
 
 interface WaitForConnectionResponse {
@@ -59,6 +56,8 @@ export const getConnections = async (
     },
   );
   const data = await response.json();
+
+  // console.log('data in get connections', data.data);
 
   return data.data ?? [];
 };

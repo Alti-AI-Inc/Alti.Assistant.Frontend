@@ -5,8 +5,10 @@ import {
   useWaitForConnectionMutation,
 } from '@/hooks/useConnectApps';
 import { APP } from '@/lib/all-apps';
+import { cn } from '@/lib/utils';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { useState } from 'react';
 
 const AppCard = ({
   app,
@@ -22,7 +24,12 @@ const AppCard = ({
   const { mutate: waitForConnection, isPending: isWaiting } =
     useWaitForConnectionMutation();
 
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // console.log({ isWaiting });
+
   const handleClick = () => {
+    setErrorMessage('');
     initiateConnection(
       {
         app_name: app.app_name,
@@ -31,9 +38,16 @@ const AppCard = ({
       },
       {
         onSuccess: response => {
+          if (response.error) {
+            setErrorMessage(response.error);
+            return;
+          }
+          console.log(
+            '✅ Connection initiated, redirecting to:',
+            response.authConfig.authConfig,
+          );
           const redirectUrl = response.authConfig.authConfig.redirectUrl;
-          const connectedAccountId =
-            response.authConfig.authConfig.connectedAccountId;
+          const connectedAccountId = response.authConfig.authConfig.id;
 
           window.open(redirectUrl, '_blank');
 
@@ -76,8 +90,16 @@ const AppCard = ({
           <p className="mt-2 flex flex-1 flex-col text-sm text-gray-500">
             {app.description}
           </p>
+          {errorMessage && (
+            <p className="mt-2 flex flex-1 flex-col text-center text-sm text-red-500">
+              {errorMessage}
+            </p>
+          )}
           <Button
-            className="mt-6 w-full hover:bg-white/90"
+            className={cn(
+              'mt-6 w-full hover:bg-white/90',
+              errorMessage && 'mt-0',
+            )}
             variant="outline"
             disabled={isAlreadyConnected || isPending || isWaiting}
             onClick={handleClick}

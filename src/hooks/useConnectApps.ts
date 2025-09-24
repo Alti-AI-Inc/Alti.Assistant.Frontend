@@ -36,6 +36,7 @@ export const useWaitForConnectionMutation = () => {
     mutationFn: (connectedAccountId: string) =>
       waitForConnection(connectedAccountId),
     onSuccess: () => {
+      console.log('✅ Connection established, refreshing connections');
       // ✅ refresh connections after success
       queryClient.invalidateQueries({ queryKey: ['connections'] });
     },
