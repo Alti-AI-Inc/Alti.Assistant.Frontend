@@ -17,7 +17,7 @@ export default function ReferencesList({ references }: ReferencesProps) {
     <div className="">
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
-          <AccordionTrigger className="text-primary text-base focus-visible:border-none focus-visible:ring-0">
+          <AccordionTrigger className="text-primary text-base focus-visible:border-none focus-visible:ring-0 justify-start items-center">
             References
           </AccordionTrigger>
           <AccordionContent>
