@@ -1,7 +1,10 @@
+import BotsList from "./_components/BotsList"
 
 const page = () => {
   return (
-    <div>chatbots page</div>
+    <div>
+      <BotsList/>
+    </div>
   )
 }
 
