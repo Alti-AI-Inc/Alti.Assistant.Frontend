@@ -134,7 +134,7 @@ function DocumentsPage() {
       <div className="flex items-center justify-between">
         <div className="mb-6 flex items-center gap-3">
           {history.length > 0 && <ArrowLeft onClick={handleGoBack} />}
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">
             {history.length > 0 ? folderName : 'Knowledge Bank'}
           </h1>
         </div>
@@ -152,11 +152,8 @@ function DocumentsPage() {
         )}
       </div>
 
-      <div className="mb-8 flex items-center justify-between">
-        <Input
-          className="h-12 w-[500px] border-none bg-gray-100"
-          placeholder="Search"
-        />
+      <div className="mb-4 mt-4 flex items-center justify-between">
+         <Input placeholder="Search " className="max-w-sm" />
         <div className="flex items-center gap-5">
           {history.length > 0 ? (
             <div className="flex gap-5">

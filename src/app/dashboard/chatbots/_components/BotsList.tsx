@@ -71,7 +71,7 @@ const BotsList = () => {
   const { onOpen } = useModalStore();
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         {chatbots.map(chat => (
           <div
             key={chat.id}
