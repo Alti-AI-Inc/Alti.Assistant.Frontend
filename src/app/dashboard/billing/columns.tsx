@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,40 +13,88 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-type Person = {
-  name: string;
-  email: string;
-  phone: string;
-  cases: string;
+type Bill = {
+  date: string;
+  type: string;
+  receipt: string;
 };
-
-export const columns: ColumnDef<Person>[] = [
-  {
-    accessorKey: "name",
-    header: "Name",
+export const data: Bill[] = [
+{
+    date: 'January 5, 2025',
+    type: 'Utilities',
+    receipt: 'R-1001',
   },
   {
-    accessorKey: "email",
+    date: 'January 10, 2025',
+    type: 'Groceries',
+    receipt: 'R-1002',
+  },
+  {
+    date: 'January 15, 2025',
+    type: 'Rent',
+    receipt: 'R-1003',
+  },
+  {
+    date: 'January 20, 2025',
+    type: 'Internet',
+    receipt: 'R-1004',
+  },
+  {
+    date: 'January 25, 2025',
+    type: 'Dining',
+    receipt: 'R-1005',
+  },
+  {
+    date: 'February 1, 2025',
+    type: 'Transportation',
+    receipt: 'R-1006',
+  },
+  {
+    date: 'February 5, 2025',
+    type: 'Medical',
+    receipt: 'R-1007',
+  },
+  {
+    date: 'February 10, 2025',
+    type: 'Entertainment',
+    receipt: 'R-1008',
+  },
+  {
+    date: 'February 15, 2025',
+    type: 'Clothing',
+    receipt: 'R-1009',
+  },
+  {
+    date: 'February 20, 2025',
+    type: 'Travel',
+    receipt: 'R-1010',
+  },
+];
+
+export const columns: ColumnDef<Bill>[] = [
+  {
+    accessorKey: "date",
+    header: "Date",
+  },
+  {
+    accessorKey: "type",
+    header: "Type",
+  },
+  {
+    accessorKey: "receipt",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          Receipt
+          {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
         </Button>
       );
     },
   },
-  {
-    accessorKey: "phone",
-    header: "Phone",
-  },
-  {
-    accessorKey: "cases",
-    header: "Cases",
-  },
+  
   {
     id: "actions",
     cell: ({ row }) => {
@@ -63,7 +111,7 @@ export const columns: ColumnDef<Person>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(client.phone)}
+              onClick={() => navigator.clipboard.writeText(client.type)}
             >
               Copy phone
             </DropdownMenuItem>
@@ -76,65 +124,3 @@ export const columns: ColumnDef<Person>[] = [
   },
 ];
 
-export const data: Person[] = [
-  {
-    name: "John Smith",
-    email: "john.smith@example.com",
-    phone: "555-0123",
-    cases: "Case123",
-  },
-  {
-    name: "Emma Johnson",
-    email: "emma.johnson@example.com",
-    phone: "555-0456",
-    cases: "Case456",
-  },
-  {
-    name: "Michael Brown",
-    email: "michael.brown@example.com",
-    phone: "555-0789",
-    cases: "Case789",
-  },
-  {
-    name: "Sarah Davis",
-    email: "sarah.davis@example.com",
-    phone: "555-1012",
-    cases: "Case101",
-  },
-  {
-    name: "David Wilson",
-    email: "david.wilson@example.com",
-    phone: "555-1314",
-    cases: "Case202",
-  },
-  {
-    name: "Laura Martinez",
-    email: "laura.martinez@example.com",
-    phone: "555-1617",
-    cases: "Case303",
-  },
-  {
-    name: "James Taylor",
-    email: "james.taylor@example.com",
-    phone: "555-1920",
-    cases: "Case404",
-  },
-  {
-    name: "Emily Anderson",
-    email: "emily.anderson@example.com",
-    phone: "555-2223",
-    cases: "Case505",
-  },
-  {
-    name: "Robert Lee",
-    email: "robert.lee@example.com",
-    phone: "555-2526",
-    cases: "Case606",
-  },
-  {
-    name: "Olivia Clark",
-    email: "olivia.clark@example.com",
-    phone: "555-2829",
-    cases: "Case707",
-  },
-];

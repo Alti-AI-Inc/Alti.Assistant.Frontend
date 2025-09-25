@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ColumnDef } from '@tanstack/react-table';
+import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,27 +11,83 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 
 type Person = {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  phone: string;
-  cases: string;
 };
+
+export const data: Person[] = [
+  {
+    firstName: 'John',
+    lastName: 'Smith',
+    email: 'john.smith@example.com',
+  },
+  {
+    firstName: 'Emily',
+    lastName: 'Johnson',
+    email: 'emily.johnson@example.com',
+  },
+  {
+    firstName: 'Michael',
+    lastName: 'Brown',
+    email: 'michael.brown@example.com',
+  },
+  {
+    firstName: 'Sophia',
+    lastName: 'Davis',
+    email: 'sophia.davis@example.com',
+  },
+  {
+    firstName: 'James',
+    lastName: 'Wilson',
+    email: 'james.wilson@example.com',
+  },
+  {
+    firstName: 'Olivia',
+    lastName: 'Martinez',
+    email: 'olivia.martinez@example.com',
+  },
+  {
+    firstName: 'Daniel',
+    lastName: 'Taylor',
+    email: 'daniel.taylor@example.com',
+  },
+  {
+    firstName: 'Ava',
+    lastName: 'Anderson',
+    email: 'ava.anderson@example.com',
+  },
+  {
+    firstName: 'William',
+    lastName: 'Thomas',
+    email: 'william.thomas@example.com',
+  },
+  {
+    firstName: 'Mia',
+    lastName: 'Harris',
+    email: 'mia.harris@example.com',
+  },
+];
 
 export const columns: ColumnDef<Person>[] = [
   {
-    accessorKey: "name",
-    header: "Name",
+    accessorKey: 'firstName',
+    header: 'First name',
   },
   {
-    accessorKey: "email",
+    accessorKey: 'lastName',
+    header: 'Last name',
+  },
+  {
+    accessorKey: 'email',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Email
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -39,16 +95,9 @@ export const columns: ColumnDef<Person>[] = [
       );
     },
   },
+
   {
-    accessorKey: "phone",
-    header: "Phone",
-  },
-  {
-    accessorKey: "cases",
-    header: "Cases",
-  },
-  {
-    id: "actions",
+    id: 'actions',
     cell: ({ row }) => {
       const client = row.original;
 
@@ -63,78 +112,15 @@ export const columns: ColumnDef<Person>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(client.phone)}
+              onClick={() => navigator.clipboard.writeText(client.email)}
             >
-              Copy phone
+              Copy email
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>Send message</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
     },
-  },
-];
-
-export const data: Person[] = [
-  {
-    name: "John Smith",
-    email: "john.smith@example.com",
-    phone: "555-0123",
-    cases: "Case123",
-  },
-  {
-    name: "Emma Johnson",
-    email: "emma.johnson@example.com",
-    phone: "555-0456",
-    cases: "Case456",
-  },
-  {
-    name: "Michael Brown",
-    email: "michael.brown@example.com",
-    phone: "555-0789",
-    cases: "Case789",
-  },
-  {
-    name: "Sarah Davis",
-    email: "sarah.davis@example.com",
-    phone: "555-1012",
-    cases: "Case101",
-  },
-  {
-    name: "David Wilson",
-    email: "david.wilson@example.com",
-    phone: "555-1314",
-    cases: "Case202",
-  },
-  {
-    name: "Laura Martinez",
-    email: "laura.martinez@example.com",
-    phone: "555-1617",
-    cases: "Case303",
-  },
-  {
-    name: "James Taylor",
-    email: "james.taylor@example.com",
-    phone: "555-1920",
-    cases: "Case404",
-  },
-  {
-    name: "Emily Anderson",
-    email: "emily.anderson@example.com",
-    phone: "555-2223",
-    cases: "Case505",
-  },
-  {
-    name: "Robert Lee",
-    email: "robert.lee@example.com",
-    phone: "555-2526",
-    cases: "Case606",
-  },
-  {
-    name: "Olivia Clark",
-    email: "olivia.clark@example.com",
-    phone: "555-2829",
-    cases: "Case707",
   },
 ];

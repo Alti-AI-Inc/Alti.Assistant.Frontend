@@ -31,16 +31,16 @@ export function AddMemberModal() {
           </DialogHeader>
           <div className="grid grid-cols-1 gap-4">
             <div className="grid gap-3">
-              <Label htmlFor="name-1">Name</Label>
-              <Input id="name-1" name="name" placeholder="Pedro Duarte" />
+              <Label htmlFor="name-1">First name</Label>
+              <Input id="name-1" name="firstName" placeholder="Pedro" />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="name-2">Last name</Label>
+              <Input id="name-2" name="lastName" placeholder="Duarte" />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="email">Email</Label>
               <Input id="email" name="email" placeholder="example@xyz.com" />
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="phone">Phone</Label>
-              <Input id="phone" name="phone" placeholder="(123) 456-789" />
             </div>
           </div>
           <DialogFooter>
