@@ -128,13 +128,13 @@ function DocumentsPage() {
 
   return (
     <div
-      className="relative h-full w-full p-6"
+      className="relative h-full w-full p-8"
       style={{ pointerEvents: 'auto' }}
     >
       <div className="flex items-center justify-between">
         <div className="mb-6 flex items-center gap-3">
           {history.length > 0 && <ArrowLeft onClick={handleGoBack} />}
-          <h1 className="text-3xl leading-[32px] font-[700]">
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">
             {history.length > 0 ? folderName : 'Knowledge Bank'}
           </h1>
         </div>
