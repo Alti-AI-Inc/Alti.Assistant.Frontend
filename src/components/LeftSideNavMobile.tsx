@@ -11,7 +11,6 @@ import {
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {
-  LayoutGrid,
   LogOut,
   MessageSquare,
   Network,
@@ -19,13 +18,13 @@ import {
   Scale,
   Search,
   Settings,
-  SquarePen,
+  SquarePen
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import ConversationsList from './ConversationsList';
 import { Button } from './ui/button';
-import Link from 'next/link';
 
 const LeftSideNavMobile = () => {
   const { data } = useSession();
@@ -75,13 +74,13 @@ const LeftSideNavMobile = () => {
             <span className="text-sm font-normal">Saved chats</span>
           </Button>
 
-          <Button
+          {/* <Button
             onClick={() => router.push('/apps')}
             className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
           >
             <LayoutGrid />
             <span className="text-sm font-normal">Connect apps</span>
-          </Button>
+          </Button> */}
 
           <Button
             onClick={() => router.push('/workflows')}

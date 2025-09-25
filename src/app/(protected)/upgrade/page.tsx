@@ -11,7 +11,7 @@ const plans = [
     features: [
       'Web Search → 1,000',
       'Deep Research → 10',
-      'Task Commands → 100',
+      // 'Task Commands → 100',
       'Code Generation → 100',
       'Image Generation → 10',
       // 'Video Generation → 10 seconds',
@@ -30,7 +30,7 @@ const plans = [
     features: [
       'Web Search → 5,000',
       'Deep Research → 50',
-      'Task Commands → 500',
+      // 'Task Commands → 500',
       'Code Generation → 500',
       'Image Generation → 50',
       // 'Video Generation → 50 seconds',
@@ -199,32 +199,32 @@ const searches = [
     currentPlan: false,
   },
 ];
-const automations = [
-  {
-    name: '250 Task Commands',
-    price: 10,
-    buttonText: 'Purchase Task',
-    currentPlan: true,
-  },
-  {
-    name: '1,000 Task Commands',
-    price: 25,
-    buttonText: 'Purchase Task',
-    currentPlan: false,
-  },
-  {
-    name: '2,500 Task Commands',
-    price: 50,
-    buttonText: 'Purchase Task',
-    currentPlan: false,
-  },
-  {
-    name: '10,000 Task Commands',
-    price: 100,
-    buttonText: 'Purchase Task',
-    currentPlan: false,
-  },
-];
+// const automations = [
+//   {
+//     name: '250 Task Commands',
+//     price: 10,
+//     buttonText: 'Purchase Task',
+//     currentPlan: true,
+//   },
+//   {
+//     name: '1,000 Task Commands',
+//     price: 25,
+//     buttonText: 'Purchase Task',
+//     currentPlan: false,
+//   },
+//   {
+//     name: '2,500 Task Commands',
+//     price: 50,
+//     buttonText: 'Purchase Task',
+//     currentPlan: false,
+//   },
+//   {
+//     name: '10,000 Task Commands',
+//     price: 100,
+//     buttonText: 'Purchase Task',
+//     currentPlan: false,
+//   },
+// ];
 
 const Pricing01 = () => {
   return (
@@ -238,7 +238,7 @@ const Pricing01 = () => {
           {/* <TabsTrigger value="memory">Memory</TabsTrigger> */}
           <TabsTrigger value="search">Search</TabsTrigger>
           <TabsTrigger value="research">Research</TabsTrigger>
-          <TabsTrigger value="automation">Task</TabsTrigger>
+          {/* <TabsTrigger value="automation">Task</TabsTrigger> */}
           <TabsTrigger value="code">Code</TabsTrigger>
           <TabsTrigger value="image">Image</TabsTrigger>
 
@@ -459,7 +459,7 @@ const Pricing01 = () => {
             ))}
           </div>
         </TabsContent>
-        <TabsContent value="automation">
+        {/* <TabsContent value="automation">
           <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
             {automations.map(plan => (
               <div
@@ -487,7 +487,7 @@ const Pricing01 = () => {
               </div>
             ))}
           </div>
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
     </div>
   );

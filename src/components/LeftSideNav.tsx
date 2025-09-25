@@ -13,7 +13,6 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
-  LayoutGrid,
   LogOut,
   MessageSquare,
   Orbit,
@@ -21,7 +20,7 @@ import {
   Scale,
   Search,
   Settings,
-  SquarePen,
+  SquarePen
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -143,7 +142,7 @@ const LeftSideNav = () => {
                 Saved chats
               </span>
             </Button>
-            <Button
+            {/* <Button
               onClick={() => {
                 router.push('/apps');
                 setTimeout(() => close(), 50);
@@ -156,7 +155,7 @@ const LeftSideNav = () => {
               >
                 Connect apps
               </span>
-            </Button>
+            </Button> */}
 
             {/* <Button
               onClick={() => router.push('/workflows')}

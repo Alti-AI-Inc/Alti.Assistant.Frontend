@@ -26,7 +26,7 @@ import { Textarea } from './ui/textarea';
 
 const options = [
   { id: 1, title: 'Research', value: OPTIONS.RESEARCH },
-  { id: 2, title: 'Task', value: OPTIONS.TASK },
+  // { id: 2, title: 'Task', value: OPTIONS.TASK },
   { id: 3, title: 'Code', value: OPTIONS.CODE },
   { id: 4, title: 'Image', value: OPTIONS.IMAGE },
   //   { id: 6, title: 'Video', value: OPTIONS.VIDEO },
