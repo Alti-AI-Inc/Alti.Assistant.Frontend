@@ -30,7 +30,8 @@ const ConversationsList = () => {
     // error,
   } = useConversations(session?.accessToken);
   const deleteMutation = useDeleteConversation();
-  const { setSelectedOption,setShowStartLastMessage } = useConversationsStore();
+  const { setSelectedOption, setShowStartLastMessage, setUserMessage } =
+    useConversationsStore();
   const { onOpen } = useModalStore();
 
   const sortedConversations = conversations
@@ -44,6 +45,7 @@ const ConversationsList = () => {
     close(); // will close Zustand drawer
     setSelectedOption(null);
     setShowStartLastMessage(false);
+    setUserMessage('');
     router.push('/c/' + id);
   };
 

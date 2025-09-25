@@ -31,8 +31,12 @@ const LeftSideNavMobile = () => {
   const router = useRouter();
 
   const { onOpen } = useModalStore();
-  const { setActiveConversation, setSelectedOption, setShowStartLastMessage } =
-    useConversationsStore();
+  const {
+    setActiveConversation,
+    setSelectedOption,
+    setShowStartLastMessage,
+    setUserMessage,
+  } = useConversationsStore();
 
   const isLoggedIn = data?.accessToken;
 
@@ -45,6 +49,7 @@ const LeftSideNavMobile = () => {
             onClick={() => {
               setActiveConversation(null);
               setShowStartLastMessage(false);
+              setUserMessage('');
               setSelectedOption(null);
               router.push('/');
             }}

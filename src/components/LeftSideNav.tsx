@@ -35,7 +35,7 @@ const LeftSideNav = () => {
   const router = useRouter();
 
   const { onOpen } = useModalStore();
-  const { setActiveConversation, setSelectedOption,setShowStartLastMessage } = useConversationsStore();
+  const { setActiveConversation, setSelectedOption,setShowStartLastMessage,setUserMessage } = useConversationsStore();
   const { isLeftSidebarOpen, toggleLeftSidebar } = useSidebarStore();
 
   const hideSidebar = !isLeftSidebarOpen;
@@ -98,6 +98,7 @@ const LeftSideNav = () => {
             onClick={() => {
               setActiveConversation(null);
               setShowStartLastMessage(false);
+              setUserMessage('');
               setSelectedOption(null);
               close();
               router.push('/');

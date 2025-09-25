@@ -52,6 +52,8 @@ export type ActiveConversation = {
 };
 
 interface ConversationStore {
+  userMessage: string;
+  setUserMessage: (message: string) => void;
   showStartLastMessage: boolean;
   setShowStartLastMessage: (show: boolean) => void;
   activeConversation: ActiveConversation | null;
@@ -80,6 +82,10 @@ interface ConversationStore {
 export const useConversationsStore = create<ConversationStore>()(set => ({
   activeConversation: null,
   showStartLastMessage: false,
+  userMessage: '',
+  setUserMessage(message) {
+    set({ userMessage: message });
+  },
   setShowStartLastMessage: show => set({ showStartLastMessage: show }),
   isLoadingActiveConversation: false,
   isLoadingResponse: false,

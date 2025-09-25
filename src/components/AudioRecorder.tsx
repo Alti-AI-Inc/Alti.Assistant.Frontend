@@ -10,7 +10,7 @@ import { useRef, useState } from 'react';
 export default function AudioRecorder({
   setMessage,
 }: {
-  setMessage: React.Dispatch<React.SetStateAction<string>>;
+  setMessage: (message: string) => void;
 }) {
   const { data } = useSession();
   const [recording, setRecording] = useState(false);

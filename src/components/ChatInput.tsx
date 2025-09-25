@@ -21,7 +21,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowRight, Menu, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { Textarea } from './ui/textarea';
 
 const options = [
@@ -44,10 +43,12 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     selectedOption,
     setSelectedOption,
     activeConversation,
+    userMessage:message,
+    setUserMessage:setMessage,
     setShowStartLastMessage,
   } = useConversationsStore();
 
-  const [message, setMessage] = useState('');
+  // const [message, setMessage] = useState('');
 
   const handleSelectOption = (value: OPTIONS) => {
     setSelectedOption(selectedOption === value ? null : value);
