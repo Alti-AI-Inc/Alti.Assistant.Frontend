@@ -11,9 +11,11 @@ import {
 import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
 import {
+  BookCheck,
+  Bot,
   CircleUserRound,
-  FileCheck2,
   LogOut,
+  ReceiptText,
   Settings
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -65,15 +67,14 @@ const DashboardLeftSideNav = () => {
             onClick={() => router.push('/dashboard/billing')}
             className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
           >
-            <FileCheck2 />
-
+            <ReceiptText />
             <span className={cn('text-sm font-normal')}>Billing</span>
           </Button>
           <Button
             onClick={() => router.push('/dashboard/knowledge')}
             className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
           >
-            <FileCheck2 />
+            <BookCheck />
 
             <span className={cn('text-sm font-normal')}>Knowledge</span>
           </Button>
@@ -81,7 +82,7 @@ const DashboardLeftSideNav = () => {
             onClick={() => router.push('/dashboard/chatbots')}
             className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
           >
-            <FileCheck2 />
+            <Bot />
 
             <span className={cn('text-sm font-normal')}>Chatbots</span>
           </Button>
