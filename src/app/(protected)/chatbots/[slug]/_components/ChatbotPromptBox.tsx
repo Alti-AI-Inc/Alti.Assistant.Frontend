@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { ArrowRight, Plus } from 'lucide-react';
 import { useState } from 'react';
-import { chatbots } from '../../page';
+import { chatbots } from '../../_components/BotsList';
 
 function ChatbotPromptBox({ slug }: { slug: string }) {
   const [message, setMessage] = useState('');
