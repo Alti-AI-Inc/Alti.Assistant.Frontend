@@ -1,6 +1,4 @@
-'use client';
-
-import Link from "next/link";
+import Link from 'next/link';
 
 type Chat = {
   id: number;
@@ -12,7 +10,7 @@ type Chat = {
 export const chatbots: Chat[] = [
   {
     id: 1,
-    slug: 'chatbot-1',  
+    slug: 'chatbot-1',
     title: 'Finance Chatbot',
     descritpion:
       'Chatbot description  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quas, magnam!',
@@ -61,18 +59,17 @@ export const chatbots: Chat[] = [
   },
 ];
 
-const Page = () => {
+const page = () => {
   return (
     <>
       <div className="grid grid-cols-1 gap-4 p-6 sm:grid-cols-2 md:grid-cols-3">
         {chatbots.map(chat => (
-         
           <div
             key={chat.id}
             className="group relative space-y-2 rounded-md bg-gray-100 p-6"
           >
             <Link href={`/chatbots/${chat.slug}`}>
-            <span className="absolute inset-0"></span>
+              <span className="absolute inset-0"></span>
             </Link>
             <h2 className="font-bold">{chat.title}</h2>
             <p className="line-clamp-2">{chat.descritpion}</p>
@@ -83,4 +80,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default page;
