@@ -134,7 +134,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
       setLoadingResponse(false);
     },
     onSettled: () => {
-      setMessage('');
+      // setMessage('');
       setLoadingResponse(false);
     },
   });
