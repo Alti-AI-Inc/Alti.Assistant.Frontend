@@ -7,7 +7,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useModalStore } from '@/stores/useModalStore';
 import { EllipsisVertical, Pencil, Trash2 } from 'lucide-react';
-import Link from 'next/link';
 
 type Chat = {
   id: number;
@@ -106,9 +105,7 @@ const BotsList = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <Link href={`/dashboard/chatbots/${chat.slug}`}>
-              <span className="absolute inset-0"></span>
-            </Link>
+
             <h2 className="font-bold">{chat.title}</h2>
             <p className="line-clamp-2">{chat.descritpion}</p>
           </div>
