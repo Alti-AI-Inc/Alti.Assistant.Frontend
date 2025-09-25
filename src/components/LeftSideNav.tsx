@@ -13,6 +13,7 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
+  BookCheck,
   LogOut,
   MessageSquare,
   Orbit,
@@ -20,7 +21,7 @@ import {
   Scale,
   Search,
   Settings,
-  SquarePen
+  SquarePen,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -140,6 +141,20 @@ const LeftSideNav = () => {
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
                 Saved chats
+              </span>
+            </Button>
+            <Button
+              onClick={() => {
+                router.push('/knowledge');
+                close();
+              }}
+              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+            >
+              <BookCheck />{' '}
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                Knowledge
               </span>
             </Button>
             {/* <Button
