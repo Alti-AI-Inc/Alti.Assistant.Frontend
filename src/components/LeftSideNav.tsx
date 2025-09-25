@@ -14,6 +14,7 @@ import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
   BookCheck,
+  Bot,
   LayoutGrid,
   LogOut,
   MessageSquare,
@@ -22,7 +23,7 @@ import {
   Scale,
   Search,
   Settings,
-  SquarePen
+  SquarePen,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -170,6 +171,20 @@ const LeftSideNav = () => {
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
                 Connectors
+              </span>
+            </Button>
+            <Button
+              onClick={() => {
+                router.push('/chatbots');
+                setTimeout(() => close(), 50);
+              }}
+              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+            >
+              <Bot />{' '}
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                Chatbots
               </span>
             </Button>
 
