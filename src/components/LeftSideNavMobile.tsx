@@ -14,12 +14,11 @@ import {
   BookCheck,
   LogOut,
   MessageSquare,
-  Network,
   Orbit,
   Scale,
   Search,
   Settings,
-  SquarePen,
+  SquarePen
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -92,14 +91,6 @@ const LeftSideNavMobile = () => {
             <LayoutGrid />
             <span className="text-sm font-normal">Connect apps</span>
           </Button> */}
-
-              <Button
-                onClick={() => router.push('/workflows')}
-                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-              >
-                <Network />
-                <span className="text-sm font-normal">Workflows</span>
-              </Button>
 
               <div className="mt-6 pl-4 text-sm text-gray-500">
                 Chat history

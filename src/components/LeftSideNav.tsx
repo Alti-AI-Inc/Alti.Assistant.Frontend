@@ -17,7 +17,6 @@ import {
   LayoutGrid,
   LogOut,
   MessageSquare,
-  Network,
   Orbit,
   PanelLeftClose,
   Scale,
@@ -174,18 +173,6 @@ const LeftSideNav = () => {
               </span>
             </Button>
 
-            <Button
-              onClick={() => router.push('/workflows')}
-
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <Network />{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Workflows
-              </span>
-            </Button>
             {/* 
             {/* <Button
               onClick={() => router.push('/agent-store')}

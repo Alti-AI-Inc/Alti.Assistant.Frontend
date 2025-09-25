@@ -3,7 +3,6 @@
 import LeftSideNav from '@/components/LeftSideNav';
 
 import LeftSideNavMobile from '@/components/LeftSideNavMobile';
-import RightSideNav from '@/components/RightSideNav';
 import {
   Sheet,
   SheetContent,
@@ -14,10 +13,9 @@ import {
 import { cn } from '@/lib/utils';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
-import { Menu, PanelLeftClose, PanelRightClose } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
 export default function ProtectedLayout({
@@ -25,12 +23,12 @@ export default function ProtectedLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
+  
   const { isLeftSidebarOpen } = useSidebarStore();
 
   // Drawer state for workflows
   // const [drawerOpen, setDrawerOpen] = useState(false);
-  const { isOpen: drawerOpen, toggle, close } = useDrawerStore();
+  const { close } = useDrawerStore();
   const drawerRef = useRef<HTMLDivElement>(null);
 
   // Swipe left to close drawer
@@ -90,15 +88,6 @@ export default function ProtectedLayout({
             width={20}
           />
         </Link>
-
-        {/* Right Sidebar (mobile) only when /workflows */}
-        {pathname === '/workflows' ? (
-          <button onClick={toggle} className="rounded-md p-2">
-            {/* <Menu className="h-6 w-6" /> */}
-          </button>
-        ) : (
-          <div />
-        )}
       </header>
 
       {/* Body */}
@@ -117,38 +106,6 @@ export default function ProtectedLayout({
         <main className="bg-background w-full flex-1 overflow-y-auto">
           {children}
         </main>
-
-        {/* Workflow Drawer - Desktop & Mobile */}
-        {/* Workflow Drawer - Desktop & Mobile */}
-        {pathname === '/workflows' && (
-          <div
-            ref={drawerRef}
-            className={cn(
-              'bg-secondary fixed top-[56px] right-0 z-40 h-[calc(100vh-56px)] shadow-lg transition-all duration-300 ease-in-out md:top-0 md:h-screen',
-              drawerOpen ? 'w-64' : 'w-10',
-            )}
-          >
-            {/* Toggle button */}
-            <button onClick={toggle} className="absolute top-4 -left-4 p-1">
-              {drawerOpen ? (
-                <PanelRightClose
-                  size={20}
-                  className="ml-7 size-6 cursor-pointer p-0.5 text-gray-500 transition-transform duration-300"
-                />
-              ) : (
-                <PanelLeftClose
-                  size={20}
-                  className="ml-5 size-6 cursor-pointer p-0.5 text-gray-500 transition-transform duration-300"
-                />
-              )}
-            </button>
-
-            {/* Drawer content */}
-            <div className="h-full overflow-y-auto p-2 pt-8">
-              <RightSideNav isOpen={drawerOpen} />
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
