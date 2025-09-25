@@ -4,7 +4,6 @@ import { useActiveConversation } from '@/hooks/useConversations';
 import { cn } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useSession } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { Streamdown } from 'streamdown';
 import ReferencesList from './ReferenceList';
@@ -13,11 +12,11 @@ import VideoComponentForContent from './YoutubePlayer';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
-  const pathname = usePathname();
+  // const pathname = usePathname();
   const {
     data: queryConversation,
     isLoading,
-    error,
+    // error,
   } = useActiveConversation(conversationId, data?.accessToken);
 
   const { setActiveConversation, activeConversation, isLoadingResponse } =
@@ -42,7 +41,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     scrollToBottom();
   }, [activeConversation?.messages]);
 
-  const isHomePage = pathname === '/';
+  // const isHomePage = pathname === '/';
 
   const containsYouTubeUrl = (text: string) => {
     const youtubeRegex =
@@ -133,9 +132,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         </div>
       )}
 
-      {error && !isHomePage && (
+      {/* {error && !isHomePage && (
         <div className="my-6 text-center">{error.message}</div>
-      )}
+      )} */}
 
       {/* Sticky chat input at bottom */}
       <div className="sticky bottom-0 bg-white px-4 pb-4">
