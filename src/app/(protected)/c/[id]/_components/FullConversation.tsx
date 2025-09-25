@@ -19,8 +19,12 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     // error,
   } = useActiveConversation(conversationId, data?.accessToken);
 
-  const { setActiveConversation, activeConversation, isLoadingResponse } =
-    useConversationsStore();
+  const {
+    setActiveConversation,
+    showStartLastMessage,
+    activeConversation,
+    isLoadingResponse,
+  } = useConversationsStore();
 
   // Sync query result into Zustand
   useEffect(() => {
@@ -29,6 +33,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     }
   }, [queryConversation, setActiveConversation]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom function
@@ -36,11 +41,23 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const scrollToLastUserMessage = () => {
+    lastMessageRef.current?.scrollIntoView();
+  };
+
   // Auto-scroll when messages change or loading state changes
   useEffect(() => {
+    if (showStartLastMessage) return;
     scrollToBottom();
-  }, [activeConversation?.messages]);
+  }, [activeConversation?.messages, showStartLastMessage]);
 
+  useEffect(() => {
+    if (showStartLastMessage) {
+      scrollToLastUserMessage();
+    }
+  }, [activeConversation?.messages, showStartLastMessage]);
+
+  console.log({ showStartLastMessage });
   // const isHomePage = pathname === '/';
 
   const containsYouTubeUrl = (text: string) => {
@@ -51,6 +68,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     const result = youtubeRegex.test(text);
     return result;
   };
+
+  const lastUserMessage = activeConversation?.messages
+    .filter(message => message.role === 'user')
+    .pop();
+  console.log({ lastUserMessage });
 
   return (
     <div
@@ -63,13 +85,29 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       {/* Messages container - takes remaining space and scrolls */}
       {activeConversation?.messages.length && (
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
-          <div className="mx-auto w-full max-w-[796px] space-y-6 px-4 py-6 lg:pr-2">
+          <div
+            className={cn(
+              'mx-auto w-full max-w-[796px] space-y-6 px-4 py-6 lg:pr-2',
+            )}
+          >
             {activeConversation?.messages.length &&
               activeConversation.messages.map((message, idx) => (
                 <div key={idx} className="space-y-4">
                   {message.role === 'user' && (
-                    <div className="flex items-center justify-end">
-                      <div className="w-fit max-w-[85%] rounded-2xl bg-gray-100 px-4 py-2 text-black shadow">
+                    <div
+                      className="flex items-center justify-end"
+                      ref={
+                        message.content === lastUserMessage?.content
+                          ? lastMessageRef
+                          : null
+                      }
+                    >
+                      <div
+                        className={cn(
+                          'w-fit max-w-[85%] rounded-2xl bg-gray-100 px-4 py-2 text-black shadow',
+                          showStartLastMessage && 'mt-8',
+                        )}
+                      >
                         {message.content}
                       </div>
                     </div>
@@ -88,6 +126,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                         )}
                       </div>
                     )}
+
                   {message.metadata?.images && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -115,6 +154,12 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 </div>
               </div>
             )}
+            <div
+              className={cn(
+                // idx === activeConversation.messages.length - 1 &&
+                showStartLastMessage && 'h-[65dvh]',
+              )}
+            ></div>
           </div>
           <div ref={messagesEndRef} />
         </div>

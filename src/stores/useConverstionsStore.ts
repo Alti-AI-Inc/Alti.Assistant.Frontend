@@ -26,6 +26,7 @@ export interface Reference {
 export type ConversationMessage = {
   role: ROLES;
   content: string;
+
   timestamp: string; // ISO string
   metadata?: {
     type?: string;
@@ -51,6 +52,8 @@ export type ActiveConversation = {
 };
 
 interface ConversationStore {
+  showStartLastMessage: boolean;
+  setShowStartLastMessage: (show: boolean) => void;
   activeConversation: ActiveConversation | null;
   isLoadingActiveConversation: boolean;
   isLoadingResponse: boolean;
@@ -76,6 +79,8 @@ interface ConversationStore {
 
 export const useConversationsStore = create<ConversationStore>()(set => ({
   activeConversation: null,
+  showStartLastMessage: false,
+  setShowStartLastMessage: show => set({ showStartLastMessage: show }),
   isLoadingActiveConversation: false,
   isLoadingResponse: false,
   error: null,

@@ -44,6 +44,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     selectedOption,
     setSelectedOption,
     activeConversation,
+    setShowStartLastMessage,
   } = useConversationsStore();
 
   const [message, setMessage] = useState('');
@@ -140,6 +141,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
 
   const handleSubmit = () => {
     if (message.trim() === '') return;
+    setShowStartLastMessage(true);
     mutation.mutate(message);
     setMessage('');
   };
