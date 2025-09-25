@@ -5,6 +5,7 @@ import {
   PostConversation,
 } from '@/actions/conversations';
 import { ROLES, useConversationsStore } from '@/stores/useConverstionsStore';
+import { useModalStore } from '@/stores/useModalStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -121,6 +122,7 @@ export function useDeleteConversation() {
   const queryClient = useQueryClient();
   const { data } = useSession();
   const pathname = usePathname();
+  const { onClose } = useModalStore();
   const router = useRouter();
   // const { setActiveConversation } = useConversationsStore();
 
@@ -134,6 +136,10 @@ export function useDeleteConversation() {
       if (pathname.endsWith(deletedId)) {
         router.push('/');
       }
+
+      // close modal
+      onClose();
+
       // clear active conversation
       // setActiveConversation(null);
       // invalidate list

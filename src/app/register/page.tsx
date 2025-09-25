@@ -34,6 +34,7 @@ import { useState } from 'react';
 export default function Component() {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -70,6 +71,9 @@ export default function Component() {
       console.log({ response });
       if (response.success) {
         setShowSuccessMessage(true);
+      }
+      if (!response.status) {
+        setErrorMessage(response.message);
       }
     } catch (error) {
       console.log(error);
@@ -186,6 +190,11 @@ export default function Component() {
                   </Button>
                 </form>
               </Form>
+              {errorMessage && (
+                <p className="text-center text-sm text-red-500">
+                  {errorMessage}
+                </p>
+              )}
               <p className="text-small flex items-center justify-center space-x-2 text-center">
                 <span>Already have an account?</span>
                 <Link href="/login" className="text-[#00f] underline">

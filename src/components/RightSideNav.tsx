@@ -1,4 +1,5 @@
 'use client';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,12 +7,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
-import { useModalStore } from '@/stores/useModalStore';
-import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
   EllipsisVertical,
-  PanelRightClose,
   Pencil,
   Search,
   SquarePen,
@@ -19,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
+import { useModalStore } from '@/stores/useModalStore';
 
 const previousChatHistory = [
   {
@@ -98,111 +96,76 @@ const previousChatHistory = [
   },
 ];
 
-const RightSideNav = () => {
+export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
   const router = useRouter();
-
-  const { isRightSidebarOpen, toggleRightSidebar } = useSidebarStore();
   const { onOpen } = useModalStore();
 
-  const hideSidebar = !isRightSidebarOpen;
-
-  return (
-    <>
-      <nav className={cn(!hideSidebar && 'overflow-y-scroll')}>
-        <div className="bg-secondary sticky top-0 z-30 pt-4 pb-2">
-          <div
-            className={cn(
-              'flex items-center justify-between px-4 pt-2',
-              hideSidebar && 'justify-center',
-            )}
-          >
-            <div
-              className={cn(
-                'flex flex-none items-center justify-center transition-all duration-300',
-              )}
-            >
-              <PanelRightClose
-                className={cn(
-                  'size-6 cursor-pointer p-0.5 text-gray-500 transition-transform duration-300',
-                )}
-                onClick={toggleRightSidebar}
-              />
-            </div>
-          </div>
-          <div className={cn('space-y-0.5 px-1 pt-6', hideSidebar && 'px-0')}>
-            <Button
-              onClick={() => router.push('/')}
-              className="flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <SquarePen />
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                New workflow
-              </span>
-            </Button>
-            <Button
-              onClick={() =>
-                onOpen({
-                  type: 'search-chats',
-                })
-              }
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <Search />{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Search workflows
-              </span>
-            </Button>
-
-            <Button
-              // onClick={() => router.push("/saved-chats")}
-              className="mt-6 flex w-full items-start justify-start bg-transparent text-sm text-black shadow-none hover:bg-transparent"
-            >
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Workflows
-              </span>
-            </Button>
-          </div>
-        </div>
-
-        <div
-          className={cn('flex flex-1 flex-col px-4', hideSidebar && 'hidden')}
-        >
-          <div className="mt-2">
-            {previousChatHistory.map(chat => (
-              <div
-                className="group focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive group flex h-9 w-full shrink-0 cursor-pointer items-start justify-between gap-2 rounded-md bg-transparent px-1 py-2 text-sm font-medium whitespace-nowrap text-black shadow-none transition-all outline-none hover:bg-black/5 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 has-[>svg]:px-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
-                key={chat.id}
-              >
-                <span className="truncate">{chat.title}</span>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <EllipsisVertical className="rotate-90 opacity-0 group-hover:opacity-100" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="rounded-2xl">
-                    <DropdownMenuItem>
-                      <Pencil className="text-black" /> Rename
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-
-                    <DropdownMenuItem>
-                      <Trash2 className="text-black" />{' '}
-                      <span className="text-black">Delete</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            ))}
-          </div>
-        </div>
+  if (!isOpen) {
+    // Collapsed → only icons
+    return (
+      <nav className="flex flex-col items-center gap-6 px-2 pt-8">
+        <button onClick={() => router.push('/')}>
+          <SquarePen className="h-5 w-5" />
+        </button>
+        <button onClick={() => onOpen({ type: 'search-chats' })}>
+          <Search className="h-5 w-5" />
+        </button>
       </nav>
-    </>
-  );
-};
+    );
+  }
 
-export default RightSideNav;
+  // Expanded → full view
+  return (
+    <nav className="h-full overflow-y-auto px-2 pt-8 ">
+      {/* Header actions */}
+      <div className="bg-secondary sticky top-0 z-30 pb-2">
+        <div className="space-y-2 ">
+          <Button
+            onClick={() => router.push('/')}
+            className="-ml-3 flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+          >
+            <SquarePen className="h-5 w-5" />
+            New workflow
+          </Button>
+
+          <Button
+            onClick={() => onOpen({ type: 'search-chats' })}
+            className="-ml-3 flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+          >
+            <Search className="h-5 w-5" />
+            Search workflows
+          </Button>
+
+          <div className="mt-6 text-sm font-medium text-black">Workflows</div>
+        </div>
+      </div>
+
+      {/* Chat history */}
+      <div className="flex flex-col">
+        {previousChatHistory.map(chat => (
+          <div
+            key={chat.id}
+            className="group flex h-9 w-full cursor-pointer items-center justify-between gap-2 rounded-md px-1 py-2 text-sm text-black hover:bg-black/5"
+          >
+            <span className="truncate">{chat.title}</span>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <EllipsisVertical className="h-5 w-5 rotate-90 opacity-0 group-hover:opacity-100" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="rounded-2xl">
+                <DropdownMenuItem>
+                  <Pencil className="mr-2 h-5 w-5 text-black" /> Rename
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <Trash2 className="mr-2 h-5 w-5 text-black" />
+                  <span className="text-black">Delete</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        ))}
+      </div>
+    </nav>
+  );
+}

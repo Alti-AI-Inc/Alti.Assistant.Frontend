@@ -1,5 +1,7 @@
 'use client';
 import { useModalStore } from '@/stores/useModalStore';
+import { useEffect } from 'react';
+import { DeleteConversation } from './DeleteConversation';
 import { ForgotPasswordDialog } from './ForgotPasswordDialog';
 import { Logout } from './logout';
 import RenameChat from './RenameChat';
@@ -8,6 +10,12 @@ import SearchWorkflows from './SearchWorkflows';
 
 export const ModalProvider = () => {
   const { type, isOpen } = useModalStore();
+
+  useEffect(() => {
+    if (!isOpen) {
+      document.body.style.pointerEvents = '';
+    }
+  }, [isOpen]);
 
   if (!type || !isOpen) return null;
 
@@ -18,6 +26,7 @@ export const ModalProvider = () => {
       {type === 'rename-chat' && <RenameChat />}
       {type === 'forgot-password' && <ForgotPasswordDialog />}
       {type === 'search-workflows' && <SearchWorkflows />}
+      {type === 'delete-conversation' && <DeleteConversation />}
     </>
   );
 };

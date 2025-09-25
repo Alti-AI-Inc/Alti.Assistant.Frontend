@@ -4,19 +4,19 @@ import { useActiveConversation } from '@/hooks/useConversations';
 import { cn } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useSession } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { Streamdown } from 'streamdown';
 import ReferencesList from './ReferenceList';
 import VideoComponent from './VideoComponent';
+import VideoComponentForContent from './YoutubePlayer';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
-  const pathname = usePathname();
+  // const pathname = usePathname();
   const {
     data: queryConversation,
     isLoading,
-    error,
+    // error,
   } = useActiveConversation(conversationId, data?.accessToken);
 
   const { setActiveConversation, activeConversation, isLoadingResponse } =
@@ -41,7 +41,17 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     scrollToBottom();
   }, [activeConversation?.messages]);
 
-  const isHomePage = pathname === '/';
+  // const isHomePage = pathname === '/';
+
+  const containsYouTubeUrl = (text: string) => {
+    const youtubeRegex =
+      /https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
+    // /https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/;
+
+    const result = youtubeRegex.test(text);
+    return result;
+  };
+
   return (
     <div
       className={cn(
@@ -68,9 +78,15 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   {message.role === 'assistant' &&
                     message.content !== 'Image generated successfully' &&
                     message.content !== 'Video generated successfully' && (
-                      <Streamdown className="w-fit max-w-[85%] rounded-lg">
-                        {message.content}
-                      </Streamdown>
+                      <div>
+                        {containsYouTubeUrl(message.content) ? (
+                          <VideoComponentForContent content={message.content} />
+                        ) : (
+                          <Streamdown className="w-full max-w-[85%] rounded-lg">
+                            {message.content}
+                          </Streamdown>
+                        )}
+                      </div>
                     )}
                   {message.metadata?.images && (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -116,9 +132,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         </div>
       )}
 
-      {error && !isHomePage && (
+      {/* {error && !isHomePage && (
         <div className="my-6 text-center">{error.message}</div>
-      )}
+      )} */}
 
       {/* Sticky chat input at bottom */}
       <div className="sticky bottom-0 bg-white px-4 pb-4">

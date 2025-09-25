@@ -4,6 +4,7 @@ interface ModalStore {
   isOpen: boolean;
   type: ModalType;
   title?: string;
+  actionId?: string;
   message?: string;
   onConfirm?: () => void;
   onCancel?: () => void;
@@ -12,6 +13,7 @@ interface ModalStore {
   onOpen: (modal: {
     type: ModalType;
     title?: string;
+    actionId?: string;
     message?: string;
     onConfirm?: () => void;
     onCancel?: () => void;
@@ -37,9 +39,12 @@ export const useModalStore = create<ModalStore>(set => ({
     set({
       isOpen: false,
       type: null,
+      actionId: undefined,
       title: undefined,
       message: undefined,
       onConfirm: undefined,
       onCancel: undefined,
     }),
 }));
+// stores/useDrawerStore.ts
+// import { create } from 'zustand';

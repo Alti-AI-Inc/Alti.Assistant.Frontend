@@ -11,10 +11,10 @@ const plans = [
     features: [
       'Web Search → 1,000',
       'Deep Research → 10',
-      'Task Commands → 100',
+      // 'Task Commands → 100',
       'Code Generation → 100',
       'Image Generation → 10',
-      'Video Generation → 10 seconds',
+      // 'Video Generation → 10 seconds',
 
       // 'My Chatbots → save up to 10 bots',
       // 'My Knowledge → manual uploads',
@@ -30,10 +30,10 @@ const plans = [
     features: [
       'Web Search → 5,000',
       'Deep Research → 50',
-      'Task Commands → 500',
+      // 'Task Commands → 500',
       'Code Generation → 500',
       'Image Generation → 50',
-      'Video Generation → 50 seconds',
+      // 'Video Generation → 50 seconds',
 
       // 'My Chatbots → save up to 50 bots',
       // 'My Knowledge → app connectors',
@@ -42,32 +42,32 @@ const plans = [
     currentPlan: false,
   },
 ];
-const memroy = [
-  {
-    name: '1,000 Stored Chats',
-    price: 10,
-    buttonText: 'Purchase Memory',
-    currentPlan: true,
-  },
-  {
-    name: '5,000 Stored Chats',
-    price: 25,
-    buttonText: 'Purchase Memory',
-    currentPlan: false,
-  },
-  {
-    name: '10,000 Stored Chats',
-    price: 50,
-    buttonText: 'Purchase Memory',
-    currentPlan: false,
-  },
-  {
-    name: '25,000 Stored Chats',
-    price: 100,
-    buttonText: 'Purchase Memory',
-    currentPlan: false,
-  },
-];
+// const memroy = [
+//   {
+//     name: '1,000 Stored Chats',
+//     price: 10,
+//     buttonText: 'Purchase Memory',
+//     currentPlan: true,
+//   },
+//   {
+//     name: '5,000 Stored Chats',
+//     price: 25,
+//     buttonText: 'Purchase Memory',
+//     currentPlan: false,
+//   },
+//   {
+//     name: '10,000 Stored Chats',
+//     price: 50,
+//     buttonText: 'Purchase Memory',
+//     currentPlan: false,
+//   },
+//   {
+//     name: '25,000 Stored Chats',
+//     price: 100,
+//     buttonText: 'Purchase Memory',
+//     currentPlan: false,
+//   },
+// ];
 const images = [
   {
     name: '100 Images',
@@ -95,32 +95,32 @@ const images = [
   },
 ];
 
-const videos = [
-  {
-    name: '30 Seconds',
-    price: 10,
-    buttonText: 'Purchase Video',
-    currentPlan: true,
-  },
-  {
-    name: '90 Seconds',
-    price: 25,
-    buttonText: 'Purchase Video',
-    currentPlan: false,
-  },
-  {
-    name: '180 Seconds',
-    price: 50,
-    buttonText: 'Purchase Video',
-    currentPlan: false,
-  },
-  {
-    name: '360 Seconds',
-    price: 100,
-    buttonText: 'Purchase Video',
-    currentPlan: false,
-  },
-];
+// const videos = [
+//   {
+//     name: '30 Seconds',
+//     price: 10,
+//     buttonText: 'Purchase Video',
+//     currentPlan: true,
+//   },
+//   {
+//     name: '90 Seconds',
+//     price: 25,
+//     buttonText: 'Purchase Video',
+//     currentPlan: false,
+//   },
+//   {
+//     name: '180 Seconds',
+//     price: 50,
+//     buttonText: 'Purchase Video',
+//     currentPlan: false,
+//   },
+//   {
+//     name: '360 Seconds',
+//     price: 100,
+//     buttonText: 'Purchase Video',
+//     currentPlan: false,
+//   },
+// ];
 const codes = [
   {
     name: '100 Code Generation',
@@ -199,32 +199,32 @@ const searches = [
     currentPlan: false,
   },
 ];
-const automations = [
-  {
-    name: '250 Task Commands',
-    price: 10,
-    buttonText: 'Purchase Task',
-    currentPlan: true,
-  },
-  {
-    name: '1,000 Task Commands',
-    price: 25,
-    buttonText: 'Purchase Task',
-    currentPlan: false,
-  },
-  {
-    name: '2,500 Task Commands',
-    price: 50,
-    buttonText: 'Purchase Task',
-    currentPlan: false,
-  },
-  {
-    name: '10,000 Task Commands',
-    price: 100,
-    buttonText: 'Purchase Task',
-    currentPlan: false,
-  },
-];
+// const automations = [
+//   {
+//     name: '250 Task Commands',
+//     price: 10,
+//     buttonText: 'Purchase Task',
+//     currentPlan: true,
+//   },
+//   {
+//     name: '1,000 Task Commands',
+//     price: 25,
+//     buttonText: 'Purchase Task',
+//     currentPlan: false,
+//   },
+//   {
+//     name: '2,500 Task Commands',
+//     price: 50,
+//     buttonText: 'Purchase Task',
+//     currentPlan: false,
+//   },
+//   {
+//     name: '10,000 Task Commands',
+//     price: 100,
+//     buttonText: 'Purchase Task',
+//     currentPlan: false,
+//   },
+// ];
 
 const Pricing01 = () => {
   return (
@@ -233,15 +233,17 @@ const Pricing01 = () => {
         Upgrade Plans
       </h1>
       <Tabs defaultValue="plan" className="mt-8 w-full">
-        <TabsList className="mx-auto mb-6 w-full max-w-[840px]">
+        <TabsList className="bg-muted/50 inline-flex-none mx-auto mb-6 grid h-auto w-full max-w-[840px] grid-cols-3 gap-2 rounded-lg p-2 sm:flex sm:flex-nowrap sm:justify-start">
           <TabsTrigger value="plan">Plans</TabsTrigger>
-          <TabsTrigger value="memory">Memory</TabsTrigger>
+          {/* <TabsTrigger value="memory">Memory</TabsTrigger> */}
           <TabsTrigger value="search">Search</TabsTrigger>
           <TabsTrigger value="research">Research</TabsTrigger>
-          <TabsTrigger value="automation">Task</TabsTrigger>
+          {/* <TabsTrigger value="automation">Task</TabsTrigger> */}
           <TabsTrigger value="code">Code</TabsTrigger>
           <TabsTrigger value="image">Image</TabsTrigger>
-          <TabsTrigger value="video">Video</TabsTrigger>
+
+          {/* <TabsTrigger value="video">Video</TabsTrigger> */}
+
         </TabsList>
         <TabsContent value="plan">
           <div className="mx-auto grid w-full max-w-[840px] grid-cols-1 gap-5 lg:grid-cols-2">
@@ -282,7 +284,7 @@ const Pricing01 = () => {
             ))}
           </div>
         </TabsContent>
-        <TabsContent value="memory">
+        {/* <TabsContent value="memory">
           <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
             {memroy.map(plan => (
               <div
@@ -310,7 +312,7 @@ const Pricing01 = () => {
               </div>
             ))}
           </div>
-        </TabsContent>
+        </TabsContent> */}
         <TabsContent value="image">
           <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
             {images.map(plan => (
@@ -341,7 +343,7 @@ const Pricing01 = () => {
           </div>
         </TabsContent>
 
-        <TabsContent value="video">
+        {/* <TabsContent value="video">
           <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
             {videos.map(plan => (
               <div
@@ -369,7 +371,7 @@ const Pricing01 = () => {
               </div>
             ))}
           </div>
-        </TabsContent>
+        </TabsContent> */}
         <TabsContent value="code">
           <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
             {codes.map(plan => (
@@ -457,7 +459,7 @@ const Pricing01 = () => {
             ))}
           </div>
         </TabsContent>
-        <TabsContent value="automation">
+        {/* <TabsContent value="automation">
           <div className="mx-auto grid w-full max-w-[1080px] grid-cols-1 gap-5 lg:grid-cols-4">
             {automations.map(plan => (
               <div
@@ -485,7 +487,7 @@ const Pricing01 = () => {
               </div>
             ))}
           </div>
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
     </div>
   );
