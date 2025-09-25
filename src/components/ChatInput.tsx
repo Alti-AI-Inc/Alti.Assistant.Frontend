@@ -26,10 +26,11 @@ import { Textarea } from './ui/textarea';
 
 const options = [
   { id: 1, title: 'Research', value: OPTIONS.RESEARCH },
-  // { id: 2, title: 'Task', value: OPTIONS.TASK },
+  { id: 2, title: 'Task', value: OPTIONS.TASK },
   { id: 3, title: 'Code', value: OPTIONS.CODE },
   { id: 4, title: 'Image', value: OPTIONS.IMAGE },
-  //   { id: 6, title: 'Video', value: OPTIONS.VIDEO },
+  { id: 5, title: 'Audio', value: OPTIONS.AUDIO },
+  { id: 6, title: 'Video', value: OPTIONS.VIDEO },
 ];
 
 const ChatInput = ({ conversationId }: { conversationId?: string }) => {
@@ -145,7 +146,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   };
 
   return (
-    <div className="mx-auto w-full max-w-[796px] space-y-6 px-4 lg:px-0 bg-white">
+    <div className="mx-auto w-full max-w-[796px] space-y-6 bg-white px-4 lg:px-0">
       <div className="rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4">
         <Textarea
           name="message"

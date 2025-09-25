@@ -14,8 +14,10 @@ import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
   BookCheck,
+  LayoutGrid,
   LogOut,
   MessageSquare,
+  Network,
   Orbit,
   PanelLeftClose,
   Scale,
@@ -157,7 +159,7 @@ const LeftSideNav = () => {
                 Knowledge
               </span>
             </Button>
-            {/* <Button
+            <Button
               onClick={() => {
                 router.push('/apps');
                 setTimeout(() => close(), 50);
@@ -168,11 +170,11 @@ const LeftSideNav = () => {
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Connect apps
+                Connectors
               </span>
-            </Button> */}
+            </Button>
 
-            {/* <Button
+            <Button
               onClick={() => router.push('/workflows')}
 
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
@@ -184,6 +186,7 @@ const LeftSideNav = () => {
                 Workflows
               </span>
             </Button>
+            {/* 
             {/* <Button
               onClick={() => router.push('/agent-store')}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"

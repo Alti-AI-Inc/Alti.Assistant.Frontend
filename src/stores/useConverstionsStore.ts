@@ -11,6 +11,7 @@ export enum OPTIONS {
   CODE = 'code-generation',
   IMAGE = 'image-generation',
   VIDEO = 'video-generation',
+  AUDIO= 'audio-generation',
 }
 
 export interface Reference {
