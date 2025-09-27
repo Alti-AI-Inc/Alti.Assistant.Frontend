@@ -8,6 +8,7 @@ import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { Share } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { Streamdown } from 'streamdown';
 import ReferencesList from './ReferenceList';
@@ -16,7 +17,7 @@ import VideoComponentForContent from './YoutubePlayer';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
-  // const pathname = usePathname();
+  const pathname = usePathname();
   const {
     data: queryConversation,
     isLoading,
@@ -92,7 +93,10 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
           })
         }
         variant="ghost"
-        className="absolute bg-white top-2 right-4"
+        className={cn(
+          'absolute top-2 right-4 bg-white',
+          pathname === '/' && 'hidden',
+        )}
       >
         <Share /> Share
       </Button>
