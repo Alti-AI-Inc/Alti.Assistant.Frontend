@@ -13,12 +13,11 @@ import { useModalStore } from '@/stores/useModalStore';
 import {
   LogOut,
   MessageSquare,
-  Network,
   Orbit,
   Scale,
   Search,
   Settings,
-  SquarePen,
+  SquarePen
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
