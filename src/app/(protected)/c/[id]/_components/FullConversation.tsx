@@ -1,5 +1,6 @@
 'use client';
 import ChatInput from '@/components/ChatInput';
+import CopyButton from '@/components/CopyButton';
 import { useActiveConversation } from '@/hooks/useConversations';
 import { cn } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
@@ -120,9 +121,13 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                         {containsYouTubeUrl(message.content) ? (
                           <VideoComponentForContent content={message.content} />
                         ) : (
-                          <Streamdown className="w-full max-w-[85%] rounded-lg">
-                            {message.content}
-                          </Streamdown>
+                          <div>
+                            <Streamdown className="w-full max-w-[85%] rounded-lg">
+                              {message.content}
+                            </Streamdown>
+
+                            <CopyButton content={message.content} />
+                          </div>
                         )}
                       </div>
                     )}
