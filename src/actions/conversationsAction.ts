@@ -84,3 +84,21 @@ export const deleteConversation = async (
     throw error;
   }
 };
+
+export const shareConversation = async (
+  conversationId: string,
+  accessToken: string,
+) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/conversations/${conversationId}/share`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'content-type': 'application/json',
+      },
+    },
+  );
+  const data = await response.json();
+  return data;
+};

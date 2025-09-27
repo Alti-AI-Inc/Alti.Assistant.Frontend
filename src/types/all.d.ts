@@ -9,6 +9,7 @@ type ModalType =
   | 'add-chatbot'
   | 'delete-chatbot'
   | 'edit-chatbot'
+  | 'share-conversation'
 
   | null;
 

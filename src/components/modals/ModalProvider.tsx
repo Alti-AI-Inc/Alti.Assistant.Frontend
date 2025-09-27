@@ -10,6 +10,7 @@ import { Logout } from './logout';
 import RenameChat from './RenameChat';
 import SearchChats from './SearchChats';
 import SearchWorkflows from './SearchWorkflows';
+import { ShareConversationModal } from './ShareConversationModal';
 
 export const ModalProvider = () => {
   const { type, isOpen } = useModalStore();
@@ -30,9 +31,10 @@ export const ModalProvider = () => {
       {type === 'forgot-password' && <ForgotPasswordDialog />}
       {type === 'search-workflows' && <SearchWorkflows />}
       {type === 'delete-conversation' && <DeleteConversation />}
-      {type==='add-chatbot' && <AddChatbotModal/>}
-      {type==='edit-chatbot' && <EditChatbotModal/>}
-      {type==='delete-chatbot' && <DeleteChatbotModal/>}
+      {type === 'add-chatbot' && <AddChatbotModal />}
+      {type === 'edit-chatbot' && <EditChatbotModal />}
+      {type === 'delete-chatbot' && <DeleteChatbotModal />}
+      {type === 'share-conversation' && <ShareConversationModal />}
     </>
   );
 };

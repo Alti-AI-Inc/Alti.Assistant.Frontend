@@ -1,6 +1,6 @@
 'use client';
 
-import { PostConversation } from '@/actions/conversations';
+import { PostConversation } from '@/actions/conversationsAction';
 import AudioRecorder from '@/components/AudioRecorder';
 import { Button } from '@/components/ui/button';
 import {

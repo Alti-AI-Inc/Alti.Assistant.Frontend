@@ -3,7 +3,7 @@ import {
   fetchConversationList,
   loadSingleConversation,
   PostConversation,
-} from '@/actions/conversations';
+} from '@/actions/conversationsAction';
 import { ROLES, useConversationsStore } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

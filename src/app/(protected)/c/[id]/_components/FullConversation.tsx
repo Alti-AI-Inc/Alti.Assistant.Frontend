@@ -1,9 +1,12 @@
 'use client';
 import ChatInput from '@/components/ChatInput';
 import CopyButton from '@/components/CopyButton';
+import { Button } from '@/components/ui/button';
 import { useActiveConversation } from '@/hooks/useConversations';
 import { cn } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useModalStore } from '@/stores/useModalStore';
+import { Share } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useEffect, useRef } from 'react';
 import { Streamdown } from 'streamdown';
@@ -26,6 +29,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     activeConversation,
     isLoadingResponse,
   } = useConversationsStore();
+
+  const { onOpen } = useModalStore();
 
   // Sync query result into Zustand
   useEffect(() => {
@@ -58,9 +63,6 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     }
   }, [activeConversation?.messages, showStartLastMessage]);
 
-  console.log({ showStartLastMessage });
-  // const isHomePage = pathname === '/';
-
   const containsYouTubeUrl = (text: string) => {
     const youtubeRegex =
       /https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
@@ -73,7 +75,6 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const lastUserMessage = activeConversation?.messages
     .filter(message => message.role === 'user')
     .pop();
-  console.log({ lastUserMessage });
 
   return (
     <div
@@ -83,6 +84,18 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         isLoading && 'h-screen',
       )}
     >
+      <Button
+        onClick={() =>
+          onOpen({
+            type: 'share-conversation',
+            actionId: queryConversation._id,
+          })
+        }
+        variant="ghost"
+        className="absolute bg-white top-2 right-4"
+      >
+        <Share /> Share
+      </Button>
       {/* Messages container - takes remaining space and scrolls */}
       {activeConversation?.messages.length && (
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
