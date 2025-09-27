@@ -9,7 +9,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
 import {
@@ -18,7 +22,7 @@ import {
   useConversationsStore,
 } from '@/stores/useConverstionsStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowRight, Menu, Plus } from 'lucide-react';
+import { ArrowRight, Menu, Microscope } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Textarea } from './ui/textarea';
@@ -26,8 +30,8 @@ import { Textarea } from './ui/textarea';
 const options = [
   { id: 1, title: 'Research', value: OPTIONS.RESEARCH },
   // { id: 2, title: 'Task', value: OPTIONS.TASK },
-  { id: 3, title: 'Code', value: OPTIONS.CODE },
-  { id: 4, title: 'Image', value: OPTIONS.IMAGE },
+  // { id: 3, title: 'Code', value: OPTIONS.CODE },
+  // { id: 4, title: 'Image', value: OPTIONS.IMAGE },
   //   { id: 6, title: 'Video', value: OPTIONS.VIDEO },
 ];
 
@@ -43,8 +47,8 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     selectedOption,
     setSelectedOption,
     activeConversation,
-    userMessage:message,
-    setUserMessage:setMessage,
+    userMessage: message,
+    setUserMessage: setMessage,
     setShowStartLastMessage,
   } = useConversationsStore();
 
@@ -148,7 +152,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   };
 
   return (
-    <div className="mx-auto w-full max-w-[796px] space-y-6 px-4 lg:px-0 bg-white">
+    <div className="mx-auto w-full max-w-[796px] space-y-6 bg-white px-4 lg:px-0">
       <div className="rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4">
         <Textarea
           name="message"
@@ -164,42 +168,32 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
           className="max-h-[500px] min-h-12 w-full resize-none overflow-y-auto border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
         />
         {/* Responsive container */}
-        <div className="flex gap-2 py-2 sm:flex-row sm:items-end sm:justify-between">
+        <div className="flex gap-2 py-2 items-end justify-between">
           {/* Desktop layout */}
-          <div className="hidden items-center gap-2 sm:flex">
+          <div className="items-center gap-2 flex">
             {/* File upload */}
-            <label htmlFor="file-input-alt">
-              <Plus className="size-6 cursor-pointer rounded-full border-2 border-gray-300 p-0.5" />
-            </label>
-            <Input type="file" className="hidden" id="file-input-alt" />
 
             {/* All options as buttons */}
-            {options.map(option => (
-              <Button
-                key={option.id}
-                className={cn(
-                  'h-7 rounded-full border border-gray-300 bg-white px-3 text-xs font-normal text-black hover:text-white sm:text-sm',
-                  { 'bg-black text-white': option.value === selectedOption },
-                )}
-                onClick={() => handleSelectOption(option.value)}
-              >
-                {option.title}
-              </Button>
-            ))}
+            <Tooltip >
+              <TooltipTrigger>
+                <Microscope
+                  onClick={() => handleSelectOption(OPTIONS.RESEARCH)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-1 text-black',
+                    selectedOption === OPTIONS.RESEARCH &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side='bottom'>
+                <p>Deep Research</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
 
           {/* Mobile layout */}
-          <div className="flex w-full items-center justify-between gap-2 sm:hidden">
+          <div className="w-full items-center justify-between gap-2 hidden">
             <div className="flex items-center gap-2">
-              <label htmlFor="file-input-alt-mobile">
-                <Plus className="size-6 cursor-pointer rounded-full border-2 border-gray-300 p-0.5" />
-              </label>
-              <Input
-                type="file"
-                className="hidden"
-                id="file-input-alt-mobile"
-              />
-
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -233,7 +227,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
             {message ? (
               <ArrowRight
                 onClick={handleSubmit}
-                className="size-7 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-1 text-white"
+                className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-1 text-white"
               />
             ) : (
               <AudioRecorder setMessage={setMessage} />

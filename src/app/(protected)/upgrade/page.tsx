@@ -12,8 +12,8 @@ const plans = [
       'Web Search → 1,000',
       'Deep Research → 10',
       // 'Task Commands → 100',
-      'Code Generation → 100',
-      'Image Generation → 10',
+      // 'Code Generation → 100',
+      // 'Image Generation → 10',
       // 'Video Generation → 10 seconds',
 
       // 'My Chatbots → save up to 10 bots',
@@ -31,8 +31,8 @@ const plans = [
       'Web Search → 5,000',
       'Deep Research → 50',
       // 'Task Commands → 500',
-      'Code Generation → 500',
-      'Image Generation → 50',
+      // 'Code Generation → 500',
+      // 'Image Generation → 50',
       // 'Video Generation → 50 seconds',
 
       // 'My Chatbots → save up to 50 bots',
@@ -239,8 +239,8 @@ const Pricing01 = () => {
           <TabsTrigger value="search">Search</TabsTrigger>
           <TabsTrigger value="research">Research</TabsTrigger>
           {/* <TabsTrigger value="automation">Task</TabsTrigger> */}
-          <TabsTrigger value="code">Code</TabsTrigger>
-          <TabsTrigger value="image">Image</TabsTrigger>
+          {/* <TabsTrigger value="code">Code</TabsTrigger> */}
+          {/* <TabsTrigger value="image">Image</TabsTrigger> */}
 
           {/* <TabsTrigger value="video">Video</TabsTrigger> */}
 
