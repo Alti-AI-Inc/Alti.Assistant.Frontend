@@ -71,7 +71,7 @@ const ConversationsList = () => {
               <DropdownMenuItem>
                 <Share className="text-black" /> Share
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onOpen({ type: 'rename-chat', actionId: chat.conversationId, title: chat.title.replace(/^(Search|Code|Image|Deep Research):\s*/, '') })}>
                 <Pencil className="text-black" /> Rename
               </DropdownMenuItem>
               <DropdownMenuSeparator />

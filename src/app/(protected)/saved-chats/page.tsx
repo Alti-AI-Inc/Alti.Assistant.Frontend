@@ -85,6 +85,7 @@ const Page = () => {
                     onClick={() =>
                       onOpen({
                         type: 'rename-chat',
+                        title: chat.title,
                       })
                     }
                   >

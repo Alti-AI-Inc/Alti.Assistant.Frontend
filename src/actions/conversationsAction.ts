@@ -102,3 +102,26 @@ export const shareConversation = async (
   const data = await response.json();
   return data;
 };
+
+export async function renameConversationAction(
+  conversationId: string,
+  newTitle: string,
+  accessToken: string,
+) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/conversations/rename/${conversationId}`,
+    {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        newTitle,
+      }),
+    },
+  );
+  const data = await response.json();
+
+  return data;
+}

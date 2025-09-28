@@ -2,16 +2,44 @@
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
 
+import { renameConversationAction } from '@/actions/conversationsAction';
 import { useModalStore } from '@/stores/useModalStore';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { LoaderCircle } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { useState } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 
 const RenameChat = () => {
-  const { isOpen, onClose } = useModalStore();
+  const { data: session } = useSession();
+  const { isOpen, onClose, actionId, title: currentTitle } = useModalStore();
+  const [title, setTitle] = useState(currentTitle || '');
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: () => {
+      if (!session?.accessToken || !actionId) {
+        throw new Error('Id not found');
+      }
+      return renameConversationAction(actionId, title, session.accessToken);
+    },
+    onSuccess: () => {
+      // invalidate the conversations list so UI refreshes
+      queryClient.invalidateQueries({ queryKey: ['conversations'] });
+      onClose();
+      setTitle('');
+    },
+    onError: error => {
+      console.error('Rename failed', error);
+    },
+  });
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -20,13 +48,32 @@ const RenameChat = () => {
           <DialogTitle>Rename Chat</DialogTitle>
         </DialogHeader>
         <Input
+          value={title}
+          onChange={e => setTitle(e.target.value)}
           type="text"
-          placeholder="Chat Name"
-          className="w-full border-0 px-3 py-2 shadow-none focus:ring-0 focus-visible:ring-0"
+          disabled={isPending}
+          autoFocus
+          placeholder="New title"
+          className="w-full px-3 py-2 shadow-none focus:ring-0 focus-visible:ring-0"
+          onKeyPress={e => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              mutate();
+            }
+          }}
         />
-        <Button className="ml-auto" type="submit" onClick={onClose}>
-          Rename
-        </Button>
+        <DialogFooter className="justify-end">
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            onClick={() => mutate()}
+            disabled={isPending || !title.trim()}
+          >
+            {isPending && <LoaderCircle className="mr-2 animate-spin" />}
+            {isPending ? 'Renaming...' : 'Rename'}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
