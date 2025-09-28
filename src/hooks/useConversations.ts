@@ -1,8 +1,10 @@
 import {
   deleteConversation,
   fetchConversationList,
+  fetchSavedConversationList,
   loadSingleConversation,
   PostConversation,
+  searchConversations,
 } from '@/actions/conversationsAction';
 import { ROLES, useConversationsStore } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
@@ -10,7 +12,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 
-type Conversation = {
+export type Conversation = {
   _id: string;
   conversationId: string;
   userId: string;
@@ -37,6 +39,15 @@ export function useConversations(accessToken?: string) {
     queryFn: () => fetchConversationList(accessToken!),
     enabled: !!accessToken, // only run if token exists
     staleTime: 1000 * 60, // 1 min caching
+  });
+}
+export function useSavedConversations(accessToken?: string) {
+  return useQuery({
+    queryKey: ['saved-conversations', accessToken],
+    queryFn: () => fetchSavedConversationList(accessToken!),
+    enabled: !!accessToken, // only run if token exists
+    // staleTime: 1000 * 60, // 1 min caching
+    staleTime: Infinity
   });
 }
 
@@ -137,15 +148,12 @@ export function useDeleteConversation() {
         router.push('/');
       }
 
-      // close modal
-      onClose();
-
-      // clear active conversation
-      // setActiveConversation(null);
-      // invalidate list
       queryClient.invalidateQueries({
-        queryKey: ['conversations', data?.accessToken],
+        predicate: q =>
+          q.queryKey[0] === 'conversations' ||
+          q.queryKey[0] === 'saved-conversations',
       });
+      onClose();
     },
     onMutate: async (conversationId: string) => {
       // Cancel outgoing refetches so they don’t overwrite optimistic update
@@ -184,5 +192,14 @@ export function useDeleteConversation() {
         queryKey: ['conversations', data?.accessToken],
       });
     },
+  });
+}
+
+export function useSearchConversations(accessToken?: string, searchTerm?: string) {
+  return useQuery({
+    queryKey: ["search-conversations", accessToken, searchTerm],
+    queryFn: () => searchConversations(accessToken!, searchTerm!),
+    enabled: !!accessToken && !!searchTerm, // only run when both exist
+    staleTime: 0, // always fresh
   });
 }

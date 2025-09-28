@@ -38,6 +38,42 @@ export async function fetchConversationList(accessToken: string) {
   const data = await response.json();
   return data.data.conversations;
 }
+export async function fetchSavedConversationList(accessToken: string) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/conversations/saved?limit=30&page=1`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'content-type': 'application/json',
+      },
+      cache: 'no-store',
+    },
+  );
+  const data = await response.json();
+  console.log('data in fetch saved conversation', data.data);
+  return data.data.conversations;
+}
+
+export async function searchConversations(
+  accessToken: string,
+  searchTerm: string,
+) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/conversations/search?searchTerm=${encodeURIComponent(searchTerm)}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'content-type': 'application/json',
+      },
+      cache: 'no-store',
+    },
+  );
+  const data = await response.json();
+  console.log('data in fetch saved conversation', data.data);
+  return data.data;
+}
 
 export async function loadSingleConversation(
   conversationId: string,
@@ -122,6 +158,31 @@ export async function renameConversationAction(
     },
   );
   const data = await response.json();
+
+  return data;
+}
+
+export async function saveConversationAction(
+  conversationId: string,
+  is_saved = true,
+  accessToken: string,
+) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/conversations/save/${conversationId}`,
+    {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        is_saved,
+      }),
+    },
+  );
+  const data = await response.json();
+
+  console.log('data in save conversation', data);
 
   return data;
 }

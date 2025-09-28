@@ -6,105 +6,109 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  useDeleteConversation,
+  useSavedConversations,
+} from '@/hooks/useConversations';
+import { formatConversationTitle } from '@/lib/utils';
+import { ActiveConversation } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
-import { EllipsisVertical, Pencil, Share, Trash2 } from 'lucide-react';
-
-type Chat = {
-  id: number;
-  title: string;
-  descritpion: string;
-};
-
-const chats: Chat[] = [
-  {
-    id: 1,
-    title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    descritpion:
-      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
-  },
-  {
-    id: 2,
-    title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    descritpion:
-      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
-  },
-  {
-    id: 3,
-    title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    descritpion:
-      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
-  },
-  {
-    id: 4,
-    title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    descritpion:
-      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
-  },
-  {
-    id: 5,
-    title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    descritpion:
-      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
-  },
-  {
-    id: 6,
-    title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    descritpion:
-      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
-  },
-  {
-    id: 7,
-    title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    descritpion:
-      ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus sint illo nesciunt deserunt quis beatae accusamus reiciendis dolore ea! In. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam optio rem aperiam impedit ipsam, nobis saepe magnam cum eaque vel, ullam qui possimus asperiores quam, non ducimus pariatur. Vitae hic quas ea molestias nobis laborum corrupti magnam asperiores doloremque pariatur!',
-  },
-];
+import {
+  EllipsisVertical,
+  LoaderCircle,
+  Pencil,
+  Share,
+  Trash2,
+} from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 const Page = () => {
   const { onOpen } = useModalStore();
+  const { data: session } = useSession();
+  const {
+    data: conversations,
+    isLoading,
+    // error,
+  } = useSavedConversations(session?.accessToken);
+  const deleteMutation = useDeleteConversation();
+
+  const sortedConversations: ActiveConversation[] = conversations
+    ? [...conversations].sort(
+        (a, b) =>
+          new Date(b?.updatedAt).getTime() - new Date(a?.updatedAt).getTime(),
+      )
+    : [];
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 p-6 sm:grid-cols-2 md:grid-cols-3">
-        {chats.map(chat => (
-          <div
-            key={chat.id}
-            className="group relative space-y-2 rounded-md bg-gray-100 p-6"
-          >
-            <div className="absolute top-2 right-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <EllipsisVertical className="size-5 rotate-90 opacity-0 group-hover:opacity-100" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="mr-5 rounded-2xl">
-                  {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
-                  <DropdownMenuItem>
-                    <Share className="text-black" /> Share
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() =>
-                      onOpen({
-                        type: 'rename-chat',
-                        title: chat.title,
-                      })
-                    }
-                  >
-                    <Pencil className="text-black" /> Rename
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
+      {isLoading ? (
+        <div className="flex h-svh w-full items-center justify-center">
+          <LoaderCircle className="animate-spin" />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 p-6 sm:grid-cols-2 md:grid-cols-3">
+          {sortedConversations.map(chat => (
+            <div
+              key={chat.conversationId}
+              className="group relative space-y-2 rounded-md bg-gray-100 p-6"
+            >
+              <div className="absolute top-2 right-2 z-10">
+                <DropdownMenu>
+                  <DropdownMenuTrigger className='p-2'>
+                    <EllipsisVertical className="size-5 rotate-90 opacity-0 group-hover:opacity-100" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="mr-5 rounded-2xl">
+                    {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
+                    <DropdownMenuItem
+                      onClick={() =>
+                        onOpen({
+                          type: 'share-conversation',
+                          actionId: chat._id,
+                        })
+                      }
+                    >
+                      <Share className="text-black" /> Share
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        onOpen({
+                          type: 'rename-chat',
+                          title: chat.title,
+                          actionId: chat.conversationId,
+                        })
+                      }
+                    >
+                      <Pencil className="text-black" /> Rename
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
 
-                  <DropdownMenuItem>
-                    <Trash2 className="text-black" />{' '}
-                    <span className="text-black">Delete</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        onOpen({
+                          type: 'delete-conversation',
+                          actionId: chat.conversationId,
+                        })
+                      }
+                      disabled={deleteMutation.isPending}
+                    >
+                      <Trash2 className="text-black" />{' '}
+                      <span className="text-black">Delete</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              <h2 className="line-clamp-1 font-bold">
+                <Link href={`/c/${chat.conversationId}`}>
+                  <span className="absolute inset-0 z-0"></span>
+                  {formatConversationTitle(chat.title!)}
+                </Link>
+              </h2>
+              <p className="line-clamp-2">{chat.messages[1].content}</p>
             </div>
-            <h2 className="mt-6 line-clamp-1 font-bold">{chat.title}</h2>
-            <p className="line-clamp-2">{chat.descritpion}</p>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </>
   );
 };

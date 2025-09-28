@@ -1,12 +1,19 @@
 'use client';
 import ChatInput from '@/components/ChatInput';
 import CopyButton from '@/components/CopyButton';
+import SaveConversation from '@/components/SaveConversation';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useActiveConversation } from '@/hooks/useConversations';
 import { cn } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
-import { Share } from 'lucide-react';
+import { EllipsisVertical, Share, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
@@ -85,21 +92,42 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         isLoading && 'h-screen',
       )}
     >
-      <Button
-        onClick={() =>
-          onOpen({
-            type: 'share-conversation',
-            actionId: queryConversation._id,
-          })
-        }
-        variant="ghost"
-        className={cn(
-          'absolute top-2 right-4 bg-white',
-          pathname === '/' && 'hidden',
-        )}
-      >
-        <Share /> Share
-      </Button>
+      <div className="sticky top-2 right-4 z-10 flex items-center justify-end pr-4">
+        <Button
+          onClick={() =>
+            onOpen({
+              type: 'share-conversation',
+              actionId: queryConversation._id,
+            })
+          }
+          variant="ghost"
+          className={cn('bg-white', pathname === '/' && 'hidden')}
+        >
+          <Share /> Share
+        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="outline-hidden">
+            <EllipsisVertical className="size-5 rotate-90" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="mr-5 rounded-2xl">
+            {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
+
+            {/* <DropdownMenuSeparator /> */}
+
+            {activeConversation?.conversationId && (
+              <DropdownMenuItem onSelect={e => e.preventDefault()}>
+                <SaveConversation
+                  conversationId={activeConversation?.conversationId}
+                />
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem>
+              <Trash2 className="text-black" />{' '}
+              <span className="text-black">Delete</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       {/* Messages container - takes remaining space and scrolls */}
       {activeConversation?.messages.length && (
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>

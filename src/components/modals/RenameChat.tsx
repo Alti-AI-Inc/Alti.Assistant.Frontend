@@ -31,8 +31,11 @@ const RenameChat = () => {
       return renameConversationAction(actionId, title, session.accessToken);
     },
     onSuccess: () => {
-      // invalidate the conversations list so UI refreshes
-      queryClient.invalidateQueries({ queryKey: ['conversations'] });
+      queryClient.invalidateQueries({
+        predicate: q =>
+          q.queryKey[0] === 'conversations' ||
+          q.queryKey[0] === 'saved-conversations',
+      });
       onClose();
       setTitle('');
     },

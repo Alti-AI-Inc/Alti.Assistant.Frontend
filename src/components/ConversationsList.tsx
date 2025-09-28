@@ -4,6 +4,7 @@ import {
   useConversations,
   useDeleteConversation,
 } from '@/hooks/useConversations';
+import { formatConversationTitle } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
@@ -29,6 +30,7 @@ const ConversationsList = () => {
     data: conversations,
     // error,
   } = useConversations(session?.accessToken);
+  console.log(session?.accessToken)
   const deleteMutation = useDeleteConversation();
   const { setSelectedOption, setShowStartLastMessage, setUserMessage } =
     useConversationsStore();
@@ -61,7 +63,7 @@ const ConversationsList = () => {
             onClick={() => handleConversationClick(chat.conversationId)}
           >
             {' '}
-            {chat?.title?.replace(/^(Search|Code|Image|Deep Research):\s*/, '')}
+            {formatConversationTitle(chat?.title)}
           </span>
           <DropdownMenu>
             <DropdownMenuTrigger className="focus-visible:outline-none">
@@ -71,7 +73,15 @@ const ConversationsList = () => {
               <DropdownMenuItem>
                 <Share className="text-black" /> Share
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onOpen({ type: 'rename-chat', actionId: chat.conversationId, title: chat.title.replace(/^(Search|Code|Image|Deep Research):\s*/, '') })}>
+              <DropdownMenuItem
+                onClick={() =>
+                  onOpen({
+                    type: 'rename-chat',
+                    actionId: chat.conversationId,
+                    title: formatConversationTitle(chat?.title),
+                  })
+                }
+              >
                 <Pencil className="text-black" /> Rename
               </DropdownMenuItem>
               <DropdownMenuSeparator />
