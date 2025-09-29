@@ -153,6 +153,7 @@ export function usePostMessage(conversationId?: string) {
 
 export function useDeleteConversation() {
   const queryClient = useQueryClient();
+  const { activeConversation } = useConversationsStore();
   const { data } = useSession();
   const pathname = usePathname();
   const { onClose } = useModalStore();
@@ -164,9 +165,13 @@ export function useDeleteConversation() {
       if (!data?.accessToken) throw new Error('No access token');
       return await deleteConversation(data.accessToken, conversationId);
     },
-    onSuccess: (_, deletedId) => {
+    onSuccess: (resp, deletedId) => {
+      console.log('Deleted conversation: resp', resp);
       // navigate home if currently viewing deleted chat
-      if (pathname.endsWith(deletedId)) {
+      if (
+        pathname.endsWith(deletedId) ||
+        activeConversation?._id === deletedId
+      ) {
         router.push('/');
       }
 
