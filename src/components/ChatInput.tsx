@@ -27,13 +27,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Textarea } from './ui/textarea';
 
-const options = [
-  { id: 1, title: 'Research', value: OPTIONS.RESEARCH },
-  // { id: 2, title: 'Task', value: OPTIONS.TASK },
-  // { id: 3, title: 'Code', value: OPTIONS.CODE },
-  // { id: 4, title: 'Image', value: OPTIONS.IMAGE },
-  //   { id: 6, title: 'Video', value: OPTIONS.VIDEO },
-];
+const options = [{ id: 1, title: 'Research', value: OPTIONS.RESEARCH }];
 
 const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   const router = useRouter();
@@ -59,17 +53,9 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   };
 
   const apiUrl =
-    selectedOption === OPTIONS.IMAGE
-      ? `${process.env.NEXT_PUBLIC_API_URL}/image/generate`
-      : selectedOption === OPTIONS.VIDEO
-        ? `${process.env.NEXT_PUBLIC_API_URL}/video/generate`
-        : selectedOption === OPTIONS.CODE
-          ? `${process.env.NEXT_PUBLIC_API_URL}/code/assistant`
-          : selectedOption === OPTIONS.RESEARCH
-            ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
-            : selectedOption === OPTIONS.TASK
-              ? `${process.env.NEXT_PUBLIC_API_URL}/composio_v2/classify-and-execute`
-              : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
+    selectedOption === OPTIONS.RESEARCH
+      ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
+      : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
 
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
@@ -109,13 +95,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
       const reference = response.data?.responseMessage?.reference;
 
       updateActiveConversation(
-        selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.VIDEO
-          ? response.data.responseMessage.text
-          : selectedOption === OPTIONS.CODE
-            ? response.data.responseMessage
-            : selectedOption === OPTIONS.TASK
-              ? response.data.responseMessage.message
-              : response.data.responseMessage.answer,
+        response.data.responseMessage.answer,
         ROLES.ASSISTANT,
         newId,
         {

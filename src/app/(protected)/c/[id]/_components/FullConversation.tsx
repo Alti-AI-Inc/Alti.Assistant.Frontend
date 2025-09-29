@@ -83,7 +83,12 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         isLoading && 'h-screen',
       )}
     >
-      <div className="sticky top-2 right-4 z-10 flex items-center justify-end pr-4">
+      <div
+        className={cn(
+          'sticky top-2 right-4 z-10 flex items-center justify-end pr-4',
+          pathname === '/' && 'hidden',
+        )}
+      >
         <Button
           onClick={() =>
             onOpen({
@@ -92,7 +97,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             })
           }
           variant="ghost"
-          className={cn('bg-white', pathname === '/' && 'hidden')}
+          className="bg-white"
         >
           <Share /> Share
         </Button>
