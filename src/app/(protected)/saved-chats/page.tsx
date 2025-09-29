@@ -87,7 +87,7 @@ const Page = () => {
                       onClick={() =>
                         onOpen({
                           type: 'delete-conversation',
-                          actionId: chat.conversationId,
+                          actionId: chat._id,
                         })
                       }
                       disabled={deleteMutation.isPending}
