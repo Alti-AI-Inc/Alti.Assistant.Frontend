@@ -3,10 +3,15 @@ import {
   fetchConversationList,
   fetchSavedConversationList,
   loadSingleConversation,
+  loadSingleSharedConversation,
   PostConversation,
   searchConversations,
 } from '@/actions/conversationsAction';
-import { ROLES, useConversationsStore } from '@/stores/useConverstionsStore';
+import {
+  ActiveConversation,
+  ROLES,
+  useConversationsStore,
+} from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
@@ -47,7 +52,7 @@ export function useSavedConversations(accessToken?: string) {
     queryFn: () => fetchSavedConversationList(accessToken!),
     enabled: !!accessToken, // only run if token exists
     // staleTime: 1000 * 60, // 1 min caching
-    staleTime: Infinity
+    staleTime: Infinity,
   });
 }
 
@@ -72,6 +77,24 @@ export function useActiveConversation(
     },
     enabled: !!conversationId && conversationId !== 'new-chat' && !!accessToken,
     staleTime: 1000 * 60 * 2, // 2 min
+  });
+}
+
+export function useSharedConversation(id: string, accessToken?: string) {
+  return useQuery({
+    queryKey: ['sharedConversation', id, accessToken],
+    queryFn: async (): Promise<ActiveConversation> => {
+      if (!accessToken) throw new Error('No access token');
+      const response = await loadSingleSharedConversation(id, accessToken);
+
+      if (!response.success) {
+        throw new Error(response.message || 'Failed to load conversation');
+      }
+
+      return response.data.conversation; // should match ActiveConversation type
+    },
+    enabled: !!id && !!accessToken,
+    staleTime: 1000 * 60 * 5, // 2 min
   });
 }
 
@@ -195,9 +218,12 @@ export function useDeleteConversation() {
   });
 }
 
-export function useSearchConversations(accessToken?: string, searchTerm?: string) {
+export function useSearchConversations(
+  accessToken?: string,
+  searchTerm?: string,
+) {
   return useQuery({
-    queryKey: ["search-conversations", accessToken, searchTerm],
+    queryKey: ['search-conversations', accessToken, searchTerm],
     queryFn: () => searchConversations(accessToken!, searchTerm!),
     enabled: !!accessToken && !!searchTerm, // only run when both exist
     staleTime: 0, // always fresh

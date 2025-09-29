@@ -37,7 +37,7 @@ export function ShareConversationModal() {
     : process.env.NODE_ENV === 'production'
       ? `https://www.chatalti.com/shared/${data?.data?.shareId}`
       : `http://localhost:3000/shared/${data?.data?.shareId}`;
-  console.log(data);
+
   //e26b78ad-21c7-4558-af8d-6351f8e53a7f
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

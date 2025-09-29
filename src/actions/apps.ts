@@ -57,8 +57,6 @@ export const getConnections = async (
   );
   const data = await response.json();
 
-  // console.log('data in get connections', data.data);
-
   return data.data ?? [];
 };
 
@@ -82,7 +80,6 @@ export async function initiateConnection(
     },
   );
   const data = await response.json();
-  console.log('data in initiate', { data });
   return data;
 }
 
@@ -102,6 +99,5 @@ export async function waitForConnection(
     },
   );
   const data = await response.json();
-  console.log('data in wait for connection', { connected_account_id, data });
   return data;
 }

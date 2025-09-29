@@ -27,8 +27,6 @@ const AppCard = ({
 
   const [errorMessage, setErrorMessage] = useState('');
 
-  // console.log({ isWaiting });
-
   const handleClick = () => {
     setErrorMessage('');
     initiateConnection(
@@ -43,10 +41,6 @@ const AppCard = ({
             setErrorMessage(response.error);
             return;
           }
-          console.log(
-            '✅ Connection initiated, redirecting to:',
-            response.authConfig.authConfig,
-          );
           const redirectUrl = response.authConfig.authConfig.redirectUrl;
           const connectedAccountId = response.authConfig.authConfig.id;
 

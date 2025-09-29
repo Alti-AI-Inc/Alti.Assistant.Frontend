@@ -103,12 +103,9 @@ const VideoComponentForContent = ({ content }: { content: string }) => {
   useEffect(() => {
     if (content) {
       const extractedVideos = extractYouTubeUrls(content);
-      console.log('extractedVideos', extractedVideos);
       setYoutubeVideos(extractedVideos);
     }
   }, [content]);
-
-  console.log({ youtubeVideos });
 
   if (youtubeVideos.length === 0) {
     return null; // Let Streamdown handle it

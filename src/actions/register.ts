@@ -9,17 +9,19 @@ export async function RegisterUser({
   password: string;
   confirmPassword: string;
 }) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+        confirmPassword,
+      }),
     },
-    body: JSON.stringify({
-      email,
-      password,
-      confirmPassword,
-    }),
-  });
-  console.log('register response', { response });
+  );
   return response.json();
 }

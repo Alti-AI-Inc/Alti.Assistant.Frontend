@@ -29,8 +29,6 @@ const SearchChats = () => {
     debouncedSearch,
   );
 
-  console.log({ data });
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-[95%] max-w-4xl rounded-2xl">

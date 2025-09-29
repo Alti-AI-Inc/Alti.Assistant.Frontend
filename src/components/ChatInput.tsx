@@ -106,8 +106,6 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
 
       const images = response.data?.responseMessage?.images;
       const name = response.data?.responseMessage?.video?.name;
-      console.log('refrences--->', response.data?.responseMessage);
-      console.log('reponse data--->', response.data);
       const reference = response.data?.responseMessage?.reference;
 
       updateActiveConversation(
@@ -168,13 +166,13 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
           className="max-h-[500px] min-h-12 w-full resize-none overflow-y-auto border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
         />
         {/* Responsive container */}
-        <div className="flex gap-2 py-2 items-end justify-between">
+        <div className="flex items-end justify-between gap-2 py-2">
           {/* Desktop layout */}
-          <div className="items-center gap-2 flex">
+          <div className="flex items-center gap-2">
             {/* File upload */}
 
             {/* All options as buttons */}
-            <Tooltip >
+            <Tooltip>
               <TooltipTrigger>
                 <Microscope
                   onClick={() => handleSelectOption(OPTIONS.RESEARCH)}
@@ -185,14 +183,14 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
                   )}
                 />
               </TooltipTrigger>
-              <TooltipContent side='bottom'>
+              <TooltipContent side="bottom">
                 <p>Deep Research</p>
               </TooltipContent>
             </Tooltip>
           </div>
 
           {/* Mobile layout */}
-          <div className="w-full items-center justify-between gap-2 hidden">
+          <div className="hidden w-full items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

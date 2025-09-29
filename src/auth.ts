@@ -59,7 +59,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             accessToken: user.data.accessToken,
           };
         } catch (error) {
-          console.log(error);
+          console.error(error);
           return null;
         }
       },

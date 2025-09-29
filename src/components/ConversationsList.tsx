@@ -30,7 +30,6 @@ const ConversationsList = () => {
     data: conversations,
     // error,
   } = useConversations(session?.accessToken);
-  console.log(session?.accessToken)
   const deleteMutation = useDeleteConversation();
   const { setSelectedOption, setShowStartLastMessage, setUserMessage } =
     useConversationsStore();

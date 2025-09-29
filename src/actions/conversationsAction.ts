@@ -18,8 +18,6 @@ export async function PostConversation(
     }),
   });
   const data = await response.json();
-  console.log('response in post conversation', data);
-
   return data;
 }
 
@@ -51,7 +49,6 @@ export async function fetchSavedConversationList(accessToken: string) {
     },
   );
   const data = await response.json();
-  console.log('data in fetch saved conversation', data.data);
   return data.data.conversations;
 }
 
@@ -71,7 +68,6 @@ export async function searchConversations(
     },
   );
   const data = await response.json();
-  console.log('data in fetch saved conversation', data.data);
   return data.data;
 }
 
@@ -81,6 +77,23 @@ export async function loadSingleConversation(
 ) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/conversations/${conversationId}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'content-type': 'application/json',
+      },
+    },
+  );
+  const data = await response.json();
+  return data;
+}
+export async function loadSingleSharedConversation(
+  id: string,
+  accessToken: string,
+) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/conversations/shared/${id}`,
     {
       method: 'GET',
       headers: {
@@ -107,14 +120,7 @@ export const deleteConversation = async (
         'Content-Type': 'application/json',
       },
     });
-    console.log('delete response in server', { response });
     return response.json();
-    // if (!response.ok) {
-    //   const error = await response.json();
-    //   throw new Error(error.message || 'Failed to delete the session');
-    // }
-
-    console.log('Session deleted successfully');
   } catch (error) {
     console.error('Error deleting session:', error);
     throw error;
@@ -181,8 +187,6 @@ export async function saveConversationAction(
     },
   );
   const data = await response.json();
-
-  console.log('data in save conversation', data);
 
   return data;
 }

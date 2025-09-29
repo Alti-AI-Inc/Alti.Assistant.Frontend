@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useActiveConversation } from '@/hooks/useConversations';
-import { cn } from '@/lib/utils';
+import { cn, containsYouTubeUrl } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { EllipsisVertical, Share, Trash2 } from 'lucide-react';
@@ -70,15 +70,6 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       scrollToLastUserMessage();
     }
   }, [activeConversation?.messages, showStartLastMessage]);
-
-  const containsYouTubeUrl = (text: string) => {
-    const youtubeRegex =
-      /https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
-    // /https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/;
-
-    const result = youtubeRegex.test(text);
-    return result;
-  };
 
   const lastUserMessage = activeConversation?.messages
     .filter(message => message.role === 'user')

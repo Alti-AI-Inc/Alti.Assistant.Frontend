@@ -12,3 +12,12 @@ export const formatArea = (area: number) => {
 export const formatConversationTitle = (title: string) => {
   return title?.replace(/^(Search|Code|Image|Deep Research):\s*/, '');
 };
+
+export const containsYouTubeUrl = (text: string) => {
+  const youtubeRegex =
+    /https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
+  // /https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/;
+
+  const result = youtubeRegex.test(text);
+  return result;
+};
