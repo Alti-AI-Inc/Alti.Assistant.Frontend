@@ -88,19 +88,9 @@ export async function loadSingleConversation(
   const data = await response.json();
   return data;
 }
-export async function loadSingleSharedConversation(
-  id: string,
-  accessToken: string,
-) {
+export async function loadSingleSharedConversation(id: string) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/conversations/shared/${id}`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
-      },
-    },
   );
   const data = await response.json();
   return data;

@@ -6,16 +6,14 @@ import VideoComponentForContent from '@/app/(protected)/c/[id]/_components/Youtu
 import CopyButton from '@/components/CopyButton';
 import { useSharedConversation } from '@/hooks/useConversations';
 import { cn, containsYouTubeUrl } from '@/lib/utils';
-import { useSession } from 'next-auth/react';
 import { Streamdown } from 'streamdown';
 
 const SharedConversation = ({ id }: { id: string }) => {
-  const { data } = useSession();
   const {
     data: activeConversation,
     isLoading,
     // error,
-  } = useSharedConversation(id, data?.accessToken);
+  } = useSharedConversation(id);
 
   return (
     <div>

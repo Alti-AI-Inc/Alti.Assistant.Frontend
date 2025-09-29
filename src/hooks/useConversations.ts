@@ -80,12 +80,11 @@ export function useActiveConversation(
   });
 }
 
-export function useSharedConversation(id: string, accessToken?: string) {
+export function useSharedConversation(id: string) {
   return useQuery({
-    queryKey: ['sharedConversation', id, accessToken],
+    queryKey: ['sharedConversation', id],
     queryFn: async (): Promise<ActiveConversation> => {
-      if (!accessToken) throw new Error('No access token');
-      const response = await loadSingleSharedConversation(id, accessToken);
+      const response = await loadSingleSharedConversation(id);
 
       if (!response.success) {
         throw new Error(response.message || 'Failed to load conversation');
@@ -93,7 +92,7 @@ export function useSharedConversation(id: string, accessToken?: string) {
 
       return response.data.conversation; // should match ActiveConversation type
     },
-    enabled: !!id && !!accessToken,
+    enabled: !!id,
     staleTime: 1000 * 60 * 5, // 2 min
   });
 }
