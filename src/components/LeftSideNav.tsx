@@ -20,7 +20,7 @@ import {
   Scale,
   Search,
   Settings,
-  SquarePen
+  SquarePen,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -35,7 +35,12 @@ const LeftSideNav = () => {
   const router = useRouter();
 
   const { onOpen } = useModalStore();
-  const { setActiveConversation, setSelectedOption,setShowStartLastMessage,setUserMessage } = useConversationsStore();
+  const {
+    setActiveConversation,
+    setSelectedOption,
+    setShowStartLastMessage,
+    setUserMessage,
+  } = useConversationsStore();
   const { isLeftSidebarOpen, toggleLeftSidebar } = useSidebarStore();
 
   const hideSidebar = !isLeftSidebarOpen;
@@ -144,95 +149,6 @@ const LeftSideNav = () => {
                 Saved chats
               </span>
             </Button>
-            {/* <Button
-              onClick={() => {
-                router.push('/apps');
-                setTimeout(() => close(), 50);
-              }}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <LayoutGrid />{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Connect apps
-              </span>
-            </Button> */}
-
-            {/* <Button
-              onClick={() => router.push('/workflows')}
-
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <Network />{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Workflows
-              </span>
-            </Button> */}
-            {/* <Button
-              onClick={() => router.push('/agent-store')}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <Store />{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Agent store
-              </span>
-            </Button>
-            <Button
-              onClick={() => router.push('/my-agents')}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-hat-glasses-icon lucide-hat-glasses"
-              >
-                <path d="M14 18a2 2 0 0 0-4 0" />
-                <path d="m19 11-2.11-6.657a2 2 0 0 0-2.752-1.148l-1.276.61A2 2 0 0 1 12 4H8.5a2 2 0 0 0-1.925 1.456L5 11" />
-                <path d="M2 11h20" />
-                <circle cx="17" cy="18" r="3" />
-                <circle cx="7" cy="18" r="3" />
-              </svg>{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                My agents
-              </span>
-            </Button> */}
-            {/* <Button
-              onClick={() => router.push('/my-chatbots')}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <Bot />{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                My chatbots
-              </span>
-            </Button>
-
-            <Button
-              onClick={() => router.push('/knowledge')}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <BookA />{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                My knowledge
-              </span>
-            </Button> */}
 
             <div
               className={cn(

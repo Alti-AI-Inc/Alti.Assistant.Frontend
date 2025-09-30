@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {
   LogOut,
@@ -17,7 +18,7 @@ import {
   Scale,
   Search,
   Settings,
-  SquarePen
+  SquarePen,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -28,6 +29,7 @@ import { Button } from './ui/button';
 const LeftSideNavMobile = () => {
   const { data } = useSession();
   const router = useRouter();
+  const { close } = useDrawerStore();
 
   const { onOpen } = useModalStore();
   const {
@@ -51,6 +53,7 @@ const LeftSideNavMobile = () => {
               setUserMessage('');
               setSelectedOption(null);
               router.push('/');
+              close();
             }}
             className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
           >
@@ -61,11 +64,12 @@ const LeftSideNavMobile = () => {
           {isLoggedIn && (
             <>
               <Button
-                onClick={() =>
+                onClick={() => {
                   onOpen({
                     type: 'search-chats',
-                  })
-                }
+                  });
+                  close();
+                }}
                 className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
               >
                 <Search />
@@ -73,21 +77,15 @@ const LeftSideNavMobile = () => {
               </Button>
 
               <Button
-                onClick={() => router.push('/saved-chats')}
+                onClick={() => {
+                  router.push('/saved-chats');
+                  close();
+                }}
                 className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
               >
                 <MessageSquare />
                 <span className="text-sm font-normal">Saved chats</span>
               </Button>
-
-              {/* <Button
-            onClick={() => router.push('/apps')}
-            className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-          >
-            <LayoutGrid />
-            <span className="text-sm font-normal">Connect apps</span>
-          </Button> */}
-
 
               <div className="mt-6 pl-4 text-sm text-gray-500">
                 Chat history
@@ -105,7 +103,7 @@ const LeftSideNavMobile = () => {
       )}
 
       {/* Footer fixed at bottom */}
-      <div className="bg-secondary flex h-20 items-center justify-center p-4">
+      <div className="bg-secondary sticky bottom-0 flex h-20 items-center justify-center p-4">
         {!isLoggedIn ? (
           <div className="flex items-center space-x-2">
             <Button
@@ -136,13 +134,28 @@ const LeftSideNavMobile = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuGroup>
-                <DropdownMenuItem onClick={() => router.push('/upgrade')}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push('/upgrade');
+                    close();
+                  }}
+                >
                   <Orbit className="text-black" /> Upgrade
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/legal')}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push('/legal');
+                    close();
+                  }}
+                >
                   <Scale className="text-black" /> Legal
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/settings')}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push('/settings');
+                    close();
+                  }}
+                >
                   <Settings className="text-black" /> Settings
                 </DropdownMenuItem>
               </DropdownMenuGroup>
