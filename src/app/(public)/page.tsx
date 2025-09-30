@@ -14,7 +14,7 @@ function App() {
   }, [setActiveConversation]);
 
   return (
-    <div className={cn('flex h-screen flex-col items-center justify-center')}>
+    <div className={cn('flex h-[calc(100vh-70px)] lg:h-screen flex-col items-center justify-center')}>
       {!activeConversation && (
         <h1 className="mb-8 text-4xl font-medium">How can I help you?</h1>
       )}
