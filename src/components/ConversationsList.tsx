@@ -11,6 +11,7 @@ import { useModalStore } from '@/stores/useModalStore';
 import { EllipsisVertical, Pencil, Share, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import SaveConversation from './SaveConversation';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -71,6 +72,9 @@ const ConversationsList = () => {
             <DropdownMenuContent className="rounded-2xl">
               <DropdownMenuItem>
                 <Share className="text-black" /> Share
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={e => e.preventDefault()}>
+                <SaveConversation conversationId={chat?.conversationId} />
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() =>
