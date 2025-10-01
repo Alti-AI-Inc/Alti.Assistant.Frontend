@@ -70,12 +70,13 @@ const ConversationsList = () => {
               <EllipsisVertical className="mr-2 rotate-90 opacity-0 group-hover:opacity-100" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="rounded-2xl">
-              <DropdownMenuItem>
-                <Share className="text-black" /> Share
-              </DropdownMenuItem>
               <DropdownMenuItem onSelect={e => e.preventDefault()}>
                 <SaveConversation conversationId={chat?.conversationId} />
               </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Share className="text-black" /> Share
+              </DropdownMenuItem>
+
               <DropdownMenuItem
                 onClick={() =>
                   onOpen({
