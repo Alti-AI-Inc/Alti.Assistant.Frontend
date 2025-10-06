@@ -10,6 +10,7 @@ type ModalType =
   | 'delete-chatbot'
   | 'edit-chatbot'
   | 'share-conversation'
+  | 'create-knowledge-base'
 
   | null;
 

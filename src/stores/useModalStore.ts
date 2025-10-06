@@ -46,5 +46,3 @@ export const useModalStore = create<ModalStore>(set => ({
       onCancel: undefined,
     }),
 }));
-// stores/useDrawerStore.ts
-// import { create } from 'zustand';

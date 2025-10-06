@@ -1,0 +1,89 @@
+'use client';
+import { fileUploadAction } from '@/actions/knowledgeBaseAction';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import { Check, Upload } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import React, { useRef } from 'react';
+
+const FileUpload = ({ baseId }: { baseId: string }) => {
+  const { data } = useSession();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [isUploading, setIsUploading] = React.useState(false);
+  const [isUploadded, setIsUploadded] = React.useState(false);
+
+  const handleFileFocus = () => {
+    inputRef.current?.click();
+  };
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setIsUploading(true);
+      console.log('File selected:', file.name);
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('knowledgebotId', baseId);
+      console.log(formData);
+      try {
+        const response = await fileUploadAction(
+          formData,
+          data?.accessToken as string,
+        );
+        console.log(response);
+        if (response.ok) {
+          setIsUploadded(true);
+          setIsUploading(false);
+        }
+
+        setTimeout(() => {
+          setIsUploadded(false);
+        }, 2000);
+      } catch (error) {
+        setIsUploadded(false);
+        setIsUploading(false);
+        console.log(error);
+      } finally {
+        setIsUploading(false);
+      }
+    }
+  };
+  return (
+    <div>
+      <div className="flex gap-5">
+        <Button
+          className="flex items-center justify-start text-sm font-normal"
+          onClick={handleFileFocus}
+          disabled={isUploading}
+        >
+          {isUploading ? (
+            <>
+              <Spinner />
+              Uploading
+            </>
+          ) : isUploadded ? (
+            <>
+              <Check />
+              Uploaded
+            </>
+          ) : (
+            <>
+              <Upload />
+              Upload file
+            </>
+          )}
+        </Button>
+        <input
+          ref={inputRef}
+          className="hidden"
+          type="file"
+          onChange={handleFileChange}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default FileUpload;

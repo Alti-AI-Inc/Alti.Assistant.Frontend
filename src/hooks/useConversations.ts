@@ -4,13 +4,11 @@ import {
   fetchSavedConversationList,
   loadSingleConversation,
   loadSingleSharedConversation,
-  PostConversation,
-  searchConversations,
+  searchConversations
 } from '@/actions/conversationsAction';
 import {
   ActiveConversation,
-  ROLES,
-  useConversationsStore,
+  useConversationsStore
 } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -94,60 +92,6 @@ export function useSharedConversation(id: string) {
     },
     enabled: !!id,
     staleTime: 1000 * 60 * 5, // 2 min
-  });
-}
-
-export function usePostMessage(conversationId?: string) {
-  const queryClient = useQueryClient();
-  const { updateActiveConversation, activeConversation } =
-    useConversationsStore();
-
-  return useMutation({
-    mutationFn: async ({
-      apiUrl,
-      message,
-      accessToken,
-    }: {
-      apiUrl: string;
-      message: string;
-      accessToken: string;
-    }) => {
-      return await PostConversation(
-        apiUrl,
-        message,
-        accessToken,
-        conversationId === 'new-chat'
-          ? activeConversation?.conversationId || undefined
-          : conversationId,
-      );
-    },
-    onMutate: async ({ message }) => {
-      // optimistic update: add user message immediately
-      updateActiveConversation(message, ROLES.USER);
-    },
-    onSuccess: response => {
-      if (response.data?.responseMessage?.answer) {
-        updateActiveConversation(
-          response.data.responseMessage.answer,
-          ROLES.ASSISTANT,
-        );
-      }
-
-      // refresh sidebar list
-      queryClient.invalidateQueries({
-        queryKey: ['conversations'],
-      });
-
-      // refresh active conversation
-      if (response.data?.conversationId) {
-        queryClient.invalidateQueries({
-          queryKey: ['activeConversation', response.data.conversationId],
-        });
-      }
-    },
-    onError: err => {
-      console.error('Message post failed:', err);
-    },
   });
 }
 

@@ -2,6 +2,7 @@
 import { useModalStore } from '@/stores/useModalStore';
 import { useEffect } from 'react';
 import { AddChatbotModal } from './AddChatbotModal';
+import CreateKnowledgeBaseModal from './CreateKnowledgeBaseModal';
 import { DeleteChatbotModal } from './DeleteChatBotModal';
 import { DeleteConversation } from './DeleteConversation';
 import { EditChatbotModal } from './EditChatbotModal';
@@ -35,6 +36,7 @@ export const ModalProvider = () => {
       {type === 'edit-chatbot' && <EditChatbotModal />}
       {type === 'delete-chatbot' && <DeleteChatbotModal />}
       {type === 'share-conversation' && <ShareConversationModal />}
+      {type==='create-knowledge-base' && <CreateKnowledgeBaseModal/>}
     </>
   );
 };
