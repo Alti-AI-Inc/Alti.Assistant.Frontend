@@ -13,6 +13,7 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
+  Bot,
   LogOut,
   MessageSquare,
   Orbit,
@@ -147,6 +148,20 @@ const LeftSideNav = () => {
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
                 Saved chats
+              </span>
+            </Button>
+            <Button
+              onClick={() => {
+                router.push('/knowledge');
+                close();
+              }}
+              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+            >
+              <Bot />
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                Knowledge bots
               </span>
             </Button>
 
