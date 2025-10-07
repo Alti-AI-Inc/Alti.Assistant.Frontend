@@ -2,13 +2,6 @@
 
 import { PostConversation } from '@/actions/conversationsAction';
 import AudioRecorder from '@/components/AudioRecorder';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import {
   Tooltip,
   TooltipContent,
@@ -22,12 +15,10 @@ import {
   useConversationsStore,
 } from '@/stores/useConverstionsStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowRight, Menu, Microscope } from 'lucide-react';
+import { ArrowRight, Code, Image as ImageIcon, Microscope } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Textarea } from './ui/textarea';
-
-const options = [{ id: 1, title: 'Research', value: OPTIONS.RESEARCH }];
 
 const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   const router = useRouter();
@@ -53,9 +44,13 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   };
 
   const apiUrl =
-    selectedOption === OPTIONS.RESEARCH
-      ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
-      : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
+    selectedOption === OPTIONS.IMAGE
+      ? `${process.env.NEXT_PUBLIC_API_URL}/image/generate`
+      : selectedOption === OPTIONS.CODE
+        ? `${process.env.NEXT_PUBLIC_API_URL}/code/assistant`
+        : selectedOption === OPTIONS.RESEARCH
+          ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
+          : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
 
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
@@ -95,8 +90,13 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
       const reference = response.data?.responseMessage?.reference;
 
       updateActiveConversation(
-        response.data.responseMessage.answer,
+        selectedOption === OPTIONS.IMAGE
+          ? response.data.responseMessage.text
+          : selectedOption === OPTIONS.CODE
+            ? response.data.responseMessage
+            : response.data.responseMessage.answer,
         ROLES.ASSISTANT,
+
         newId,
         {
           ...(images && { images }),
@@ -149,8 +149,6 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
         <div className="flex items-end justify-between gap-2 py-2">
           {/* Desktop layout */}
           <div className="flex items-center gap-2">
-            {/* File upload */}
-
             {/* All options as buttons */}
             <Tooltip>
               <TooltipTrigger>
@@ -167,39 +165,36 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
                 <p>Deep Research</p>
               </TooltipContent>
             </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <ImageIcon
+                  onClick={() => handleSelectOption(OPTIONS.IMAGE)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-1 text-black',
+                    selectedOption === OPTIONS.IMAGE && 'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Image Generation</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <Code
+                  onClick={() => handleSelectOption(OPTIONS.CODE)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-1 text-black',
+                    selectedOption === OPTIONS.CODE && 'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Code Generation</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
 
-          {/* Mobile layout */}
-          <div className="hidden w-full items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-7 rounded-full px-2"
-                  >
-                    <Menu className="size-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start">
-                  {options.map(option => (
-                    <DropdownMenuItem
-                      key={option.id}
-                      onClick={() => handleSelectOption(option.value)}
-                      className={cn(
-                        'cursor-pointer',
-                        option.value === selectedOption &&
-                          'bg-black text-white',
-                      )}
-                    >
-                      {option.title}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
           {/* Right: Mic or send button */}
           <div className="flex items-center">
             {message ? (

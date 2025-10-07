@@ -7,6 +7,10 @@ export enum ROLES {
 
 export enum OPTIONS {
   RESEARCH = 'deep-research',
+  CODE = 'code-generation',
+  IMAGE = 'image-generation',
+  // TASK = 'task-automation',
+  // VIDEO = 'video-generation',
 }
 
 export interface Reference {
