@@ -1,6 +1,5 @@
 'use client';
 
-import { PostConversation } from '@/actions/conversationsAction';
 import AudioRecorder from '@/components/AudioRecorder';
 import {
   Tooltip,
@@ -9,6 +8,8 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
+import { PostConversation } from '@/actions/conversationsAction';
+import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import {
   OPTIONS,
   ROLES,
@@ -43,18 +44,20 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     setSelectedOption(selectedOption === value ? null : value);
   };
 
-  const apiUrl =
-    selectedOption === OPTIONS.IMAGE
+  const apiUrl = activeConversation?.knowledgebaseId
+    ? `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/chat`
+    : selectedOption === OPTIONS.IMAGE
       ? `${process.env.NEXT_PUBLIC_API_URL}/image/generate`
       : selectedOption === OPTIONS.CODE
         ? `${process.env.NEXT_PUBLIC_API_URL}/code/assistant`
         : selectedOption === OPTIONS.RESEARCH
           ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
           : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
-
+  console.log({ apiUrl },activeConversation?.knowledgebaseId);
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
       if (!data?.accessToken) throw new Error('No access token');
+      // console.log(apiUrl,activeConversation?.knowledgebaseId)
       return await PostConversation(
         apiUrl,
         userMessage,
@@ -62,6 +65,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
         conversationId === 'new-chat'
           ? activeConversation?.conversationId || undefined
           : conversationId,
+        activeConversation?.knowledgebaseId,
       );
     },
     onMutate: userMessage => {
@@ -69,7 +73,8 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
       setLoadingResponse(true);
     },
     onSuccess: (response, userMessage) => {
-      if (!response?.data?.responseMessage) return;
+      console.log('response data', response?.data);
+      if (!response?.data) return;
 
       const newId =
         conversationId === 'new-chat'
@@ -90,11 +95,13 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
       const reference = response.data?.responseMessage?.reference;
 
       updateActiveConversation(
-        selectedOption === OPTIONS.IMAGE
-          ? response.data.responseMessage.text
-          : selectedOption === OPTIONS.CODE
-            ? response.data.responseMessage
-            : response.data.responseMessage.answer,
+        activeConversation?.knowledgebaseId
+          ? response.data.message
+          : selectedOption === OPTIONS.IMAGE
+            ? response.data.responseMessage.text
+            : selectedOption === OPTIONS.CODE
+              ? response.data.responseMessage
+              : response.data.responseMessage.answer,
         ROLES.ASSISTANT,
 
         newId,
@@ -128,10 +135,25 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     mutation.mutate(message);
     setMessage('');
   };
+  const {
+    data: knowledgeBases,
+    isLoading,
+
+    // error,
+  } = useKnowledgeBases(data?.accessToken);
+
+  const activeKnowledgeBaseName = knowledgeBases?.filter(
+    kb => kb.id === activeConversation?.knowledgebaseId,
+  )[0]?.name;
 
   return (
     <div className="mx-auto w-full max-w-[796px] space-y-6 bg-white px-4 lg:px-0">
-      <div className="rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4">
+      <div
+        className={cn(
+          'rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4',
+          activeConversation?.knowledgebaseId && message.length < 100 && 'flex',
+        )}
+      >
         <Textarea
           name="message"
           value={message}
@@ -142,13 +164,24 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               handleSubmit();
             }
           }}
-          placeholder="Chat with alti"
+          placeholder={
+            activeConversation?.knowledgebaseId && isLoading
+              ? 'Loading...'
+              : activeConversation?.knowledgebaseId && activeKnowledgeBaseName
+                ? `Chat with ${activeKnowledgeBaseName}`
+                : 'Chat with alti'
+          }
           className="max-h-[500px] min-h-12 w-full resize-none overflow-y-auto border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
         />
         {/* Responsive container */}
         <div className="flex items-end justify-between gap-2 py-2">
           {/* Desktop layout */}
-          <div className="flex items-center gap-2">
+          <div
+            className={cn(
+              'flex items-center gap-2',
+              activeConversation?.knowledgebaseId && 'hidden',
+            )}
+          >
             {/* All options as buttons */}
             <Tooltip>
               <TooltipTrigger>
@@ -196,7 +229,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
           </div>
 
           {/* Right: Mic or send button */}
-          <div className="flex items-center">
+          <div className="ml-auto flex items-center">
             {message ? (
               <ArrowRight
                 onClick={handleSubmit}

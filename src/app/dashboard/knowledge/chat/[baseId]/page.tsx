@@ -1,6 +1,6 @@
+import NewBaseChatTitle from '@/components/NewChatTitle';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import NewChatTitle from '../../[baseId]/_components/NewChatTitle';
 import FullConversation from './_components/FullConversation';
 
 export default async function Page({
@@ -20,7 +20,7 @@ export default async function Page({
       </Link>
 
       <div className="flex h-full flex-col items-center justify-center">
-        <NewChatTitle baseId={baseId} />
+        <NewBaseChatTitle baseId={baseId} />
         <FullConversation conversationId="new-chat" baseId={baseId} />
       </div>
     </div>

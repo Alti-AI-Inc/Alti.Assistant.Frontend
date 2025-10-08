@@ -12,6 +12,7 @@ import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {
+  Bot,
   LogOut,
   MessageSquare,
   Orbit,
@@ -22,13 +23,14 @@ import {
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import ConversationsList from './ConversationsList';
 import { Button } from './ui/button';
 
 const LeftSideNavMobile = () => {
   const { data } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
   const { close } = useDrawerStore();
 
   const { onOpen } = useModalStore();
@@ -85,6 +87,21 @@ const LeftSideNavMobile = () => {
               >
                 <MessageSquare />
                 <span className="text-sm font-normal">Saved chats</span>
+              </Button>
+              <Button
+                disabled={pathname === '/knowledge'}
+                onClick={() => {
+                  setActiveConversation(null);
+                  setShowStartLastMessage(false);
+                  setUserMessage('');
+                  setSelectedOption(null);
+                  if (pathname !== '/knowledge') router.push('/knowledge');
+                  close();
+                }}
+                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
+              >
+                <Bot />
+                <span className="text-sm font-normal">Knowledge bots</span>
               </Button>
 
               <div className="mt-6 pl-4 text-sm text-gray-500">

@@ -26,7 +26,7 @@ import {
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ConversationsList from './ConversationsList';
 import { Button } from './ui/button';
@@ -34,6 +34,7 @@ import { Button } from './ui/button';
 const LeftSideNav = () => {
   const { data } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
 
   const { onOpen } = useModalStore();
   const {
@@ -151,11 +152,16 @@ const LeftSideNav = () => {
               </span>
             </Button>
             <Button
+              disabled={pathname === '/knowledge'}
               onClick={() => {
-                router.push('/knowledge');
+                setActiveConversation(null);
+                setShowStartLastMessage(false);
+                setUserMessage('');
+                setSelectedOption(null);
+                if (pathname !== '/knowledge') router.push('/knowledge');
                 close();
               }}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
             >
               <Bot />
               <span

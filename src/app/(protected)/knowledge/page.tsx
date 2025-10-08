@@ -1,29 +1,34 @@
 'use client';
 
+import KbFileUpload from '@/components/KbFileUpload';
+import { Button } from '@/components/ui/button';
 // import { DeleteFilledIcon } from "@/components/dashboard/delete";
 // import DeleteModal from "@/components/delete";
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 import { Spinner } from '@/components/ui/spinner';
-import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
+import { Knowledgebase, useKnowledgeBases } from '@/hooks/useKnowledgeBases';
+import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
-import { ArrowLeft, File, Trash } from 'lucide-react';
+import { ArrowLeft, File, SquarePen, Trash } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 function DocumentsPage() {
+  const router = useRouter();
   const [showBotDetails, setShowBotDetails] = useState(false);
 
   const { onOpen } = useModalStore();
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const handleFileFocus = () => {
-    inputRef.current?.click();
-  };
-
   const { data: session } = useSession();
+  const {
+    activeConversation,
+    setActiveConversation,
+    setUserMessage,
+    setShowStartLastMessage,
+    setSelectedOption,
+  } = useConversationsStore();
   const {
     data: knowledgeBases,
     isLoading,
@@ -31,6 +36,18 @@ function DocumentsPage() {
     // error,
     // error,
   } = useKnowledgeBases(session?.accessToken);
+
+  const handleKbClick = (item: Knowledgebase) => {
+    setShowBotDetails(true);
+    setActiveConversation({
+      knowledgebaseId: item.id,
+      messages: [],
+    });
+  };
+
+  const activeKnowledgeBaseName = knowledgeBases?.filter(
+    kb => kb.id === activeConversation?.knowledgebaseId,
+  )[0]?.name;
 
   return (
     <div className="relative h-full w-full p-8">
@@ -40,7 +57,9 @@ function DocumentsPage() {
             <ArrowLeft onClick={() => setShowBotDetails(false)} />
           )}
           <h1 className="text-3xl font-bold text-gray-900">
-            {showBotDetails ? 'Files' : 'Knowledge Bots'}
+            {showBotDetails
+              ? `${activeKnowledgeBaseName} Files`
+              : 'Knowledge Bots'}
           </h1>
         </div>
         {showBotDetails && (
@@ -53,17 +72,22 @@ function DocumentsPage() {
       <div className="mt-4 mb-4 flex items-center justify-between">
         <Input placeholder="Search " className="max-w-sm" />
         <div className="flex items-center gap-5">
-          {showBotDetails && (
-            <div className="flex gap-5">
-              <Button className="bg-black text-white" onClick={handleFileFocus}>
-                Upload file
+          {showBotDetails && activeConversation?.knowledgebaseId && (
+            <div className="flex items-center space-x-2">
+              <Button
+                onClick={() => {
+                  setShowStartLastMessage(false);
+                  setUserMessage('');
+                  setSelectedOption(null);
+                  // close();
+                  router.push('/');
+                }}
+                className="flex items-center justify-start text-sm"
+              >
+                <SquarePen />
+                <span className="text-sm font-normal">Chat with bot</span>
               </Button>
-              <input
-                ref={inputRef}
-                className="hidden"
-                type="file"
-                // onChange={handleFileChange}
-              />
+              <KbFileUpload baseId={activeConversation?.knowledgebaseId} />
             </div>
           )}
         </div>
@@ -106,7 +130,7 @@ function DocumentsPage() {
             <div
               key={item.id}
               className="relative flex size-40 cursor-pointer items-center justify-center rounded-2xl bg-gray-100 p-2"
-              onClick={() => setShowBotDetails(true)}
+              onClick={() => handleKbClick(item)}
             >
               {/* <Link href={`/dashboard/knowledge/${item.id}`}> */}
               {/* <span className="absolute inset-0 cursor-pointer"></span> */}

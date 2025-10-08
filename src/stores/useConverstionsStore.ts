@@ -46,6 +46,7 @@ export type ActiveConversation = {
   conversationId?: string;
   userId?: string;
   title?: string;
+  knowledgebaseId?: string;
   messages: ConversationMessage[];
   createdAt?: string;
   updatedAt?: string;
@@ -98,7 +99,7 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
 
   updateActiveConversation: (message, role, conversationId, extras) =>
     set(state => {
-      if (!state.activeConversation?.conversationId) {
+      if (!state.activeConversation?.conversationId && !state.activeConversation?.knowledgebaseId) {
         // brand new conversation
         return {
           ...state,

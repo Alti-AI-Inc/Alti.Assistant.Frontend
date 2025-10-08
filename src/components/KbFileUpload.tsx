@@ -6,7 +6,7 @@ import { Check, Upload } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import React, { useRef } from 'react';
 
-const FileUpload = ({ baseId }: { baseId: string }) => {
+const KbFileUpload = ({ baseId }: { baseId: string }) => {
   const { data } = useSession();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isUploading, setIsUploading] = React.useState(false);
@@ -33,7 +33,7 @@ const FileUpload = ({ baseId }: { baseId: string }) => {
           data?.accessToken as string,
         );
         console.log(response);
-        if (response.ok) {
+        if (response.success) {
           setIsUploadded(true);
           setIsUploading(false);
         }
@@ -86,4 +86,4 @@ const FileUpload = ({ baseId }: { baseId: string }) => {
   );
 };
 
-export default FileUpload;
+export default KbFileUpload;

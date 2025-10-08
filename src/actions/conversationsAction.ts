@@ -5,7 +5,9 @@ export async function PostConversation(
   message: string,
   accessToken: string,
   conversationId?: string,
+  knowledgebaseId?: string,
 ) {
+  console.log({ apiUrl, knowledgebaseId });
   const response = await fetch(apiUrl, {
     method: 'POST',
     headers: {
@@ -15,6 +17,7 @@ export async function PostConversation(
     body: JSON.stringify({
       message,
       ...(conversationId && { conversationId }),
+      ...(knowledgebaseId && { knowledgebaseId }),
     }),
   });
   const data = await response.json();

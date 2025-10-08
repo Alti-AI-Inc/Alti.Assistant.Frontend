@@ -125,7 +125,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         </DropdownMenu>
       </div>
       {/* Messages container - takes remaining space and scrolls */}
-      {activeConversation?.messages.length && (
+      {!!activeConversation?.messages.length && (
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
           <div
             className={cn(
