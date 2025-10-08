@@ -53,11 +53,10 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
         : selectedOption === OPTIONS.RESEARCH
           ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
           : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
-  console.log({ apiUrl },activeConversation?.knowledgebaseId);
+  
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
       if (!data?.accessToken) throw new Error('No access token');
-      // console.log(apiUrl,activeConversation?.knowledgebaseId)
       return await PostConversation(
         apiUrl,
         userMessage,
