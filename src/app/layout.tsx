@@ -10,8 +10,8 @@ const geistExo2 = Exo_2({
 });
 
 export const metadata: Metadata = {
-  title: 'Chat Alti',
-  description: 'Chat Alti',
+  title: 'Tickerstone',
+  description: 'AI for Finance',
 };
 
 export default function RootLayout({

@@ -141,7 +141,7 @@ const ChatInput = ({
               handleSubmit();
             }
           }}
-          placeholder="Chat with alti"
+          placeholder="Chat with tickerstone"
           className="max-h-[500px] min-h-12 w-full resize-none overflow-y-auto border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
         />
         {/* Responsive container */}

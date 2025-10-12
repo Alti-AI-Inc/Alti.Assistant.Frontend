@@ -1,8 +1,8 @@
 'use client';
 import CopyButton from '@/components/CopyButton';
 import {
-  useActiveBaseConversation,
-  useKnowledgeBases,
+    useActiveBaseConversation,
+    useKnowledgeBases,
 } from '@/hooks/useKnowledgeBases';
 import { cn } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
@@ -134,7 +134,7 @@ const FullConversation = ({
               <div className="flex items-center justify-start py-4">
                 <div className="flex items-center space-x-2 text-gray-500">
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"></div>
-                  <span>alti is thinking...</span>
+                  <span>tickerstone is thinking...</span>
                 </div>
               </div>
             )}
