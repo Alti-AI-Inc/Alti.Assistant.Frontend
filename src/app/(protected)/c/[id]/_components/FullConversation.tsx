@@ -4,10 +4,10 @@ import CopyButton from '@/components/CopyButton';
 import SaveConversation from '@/components/SaveConversation';
 import { Button } from '@/components/ui/button';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useActiveConversation } from '@/hooks/useConversations';
 import { cn, containsYouTubeUrl } from '@/lib/utils';
@@ -196,7 +196,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
               <div className="flex items-center justify-start py-4">
                 <div className="flex items-center space-x-2 text-gray-500">
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"></div>
-                  <span>tickerstone is thinking...</span>
+                  <span>alti is thinking...</span>
                 </div>
               </div>
             )}

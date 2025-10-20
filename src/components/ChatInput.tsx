@@ -16,7 +16,7 @@ import {
   useConversationsStore,
 } from '@/stores/useConverstionsStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowRight, Microscope } from 'lucide-react';
+import { ArrowRight, Code, Image as ImageIcon, Microscope } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Textarea } from './ui/textarea';
@@ -168,7 +168,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               ? 'Loading...'
               : activeConversation?.knowledgebaseId && activeKnowledgeBaseName
                 ? `Chat with ${activeKnowledgeBaseName}`
-                : 'Chat with tickerstone'
+                : 'Chat with alti'
           }
           className="max-h-[500px] min-h-12 w-full resize-none overflow-y-auto border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
         />
@@ -197,7 +197,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
                 <p>Deep Research</p>
               </TooltipContent>
             </Tooltip>
-            {/* <Tooltip>
+            <Tooltip>
               <TooltipTrigger>
                 <ImageIcon
                   onClick={() => handleSelectOption(OPTIONS.IMAGE)}
@@ -224,7 +224,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               <TooltipContent side="bottom">
                 <p>Code Generation</p>
               </TooltipContent>
-            </Tooltip> */}
+            </Tooltip>
           </div>
 
           {/* Right: Mic or send button */}
