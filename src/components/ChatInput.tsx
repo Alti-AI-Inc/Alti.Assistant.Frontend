@@ -16,9 +16,10 @@ import {
   useConversationsStore,
 } from '@/stores/useConverstionsStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowRight, Code, Image as ImageIcon, Microscope } from 'lucide-react';
+import { ArrowRight, Microscope, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useRef } from 'react';
 import { Textarea } from './ui/textarea';
 
 const ChatInput = ({ conversationId }: { conversationId?: string }) => {
@@ -53,7 +54,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
         : selectedOption === OPTIONS.RESEARCH
           ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
           : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
-  
+
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
       if (!data?.accessToken) throw new Error('No access token');
@@ -145,6 +146,13 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     kb => kb.id === activeConversation?.knowledgebaseId,
   )[0]?.name;
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) console.log({ file });
+  };
+
   return (
     <div className="mx-auto w-full max-w-[796px] space-y-6 bg-white px-4 lg:px-0">
       <div
@@ -181,6 +189,18 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               activeConversation?.knowledgebaseId && 'hidden',
             )}
           >
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              className="relative flex cursor-pointer items-center"
+            >
+              <Plus className="size-5.5 rounded-full border-2 border-gray-300 p-0.5" />
+              <input
+                ref={fileInputRef}
+                type="file"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </div>
             {/* All options as buttons */}
             <Tooltip>
               <TooltipTrigger>
@@ -195,34 +215,6 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Deep Research</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <ImageIcon
-                  onClick={() => handleSelectOption(OPTIONS.IMAGE)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-1 text-black',
-                    selectedOption === OPTIONS.IMAGE && 'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Image Generation</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <Code
-                  onClick={() => handleSelectOption(OPTIONS.CODE)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-1 text-black',
-                    selectedOption === OPTIONS.CODE && 'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Code Generation</p>
               </TooltipContent>
             </Tooltip>
           </div>
