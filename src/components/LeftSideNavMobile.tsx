@@ -13,6 +13,7 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {
   Bot,
+  LayoutGrid,
   LogOut,
   MessageSquare,
   Orbit,
@@ -88,6 +89,17 @@ const LeftSideNavMobile = () => {
                 <MessageSquare />
                 <span className="text-sm font-normal">Saved chats</span>
               </Button>
+              <Button
+                onClick={() => {
+                  router.push('/apps');
+                  close();
+                }}
+                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+              >
+                <LayoutGrid />
+                <span className="text-sm font-normal"> Connect apps</span>
+              </Button>
+
               <Button
                 disabled={pathname === '/knowledge'}
                 onClick={() => {
