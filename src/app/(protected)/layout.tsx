@@ -3,6 +3,7 @@
 import LeftSideNav from '@/components/LeftSideNav';
 
 import LeftSideNavMobile from '@/components/LeftSideNavMobile';
+import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
@@ -11,19 +12,29 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
+import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
-import { Menu } from 'lucide-react';
+import { Menu, SquarePen } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function ProtectedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const router = useRouter();
   const { isLeftSidebarOpen } = useSidebarStore();
   const { isOpen: isDrawerOpen, close, open } = useDrawerStore();
+
+  const {
+    setActiveConversation,
+    setShowStartLastMessage,
+    setUserMessage,
+    setSelectedOption,
+  } = useConversationsStore();
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -61,10 +72,23 @@ export default function ProtectedLayout({
           <Image
             src="/assets/logo-icon.png"
             alt="logo"
-            height={20}
-            width={20}
+            height={26}
+            width={26}
           />
         </Link>
+        <Button
+          onClick={() => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(null);
+            router.push('/');
+            close();
+          }}
+          className="flex items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+        >
+          <SquarePen className="size-5" />
+        </Button>
       </header>
 
       {/* Body */}
