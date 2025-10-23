@@ -1,10 +1,7 @@
 'use client';
 
 import LeftSideNav from '@/components/LeftSideNav';
-import { Menu } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import LeftSideNavMobile from '@/components/LeftSideNavMobile';
 import {
   Sheet,
   SheetContent,
@@ -12,8 +9,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import LeftSideNavMobile from '@/components/LeftSideNavMobile';
+import { cn } from '@/lib/utils';
 import { useSidebarStore } from '@/stores/useSidebarStore';
+import { Menu } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function PublicLayout({
   children,
@@ -48,11 +48,15 @@ export default function PublicLayout({
             <LeftSideNavMobile />
           </SheetContent>
         </Sheet>
-
         <Link href="/">
-          <Image src="/assets/logo-icon.png" alt="logo" height={20} width={20} />
+          <Image
+            src="/assets/logo-icon.png"
+            alt="logo"
+            height={26}
+            width={26}
+            className="max-lg:-translate-x-5"
+          />
         </Link>
-
         <div /> {/* placeholder for spacing */}
       </header>
 
@@ -60,7 +64,7 @@ export default function PublicLayout({
         {/* Sidebar - Desktop only */}
         <div
           className={cn(
-            'bg-secondary sticky top-0 left-0  h-screen flex-col transition-all duration-300 ease-in-out hidden md:flex',
+            'bg-secondary sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out md:flex',
             !isLeftSidebarOpen ? 'w-10' : 'w-68',
           )}
         >
