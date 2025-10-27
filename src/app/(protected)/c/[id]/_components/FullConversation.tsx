@@ -79,7 +79,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     <div
       className={cn(
         'flex w-full flex-col',
-        activeConversation?.messages.length && 'h-[calc(100vh-70px)] lg:h-screen',
+        activeConversation?.messages.length &&
+          'h-[calc(100vh-70px)] lg:h-screen',
         isLoading && 'h-[calc(100vh-70px)] lg:h-screen',
       )}
     >
@@ -203,7 +204,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             <div
               className={cn(
                 // idx === activeConversation.messages.length - 1 &&
-                showStartLastMessage && 'h-[65dvh]',
+                activeConversation?.messages[
+                  activeConversation?.messages.length - 1
+                ]?.role === 'user' &&
+                  showStartLastMessage &&
+                  'h-[65dvh]',
               )}
             ></div>
           </div>

@@ -73,7 +73,6 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
       setLoadingResponse(true);
     },
     onSuccess: (response, userMessage) => {
-      console.log('response data', response?.data);
       if (!response?.data) return;
 
       const newId =
