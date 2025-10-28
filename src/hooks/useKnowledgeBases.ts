@@ -1,9 +1,11 @@
 import {
   fetchKnowledgeBaseConversations,
   fetchKnowledgeBaseList,
+  getKnowledgeBaseFiles,
+  KnowledgeBaseFilesResponse,
   loadSingleBaseConversation,
 } from '@/actions/knowledgeBaseAction';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export type Knowledgebase = {
   id: string;
@@ -81,5 +83,17 @@ export function useActiveBaseConversation(
     },
     enabled: !!conversationId && conversationId !== 'new-chat' && !!accessToken,
     staleTime: 1000 * 60 * 2, // 2 min
+  });
+}
+
+export function useKnowledgeBaseFiles(
+  baseId: string,
+  accessToken?: string,
+): UseQueryResult<KnowledgeBaseFilesResponse> {
+  return useQuery<KnowledgeBaseFilesResponse>({
+    queryKey: ['knowledgeBasesFiles', baseId, accessToken],
+    queryFn: () => getKnowledgeBaseFiles(baseId, accessToken!),
+    enabled: !!accessToken && !!baseId, // only run if token exists
+    staleTime: 15000 * 60, // 15 min caching
   });
 }

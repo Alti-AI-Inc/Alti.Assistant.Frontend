@@ -1,0 +1,85 @@
+'use client';
+
+import { getFileBlog, KnowledgeBaseFile } from '@/actions/knowledgeBaseAction';
+import { useKnowledgeBaseFiles } from '@/hooks/useKnowledgeBases';
+import { Download, File, LoaderCircle, Trash } from 'lucide-react';
+import { useState } from 'react';
+
+interface FileListProps {
+  baseId: string;
+  accessToken?: string;
+  onView?: (file: KnowledgeBaseFile) => void;
+}
+
+export function FileList({ baseId, accessToken, onView }: FileListProps) {
+  const { data, isLoading } = useKnowledgeBaseFiles(baseId, accessToken);
+
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  if (isLoading) return <p>Loading files...</p>;
+  if (!data?.files?.length) return <p>No files found.</p>;
+
+  const handleDownload = async (
+    e: React.MouseEvent,
+    file: KnowledgeBaseFile,
+  ) => {
+    e.preventDefault();
+    setIsDownloading(true);
+    e.stopPropagation();
+    try {
+      const blob = await getFileBlog(file);
+      if (!blob) throw new Error('Failed to get file blob');
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = file.fileName;
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+
+      setIsDownloading(false);
+    } catch (err) {
+      setIsDownloading(false);
+      console.error('Download failed:', err);
+      alert('Failed to download file.');
+    }
+  };
+
+  return (
+    <div className="space-y-3 mt-6">
+      {data.files.map(file => (
+        <div
+          key={file.id}
+          onClick={() => onView?.(file)}
+          className="flex cursor-pointer flex-row items-center justify-between rounded-lg bg-gray-100 py-4 ps-2 pe-4 transition-all hover:bg-gray-200"
+        >
+          {/* Left: File info */}
+          <div className="flex items-center space-x-4">
+            <File className="text-gray-600" />
+            <div className="flex flex-col">
+              <span className="font-medium text-gray-800">{file.fileName}</span>
+              <span className="text-sm text-gray-500">
+                {file.formattedFileSize} • {file.fileType.toUpperCase()}
+              </span>
+            </div>
+          </div>
+
+          {/* Right: Download + Delete */}
+          <div className="flex items-center space-x-3 text-gray-600">
+            {/* Download icon */}
+
+            {isDownloading ? (
+              <LoaderCircle className="animate-spin" />
+            ) : (
+              <Download size={20} onClick={e => handleDownload(e, file)} />
+            )}
+
+            {/* Delete icon */}
+            <Trash size={20} className="transition-colors" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

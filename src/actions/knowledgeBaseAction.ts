@@ -1,6 +1,9 @@
 'use server';
 
-export const fileUploadAction= async (formData: FormData, accessToken: string) => {
+export const fileUploadAction = async (
+  formData: FormData,
+  accessToken: string,
+) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/upload`,
     {
@@ -104,7 +107,6 @@ export async function PostKnowledgeConversation(
     }),
   });
   const data = await response.json();
-  console.log({ data });
   return data;
 }
 
@@ -124,4 +126,55 @@ export async function loadSingleBaseConversation(
   );
   const data = await response.json();
   return data;
+}
+
+export interface KnowledgeBaseFile {
+  id: string;
+  fileName: string;
+  fileType: string;
+  fileSize: number;
+  formattedFileSize: string;
+  gcsUrl: string;
+  documentId: string;
+  knowledgebotId: string;
+  title: string;
+  chunkCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface KnowledgeBaseFilesResponse {
+  files: KnowledgeBaseFile[];
+  totalCount: number;
+  knowledgebotId: string;
+}
+
+export async function getKnowledgeBaseFiles(
+  knowledgebotId: string,
+  accessToken: string,
+): Promise<KnowledgeBaseFilesResponse> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/files?knowledgebotId=${knowledgebotId}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'content-type': 'application/json',
+      },
+    },
+  );
+  const data = await response.json();
+  console.log('files response', data?.data);
+  return data?.data;
+}
+
+export async function getFileBlog(file: KnowledgeBaseFile) {
+  try {
+    const response = await fetch(file.gcsUrl);
+    const blob = await response.blob();
+
+    return blob;
+  } catch (error) {
+    console.log(error);
+  }
 }
