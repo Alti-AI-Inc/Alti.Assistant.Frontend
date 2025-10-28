@@ -2,6 +2,7 @@
 import { fileUploadAction } from '@/actions/knowledgeBaseAction';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { useQueryClient } from '@tanstack/react-query';
 import { Check, Upload } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import React, { useRef } from 'react';
@@ -11,6 +12,8 @@ const KbFileUpload = ({ baseId }: { baseId: string }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isUploading, setIsUploading] = React.useState(false);
   const [isUploadded, setIsUploadded] = React.useState(false);
+
+  const queryClient = useQueryClient();
 
   const handleFileFocus = () => {
     inputRef.current?.click();
@@ -22,11 +25,9 @@ const KbFileUpload = ({ baseId }: { baseId: string }) => {
     const file = event.target.files?.[0];
     if (file) {
       setIsUploading(true);
-      console.log('File selected:', file.name);
       const formData = new FormData();
       formData.append('file', file);
       formData.append('knowledgebotId', baseId);
-      console.log(formData);
       try {
         const response = await fileUploadAction(
           formData,
@@ -36,6 +37,9 @@ const KbFileUpload = ({ baseId }: { baseId: string }) => {
         if (response.success) {
           setIsUploadded(true);
           setIsUploading(false);
+          queryClient.invalidateQueries({
+            queryKey: ['knowledgeBasesFiles', baseId, data?.accessToken],
+          });
         }
 
         setTimeout(() => {

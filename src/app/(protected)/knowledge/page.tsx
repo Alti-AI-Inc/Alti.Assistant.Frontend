@@ -17,13 +17,11 @@ import { useModalStore } from '@/stores/useModalStore';
 import { ArrowLeft, SquarePen, Trash } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { FileList } from './_components/FileList';
 // import { FileViewer } from './_components/FileViewer';
 
 function DocumentsPage() {
   const router = useRouter();
-  const [activeKbId, setActiveKbId] = useState<string | null>(null);
 
   const { onOpen } = useModalStore();
 
@@ -44,7 +42,7 @@ function DocumentsPage() {
   } = useKnowledgeBases(session?.accessToken);
 
   const { data: kbFiles, isLoading: isLoadingFiles } = useKnowledgeBaseFiles(
-    activeKbId || '',
+    activeConversation?.knowledgebaseId || '',
     session?.accessToken,
   );
 
@@ -53,10 +51,8 @@ function DocumentsPage() {
       knowledgebaseId: item.id,
       messages: [],
     });
-    setActiveKbId(item.id);
+    // setActiveKbId(item.id);
   };
-
-  console.log({ kbFiles });
 
   const activeKnowledgeBaseName = knowledgeBases?.filter(
     kb => kb.id === activeConversation?.knowledgebaseId,
@@ -64,14 +60,22 @@ function DocumentsPage() {
 
   return (
     <div className="relative h-full w-full p-8">
-      <div className="flex items-center justify-between">
-        <div className="mb-6 flex items-center gap-3">
-          {activeKbId && <ArrowLeft onClick={() => setActiveKbId(null)} />}
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          {activeConversation?.knowledgebaseId && (
+            <ArrowLeft
+              onClick={() => {
+                setActiveConversation(null);
+              }}
+            />
+          )}
           <h1 className="text-3xl font-bold text-gray-900">
-            {activeKbId ? `${activeKnowledgeBaseName} Files` : 'Knowledge Bots'}
+            {activeConversation?.knowledgebaseId
+              ? `${activeKnowledgeBaseName} Files`
+              : 'Knowledge Bots'}
           </h1>
         </div>
-        {activeKbId && (
+        {activeConversation?.knowledgebaseId && (
           <div>
             <Trash />
           </div>
@@ -81,14 +85,14 @@ function DocumentsPage() {
       <div className="mt-4 mb-4 flex items-center justify-between">
         <Input placeholder="Search " className="max-w-sm" />
         <div className="flex items-center gap-5">
-          {activeKbId && activeConversation?.knowledgebaseId && (
+          {activeConversation?.knowledgebaseId && (
             <div className="flex items-center space-x-2">
               <Button
                 onClick={() => {
                   setShowStartLastMessage(false);
                   setUserMessage('');
                   setSelectedOption(null);
-                  // close();
+
                   router.push('/');
                 }}
                 className="flex items-center justify-start text-sm"
@@ -102,15 +106,14 @@ function DocumentsPage() {
         </div>
       </div>
 
-      {/* Main content area with explicit click handling */}
       <div
         className={`flex w-full overflow-y-auto ${
-          activeKbId
+          activeConversation?.knowledgebaseId
             ? 'h-[calc(100vh_-_220px)] flex-col gap-2'
             : 'flex-row flex-wrap gap-5'
         }`}
       >
-        {!activeKbId && !isLoading && (
+        {!activeConversation?.knowledgebaseId && !isLoading && (
           <div
             className="flex size-40 cursor-pointer items-center justify-center rounded-2xl bg-black text-white"
             onClick={() => onOpen({ type: 'create-knowledge-base' })}
@@ -122,8 +125,11 @@ function DocumentsPage() {
           <div className="flex h-[calc(100vh_-180px)] flex-1 items-center justify-center">
             <Spinner /> Loading...
           </div>
-        ) : activeKbId && !!kbFiles?.files ? (
-          <FileList baseId={activeKbId} accessToken={session?.accessToken} />
+        ) : activeConversation?.knowledgebaseId && !!kbFiles?.files ? (
+          <FileList
+            baseId={activeConversation.knowledgebaseId}
+            accessToken={session?.accessToken}
+          />
         ) : !!knowledgeBases?.length ? (
           knowledgeBases.map(item => (
             <div
@@ -131,10 +137,7 @@ function DocumentsPage() {
               className="relative flex size-40 cursor-pointer items-center justify-center rounded-2xl bg-gray-100 p-2"
               onClick={() => handleKbClick(item)}
             >
-              {/* <Link href={`/dashboard/knowledge/${item.id}`}> */}
-              {/* <span className="absolute inset-0 cursor-pointer"></span> */}
               {item.name}
-              {/* </Link> */}
             </div>
           ))
         ) : (

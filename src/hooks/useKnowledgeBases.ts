@@ -106,8 +106,8 @@ export function useKnowledgeBaseFiles(
 }
 
 export function useDeleteKnowledgeBaseFile(
-  baseId: string,
-  onClose: () => void,
+  baseId?: string,
+  onClose?: () => void,
 ) {
   const queryClient = useQueryClient();
   const { data } = useSession();

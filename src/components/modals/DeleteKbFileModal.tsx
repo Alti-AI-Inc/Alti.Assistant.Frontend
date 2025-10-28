@@ -8,18 +8,18 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useDeleteKnowledgeBaseFile } from '@/hooks/useKnowledgeBases';
+import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { LoaderCircle } from 'lucide-react';
 
 export function DeleteKnowledgeBaseFileModal() {
-  const {
-    onClose,
-    isOpen,
-    actionId: fileId,
-    actionId2: baseId,
-  } = useModalStore();
+  const { onClose, isOpen, actionId: fileId } = useModalStore();
+  const { activeConversation } = useConversationsStore();
 
-  const deleteMutation = useDeleteKnowledgeBaseFile(baseId!, onClose);
+  const deleteMutation = useDeleteKnowledgeBaseFile(
+    activeConversation?.knowledgebaseId,
+    onClose,
+  );
 
   const handleDelete = async () => {
     if (fileId) deleteMutation.mutate(fileId);

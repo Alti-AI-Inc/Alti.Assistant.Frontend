@@ -18,7 +18,7 @@ export function FileList({ baseId, accessToken }: FileListProps) {
   const [isDownloading, setIsDownloading] = useState(false);
 
   if (isLoading) return <p>Loading files...</p>;
-  if (!data?.files?.length) return <p>No files found.</p>;
+  if (!data?.files?.length) return <p className='flex items-center justify-center h-[60vh]'>No files found.</p>;
 
   const handleDownload = async (
     e: React.MouseEvent,
@@ -86,7 +86,6 @@ export function FileList({ baseId, accessToken }: FileListProps) {
                 onOpen({
                   type: 'delete-knowledge-base-file',
                   actionId: file.id,
-                  actionId2:baseId
                 })
               }
             />

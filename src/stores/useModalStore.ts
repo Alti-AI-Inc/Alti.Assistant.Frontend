@@ -5,7 +5,6 @@ interface ModalStore {
   type: ModalType;
   title?: string;
   actionId?: string;
-  actionId2?: string;
   message?: string;
   onConfirm?: () => void;
   onCancel?: () => void;
@@ -15,7 +14,6 @@ interface ModalStore {
     type: ModalType;
     title?: string;
     actionId?: string;
-    actionId2?: string;
     message?: string;
     onConfirm?: () => void;
     onCancel?: () => void;
@@ -42,7 +40,6 @@ export const useModalStore = create<ModalStore>(set => ({
       isOpen: false,
       type: null,
       actionId: undefined,
-      actionId2: undefined,
       title: undefined,
       message: undefined,
       onConfirm: undefined,
