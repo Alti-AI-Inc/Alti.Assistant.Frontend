@@ -7,9 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import {
-  useDeleteKnowledgeBase
-} from '@/hooks/useKnowledgeBases';
+import { useDeleteKnowledgeBase } from '@/hooks/useKnowledgeBases';
 import { useModalStore } from '@/stores/useModalStore';
 import { LoaderCircle } from 'lucide-react';
 
@@ -26,7 +24,7 @@ export function DeleteKnowledgeBaseModal() {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="border-none ring-0 outline-none sm:max-w-[480px]">
         <DialogHeader>
-          <DialogTitle>Delete</DialogTitle>
+          <DialogTitle>Delete Knowledge Bot</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 pt-4">
           <h1 className="">

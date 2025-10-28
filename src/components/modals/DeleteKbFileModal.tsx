@@ -29,7 +29,7 @@ export function DeleteKnowledgeBaseFileModal() {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="border-none ring-0 outline-none sm:max-w-[480px]">
         <DialogHeader>
-          <DialogTitle>Delete</DialogTitle>
+          <DialogTitle>Delete File</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 pt-4">
           <h1 className="">Are you sure you want to delete file?</h1>
