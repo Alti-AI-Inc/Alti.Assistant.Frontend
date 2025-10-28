@@ -11,11 +11,13 @@ import {
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
+import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
   Bot,
   LayoutGrid,
   LogOut,
   MessageSquare,
+  Network,
   Orbit,
   Scale,
   Search,
@@ -33,6 +35,7 @@ const LeftSideNavMobile = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { close } = useDrawerStore();
+  const { setRightSidebarOpen } = useSidebarStore();
 
   const { onOpen } = useModalStore();
   const {
@@ -114,6 +117,19 @@ const LeftSideNavMobile = () => {
               >
                 <Bot />
                 <span className="text-sm font-normal">Knowledge bots</span>
+              </Button>
+              <Button
+                onClick={() => {
+                  router.push('/workflows');
+                  setRightSidebarOpen(true);
+                  setTimeout(() => close(), 50);
+                }}
+                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+              >
+                <Network />{' '}
+                <span className="text-sm font-normal">
+                  Workflow automations
+                </span>
               </Button>
 
               <div className="mt-6 pl-4 text-sm text-gray-500">

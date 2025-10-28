@@ -45,7 +45,8 @@ const LeftSideNav = () => {
     setShowStartLastMessage,
     setUserMessage,
   } = useConversationsStore();
-  const { isLeftSidebarOpen, toggleLeftSidebar } = useSidebarStore();
+  const { isLeftSidebarOpen, toggleLeftSidebar, setRightSidebarOpen } =
+    useSidebarStore();
 
   const hideSidebar = !isLeftSidebarOpen;
   const isLoggedIn = data?.accessToken;
@@ -167,13 +168,7 @@ const LeftSideNav = () => {
                 Connect apps
               </span>
             </Button>
-            <Button
-              onClick={() => router.push('/workflows')}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <Network />
-              <span className="text-sm font-normal">Workflows</span>
-            </Button>
+
             <Button
               disabled={pathname === '/knowledge'}
               onClick={() => {
@@ -191,6 +186,21 @@ const LeftSideNav = () => {
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
                 Knowledge bots
+              </span>
+            </Button>
+            <Button
+              onClick={() => {
+                router.push('/workflows');
+                setRightSidebarOpen(true);
+                setTimeout(() => close(), 50);
+              }}
+              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+            >
+              <Network />{' '}
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                Workflow automations
               </span>
             </Button>
 

@@ -1,4 +1,6 @@
 'use client';
+import { cn } from '@/lib/utils';
+import { useSidebarStore } from '@/stores/useSidebarStore';
 import { ArrowRight, FileIcon, Plus, XIcon } from 'lucide-react';
 import Image from 'next/image';
 import React, { ChangeEvent } from 'react';
@@ -7,6 +9,7 @@ export default function Page() {
   const [preview, setPreview] = React.useState<string | null>(null);
   const [fileType, setFileType] = React.useState<string | null>(null);
   const [fileName, setFileName] = React.useState<string | null>(null);
+  const { isRightSidebarOpen } = useSidebarStore();
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -23,7 +26,12 @@ export default function Page() {
   };
 
   return (
-    <div className="mx-auto -mt-10 flex  min-h-[calc(100vh-80px)] flex-col items-center justify-center px-4 pr-12">
+    <div
+      className={cn(
+        'mx-auto flex min-h-screen flex-col items-center justify-center px-4 pr-12 transition-all duration-300',
+        isRightSidebarOpen && 'pr-72',
+      )}
+    >
       <div className="w-full max-w-3xl">
         {/* Heading */}
         <h1 className="mb-6 text-center text-2xl font-semibold sm:text-3xl md:text-4xl">
@@ -32,7 +40,7 @@ export default function Page() {
 
         {/* Form */}
         <form>
-          <div className="rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4 ">
+          <div className="rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4">
             {(preview || fileType) && (
               <div className="relative w-fit">
                 {preview ? (
@@ -94,10 +102,7 @@ export default function Page() {
               </div>
 
               {/* Submit button */}
-              <button
-                type="submit"
-                className=""
-              >
+              <button type="submit" className="">
                 <ArrowRight className="size-7 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-1 text-white" />
               </button>
             </div>

@@ -7,6 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useModalStore } from '@/stores/useModalStore';
 import {
   EllipsisVertical,
   Pencil,
@@ -16,7 +17,6 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
-import { useModalStore } from '@/stores/useModalStore';
 
 const previousChatHistory = [
   {

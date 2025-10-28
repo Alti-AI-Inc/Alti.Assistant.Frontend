@@ -20,7 +20,6 @@ import { Menu, PanelLeftClose, PanelRightClose, SquarePen } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useRef } from 'react';
 
 export default function ProtectedLayout({
   children,
@@ -28,13 +27,10 @@ export default function ProtectedLayout({
   children: React.ReactNode;
 }>) {
   const router = useRouter();
-  const {
-    isLeftSidebarOpen,
-    isRightSidebarOpen,
-    toggleRightSidebar,
-  } = useSidebarStore();
+  const { isLeftSidebarOpen, isRightSidebarOpen, toggleRightSidebar } =
+    useSidebarStore();
   const { isOpen: drawerOpen, close, open } = useDrawerStore();
-  const drawerRef = useRef<HTMLDivElement>(null);
+
   const pathname = usePathname();
   const {
     setActiveConversation,
@@ -42,25 +38,6 @@ export default function ProtectedLayout({
     setUserMessage,
     setSelectedOption,
   } = useConversationsStore();
-
-  // useEffect(() => {
-  //   const el = drawerRef.current;
-  //   if (!el) return;
-
-  //   let startX = 0;
-  //   const handleTouchStart = (e: TouchEvent) => (startX = e.touches[0].clientX);
-  //   const handleTouchEnd = (e: TouchEvent) => {
-  //     const endX = e.changedTouches[0].clientX;
-  //     if (startX - endX > 50) close(); // use store
-  //   };
-
-  //   el.addEventListener('touchstart', handleTouchStart);
-  //   el.addEventListener('touchend', handleTouchEnd);
-  //   return () => {
-  //     el.removeEventListener('touchstart', handleTouchStart);
-  //     el.removeEventListener('touchend', handleTouchEnd);
-  //   };
-  // }, [close]);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -135,7 +112,6 @@ export default function ProtectedLayout({
         </main>
         {pathname === '/workflows' && (
           <div
-            ref={drawerRef}
             className={cn(
               'bg-secondary fixed top-[56px] right-0 z-40 h-[calc(100vh-56px)] shadow-lg transition-all duration-300 ease-in-out md:top-0 md:h-screen',
               isRightSidebarOpen ? 'w-64' : 'w-10',
