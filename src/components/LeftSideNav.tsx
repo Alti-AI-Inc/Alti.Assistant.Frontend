@@ -84,7 +84,7 @@ const LeftSideNav = () => {
                 onClick={toggleLeftSidebar}
               />
             ) : (
-              <Link href="/">
+              <Link href="/chat">
                 <Image
                   src="/assets/logo-icon.png"
                   alt="logo"
@@ -111,7 +111,7 @@ const LeftSideNav = () => {
               setUserMessage('');
               setSelectedOption(null);
               close();
-              router.push('/');
+              router.push('/chat');
             }}
             className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
           >

@@ -100,7 +100,7 @@ function DocumentsPage() {
                   setUserMessage('');
                   setSelectedOption(null);
 
-                  router.push('/');
+                  router.push('/chat');
                 }}
                 className="flex items-center justify-start text-sm"
               >

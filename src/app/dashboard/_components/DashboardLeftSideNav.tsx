@@ -1,22 +1,22 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
 import {
-  BookCheck,
-  Bot,
-  CircleUserRound,
-  LogOut,
-  ReceiptText,
-  Settings
+    BookCheck,
+    Bot,
+    CircleUserRound,
+    LogOut,
+    ReceiptText,
+    Settings
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -44,7 +44,7 @@ const DashboardLeftSideNav = () => {
               'flex flex-none items-center justify-center transition-all duration-300',
             )}
           >
-            <Link href="/">
+            <Link href="/chat">
               <Image
                 src="/assets/logo-icon.png"
                 alt="logo"

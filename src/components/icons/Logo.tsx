@@ -2,7 +2,6 @@
 
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
-import React from 'react'
 
 const Logo = () => {
     const theme = useTheme()
@@ -17,7 +16,7 @@ const Logo = () => {
             fill={theme.resolvedTheme === 'dark' ? '#fff' : '#000'}
             viewBox="0 0 555.000000 555.000000"
             preserveAspectRatio="xMidYMid meet"
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/chat')}
             className='cursor-pointer'
         >
             <g

@@ -3,11 +3,11 @@
 import LeftSideNav from '@/components/LeftSideNav';
 import LeftSideNavMobile from '@/components/LeftSideNavMobile';
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { useSidebarStore } from '@/stores/useSidebarStore';
@@ -48,7 +48,7 @@ export default function PublicLayout({
             <LeftSideNavMobile />
           </SheetContent>
         </Sheet>
-        <Link href="/">
+        <Link href="/chat">
           <Image
             src="/assets/logo-icon.png"
             alt="logo"

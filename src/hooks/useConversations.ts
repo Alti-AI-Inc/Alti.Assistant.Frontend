@@ -116,7 +116,7 @@ export function useDeleteConversation() {
         pathname.endsWith(deletedId) ||
         activeConversation?._id === deletedId
       ) {
-        router.push('/');
+        router.push('/chat');
       }
 
       queryClient.invalidateQueries({
