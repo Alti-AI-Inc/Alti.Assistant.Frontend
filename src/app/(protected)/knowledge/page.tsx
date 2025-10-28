@@ -77,7 +77,14 @@ function DocumentsPage() {
         </div>
         {activeConversation?.knowledgebaseId && (
           <div>
-            <Trash />
+            <Trash
+              onClick={() => {
+                onOpen({
+                  type: 'delete-knowledge-base',
+                  actionId: activeConversation?.knowledgebaseId,
+                });
+              }}
+            />
           </div>
         )}
       </div>

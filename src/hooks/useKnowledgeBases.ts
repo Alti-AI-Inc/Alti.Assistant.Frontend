@@ -1,4 +1,5 @@
 import {
+  deleteKnowledgeBase,
   deleteKnowledgeBaseFile,
   fetchKnowledgeBaseConversations,
   fetchKnowledgeBaseList,
@@ -6,6 +7,7 @@ import {
   KnowledgeBaseFilesResponse,
   loadSingleBaseConversation,
 } from '@/actions/knowledgeBaseAction';
+import { useConversationsStore } from '@/stores/useConverstionsStore';
 import {
   useMutation,
   useQuery,
@@ -120,6 +122,28 @@ export function useDeleteKnowledgeBaseFile(
       queryClient.invalidateQueries({
         queryKey: ['knowledgeBasesFiles', baseId, data?.accessToken],
       });
+      if (onClose) onClose();
+    },
+    onError: error => {
+      console.error('File deletion failed:', error);
+    },
+  });
+}
+
+export function useDeleteKnowledgeBase(onClose?: () => void) {
+  const queryClient = useQueryClient();
+  const { data } = useSession();
+  const { setActiveConversation } = useConversationsStore();
+
+  return useMutation({
+    mutationFn: (baseId: string) =>
+      deleteKnowledgeBase(baseId, data?.accessToken),
+    onSuccess: () => {
+      // ✅ Automatically refresh file list
+      queryClient.invalidateQueries({
+        queryKey: ['knowledgeBasesList', data?.accessToken],
+      });
+      setActiveConversation(null);
       if (onClose) onClose();
     },
     onError: error => {

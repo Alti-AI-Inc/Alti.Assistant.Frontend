@@ -12,6 +12,7 @@ type ModalType =
   | 'share-conversation'
   | 'create-knowledge-base'
   | 'delete-knowledge-base-file'
+  | 'delete-knowledge-base'
   | null;
 
 enum APP_STATUS {

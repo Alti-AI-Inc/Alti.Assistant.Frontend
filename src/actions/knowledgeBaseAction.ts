@@ -15,7 +15,6 @@ export const fileUploadAction = async (
     },
   );
   const data = await response.json();
-  console.log({ data });
   return data;
 };
 
@@ -32,7 +31,6 @@ export async function fetchKnowledgeBaseList(accessToken: string) {
     },
   );
   const data = await response.json();
-  console.log({ data });
   return data.data.knowledgeBases;
 }
 
@@ -52,19 +50,9 @@ export async function fetchKnowledgeBaseConversations(
     },
   );
   const data = await response.json();
-  console.log({ data });
   return data.data;
 }
-// id: '68e21338c5a42f0c0fd0b14d',
-// name: 'My knowledgebase',
-// userId: '6830a57675ab371485a0be3a',
-// description: '',
-// isActive: true,
-// documentsCount: 0,
-// totalFileSize: 0,
-// formattedFileSize: '0 Bytes',
-// createdAt: '2025-10-05T06:42:00.126Z',
-// updatedAt: '2025-10-05T06:42:00.126Z'
+
 export async function createKnowledgeBaseAction(
   name: string,
   accessToken: string,
@@ -83,7 +71,6 @@ export async function createKnowledgeBaseAction(
     },
   );
   const data = await response.json();
-  console.log({ data });
   return data;
 }
 
@@ -164,7 +151,6 @@ export async function getKnowledgeBaseFiles(
     },
   );
   const data = await response.json();
-  console.log('files response', data?.data);
   return data?.data;
 }
 
@@ -184,6 +170,26 @@ export const deleteKnowledgeBaseFile = async (
 ) => {
   // const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/${model}/delete-single-response/${objectId}`;
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/files/${fileId}`;
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.json();
+  } catch (error) {
+    console.error('Error deleting session:', error);
+    throw error;
+  }
+};
+export const deleteKnowledgeBase = async (
+  baseId: string,
+  token: string | null | undefined,
+) => {
+  // const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/${model}/delete-single-response/${objectId}`;
+  const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/${baseId}`;
   try {
     const response = await fetch(apiUrl, {
       method: 'DELETE',
