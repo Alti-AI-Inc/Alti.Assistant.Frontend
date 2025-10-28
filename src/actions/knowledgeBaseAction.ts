@@ -178,3 +178,23 @@ export async function getFileBlog(file: KnowledgeBaseFile) {
     console.log(error);
   }
 }
+export const deleteKnowledgeBaseFile = async (
+  fileId: string,
+  token: string | null | undefined,
+) => {
+  // const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/${model}/delete-single-response/${objectId}`;
+  const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/files/${fileId}`;
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.json();
+  } catch (error) {
+    console.error('Error deleting session:', error);
+    throw error;
+  }
+};

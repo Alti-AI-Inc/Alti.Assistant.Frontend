@@ -5,6 +5,7 @@ import { AddChatbotModal } from './AddChatbotModal';
 import CreateKnowledgeBaseModal from './CreateKnowledgeBaseModal';
 import { DeleteChatbotModal } from './DeleteChatBotModal';
 import { DeleteConversation } from './DeleteConversation';
+import { DeleteKnowledgeBaseFileModal } from './DeleteKbFileModal';
 import { EditChatbotModal } from './EditChatbotModal';
 import { ForgotPasswordDialog } from './ForgotPasswordDialog';
 import { Logout } from './logout';
@@ -36,7 +37,10 @@ export const ModalProvider = () => {
       {type === 'edit-chatbot' && <EditChatbotModal />}
       {type === 'delete-chatbot' && <DeleteChatbotModal />}
       {type === 'share-conversation' && <ShareConversationModal />}
-      {type==='create-knowledge-base' && <CreateKnowledgeBaseModal/>}
+      {type === 'create-knowledge-base' && <CreateKnowledgeBaseModal />}
+      {type === 'delete-knowledge-base-file' && (
+        <DeleteKnowledgeBaseFileModal />
+      )}
     </>
   );
 };

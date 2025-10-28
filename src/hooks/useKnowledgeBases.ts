@@ -1,11 +1,18 @@
 import {
+  deleteKnowledgeBaseFile,
   fetchKnowledgeBaseConversations,
   fetchKnowledgeBaseList,
   getKnowledgeBaseFiles,
   KnowledgeBaseFilesResponse,
   loadSingleBaseConversation,
 } from '@/actions/knowledgeBaseAction';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 
 export type Knowledgebase = {
   id: string;
@@ -95,5 +102,28 @@ export function useKnowledgeBaseFiles(
     queryFn: () => getKnowledgeBaseFiles(baseId, accessToken!),
     enabled: !!accessToken && !!baseId, // only run if token exists
     staleTime: 15000 * 60, // 15 min caching
+  });
+}
+
+export function useDeleteKnowledgeBaseFile(
+  baseId: string,
+  onClose: () => void,
+) {
+  const queryClient = useQueryClient();
+  const { data } = useSession();
+
+  return useMutation({
+    mutationFn: (fileId: string) =>
+      deleteKnowledgeBaseFile(fileId, data?.accessToken),
+    onSuccess: () => {
+      // ✅ Automatically refresh file list
+      queryClient.invalidateQueries({
+        queryKey: ['knowledgeBasesFiles', baseId, data?.accessToken],
+      });
+      if (onClose) onClose();
+    },
+    onError: error => {
+      console.error('File deletion failed:', error);
+    },
   });
 }

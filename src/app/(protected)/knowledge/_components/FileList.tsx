@@ -2,16 +2,17 @@
 
 import { getFileBlog, KnowledgeBaseFile } from '@/actions/knowledgeBaseAction';
 import { useKnowledgeBaseFiles } from '@/hooks/useKnowledgeBases';
+import { useModalStore } from '@/stores/useModalStore';
 import { Download, File, LoaderCircle, Trash } from 'lucide-react';
 import { useState } from 'react';
 
 interface FileListProps {
   baseId: string;
   accessToken?: string;
-  onView?: (file: KnowledgeBaseFile) => void;
 }
 
-export function FileList({ baseId, accessToken, onView }: FileListProps) {
+export function FileList({ baseId, accessToken }: FileListProps) {
+  const { onOpen } = useModalStore();
   const { data, isLoading } = useKnowledgeBaseFiles(baseId, accessToken);
 
   const [isDownloading, setIsDownloading] = useState(false);
@@ -47,12 +48,11 @@ export function FileList({ baseId, accessToken, onView }: FileListProps) {
   };
 
   return (
-    <div className="space-y-3 mt-6">
+    <div className="mt-6 space-y-3">
       {data.files.map(file => (
         <div
           key={file.id}
-          onClick={() => onView?.(file)}
-          className="flex cursor-pointer flex-row items-center justify-between rounded-lg bg-gray-100 py-4 ps-2 pe-4 transition-all hover:bg-gray-200"
+          className="flex flex-row items-center justify-between rounded-lg bg-gray-100 py-4 ps-2 pe-4 transition-all"
         >
           {/* Left: File info */}
           <div className="flex items-center space-x-4">
@@ -72,11 +72,24 @@ export function FileList({ baseId, accessToken, onView }: FileListProps) {
             {isDownloading ? (
               <LoaderCircle className="animate-spin" />
             ) : (
-              <Download size={20} onClick={e => handleDownload(e, file)} />
+              <Download
+                className="cursor-pointer"
+                size={20}
+                onClick={e => handleDownload(e, file)}
+              />
             )}
 
-            {/* Delete icon */}
-            <Trash size={20} className="transition-colors" />
+            <Trash
+              size={20}
+              className="transition-colors"
+              onClick={() =>
+                onOpen({
+                  type: 'delete-knowledge-base-file',
+                  actionId: file.id,
+                  actionId2:baseId
+                })
+              }
+            />
           </div>
         </div>
       ))}

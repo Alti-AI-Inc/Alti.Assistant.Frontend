@@ -7,17 +7,24 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useDeleteConversation } from '@/hooks/useConversations';
+import { useDeleteKnowledgeBaseFile } from '@/hooks/useKnowledgeBases';
 import { useModalStore } from '@/stores/useModalStore';
 import { LoaderCircle } from 'lucide-react';
 
-export function DeleteConversation() {
-  const { onClose, isOpen, actionId } = useModalStore();
+export function DeleteKnowledgeBaseFileModal() {
+  const {
+    onClose,
+    isOpen,
+    actionId: fileId,
+    actionId2: baseId,
+  } = useModalStore();
 
-  const deleteMutation = useDeleteConversation();
+  const deleteMutation = useDeleteKnowledgeBaseFile(baseId!, onClose);
+
   const handleDelete = async () => {
-    if (actionId) deleteMutation.mutate(actionId);
+    if (fileId) deleteMutation.mutate(fileId);
   };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="border-none ring-0 outline-none sm:max-w-[480px]">
@@ -25,9 +32,7 @@ export function DeleteConversation() {
           <DialogTitle>Delete</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 pt-4">
-          <h1 className="">
-            Are you sure you want to delete this conversation?
-          </h1>
+          <h1 className="">Are you sure you want to delete file?</h1>
           <div className="mt-4 flex w-full justify-end gap-4">
             <Button
               variant="outline"

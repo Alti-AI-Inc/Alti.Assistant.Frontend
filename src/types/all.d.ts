@@ -11,7 +11,7 @@ type ModalType =
   | 'edit-chatbot'
   | 'share-conversation'
   | 'create-knowledge-base'
-
+  | 'delete-knowledge-base-file'
   | null;
 
 enum APP_STATUS {
