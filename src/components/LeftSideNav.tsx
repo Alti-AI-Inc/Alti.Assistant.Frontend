@@ -17,6 +17,7 @@ import {
   LayoutGrid,
   LogOut,
   MessageSquare,
+  Network,
   Orbit,
   PanelLeftClose,
   Scale,
@@ -165,6 +166,13 @@ const LeftSideNav = () => {
               >
                 Connect apps
               </span>
+            </Button>
+            <Button
+              onClick={() => router.push('/workflows')}
+              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+            >
+              <Network />
+              <span className="text-sm font-normal">Workflows</span>
             </Button>
             <Button
               disabled={pathname === '/knowledge'}
