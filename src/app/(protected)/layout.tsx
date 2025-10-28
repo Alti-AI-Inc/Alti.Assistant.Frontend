@@ -20,6 +20,7 @@ import { Menu, PanelLeftClose, PanelRightClose, SquarePen } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 
 export default function ProtectedLayout({
   children,
@@ -29,6 +30,8 @@ export default function ProtectedLayout({
   const router = useRouter();
   const { isLeftSidebarOpen, isRightSidebarOpen, toggleRightSidebar } =
     useSidebarStore();
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
   const { isOpen: drawerOpen, close, open } = useDrawerStore();
 
   const pathname = usePathname();
@@ -38,6 +41,27 @@ export default function ProtectedLayout({
     setUserMessage,
     setSelectedOption,
   } = useConversationsStore();
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target as Node)
+      ) {
+        // Only close if sidebar is open
+        if (isRightSidebarOpen) toggleRightSidebar();
+      }
+    }
+
+    // Attach listener only when sidebar is open
+    if (isRightSidebarOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isRightSidebarOpen, toggleRightSidebar]);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -112,6 +136,7 @@ export default function ProtectedLayout({
         </main>
         {pathname === '/workflows' && (
           <div
+            ref={sidebarRef}
             className={cn(
               'bg-secondary fixed top-[56px] right-0 z-40 h-[calc(100vh-56px)] shadow-lg transition-all duration-300 ease-in-out md:top-0 md:h-screen',
               isRightSidebarOpen ? 'w-64' : 'w-10',
