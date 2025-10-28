@@ -16,6 +16,7 @@ const page = () => {
         src="/assets/hero-img.jpg"
         alt="Logo"
         height={607}
+        priority
         width={1500}
         className="mx-auto h-[500px] w-[88vw] rounded-[20px]"
       />
