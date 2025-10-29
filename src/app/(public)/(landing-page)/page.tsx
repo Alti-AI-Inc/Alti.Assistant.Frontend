@@ -1,19 +1,19 @@
-import AboutUs from './_landingPageComponents/AboutUs';
+import AboutUs from './_landingPageComponents/AiBuiltFor';
 import Automate from './_landingPageComponents/Automate';
 import Header from './_landingPageComponents/Header';
 import HeroSection from './_landingPageComponents/HeroSection';
-import OurMission from './_landingPageComponents/OurMission';
-import OurVision from './_landingPageComponents/OurVision';
+import Knowledge from './_landingPageComponents/Knowledge';
+import Search from './_landingPageComponents/Search';
 
 const page = () => {
   return (
     <div>
       <Header />
       <HeroSection />
-      <AboutUs />
-      <OurMission />
-      <OurVision />
-      <Automate/>
+      <AboutUs className="h-[700px]" />
+      <Search className="h-[700px]" />
+      <Knowledge className="h-[700px]" />
+      <Automate className="h-[700px]" />
     </div>
   );
 };

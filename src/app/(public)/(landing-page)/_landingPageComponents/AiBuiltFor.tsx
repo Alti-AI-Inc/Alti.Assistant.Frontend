@@ -1,10 +1,14 @@
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
-const AboutUs = () => {
+const AiBuiltFor = ({ className }: { className?: string }) => {
   return (
     <div
       id="about"
-      className="mx-auto flex h-[800px] w-full max-w-[1300px] items-center px-5 py-10 lg:px-10 lg:py-20"
+      className={cn(
+        'mx-auto flex w-full max-w-[1300px] items-center px-5 py-10 lg:px-10 lg:py-20',
+        className,
+      )}
     >
       <div className="flex w-full flex-wrap items-center justify-between">
         <div className="w-full lg:w-1/2">
@@ -35,4 +39,4 @@ const AboutUs = () => {
   );
 };
 
-export default AboutUs;
+export default AiBuiltFor;

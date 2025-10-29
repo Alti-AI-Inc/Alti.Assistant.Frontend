@@ -1,11 +1,15 @@
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import InfoBoxesContainer from './InfoBoxesContainer';
 
-const OurVision = () => {
+const Knowledge = ({ className }: { className?: string }) => {
   return (
     <div
       id="vision"
-      className="mx-auto flex h-[700px] w-full max-w-[1300px] items-center px-5 py-10 lg:px-10 lg:pt-0 lg:pb-20"
+      className={cn(
+        'mx-auto flex w-full max-w-[1300px] items-center px-5 py-10 lg:px-10 lg:pt-0 lg:pb-20',
+        className,
+      )}
     >
       <div className="flex w-full flex-wrap items-center justify-between">
         <div className="w-full lg:w-1/2">
@@ -31,4 +35,4 @@ const OurVision = () => {
   );
 };
 
-export default OurVision;
+export default Knowledge;
