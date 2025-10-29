@@ -1,21 +1,27 @@
 import {
+  ConversationListResponse,
   deleteConversation,
   fetchConversationList,
   fetchSavedConversationList,
   loadSingleConversation,
   loadSingleSharedConversation,
-  searchConversations
+  searchConversations,
 } from '@/actions/conversationsAction';
 import {
   ActiveConversation,
-  useConversationsStore
+  useConversationsStore,
 } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 
-export type Conversation = {
+export type ConversationDetails = {
   _id: string;
   conversationId: string;
   userId: string;
@@ -37,11 +43,20 @@ export type Conversation = {
 };
 
 export function useConversations(accessToken?: string) {
-  return useQuery({
+  return useInfiniteQuery<ConversationListResponse>({
     queryKey: ['conversations', accessToken],
-    queryFn: () => fetchConversationList(accessToken!),
-    enabled: !!accessToken, // only run if token exists
-    staleTime: 1000 * 60, // 1 min caching
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) =>
+      fetchConversationList(
+        accessToken!,
+        typeof pageParam === 'number'
+          ? (pageParam as number)
+          : Number(pageParam || 1),
+      ),
+    getNextPageParam: lastPage =>
+      lastPage.pagination.hasNext ? lastPage.pagination.page + 1 : undefined,
+    enabled: !!accessToken,
+    staleTime: 1000 * 60 * 10, // 10 min caching
   });
 }
 export function useSavedConversations(accessToken?: string) {
@@ -133,15 +148,15 @@ export function useDeleteConversation() {
       });
 
       // Snapshot previous data
-      const previousConversations = queryClient.getQueryData<Conversation[]>([
+      const previousConversations = queryClient.getQueryData<ConversationDetails[]>([
         'conversations',
         data?.accessToken,
       ]);
 
       // Optimistically remove conversation
-      queryClient.setQueryData<Conversation[]>(
+      queryClient.setQueryData<ConversationDetails[]>(
         ['conversations', data?.accessToken],
-        (old: Conversation[] = []) =>
+        (old: ConversationDetails[] = []) =>
           old.filter(c => c.conversationId !== conversationId),
       );
 

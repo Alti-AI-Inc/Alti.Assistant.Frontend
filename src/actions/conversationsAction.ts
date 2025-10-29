@@ -24,9 +24,34 @@ export async function PostConversation(
   return data;
 }
 
-export async function fetchConversationList(accessToken: string) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/conversations`,
+export interface Conversation {
+  _id: string;
+  conversationId: string;
+  title: string;
+  updatedAt: string;
+  createdAt: string;
+}
+
+export interface Pagination {
+  page: number;
+  limit: number;
+  total: number;
+  pages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
+export interface ConversationListResponse {
+  conversations: Conversation[];
+  pagination: Pagination;
+}
+
+export async function fetchConversationList(
+  accessToken: string,
+  page = 1,
+): Promise<ConversationListResponse> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/conversations?page=${page}&limit=20`,
     {
       method: 'GET',
       headers: {
@@ -36,9 +61,15 @@ export async function fetchConversationList(accessToken: string) {
       cache: 'no-store',
     },
   );
-  const data = await response.json();
-  return data.data.conversations;
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch conversations: ${res.statusText}`);
+  }
+
+  const data = await res.json();
+  return data.data as ConversationListResponse;
 }
+
 export async function fetchSavedConversationList(accessToken: string) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/conversations/saved?limit=30&page=1`,

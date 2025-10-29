@@ -1,5 +1,5 @@
 import { saveConversationAction } from '@/actions/conversationsAction';
-import { Conversation, useSavedConversations } from '@/hooks/useConversations';
+import { ConversationDetails, useSavedConversations } from '@/hooks/useConversations';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Bookmark, BookmarkCheck, LoaderCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -15,7 +15,7 @@ const SaveConversation = ({ conversationId }: { conversationId: string }) => {
   const queryClient = useQueryClient();
 
   const isSaved = conversations?.find(
-    (conversation: Conversation) =>
+    (conversation: ConversationDetails) =>
       conversation.conversationId === conversationId,
   )?.is_saved;
 
