@@ -13,7 +13,7 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
-  Bot,
+  BookA,
   LayoutGrid,
   LogOut,
   MessageSquare,
@@ -23,7 +23,7 @@ import {
   Scale,
   Search,
   Settings,
-  SquarePen,
+  SquarePen
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -154,7 +154,7 @@ const LeftSideNav = () => {
                 Saved chats
               </span>
             </Button>
-            <Button
+            {/* <Button
               onClick={() => {
                 router.push('/apps');
                 setTimeout(() => close(), 50);
@@ -167,7 +167,7 @@ const LeftSideNav = () => {
               >
                 Connect apps
               </span>
-            </Button>
+            </Button> */}
 
             <Button
               disabled={pathname === '/knowledge'}
@@ -181,11 +181,11 @@ const LeftSideNav = () => {
               }}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
             >
-              <Bot />
+              <BookA />
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Knowledge bots
+                Knowledge
               </span>
             </Button>
             <Button
@@ -200,7 +200,7 @@ const LeftSideNav = () => {
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Workflow automations
+                Workflows
               </span>
             </Button>
 
@@ -265,6 +265,9 @@ const LeftSideNav = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => router.push('/apps')}>
+                  <LayoutGrid className="text-black" /> Apps
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
                 </DropdownMenuItem>

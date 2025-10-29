@@ -13,7 +13,7 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
-  Bot,
+  BookA,
   LayoutGrid,
   LogOut,
   MessageSquare,
@@ -92,7 +92,7 @@ const LeftSideNavMobile = () => {
                 <MessageSquare />
                 <span className="text-sm font-normal">Saved chats</span>
               </Button>
-              <Button
+              {/* <Button
                 onClick={() => {
                   router.push('/apps');
                   close();
@@ -101,7 +101,7 @@ const LeftSideNavMobile = () => {
               >
                 <LayoutGrid />
                 <span className="text-sm font-normal"> Connect apps</span>
-              </Button>
+              </Button> */}
 
               <Button
                 disabled={pathname === '/knowledge'}
@@ -115,8 +115,8 @@ const LeftSideNavMobile = () => {
                 }}
                 className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
               >
-                <Bot />
-                <span className="text-sm font-normal">Knowledge bots</span>
+                <BookA />
+                <span className="text-sm font-normal">Knowledge</span>
               </Button>
               <Button
                 onClick={() => {
@@ -127,9 +127,7 @@ const LeftSideNavMobile = () => {
                 className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
               >
                 <Network />{' '}
-                <span className="text-sm font-normal">
-                  Workflow automations
-                </span>
+                <span className="text-sm font-normal">Workflows</span>
               </Button>
 
               <div className="mt-6 pl-4 text-sm text-gray-500">
@@ -179,6 +177,14 @@ const LeftSideNavMobile = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuGroup>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push('/apps');
+                    close();
+                  }}
+                >
+                  <LayoutGrid className="text-black" /> Apps
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
                     router.push('/upgrade');
