@@ -13,7 +13,7 @@ const Search = ({ className }: { className?: string }) => {
         )}
       >
         <div className="flex w-full flex-col-reverse flex-wrap items-center justify-between lg:flex-row">
-          <div className="mt-10 flex w-full -translate-x-20 justify-center lg:mb-0 lg:w-1/2 lg:justify-start">
+          <div className="mt-10 flex w-full -translate-x-10 justify-center lg:mb-0 lg:w-1/2 lg:justify-start">
             <Image
               height={400}
               width={1200}
@@ -21,7 +21,7 @@ const Search = ({ className }: { className?: string }) => {
               src="/assets/our-mission.png"
             />
           </div>
-          <div className="w-full lg:w-1/2">
+          <div className="flex w-full translate-x-12 justify-center lg:mt-0 lg:w-1/2 lg:justify-end">
             <InfoBoxesContainer
               title="Search"
               box1Title="Web Search"

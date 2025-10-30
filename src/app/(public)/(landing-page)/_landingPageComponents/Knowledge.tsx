@@ -12,7 +12,7 @@ const Knowledge = ({ className }: { className?: string }) => {
       )}
     >
       <div className="flex w-full flex-wrap items-center justify-between">
-        <div className="w-full lg:w-1/2">
+        <div className="w-full flex justify-center lg:w-1/2">
           <InfoBoxesContainer
             title="Knowledge"
             box1Title="Knowledge Bank"
@@ -21,7 +21,7 @@ const Knowledge = ({ className }: { className?: string }) => {
             box2Desc=" Private AI assistants trained on your company’s knowledge to deliver instant, context aware answers."
           />
         </div>
-        <div className="flex w-full translate-x-6 justify-center lg:mt-0 lg:w-1/2 lg:justify-end">
+        <div className="flex w-full translate-x-16 justify-center lg:mt-0 lg:w-1/2 lg:justify-end">
           <Image
             height={400}
             width={1200}
