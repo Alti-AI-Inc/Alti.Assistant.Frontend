@@ -1,7 +1,19 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 
 const HeroSection = () => {
+  const handleScroll = () => {
+    const element = document.querySelector('#about');
+    if (element) {
+      const offsetTop =
+        element.getBoundingClientRect().top + window.pageYOffset - 80; // 80px offset for navbar
+      window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth',
+      });
+    }
+  };
   return (
     <div className="mx-auto max-w-(--breakpoint-xl)">
       <h1 className="mx-auto mt-[110px] mb-2 w-full max-w-[1007px] text-center text-[50px] font-bold text-[#0E0D17]">
@@ -20,7 +32,11 @@ const HeroSection = () => {
         className="mx-auto h-[400px] w-[88vw] rounded-[20px]"
       />
       <div className="mt-12 flex items-center justify-center space-x-6">
-        <Button className="rounded-full bg-blue-700 text-white" size="lg">
+        <Button
+          onClick={handleScroll}
+          className="rounded-full bg-blue-700 text-white hover:bg-blue-800 hover:text-white"
+          size="lg"
+        >
           Learn More
         </Button>
         <Button className="rounded-full" size="lg">
