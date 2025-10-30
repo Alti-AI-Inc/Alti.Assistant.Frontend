@@ -27,7 +27,7 @@ const Generation = ({ className }: { className?: string }) => {
             width={1200}
             alt="Out vision image"
             src="/assets/Generation.png"
-            className="h-[350px] w-[500px] translate-y-10 object-contain"
+            className="h-[350px] w-[500px] translate-y-7.5 object-contain"
           />
         </div>
       </div>
