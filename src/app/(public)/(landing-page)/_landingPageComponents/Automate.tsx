@@ -8,12 +8,12 @@ const Automate = ({ className }: { className?: string }) => {
       <div
         id="mission"
         className={cn(
-          'mx-auto flex max-w-[1300px] items-center px-5 py-10 lg:px-10 lg:pt-0 lg:pb-20',
+          'mx-auto flex max-w-(--breakpoint-xl) items-center px-5 py-10 lg:px-0 lg:pt-0 lg:pb-20',
           className,
         )}
       >
         <div className="flex w-full flex-col-reverse flex-wrap items-center justify-between lg:flex-row">
-          <div className="mt-10 flex w-full translate-x-6 justify-center lg:mb-0 lg:w-1/2 lg:justify-start">
+          <div className="mt-10 flex w-full translate-x-0 justify-center lg:mb-0 lg:w-1/2 lg:justify-start">
             <Image
               height={350}
               width={500}
@@ -21,7 +21,7 @@ const Automate = ({ className }: { className?: string }) => {
               src="/assets/automate-image.png"
             />
           </div>
-          <div className="flex w-full translate-x-12 justify-center lg:mt-0 lg:w-1/2 lg:justify-end">
+          <div className="flex w-full justify-center lg:mt-0 lg:w-1/2 lg:justify-end">
             <InfoBoxesContainer
               title="Automate"
               box1Title="Task Automation"

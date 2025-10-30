@@ -7,12 +7,12 @@ const Knowledge = ({ className }: { className?: string }) => {
     <div
       id="vision"
       className={cn(
-        'mx-auto flex w-full max-w-[1300px] items-center px-5 py-10 lg:px-10 lg:pt-0 lg:pb-20',
+        'mx-auto flex w-full max-w-(--breakpoint-xl) items-center px-5 py-10 lg:px-0 lg:pt-0 lg:pb-20',
         className,
       )}
     >
       <div className="flex w-full flex-wrap items-center justify-between">
-        <div className="w-full flex justify-center lg:w-1/2">
+        <div className="w-full lg:w-1/2">
           <InfoBoxesContainer
             title="Knowledge"
             box1Title="Knowledge Bank"
@@ -21,7 +21,7 @@ const Knowledge = ({ className }: { className?: string }) => {
             box2Desc=" Private AI assistants trained on your company’s knowledge to deliver instant, context aware answers."
           />
         </div>
-        <div className="flex w-full translate-x-16 justify-center lg:mt-0 lg:w-1/2 lg:justify-end">
+        <div className="flex w-full translate-x-10 justify-center lg:mt-0 lg:w-1/2 lg:justify-end">
           <Image
             height={400}
             width={1200}

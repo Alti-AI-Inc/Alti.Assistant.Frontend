@@ -6,7 +6,7 @@ const AiBuiltFor = ({ className }: { className?: string }) => {
     <div
       id="about"
       className={cn(
-        'mx-auto flex w-full max-w-[1300px] items-center px-5 py-10 lg:px-10 lg:py-20',
+        'mx-auto flex w-full max-w-(--breakpoint-xl) items-center px-5 py-10 lg:px-00 lg:py-20',
         className,
       )}
     >

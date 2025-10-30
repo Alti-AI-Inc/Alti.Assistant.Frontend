@@ -8,7 +8,7 @@ const Search = ({ className }: { className?: string }) => {
       <div
         id="mission"
         className={cn(
-          'mx-auto flex w-full max-w-[1300px] items-center px-5 py-10 lg:px-10 lg:pt-0 lg:pb-20',
+          'mx-auto flex w-full max-w-(--breakpoint-xl) items-center px-5 py-10 lg:px-0 lg:pt-0 lg:pb-20',
           className,
         )}
       >
@@ -21,7 +21,7 @@ const Search = ({ className }: { className?: string }) => {
               src="/assets/our-mission.png"
             />
           </div>
-          <div className="flex w-full translate-x-12 justify-center lg:mt-0 lg:w-1/2 lg:justify-end">
+          <div className="flex w-full justify-center lg:mt-0 lg:w-1/2 lg:justify-end">
             <InfoBoxesContainer
               title="Search"
               box1Title="Web Search"
