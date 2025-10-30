@@ -6,7 +6,7 @@ const AiBuiltFor = ({ className }: { className?: string }) => {
     <div
       id="about"
       className={cn(
-        'mx-auto flex w-full max-w-(--breakpoint-xl) items-center px-5 py-10 lg:px-00 lg:py-20',
+        'mx-auto flex w-full max-w-(--breakpoint-xl) items-center px-5 py-10 lg:px-0 lg:py-20',
         className,
       )}
     >
@@ -22,10 +22,10 @@ const AiBuiltFor = ({ className }: { className?: string }) => {
             information into instant, actionable insight. Centered around three
             core pillars of search, knowledge, and automate, we enable teams to
             find answers faster, preserve critical expertise, and streamline
-            operations through intelligent automation.
+            operations through intelligent automation and workflows.
           </p>
         </div>
-        <div className="flex w-full translate-x-12 justify-center lg:mt-0 lg:w-1/2 lg:justify-end">
+        <div className="flex w-full translate-x-7 justify-center lg:mt-0 lg:w-1/2 lg:justify-end">
           <Image
             height={400}
             width={1200}

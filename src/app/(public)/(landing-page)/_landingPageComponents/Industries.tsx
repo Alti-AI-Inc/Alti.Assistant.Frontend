@@ -1,36 +1,41 @@
-import Image from 'next/image';
+import { cn } from '@/lib/utils';
+import { Building, Car, Cog, DraftingCompass, Droplet, Factory, Forklift, Fuel, Hammer, Pickaxe, Rocket, Zap } from 'lucide-react';
 
 const industries = [
-  { icon: '/assets/industries-icons/construction.svg', title: 'Construction' },
-  { icon: '/assets/industries-icons/architecture.svg', title: 'Architecture' },
-  // { icon: '🏢', title: 'Real Estate' },
-  // { icon: '🧮', title: 'Engineering' },
-  // { icon: '⚙️', title: 'Manufacturing' },
-  // { icon: '🚗', title: 'Automotive' },
-  // { icon: '✈️', title: 'Aerospace' },
-  // { icon: '🚛', title: 'Logistics' },
-  // { icon: '⚡', title: 'Energy' },
-  // { icon: '🛢️', title: 'Oil' },
-  // { icon: '⛏️', title: 'Mining' },
-  // { icon: '💧', title: 'Utilities' },
+  { name: 'Construction', icon: <Hammer className="mr-6" /> },
+  { name: 'Architecture', icon: <DraftingCompass className="mr-6" /> },
+  { name: 'Real Estate', icon: <Building className="mr-6" /> },
+  { name: 'Engineering', icon: <Cog className="mr-6" /> },
+  { name: 'Manufacturing', icon: <Factory className="mr-6" /> },
+  { name: 'Automotive', icon: <Car className="mr-6" /> },
+  { name: 'Aerospace', icon: <Rocket className="mr-6" /> },
+  { name: 'Logistics', icon: <Forklift className="mr-6" /> },
+  { name: 'Energy', icon: <Zap className="mr-6" /> },
+  { name: 'Oil', icon: <Fuel className="mr-6" /> },
+  { name: 'Mining', icon: <Pickaxe className="mr-6" /> },
+  { name: 'Utilities', icon: <Droplet className="mr-6" /> },
 ];
 
-const Industries = () => {
+const Industries = ({ className }: { className?: string }) => {
   return (
-    <div className="mx-auto mt-6 max-w-[1340px] items-start px-4">
-      <div className="grid grid-cols-4 gap-6">
-        {industries.map(item => (
+    <div
+      id="industries"
+      className={cn(
+        'mx-auto w-full max-w-(--breakpoint-xl) px-5 py-10 lg:px-0 lg:py-20',
+        className,
+      )}
+    >
+      <h2 className="font-secondary font-montserrat text-center text-[32px] leading-[56px] font-bold text-[#000] md:text-5xl lg:text-start">
+        Industries We Serve
+      </h2>
+      <div className="mt-16 grid grid-cols-4 gap-6">
+        {industries.map((item, index) => (
           <div
-            key={item.title}
-            className="flex items-center space-x-4 rounded-md bg-gray-100 p-4"
+            key={index}
+            className="flex items-center rounded-2xl bg-gray-100 px-8 py-4 text-xl"
           >
-            <Image src={item.icon} alt={item.title} width={50} height={50} />
-            <div>
-              <h3 className="text-lg font-semibold">{item.title}</h3>
-              {/* <p className="text-muted-foreground text-sm">
-                {item.description}
-              </p> */}
-            </div>
+            {item.icon}
+            {item.name}
           </div>
         ))}
       </div>

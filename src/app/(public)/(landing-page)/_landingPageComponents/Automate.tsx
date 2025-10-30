@@ -23,7 +23,7 @@ const Automate = ({ className }: { className?: string }) => {
           </div>
           <div className="flex w-full justify-center lg:mt-0 lg:w-1/2 lg:justify-end">
             <InfoBoxesContainer
-              title="Automate"
+              title="Automation"
               box1Title="Task Automation"
               box1Desc="Execute one time AI-driven actions across connected apps and systems instantly."
               box2Desc="Build recurring, intelligent workflows that keep operations running automatically."
