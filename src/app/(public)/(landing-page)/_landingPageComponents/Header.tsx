@@ -22,11 +22,17 @@ const Header = () => {
     label: string;
     type: string;
   }) => {
+    const offset =
+      item.href === '#home'
+        ? 140
+        : item.href === '#features'
+          ? 280
+          : item.href === '#industries'
+            ? 150
+            : 80;
     if (item.type === 'anchor') {
       // Check if we're on the home page
       if (pathname === '/') {
-        // Handle anchor links with offset for current page
-        const offset = item.href === '#home' ? 140 : 80;
         const element = document.querySelector(item.href);
         if (element) {
           const offsetTop =
@@ -39,7 +45,7 @@ const Header = () => {
       } else {
         // Navigate to home page with anchor
         router.push(`/${item.href}`);
-        const offset = item.href === '#home' ? 140 : 80;
+
         setTimeout(() => {
           const element = document.querySelector(item.href);
           if (element) {
