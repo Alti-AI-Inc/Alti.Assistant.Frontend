@@ -6,7 +6,7 @@ const Search = ({ className }: { className?: string }) => {
   return (
     <div>
       <div
-        id="mission"
+        id="features"
         className={cn(
           'mx-auto flex w-full max-w-(--breakpoint-xl) items-center px-5 py-10 lg:px-0 lg:pt-0 lg:pb-20',
           className,

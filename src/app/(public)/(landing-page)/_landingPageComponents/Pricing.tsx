@@ -1,81 +1,78 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 import { CircleCheck } from 'lucide-react';
 
 const plans = [
   {
     name: 'Company Plan',
-    price: 19,
-    description:
-      'Get 20 AI-generated portraits with 2 unique styles and filters.',
-    features: [
-      '5 hours turnaround time',
-      '20 AI portraits',
-      'Choice of 2 styles',
-      'Choice of 2 filters',
-      '2 retouch credits',
-    ],
-    buttonText: 'Get 20 portraits in 5 hours',
+    per: 'company',
+    price: '1,000',
+    description: 'This price is per company.',
+    features: ['1TB shared storage'],
+    buttonText: 'Get Company Plan',
   },
   {
     name: 'User Plan',
-    price: 29,
+    price: 100,
+    per: 'user',
     isRecommended: true,
     description:
       'Get 50 AI-generated portraits with 5 unique styles and filters.',
-    features: [
-      '3 hours turnaround time',
-      '50 AI portraits',
-      'Choice of 5 styles',
-      'Choice of 5 filters',
-      '5 retouch credits',
-    ],
-    buttonText: 'Get 50 portraits in 3 hours',
+    features: ['100GB personal storage'],
+    buttonText: 'Get User Plan',
     isPopular: true,
   },
   {
     name: 'Additional Storage',
-    price: 49,
+    price: 1,
+    per: 'GB',
     description:
       'Get 100 AI-generated portraits with 10 unique styles and filters.',
-    features: [
-      '1-hour turnaround time',
-      '100 AI portraits',
-      'Choice of 10 styles',
-      'Choice of 10 filters',
-      '10 retouch credits',
-    ],
+    features: ['Expand company or user storage anytime'],
     buttonText: 'Get 100 portraits in 1 hour',
+    hideButton: true,
   },
 ];
 
 const Pricing = () => {
   return (
-    <div className="mx-auto w-full max-w-(--breakpoint-xl) px-5 py-10 lg:px-0 lg:py-20">
-      <h2 className="font-secondary font-montserrat w-full text-center text-[32px] leading-[56px] font-bold text-[#000] md:text-5xl">
-        Pricing
+    <div
+      id="pricing"
+      className="mx-auto mb-28 w-full max-w-(--breakpoint-xl) px-5 py-10 lg:px-0 lg:py-20"
+    >
+      <h2 className="font-secondary font-montserrat w-full text-center text-[32px] leading-[56px] font-bold text-[#000] md:text-5xl lg:text-center">
+        Our Pricing
       </h2>
-      <div className="mx-auto mt-12 grid max-w-(--breakpoint-lg) grid-cols-1 gap-8 sm:mt-16 lg:grid-cols-3">
+      <div className="mx-auto mt-12 grid grid-cols-1 gap-8 sm:mt-16 lg:grid-cols-3">
         {plans.map(plan => (
-          <div key={plan.name} className="rounded-lg border p-6">
-            <h3 className="text-lg font-medium">{plan.name}</h3>
-            <p className="mt-2 text-4xl font-bold">${plan.price}</p>
-            <p className="text-muted-foreground mt-4 font-medium">
-              {plan.description}
+          <div
+            key={plan.name}
+            className="h-fit rounded-lg border border-none bg-gray-100 p-6"
+          >
+            <h3 className="text-2xl font-semibold">{plan.name}</h3>
+            <p className="mt-2 text-4xl font-bold">
+              ${plan.price}
+              <span className="text-muted-foreground text-sm font-medium">
+                /{plan.per}
+              </span>
             </p>
-            <Separator className="my-4" />
-            <ul className="space-y-2">
+
+            <Separator className={cn('my-4', plan?.hideButton && 'hidden')} />
+            <ul className={cn('space-y-2', plan?.hideButton && 'hidden')}>
               {plan.features.map(feature => (
                 <li key={feature} className="flex items-start gap-2">
-                  <CircleCheck className="mt-1 h-4 w-4 text-green-600" />{' '}
+                  <CircleCheck className="mt-1 h-4 w-4 text-blue-700" />{' '}
                   {feature}
                 </li>
               ))}
             </ul>
             <Button
-              variant={plan.isPopular ? 'default' : 'outline'}
               size="lg"
-              className="mt-6 w-full"
+              className={cn(
+                'mt-6 w-full bg-blue-700 text-white hover:bg-blue-800 hover:text-white',
+                plan?.hideButton && 'hidden',
+              )}
             >
               {plan.buttonText}
             </Button>

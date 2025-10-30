@@ -10,15 +10,15 @@ import Search from './_landingPageComponents/Search';
 
 const page = () => {
   return (
-    <div>
+    <div id="home">
       <Header />
       <HeroSection />
       <AboutUs className="h-[700px]" />
       <Search className="h-[500px]" />
       <Knowledge className="h-[500px]" />
       <Automate className="h-[600px]" />
-      <Industries className='h-[600px]'/>
-      <Pricing/>
+      <Industries className="h-[600px]" />
+      <Pricing />
       <Footer />
     </div>
   );

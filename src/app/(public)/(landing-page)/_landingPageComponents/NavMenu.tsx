@@ -11,23 +11,35 @@ export const NavMenu = (props: ComponentProps<typeof NavigationMenu>) => (
   <NavigationMenu {...props}>
     <NavigationMenuList className="gap-3 space-x-0 data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-start data-[orientation=vertical]:justify-start">
       <NavigationMenuItem>
-        <NavigationMenuLink className='hover:bg-transparent hover:text-white' asChild>
+        <NavigationMenuLink
+          className="hover:bg-transparent hover:text-white"
+          asChild
+        >
           <Link href="#">Home</Link>
         </NavigationMenuLink>
       </NavigationMenuItem>
       <NavigationMenuItem>
-        <NavigationMenuLink className='hover:bg-transparent hover:text-white' asChild>
+        <NavigationMenuLink
+          className="hover:bg-transparent hover:text-white"
+          asChild
+        >
           <Link href="#">Blog</Link>
         </NavigationMenuLink>
       </NavigationMenuItem>
       <NavigationMenuItem>
-        <NavigationMenuLink className='hover:bg-transparent hover:text-white' asChild>
+        <NavigationMenuLink
+          className="hover:bg-transparent hover:text-white"
+          asChild
+        >
           <Link href="#">About</Link>
         </NavigationMenuLink>
       </NavigationMenuItem>
       <NavigationMenuItem>
-        <NavigationMenuLink className='hover:bg-transparent hover:text-white' asChild>
-          <Link href="#">Contact Us</Link>
+        <NavigationMenuLink
+          className="hover:bg-transparent hover:text-white"
+          asChild
+        >
+          <Link href="/contact">Contact Us</Link>
         </NavigationMenuLink>
       </NavigationMenuItem>
     </NavigationMenuList>

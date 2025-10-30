@@ -21,7 +21,7 @@ const AiBuiltFor = ({ className }: { className?: string }) => {
             manage, access, and act on complex technical data, turning
             information into instant, actionable insight. Centered around three
             core pillars of search, knowledge, and automate, we enable teams to
-            find answers faster, preserve critical expertise, and streamline
+            find answers faster, preserve critical expertise, and streamline your business
             operations through intelligent automation and workflows.
           </p>
         </div>
