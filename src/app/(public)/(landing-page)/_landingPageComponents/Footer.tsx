@@ -5,9 +5,17 @@ import Image from 'next/image';
 function Footer() {
   const handleScroll = (id: string) => {
     const element = document.querySelector('#' + id);
+    const offset =
+      id === 'home'
+        ? 140
+        : id === 'features'
+          ? 280
+          : id === 'industries'
+            ? 150
+            : 80;
     if (element) {
       const offsetTop =
-        element.getBoundingClientRect().top + window.pageYOffset - 80; // 80px offset for navbar
+        element.getBoundingClientRect().top + window.pageYOffset - offset; // 80px offset for navbar
       window.scrollTo({
         top: offsetTop,
         behavior: 'smooth',
@@ -34,7 +42,7 @@ function Footer() {
           {/* Navigation Links Section */}
           <div className="w-full lg:w-auto">
             {/* Desktop/Tablet Grid Layout */}
-            <div className="mx-auto grid max-w-2xl grid-cols-2 gap-8 md:grid-cols-3 lg:mx-0 lg:max-w-none lg:gap-8">
+            <div className="mx-auto grid max-w-2xl grid-cols-2 gap-8 md:grid-cols-4 lg:mx-0 lg:max-w-none lg:gap-8">
               {/* Company Column */}
               <div className="flex w-full flex-col gap-6 lg:w-[200px] lg:gap-10">
                 <p className="text-base font-medium text-white">Company</p>
@@ -45,9 +53,25 @@ function Footer() {
                     </div>
                   </li>
 
-                  <li onClick={() => handleScroll('products')}>
+                  <li onClick={() => handleScroll('features')}>
                     <div className="font-secondary cursor-pointer text-sm font-normal text-white transition-colors hover:text-gray-300">
-                      Products
+                      Features
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div className="flex w-full flex-col gap-6 lg:w-[200px] lg:gap-10">
+                <p className="text-base font-medium text-white">Business</p>
+                <ul className="flex flex-col gap-4 lg:gap-6">
+                  <li onClick={() => handleScroll('industries')}>
+                    <div className="font-secondary cursor-pointer text-sm font-normal text-white transition-colors hover:text-gray-300">
+                      Industries
+                    </div>
+                  </li>
+
+                  <li onClick={() => handleScroll('pricing')}>
+                    <div className="font-secondary cursor-pointer text-sm font-normal text-white transition-colors hover:text-gray-300">
+                      Pricing
                     </div>
                   </li>
                 </ul>

@@ -31,26 +31,24 @@ const Header = () => {
             ? 150
             : 80;
     if (item.type === 'anchor') {
-      // Check if we're on the home page
       if (pathname === '/') {
         const element = document.querySelector(item.href);
         if (element) {
           const offsetTop =
-            element.getBoundingClientRect().top + window.pageYOffset - offset; // 80px offset for navbar
+            element.getBoundingClientRect().top + window.pageYOffset - offset;
           window.scrollTo({
             top: offsetTop,
             behavior: 'smooth',
           });
         }
       } else {
-        // Navigate to home page with anchor
         router.push(`/${item.href}`);
 
         setTimeout(() => {
           const element = document.querySelector(item.href);
           if (element) {
             const offsetTop =
-              element.getBoundingClientRect().top + window.pageYOffset - offset; // 80px offset for navbar
+              element.getBoundingClientRect().top + window.pageYOffset - offset;
             window.scrollTo({
               top: offsetTop,
               behavior: 'smooth',
@@ -64,16 +62,19 @@ const Header = () => {
     <div>
       <nav className="fixed inset-x-4 top-6 z-50 mx-auto h-16 max-w-(--breakpoint-xl) rounded-full border bg-black text-white dark:border-slate-700/70">
         <div className="mx-auto flex h-full items-center justify-between px-4">
-          <Link href="/">
-            <Image
-              src="/assets/logo-white.png"
-              alt="Logo"
-              height={25}
-              width={50}
-              className="ml-4"
-            />
-          </Link>
+          <div className="w-[174px]">
+            <Link href="/" className="inline-block w-12.5">
+              <Image
+                src="/assets/logo-white.png"
+                alt="Logo"
+                height={25}
+                width={50}
+                className="ml-4"
+              />
+            </Link>
+          </div>
           {/* Desktop Menu */}
+          {/*  className="absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 transform items-center space-x-5 text-sm" */}
           <ul className="flex items-center space-x-5 text-sm">
             {menuItems.map(subItem =>
               subItem.type === 'anchor' ? (
