@@ -15,9 +15,9 @@ const page = () => {
       <Header />
       <HeroSection />
       <AboutUs className="h-[700px]" />
-      <Search className="h-[500px]" />
-      <Knowledge className="h-[500px]" />
-      <Automate className="h-[500px]" />
+      <Search className="h-[600px]" />
+      <Knowledge className="h-[600px]" />
+      <Automate className="h-[600px]" />
       <Generation className="h-[600px]" />
       <Industries className="h-[600px]" />
       <Pricing />
