@@ -1,5 +1,22 @@
 import { cn } from '@/lib/utils';
-import { Building, Car, Cog, DraftingCompass, Droplet, Factory, Forklift, Fuel, Hammer, Pickaxe, Rocket, Zap } from 'lucide-react';
+import {
+  Building,
+  Car,
+  ChartNoAxesCombined,
+  CircleDollarSign,
+  Cog,
+  DraftingCompass,
+  Droplet,
+  Factory,
+  Forklift,
+  Fuel,
+  Hammer,
+  HandCoins,
+  Pickaxe,
+  Rocket,
+  Umbrella,
+  Zap
+} from 'lucide-react';
 
 const industries = [
   { name: 'Construction', icon: <Hammer className="mr-6" /> },
@@ -14,6 +31,10 @@ const industries = [
   { name: 'Oil', icon: <Fuel className="mr-6" /> },
   { name: 'Mining', icon: <Pickaxe className="mr-6" /> },
   { name: 'Utilities', icon: <Droplet className="mr-6" /> },
+  { name: 'Finance', icon: <CircleDollarSign className="mr-6" /> },
+  { name: 'Mortgage', icon: <HandCoins className="mr-6" /> },
+  { name: 'Insurance', icon: <Umbrella className="mr-6" /> },
+  { name: 'Capital Markets', icon: <ChartNoAxesCombined className="mr-6" /> },
 ];
 
 const Industries = ({ className }: { className?: string }) => {

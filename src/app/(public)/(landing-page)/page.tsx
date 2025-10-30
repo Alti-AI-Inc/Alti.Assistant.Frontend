@@ -5,6 +5,7 @@ import Header from './_landingPageComponents/Header';
 import HeroSection from './_landingPageComponents/HeroSection';
 import Industries from './_landingPageComponents/Industries';
 import Knowledge from './_landingPageComponents/Knowledge';
+import Pricing from './_landingPageComponents/Pricing';
 import Search from './_landingPageComponents/Search';
 
 const page = () => {
@@ -17,6 +18,7 @@ const page = () => {
       <Knowledge className="h-[500px]" />
       <Automate className="h-[600px]" />
       <Industries className='h-[600px]'/>
+      <Pricing/>
       <Footer />
     </div>
   );
