@@ -46,7 +46,7 @@ const Industries = ({ className }: { className?: string }) => {
         className,
       )}
     >
-      <h2 className="font-secondary font-montserrat text-center text-[32px] leading-[56px] font-bold text-[#000] md:text-5xl lg:text-start">
+      <h2 className="font-secondary font-montserrat text-center text-[32px] leading-[56px] font-bold text-[#000] md:text-5xl">
         Industries We Serve
       </h2>
       <div className="mt-16 grid grid-cols-4 gap-6">
