@@ -26,9 +26,9 @@ const Header = () => {
       item.href === '#home'
         ? 140
         : item.href === '#features'
-          ? 280
+          ? 220
           : item.href === '#industries'
-            ? 150
+            ? 120
             : 80;
     if (item.type === 'anchor') {
       if (pathname === '/') {

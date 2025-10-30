@@ -9,7 +9,7 @@ function Footer() {
       id === 'home'
         ? 140
         : id === 'features'
-          ? 280
+          ? 220
           : id === 'industries'
             ? 150
             : 80;
