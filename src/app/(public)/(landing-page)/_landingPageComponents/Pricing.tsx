@@ -1,37 +1,81 @@
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { CircleCheck } from 'lucide-react';
 
 const plans = [
   {
-    name: 'Company Plan',
-    per: 'company',
-    price: '1,000',
-    description: 'This price is per company.',
-    features: ['1TB shared storage'],
-    buttonText: 'Get Company Plan',
-  },
-  {
-    name: 'User Plan',
+    name: 'Explore',
     price: 100,
-    per: 'user',
-    isRecommended: true,
-    description:
-      'Get 50 AI-generated portraits with 5 unique styles and filters.',
-    features: ['100GB personal storage'],
-    buttonText: 'Get User Plan',
-    isPopular: true,
+    description: 'Private assistant, smarter tools.',
+    features: [
+      'Knowledge Bank → 10 GB',
+      'Knowledge Bots → 1',
+      'Ingestion Connectors → 1',
+      'AI Tasks → 1,000',
+      'AI Workflows → 100',
+      'Web Search → 1,000',
+      'Deep Research → 10',
+      'Text Generations → 1,000',
+      'Code Generations → 100',
+    ],
+    buttonText: 'Select Plan',
+    currentPlan: false,
   },
   {
-    name: 'Additional Storage',
-    price: 1,
-    per: 'GB',
-    description:
-      'Get 100 AI-generated portraits with 10 unique styles and filters.',
-    features: ['Expand company or user storage anytime'],
-    buttonText: 'Get 100 portraits in 1 hour',
-    hideButton: true,
+    name: 'Professional',
+    price: 250,
+    isRecommended: true,
+    description: 'Advanced AI, deeper knowledge.',
+    features: [
+      'Knowledge Bank → 100 GB',
+      'Knowledge Bots → 10',
+      'Ingestion Connectors → 10',
+      'AI Tasks → 10,000',
+      'AI Workflows → 1,000',
+      'Web Search → 10,000',
+      'Deep Research → 100',
+      'Text Generations → 10,000',
+      'Code Generations → 1,000',
+    ],
+    buttonText: 'Select Plan',
+    currentPlan: false,
+  },
+  {
+    name: 'Business',
+    price: 500,
+    isRecommended: false,
+    description: 'Scale your operations with powerful AI tools.',
+    features: [
+      'Knowledge Bank → 500 GB',
+      'Knowledge Bots → 50',
+      'Ingestion Connectors → 50',
+      'AI Tasks → 50,000',
+      'AI Workflows → 5,000',
+      'Web Search → 50,000',
+      'Deep Research → 500',
+      'Text Generations → 50,000',
+      'Code Generations → 5,000',
+    ],
+    buttonText: 'Select Plan',
+    currentPlan: false,
+  },
+  {
+    name: 'Enterprise',
+    price: '1,000',
+    isRecommended: false,
+    description: 'Enterprise-grade intelligence and scalability.',
+    features: [
+      'Knowledge Bank → 1 TB',
+      'Knowledge Bots → 100',
+      'Ingestion Connectors → 100',
+      'AI Tasks → 100,000',
+      'AI Workflows → 10,000',
+      'Web Search → 100,000',
+      'Deep Research → 1,000',
+      'Text Generations → 100,000',
+      'Code Generations → 10,000',
+    ],
+    buttonText: 'Select Plan',
+    currentPlan: false,
   },
 ];
 
@@ -44,38 +88,38 @@ const Pricing = () => {
       <h2 className="font-secondary font-montserrat w-full text-center text-[32px] leading-[56px] font-bold text-[#000] md:text-5xl lg:text-center">
         Our Pricing
       </h2>
-      <div className="mx-auto mt-12 grid grid-cols-1 gap-8 sm:mt-16 lg:grid-cols-3">
+      <div className="mx-aut mt-12 grid w-full grid-cols-1 gap-5 lg:grid-cols-4">
         {plans.map(plan => (
-          <div
-            key={plan.name}
-            className="h-fit rounded-lg border border-none bg-gray-100 p-6"
-          >
-            <h3 className="text-2xl font-semibold">{plan.name}</h3>
+          <div key={plan.name} className="bg-secondary rounded-lg border p-6">
+            <h3 className="text-lg font-medium">{plan.name}</h3>
             <p className="mt-2 text-4xl font-bold">
-              ${plan.price}
+              ${plan.price}{' '}
               <span className="text-muted-foreground text-sm font-medium">
-                /{plan.per}
+                /month
               </span>
             </p>
-
-            <Separator className={cn('my-4', plan?.hideButton && 'hidden')} />
-            <ul className={cn('space-y-2', plan?.hideButton && 'hidden')}>
-              {plan.features.map(feature => (
-                <li key={feature} className="flex items-start gap-2">
-                  <CircleCheck className="mt-1 h-4 w-4 text-blue-700" />{' '}
-                  {feature}
-                </li>
-              ))}
-            </ul>
+            {/* <p className="text-muted-foreground mt-4 font-medium">
+                  {plan.description}
+                </p> */}
             <Button
               size="lg"
               className={cn(
-                'mt-6 w-full bg-blue-700 text-white hover:bg-blue-800 hover:text-white',
-                plan?.hideButton && 'hidden',
+                'mt-4 mb-8 w-full bg-white text-black shadow-none hover:bg-white hover:text-black',
+                plan.currentPlan &&
+                  'bg-primary/90 hover:bg-primary/80 text-white hover:text-white',
               )}
             >
-              {plan.buttonText}
+              {plan.currentPlan ? 'Current Plan' : plan.buttonText}
             </Button>
+            {/* <Separator className="my-4" /> */}
+            <ul className="space-y-2">
+              {plan.features.map(feature => (
+                <li key={feature} className="flex items-center gap-2">
+                  <div className="size-1.5 rounded-full bg-black/80" />{' '}
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>
