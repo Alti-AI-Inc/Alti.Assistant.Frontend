@@ -9,7 +9,6 @@ const plans = [
     features: [
       'Knowledge Bank → 10 GB',
       'Knowledge Bots → 10',
-      'Ingestion Connectors → 10',
       'AI Tasks → 1,000',
       'AI Workflows → 100',
       'Web Search → 1,000',
@@ -28,7 +27,6 @@ const plans = [
     features: [
       'Knowledge Bank → 100 GB',
       'Knowledge Bots → 100',
-      'Ingestion Connectors → 100',
       'AI Tasks → 10,000',
       'AI Workflows → 1,000',
       'Web Search → 10,000',
@@ -47,7 +45,6 @@ const plans = [
     features: [
       'Knowledge Bank → 500 GB',
       'Knowledge Bots → 500',
-      'Ingestion Connectors → 500',
       'AI Tasks → 50,000',
       'AI Workflows → 5,000',
       'Web Search → 50,000',
