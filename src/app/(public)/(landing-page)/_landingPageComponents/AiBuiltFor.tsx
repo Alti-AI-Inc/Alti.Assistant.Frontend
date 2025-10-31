@@ -16,16 +16,13 @@ const AiBuiltFor = ({ className }: { className?: string }) => {
             AI Built for the Economy
           </h2>
           <p className="mt-2 md:mt-6 md:text-lg">
-            Alti is a secure, enterprise grade AI platform built to power
+            Alti is a secure, enterprise grade AI platform built to power heavy
             industrial intelligence. It helps organizations transform how they
             manage, access, and act on complex technical data, turning
-            information into instant, actionable insight. Centered around three
-            core pillars of search, knowledge, and automate, we enable teams to
-            find answers faster, preserve critical expertise, and streamline your business
-            operations through intelligent automation and workflows.
+            information into instant, actionable insight.
           </p>
         </div>
-        <div className="flex w-full translate-x-7 justify-center lg:mt-0 lg:w-1/2 lg:justify-end">
+        <div className="flex w-full  justify-end translate-y-7 lg:mt-0 lg:w-1/2 lg:justify-end">
           <Image
             height={400}
             width={1200}
