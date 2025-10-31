@@ -8,8 +8,8 @@ const plans = [
     description: 'Private assistant, smarter tools.',
     features: [
       'Knowledge Bank → 10 GB',
-      'Knowledge Bots → 1',
-      'Ingestion Connectors → 1',
+      'Knowledge Bots → 10',
+      'Ingestion Connectors → 10',
       'AI Tasks → 1,000',
       'AI Workflows → 100',
       'Web Search → 1,000',
@@ -27,8 +27,8 @@ const plans = [
     description: 'Advanced AI, deeper knowledge.',
     features: [
       'Knowledge Bank → 100 GB',
-      'Knowledge Bots → 10',
-      'Ingestion Connectors → 10',
+      'Knowledge Bots → 100',
+      'Ingestion Connectors → 100',
       'AI Tasks → 10,000',
       'AI Workflows → 1,000',
       'Web Search → 10,000',
@@ -46,8 +46,8 @@ const plans = [
     description: 'Scale your operations with powerful AI tools.',
     features: [
       'Knowledge Bank → 500 GB',
-      'Knowledge Bots → 50',
-      'Ingestion Connectors → 50',
+      'Knowledge Bots → 500',
+      'Ingestion Connectors → 500',
       'AI Tasks → 50,000',
       'AI Workflows → 5,000',
       'Web Search → 50,000',
@@ -65,8 +65,8 @@ const plans = [
     description: 'Enterprise-grade intelligence and scalability.',
     features: [
       'Knowledge Bank → 1 TB',
-      'Knowledge Bots → 100',
-      'Ingestion Connectors → 100',
+      'Knowledge Bots → 1,000',
+      'Ingestion Connectors → 1,000',
       'AI Tasks → 100,000',
       'AI Workflows → 10,000',
       'Web Search → 100,000',
