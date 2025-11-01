@@ -13,7 +13,7 @@ const Search = ({ className }: { className?: string }) => {
         )}
       >
         <div className="flex w-full flex-col-reverse flex-wrap items-center justify-between lg:flex-row">
-          <div className="mt-10 flex w-full -translate-x-10 justify-center lg:mb-0 lg:w-1/2 lg:justify-start">
+          <div className="mt-10 flex w-full lg:-translate-x-10 justify-center lg:mb-0 lg:w-1/2 lg:justify-start">
             <Image
               height={400}
               width={1200}

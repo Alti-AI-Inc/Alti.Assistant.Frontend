@@ -1,4 +1,4 @@
-import AboutUs from './_landingPageComponents/AiBuiltFor';
+import AiBuiltFor from './_landingPageComponents/AiBuiltFor';
 import Automate from './_landingPageComponents/Automate';
 import Footer from './_landingPageComponents/Footer';
 import Generation from './_landingPageComponents/Generation';
@@ -14,14 +14,16 @@ const page = () => {
     <div id="home">
       <Header />
       <HeroSection />
-      <AboutUs className="h-[700px]" />
-      <Search className="h-[600px]" />
-      <Knowledge className="h-[600px]" />
-      <Automate className="h-[600px]" />
-      <Generation className="h-[600px]" />
-      <Industries className="h-[600px]" />
+      <AiBuiltFor className="lg:h-[700px]" />
+      <Search className="lg:h-[600px]" />
+      <Knowledge className="lg:h-[600px]" />
+      <Automate className="lg:h-[600px]" />
+      <Generation className="lg:h-[600px]" />
+      <Industries className="lg:h-[600px]" />
       <Pricing />
-      <Footer />
+      <Footer /> 
+      
+       
     </div>
   );
 };

@@ -15,7 +15,7 @@ import {
   Pickaxe,
   Rocket,
   Umbrella,
-  Zap
+  Zap,
 } from 'lucide-react';
 
 const industries = [
@@ -49,14 +49,14 @@ const Industries = ({ className }: { className?: string }) => {
       <h2 className="font-secondary font-montserrat text-center text-[32px] leading-[56px] font-bold text-[#000] md:text-5xl">
         Industries We Serve
       </h2>
-      <div className="mt-16 grid grid-cols-4 gap-6">
+      <div className="mt-16 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
         {industries.map((item, index) => (
           <div
             key={index}
-            className="flex items-center rounded-2xl bg-gray-100 px-8 py-4 text-xl"
+            className="flex items-center rounded-2xl bg-gray-100 pl-4 md:px-8 py-4 md:text-xl"
           >
-            {item.icon}
-            {item.name}
+            <span className='flex-none'> {item.icon}</span>
+            <span> {item.name}</span>
           </div>
         ))}
       </div>
