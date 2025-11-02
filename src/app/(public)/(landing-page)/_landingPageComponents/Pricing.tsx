@@ -3,23 +3,6 @@ import { cn } from '@/lib/utils';
 
 const plans = [
   {
-    name: 'Explore',
-    price: 100,
-    description: 'Private assistant, smarter tools.',
-    features: [
-      'Knowledge Bank → 10 GB',
-      'Knowledge Bots → 10',
-      'AI Tasks → 1,000',
-      'AI Workflows → 100',
-      'Web Search → 1,000',
-      'Deep Research → 10',
-      'Text Generations → 1,000',
-      'Code Generations → 100',
-    ],
-    buttonText: 'Select Plan',
-    currentPlan: false,
-  },
-  {
     name: 'Professional',
     price: 250,
     isRecommended: true,
@@ -85,7 +68,7 @@ const Pricing = () => {
       <h2 className="font-secondary font-montserrat w-full text-center text-[32px] leading-[56px] font-bold text-[#000] md:text-5xl lg:text-center">
         Our Pricing
       </h2>
-      <div className="mx-aut mt-12 grid w-full grid-cols-1 gap-5 lg:grid-cols-4">
+      <div className="mx-aut mt-12 grid w-full grid-cols-1 gap-5 lg:grid-cols-3">
         {plans.map(plan => (
           <div key={plan.name} className="bg-secondary rounded-lg border p-6">
             <h3 className="text-lg font-medium">{plan.name}</h3>
