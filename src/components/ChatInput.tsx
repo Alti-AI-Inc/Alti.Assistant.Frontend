@@ -16,7 +16,14 @@ import {
   useConversationsStore,
 } from '@/stores/useConverstionsStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowRight, Microscope, Plus } from 'lucide-react';
+import {
+  ArrowRight,
+  Code,
+  Command,
+  Microscope,
+  PencilLine,
+  Plus,
+} from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
@@ -49,8 +56,8 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     ? `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/chat`
     : selectedOption === OPTIONS.IMAGE
       ? `${process.env.NEXT_PUBLIC_API_URL}/image/generate`
-      : selectedOption === OPTIONS.CODE
-        ? `${process.env.NEXT_PUBLIC_API_URL}/code/assistant`
+      // : selectedOption === OPTIONS.CODE
+      //   ? `${process.env.NEXT_PUBLIC_API_URL}/code/assistant`
         : selectedOption === OPTIONS.RESEARCH
           ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
           : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
@@ -192,7 +199,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               onClick={() => fileInputRef.current?.click()}
               className="relative flex cursor-pointer items-center"
             >
-              <Plus className="size-5.5 rounded-full border-2 border-gray-300 p-0.5" />
+              <Plus className="size-6 rounded-full border-2 border-gray-300 p-[3px]" />
               <input
                 ref={fileInputRef}
                 type="file"
@@ -206,7 +213,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
                 <Microscope
                   onClick={() => handleSelectOption(OPTIONS.RESEARCH)}
                   className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-1 text-black',
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
                     selectedOption === OPTIONS.RESEARCH &&
                       'bg-black text-white',
                   )}
@@ -214,6 +221,49 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Deep Research</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger>
+                <Command
+                  onClick={() => handleSelectOption(OPTIONS.TASK)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.TASK && 'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Task Automation</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <PencilLine
+                  onClick={() => handleSelectOption(OPTIONS.TEXT)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.TEXT && 'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Text Generation</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <Code
+                  onClick={() => handleSelectOption(OPTIONS.CODE)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.CODE && 'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Code Generation</p>
               </TooltipContent>
             </Tooltip>
           </div>

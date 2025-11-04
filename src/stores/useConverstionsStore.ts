@@ -8,8 +8,9 @@ export enum ROLES {
 export enum OPTIONS {
   RESEARCH = 'deep-research',
   CODE = 'code-generation',
+  TEXT = 'text-generation',
   IMAGE = 'image-generation',
-  // TASK = 'task-automation',
+  TASK = 'task-automation',
   // VIDEO = 'video-generation',
 }
 
@@ -99,7 +100,10 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
 
   updateActiveConversation: (message, role, conversationId, extras) =>
     set(state => {
-      if (!state.activeConversation?.conversationId && !state.activeConversation?.knowledgebaseId) {
+      if (
+        !state.activeConversation?.conversationId &&
+        !state.activeConversation?.knowledgebaseId
+      ) {
         // brand new conversation
         return {
           ...state,
