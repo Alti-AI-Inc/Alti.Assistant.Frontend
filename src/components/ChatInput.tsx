@@ -22,7 +22,7 @@ import {
   Microscope,
   PencilLine,
   Plus,
-  Zap
+  Zap,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -56,11 +56,11 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     ? `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/chat`
     : selectedOption === OPTIONS.IMAGE
       ? `${process.env.NEXT_PUBLIC_API_URL}/image/generate`
-      // : selectedOption === OPTIONS.CODE
-      //   ? `${process.env.NEXT_PUBLIC_API_URL}/code/assistant`
-        : selectedOption === OPTIONS.RESEARCH
-          ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
-          : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
+      : // : selectedOption === OPTIONS.CODE
+        //   ? `${process.env.NEXT_PUBLIC_API_URL}/code/assistant`
+        selectedOption === OPTIONS.RESEARCH
+        ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
+        : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
 
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
@@ -185,6 +185,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
                 : 'Chat with alti'
           }
           className="max-h-[500px] min-h-12 w-full resize-none overflow-y-auto border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+          autoFocus
         />
         {/* Responsive container */}
         <div className="flex items-end justify-between gap-2 py-2">
@@ -195,18 +196,25 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               activeConversation?.knowledgebaseId && 'hidden',
             )}
           >
-            <div
-              onClick={() => fileInputRef.current?.click()}
-              className="relative flex cursor-pointer items-center"
-            >
-              <Plus className="size-6 rounded-full border-2 border-gray-300 p-[3px]" />
-              <input
-                ref={fileInputRef}
-                type="file"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-            </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="relative flex cursor-pointer items-center"
+                >
+                  <Plus className="size-6 rounded-full border-2 border-gray-300 p-[3px]" />
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Upload Files</p>
+              </TooltipContent>
+            </Tooltip>
             {/* All options as buttons */}
             <Tooltip>
               <TooltipTrigger>
