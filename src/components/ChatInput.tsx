@@ -56,11 +56,11 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     ? `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/chat`
     : selectedOption === OPTIONS.IMAGE
       ? `${process.env.NEXT_PUBLIC_API_URL}/image/generate`
-      : // : selectedOption === OPTIONS.CODE
-        //   ? `${process.env.NEXT_PUBLIC_API_URL}/code/assistant`
-        selectedOption === OPTIONS.RESEARCH
-        ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
-        : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
+      : selectedOption === OPTIONS.CODE
+        ? `${process.env.NEXT_PUBLIC_API_URL}/search/code`
+        : selectedOption === OPTIONS.RESEARCH
+          ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
+          : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
 
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
@@ -102,12 +102,12 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
 
       updateActiveConversation(
         activeConversation?.knowledgebaseId
-          ? response.data.message
+          ? response.data?.message
           : selectedOption === OPTIONS.IMAGE
-            ? response.data.responseMessage.text
+            ? response.data?.responseMessage?.text
             : selectedOption === OPTIONS.CODE
-              ? response.data.responseMessage
-              : response.data.responseMessage.answer,
+              ? response.data?.responseMessage?.answer
+              : response.data?.responseMessage?.answer,
         ROLES.ASSISTANT,
 
         newId,
