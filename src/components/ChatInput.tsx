@@ -19,10 +19,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowRight,
   Code,
-  Command,
   Microscope,
   PencilLine,
   Plus,
+  Zap
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -226,7 +226,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
 
             <Tooltip>
               <TooltipTrigger>
-                <Command
+                <Zap
                   onClick={() => handleSelectOption(OPTIONS.TASK)}
                   className={cn(
                     'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',

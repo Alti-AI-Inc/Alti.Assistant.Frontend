@@ -130,7 +130,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
           <div
             className={cn(
-              'mx-auto w-full max-w-[796px] space-y-6 px-4 py-6 lg:pr-2',
+              'mx-auto w-full max-w-[796px] space-y-6 px-4 lg:px-2 py-6 lg:pr-0',
             )}
           >
             {activeConversation?.messages.length &&
@@ -164,7 +164,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                           <VideoComponentForContent content={message.content} />
                         ) : (
                           <div>
-                            <Streamdown className="w-full max-w-[85%] rounded-lg">
+                            <Streamdown className="w-full rounded-lg">
                               {message.content}
                             </Streamdown>
 

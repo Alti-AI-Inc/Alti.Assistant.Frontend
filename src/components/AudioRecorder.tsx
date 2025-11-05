@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { ArrowUp, LoaderCircle, Mic, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRef, useState } from 'react';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 export default function AudioRecorder({
   setMessage,
@@ -107,10 +108,17 @@ export default function AudioRecorder({
       {loadingText && !recording ? (
         <LoaderCircle className="size-6 flex-none animate-spin cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white" />
       ) : !recording && !loadingText ? (
-        <Mic
-          onClick={startRecording}
-          className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
-        />
+        <Tooltip>
+          <TooltipTrigger>
+            <Mic
+              onClick={startRecording}
+              className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
+            />
+          </TooltipTrigger>
+          <TooltipContent side="bottom">
+            <p>Speech to Text</p>
+          </TooltipContent>
+        </Tooltip>
       ) : (
         <div className="flex space-x-2">
           <X
