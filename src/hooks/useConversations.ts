@@ -117,7 +117,7 @@ export function useDeleteConversation() {
   const pathname = usePathname();
   const { onClose } = useModalStore();
   const router = useRouter();
-  // const { setActiveConversation } = useConversationsStore();
+  const { setActiveConversation } = useConversationsStore();
 
   return useMutation({
     mutationFn: async (conversationId: string) => {
@@ -132,6 +132,7 @@ export function useDeleteConversation() {
         activeConversation?._id === deletedId
       ) {
         router.push('/chat');
+        setActiveConversation(null);
       }
 
       queryClient.invalidateQueries({
@@ -140,43 +141,6 @@ export function useDeleteConversation() {
           q.queryKey[0] === 'saved-conversations',
       });
       onClose();
-    },
-    onMutate: async (conversationId: string) => {
-      // Cancel outgoing refetches so they don’t overwrite optimistic update
-      await queryClient.cancelQueries({
-        queryKey: ['conversations', data?.accessToken],
-      });
-
-      // Snapshot previous data
-      const previousConversations = queryClient.getQueryData<ConversationDetails[]>([
-        'conversations',
-        data?.accessToken,
-      ]);
-
-      // Optimistically remove conversation
-      queryClient.setQueryData<ConversationDetails[]>(
-        ['conversations', data?.accessToken],
-        (old: ConversationDetails[] = []) =>
-          old.filter(c => c.conversationId !== conversationId),
-      );
-
-      return { previousConversations };
-    },
-    onError: (err, conversationId, context) => {
-      // Rollback
-      if (context?.previousConversations) {
-        queryClient.setQueryData(
-          ['conversations', data?.accessToken],
-          context.previousConversations,
-        );
-      }
-      console.error('Failed to delete conversation:', err);
-    },
-    onSettled: () => {
-      // Always refetch to ensure consistency
-      queryClient.invalidateQueries({
-        queryKey: ['conversations', data?.accessToken],
-      });
     },
   });
 }
