@@ -1,3 +1,4 @@
+import Agents from './_landingPageComponents/Agents';
 import AiBuiltFor from './_landingPageComponents/AiBuiltFor';
 import Automate from './_landingPageComponents/Automate';
 import Footer from './_landingPageComponents/Footer';
@@ -19,11 +20,10 @@ const page = () => {
       <Knowledge className="lg:h-[600px]" />
       <Automate className="lg:h-[600px]" />
       <Generation className="lg:h-[600px]" />
+      <Agents className="lg:h-[600px]" />
       <Industries className="lg:h-[600px]" />
       <Pricing />
-      <Footer /> 
-      
-       
+      <Footer />
     </div>
   );
 };
