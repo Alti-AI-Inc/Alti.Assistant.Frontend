@@ -130,7 +130,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
           <div
             className={cn(
-              'mx-auto w-full max-w-[796px] space-y-6 px-4 lg:px-2 py-6 lg:pr-0',
+              'mx-auto w-full max-w-[796px] space-y-6 px-4 lg:px-2 py-6 lg:pr-1',
             )}
           >
             {activeConversation?.messages.length &&
