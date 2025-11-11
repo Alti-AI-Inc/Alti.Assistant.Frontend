@@ -1,5 +1,12 @@
 'use server';
 
+enum FileStatus {
+  PENDING = 'pending',
+  PROCESSING = 'processing',
+  COMPLETED = 'completed',
+  FAILED = 'failed',
+}
+
 export type KnowledgeBankFile = {
   id: string;
   fileName: string;
@@ -8,7 +15,7 @@ export type KnowledgeBankFile = {
   formattedFileSize: string;
   gcsUrl: string;
   isProcessed: boolean;
-  processingStatus: 'pending' | 'processing' | 'completed' | 'failed';
+  processingStatus: FileStatus;
   createdAt: string;
   updatedAt: string;
 };
@@ -194,7 +201,7 @@ export const processKnowledgeBankFile = async (
     },
   );
   const data = await response.json();
-  console.log('process file response', data);
+  // console.log('process file response', data);
   return data;
 };
 

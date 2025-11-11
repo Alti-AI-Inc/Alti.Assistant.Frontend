@@ -2,16 +2,28 @@
 
 import { KnowledgeBankFile } from '@/actions/knowledgeBankAction';
 import { getFileBlob } from '@/actions/knowledgeBaseAction';
-import { Button } from '@/components/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import {
   useKnowledgeBankFolderContent,
   useProcessKnowledgeBankFile,
 } from '@/hooks/useKnowledgeBank';
+import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
 import { Cog, Download, File, LoaderCircle, Trash } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 // import { Download, File, LoaderCircle, Trash } from 'lucide-react';
 import { useState } from 'react';
+
+enum FileStatus {
+  PENDING = 'pending',
+  PROCESSING = 'processing',
+  COMPLETED = 'completed',
+  FAILED = 'failed',
+}
 
 export function KnowledgeBankFolderContent({ folderId }: { folderId: string }) {
   const { onOpen } = useModalStore();
@@ -65,11 +77,6 @@ export function KnowledgeBankFolderContent({ folderId }: { folderId: string }) {
     }
   };
 
-  const handleProcess = async (file: KnowledgeBankFile) => {
-    console.log('processing file', file.id);
-    mutate({ fileId: file.id });
-  };
-
   return (
     <div className="mt-6 space-y-3">
       {data?.files?.map(file => (
@@ -87,29 +94,45 @@ export function KnowledgeBankFolderContent({ folderId }: { folderId: string }) {
             </div>
           </div>
 
-          <div>
-            Processing status:
-            {file.processingStatus}
-          </div>
-          <div>
-            <Button
-              variant="outline"
-              onClick={() => handleProcess(file)}
-              disabled={isPending}
-            >
-              {isPending ? (
-                <div className="flex items-center">
-                  <LoaderCircle className="mr-2 animate-spin" /> Processing
-                </div>
-              ) : (
-                <div className="flex items-center">
-                  <Cog className="mr-2" />
-                  Process Manually
-                </div>
-              )}
-            </Button>
-          </div>
           <div className="flex items-center space-x-3 text-gray-600">
+            {isPending ? (
+              <div className="flex items-center text-sm text-gray-600">
+                <LoaderCircle size={20} className="mr-2 animate-spin" />
+                Processing
+              </div>
+            ) : (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Cog
+                    size={20}
+                    className={cn(
+                      'mr-2 cursor-pointer text-gray-600 hover:text-gray-800',
+                      file.processingStatus === FileStatus.COMPLETED &&
+                        'text-green-600 hover:text-green-800',
+                    )}
+                    onClick={() => {
+                      if (
+                        file.processingStatus === FileStatus.COMPLETED ||
+                        file.processingStatus === FileStatus.PROCESSING
+                      )
+                        return;
+                      mutate({ fileId: file.id });
+                    }}
+                  />
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>
+                    {file.processingStatus === FileStatus.COMPLETED
+                      ? 'Processing completed'
+                      : file.processingStatus === FileStatus.FAILED
+                        ? 'Processing failed'
+                        : file.processingStatus === FileStatus.PROCESSING
+                          ? 'Processing in progress'
+                          : 'Process file'}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            )}
             {isDownloading ? (
               <LoaderCircle className="animate-spin" />
             ) : (
