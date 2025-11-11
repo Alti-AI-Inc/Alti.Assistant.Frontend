@@ -55,7 +55,7 @@ export function useKnowledgeBases(accessToken?: string) {
     queryKey: ['knowledgeBasesList', accessToken],
     queryFn: () => fetchKnowledgeBaseList(accessToken!),
     enabled: !!accessToken, // only run if token exists
-    staleTime: 15000 * 60, // 5 min caching
+    staleTime: 15000 * 60, // 15 min caching
   });
 }
 

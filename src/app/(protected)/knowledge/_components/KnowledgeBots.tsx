@@ -1,6 +1,6 @@
 'use client';
 
-import KbFileUpload from '@/components/KbFileUpload';
+import KnowledgeBaseFileUpload from '@/components/KnowledgeBaseFileUpload';
 import { Button } from '@/components/ui/button';
 // import { DeleteFilledIcon } from "@/components/dashboard/delete";
 // import DeleteModal from "@/components/delete";
@@ -67,7 +67,8 @@ function KnowledgeBots() {
             className="w-[115px]"
             onClick={() => onOpen({ type: 'create-knowledge-base' })}
           >
-            New Folder
+            {/* New Folder */}
+            New Chatbot
           </Button>
         </div>
       </div>
@@ -118,7 +119,7 @@ function KnowledgeBots() {
                 <SquarePen />
                 <span className="text-sm font-normal">Chat with bot</span>
               </Button>
-              <KbFileUpload baseId={activeConversation?.knowledgebaseId} />
+              <KnowledgeBaseFileUpload baseId={activeConversation?.knowledgebaseId} />
             </div>
           </div>
         </div>

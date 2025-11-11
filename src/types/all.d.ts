@@ -13,6 +13,9 @@ type ModalType =
   | 'create-knowledge-base'
   | 'delete-knowledge-base-file'
   | 'delete-knowledge-base'
+  | 'create-knowledge-bank-folder'
+  | 'delete-knowledge-bank-folder'
+  | 'delete-knowledge-bank-file'
   | null;
 
 enum APP_STATUS {

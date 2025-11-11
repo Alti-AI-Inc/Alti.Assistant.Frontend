@@ -1,5 +1,5 @@
 'use client';
-import { fileUploadAction } from '@/actions/knowledgeBaseAction';
+import { uploadfileToKnowledgeBaseAction } from '@/actions/knowledgeBaseAction';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { useQueryClient } from '@tanstack/react-query';
@@ -7,7 +7,7 @@ import { Check, Upload } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import React, { useRef } from 'react';
 
-const KbFileUpload = ({ baseId }: { baseId: string }) => {
+const KnowledgeBaseFileUpload = ({ baseId }: { baseId: string }) => {
   const { data } = useSession();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isUploading, setIsUploading] = React.useState(false);
@@ -29,11 +29,11 @@ const KbFileUpload = ({ baseId }: { baseId: string }) => {
       formData.append('file', file);
       formData.append('knowledgebotId', baseId);
       try {
-        const response = await fileUploadAction(
+        const response = await uploadfileToKnowledgeBaseAction(
           formData,
           data?.accessToken as string,
         );
-        console.log(response);
+
         if (response.success) {
           setIsUploadded(true);
           setIsUploading(false);
@@ -90,4 +90,4 @@ const KbFileUpload = ({ baseId }: { baseId: string }) => {
   );
 };
 
-export default KbFileUpload;
+export default KnowledgeBaseFileUpload;

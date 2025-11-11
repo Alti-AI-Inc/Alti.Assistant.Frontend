@@ -1,19 +1,27 @@
 'use client';
 
-import { getFileBlob, KnowledgeBaseFile } from '@/actions/knowledgeBaseAction';
-import { useKnowledgeBaseFiles } from '@/hooks/useKnowledgeBases';
+import { KnowledgeBankFile } from '@/actions/knowledgeBankAction';
+import { getFileBlob } from '@/actions/knowledgeBaseAction';
+import { Button } from '@/components/ui/button';
+import {
+  useKnowledgeBankFolderContent,
+  useProcessKnowledgeBankFile,
+} from '@/hooks/useKnowledgeBank';
 import { useModalStore } from '@/stores/useModalStore';
-import { Download, File, LoaderCircle, Trash } from 'lucide-react';
+import { Cog, Download, File, LoaderCircle, Trash } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+// import { Download, File, LoaderCircle, Trash } from 'lucide-react';
 import { useState } from 'react';
 
-interface FileListProps {
-  baseId: string;
-  accessToken?: string;
-}
-
-export function FileList({ baseId, accessToken }: FileListProps) {
+export function KnowledgeBankFolderContent({ folderId }: { folderId: string }) {
   const { onOpen } = useModalStore();
-  const { data, isLoading } = useKnowledgeBaseFiles(baseId, accessToken);
+  const { data: session } = useSession();
+  const { data, isLoading } = useKnowledgeBankFolderContent(
+    folderId,
+    session?.accessToken,
+  );
+
+  const { mutate, isPending } = useProcessKnowledgeBankFile(folderId);
 
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -32,7 +40,7 @@ export function FileList({ baseId, accessToken }: FileListProps) {
 
   const handleDownload = async (
     e: React.MouseEvent,
-    file: KnowledgeBaseFile,
+    file: KnowledgeBankFile,
   ) => {
     e.preventDefault();
     setIsDownloading(true);
@@ -57,14 +65,18 @@ export function FileList({ baseId, accessToken }: FileListProps) {
     }
   };
 
+  const handleProcess = async (file: KnowledgeBankFile) => {
+    console.log('processing file', file.id);
+    mutate({ fileId: file.id });
+  };
+
   return (
     <div className="mt-6 space-y-3">
-      {data.files.map(file => (
+      {data?.files?.map(file => (
         <div
           key={file.id}
           className="flex flex-row items-center justify-between rounded-lg bg-gray-100 py-4 ps-2 pe-4 transition-all"
         >
-          {/* Left: File info */}
           <div className="flex items-center space-x-4">
             <File className="text-gray-600" />
             <div className="flex flex-col">
@@ -75,10 +87,29 @@ export function FileList({ baseId, accessToken }: FileListProps) {
             </div>
           </div>
 
-          {/* Right: Download + Delete */}
+          <div>
+            Processing status:
+            {file.processingStatus}
+          </div>
+          <div>
+            <Button
+              variant="outline"
+              onClick={() => handleProcess(file)}
+              disabled={isPending}
+            >
+              {isPending ? (
+                <div className="flex items-center">
+                  <LoaderCircle className="mr-2 animate-spin" /> Processing
+                </div>
+              ) : (
+                <div className="flex items-center">
+                  <Cog className="mr-2" />
+                  Process Manually
+                </div>
+              )}
+            </Button>
+          </div>
           <div className="flex items-center space-x-3 text-gray-600">
-            {/* Download icon */}
-
             {isDownloading ? (
               <LoaderCircle className="animate-spin" />
             ) : (
@@ -94,8 +125,9 @@ export function FileList({ baseId, accessToken }: FileListProps) {
               className="transition-colors"
               onClick={() =>
                 onOpen({
-                  type: 'delete-knowledge-base-file',
+                  type: 'delete-knowledge-bank-file',
                   actionId: file.id,
+                  actionId2: folderId,
                 })
               }
             />

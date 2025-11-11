@@ -1,6 +1,8 @@
 'use server';
 
-export const fileUploadAction = async (
+import { KnowledgeBankFile } from "./knowledgeBankAction";
+
+export const uploadfileToKnowledgeBaseAction = async (
   formData: FormData,
   accessToken: string,
 ) => {
@@ -154,7 +156,7 @@ export async function getKnowledgeBaseFiles(
   return data?.data;
 }
 
-export async function getFileBlog(file: KnowledgeBaseFile) {
+export async function getFileBlob(file: KnowledgeBaseFile | KnowledgeBankFile) {
   try {
     const response = await fetch(file.gcsUrl);
     const blob = await response.blob();

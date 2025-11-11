@@ -3,7 +3,7 @@ import { useKnowledgeBaseConversations } from '@/hooks/useKnowledgeBases';
 import { ArrowLeft, LoaderCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import KbFileUpload from '../../../../../components/KbFileUpload';
+import KnowledgeBaseFileUpload from '../../../../../components/KnowledgeBaseFileUpload';
 import NewConversationButton from './NewConversationButton';
 
 const KnowledgeBaseConversations = ({ baseId }: { baseId: string }) => {
@@ -43,7 +43,7 @@ const KnowledgeBaseConversations = ({ baseId }: { baseId: string }) => {
         </div>
         <div className="ml-auto flex justify-end space-x-1">
           <NewConversationButton baseId={baseId} />
-          <KbFileUpload baseId={baseId} />
+          <KnowledgeBaseFileUpload baseId={baseId} />
         </div>
       </div>
       <div className="mt-2">

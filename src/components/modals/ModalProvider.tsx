@@ -2,11 +2,14 @@
 import { useModalStore } from '@/stores/useModalStore';
 import { useEffect } from 'react';
 import { AddChatbotModal } from './AddChatbotModal';
+import CreateKnowledgeBankFolderModal from './CreateKnowledgeBankFolderModal';
 import CreateKnowledgeBaseModal from './CreateKnowledgeBaseModal';
 import { DeleteChatbotModal } from './DeleteChatBotModal';
 import { DeleteConversation } from './DeleteConversation';
 import { DeleteKnowledgeBaseFileModal } from './DeleteKbFileModal';
 import { DeleteKnowledgeBaseModal } from './DeleteKbModal';
+import { DeleteKnowledgeBankFileModal } from './DeleteKnowledgeBankFileModal';
+import { DeleteKnowledgeBankFolderModal } from './DeleteKnowledgeBankFolderModal';
 import { EditChatbotModal } from './EditChatbotModal';
 import { ForgotPasswordDialog } from './ForgotPasswordDialog';
 import { Logout } from './logout';
@@ -42,6 +45,17 @@ export const ModalProvider = () => {
       {type === 'delete-knowledge-base-file' && (
         <DeleteKnowledgeBaseFileModal />
       )}
+      {type === 'delete-knowledge-bank-file' && (
+        <DeleteKnowledgeBankFileModal />
+      )}
+      {type === 'create-knowledge-bank-folder' && (
+        <CreateKnowledgeBankFolderModal />
+      )}
+      {
+        type === 'delete-knowledge-bank-folder' && (
+          <DeleteKnowledgeBankFolderModal />
+        )
+      }
       {type === 'delete-knowledge-base' && <DeleteKnowledgeBaseModal />}
     </>
   );
