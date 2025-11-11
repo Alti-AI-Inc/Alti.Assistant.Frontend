@@ -17,13 +17,12 @@ import {
   LayoutGrid,
   LogOut,
   MessageSquare,
-  Network,
   Orbit,
   PanelLeftClose,
   Scale,
   Search,
   Settings,
-  SquarePen
+  SquarePen,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -45,8 +44,7 @@ const LeftSideNav = () => {
     setShowStartLastMessage,
     setUserMessage,
   } = useConversationsStore();
-  const { isLeftSidebarOpen, toggleLeftSidebar, setRightSidebarOpen } =
-    useSidebarStore();
+  const { isLeftSidebarOpen, toggleLeftSidebar } = useSidebarStore();
 
   const hideSidebar = !isLeftSidebarOpen;
   const isLoggedIn = data?.accessToken;
@@ -186,21 +184,6 @@ const LeftSideNav = () => {
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
                 Knowledge
-              </span>
-            </Button>
-            <Button
-              onClick={() => {
-                router.push('/workflows');
-                setRightSidebarOpen(true);
-                setTimeout(() => close(), 50);
-              }}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <Network />{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Workflows
               </span>
             </Button>
 

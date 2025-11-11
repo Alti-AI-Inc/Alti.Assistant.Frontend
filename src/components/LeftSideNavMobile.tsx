@@ -11,18 +11,16 @@ import {
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
-import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
   BookA,
   LayoutGrid,
   LogOut,
   MessageSquare,
-  Network,
   Orbit,
   Scale,
   Search,
   Settings,
-  SquarePen,
+  SquarePen
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -35,7 +33,6 @@ const LeftSideNavMobile = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { close } = useDrawerStore();
-  const { setRightSidebarOpen } = useSidebarStore();
 
   const { onOpen } = useModalStore();
   const {
@@ -117,17 +114,6 @@ const LeftSideNavMobile = () => {
               >
                 <BookA />
                 <span className="text-sm font-normal">Knowledge</span>
-              </Button>
-              <Button
-                onClick={() => {
-                  router.push('/workflows');
-                  setRightSidebarOpen(true);
-                  setTimeout(() => close(), 50);
-                }}
-                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-              >
-                <Network />{' '}
-                <span className="text-sm font-normal">Workflows</span>
               </Button>
 
               <div className="mt-6 pl-4 text-sm text-gray-500">

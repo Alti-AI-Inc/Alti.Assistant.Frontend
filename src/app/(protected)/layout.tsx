@@ -3,7 +3,6 @@
 import LeftSideNav from '@/components/LeftSideNav';
 
 import LeftSideNavMobile from '@/components/LeftSideNavMobile';
-import RightSideNav from '@/components/RightSideNav';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -16,10 +15,10 @@ import { cn } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
-import { Menu, PanelLeftClose, PanelRightClose, SquarePen } from 'lucide-react';
+import { Menu, SquarePen } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function ProtectedLayout({
   children,
@@ -27,13 +26,10 @@ export default function ProtectedLayout({
   children: React.ReactNode;
 }>) {
   const router = useRouter();
-  const { isLeftSidebarOpen, isRightSidebarOpen, toggleRightSidebar } =
-    useSidebarStore();
- 
+  const { isLeftSidebarOpen } = useSidebarStore();
 
   const { isOpen: drawerOpen, close, open } = useDrawerStore();
 
-  const pathname = usePathname();
   const {
     setActiveConversation,
     setShowStartLastMessage,
@@ -112,37 +108,6 @@ export default function ProtectedLayout({
         <main className="bg-background w-full flex-1 overflow-y-auto">
           {children}
         </main>
-        {pathname === '/workflows' && (
-          <div
-            className={cn(
-              'bg-secondary fixed top-[56px] right-0 z-40 h-[calc(100vh-56px)] shadow-lg transition-all duration-300 ease-in-out md:top-0 md:h-screen',
-              isRightSidebarOpen ? 'w-68' : 'w-10',
-            )}
-          >
-            {/* Toggle button */}
-            <button
-              onClick={toggleRightSidebar}
-              className="absolute top-4 -left-4 p-1"
-            >
-              {isRightSidebarOpen ? (
-                <PanelRightClose
-                  size={20}
-                  className="ml-7 size-6 cursor-pointer p-0.5 text-gray-500 transition-transform duration-300"
-                />
-              ) : (
-                <PanelLeftClose
-                  size={20}
-                  className="ml-5 size-6 cursor-pointer p-0.5 text-gray-500 transition-transform duration-300"
-                />
-              )}
-            </button>
-
-            {/* Drawer content */}
-            <div className="h-full overflow-y-auto p-2 pt-8">
-              <RightSideNav isOpen={isRightSidebarOpen} />
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -10,15 +10,9 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex">
       <DashboardLeftSideNav />
-      <div
-        className={cn(
-          'w-full',
-          // !visibleRightSidebar && pathname==="/workflows" && "pr-64"
-        )}
-      >
+      <div className={cn('w-full')}>
         <main className="h-screen overflow-y-auto">{children}</main>
       </div>
-      {/* {pathname==="/workflows" && <RightSideBar visibleRightSidebar={visibleRightSidebar} toggleRightSidebar={toggleRightSidebar} />} */}
     </div>
   );
 };
