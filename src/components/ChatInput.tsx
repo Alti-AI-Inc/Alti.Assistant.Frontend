@@ -60,7 +60,9 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
         ? `${process.env.NEXT_PUBLIC_API_URL}/search/code`
         : selectedOption === OPTIONS.RESEARCH
           ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
-          : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
+          : selectedOption === OPTIONS.TEXT
+            ? `${process.env.NEXT_PUBLIC_API_URL}/search/writing`
+            : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
 
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
