@@ -28,7 +28,7 @@ const KnowledgeBankFileUpload = ({ folderId }: { folderId: string }) => {
       const formData = new FormData();
       formData.append('files', file);
       formData.append('folderId', folderId);
-      formData.append('processImmediately', false.toString());
+      // formData.append('processImmediately', false.toString());
       try {
         const response = await uploadfileToKnowledgeBankAction(
           formData,
