@@ -35,18 +35,24 @@ const BanksList = () => {
     <div className="relative h-full w-full p-8 pt-0">
       <div className="flex items-center justify-between">
         <Input placeholder="Search" className="max-w-sm" />
-        <div className="flex items-center justify-end">
-          <Button
-            className="w-[115px]"
-            onClick={() => {
-              onOpen({
-                type: 'create-knowledge-bank-folder',
-              });
-            }}
-          >
-            New Folder
-          </Button>
-        </div>
+        {!selectedFolder ? (
+          <div className="flex items-center justify-end">
+            <Button
+              className="w-[115px]"
+              onClick={() => {
+                onOpen({
+                  type: 'create-knowledge-bank-folder',
+                });
+              }}
+            >
+              New Folder
+            </Button>
+          </div>
+        ) : (
+          // <div className="mt-6 mb-4 flex items-center justify-end">
+          <KnowledgeBankFileUpload folderId={selectedFolder?.id} />
+          // </div>
+        )}
       </div>
       {selectedFolder ? (
         <div>
@@ -74,9 +80,7 @@ const BanksList = () => {
               />
             </div>
           </div>
-          <div className="mt-6 mb-4 flex items-center justify-end">
-            <KnowledgeBankFileUpload folderId={selectedFolder?.id} />
-          </div>
+
           <KnowledgeBankFolderContent folderId={selectedFolder?.id} />
         </div>
       ) : isLoading ? (

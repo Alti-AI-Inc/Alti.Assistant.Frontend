@@ -1,6 +1,6 @@
 'use server';
 
-import { KnowledgeBankFile } from "./knowledgeBankAction";
+import { KnowledgeBankFile } from './knowledgeBankAction';
 
 export const uploadfileToKnowledgeBaseAction = async (
   formData: FormData,
@@ -33,7 +33,7 @@ export async function fetchKnowledgeBaseList(accessToken: string) {
     },
   );
   const data = await response.json();
-  return data.data.knowledgeBases;
+  return data?.data?.knowledgeBases;
 }
 
 export async function fetchKnowledgeBaseConversations(

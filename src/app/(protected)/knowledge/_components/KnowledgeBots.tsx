@@ -63,13 +63,38 @@ function KnowledgeBots() {
       <div className="flex items-center justify-between">
         <Input placeholder="Search" className="max-w-sm" />
         <div className="flex items-center justify-end">
-          <Button
-            className="w-[115px]"
-            onClick={() => onOpen({ type: 'create-knowledge-base' })}
-          >
-            {/* New Folder */}
-            New Chatbot
-          </Button>
+          {activeConversation?.knowledgebaseId ? (
+            <div className="flex items-center justify-end">
+              <div className="flex items-center gap-5">
+                <div className="flex items-center space-x-2">
+                  <Button
+                    onClick={() => {
+                      setShowStartLastMessage(false);
+                      setUserMessage('');
+                      setSelectedOption(null);
+
+                      router.push('/chat');
+                    }}
+                    className="flex items-center justify-start text-sm"
+                  >
+                    <SquarePen />
+                    <span className="text-sm font-normal">Chat with bot</span>
+                  </Button>
+                  <KnowledgeBaseFileUpload
+                    baseId={activeConversation?.knowledgebaseId}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <Button
+              className="w-[115px]"
+              onClick={() => onOpen({ type: 'create-knowledge-base' })}
+            >
+              {/* New Folder */}
+              New Chatbot
+            </Button>
+          )}
         </div>
       </div>
       {activeConversation?.knowledgebaseId && (
@@ -102,33 +127,10 @@ function KnowledgeBots() {
         </div>
       )}
 
-      {activeConversation?.knowledgebaseId && (
-        <div className="mt-6 mb-4 flex items-center justify-end">
-          <div className="flex items-center gap-5">
-            <div className="flex items-center space-x-2">
-              <Button
-                onClick={() => {
-                  setShowStartLastMessage(false);
-                  setUserMessage('');
-                  setSelectedOption(null);
-
-                  router.push('/chat');
-                }}
-                className="flex items-center justify-start text-sm"
-              >
-                <SquarePen />
-                <span className="text-sm font-normal">Chat with bot</span>
-              </Button>
-              <KnowledgeBaseFileUpload baseId={activeConversation?.knowledgebaseId} />
-            </div>
-          </div>
-        </div>
-      )}
-
       <div
         className={`mt-6 flex w-full overflow-y-auto ${
           activeConversation?.knowledgebaseId
-            ? 'h-[calc(100vh_-_220px)] flex-col gap-2'
+            ? 'h-[calc(80vh_-_220px)] flex-col gap-2'
             : 'flex-row flex-wrap gap-5'
         }`}
       >
