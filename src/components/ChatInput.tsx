@@ -19,6 +19,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowRight,
   Code,
+  Image as ImageIcon,
   Microscope,
   PencilLine,
   Plus,
@@ -260,6 +261,20 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Text Generation</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <ImageIcon
+                  onClick={() => handleSelectOption(OPTIONS.IMAGE)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.IMAGE && 'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Image Generation</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
