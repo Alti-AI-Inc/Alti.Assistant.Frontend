@@ -18,6 +18,7 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowRight,
+  AudioLines,
   Code,
   Image as ImageIcon,
   Microscope,
@@ -247,6 +248,21 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Task Automation</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <AudioLines
+                  onClick={() => handleSelectOption(OPTIONS.Transcribe)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.Transcribe &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Transcribe Audio</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
