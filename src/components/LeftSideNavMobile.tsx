@@ -20,7 +20,7 @@ import {
   Scale,
   Search,
   Settings,
-  SquarePen
+  SquarePen,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -114,6 +114,21 @@ const LeftSideNavMobile = () => {
               >
                 <BookA />
                 <span className="text-sm font-normal">Knowledge</span>
+              </Button>
+              <Button
+                disabled={pathname === '/apps'}
+                onClick={() => {
+                  setActiveConversation(null);
+                  setShowStartLastMessage(false);
+                  setUserMessage('');
+                  setSelectedOption(null);
+                  if (pathname !== '/apps') router.push('/apps');
+                  close();
+                }}
+                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
+              >
+                <LayoutGrid />
+                <span className="text-sm font-normal">Connectors</span>
               </Button>
 
               <div className="mt-6 pl-4 text-sm text-gray-500">

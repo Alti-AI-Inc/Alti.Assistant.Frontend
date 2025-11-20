@@ -186,6 +186,25 @@ const LeftSideNav = () => {
                 Knowledge
               </span>
             </Button>
+            <Button
+              disabled={pathname === '/apps'}
+              onClick={() => {
+                setActiveConversation(null);
+                setShowStartLastMessage(false);
+                setUserMessage('');
+                setSelectedOption(null);
+                if (pathname !== '/apps') router.push('/apps');
+                close();
+              }}
+              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
+            >
+              <LayoutGrid />
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                Connectors
+              </span>
+            </Button>
 
             <div
               className={cn(
@@ -248,9 +267,6 @@ const LeftSideNav = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuGroup>
-                <DropdownMenuItem onClick={() => router.push('/apps')}>
-                  <LayoutGrid className="text-black" /> Apps
-                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
                 </DropdownMenuItem>
