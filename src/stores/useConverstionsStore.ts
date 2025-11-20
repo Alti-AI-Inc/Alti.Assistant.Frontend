@@ -11,6 +11,7 @@ export enum OPTIONS {
   TEXT = 'text-generation',
   IMAGE = 'image-generation',
   TASK = 'task-automation',
+  Transcribe = 'transcribe-audio',
   // VIDEO = 'video-generation',
 }
 
