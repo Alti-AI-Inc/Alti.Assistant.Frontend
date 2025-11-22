@@ -13,6 +13,7 @@ import { useActiveConversation } from '@/hooks/useConversations';
 import { cn, containsYouTubeUrl } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
+import { useSidebarStore } from '@/stores/useSidebarStore';
 import { EllipsisVertical, Share, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
@@ -30,6 +31,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     isLoading,
     // error,
   } = useActiveConversation(conversationId, data?.accessToken);
+  const { isLeftSidebarOpen } = useSidebarStore();
 
   const {
     setActiveConversation,
@@ -130,7 +132,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
           <div
             className={cn(
-              'mx-auto w-full max-w-[796px] space-y-6 px-4 lg:px-2 py-6 lg:pr-1',
+              'mx-auto w-full max-w-[796px] space-y-6 px-4 py-6 lg:px-2 lg:pr-1',
             )}
           >
             {activeConversation?.messages.length &&
@@ -207,8 +209,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 // activeConversation?.messages[
                 //   activeConversation?.messages.length - 1
                 // ]?.role === 'user' &&
-                  showStartLastMessage &&
-                  'h-[50dvh] md:h-[65dvh]',
+                showStartLastMessage && 'h-[50dvh] md:h-[65dvh]',
               )}
             ></div>
           </div>
@@ -233,7 +234,17 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       )} */}
 
       {/* Sticky chat input at bottom */}
-      <div className="sticky bottom-0 bg-white px-4 pb-4">
+      {/* <div className="sticky bottom-0 bg-white px-4 pb-4"> */}
+      <div
+        className={cn(
+          pathname === '/chat'
+            ? 'sticky bottom-0 bg-white px-4 pb-4'
+            : 'fixed bottom-0 left-0 px-4 pb-4 shadow-lg transition-all duration-300',
+          pathname !== '/chat' && isLeftSidebarOpen
+            ? 'ml-68 w-[calc(100%-272px)]'
+            : 'ml-10 w-[calc(100%-40px)]',
+        )}
+      >
         {/* <div className="mx-auto w-full max-w-3xl"> */}
         <ChatInput conversationId={conversationId} />
         {/* </div> */}
