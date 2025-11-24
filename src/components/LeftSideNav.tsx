@@ -14,7 +14,6 @@ import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
   BookA,
-  LayoutGrid,
   LogOut,
   MessageSquare,
   Orbit,
@@ -109,7 +108,7 @@ const LeftSideNav = () => {
               setUserMessage('');
               setSelectedOption(null);
               close();
-              router.push("/");
+              router.push('/');
             }}
             className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
           >
@@ -186,7 +185,7 @@ const LeftSideNav = () => {
                 Knowledge
               </span>
             </Button>
-            <Button
+            {/* <Button
               disabled={pathname === '/apps'}
               onClick={() => {
                 setActiveConversation(null);
@@ -204,7 +203,7 @@ const LeftSideNav = () => {
               >
                 Connectors
               </span>
-            </Button>
+            </Button> */}
 
             <div
               className={cn(
@@ -270,11 +269,12 @@ const LeftSideNav = () => {
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/legal')}>
-                  <Scale className="text-black" /> Legal
-                </DropdownMenuItem>
+
                 <DropdownMenuItem onClick={() => router.push('/settings')}>
                   <Settings className="text-black" /> Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/legal')}>
+                  <Scale className="text-black" /> Legal
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

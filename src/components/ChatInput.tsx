@@ -29,8 +29,7 @@ import {
   Minimize,
   PencilLine,
   Plus,
-  Presentation,
-  Zap,
+  Presentation
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -242,7 +241,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               </TooltipContent>
             </Tooltip>
 
-            <Tooltip>
+            {/* <Tooltip>
               <TooltipTrigger>
                 <Zap
                   onClick={() => handleSelectOption(OPTIONS.TASK)}
@@ -255,7 +254,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               <TooltipContent side="bottom">
                 <p>Task Automation</p>
               </TooltipContent>
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip>
               <TooltipTrigger>
                 <AudioLines

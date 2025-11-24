@@ -13,14 +13,13 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {
   BookA,
-  LayoutGrid,
   LogOut,
   MessageSquare,
   Orbit,
   Scale,
   Search,
   Settings,
-  SquarePen,
+  SquarePen
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -55,7 +54,7 @@ const LeftSideNavMobile = () => {
               setShowStartLastMessage(false);
               setUserMessage('');
               setSelectedOption(null);
-              router.push("/");
+              router.push('/');
               close();
             }}
             className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
@@ -115,7 +114,7 @@ const LeftSideNavMobile = () => {
                 <BookA />
                 <span className="text-sm font-normal">Knowledge</span>
               </Button>
-              <Button
+              {/* <Button
                 disabled={pathname === '/apps'}
                 onClick={() => {
                   setActiveConversation(null);
@@ -129,7 +128,7 @@ const LeftSideNavMobile = () => {
               >
                 <LayoutGrid />
                 <span className="text-sm font-normal">Connectors</span>
-              </Button>
+              </Button> */}
 
               <div className="mt-6 pl-4 text-sm text-gray-500">
                 Chat history
@@ -178,14 +177,14 @@ const LeftSideNavMobile = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuGroup>
-                <DropdownMenuItem
+                {/* <DropdownMenuItem
                   onClick={() => {
                     router.push('/apps');
                     close();
                   }}
                 >
                   <LayoutGrid className="text-black" /> Apps
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
                 <DropdownMenuItem
                   onClick={() => {
                     router.push('/upgrade');
@@ -196,19 +195,19 @@ const LeftSideNavMobile = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
-                    router.push('/legal');
-                    close();
-                  }}
-                >
-                  <Scale className="text-black" /> Legal
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
                     router.push('/settings');
                     close();
                   }}
                 >
                   <Settings className="text-black" /> Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push('/legal');
+                    close();
+                  }}
+                >
+                  <Scale className="text-black" /> Legal
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
