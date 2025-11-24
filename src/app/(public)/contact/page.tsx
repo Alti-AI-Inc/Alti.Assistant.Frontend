@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import Footer from '../(landing-page)/_landingPageComponents/Footer';
-import Header from '../(landing-page)/_landingPageComponents/Header';
+import Footer from '../(landing-page)/landingpage/_landingPageComponents/Footer';
+import Header from '../(landing-page)/landingpage/_landingPageComponents/Header';
 
 const page = () => {
   return (
@@ -16,7 +16,7 @@ const page = () => {
             alt="logo"
           />
         </div>
-        <div className="mx-auto w-full justify-center max-w-lg rounded-2xl p-6 md:px-10 lg:px-0 md:py-8 lg:w-1/2">
+        <div className="mx-auto w-full max-w-lg justify-center rounded-2xl p-6 md:px-10 md:py-8 lg:w-1/2 lg:px-0">
           <h2 className="font-secondary mb-10 text-2xl font-bold md:text-[40px]">
             Contact Us
           </h2>
