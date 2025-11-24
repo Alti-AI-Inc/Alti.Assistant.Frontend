@@ -271,20 +271,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
                 <p>Transcribe Audio</p>
               </TooltipContent>
             </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <PencilLine
-                  onClick={() => handleSelectOption(OPTIONS.TEXT)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.TEXT && 'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Draft Document</p>
-              </TooltipContent>
-            </Tooltip>
+
             <Tooltip>
               <TooltipTrigger>
                 <ImageIcon
@@ -345,21 +332,19 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
             </Tooltip>
             <Tooltip>
               <TooltipTrigger>
-                <Languages
-                  onClick={() =>
-                    handleSelectOption(OPTIONS.TRANSLATE_DOCUMENTS)
-                  }
+                <PencilLine
+                  onClick={() => handleSelectOption(OPTIONS.TEXT)}
                   className={cn(
                     'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.TRANSLATE_DOCUMENTS &&
-                      'bg-black text-white',
+                    selectedOption === OPTIONS.TEXT && 'bg-black text-white',
                   )}
                 />
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Translate Document</p>
+                <p>Draft Document</p>
               </TooltipContent>
             </Tooltip>
+
             <Tooltip>
               <TooltipTrigger>
                 <FileText
@@ -388,6 +373,23 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Summarize Document</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <Languages
+                  onClick={() =>
+                    handleSelectOption(OPTIONS.TRANSLATE_DOCUMENTS)
+                  }
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.TRANSLATE_DOCUMENTS &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Translate Document</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
