@@ -82,10 +82,10 @@ export default function ChangePassword() {
   return (
     <div className="flex-1">
       {/*  h-[calc(100vh_-_80px)] */}
-      <div className="flex h-full w-full items-center justify-center bg-white">
+      <div className="flex h-full w-full bg-white">
         <div className="flex w-full max-w-md items-center justify-center">
-          <div className="rounded-large flex w-full max-w-lg flex-col gap-4 px-8 pt-6 pb-10">
-            <p className="pb-4 text-center text-3xl font-semibold">
+          <div className="rounded-large flex w-full max-w-lg flex-col gap-4 pb-10">
+            <p className="pb-4 text-2xl font-semibold">
               Change Password
             </p>
             <Form {...form}>
