@@ -22,77 +22,77 @@ const previousChatHistory = [
   {
     id: 1,
     title: 'lorem ipsum dolor sit',
-    url: '/chat',
+    url: "/",
   },
   {
     id: 2,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: '/chat',
+    url: "/",
   },
   {
     id: 3,
     title: 'lorem ipsum  elit',
-    url: '/chat',
+    url: "/",
   },
   {
     id: 4,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: '/chat',
+    url: "/",
   },
   {
     id: 5,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: '/chat',
+    url: "/",
   },
   {
     id: 6,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: '/chat',
+    url: "/",
   },
   {
     id: 7,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: '/chat',
+    url: "/",
   },
   {
     id: 8,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: '/chat',
+    url: "/",
   },
   {
     id: 9,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: '/chat',
+    url: "/",
   },
   {
     id: 10,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: '/chat',
+    url: "/",
   },
   {
     id: 11,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: '/chat',
+    url: "/",
   },
   {
     id: 12,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: '/chat',
+    url: "/",
   },
   {
     id: 13,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: '/chat',
+    url: "/",
   },
   {
     id: 14,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: '/chat',
+    url: "/",
   },
   {
     id: 15,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: '/chat',
+    url: "/",
   },
 ];
 
@@ -104,7 +104,7 @@ export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
     // Collapsed → only icons
     return (
       <nav className="flex flex-col items-center gap-6 px-2 pt-8">
-        <button onClick={() => router.push('/chat')}>
+        <button onClick={() => router.push("/")}>
           <SquarePen className="h-5 w-5" />
         </button>
         <button onClick={() => onOpen({ type: 'search-chats' })}>
@@ -121,7 +121,7 @@ export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
       <div className="bg-secondary sticky top-0 z-30 pb-2">
         <div className="space-y-2 ">
           <Button
-            onClick={() => router.push('/chat')}
+            onClick={() => router.push("/")}
             className="-ml-3 flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
           >
             <SquarePen className="h-5 w-5" />

@@ -84,7 +84,7 @@ export default function Component() {
   return (
     <div>
       <div className="h-20 p-10">
-        <Link href="/chat">
+        <Link href="/">
           <Image
             src="/assets/logo-icon.png"
             alt="logo"

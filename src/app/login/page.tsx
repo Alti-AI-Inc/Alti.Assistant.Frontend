@@ -53,7 +53,7 @@ export default function Component() {
       });
       // console.log({ response });
       if (response.ok) {
-        router.push('/chat');
+        router.push("/");
       }
     } catch (error) {
       console.log(error);
@@ -64,7 +64,7 @@ export default function Component() {
   return (
     <div className="flex-1">
       <div className="h-20 p-10">
-        <Link href="/chat">
+        <Link href="/">
           <Image
             src="/assets/logo-icon.png"
             alt="logo"

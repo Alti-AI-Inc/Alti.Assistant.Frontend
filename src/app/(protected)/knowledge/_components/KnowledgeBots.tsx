@@ -73,7 +73,7 @@ function KnowledgeBots() {
                       setUserMessage('');
                       setSelectedOption(null);
 
-                      router.push('/chat');
+                      router.push("/");
                     }}
                     className="flex items-center justify-start text-sm"
                   >

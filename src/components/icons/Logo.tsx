@@ -16,7 +16,7 @@ const Logo = () => {
             fill={theme.resolvedTheme === 'dark' ? '#fff' : '#000'}
             viewBox="0 0 555.000000 555.000000"
             preserveAspectRatio="xMidYMid meet"
-            onClick={() => router.push('/chat')}
+            onClick={() => router.push("/")}
             className='cursor-pointer'
         >
             <g

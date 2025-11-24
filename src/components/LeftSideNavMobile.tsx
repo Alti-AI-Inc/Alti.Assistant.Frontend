@@ -55,7 +55,7 @@ const LeftSideNavMobile = () => {
               setShowStartLastMessage(false);
               setUserMessage('');
               setSelectedOption(null);
-              router.push('/chat');
+              router.push("/");
               close();
             }}
             className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"

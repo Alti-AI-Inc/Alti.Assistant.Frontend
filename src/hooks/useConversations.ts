@@ -131,7 +131,7 @@ export function useDeleteConversation() {
         pathname.endsWith(deletedId) ||
         activeConversation?._id === deletedId
       ) {
-        router.push('/chat');
+        router.push("/");
         setActiveConversation(null);
       }
 

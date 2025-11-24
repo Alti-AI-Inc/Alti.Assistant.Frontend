@@ -54,7 +54,7 @@ export default function ProtectedLayout({
           <SheetContent side="left" className="bg-secondary w-64 p-0">
             <SheetHeader>
               <SheetTitle>
-                <Link href="/chat">
+                <Link href="/">
                   <Image
                     src="/assets/logo-icon.png"
                     alt="logo"
@@ -69,7 +69,7 @@ export default function ProtectedLayout({
         </Sheet>
 
         {/* Center logo */}
-        <Link href="/chat">
+        <Link href="/">
           <Image
             src="/assets/logo-icon.png"
             alt="logo"
@@ -83,7 +83,7 @@ export default function ProtectedLayout({
             setShowStartLastMessage(false);
             setUserMessage('');
             setSelectedOption(null);
-            router.push('/chat');
+            router.push("/");
             close();
           }}
           className="flex items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
