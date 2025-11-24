@@ -20,10 +20,15 @@ import {
   ArrowRight,
   AudioLines,
   Code,
+  FileCheck,
+  FileText,
+  HardDrive,
   Image as ImageIcon,
   Microscope,
+  Minimize,
   PencilLine,
   Plus,
+  Presentation,
   Zap,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -276,7 +281,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
                 />
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Text Generation</p>
+                <p>Draft Document</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -290,7 +295,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
                 />
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Image Generation</p>
+                <p>Generate Image</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -304,7 +309,82 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
                 />
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Code Generation</p>
+                <p>Generate Code</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <Presentation
+                  onClick={() => handleSelectOption(OPTIONS.Presentation)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.Presentation &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Generate Presentation</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <HardDrive
+                  onClick={() => handleSelectOption(OPTIONS.COMPUTER_USE)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.COMPUTER_USE &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Computer Use</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <FileText
+                  onClick={() => handleSelectOption(OPTIONS.REVIEW_DOCUMENTS)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.REVIEW_DOCUMENTS &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Review Document</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <FileCheck
+                  onClick={() => handleSelectOption(OPTIONS.SUMMARIZE)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.SUMMARIZE &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Summarize Document</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <Minimize
+                  onClick={() => handleSelectOption(OPTIONS.EXTRACT_DATA)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.EXTRACT_DATA &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Extract Data</p>
               </TooltipContent>
             </Tooltip>
           </div>

@@ -12,6 +12,11 @@ export enum OPTIONS {
   IMAGE = 'image-generation',
   TASK = 'task-automation',
   Transcribe = 'transcribe-audio',
+  Presentation = 'presentation-generation',
+  COMPUTER_USE = 'computer-use',
+  REVIEW_DOCUMENTS = 'review-documents',
+  SUMMARIZE = 'summarize-documents',
+  EXTRACT_DATA = 'extract-data',
   // VIDEO = 'video-generation',
 }
 
