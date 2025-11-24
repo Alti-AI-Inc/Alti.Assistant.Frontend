@@ -24,6 +24,7 @@ import {
   FileText,
   HardDrive,
   Image as ImageIcon,
+  Languages,
   Microscope,
   Minimize,
   PencilLine,
@@ -340,6 +341,23 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Computer Use</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <Languages
+                  onClick={() =>
+                    handleSelectOption(OPTIONS.TRANSLATE_DOCUMENTS)
+                  }
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.TRANSLATE_DOCUMENTS &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Translate Document</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>

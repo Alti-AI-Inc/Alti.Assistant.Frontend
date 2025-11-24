@@ -17,6 +17,7 @@ export enum OPTIONS {
   REVIEW_DOCUMENTS = 'review-documents',
   SUMMARIZE = 'summarize-documents',
   EXTRACT_DATA = 'extract-data',
+  TRANSLATE_DOCUMENTS = 'translate-documents',
   // VIDEO = 'video-generation',
 }
 
