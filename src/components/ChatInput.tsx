@@ -26,6 +26,7 @@ import {
   FileCheck,
   File as FileIcon,
   FileMinus,
+  FileSpreadsheet,
   FileText,
   HardDrive,
   Image as ImageIcon,
@@ -35,8 +36,7 @@ import {
   PencilLine,
   Plus,
   Presentation,
-  Table,
-  Workflow,
+  Workflow
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -338,7 +338,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
             </Tooltip>
             <Tooltip>
               <TooltipTrigger>
-                <Table
+                <FileSpreadsheet
                   onClick={() =>
                     handleSelectOption(OPTIONS.GENERATE_SPREADSHEET)
                   }
