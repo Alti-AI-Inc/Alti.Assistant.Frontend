@@ -10,6 +10,7 @@ export enum OPTIONS {
   CODE = 'code-generation',
   TEXT = 'text-generation',
   IMAGE = 'image-generation',
+  EDIT_IMAGE = 'edit-generation',
   TASK = 'task-automation',
   Transcribe = 'transcribe-audio',
   Presentation = 'presentation-generation',
@@ -25,8 +26,6 @@ export enum OPTIONS {
   GENERATE_DIAGRAM = 'generate-diagram',
   GENERATE_TIMELINE = 'generate-timeline',
   GENERATE_FLAYER = 'generate-flayer',
-  
-  
 
   // VIDEO = 'video-generation',
 }

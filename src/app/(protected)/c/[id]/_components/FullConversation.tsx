@@ -209,7 +209,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 // activeConversation?.messages[
                 //   activeConversation?.messages.length - 1
                 // ]?.role === 'user' &&
-                showStartLastMessage && 'h-[50dvh] md:h-[65dvh]',
+                showStartLastMessage && 'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
               )}
             ></div>
           </div>

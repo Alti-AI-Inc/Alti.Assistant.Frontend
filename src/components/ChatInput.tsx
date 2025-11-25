@@ -30,13 +30,14 @@ import {
   FileText,
   HardDrive,
   Image as ImageIcon,
+  ImageUp,
   Languages,
   Microscope,
   Minimize,
   PencilLine,
   Plus,
   Presentation,
-  Workflow
+  Workflow,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -290,6 +291,21 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Generate Image</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <ImageUp
+                  onClick={() => handleSelectOption(OPTIONS.EDIT_IMAGE)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.EDIT_IMAGE &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Edit Image</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>

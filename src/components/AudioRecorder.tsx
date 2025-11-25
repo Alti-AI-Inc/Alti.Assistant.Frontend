@@ -88,7 +88,7 @@ export default function AudioRecorder({
 
   return (
     <div className="flex gap-4">
-      <div className={cn('flex h-6 w-28 items-end gap-1', recording && 'w-10')}>
+      <div className={cn('flex h-6 w-20 items-end gap-1', recording && 'w-10')}>
         {recording &&
           [...Array(10)].map((_, i) => (
             <motion.div
