@@ -2,6 +2,7 @@
 
 import { getTranscription } from '@/actions/transcription';
 // import { getTranscription } from '@/actions/transcription';
+import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { ArrowUp, LoaderCircle, Mic, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -87,9 +88,9 @@ export default function AudioRecorder({
 
   return (
     <div className="flex gap-4">
-      <div className="flex h-6 w-32 items-end gap-1">
+      <div className={cn('flex h-6 w-28 items-end gap-1', recording && 'w-10')}>
         {recording &&
-          [...Array(15)].map((_, i) => (
+          [...Array(10)].map((_, i) => (
             <motion.div
               key={i}
               className="w-1 rounded bg-neutral-800"

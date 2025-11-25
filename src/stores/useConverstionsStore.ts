@@ -18,6 +18,16 @@ export enum OPTIONS {
   SUMMARIZE = 'summarize-documents',
   EXTRACT_DATA = 'extract-data',
   TRANSLATE_DOCUMENTS = 'translate-documents',
+  GENERATE_REPORT = 'generate-report',
+  GENERATE_SPREADSHEET = 'generate-spreadsheet',
+  GENERATE_CHART = 'generate-chart',
+  GENERATE_MINDMAP = 'generate-mindmap',
+  GENERATE_DIAGRAM = 'generate-diagram',
+  GENERATE_TIMELINE = 'generate-timeline',
+  GENERATE_FLAYER = 'generate-flayer',
+  
+  
+
   // VIDEO = 'video-generation',
 }
 

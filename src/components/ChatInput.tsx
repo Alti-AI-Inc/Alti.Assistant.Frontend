@@ -19,8 +19,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowRight,
   AudioLines,
+  BrainCircuit,
+  ChartArea,
+  ChartNoAxesGantt,
   Code,
   FileCheck,
+  File as FileIcon,
+  FileMinus,
   FileText,
   HardDrive,
   Image as ImageIcon,
@@ -29,7 +34,9 @@ import {
   Minimize,
   PencilLine,
   Plus,
-  Presentation
+  Presentation,
+  Table,
+  Workflow,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -314,6 +321,114 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
                 <p>Generate Presentation</p>
               </TooltipContent>
             </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <FileMinus
+                  onClick={() => handleSelectOption(OPTIONS.GENERATE_REPORT)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.GENERATE_REPORT &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Generate Report</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <Table
+                  onClick={() =>
+                    handleSelectOption(OPTIONS.GENERATE_SPREADSHEET)
+                  }
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.GENERATE_SPREADSHEET &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Generate Spreadsheet</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <ChartArea
+                  onClick={() => handleSelectOption(OPTIONS.GENERATE_CHART)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.GENERATE_CHART &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Generate Chart</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <BrainCircuit
+                  onClick={() => handleSelectOption(OPTIONS.GENERATE_MINDMAP)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.GENERATE_MINDMAP &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Generate Mindmap</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <Workflow
+                  onClick={() => handleSelectOption(OPTIONS.GENERATE_DIAGRAM)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.GENERATE_DIAGRAM &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Generate Diagram</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <ChartNoAxesGantt
+                  onClick={() => handleSelectOption(OPTIONS.GENERATE_TIMELINE)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.GENERATE_TIMELINE &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Generate Timeline</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <FileIcon
+                  onClick={() => handleSelectOption(OPTIONS.GENERATE_FLAYER)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.GENERATE_FLAYER &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Generate Flyer</p>
+              </TooltipContent>
+            </Tooltip>
+            {/* generate ends here */}
             <Tooltip>
               <TooltipTrigger>
                 <HardDrive
