@@ -89,7 +89,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       <div
         className={cn(
           'sticky top-2 right-4 z-10 flex items-center justify-end pr-4',
-          pathname === "/" && 'hidden',
+          pathname === '/' && 'hidden',
         )}
       >
         <Button
@@ -237,10 +237,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       {/* <div className="sticky bottom-0 bg-white px-4 pb-4"> */}
       <div
         className={cn(
-          pathname === "/"
-            ? 'sticky bottom-0 bg-white px-4 pb-4'
+          'bg-white',
+          pathname === '/'
+            ? 'sticky bottom-0 px-4 pb-4'
             : 'fixed bottom-0 left-0 px-4 pb-4 shadow-lg transition-all duration-300',
-          pathname !== "/" && isLeftSidebarOpen
+          pathname !== '/' && isLeftSidebarOpen
             ? 'ml-68 w-[calc(100%-272px)]'
             : 'ml-10 w-[calc(100%-40px)]',
         )}
