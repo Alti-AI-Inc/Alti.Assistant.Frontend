@@ -28,7 +28,6 @@ import {
   FileMinus,
   FileSpreadsheet,
   FileText,
-  HardDrive,
   Image as ImageIcon,
   ImageUp,
   Languages,
@@ -37,7 +36,7 @@ import {
   PencilLine,
   Plus,
   Presentation,
-  Workflow,
+  Workflow
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -445,21 +444,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               </TooltipContent>
             </Tooltip>
             {/* generate ends here */}
-            <Tooltip>
-              <TooltipTrigger>
-                <HardDrive
-                  onClick={() => handleSelectOption(OPTIONS.COMPUTER_USE)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.COMPUTER_USE &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Computer Use</p>
-              </TooltipContent>
-            </Tooltip>
+           
             <Tooltip>
               <TooltipTrigger>
                 <PencilLine

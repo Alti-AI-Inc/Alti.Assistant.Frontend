@@ -14,7 +14,6 @@ export enum OPTIONS {
   TASK = 'task-automation',
   Transcribe = 'transcribe-audio',
   Presentation = 'presentation-generation',
-  COMPUTER_USE = 'computer-use',
   REVIEW_DOCUMENTS = 'review-documents',
   SUMMARIZE = 'summarize-documents',
   EXTRACT_DATA = 'extract-data',
