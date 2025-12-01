@@ -36,7 +36,7 @@ import {
   PencilLine,
   Plus,
   Presentation,
-  Workflow
+  Workflow,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -444,7 +444,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               </TooltipContent>
             </Tooltip>
             {/* generate ends here */}
-           
+
             <Tooltip>
               <TooltipTrigger>
                 <PencilLine
@@ -519,7 +519,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
                 />
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Extract Data</p>
+                <p>Analyze Document</p>
               </TooltipContent>
             </Tooltip>
           </div>
