@@ -31,13 +31,13 @@ import {
   Image as ImageIcon,
   ImageUp,
   Languages,
-  Layers,
   Microscope,
   Minimize,
+  NotebookPen,
   PencilLine,
   Plus,
   Presentation,
-  Workflow,
+  Workflow
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -324,7 +324,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
             </Tooltip>
             <Tooltip>
               <TooltipTrigger>
-                <Layers
+                <NotebookPen
                   onClick={() => handleSelectOption(OPTIONS.GENERATE_PLAN)}
                   className={cn(
                     'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
