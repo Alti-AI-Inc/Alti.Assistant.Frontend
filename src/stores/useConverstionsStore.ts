@@ -25,6 +25,7 @@ export enum OPTIONS {
   GENERATE_DIAGRAM = 'generate-diagram',
   GENERATE_TIMELINE = 'generate-timeline',
   GENERATE_FLAYER = 'generate-flayer',
+  GENERATE_PLAN = 'generate-plan',
 
   // VIDEO = 'video-generation',
 }

@@ -31,6 +31,7 @@ import {
   Image as ImageIcon,
   ImageUp,
   Languages,
+  Layers,
   Microscope,
   Minimize,
   PencilLine,
@@ -319,6 +320,21 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Generate Code</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <Layers
+                  onClick={() => handleSelectOption(OPTIONS.GENERATE_PLAN)}
+                  className={cn(
+                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                    selectedOption === OPTIONS.GENERATE_PLAN &&
+                      'bg-black text-white',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Generate Plan</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
