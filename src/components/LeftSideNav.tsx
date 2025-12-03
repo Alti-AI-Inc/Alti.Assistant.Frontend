@@ -13,7 +13,10 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
+  ArrowUpRight,
   BookA,
+  Bot,
+  Code,
   LogOut,
   MessageSquare,
   Orbit,
@@ -22,6 +25,7 @@ import {
   Search,
   Settings,
   SquarePen,
+  Workflow,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -184,6 +188,42 @@ const LeftSideNav = () => {
               >
                 Knowledge
               </span>
+            </Button>
+            <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
+              <Bot />
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                <Link href="https://www.altiagents.com/" target="_blank">
+                  <span className="absolute inset-0"></span>
+                  Agents
+                </Link>
+              </span>
+              <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
+            </Button>
+            <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
+              <Workflow />
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                <Link href="http://altiworkflows.com/" target="_blank">
+                  <span className="absolute inset-0"></span>
+                  Workflows
+                </Link>
+              </span>
+              <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
+            </Button>
+            <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
+              <Code />
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                <Link href="https://www.alticodestudio.com/" target="_blank">
+                  <span className="absolute inset-0"></span>
+                  Code Studio
+                </Link>
+              </span>
+              <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
             </Button>
             {/* <Button
               disabled={pathname === '/apps'}
