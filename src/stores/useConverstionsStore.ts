@@ -13,7 +13,7 @@ export enum OPTIONS {
   EDIT_IMAGE = 'edit-generation',
   TASK = 'task-automation',
   Transcribe = 'transcribe-audio',
-  Presentation = 'presentation-generation',
+  PRESENTATION = 'presentation-generation',
   REVIEW_DOCUMENTS = 'review-documents',
   SUMMARIZE = 'summarize-documents',
   EXTRACT_DATA = 'extract-data',

@@ -36,12 +36,105 @@ import {
   NotebookPen,
   PencilLine,
   Plus,
-  Presentation
+  Presentation,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 import { Textarea } from './ui/textarea';
+
+const TOOLBAR_ITEMS = [
+  {
+    type: OPTIONS.RESEARCH,
+    label: 'Deep Research',
+    Icon: Microscope,
+  },
+  {
+    type: OPTIONS.Transcribe,
+    label: 'Transcribe Audio',
+    Icon: AudioLines,
+  },
+  {
+    type: OPTIONS.IMAGE,
+    label: 'Generate Image',
+    Icon: ImageIcon,
+  },
+  {
+    type: OPTIONS.EDIT_IMAGE,
+    label: 'Edit Image',
+    Icon: ImageUp,
+  },
+  {
+    type: OPTIONS.CODE,
+    label: 'Generate Code',
+    Icon: Code,
+  },
+  {
+    type: OPTIONS.GENERATE_PLAN,
+    label: 'Generate Plan',
+    Icon: NotebookPen,
+  },
+  {
+    type: OPTIONS.PRESENTATION,
+    label: 'Generate Presentation',
+    Icon: Presentation,
+  },
+  {
+    type: OPTIONS.GENERATE_REPORT,
+    label: 'Generate Report',
+    Icon: FileMinus,
+  },
+  {
+    type: OPTIONS.GENERATE_SPREADSHEET,
+    label: 'Generate Spreadsheet',
+    Icon: FileSpreadsheet,
+  },
+  {
+    type: OPTIONS.GENERATE_CHART,
+    label: 'Generate Chart',
+    Icon: ChartArea,
+  },
+  {
+    type: OPTIONS.GENERATE_MINDMAP,
+    label: 'Generate Mindmap',
+    Icon: BrainCircuit,
+  },
+  {
+    type: OPTIONS.GENERATE_TIMELINE,
+    label: 'Generate Timeline',
+    Icon: ChartNoAxesGantt,
+  },
+  {
+    type: OPTIONS.GENERATE_FLAYER,
+    label: 'Generate Flyer',
+    Icon: FileIcon,
+  },
+  {
+    type: OPTIONS.TEXT,
+    label: 'Draft Document',
+    Icon: PencilLine,
+  },
+  {
+    type: OPTIONS.REVIEW_DOCUMENTS,
+    label: 'Review Document',
+    Icon: FileText,
+  },
+  {
+    type: OPTIONS.SUMMARIZE,
+    label: 'Summarize Document',
+    Icon: FileCheck,
+  },
+  {
+    type: OPTIONS.TRANSLATE_DOCUMENTS,
+    label: 'Translate Document',
+    Icon: Languages,
+  },
+  {
+    type: OPTIONS.EXTRACT_DATA,
+    label: 'Analyze Document',
+    Icon: Minimize,
+  },
+];
 
 const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   const router = useRouter();
@@ -231,298 +324,24 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
                 <p>Upload Files</p>
               </TooltipContent>
             </Tooltip>
-            {/* All options as buttons */}
-            <Tooltip>
-              <TooltipTrigger>
-                <Microscope
-                  onClick={() => handleSelectOption(OPTIONS.RESEARCH)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.RESEARCH &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Deep Research</p>
-              </TooltipContent>
-            </Tooltip>
+            {/* options */}
+            {TOOLBAR_ITEMS.map(({ type, label, Icon }) => (
+              <Tooltip key={type}>
+                <TooltipTrigger>
+                  <Icon
+                    onClick={() => handleSelectOption(type)}
+                    className={cn(
+                      'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                      selectedOption === type && 'bg-black text-white',
+                    )}
+                  />
+                </TooltipTrigger>
 
-            {/* <Tooltip>
-              <TooltipTrigger>
-                <Zap
-                  onClick={() => handleSelectOption(OPTIONS.TASK)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.TASK && 'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Task Automation</p>
-              </TooltipContent>
-            </Tooltip> */}
-            <Tooltip>
-              <TooltipTrigger>
-                <AudioLines
-                  onClick={() => handleSelectOption(OPTIONS.Transcribe)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.Transcribe &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Transcribe Audio</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger>
-                <ImageIcon
-                  onClick={() => handleSelectOption(OPTIONS.IMAGE)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.IMAGE && 'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Generate Image</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <ImageUp
-                  onClick={() => handleSelectOption(OPTIONS.EDIT_IMAGE)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.EDIT_IMAGE &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Edit Image</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <Code
-                  onClick={() => handleSelectOption(OPTIONS.CODE)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.CODE && 'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Generate Code</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <NotebookPen
-                  onClick={() => handleSelectOption(OPTIONS.GENERATE_PLAN)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.GENERATE_PLAN &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Generate Plan</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <Presentation
-                  onClick={() => handleSelectOption(OPTIONS.Presentation)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.Presentation &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Generate Presentation</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <FileMinus
-                  onClick={() => handleSelectOption(OPTIONS.GENERATE_REPORT)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.GENERATE_REPORT &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Generate Report</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <FileSpreadsheet
-                  onClick={() =>
-                    handleSelectOption(OPTIONS.GENERATE_SPREADSHEET)
-                  }
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.GENERATE_SPREADSHEET &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Generate Spreadsheet</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <ChartArea
-                  onClick={() => handleSelectOption(OPTIONS.GENERATE_CHART)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.GENERATE_CHART &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Generate Chart</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <BrainCircuit
-                  onClick={() => handleSelectOption(OPTIONS.GENERATE_MINDMAP)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.GENERATE_MINDMAP &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Generate Mindmap</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger>
-                <ChartNoAxesGantt
-                  onClick={() => handleSelectOption(OPTIONS.GENERATE_TIMELINE)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.GENERATE_TIMELINE &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Generate Timeline</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <FileIcon
-                  onClick={() => handleSelectOption(OPTIONS.GENERATE_FLAYER)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.GENERATE_FLAYER &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Generate Flyer</p>
-              </TooltipContent>
-            </Tooltip>
-            {/* generate ends here */}
-
-            <Tooltip>
-              <TooltipTrigger>
-                <PencilLine
-                  onClick={() => handleSelectOption(OPTIONS.TEXT)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.TEXT && 'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Draft Document</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger>
-                <FileText
-                  onClick={() => handleSelectOption(OPTIONS.REVIEW_DOCUMENTS)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.REVIEW_DOCUMENTS &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Review Document</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <FileCheck
-                  onClick={() => handleSelectOption(OPTIONS.SUMMARIZE)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.SUMMARIZE &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Summarize Document</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <Languages
-                  onClick={() =>
-                    handleSelectOption(OPTIONS.TRANSLATE_DOCUMENTS)
-                  }
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.TRANSLATE_DOCUMENTS &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Translate Document</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <Minimize
-                  onClick={() => handleSelectOption(OPTIONS.EXTRACT_DATA)}
-                  className={cn(
-                    'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                    selectedOption === OPTIONS.EXTRACT_DATA &&
-                      'bg-black text-white',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Analyze Document</p>
-              </TooltipContent>
-            </Tooltip>
+                <TooltipContent side="bottom">
+                  <p>{label}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))}
           </div>
 
           {/* Right: Mic or send button */}
