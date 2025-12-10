@@ -25,7 +25,6 @@ import {
   Code,
   FileCheck,
   FileMinus,
-  FileSpreadsheet,
   FileText,
   Image as ImageIcon,
   ImageUp,
@@ -37,7 +36,7 @@ import {
   PencilLine,
   PencilRuler,
   Plus,
-  Presentation,
+  Presentation
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -90,11 +89,7 @@ const TOOLBAR_ITEMS = [
     label: 'Generate Report',
     Icon: FileMinus,
   },
-  {
-    type: OPTIONS.GENERATE_SPREADSHEET,
-    label: 'Generate Spreadsheet',
-    Icon: FileSpreadsheet,
-  },
+
   {
     type: OPTIONS.GENERATE_CHART,
     label: 'Generate Chart',
@@ -107,15 +102,16 @@ const TOOLBAR_ITEMS = [
     Icon: PencilLine,
   },
   {
-    type: OPTIONS.DRAFT_EMAIL,
-    label: 'Draft Email',
-    Icon: Mail,
-  },
-  {
     type: OPTIONS.REVIEW_DOCUMENTS,
     label: 'Review Document',
     Icon: FileText,
   },
+  {
+    type: OPTIONS.DRAFT_EMAIL,
+    label: 'Draft Email',
+    Icon: Mail,
+  },
+
   {
     type: OPTIONS.SUMMARIZE,
     label: 'Summarize',
