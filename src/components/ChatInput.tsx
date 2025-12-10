@@ -20,7 +20,6 @@ import {
   ArrowRight,
   AudioLines,
   Brain,
-  Bug,
   ChartArea,
   Code,
   FileCheck,
@@ -69,11 +68,7 @@ const TOOLBAR_ITEMS = [
     label: 'Write Code',
     Icon: Code,
   },
-  {
-    type: OPTIONS.DEBUG_CODE,
-    label: 'Debug Code',
-    Icon: Bug,
-  },
+
   {
     type: OPTIONS.GENERATE_PLAN,
     label: 'Generate Plan',
