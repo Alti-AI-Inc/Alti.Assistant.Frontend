@@ -53,7 +53,7 @@ export default function Component() {
       });
       // console.log({ response });
       if (response.ok) {
-        router.push("/");
+        router.push('/');
       }
     } catch (error) {
       console.log(error);
@@ -74,7 +74,7 @@ export default function Component() {
         </Link>
       </div>
       <div className="flex h-[calc(100vh_-_80px)] w-full items-center justify-center bg-white">
-        <div className="flex w-full max-w-md items-center justify-center">
+        <div className="flex w-full max-w-md items-center justify-center md:translate-x-[10%]">
           <div className="rounded-large flex w-full max-w-lg flex-col gap-4 px-8 pt-6 pb-10">
             <p className="pb-4 text-center text-3xl font-semibold">Login</p>
             <Form {...form}>
@@ -153,14 +153,13 @@ export default function Component() {
             </p>
           </div>
         </div>
-        <div className="hidden translate-x-[20%] items-center justify-center lg:flex">
-          <video
-            src="/assets/login-register.mov"
-            autoPlay
-            loop
-            muted
-            className="h-[350px] object-cover object-left"
-          ></video>
+        <div className="hidden translate-x-[10%] w-1/2 items-center justify-center lg:flex">
+          <Image
+            src="/assets/logo-full.jpeg"
+            height={250}
+            width={250}
+            alt="logo"
+          />
         </div>
       </div>
     </div>
