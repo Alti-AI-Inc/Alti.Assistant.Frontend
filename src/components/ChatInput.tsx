@@ -19,22 +19,23 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowRight,
   AudioLines,
-  BrainCircuit,
+  Brain,
+  Bug,
   ChartArea,
-  ChartNoAxesGantt,
   Code,
   FileCheck,
-  File as FileIcon,
   FileMinus,
   FileSpreadsheet,
   FileText,
   Image as ImageIcon,
   ImageUp,
   Languages,
+  Mail,
   Microscope,
   Minimize,
   NotebookPen,
   PencilLine,
+  PencilRuler,
   Plus,
   Presentation,
 } from 'lucide-react';
@@ -56,7 +57,7 @@ const TOOLBAR_ITEMS = [
   },
   {
     type: OPTIONS.IMAGE,
-    label: 'Generate Image',
+    label: 'Create Image',
     Icon: ImageIcon,
   },
   {
@@ -66,8 +67,13 @@ const TOOLBAR_ITEMS = [
   },
   {
     type: OPTIONS.CODE,
-    label: 'Generate Code',
+    label: 'Write Code',
     Icon: Code,
+  },
+  {
+    type: OPTIONS.DEBUG_CODE,
+    label: 'Debug Code',
+    Icon: Bug,
   },
   {
     type: OPTIONS.GENERATE_PLAN,
@@ -94,25 +100,16 @@ const TOOLBAR_ITEMS = [
     label: 'Generate Chart',
     Icon: ChartArea,
   },
-  {
-    type: OPTIONS.GENERATE_MINDMAP,
-    label: 'Generate Mindmap',
-    Icon: BrainCircuit,
-  },
-  {
-    type: OPTIONS.GENERATE_TIMELINE,
-    label: 'Generate Timeline',
-    Icon: ChartNoAxesGantt,
-  },
-  {
-    type: OPTIONS.GENERATE_FLAYER,
-    label: 'Generate Flyer',
-    Icon: FileIcon,
-  },
+
   {
     type: OPTIONS.TEXT,
     label: 'Draft Document',
     Icon: PencilLine,
+  },
+  {
+    type: OPTIONS.DRAFT_EMAIL,
+    label: 'Draft Email',
+    Icon: Mail,
   },
   {
     type: OPTIONS.REVIEW_DOCUMENTS,
@@ -121,18 +118,28 @@ const TOOLBAR_ITEMS = [
   },
   {
     type: OPTIONS.SUMMARIZE,
-    label: 'Summarize Document',
+    label: 'Summarize',
     Icon: FileCheck,
   },
   {
     type: OPTIONS.TRANSLATE_DOCUMENTS,
-    label: 'Translate Document',
+    label: 'Translate',
     Icon: Languages,
   },
   {
     type: OPTIONS.EXTRACT_DATA,
-    label: 'Analyze Document',
+    label: 'Analyze',
     Icon: Minimize,
+  },
+  {
+    type: OPTIONS.REWRITE,
+    label: 'Rewrite',
+    Icon: PencilRuler,
+  },
+  {
+    type: OPTIONS.BRAINSTORM,
+    label: 'Brainstorm',
+    Icon: Brain,
   },
 ];
 

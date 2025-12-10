@@ -26,6 +26,10 @@ export enum OPTIONS {
   GENERATE_TIMELINE = 'generate-timeline',
   GENERATE_FLAYER = 'generate-flayer',
   GENERATE_PLAN = 'generate-plan',
+  DRAFT_EMAIL = 'draft-email',
+  DEBUG_CODE = 'debug-code',
+  REWRITE = 'rewrite',  
+  BRAINSTORM = 'brainstorm',
 
   // VIDEO = 'video-generation',
 }
