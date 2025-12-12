@@ -127,18 +127,24 @@ export async function analyzeImageIntent(
   conversationId: string | undefined,
   accessToken: string,
 ): Promise<ApiResponse<ImageIntentResponse>> {
+  console.log('action data:', {
+    request,
+    hasImage,
+    ...(conversationId && { conversationId }),
+  });
   const response = await fetch(
     `${API_URL}/enhanced-image/analyze-image-intent`,
     {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        // Authorization: `Bearer ${accessToken}`,
+        AUthorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODMwYTU3Njc1YWIzNzE0ODVhMGJlM2EiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjU1NDU0NDYsImV4cCI6MTc2NjE1MDI0Nn0.Oo6Z8muJybw9ZSEoOwbXpvxfpE1zTkQ-HKNvxZYtE4c`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         request,
         hasImage,
-        ...(conversationId && { conversationId }),
+        // ...(conversationId && { conversationId }),
       }),
     },
   );
