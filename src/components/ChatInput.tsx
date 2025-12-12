@@ -155,7 +155,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     setShowStartLastMessage,
   } = useConversationsStore();
 
-  // Image generation hook
+  // Image generation hook - pass router and queryClient for URL redirect and query invalidation
   const {
     workflow: imageWorkflow,
     shouldShowConfirmation,
@@ -165,7 +165,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     handleUserConfirmation,
     handleAddDetail,
     reset: resetImageGen,
-  } = useImageGeneration();
+  } = useImageGeneration({ router, queryClient });
 
   // const [message, setMessage] = useState('');
 

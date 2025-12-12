@@ -10,9 +10,20 @@ import {
 } from '@/actions/imageActions';
 import { useImageGenStore } from '@/stores/useImageGenStore';
 import { useConversationsStore, ROLES } from '@/stores/useConverstionsStore';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, QueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { useCallback } from 'react';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+
+/**
+ * Options for the useImageGeneration hook
+ */
+interface UseImageGenerationOptions {
+  /** Next.js router instance for URL redirects */
+  router?: AppRouterInstance;
+  /** React Query client for invalidating queries */
+  queryClient?: QueryClient;
+}
 
 /**
  * Custom hook for managing the enhanced image generation/editing workflow.
@@ -25,8 +36,10 @@ import { useCallback } from 'react';
  * - Waits for conversationId from analyzeIntent before subsequent calls
  * - Clears input on submit (handled by ChatInput)
  * - Follows same pattern as useConverstionsStore for message handling
+ * - Redirects URL to /c/{conversationId} after initialization (matches standard chat)
  */
-export function useImageGeneration() {
+export function useImageGeneration(options?: UseImageGenerationOptions) {
+  const { router, queryClient } = options || {};
   const { data: session } = useSession();
   const accessToken = session?.accessToken;
   const userId = session?.user?.id;
@@ -136,71 +149,141 @@ export function useImageGeneration() {
     }) => {
       if (!accessToken) throw new Error('No access token');
 
-      console.log('[useImageGeneration] analyzeIntent - sending:', {
+      // Just return the params immediately - don't wait for API
+      // This allows redirect to happen first, then analyze runs in background
+      return {
         request,
         hasImage,
         existingConversationId,
-      });
-
-      return analyzeImageIntent(
-        request,
-        hasImage,
-        existingConversationId,
-        accessToken,
-      );
+      };
     },
-    onMutate: ({ request }) => {
+    onMutate: ({ request, existingConversationId }) => {
       startImageGeneration();
-      // Add user message to chat (same pattern as useConverstionsStore)
-      updateActiveConversation(request, ROLES.USER);
+
+      // Generate conversationId client-side if new conversation
+      if (!existingConversationId) {
+        const newConversationId = `image-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+        setConversationId(newConversationId);
+
+        // Add user message with the new conversationId
+        updateActiveConversation(request, ROLES.USER, newConversationId);
+      } else {
+        // Add user message with existing conversationId
+        updateActiveConversation(request, ROLES.USER, existingConversationId);
+      }
+
       setLoadingResponse(true);
     },
-    onSuccess: async (response, variables) => {
-      if (!response.success || !response.data) {
-        setError(response.message || 'Failed to analyze intent');
+    onSuccess: async (params, variables) => {
+      const { request, hasImage, existingConversationId } = params;
+      const store = useImageGenStore.getState();
+      const currentConversationId =
+        store.conversationId || existingConversationId;
+
+      // === REDIRECT IMMEDIATELY (before analyze API) ===
+      if (currentConversationId && !existingConversationId) {
+        console.log(
+          '[useImageGeneration] Redirecting IMMEDIATELY to /c/' +
+            currentConversationId,
+        );
+
+        if (router) {
+          router.replace(`/c/${currentConversationId}`);
+        }
+
+        // Invalidate conversation list queries to show new chat in sidebar
+        if (queryClient && accessToken) {
+          queryClient.invalidateQueries({
+            queryKey: ['conversations', accessToken],
+          });
+        }
+      }
+
+      // === NOW call analyze API in background (after redirect) ===
+      console.log(
+        '[useImageGeneration] Calling analyzeImageIntent in background',
+      );
+
+      if (!accessToken || !currentConversationId) {
+        setError(!accessToken ? 'No access token' : 'No conversation ID');
         setLoadingResponse(false);
         return;
       }
 
-      const {
-        isEditable: respIsEditable,
-        intent: respIntent,
-        conversationId: newConversationId,
-        userId: newUserId,
-      } = response.data;
-
-      console.log('[useImageGeneration] analyzeIntent - result:', {
-        isEditable: respIsEditable,
-        intent: respIntent,
-        conversationId: newConversationId,
-      });
-
-      // Store conversation info - IMPORTANT: wait for this before next API calls
-      setIntent(respIntent);
-      setIsEditable(respIsEditable);
-      setConversationId(newConversationId);
-      setUserId(newUserId);
-
-      if (respIsEditable) {
-        // Workflow #2: Edit flow - need image from user
-        setWorkflow('editing');
-        // Only add this message if we're in edit mode and need user to upload image
-        updateActiveConversation(
-          'Please upload the image you want to edit.',
-          ROLES.ASSISTANT,
-          newConversationId,
+      try {
+        const response = await analyzeImageIntent(
+          request,
+          hasImage,
+          currentConversationId,
+          accessToken,
         );
-        setLoadingResponse(false);
-      } else {
-        // Workflow #1: Generation flow - auto-chain to evaluatePrompt
-        console.log('[useImageGeneration] Auto-chaining to evaluatePrompt...');
-        setWorkflow('evaluating');
 
-        // Use the NEW conversationId from the response
-        await evaluatePromptMutation.mutateAsync({
-          prompt: variables.request,
-          convId: newConversationId,
+        console.log('[useImageGeneration] analyzeIntent response:', response);
+
+        if (!response.success || !response.data) {
+          setError(response.message || 'Failed to analyze intent');
+          setLoadingResponse(false);
+          return;
+        }
+
+        const {
+          isEditable: respIsEditable,
+          intent: respIntent,
+          conversationId: backendConversationId,
+          userId: newUserId,
+        } = response.data;
+
+        console.log('[useImageGeneration] analyzeIntent - result:', {
+          isEditable: respIsEditable,
+          intent: respIntent,
+          conversationId: backendConversationId,
         });
+
+        // Update with backend conversationId if different
+        if (
+          backendConversationId &&
+          backendConversationId !== currentConversationId
+        ) {
+          console.log(
+            '[useImageGeneration] Updating to backend conversationId:',
+            backendConversationId,
+          );
+          setConversationId(backendConversationId);
+
+          // Update message with backend conversationId
+          updateActiveConversation(request, ROLES.USER, backendConversationId);
+        }
+
+        // Store conversation info
+        setIntent(respIntent);
+        setIsEditable(respIsEditable);
+        setUserId(newUserId);
+
+        if (respIsEditable) {
+          // Workflow #2: Edit flow - need image from user
+          setWorkflow('editing');
+          updateActiveConversation(
+            'Please upload the image you want to edit.',
+            ROLES.ASSISTANT,
+            backendConversationId || currentConversationId,
+          );
+          setLoadingResponse(false);
+        } else {
+          // Workflow #1: Generation flow - auto-chain to evaluatePrompt
+          console.log(
+            '[useImageGeneration] Auto-chaining to evaluatePrompt...',
+          );
+          setWorkflow('evaluating');
+
+          await evaluatePromptMutation.mutateAsync({
+            prompt: request,
+            convId: backendConversationId || currentConversationId,
+          });
+        }
+      } catch (error: any) {
+        console.error('[useImageGeneration] analyzeIntent error:', error);
+        setError(error.message);
+        setLoadingResponse(false);
       }
     },
     onError: error => {
@@ -288,6 +371,11 @@ export function useImageGeneration() {
       if (!accessToken || !currentConvId || !currentUserId) {
         throw new Error('Missing required data');
       }
+
+      // TODO: Add backend sync API here to push conversation to backend
+      // This should be called BEFORE finalizePrompt to ensure conversation is saved
+      // Example:
+      // await syncConversationToBackend(currentConvId, currentUserId, accessToken);
 
       console.log('[useImageGeneration] finalizePrompt - sending:', {
         conversationId: currentConvId,
@@ -519,6 +607,10 @@ export function useImageGeneration() {
       const store = useImageGenStore.getState();
 
       // This will auto-chain to evaluatePrompt for generation flow
+      console.log(
+        '[useImageGeneration] Starting image generation workflow...',
+        store.conversationId,
+      );
       await analyzeIntentMutation.mutateAsync({
         request: message,
         hasImage,

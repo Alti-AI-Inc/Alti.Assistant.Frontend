@@ -24,7 +24,7 @@ export function ImageGenSuggestions() {
   }
 
   return (
-    <div className="fixed bottom-28 left-1/2 z-50 mx-auto max-w-[600px] -translate-x-1/2 rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-lg">
+    <div className="fixed bottom-28 left-1/2 z-50 mx-auto max-w-[600px] -translate-x-1/3 rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-lg">
       <div className="mb-3 flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100">
           <Lightbulb className="h-4 w-4 text-amber-600" />
