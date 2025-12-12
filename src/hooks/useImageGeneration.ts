@@ -12,7 +12,7 @@ import { useImageGenStore } from '@/stores/useImageGenStore';
 import { useConversationsStore, ROLES } from '@/stores/useConverstionsStore';
 import { useMutation, QueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 /**
@@ -191,13 +191,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
     },
     onMutate: ({ request, existingConversationId }) => {
       startImageGeneration();
-
-      // Optimistically update chat with user message
-      // Note: We don't have the conversationId yet for new chats, but passing undefined
-      // might be okay if the store just appends it to the "current" view or if we use a temp ID.
-      // However, to be safe and consistent with the "wait for server" approach,
-      // we might want to wait. But standard UX usually shows the user message immediately.
-      // Let's pass the existing ID if we have it, or nothing.
       updateActiveConversation(request, ROLES.USER, existingConversationId);
 
       setLoadingResponse(true);
@@ -260,23 +253,34 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
 
       // Continue the Flow based on Intent
       if (respIsEditable) {
-        // Workflow #2: Edit flow
+        // Workflow #2: Edit flow - need image from user
         setWorkflow('editing');
         updateActiveConversation(
           'Please upload the image you want to edit.',
           ROLES.ASSISTANT,
-          backendConversationId,
+          backendConversationId || existingConversationId,
         );
         setLoadingResponse(false);
       } else {
         // Workflow #1: Generation flow
-        console.log('[useImageGeneration] Auto-chaining to evaluatePrompt...');
+        // Set workflow to evaluating
+        // The useEffect will pick this up on the new page
+        console.log('[useImageGeneration] Setting workflow to evaluating');
         setWorkflow('evaluating');
 
-        await evaluatePromptMutation.mutateAsync({
-          prompt: request,
-          convId: backendConversationId,
-        });
+        // Only chain if we didn't redirect (same conversation ID)
+        // Fix: Use stored conversationId as fallback for current
+        const effectiveCurrentId = existingConversationId;
+
+        if (backendConversationId === effectiveCurrentId) {
+          console.log(
+            '[useImageGeneration] Staying on same page, letting useEffect handle continuation...',
+          );
+        } else {
+          console.log(
+            '[useImageGeneration] Redirecting, letting useEffect handle continuation on new page...',
+          );
+        }
       }
     },
     onError: error => {
@@ -591,6 +595,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
     ) => {
       // Clear any existing suggestions
       setSuggestions([]);
+      hasResumedEvaluation.current = false;
 
       if (hasImage && existingImageBase64) {
         startImageEditing(existingImageBase64);
@@ -684,6 +689,53 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
     },
     [editImageMutation],
   );
+
+  // ============ Effect: Resume Flow After Redirect ============
+  // This handles the "analyze -> redirect -> evaluate" transition
+  const hasResumedEvaluation = useRef(false);
+
+  useEffect(() => {
+    // Only run if we are in 'evaluating' state and NOT currently processing
+    if (
+      workflow === 'evaluating' &&
+      !evaluatePromptMutation.isPending &&
+      !hasResumedEvaluation.current
+    ) {
+      // Check if we have a conversation ID and we are on the page for it?
+      // The store conversationId should be set.
+      if (conversationId && accessToken) {
+        console.log(
+          '[useImageGeneration] Resuming evaluation flow for conversation:',
+          conversationId,
+        );
+
+        // We need to find the prompt from the history since it's not passed via URL
+        const { activeConversation } = useConversationsStore.getState();
+
+        // Find the last user message
+        // This assumes the user message was added to the history before redirect
+        const lastUserMessage = activeConversation?.messages
+          ?.filter(m => m.role === ROLES.USER)
+          ?.slice(-1)[0]?.content;
+
+        if (lastUserMessage) {
+          console.log(
+            '[useImageGeneration] Found pending prompt from history:',
+            lastUserMessage,
+          );
+          hasResumedEvaluation.current = true;
+          evaluatePromptMutation.mutate({
+            prompt: lastUserMessage,
+            convId: conversationId,
+          });
+        } else {
+          console.warn(
+            '[useImageGeneration] Could not find pending prompt in history to resume evaluation',
+          );
+        }
+      }
+    }
+  }, [workflow, conversationId, accessToken, evaluatePromptMutation]);
 
   // Computed states
   const isLoading =
