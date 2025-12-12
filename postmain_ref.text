@@ -1,0 +1,313 @@
+I want you to intregrate new api's into thsi frontend project for this nextjs 15-16 projects using server action. Use the zustand store to access conversation, token, user and other data. Also update the frontend and zustand to adjust with the new api's BUT do not change the existing api or UI or Style. Create new server action to handle the image feature. The feature is about gernating and editing ai image and below are cetain steps and flow which we need to follow:
+
+---
+Workflow # 0 (common steps)
+---
+Step 1 :
+Use following url: {{baseUrl}}/enhanced-image/analyze-image-intent
+Body: {
+  "request": "Create a minimalist logo for a tech startup",
+  "hasImage": false,
+  "conversationId": "{{conversationId}}"
+}
+response (if prompt is to create new image):{
+    "statusCode": 200,
+    "success": true,
+    "message": "Intent analyzed successfully",
+    "data": {
+        "isEditable": false,
+        "intent": "generate",
+        "editType": null,
+        "reasoning": "The user explicitly used the word 'Create' and described a new subject ('a minimalist logo for a tech startup') without any reference to an existing image or elements to modify. This clearly indicates a request to generate a new image.",
+        "needsMoreInfo": false,
+        "questions": [],
+        "conversationId": "search-1765459578310-zitujruhl",
+        "userType": "guest",
+        "userId": "693ad03cc0977de0305d8fac"
+    }
+}
+response(if to edit the image):{
+    "statusCode": 200,
+    "success": true,
+    "message": "Intent analyzed successfully",
+    "data": {
+        "isEditable": true,
+        "intent": "edit",
+        "editType": "style transfer",
+        "reasoning": "The user explicitly stated 'I want to edit' and referred to an existing element ('the sky') in the attached image, requesting a transformation ('make it more dramatic'). The presence of an attached image further confirms an editing intent.",
+        "needsMoreInfo": false,
+        "questions": [],
+        "conversationId": "search-1765459578310-zitujruhl",
+        "userType": "guest",
+        "userId": "693ad0c0c0977de0305d8fae"
+    }
+}
+
+Step 2: If 'isEditable' is false chose the 'Workflow # 1 (image gernation)' which is for image gernation. If 'isEditable' is true chose the 'Workflow # 2 (image editing)' which is for image editing.
+
+---
+Workflow # 1 (image gernation):
+---
+Step 1.⁠ ⁠{{baseUrl}}/enhanced-image/evaluate-prompt to evaluate the score of the prompt. 
+Then it will analyze the prompt and  provide you a score. If the score is less then 65 ask the user the questiion that you get from the response ""{{suggestions}}"" in the '/evaluate-prompt' api.
+request: {
+  "prompt": "A sun is setting on a sea beach. The sea is calm the sky is clean. I want it in photo realistic. the sun is gold half disappeared, waves are rushing, mood is chill",
+  "conversationId": "{{conversationId}}"
+}
+response: {
+    "statusCode": 200,
+    "success": true,
+    "message": "Prompt evaluated successfully",
+    "data": {
+        "evaluation": {
+            "isComplete": false,
+            "score": 70,
+            "missingElements": [
+                "Clarity on wave activity (calm vs. rushing waves)",
+                "Specific details about the beach (e.g., sand color, presence of objects, people)",
+                "Specific colors for the sky and sea beyond the golden sun",
+                "Composition or perspective",
+                "Time of sunset (e.g., early, mid, late sunset)"
+            ],
+            "suggestions": [
+                "Could you clarify the wave activity? Do you envision gentle, lapping waves typical of a calm sea, or more active, 'rushing' waves breaking on the shore?",
+                "What specific details would you like for the beach itself? For example, what color is the sand? Are there any elements like rocks, driftwood, footprints, or perhaps a lone figure?",
+                "What specific colors should dominate the sunset sky and the reflections in the water? (e.g., fiery oranges, soft pinks, deep purples, warm blues)",
+                "What composition or perspective would you prefer? (e.g., a wide shot capturing the vastness, a close-up on the waves, an eye-level view, or a drone shot looking down the beach?)",
+                "At what stage of the sunset do you want the image to be? (e.g., early sunset with bright colors, mid-sunset with the sun half-disappeared, or late sunset with deeper hues?)"
+            ]
+        },
+        "conversationId": "image-1765459395367-vigjk0n1n",
+        "userType": "authenticated"
+    }
+}
+
+Step 2: keep asking until you get the score more then the score 65 and on each cycle of getting detail from user use run '{{baseUrl}}/enhanced-image/add-detail' api to post the latest message to the backend and get total conversation/detail score.
+request : {    "conversationId": "search-1765459578310-zitujruhl",
+    "userId": "6830a57675ab371485a0be3a",
+    "detail": "A boat is passing by"
+}
+response 1: {
+    "statusCode": 200,
+    "success": true,
+    "message": "Detail added and prompt re-evaluated successfully",
+    "data": {
+        "evaluation": {
+            "isComplete": false,
+            "score": 15,
+            "missingElements": [
+                "Style or quality level",
+                "Key details about the subject (type of boat, condition, specific features)",
+                "Setting/environment (where is it passing by, what's in the background)",
+                "Lighting/mood",
+                "Colors or visual elements",
+                "Composition or perspective"
+            ],
+            "suggestions": [
+                "What kind of boat is it? (e.g., a sleek modern yacht, an old wooden fishing boat, a majestic sailboat, a small rowboat)",
+                "What style should the image be? (e.g., photorealistic, an oil painting, a watercolor, a cartoon, a cinematic shot)",
+                "Where is the boat passing by? (e.g., on a calm lake, a stormy ocean, a bustling river, a tropical bay, a narrow canal, near a city skyline or mountains)",
+                "What time of day is it, and what is the lighting like? (e.g., golden hour sunset, bright midday sun, foggy morning, dramatic stormy light)",
+                "Are there any specific colors or visual elements you'd like to include? (e.g., a red hull, clear blue water, a dramatic sky, reflections)",
+                "What perspective or composition would you prefer? (e.g., a wide shot from the shore, a close-up of the boat, from above, eye-level)"
+            ]
+        },
+        "conversationHistory": [
+            "hi",
+            "hi",
+            "A boat is passing by",
+            "A boat is passing by"
+        ],
+        "messageCount": 6,
+        "conversationId": "search-1765459578310-zitujruhl"
+    }
+}
+
+response 2: {
+    "statusCode": 200,
+    "success": true,
+    "message": "Detail added and prompt re-evaluated successfully",
+    "data": {
+        "evaluation": {
+            "isComplete": false,
+            "score": 75,
+            "missingElements": [
+                "Clarity on the contradiction between 'sea is calm' and 'waves are rushing'.",
+                "More specific details about the luxury boat (e.g., type, design, color).",
+                "Details about the sea beach (e.g., sand color, presence of elements like palm trees, rocks, or people).",
+                "Specific composition details for the drone shot (e.g., altitude, angle, how the boat is framed relative to the sunset).",
+                "Direction or interaction of the boat with the sunset (e.g., sailing towards, across, or away from it)."
+            ],
+            "suggestions": [
+                "Could you clarify if the sea should be calm with gentle lapping waves, or if there should be more prominent, rushing waves? These two descriptions ('sea is calm' and 'waves are rushing') contradict each other.",
+                "What kind of luxury boat do you envision? For example, a sleek modern yacht, a classic wooden cruiser, or something else? Are there any specific colors or features?",
+                "Can you describe the beach itself? Is it a white sandy beach, a rocky shore, or perhaps a tropical beach with palm trees or other specific features?",
+                "For the drone shot, what kind of perspective are you looking for? A high-altitude wide shot showing the vastness, a low-altitude shot following the boat closely, or an overhead view?",
+                "Is the boat sailing towards the setting sun, across its path, or moving away from it?"
+            ]
+        },
+        "conversationHistory": [
+            "hi",
+            "hi",
+            "A boat is passing by",
+            "A boat is passing by",
+            "A sun is setting on a sea beach. The sea is calm the sky is clean. ",
+            "I want it in photo realistic. the sun is gold half disappeared, waves are rushing, mood is chill",
+            "theme is cinematic",
+            "boat is huge luxary n its a dron shot"
+        ],
+        "messageCount": 10,
+        "conversationId": "search-1765459578310-zitujruhl"
+    }
+}
+
+Step 3:  If the score is more than 65 then ask the user if they want to add morer details (in the caht UI a button Yes/No (if yes then render the suggestions from the last api call response)). If the user wants to add details use the '{{baseUrl}}/enhanced-image/add-detail' api
+
+Step 4: If user selects 'No' button then use '{{baseUrl}}/enhanced-image/finalize-prompt' api to get the final prompt 
+request: {    "conversationId": "search-1765459578310-zitujruhl",
+    "userId": "6830a57675ab371485a0be3a"
+}
+
+response: {
+    "statusCode": 200,
+    "success": true,
+    "message": "Prompt finalized successfully",
+    "data": {
+        "enhancedPrompt": "A photo realistic, cinematic drone shot captures a serene yet dynamic sunset scene. A huge, luxurious yacht is prominently passing by a pristine sandy beach. The golden sun is half-disappeared below the horizon, casting a warm, soft light across the expansive, clean sky. Gentle waves are softly rushing onto the shore, contributing to the overall chill and tranquil mood.",
+        "conversationHistory": [
+            "hi",
+            "hi",
+            "A boat is passing by",
+            "A boat is passing by",
+            "A sun is setting on a sea beach. The sea is calm the sky is clean. ",
+            "I want it in photo realistic. the sun is gold half disappeared, waves are rushing, mood is chill",
+            "theme is cinematic",
+            "boat is huge luxary n its a dron shot"
+        ],
+        "conversationId": "search-1765459578310-zitujruhl"
+    }
+}
+
+Step 5: then use the "enhancedPrompt" string in the api '{{baseUrl}}/enhanced-image/generate' to generate image. 
+request (Generate Image (Authenticated)):{
+  "prompt": "A futuristic city skyline at night with neon lights, cyberpunk style",
+  "aspectRatio": "16:9",
+  "negativePrompt": "blurry, low quality"
+}
+response: {
+    "statusCode": 200,
+    "success": true,
+    "message": "Image generated successfully",
+    "data": {
+        "responseMessage": {
+            "answer": "Image generated successfully using imagen4",
+            "image": {
+                "filename": "image-direct-1765467274198.png",
+                "url": "https://storage.googleapis.com/alti_assistant_generated_photo/image-direct-1765467274198.png",
+                "service": "imagen4",
+                "reasoning": "The user is requesting the generation of a new, detailed image (futuristic city skyline). There is no indication of needing to edit an existing image, nor is there a request for speed or quick results. Therefore, the high-fidelity generation model is the appropriate choice.",
+                "confidence": 1
+            },
+            "prompt": "A futuristic city skyline at night with neon lights, cyberpunk style",
+            "metadata": {
+                "imageUrl": "https://storage.googleapis.com/alti_assistant_generated_photo/image-direct-1765467274198.png",
+                "filename": "image-direct-1765467274198.png",
+                "service": "imagen4",
+                "reasoning": "The user is requesting the generation of a new, detailed image (futuristic city skyline). There is no indication of needing to edit an existing image, nor is there a request for speed or quick results. Therefore, the high-fidelity generation model is the appropriate choice.",
+                "confidence": 1,
+                "aspectRatio": "16:9",
+                "negativePrompt": "blurry, low quality",
+                "timestamp": "2025-12-11T15:34:53.513Z"
+            }
+        },
+        "conversationId": "image-1765467273453-x6ko2mpa1",
+        "messageCount": 2,
+        "userType": "guest",
+        "userId": "693ae489c0977de0305d8fe5"
+    }
+}
+
+request (Generate Image (Continue Conversation)): {  "prompt": "Add more vibrant colors and increase the saturation",
+  "conversationId": "6830a57675ab371485a0be3a",
+  "userId": "{{userId}}"
+}
+
+response :{
+    "statusCode": 200,
+    "success": true,
+    "message": "Image generated successfully",
+    "data": {
+        "responseMessage": {
+            "answer": "Image generated successfully using gemini2.5flash",
+            "image": {
+                "filename": "image-direct-1765467203643.png",
+                "url": "https://storage.googleapis.com/alti_assistant_generated_photo/image-direct-1765467203643.png",
+                "service": "gemini2.5flash",
+                "reasoning": "The user is requesting modifications to the image ('Add more vibrant colors', 'increase the saturation'). This falls under the category of image editing and modifications to existing images, which is the designated use case for gemini2.5flash.",
+                "confidence": 1
+            },
+            "prompt": "Add more vibrant colors and increase the saturation",
+            "metadata": {
+                "imageUrl": "https://storage.googleapis.com/alti_assistant_generated_photo/image-direct-1765467203643.png",
+                "filename": "image-direct-1765467203643.png",
+                "service": "gemini2.5flash",
+                "reasoning": "The user is requesting modifications to the image ('Add more vibrant colors', 'increase the saturation'). This falls under the category of image editing and modifications to existing images, which is the designated use case for gemini2.5flash.",
+                "confidence": 1,
+                "timestamp": "2025-12-11T15:33:39.671Z"
+            }
+        },
+        "conversationId": "6830a57675ab371485a0be3a",
+        "messageCount": 2,
+        "userType": "guest",
+        "userId": "6830a57675ab371485a0be3a"
+    }
+}
+---
+Workflow # 2 (image editing):
+---
+
+Step 1: If 'isEditable' is true use '/enhanced-image/edit' api directly to edit the image.
+request :{  "prompt": "Make the image brighter and add more contrast",
+  "imageBase64": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+  "conversationId": "6830a57675ab371485a0be3a",
+  "userId": "{{userId}}",  
+  "aspectRatio": "16:9"
+}
+
+response: {
+    "statusCode": 200,
+    "success": true,
+    "message": "Image edited successfully",
+    "data": {
+        "responseMessage": {
+            "answer": "Image edited successfully using Imagen3",
+            "image": {
+                "filename": "image-edit-1765467701062.png",
+                "url": {
+                    "url": "https://storage.googleapis.com/alti_assistant_generated_photo/image-edit-1765467701062.png",
+                    "filename": "image-edit-1765467701062.png",
+                    "service": "imagen3-edit",
+                    "reasoning": "Image edited using Gemini 3 Pro Image (Imagen 3)"
+                },
+                "service": "imagen3"
+            },
+            "prompt": "Make the image brighter and add more contrast",
+            "metadata": {
+                "imageUrl": {
+                    "url": "https://storage.googleapis.com/alti_assistant_generated_photo/image-edit-1765467701062.png",
+                    "filename": "image-edit-1765467701062.png",
+                    "service": "imagen3-edit",
+                    "reasoning": "Image edited using Gemini 3 Pro Image (Imagen 3)"
+                },
+                "filename": "image-edit-1765467701062.png",
+                "service": "imagen3",
+                "aspectRatio": "16:9",
+                "timestamp": "2025-12-11T15:41:51.763Z"
+            }
+        },
+        "conversationId": "6830a57675ab371485a0be3a",
+        "messageCount": 4,
+        "userType": "guest",
+        "userId": "6830a57675ab371485a0be3a"
+    }
+}

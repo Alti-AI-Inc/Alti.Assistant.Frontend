@@ -28,7 +28,7 @@ export enum OPTIONS {
   GENERATE_PLAN = 'generate-plan',
   DRAFT_EMAIL = 'draft-email',
   DEBUG_CODE = 'debug-code',
-  REWRITE = 'rewrite',  
+  REWRITE = 'rewrite',
   BRAINSTORM = 'brainstorm',
 
   // VIDEO = 'video-generation',

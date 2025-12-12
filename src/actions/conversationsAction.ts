@@ -21,6 +21,7 @@ export async function PostConversation(
     }),
   });
   const data = await response.json();
+  console.log('PostConversation response:', data);
   // await new Promise((resolve) => setTimeout(resolve, 5000));
   // const data = { data: { responseMessage: { answer: 'test' } } };
   return data;

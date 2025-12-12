@@ -1,6 +1,9 @@
 'use client';
 
 import AudioRecorder from '@/components/AudioRecorder';
+import { AspectRatioSelector } from '@/components/AspectRatioSelector';
+import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
+import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
 import {
   Tooltip,
   TooltipContent,
@@ -9,6 +12,7 @@ import {
 import { cn } from '@/lib/utils';
 
 import { PostConversation } from '@/actions/conversationsAction';
+import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import {
   OPTIONS,
@@ -35,11 +39,11 @@ import {
   PencilLine,
   PencilRuler,
   Plus,
-  Presentation
+  Presentation,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { Textarea } from './ui/textarea';
 
 const TOOLBAR_ITEMS = [
@@ -151,16 +155,38 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     setShowStartLastMessage,
   } = useConversationsStore();
 
+  // Image generation hook
+  const {
+    workflow: imageWorkflow,
+    shouldShowConfirmation,
+    isCollectingDetails,
+    isImageWorkflowActive,
+    handleImageRequest,
+    handleUserConfirmation,
+    handleAddDetail,
+    reset: resetImageGen,
+  } = useImageGeneration();
+
   // const [message, setMessage] = useState('');
 
-  const handleSelectOption = (value: OPTIONS) => {
-    setSelectedOption(selectedOption === value ? null : value);
-  };
+  const handleSelectOption = useCallback(
+    (value: OPTIONS) => {
+      // Reset image generation state when switching options
+      if (
+        selectedOption === OPTIONS.IMAGE ||
+        selectedOption === OPTIONS.EDIT_IMAGE
+      ) {
+        resetImageGen();
+      }
+      setSelectedOption(selectedOption === value ? null : value);
+    },
+    [selectedOption, setSelectedOption, resetImageGen],
+  );
 
   const apiUrl = activeConversation?.knowledgebaseId
     ? `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/chat`
     : selectedOption === OPTIONS.IMAGE
-      ? `${process.env.NEXT_PUBLIC_API_URL}/image/generate`
+      ? `${process.env.NEXT_PUBLIC_API_URL}/enhanced-image/analyze-intent`
       : selectedOption === OPTIONS.CODE
         ? `${process.env.NEXT_PUBLIC_API_URL}/search/code`
         : selectedOption === OPTIONS.RESEARCH
@@ -171,7 +197,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
 
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
-      if (!data?.accessToken) throw new Error('No access token');
+      if (!data?.accessToken) throw new Error('No access token1');
       return await PostConversation(
         apiUrl,
         userMessage,
@@ -242,9 +268,42 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     },
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    console.log('11111111111', {
+      selectedOption,
+      conversationId,
+      userId: data?.user.id,
+      accessToken: data?.accessToken,
+      imageWorkflow,
+    });
+
     if (message.trim() === '') return;
     setShowStartLastMessage(true);
+
+    // Use image generation workflow for IMAGE option
+    if (
+      selectedOption === OPTIONS.IMAGE ||
+      selectedOption === OPTIONS.EDIT_IMAGE
+    ) {
+      console.log('[ChatInput] Image workflow - current state:', imageWorkflow);
+
+      if (isCollectingDetails) {
+        // We're in detail collection phase - add detail
+        console.log('[ChatInput] Adding detail to image prompt');
+        await handleAddDetail(message);
+      } else {
+        // Start new image generation flow
+        console.log('[ChatInput] Starting image generation flow');
+        await handleImageRequest(
+          message,
+          selectedOption === OPTIONS.EDIT_IMAGE,
+        );
+      }
+      setMessage('');
+      return;
+    }
+
+    // Use regular mutation for other options
     mutation.mutate(message);
     setMessage('');
   };
@@ -267,95 +326,117 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   };
 
   return (
-    <div className="mx-auto w-full max-w-[796px] space-y-6 bg-white px-4 lg:px-0">
-      <div
-        className={cn(
-          'rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4',
-          activeConversation?.knowledgebaseId && message.length < 100 && 'flex',
-        )}
-      >
-        <Textarea
-          name="message"
-          value={message}
-          onChange={e => setMessage(e.target.value)}
-          onKeyPress={e => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              handleSubmit();
-            }
-          }}
-          placeholder={
-            activeConversation?.knowledgebaseId && isLoading
-              ? 'Loading...'
-              : activeConversation?.knowledgebaseId && activeKnowledgeBaseName
-                ? `Chat with ${activeKnowledgeBaseName}`
-                : 'Chat with alti'
-          }
-          className="max-h-[500px] min-h-12 w-full resize-none overflow-y-auto border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
-          autoFocus
-        />
-        {/* Responsive container */}
-        <div className="flex items-end justify-between gap-2 py-2">
-          {/* Desktop layout */}
-          <div
-            className={cn(
-              'flex items-center gap-2',
-              activeConversation?.knowledgebaseId && 'hidden',
-            )}
-          >
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div
-                  onClick={() => fileInputRef.current?.click()}
-                  className="relative flex cursor-pointer items-center"
-                >
-                  <Plus className="size-6 rounded-full border-2 border-gray-300 p-[3px]" />
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Upload Files</p>
-              </TooltipContent>
-            </Tooltip>
-            {/* options */}
-            {TOOLBAR_ITEMS.map(({ type, label, Icon }) => (
-              <Tooltip key={type}>
-                <TooltipTrigger>
-                  <Icon
-                    onClick={() => handleSelectOption(type)}
-                    className={cn(
-                      'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                      selectedOption === type && 'bg-black text-white',
-                    )}
-                  />
-                </TooltipTrigger>
+    <>
+      {/* Image Generation Confirmation - shown when prompt score >= 65 */}
+      {shouldShowConfirmation && (
+        <ImageGenConfirmation onConfirm={handleUserConfirmation} />
+      )}
 
+      {/* Image Generation Suggestions - shown during detail collection */}
+      {isCollectingDetails && <ImageGenSuggestions />}
+
+      <div className="mx-auto w-full max-w-[796px] space-y-6 bg-white px-4 lg:px-0">
+        <div
+          className={cn(
+            'rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4',
+            activeConversation?.knowledgebaseId &&
+              message.length < 100 &&
+              'flex',
+          )}
+        >
+          <Textarea
+            name="message"
+            value={message}
+            onChange={e => setMessage(e.target.value)}
+            onKeyPress={e => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit();
+              }
+            }}
+            placeholder={
+              activeConversation?.knowledgebaseId && isLoading
+                ? 'Loading...'
+                : activeConversation?.knowledgebaseId && activeKnowledgeBaseName
+                  ? `Chat with ${activeKnowledgeBaseName}`
+                  : selectedOption === OPTIONS.IMAGE
+                    ? 'Describe the image you want to create...'
+                    : selectedOption === OPTIONS.EDIT_IMAGE
+                      ? 'Describe how you want to edit the image...'
+                      : 'Chat with alti'
+            }
+            className="max-h-[500px] min-h-12 w-full resize-none overflow-y-auto border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+            autoFocus
+          />
+          {/* Responsive container */}
+          <div className="flex items-end justify-between gap-2 py-2">
+            {/* Desktop layout */}
+            <div
+              className={cn(
+                'flex items-center gap-2',
+                activeConversation?.knowledgebaseId && 'hidden',
+              )}
+            >
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    className="relative flex cursor-pointer items-center"
+                  >
+                    <Plus className="size-6 rounded-full border-2 border-gray-300 p-[3px]" />
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </div>
+                </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>{label}</p>
+                  <p>Upload Files</p>
                 </TooltipContent>
               </Tooltip>
-            ))}
-          </div>
+              {/* options */}
+              {TOOLBAR_ITEMS.map(({ type, label, Icon }) => (
+                <Tooltip key={type}>
+                  <TooltipTrigger>
+                    <Icon
+                      onClick={() => handleSelectOption(type)}
+                      className={cn(
+                        'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
+                        selectedOption === type && 'bg-black text-white',
+                      )}
+                    />
+                  </TooltipTrigger>
 
-          {/* Right: Mic or send button */}
-          <div className="ml-auto flex items-center">
-            {message ? (
-              <ArrowRight
-                onClick={handleSubmit}
-                className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-1 text-white"
-              />
-            ) : (
-              <AudioRecorder setMessage={setMessage} />
-            )}
+                  <TooltipContent side="bottom">
+                    <p>{label}</p>
+                  </TooltipContent>
+                </Tooltip>
+              ))}
+            </div>
+
+            {/* Aspect ratio selector - shown for image options */}
+            {/* {(selectedOption === OPTIONS.IMAGE ||
+              selectedOption === OPTIONS.EDIT_IMAGE) && (
+              <AspectRatioSelector className="mr-2" />
+            )} */}
+
+            {/* Right: Mic or send button */}
+            <div className="ml-auto flex items-center">
+              {message ? (
+                <ArrowRight
+                  onClick={handleSubmit}
+                  className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-1 text-white"
+                />
+              ) : (
+                <AudioRecorder setMessage={setMessage} />
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 export default ChatInput;
