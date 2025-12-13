@@ -78,7 +78,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
   } = useImageGenStore();
 
   // Conversation store for updating chat UI
-  const { updateActiveConversation, setLoadingResponse } =
+  const { updateActiveConversation, setLoadingResponse, setUserMessage } =
     useConversationsStore();
 
   // ============ Step 2: Evaluate Prompt ============
@@ -194,6 +194,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       updateActiveConversation(request, ROLES.USER, existingConversationId);
 
       setLoadingResponse(true);
+      setUserMessage('');
     },
     onSuccess: async (response, variables) => {
       if (!response.success || !response.data) {
@@ -323,6 +324,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // Clear suggestions when user submits new detail
       setSuggestions([]);
       setLoadingResponse(true);
+      setUserMessage('');
     },
     onSuccess: response => {
       if (!response.success || !response.data) {
@@ -407,11 +409,11 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
 
       // Add a simple "generating" message to chat
       const store = useImageGenStore.getState();
-      updateActiveConversation(
-        'Generating your image...',
-        ROLES.ASSISTANT,
-        store.conversationId || undefined,
-      );
+      // updateActiveConversation(
+      //   'Generating your image...',
+      //   ROLES.ASSISTANT,
+      //   store.conversationId || undefined,
+      // );
 
       setWorkflow('generating');
     },
@@ -481,7 +483,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
 
       // Add generated image to chat
       updateActiveConversation(
-        answer,
+        '',
         ROLES.ASSISTANT,
         newConversationId || currentConvId || undefined,
         { images: image.url },

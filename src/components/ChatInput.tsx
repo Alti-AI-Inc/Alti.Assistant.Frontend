@@ -138,7 +138,15 @@ const TOOLBAR_ITEMS = [
   },
 ];
 
-const ChatInput = ({ conversationId }: { conversationId?: string }) => {
+interface ChatInputProps {
+  conversationId?: string;
+  imageGenHook?: ReturnType<typeof useImageGeneration>;
+}
+
+const ChatInput = ({
+  conversationId,
+  imageGenHook: externalImageGenHook,
+}: ChatInputProps) => {
   const router = useRouter();
   const { data } = useSession();
 
@@ -156,6 +164,8 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
   } = useConversationsStore();
 
   // Image generation hook - pass router and queryClient for URL redirect and query invalidation
+  // Image generation hook - use external if provided, otherwise create internal instance
+  const internalImageGenHook = useImageGeneration({ router, queryClient });
   const {
     workflow: imageWorkflow,
     shouldShowConfirmation,
@@ -165,7 +175,7 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
     handleUserConfirmation,
     handleAddDetail,
     reset: resetImageGen,
-  } = useImageGeneration({ router, queryClient });
+  } = externalImageGenHook || internalImageGenHook;
 
   // const [message, setMessage] = useState('');
 
@@ -327,13 +337,12 @@ const ChatInput = ({ conversationId }: { conversationId?: string }) => {
 
   return (
     <>
-      {/* Image Generation Confirmation - shown when prompt score >= 65 */}
-      {shouldShowConfirmation && (
+      {/* Image Gen UI is now handled by parent in FullConversation, but kept here for fallback/other pages */}
+      {!externalImageGenHook && shouldShowConfirmation && (
         <ImageGenConfirmation onConfirm={handleUserConfirmation} />
       )}
 
-      {/* Image Generation Suggestions - shown during detail collection */}
-      {isCollectingDetails && <ImageGenSuggestions />}
+      {!externalImageGenHook && isCollectingDetails && <ImageGenSuggestions />}
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 bg-white px-4 lg:px-0">
         <div

@@ -18,7 +18,7 @@ export function ImageGenConfirmation({ onConfirm }: ImageGenConfirmationProps) {
   const isLoading = workflow === 'finalizing' || workflow === 'generating';
 
   return (
-    <div className="fixed bottom-28 left-1/2 z-50 mx-auto max-w-[600px] -translate-x-1/2 rounded-xl border border-gray-200 bg-gray-50 p-4 shadow-lg">
+    <div className="mx-auto mb-4 w-full max-w-[750px] rounded-xl border border-gray-200 bg-gray-50 p-4 shadow-sm">
       <div className="mb-3 flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
           <Check className="h-4 w-4 text-green-600" />
@@ -42,7 +42,7 @@ export function ImageGenConfirmation({ onConfirm }: ImageGenConfirmationProps) {
           className="flex-1"
         >
           <Plus className="mr-1 h-4 w-4" />
-          Yes, add details
+          Add details
         </Button>
         <Button
           size="sm"
@@ -50,7 +50,7 @@ export function ImageGenConfirmation({ onConfirm }: ImageGenConfirmationProps) {
           disabled={isLoading}
           className="flex-1 bg-black text-white hover:bg-gray-800"
         >
-          No, generate now
+          Generate now
         </Button>
       </div>
     </div>
