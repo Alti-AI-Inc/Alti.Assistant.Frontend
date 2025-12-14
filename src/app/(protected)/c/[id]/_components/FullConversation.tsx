@@ -1,6 +1,8 @@
 'use client';
 import ChatInput from '@/components/ChatInput';
 import CopyButton from '@/components/CopyButton';
+import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
+import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
 import SaveConversation from '@/components/SaveConversation';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,16 +12,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useActiveConversation } from '@/hooks/useConversations';
+import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { cn, containsYouTubeUrl } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
-import { useImageGenStore } from '@/stores/useImageGenStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
-import { EllipsisVertical, Share, Trash2 } from 'lucide-react';
-import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
-import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
-import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { useQueryClient } from '@tanstack/react-query';
+import { EllipsisVertical, Share, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
@@ -113,7 +112,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   return (
     <div
       className={cn(
-        'flex w-full flex-col',
+        'flex w-full flex-col pb-24',
         activeConversation?.messages.length &&
           'h-[calc(100vh-70px)] lg:h-screen',
         isLoading && 'h-[calc(100vh-70px)] lg:h-screen',

@@ -1,7 +1,6 @@
 'use client';
 
 import AudioRecorder from '@/components/AudioRecorder';
-import { AspectRatioSelector } from '@/components/AspectRatioSelector';
 import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
 import {
@@ -228,7 +227,7 @@ const ChatInput = ({
     },
     onSuccess: (response, userMessage) => {
       if (!response?.data) return;
-
+      setShowStartLastMessage(false);
       const newId =
         conversationId === 'new-chat'
           ? response.data.conversationId
@@ -443,8 +442,8 @@ const ChatInput = ({
           className={cn(
             'flex flex-col rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4',
             activeConversation?.knowledgebaseId &&
-              message.length < 100 &&
-              'flex',
+            message.length < 100 &&
+            'flex',
           )}
         >
           {/* Image Preview */}
