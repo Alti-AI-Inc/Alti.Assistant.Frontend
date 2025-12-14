@@ -108,13 +108,13 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const lastUserMessage = activeConversation?.messages
     .filter(message => message.role === 'user')
     .pop();
-
+  const lastMessageRole = activeConversation?.messages.at(-1)?.role;
   return (
     <div
       className={cn(
         'flex w-full flex-col pb-24',
         activeConversation?.messages.length &&
-          'h-[calc(100vh-70px)] lg:h-screen',
+        'h-[calc(100vh-70px)] lg:h-screen',
         isLoading && 'h-[calc(100vh-70px)] lg:h-screen',
       )}
     >
@@ -258,7 +258,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 // activeConversation?.messages[
                 //   activeConversation?.messages.length - 1
                 // ]?.role === 'user' &&
-                showStartLastMessage && 'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
+                showStartLastMessage && lastMessageRole === 'user' && 'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
               )}
             ></div>
           </div>
