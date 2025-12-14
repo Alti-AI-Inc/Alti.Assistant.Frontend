@@ -163,8 +163,13 @@ export async function analyzeImageIntent(
 export async function evaluatePrompt(
   prompt: string,
   conversationId: string,
+  conversationHistory: string,
   accessToken: string,
 ): Promise<ApiResponse<EvaluatePromptResponse>> {
+  const finalPrompt = conversationHistory
+    ? `Conversation History:\n${conversationHistory}\n\nCurrent Request: ${prompt}`
+    : prompt;
+
   const response = await fetch(`${API_URL}/enhanced-image/evaluate-prompt`, {
     method: 'POST',
     headers: {
@@ -172,7 +177,7 @@ export async function evaluatePrompt(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      prompt,
+      prompt: finalPrompt,
       conversationId,
     }),
   });
@@ -279,6 +284,7 @@ export async function generateImage(
 
 /**
  * Edit Flow: Edit an existing image
+ * @param imageBase64 - Full data URL including prefix (e.g., 'data:image/jpeg;base64,/9j/4AAQ...')
  */
 export async function editImage(
   prompt: string,

@@ -175,6 +175,8 @@ const ChatInput = ({
     handleUserConfirmation,
     handleAddDetail,
     reset: resetImageGen,
+    imageBase64,
+    setImageBase64,
   } = externalImageGenHook || internalImageGenHook;
 
   // const [message, setMessage] = useState('');
@@ -183,8 +185,10 @@ const ChatInput = ({
     (value: OPTIONS) => {
       // Reset image generation state when switching options
       if (
-        selectedOption === OPTIONS.IMAGE ||
-        selectedOption === OPTIONS.EDIT_IMAGE
+        (selectedOption === OPTIONS.IMAGE ||
+          selectedOption === OPTIONS.EDIT_IMAGE) &&
+        value !== OPTIONS.IMAGE &&
+        value !== OPTIONS.EDIT_IMAGE
       ) {
         resetImageGen();
       }
@@ -279,11 +283,11 @@ const ChatInput = ({
   });
 
   const handleSubmit = async () => {
-    console.log('11111111111', {
+    console.log('ChatInput submit:', {
       selectedOption,
       conversationId,
       userId: data?.user.id,
-      accessToken: data?.accessToken,
+      hasImage: !!imageBase64,
       imageWorkflow,
     });
 
@@ -303,10 +307,13 @@ const ChatInput = ({
         await handleAddDetail(message);
       } else {
         // Start new image generation flow
-        console.log('[ChatInput] Starting image generation flow');
+        console.log('[ChatInput] Starting image generation flow', {
+          hasImage: !!imageBase64,
+        });
         await handleImageRequest(
           message,
-          selectedOption === OPTIONS.EDIT_IMAGE,
+          selectedOption === OPTIONS.EDIT_IMAGE || !!imageBase64,
+          imageBase64 || undefined,
         );
       }
       setMessage('');
@@ -330,9 +337,96 @@ const ChatInput = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const compressImage = (
+    file: File,
+    maxWidth: number = 1920,
+    maxHeight: number = 1920,
+    quality: number = 0.8,
+  ): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = event => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          // Calculate new dimensions while maintaining aspect ratio
+          if (width > height) {
+            if (width > maxWidth) {
+              height = (height * maxWidth) / width;
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width = (width * maxHeight) / height;
+              height = maxHeight;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+
+          // Convert to base64 with compression
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+
+          console.log('[ChatInput] Image compression:', {
+            originalSize: file.size,
+            originalDimensions: `${img.width}x${img.height}`,
+            newDimensions: `${width}x${height}`,
+            originalBase64Length: (event.target?.result as string).length,
+            compressedBase64Length: compressedDataUrl.length,
+            compressionRatio:
+              (
+                (((event.target?.result as string).length -
+                  compressedDataUrl.length) /
+                  (event.target?.result as string).length) *
+                100
+              ).toFixed(2) + '%',
+          });
+
+          resolve(compressedDataUrl);
+        };
+        img.onerror = reject;
+      };
+      reader.onerror = reject;
+    });
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) console.log({ file });
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        console.error('Only image files are supported');
+        return;
+      }
+
+      try {
+        // Compress the image before storing
+        const compressedDataUrl = await compressImage(file);
+        setImageBase64(compressedDataUrl);
+        setSelectedOption(OPTIONS.EDIT_IMAGE);
+      } catch (error) {
+        console.error('[ChatInput] Error compressing image:', error);
+      }
+    }
+    // Reset input so same file can be selected again if needed
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImageBase64(null);
+    if (selectedOption === OPTIONS.EDIT_IMAGE) {
+      setSelectedOption(null);
+    }
   };
 
   return (
@@ -347,12 +441,29 @@ const ChatInput = ({
       <div className="mx-auto w-full max-w-[796px] space-y-6 bg-white px-4 lg:px-0">
         <div
           className={cn(
-            'rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4',
+            'flex flex-col rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4',
             activeConversation?.knowledgebaseId &&
               message.length < 100 &&
               'flex',
           )}
         >
+          {/* Image Preview */}
+          {imageBase64 && (
+            <div className="relative mt-2 w-fit">
+              <img
+                src={imageBase64}
+                alt="Uploaded preview"
+                className="h-12 w-12 rounded-lg object-cover"
+              />
+              <button
+                onClick={handleRemoveImage}
+                className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
+              >
+                <Plus className="bold size-3 rotate-45" />
+              </button>
+            </div>
+          )}
+
           <Textarea
             name="message"
             value={message}
@@ -396,13 +507,14 @@ const ChatInput = ({
                     <input
                       ref={fileInputRef}
                       type="file"
+                      accept="image/*"
                       onChange={handleFileChange}
                       className="hidden"
                     />
                   </div>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>Upload Files</p>
+                  <p>Upload Image</p>
                 </TooltipContent>
               </Tooltip>
               {/* options */}

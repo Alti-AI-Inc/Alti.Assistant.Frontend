@@ -49,7 +49,7 @@ interface ImageGenStore {
   aspectRatio: AspectRatio;
   negativePrompt: string;
 
-  // Edit mode
+  // Edit mode - Full data URL (e.g., 'data:image/jpeg;base64,/9j/4AAQ...')
   imageBase64: string | null;
 
   // Error handling
@@ -86,6 +86,7 @@ interface ImageGenStore {
   startImageGeneration: () => void;
   startImageEditing: (imageBase64: string) => void;
   proceedToGenerate: () => void;
+  prepareForAnalysis: () => void;
   reset: () => void;
 }
 
@@ -199,6 +200,18 @@ export const useImageGenStore = create<ImageGenStore>()(set => ({
   proceedToGenerate: () =>
     set({
       workflow: 'finalizing',
+    }),
+
+  prepareForAnalysis: () =>
+    set({
+      workflow: 'analyzing',
+      promptScore: 0,
+      suggestions: [],
+      missingElements: [],
+      isComplete: false,
+      enhancedPrompt: null,
+      generatedImage: null,
+      error: null,
     }),
 
   reset: () => set(initialState),

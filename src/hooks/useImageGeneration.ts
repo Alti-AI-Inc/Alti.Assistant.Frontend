@@ -13,7 +13,32 @@ import { useConversationsStore, ROLES } from '@/stores/useConverstionsStore';
 import { useMutation, QueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+
+// Define the conversation type based on useConversationsStore structure
+type ProcessedMessage = any; // We'd import this properly if available, but for now 'any' works
+interface ActiveConversation {
+  messages: ProcessedMessage[];
+  // other props...
+}
+
+/**
+ * Helper to build conversation history string
+ */
+const getHistoryContext = (
+  activeConversation: ActiveConversation | null,
+): string => {
+  if (activeConversation?.messages && activeConversation.messages.length > 0) {
+    return activeConversation.messages
+      .map(
+        msg =>
+          `${msg.role === ROLES.USER ? 'User' : 'Assistant'}: ${msg.content}`,
+      )
+      .join('\n');
+  }
+  return '';
+};
 
 /**
  * Options for the useImageGeneration hook
@@ -43,6 +68,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
   const { data: session } = useSession();
   const accessToken = session?.accessToken;
   const userId = session?.user?.id;
+  const pathname = usePathname();
 
   // Image generation store
   const {
@@ -73,6 +99,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
     updateFromEvaluation,
     startImageGeneration,
     startImageEditing,
+    prepareForAnalysis,
     setSuggestions,
     reset,
   } = useImageGenStore();
@@ -95,36 +122,16 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // Get conversation history from store
       const { activeConversation } = useConversationsStore.getState();
 
-      let fullPrompt = prompt;
-
-      // If we have history, prepend it to the prompt to give context
-      if (
-        activeConversation?.messages &&
-        activeConversation.messages.length > 0
-      ) {
-        // Simple transcript format:
-        // User: ...
-        // Assistant: ...
-        // User: [Current Prompt]
-
-        const historyContext = activeConversation.messages
-          .map(
-            msg =>
-              `${msg.role === ROLES.USER ? 'User' : 'Assistant'}: ${msg.content}`,
-          )
-          .join('\n');
-
-        fullPrompt = `Conversation History:\n${historyContext}\n\nCurrent Request: ${prompt}`;
-      }
+      const historyContext = getHistoryContext(activeConversation);
 
       console.log('[useImageGeneration] evaluatePrompt - sending:', {
         originalPrompt: prompt,
-        fullPrompt,
-        fullPromptLength: fullPrompt.length,
+        fullPrompt: prompt, // prompt is already full if needed, but we pass history separately now
         conversationId: convId,
+        historyContextLength: historyContext.length,
       });
 
-      return evaluatePrompt(fullPrompt, convId, accessToken);
+      return evaluatePrompt(prompt, convId, historyContext, accessToken);
     },
     onMutate: () => {
       setWorkflow('evaluating');
@@ -190,7 +197,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       );
     },
     onMutate: ({ request, existingConversationId }) => {
-      startImageGeneration();
+      prepareForAnalysis();
       updateActiveConversation(request, ROLES.USER, existingConversationId);
 
       setLoadingResponse(true);
@@ -214,37 +221,37 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
 
       const { request, existingConversationId } = variables;
 
-      // === Handle Redirect for New Conversation ===
-      // If we didn't have an ID before, but now we do (from server), we redirect.
-      if (!existingConversationId && backendConversationId) {
-        console.log(
-          '[useImageGeneration] New conversation created. Redirecting to:',
-          backendConversationId,
-        );
-
-        // Update the store with the new ID
+      // === Handle Redirect for New/Changed Conversation ===
+      // Always update the store with the backend conversation ID
+      if (backendConversationId) {
         setConversationId(backendConversationId);
 
-        // Ensure the User message is associated with this new ID in the store
-        // so it persists/shows up after redirect if store state is preserved
-        updateActiveConversation(request, ROLES.USER, backendConversationId);
+        // Determine if we need to redirect
+        const needsRedirect =
+          !existingConversationId ||
+          backendConversationId !== existingConversationId;
 
-        if (router) {
-          router.replace(`/c/${backendConversationId}`);
-        }
+        if (needsRedirect) {
+          console.log(
+            '[useImageGeneration] Redirecting to conversation:',
+            backendConversationId,
+          );
 
-        // Invalidate conversation list queries
-        if (queryClient && accessToken) {
-          queryClient.invalidateQueries({
-            queryKey: ['conversations', accessToken],
-          });
+          // Ensure the User message is associated with this new ID in the store
+          // so it persists/shows up after redirect if store state is preserved
+          updateActiveConversation(request, ROLES.USER, backendConversationId);
+
+          if (router) {
+            router.replace(`/c/${backendConversationId}`);
+          }
+
+          // Invalidate conversation list queries
+          if (queryClient && accessToken) {
+            queryClient.invalidateQueries({
+              queryKey: ['conversations', accessToken],
+            });
+          }
         }
-      } else if (
-        backendConversationId &&
-        backendConversationId !== existingConversationId
-      ) {
-        // Just in case existing ID differs (unexpected, but handle it)
-        setConversationId(backendConversationId);
       }
 
       // Update Local State
@@ -252,34 +259,65 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setIsEditable(respIsEditable);
       setUserId(newUserId);
 
+      // Get latest state for decision making
+      const store = useImageGenStore.getState();
+
       // Continue the Flow based on Intent
       if (respIsEditable) {
-        // Workflow #2: Edit flow - need image from user
-        setWorkflow('editing');
-        updateActiveConversation(
-          'Please upload the image you want to edit.',
-          ROLES.ASSISTANT,
-          backendConversationId || existingConversationId,
-        );
-        setLoadingResponse(false);
+        // Workflow #2: Edit flow
+        // Check if we have an image in the store (set by ChatInput)
+        if (store.imageBase64) {
+          console.log(
+            '[useImageGeneration] Intent is edit and image exists. Triggering edit...',
+          );
+          // Auto-trigger edit
+          await editImageMutation.mutateAsync({
+            prompt: request,
+            base64: store.imageBase64,
+          });
+        } else {
+          // No image yet - ask user
+          console.log(
+            '[useImageGeneration] Intent is edit but no image. Asking user...',
+          );
+          setWorkflow('editing');
+          updateActiveConversation(
+            'Please upload the image you want to edit.',
+            ROLES.ASSISTANT,
+            backendConversationId || existingConversationId,
+          );
+          setLoadingResponse(false);
+        }
       } else {
         // Workflow #1: Generation flow
-        // Set workflow to evaluating
-        // The useEffect will pick this up on the new page
-        console.log('[useImageGeneration] Setting workflow to evaluating');
-        setWorkflow('evaluating');
+        // STRICT CHECK: Only proceed if original user intent was 'generate'
+        if (store.intent === 'generate') {
+          console.log('[useImageGeneration] Setting workflow to evaluating');
+          setWorkflow('evaluating');
 
-        // Only chain if we didn't redirect (same conversation ID)
-        // Fix: Use stored conversationId as fallback for current
-        const effectiveCurrentId = existingConversationId;
+          // Only chain if we didn't redirect (same conversation ID)
+          // Fix: Use stored conversationId as fallback for current
+          const effectiveCurrentId = existingConversationId;
 
-        if (backendConversationId === effectiveCurrentId) {
-          console.log(
-            '[useImageGeneration] Staying on same page, letting useEffect handle continuation...',
-          );
+          if (backendConversationId === effectiveCurrentId) {
+            console.log(
+              '[useImageGeneration] Staying on same page, letting useEffect handle continuation...',
+            );
+          } else {
+            console.log(
+              '[useImageGeneration] Redirecting, letting useEffect handle continuation on new page...',
+            );
+          }
         } else {
-          console.log(
-            '[useImageGeneration] Redirecting, letting useEffect handle continuation on new page...',
+          // Mismatch: User wanted 'edit' (UI), but backend said 'generate' (Content)
+          console.warn(
+            '[useImageGeneration] Intent mismatch. User: edit, Backend: generate. Stopping.',
+          );
+          setLoadingResponse(false);
+          updateActiveConversation(
+            'It looks like you might want to generate a new image instead of editing. To edit, please make sure you attach an image and describe the changes you want to make.',
+            ROLES.ASSISTANT,
+            backendConversationId || existingConversationId,
           );
         }
       }
@@ -337,7 +375,21 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         evaluation,
         conversationHistory: history,
         messageCount,
+        conversationId: newConvId,
       } = response.data;
+
+      // Check if conversation ID changed (e.g. from new-chat to real ID)
+      const store = useImageGenStore.getState();
+      if (newConvId && newConvId !== store.conversationId) {
+        console.log(
+          '[useImageGeneration] addDetail - conversation ID changed/assigned:',
+          newConvId,
+        );
+        setConversationId(newConvId);
+        if (router) {
+          router.push(`/c/${newConvId}`);
+        }
+      }
 
       // Update store with new evaluation (suggestions go to store, NOT chat)
       updateFromEvaluation(evaluation);
@@ -517,8 +569,17 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         throw new Error('Missing required data');
       }
 
+      // Get conversation history to append to prompt
+      const { activeConversation } = useConversationsStore.getState();
+      const historyContext = getHistoryContext(activeConversation);
+
+      const finalPrompt = historyContext
+        ? `Conversation History:\n${historyContext}\n\nCurrent Request: ${prompt}`
+        : prompt;
+
       console.log('[useImageGeneration] editImage - sending:', {
-        prompt,
+        originalPrompt: prompt,
+        finalPromptLength: finalPrompt.length,
         conversationId: currentConvId,
         userId: currentUserId,
         aspectRatio: currentAspectRatio,
@@ -526,7 +587,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       });
 
       return editImage(
-        prompt,
+        finalPrompt,
         base64,
         currentConvId,
         currentUserId,
@@ -546,17 +607,35 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
     },
     onSuccess: response => {
       if (!response.success || !response.data) {
-        setError(response.message || 'Failed to edit image');
+        const errorMsg = response.message || 'Failed to edit image';
+        setError(errorMsg);
         setLoadingResponse(false);
+
+        const store = useImageGenStore.getState();
+        updateActiveConversation(
+          `I encountered an error while editing your image: ${errorMsg}`,
+          ROLES.ASSISTANT,
+          store.conversationId || undefined,
+        );
         return;
       }
 
       const { responseMessage } = response.data;
       const { answer, image } = responseMessage;
 
+      console.log(
+        '[useImageGeneration] editImage success - image object:',
+        image,
+      );
+
       // Handle nested url structure from edit response
       const imageUrl =
         typeof image.url === 'object' ? image.url.url : image.url;
+
+      console.log(
+        '[useImageGeneration] editImage - extracted imageUrl:',
+        imageUrl,
+      );
 
       setGeneratedImage({
         url: imageUrl,
@@ -565,12 +644,51 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       });
 
       const store = useImageGenStore.getState();
+      console.log(
+        '[useImageGeneration] editImage - updating conversation with:',
+        {
+          answer,
+          conversationId: store.conversationId,
+          imageUrl,
+        },
+      );
+
+      // 1. Update Zustand Store (Local State)
+      // User requested empty string for message content to avoid duplicate text if backend sends it separately?
+      // Or maybe the 'answer' is what caused the flicker if it was empty?
+      // We'll respect the user's change to '' but use 'answer' for the cache if available/appropriate.
+      // Actually, if we use '' locally, we should probably stick to it unless we want to show the answer.
+      // Let's use 'answer' for the cache update to be safe, as that's the source of truth.
       updateActiveConversation(
         answer,
         ROLES.ASSISTANT,
         store.conversationId || undefined,
         { images: imageUrl },
       );
+
+      // 2. Update React Query Cache (Server State)
+      if (store.conversationId && accessToken && queryClient) {
+        queryClient.setQueryData(
+          ['activeConversation', store.conversationId, accessToken],
+          (oldData: any) => {
+            if (!oldData) return oldData;
+
+            const newMessage = {
+              role: ROLES.ASSISTANT,
+              content: answer, // Use the actual answer from backend for the cache
+              metadata: {
+                images: imageUrl,
+              },
+              timestamp: new Date().toISOString(),
+            };
+
+            return {
+              ...oldData,
+              messages: [...(oldData.messages || []), newMessage],
+            };
+          },
+        );
+      }
 
       setWorkflow('complete');
       setLoadingResponse(false);
@@ -579,6 +697,13 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       console.error('[useImageGeneration] editImage error:', error);
       setError(error.message);
       setLoadingResponse(false);
+
+      const store = useImageGenStore.getState();
+      updateActiveConversation(
+        `${error.message}`,
+        ROLES.ASSISTANT,
+        store.conversationId || undefined,
+      );
     },
   });
 
@@ -601,6 +726,13 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
 
       if (hasImage && existingImageBase64) {
         startImageEditing(existingImageBase64);
+      } else {
+        const store = useImageGenStore.getState();
+        if (store.intent === 'edit') {
+          // Keep it as edit
+        } else {
+          startImageGeneration();
+        }
       }
 
       // Get existing conversation ID from store
@@ -612,18 +744,36 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         store.conversationId,
       );
 
+      // REMOVED: Direct edit mode check. We always analyze first now.
+
+      // Get history context for existing chat
+      const { activeConversation } = useConversationsStore.getState();
+      const historyContext = getHistoryContext(activeConversation);
+
+      let fullRequest = message;
+      if (store.conversationId && historyContext) {
+        fullRequest = `Conversation History:\n${historyContext}\n\nCurrent Request: ${message}`;
+      }
+
       console.log('analyzeIntentMutation: request:', {
-        request: message,
+        request: fullRequest, // Log the full request being sent
+        originalMessage: message,
         hasImage,
         existingConversationId: store.conversationId || undefined,
       });
+
       await analyzeIntentMutation.mutateAsync({
-        request: message,
+        request: fullRequest,
         hasImage,
         existingConversationId: store.conversationId || undefined,
       });
     },
-    [analyzeIntentMutation, setSuggestions, startImageEditing],
+    [
+      analyzeIntentMutation,
+      setSuggestions,
+      startImageEditing,
+      startImageGeneration,
+    ],
   );
 
   /**
@@ -703,9 +853,9 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       !evaluatePromptMutation.isPending &&
       !hasResumedEvaluation.current
     ) {
-      // Check if we have a conversation ID and we are on the page for it?
-      // The store conversationId should be set.
-      if (conversationId && accessToken) {
+      // Check if we have a conversation ID and we are on the correct page for it
+      // Wait for the URL to reflect the new conversation ID before continuing
+      if (conversationId && accessToken && pathname?.includes(conversationId)) {
         console.log(
           '[useImageGeneration] Resuming evaluation flow for conversation:',
           conversationId,
@@ -737,7 +887,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         }
       }
     }
-  }, [workflow, conversationId, accessToken, evaluatePromptMutation]);
+  }, [workflow, conversationId, accessToken, pathname, evaluatePromptMutation]);
 
   // Computed states
   const isLoading =

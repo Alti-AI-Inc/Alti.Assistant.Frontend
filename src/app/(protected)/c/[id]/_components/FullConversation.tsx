@@ -218,7 +218,15 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={message.metadata.images}
-                      alt={message.metadata.type}
+                      alt={message.metadata.type || 'Generated image'}
+                      className="max-w-full rounded-lg shadow-md"
+                      onError={e => {
+                        console.error(
+                          '[FullConversation] Image failed to load:',
+                          message.metadata!.images,
+                        );
+                        console.error('Error details:', e);
+                      }}
                     />
                   )}
                   {message.metadata?.video?.name && (
