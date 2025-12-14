@@ -123,6 +123,7 @@ export async function loadSingleConversation(
     },
   );
   const data = await response.json();
+
   return data;
 }
 export async function loadSingleSharedConversation(id: string) {
@@ -130,6 +131,7 @@ export async function loadSingleSharedConversation(id: string) {
     `${process.env.NEXT_PUBLIC_API_URL}/conversations/shared/${id}`,
   );
   const data = await response.json();
+
   return data;
 }
 

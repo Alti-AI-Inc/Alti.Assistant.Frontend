@@ -191,28 +191,21 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     </div>
                   )}
 
-                  {message.role === 'assistant' &&
-                    !message.content.startsWith('Intent analysis:') &&
-                    !message.content.startsWith(
-                      'Image generated successfully',
-                    ) &&
-                    !message.content.startsWith(
-                      'Video generated successfully',
-                    ) && (
-                      <div>
-                        {containsYouTubeUrl(message.content) ? (
-                          <VideoComponentForContent content={message.content} />
-                        ) : (
-                          <div>
-                            <Streamdown className="w-full rounded-lg">
-                              {message.content}
-                            </Streamdown>
+                  {message.role === 'assistant' && (
+                    <div>
+                      {containsYouTubeUrl(message.content) ? (
+                        <VideoComponentForContent content={message.content} />
+                      ) : (
+                        <div>
+                          <Streamdown className="w-full rounded-lg">
+                            {message.content}
+                          </Streamdown>
 
-                            <CopyButton content={message.content} />
-                          </div>
-                        )}
-                      </div>
-                    )}
+                          <CopyButton content={message.content} />
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {message.metadata?.imageUrl && (
                     // eslint-disable-next-line @next/next/no-img-element

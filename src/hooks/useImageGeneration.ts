@@ -17,10 +17,9 @@ import { usePathname } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 // Define the conversation type based on useConversationsStore structure
-type ProcessedMessage = any; // We'd import this properly if available, but for now 'any' works
+type ProcessedMessage = any;
 interface ActiveConversation {
   messages: ProcessedMessage[];
-  // other props...
 }
 
 /**
@@ -31,9 +30,10 @@ const getHistoryContext = (
 ): string => {
   if (activeConversation?.messages && activeConversation.messages.length > 0) {
     return activeConversation.messages
+      .filter(msg => msg.role === ROLES.USER || msg.role === ROLES.ASSISTANT)
       .map(
         msg =>
-          `${msg.role === ROLES.USER ? 'User' : 'Assistant'}: ${msg.content}`,
+          `${msg.role === ROLES.USER ? 'User' : 'Assistant'}: ${msg.content || ''}`,
       )
       .join('\n');
   }
@@ -460,12 +460,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       );
 
       // Add a simple "generating" message to chat
-      const store = useImageGenStore.getState();
-      // updateActiveConversation(
-      //   'Generating your image...',
-      //   ROLES.ASSISTANT,
-      //   store.conversationId || undefined,
-      // );
+      // const store = useImageGenStore.getState();
 
       setWorkflow('generating');
     },
@@ -533,13 +528,15 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         setConversationId(newConversationId);
       }
 
-      // Add generated image to chat
-      updateActiveConversation(
-        '',
-        ROLES.ASSISTANT,
-        newConversationId || currentConvId || undefined,
-        { imageUrl: image.url },
-      );
+      // Only add to chat if we have an image
+      if (image && image.url) {
+        updateActiveConversation(
+          '', // No text, only image
+          ROLES.ASSISTANT,
+          newConversationId || currentConvId || undefined,
+          { imageUrl: image.url },
+        );
+      }
 
       setWorkflow('complete');
       setLoadingResponse(false);
@@ -569,17 +566,8 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         throw new Error('Missing required data');
       }
 
-      // Get conversation history to append to prompt
-      const { activeConversation } = useConversationsStore.getState();
-      const historyContext = getHistoryContext(activeConversation);
-
-      const finalPrompt = historyContext
-        ? `Conversation History:\n${historyContext}\n\nCurrent Request: ${prompt}`
-        : prompt;
-
       console.log('[useImageGeneration] editImage - sending:', {
-        originalPrompt: prompt,
-        finalPromptLength: finalPrompt.length,
+        prompt,
         conversationId: currentConvId,
         userId: currentUserId,
         aspectRatio: currentAspectRatio,
@@ -587,7 +575,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       });
 
       return editImage(
-        finalPrompt,
+        prompt,
         base64,
         currentConvId,
         currentUserId,
@@ -663,36 +651,38 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // Or maybe the 'answer' is what caused the flicker if it was empty?
       // We'll respect the user's change to '' but use 'answer' for the cache if available/appropriate.
       // Actually, if we use '' locally, we should probably stick to it unless we want to show the answer.
-      // Let's use 'answer' for the cache update to be safe, as that's the source of truth.
-      updateActiveConversation(
-        answer,
-        ROLES.ASSISTANT,
-        store.conversationId || undefined,
-        { imageUrl: imageUrl },
-      );
-
-      // 2. Update React Query Cache (Server State)
-      if (store.conversationId && accessToken && queryClient) {
-        queryClient.setQueryData(
-          ['activeConversation', store.conversationId, accessToken],
-          (oldData: any) => {
-            if (!oldData) return oldData;
-
-            const newMessage = {
-              role: ROLES.ASSISTANT,
-              content: answer, // Use the actual answer from backend for the cache
-              metadata: {
-                imageUrl: imageUrl,
-              },
-              timestamp: new Date().toISOString(),
-            };
-
-            return {
-              ...oldData,
-              messages: [...(oldData.messages || []), newMessage],
-            };
-          },
+      // Only add to chat if we have an image
+      if (imageUrl) {
+        updateActiveConversation(
+          '', // No text, only image
+          ROLES.ASSISTANT,
+          store.conversationId || undefined,
+          { imageUrl: imageUrl },
         );
+
+        // 2. Update React Query Cache (Server State)
+        if (store.conversationId && accessToken && queryClient) {
+          queryClient.setQueryData(
+            ['activeConversation', store.conversationId, accessToken],
+            (oldData: any) => {
+              if (!oldData) return oldData;
+
+              const newMessage = {
+                role: ROLES.ASSISTANT,
+                content: '', // No text
+                metadata: {
+                  imageUrl: imageUrl,
+                },
+                timestamp: new Date().toISOString(),
+              };
+
+              return {
+                ...oldData,
+                messages: [...(oldData.messages || []), newMessage],
+              };
+            },
+          );
+        }
       }
 
       setWorkflow('complete');
@@ -761,7 +751,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // 1. Existing Chat + Has Prior Images -> Direct Generation (Skip Analyze/Evaluate)
       // 2. New Chat OR No Prior Images -> Full Analyze-Evaluate Flow
 
-      if (currentConversationId && hasPriorImages) {
+      if (currentConversationId && hasPriorImages && !hasImage) {
         console.log(
           '[useImageGeneration] Existing context detected. Skipping analysis, going straight to generation.',
         );
