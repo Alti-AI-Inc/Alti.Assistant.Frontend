@@ -114,7 +114,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       className={cn(
         'flex w-full flex-col pb-24',
         activeConversation?.messages.length &&
-        'h-[calc(100vh-70px)] lg:h-screen',
+          'h-[calc(100vh-70px)] lg:h-screen',
         isLoading && 'h-[calc(100vh-70px)] lg:h-screen',
       )}
     >
@@ -190,21 +190,26 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     </div>
                   )}
 
-                  {message.role === 'assistant' && (
-                    <div>
-                      {containsYouTubeUrl(message.content) ? (
-                        <VideoComponentForContent content={message.content} />
-                      ) : (
-                        <div>
-                          <Streamdown className="w-full rounded-lg">
-                            {message.content}
-                          </Streamdown>
+                  {message.role === 'assistant' &&
+                    // Skip rendering if content is empty and there's no image
+                    !(
+                      message.content.trim() === '' &&
+                      !message.metadata?.imageUrl
+                    ) && (
+                      <div>
+                        {containsYouTubeUrl(message.content) ? (
+                          <VideoComponentForContent content={message.content} />
+                        ) : (
+                          <div>
+                            <Streamdown className="w-full rounded-lg">
+                              {message.content}
+                            </Streamdown>
 
-                          <CopyButton content={message.content} />
-                        </div>
-                      )}
-                    </div>
-                  )}
+                            <CopyButton content={message.content} />
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                   {message.metadata?.imageUrl && (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -258,7 +263,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 // activeConversation?.messages[
                 //   activeConversation?.messages.length - 1
                 // ]?.role === 'user' &&
-                showStartLastMessage && lastMessageRole === 'user' && 'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
+                showStartLastMessage &&
+                  lastMessageRole === 'user' &&
+                  'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
               )}
             ></div>
           </div>

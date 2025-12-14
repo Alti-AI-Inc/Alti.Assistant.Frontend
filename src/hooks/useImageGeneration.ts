@@ -104,6 +104,8 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
     reset,
   } = useImageGenStore();
 
+  // console.log('conversationId', conversationId);
+
   // Conversation store for updating chat UI
   const { updateActiveConversation, setLoadingResponse, setUserMessage } =
     useConversationsStore();
@@ -502,6 +504,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
     onMutate: () => {
       setWorkflow('generating');
       setLoadingResponse(true);
+      setUserMessage('');
     },
     onSuccess: response => {
       if (!response.success || !response.data) {
@@ -592,6 +595,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       );
       setWorkflow('editing');
       setLoadingResponse(true);
+      setUserMessage('');
     },
     onSuccess: response => {
       if (!response.success || !response.data) {
@@ -714,10 +718,30 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       message: string,
       hasImage: boolean = false,
       existingImageBase64?: string,
+      outgoingConversationId?: string,
     ) => {
       // Clear any existing suggestions
       setSuggestions([]);
       hasResumedEvaluation.current = false;
+
+      // If we have an explicit conversation ID from the UI (e.g. existing chat),
+      // ensure it's set in the store so all subsequent steps use it.
+      if (outgoingConversationId) {
+        console.log(
+          '[useImageGeneration] handleImageRequest outgoingConversationId',
+          outgoingConversationId,
+        );
+        setConversationId(outgoingConversationId);
+      }
+
+      // Use the explicit ID if available, otherwise fall back to what's in the store
+      // (which might have just been set above, or exists from a previous step)
+      const currentConversationId =
+        outgoingConversationId || useImageGenStore.getState().conversationId;
+      console.log(
+        '[useImageGeneration] handleImageRequest currentConversationId',
+        currentConversationId,
+      );
 
       if (hasImage && existingImageBase64) {
         startImageEditing(existingImageBase64);
@@ -730,10 +754,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         }
       }
 
-      // Get existing conversation ID from store
-      const store = useImageGenStore.getState();
-      const currentConversationId = store.conversationId;
-
       // Check if we have prior images in the conversation history
       const { activeConversation } = useConversationsStore.getState();
       const hasPriorImages =
@@ -742,7 +762,11 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         ) ?? false;
 
       console.log('[useImageGeneration] handleImageRequest check:', {
-        conversationId: currentConversationId,
+        conversationId: {
+          store: useImageGenStore.getState().conversationId,
+          outgoing: outgoingConversationId,
+          effective: currentConversationId,
+        },
         hasPriorImages,
         message,
       });
@@ -860,6 +884,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
 
   useEffect(() => {
     // Only run if we are in 'evaluating' state and NOT currently processing
+
     if (
       workflow === 'evaluating' &&
       !evaluatePromptMutation.isPending &&

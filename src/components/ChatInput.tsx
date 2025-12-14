@@ -313,6 +313,7 @@ const ChatInput = ({
           message,
           selectedOption === OPTIONS.EDIT_IMAGE || !!imageBase64,
           imageBase64 || undefined,
+          activeConversation?.conversationId
         );
       }
       setMessage('');
