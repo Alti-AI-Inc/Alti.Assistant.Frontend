@@ -538,7 +538,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         '',
         ROLES.ASSISTANT,
         newConversationId || currentConvId || undefined,
-        { images: image.url },
+        { imageUrl: image.url },
       );
 
       setWorkflow('complete');
@@ -629,8 +629,13 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       );
 
       // Handle nested url structure from edit response
+      // The server sometimes returns { url: { url: "..." } } or just { url: "..." }
       const imageUrl =
-        typeof image.url === 'object' ? image.url.url : image.url;
+        typeof image.url === 'object' &&
+        image.url !== null &&
+        'url' in image.url
+          ? (image.url as any).url
+          : image.url;
 
       console.log(
         '[useImageGeneration] editImage - extracted imageUrl:',
@@ -663,7 +668,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         answer,
         ROLES.ASSISTANT,
         store.conversationId || undefined,
-        { images: imageUrl },
+        { imageUrl: imageUrl },
       );
 
       // 2. Update React Query Cache (Server State)
@@ -677,7 +682,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
               role: ROLES.ASSISTANT,
               content: answer, // Use the actual answer from backend for the cache
               metadata: {
-                images: imageUrl,
+                imageUrl: imageUrl,
               },
               timestamp: new Date().toISOString(),
             };
@@ -737,36 +742,53 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
 
       // Get existing conversation ID from store
       const store = useImageGenStore.getState();
+      const currentConversationId = store.conversationId;
 
-      // This will auto-chain to evaluatePrompt for generation flow
-      console.log(
-        '[useImageGeneration] Starting image generation workflow...',
-        store.conversationId,
-      );
-
-      // REMOVED: Direct edit mode check. We always analyze first now.
-
-      // Get history context for existing chat
+      // Check if we have prior images in the conversation history
       const { activeConversation } = useConversationsStore.getState();
-      const historyContext = getHistoryContext(activeConversation);
+      const hasPriorImages =
+        activeConversation?.messages?.some(
+          msg => msg.metadata?.imageUrl || msg.metadata?.images,
+        ) ?? false;
 
-      let fullRequest = message;
-      if (store.conversationId && historyContext) {
-        fullRequest = `Conversation History:\n${historyContext}\n\nCurrent Request: ${message}`;
+      console.log('[useImageGeneration] handleImageRequest check:', {
+        conversationId: currentConversationId,
+        hasPriorImages,
+        message,
+      });
+
+      // SPLIT WORKFLOW:
+      // 1. Existing Chat + Has Prior Images -> Direct Generation (Skip Analyze/Evaluate)
+      // 2. New Chat OR No Prior Images -> Full Analyze-Evaluate Flow
+
+      if (currentConversationId && hasPriorImages) {
+        console.log(
+          '[useImageGeneration] Existing context detected. Skipping analysis, going straight to generation.',
+        );
+
+        // Update UI immediately
+        updateActiveConversation(
+          message,
+          ROLES.USER,
+          currentConversationId || undefined,
+        );
+
+        // Call Generate Directly
+        await generateImageMutation.mutateAsync({
+          prompt: message,
+        });
+      } else {
+        // Full Flow (Analyze -> Evaluate -> ...)
+        console.log(
+          '[useImageGeneration] New context or no prior images. Starting full analysis workflow.',
+        );
+
+        await analyzeIntentMutation.mutateAsync({
+          request: message, // Send ONLY the recent message, backend handles history if needed for analysis
+          hasImage,
+          existingConversationId: currentConversationId || undefined,
+        });
       }
-
-      console.log('analyzeIntentMutation: request:', {
-        request: fullRequest, // Log the full request being sent
-        originalMessage: message,
-        hasImage,
-        existingConversationId: store.conversationId || undefined,
-      });
-
-      await analyzeIntentMutation.mutateAsync({
-        request: fullRequest,
-        hasImage,
-        existingConversationId: store.conversationId || undefined,
-      });
     },
     [
       analyzeIntentMutation,
