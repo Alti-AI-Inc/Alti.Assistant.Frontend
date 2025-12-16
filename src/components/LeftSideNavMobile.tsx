@@ -14,7 +14,6 @@ import { useModalStore } from '@/stores/useModalStore';
 import {
   ArrowUpRight,
   BookA,
-  Bot,
   Code,
   LogOut,
   MessageSquare,
@@ -22,8 +21,7 @@ import {
   Scale,
   Search,
   Settings,
-  SquarePen,
-  Workflow,
+  SquarePen
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -118,7 +116,7 @@ const LeftSideNavMobile = () => {
                 <BookA />
                 <span className="text-sm font-normal">Knowledge</span>
               </Button>
-              <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
+              {/* <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
                 <Bot />
                 <span>
                   <Link href="https://www.altiagents.com/" target="_blank">
@@ -127,8 +125,8 @@ const LeftSideNavMobile = () => {
                   </Link>
                 </span>
                 <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
-              </Button>
-              <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
+              </Button> */}
+              {/* <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
                 <Workflow />
                 <span>
                   <Link href="http://altiworkflows.com/" target="_blank">
@@ -137,7 +135,7 @@ const LeftSideNavMobile = () => {
                   </Link>
                 </span>
                 <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
-              </Button>
+              </Button> */}
               <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
                 <Code />
                 <span>

@@ -15,7 +15,6 @@ import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
   ArrowUpRight,
   BookA,
-  Bot,
   Code,
   LogOut,
   MessageSquare,
@@ -24,8 +23,7 @@ import {
   Scale,
   Search,
   Settings,
-  SquarePen,
-  Workflow,
+  SquarePen
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -189,7 +187,7 @@ const LeftSideNav = () => {
                 Knowledge
               </span>
             </Button>
-            <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
+            {/* <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
               <Bot />
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
@@ -200,8 +198,8 @@ const LeftSideNav = () => {
                 </Link>
               </span>
               <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
-            </Button>
-            <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
+            </Button> */}
+            {/* <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
               <Workflow />
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
@@ -212,7 +210,7 @@ const LeftSideNav = () => {
                 </Link>
               </span>
               <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
-            </Button>
+            </Button> */}
             <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
               <Code />
               <span
