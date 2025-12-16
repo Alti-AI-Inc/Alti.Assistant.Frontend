@@ -22,3 +22,6 @@ enum APP_STATUS {
   ACTIVE = 'ACTIVE',
   PENDING = 'pending',
 }
+
+// CSS module declarations
+declare module '*.css';

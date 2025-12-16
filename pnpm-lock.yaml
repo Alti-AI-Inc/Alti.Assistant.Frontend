@@ -95,6 +95,9 @@ importers:
       react-hook-form:
         specifier: ^7.62.0
         version: 7.68.0(react@19.2.1)
+      shiki:
+        specifier: ^3.19.0
+        version: 3.19.0
       streamdown:
         specifier: ^1.2.0
         version: 1.6.10(@types/mdast@4.0.4)(micromark-util-types@2.0.2)(micromark@4.0.2)(react@19.2.1)

@@ -28,7 +28,7 @@ export enum OPTIONS {
   GENERATE_PLAN = 'generate-plan',
   DRAFT_EMAIL = 'draft-email',
   DEBUG_CODE = 'debug-code',
-  REWRITE = 'rewrite',  
+  REWRITE = 'rewrite',
   BRAINSTORM = 'brainstorm',
 
   // VIDEO = 'video-generation',
@@ -55,6 +55,7 @@ export type ConversationMessage = {
     model?: string;
     reference?: Reference[];
     images?: null | string;
+    imageUrl?: string; // New property to align with backend
     video?: {
       name: string;
     };
@@ -92,6 +93,7 @@ interface ConversationStore {
     conversationId?: string,
     extras?: {
       images?: string;
+      imageUrl?: string; // New property to align with backend
       videoName?: string;
       reference?: Reference[];
     },
@@ -133,7 +135,16 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
               {
                 role,
                 content: message,
-                // ...(images && { metadata: { images } }),
+                ...(extras?.images && { metadata: { images: extras.images } }),
+                ...(extras?.imageUrl && {
+                  metadata: { imageUrl: extras.imageUrl },
+                }),
+                ...(extras?.videoName && {
+                  metadata: { video: { name: extras.videoName } },
+                }),
+                ...(extras?.reference && {
+                  metadata: { reference: extras.reference },
+                }),
                 timestamp: new Date().toISOString(),
               },
             ],
@@ -149,6 +160,7 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
           role,
           content: message,
           ...(extras?.images && { metadata: { images: extras.images } }),
+          ...(extras?.imageUrl && { metadata: { imageUrl: extras.imageUrl } }),
           ...(extras?.videoName && {
             metadata: { video: { name: extras.videoName } },
           }),

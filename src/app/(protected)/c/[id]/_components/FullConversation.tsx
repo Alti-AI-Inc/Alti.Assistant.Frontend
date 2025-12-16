@@ -1,6 +1,8 @@
 'use client';
 import ChatInput from '@/components/ChatInput';
 import CopyButton from '@/components/CopyButton';
+import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
+import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
 import SaveConversation from '@/components/SaveConversation';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,22 +12,28 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useActiveConversation } from '@/hooks/useConversations';
+import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { cn, containsYouTubeUrl } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
+import { useQueryClient } from '@tanstack/react-query';
 import { EllipsisVertical, Share, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { Streamdown } from 'streamdown';
 import ReferencesList from './ReferenceList';
+
 import VideoComponent from './VideoComponent';
 import VideoComponentForContent from './YoutubePlayer';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
   const pathname = usePathname();
+  const router = useRouter(); // Explicit usage for imageGen
+  const queryClient = useQueryClient();
+
   const {
     data: queryConversation,
     isLoading,
@@ -41,6 +49,30 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   } = useConversationsStore();
 
   const { onOpen } = useModalStore();
+
+  // Initialize Image Generation Hook
+  const imageGenHook = useImageGeneration({ router, queryClient });
+  const {
+    workflow,
+    shouldShowConfirmation,
+    isCollectingDetails,
+    handleUserConfirmation,
+    isLoading: isImageGenLoading,
+  } = imageGenHook;
+
+  // Helper to determine status message
+  const getStatusMessage = () => {
+    switch (workflow) {
+      case 'evaluating':
+        return 'alti is evaluating...';
+      case 'finalizing':
+        return 'alti is finalizing...';
+      case 'generating':
+        return 'alti is generating...';
+      default:
+        return 'alti is thinking...';
+    }
+  };
 
   // Sync query result into Zustand
   useEffect(() => {
@@ -76,11 +108,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const lastUserMessage = activeConversation?.messages
     .filter(message => message.role === 'user')
     .pop();
-
+  const lastMessageRole = activeConversation?.messages.at(-1)?.role;
   return (
     <div
       className={cn(
-        'flex w-full flex-col',
+        'flex w-full flex-col pb-24',
         activeConversation?.messages.length &&
           'h-[calc(100vh-70px)] lg:h-screen',
         isLoading && 'h-[calc(100vh-70px)] lg:h-screen',
@@ -159,8 +191,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   )}
 
                   {message.role === 'assistant' &&
-                    message.content !== 'Image generated successfully' &&
-                    message.content !== 'Video generated successfully' && (
+                    // Skip rendering if content is empty and there's no image
+                    !(
+                      message.content.trim() === '' &&
+                      !message.metadata?.imageUrl
+                    ) && (
                       <div>
                         {containsYouTubeUrl(message.content) ? (
                           <VideoComponentForContent content={message.content} />
@@ -176,11 +211,23 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       </div>
                     )}
 
-                  {message.metadata?.images && (
+                  {message.metadata?.imageUrl && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={message.metadata.images}
-                      alt={message.metadata.type}
+                      src={
+                        typeof message.metadata.imageUrl === 'string'
+                          ? message.metadata.imageUrl
+                          : (message.metadata.imageUrl as any)?.url
+                      }
+                      alt={message.metadata.type || 'Generated image'}
+                      className="max-w-full rounded-lg shadow-md"
+                      onError={e => {
+                        console.error(
+                          '[FullConversation] Image failed to load:',
+                          message.metadata!.imageUrl,
+                        );
+                        console.error('Error details:', e);
+                      }}
                     />
                   )}
                   {message.metadata?.video?.name && (
@@ -194,12 +241,19 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 </div>
               ))}
 
+            {/* Image Generation UI - Integrated inline */}
+            {shouldShowConfirmation && (
+              <ImageGenConfirmation onConfirm={handleUserConfirmation} />
+            )}
+
+            {isCollectingDetails && <ImageGenSuggestions />}
+
             {/* Loading message - visible in the messages area */}
             {isLoadingResponse && (
               <div className="flex items-center justify-start py-4">
                 <div className="flex items-center space-x-2 text-gray-500">
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"></div>
-                  <span>alti is thinking...</span>
+                  <span>{getStatusMessage()}</span>
                 </div>
               </div>
             )}
@@ -209,7 +263,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 // activeConversation?.messages[
                 //   activeConversation?.messages.length - 1
                 // ]?.role === 'user' &&
-                showStartLastMessage && 'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
+                showStartLastMessage &&
+                  lastMessageRole === 'user' &&
+                  'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
               )}
             ></div>
           </div>
@@ -219,7 +275,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       {isLoading && (
         <div
           className={cn(
-            'flex h-[calc(100vh_-110px] flex-1 items-center justify-center py-4',
+            'flex h-[calc()100vh_-110px] flex-1 items-center justify-center py-4',
           )}
         >
           <div className="flex items-center space-x-2 text-gray-500">
@@ -247,7 +303,10 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         )}
       >
         {/* <div className="mx-auto w-full max-w-3xl"> */}
-        <ChatInput conversationId={conversationId} />
+        <ChatInput
+          conversationId={conversationId}
+          imageGenHook={imageGenHook}
+        />
         {/* </div> */}
       </div>
     </div>

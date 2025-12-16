@@ -86,7 +86,26 @@ export function useActiveConversation(
         throw new Error(response.message || 'Failed to load conversation');
       }
 
-      return response.data; // should match ActiveConversation type
+      const data = response.data; // should match ActiveConversation type
+
+      // Sanitize messages to avoid showing success text in UI
+      if (data && data.messages) {
+        data.messages = data.messages.map((msg: any) => {
+          if (msg.role === 'assistant' && msg.content) {
+            if (
+              msg.content.startsWith('Image generated successfully') ||
+              msg.content.startsWith('Image edited successfully') ||
+              // msg.content.startsWith('Video generated successfully') ||
+              msg.content.startsWith('Intent analysis:')
+            ) {
+              return { ...msg, content: '' };
+            }
+          }
+          return msg;
+        });
+      }
+
+      return data;
     },
     enabled: !!conversationId && conversationId !== 'new-chat' && !!accessToken,
     staleTime: 1000 * 60 * 2, // 2 min
@@ -103,7 +122,26 @@ export function useSharedConversation(id: string) {
         throw new Error(response.message || 'Failed to load conversation');
       }
 
-      return response.data.conversation; // should match ActiveConversation type
+      const conversation = response.data.conversation; // should match ActiveConversation type
+
+      // Sanitize messages to avoid showing success text in UI
+      if (conversation && conversation.messages) {
+        conversation.messages = conversation.messages.map((msg: any) => {
+          if (msg.role === 'assistant' && msg.content) {
+            if (
+              msg.content.startsWith('Image generated successfully') ||
+              msg.content.startsWith('Image edited successfully') ||
+              msg.content.startsWith('Video generated successfully') ||
+              msg.content.startsWith('Intent analysis:')
+            ) {
+              return { ...msg, content: '' };
+            }
+          }
+          return msg;
+        });
+      }
+
+      return conversation;
     },
     enabled: !!id,
     staleTime: 1000 * 60 * 5, // 2 min
@@ -131,7 +169,7 @@ export function useDeleteConversation() {
         pathname.endsWith(deletedId) ||
         activeConversation?._id === deletedId
       ) {
-        router.push("/");
+        router.push('/');
         setActiveConversation(null);
       }
 
