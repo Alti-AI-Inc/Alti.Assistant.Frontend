@@ -23,7 +23,6 @@ import {
   ArrowRight,
   AudioLines,
   Brain,
-  ChartArea,
   Code,
   FileCheck,
   FileMinus,
@@ -38,7 +37,7 @@ import {
   PencilLine,
   PencilRuler,
   Plus,
-  Presentation,
+  Presentation
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -87,13 +86,6 @@ const TOOLBAR_ITEMS = [
     label: 'Generate Report',
     Icon: FileMinus,
   },
-
-  {
-    type: OPTIONS.GENERATE_CHART,
-    label: 'Generate Chart',
-    Icon: ChartArea,
-  },
-
   {
     type: OPTIONS.TEXT,
     label: 'Draft Document',
