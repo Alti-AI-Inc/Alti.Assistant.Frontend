@@ -108,7 +108,7 @@ export function useActiveConversation(
       return data;
     },
     enabled: !!conversationId && conversationId !== 'new-chat' && !!accessToken,
-    staleTime: 1000 * 60 * 2, // 2 min
+    // staleTime: 1000 * 60 * 2, // 2 min
   });
 }
 

@@ -219,7 +219,7 @@ const ChatInput = ({
     },
     onSuccess: (response, userMessage) => {
       if (!response?.data) return;
-      setShowStartLastMessage(false);
+      // setShowStartLastMessage(false);
       const newId =
         conversationId === 'new-chat'
           ? response.data.conversationId

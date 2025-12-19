@@ -108,14 +108,16 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const lastUserMessage = activeConversation?.messages
     .filter(message => message.role === 'user')
     .pop();
-  const lastMessageRole = activeConversation?.messages.at(-1)?.role;
+  // const lastMessageRole = activeConversation?.messages.at(-1)?.role;
   return (
     <div
       className={cn(
-        'flex w-full flex-col pb-24',
+        'flex w-full flex-col',
         activeConversation?.messages.length &&
-          'h-[calc(100vh-70px)] lg:h-screen',
+        'h-[calc(100vh-70px)] lg:h-screen',
         isLoading && 'h-[calc(100vh-70px)] lg:h-screen',
+        // conversationId !== 'new-chat' && 'pb-24',
+        pathname !== '/' && 'pb-24',
       )}
     >
       <div
@@ -201,7 +203,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                           <VideoComponentForContent content={message.content} />
                         ) : (
                           <div>
-                            <Streamdown className="w-full rounded-lg">
+                            <Streamdown className="w-full rounded-lg" >
                               {message.content}
                             </Streamdown>
 
@@ -264,8 +266,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 //   activeConversation?.messages.length - 1
                 // ]?.role === 'user' &&
                 showStartLastMessage &&
-                  lastMessageRole === 'user' &&
-                  'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
+                // lastMessageRole === 'user' &&
+                'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
               )}
             ></div>
           </div>
