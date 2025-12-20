@@ -78,7 +78,7 @@ function KnowledgeBots() {
                     className="flex items-center justify-start text-sm"
                   >
                     <SquarePen />
-                    <span className="text-sm font-normal">Chat with bot</span>
+                    <span className="text-sm font-normal">Chat with workspace</span>
                   </Button>
                   <KnowledgeBaseFileUpload
                     baseId={activeConversation?.knowledgebaseId}
@@ -88,11 +88,11 @@ function KnowledgeBots() {
             </div>
           ) : (
             <Button
-              className="w-[115px]"
+              className="]"
               onClick={() => onOpen({ type: 'create-knowledge-base' })}
             >
               {/* New Folder */}
-              New Chatbot
+              New Workspace
             </Button>
           )}
         </div>
@@ -128,11 +128,10 @@ function KnowledgeBots() {
       )}
 
       <div
-        className={`mt-6 flex w-full overflow-y-auto ${
-          activeConversation?.knowledgebaseId
+        className={`mt-6 flex w-full overflow-y-auto ${activeConversation?.knowledgebaseId
             ? 'h-[calc(80vh_-_220px)] flex-col gap-2'
             : 'flex-row flex-wrap gap-5'
-        }`}
+          }`}
       >
         {/* {!activeConversation?.knowledgebaseId && !isLoading && (
           <div
