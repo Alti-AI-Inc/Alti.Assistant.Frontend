@@ -13,7 +13,7 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {
   ArrowUpRight,
-  BookA,
+  Bot,
   Code,
   LogOut,
   MessageSquare,
@@ -102,19 +102,19 @@ const LeftSideNavMobile = () => {
               </Button> */}
 
               <Button
-                disabled={pathname === '/knowledge'}
+                disabled={pathname === '/chatbots'}
                 onClick={() => {
                   setActiveConversation(null);
                   setShowStartLastMessage(false);
                   setUserMessage('');
                   setSelectedOption(null);
-                  if (pathname !== '/knowledge') router.push('/knowledge');
+                  if (pathname !== '/chatbots') router.push('/chatbots');
                   close();
                 }}
                 className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
               >
-                <BookA />
-                <span className="text-sm font-normal">Knowledge</span>
+                <Bot />
+                <span className="text-sm font-normal">Chatbots</span>
               </Button>
               {/* <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
                 <Bot />

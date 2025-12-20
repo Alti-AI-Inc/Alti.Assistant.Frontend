@@ -15,6 +15,7 @@ import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
   ArrowUpRight,
   BookA,
+  Bot,
   Code,
   LogOut,
   MessageSquare,
@@ -169,22 +170,22 @@ const LeftSideNav = () => {
             </Button> */}
 
             <Button
-              disabled={pathname === '/knowledge'}
+              disabled={pathname === '/chatbots'}
               onClick={() => {
                 setActiveConversation(null);
                 setShowStartLastMessage(false);
                 setUserMessage('');
                 setSelectedOption(null);
-                if (pathname !== '/knowledge') router.push('/knowledge');
+                if (pathname !== '/chatbots') router.push('/chatbots');
                 close();
               }}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
             >
-              <BookA />
+              <Bot />
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Knowledge
+                Chatbots
               </span>
             </Button>
             {/* <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
@@ -306,6 +307,10 @@ const LeftSideNav = () => {
               <DropdownMenuGroup>
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/knowledge')}>
+                  <BookA className="text-black" /> Knowledge
+
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onClick={() => router.push('/settings')}>
