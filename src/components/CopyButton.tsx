@@ -1,5 +1,7 @@
 import { Check, Copy } from 'lucide-react';
 import { useState } from 'react';
+import { marked } from 'marked'; // Or any markdown-to-html parser
+
 import { Button } from './ui/button';
 
 const CopyButton = ({
@@ -13,7 +15,17 @@ const CopyButton = ({
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(content);
+      const htmlContent = await marked.parse(content);
+      const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
+      const textBlob = new Blob([content], { type: 'text/plain' });
+
+      // 2. Create a Blob for the HTML and Plain Text versions
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'text/html': htmlBlob,
+          'text/plain': textBlob,
+        })
+      ]);
       setIsCopied(true);
 
       // Reset back to copy icon after 2 seconds
