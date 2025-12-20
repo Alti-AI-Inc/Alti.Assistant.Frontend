@@ -37,7 +37,7 @@ import {
   PencilLine,
   PencilRuler,
   Plus,
-  Presentation
+  Presentation,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -188,18 +188,47 @@ const ChatInput = ({
     [selectedOption, setSelectedOption, resetImageGen],
   );
 
-  const apiUrl = activeConversation?.knowledgebaseId
-    ? `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/chat`
-    : selectedOption === OPTIONS.IMAGE
-      ? `${process.env.NEXT_PUBLIC_API_URL}/enhanced-image/analyze-intent`
-      : selectedOption === OPTIONS.CODE
-        ? `${process.env.NEXT_PUBLIC_API_URL}/search/code`
-        : selectedOption === OPTIONS.RESEARCH
-          ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
-          : selectedOption === OPTIONS.TEXT
-            ? `${process.env.NEXT_PUBLIC_API_URL}/search/writing`
-            : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
+  const getApiEndpoint = () => {
+    if (activeConversation?.knowledgebaseId) return '/knowledgebase/chat';
 
+    switch (selectedOption) {
+      case OPTIONS.IMAGE:
+        return '/enhanced-image/analyze-intent';
+      case OPTIONS.CODE:
+        return '/search/code';
+      case OPTIONS.RESEARCH:
+        return '/deep-research/assistant';
+      case OPTIONS.TEXT:
+        return '/search/writing';
+      case OPTIONS.GENERATE_PLAN:
+        return '/search/plan';
+      case OPTIONS.PRESENTATION:
+        return '/search/presentation';
+      case OPTIONS.GENERATE_REPORT:
+        return '/search/report';
+      case OPTIONS.REVIEW_DOCUMENTS:
+        return '/search/review';
+      case OPTIONS.DRAFT_EMAIL:
+        return '/search/email';
+      case OPTIONS.SUMMARIZE:
+        return '/search/summarize';
+      case OPTIONS.TRANSLATE_DOCUMENTS:
+        return '/search/translate';
+      case OPTIONS.EXTRACT_DATA:
+        return '/search/extract';
+      case OPTIONS.REWRITE:
+        return '/search/rewrite';
+      case OPTIONS.BRAINSTORM:
+        return '/search/brainstorm';
+      case OPTIONS.Transcribe:
+        return '/search/transcribe';
+      default:
+        return '/search/assistant';
+    }
+  };
+
+  const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}${getApiEndpoint()}`;
+  // console.log('apiUrl', apiUrl);
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
       if (!data?.accessToken) throw new Error('No access token1');
@@ -285,11 +314,7 @@ const ChatInput = ({
     if (message.trim() === '') return;
     setShowStartLastMessage(true);
 
-    // Use image generation workflow for IMAGE option
-    if (
-      selectedOption === OPTIONS.IMAGE ||
-      selectedOption === OPTIONS.EDIT_IMAGE
-    ) {
+    const handleImageWorkflow = async () => {
       console.log('[ChatInput] Image workflow - current state:', imageWorkflow);
 
       if (isCollectingDetails) {
@@ -305,15 +330,28 @@ const ChatInput = ({
           message,
           selectedOption === OPTIONS.EDIT_IMAGE || !!imageBase64,
           imageBase64 || undefined,
-          activeConversation?.conversationId
+          activeConversation?.conversationId,
         );
       }
-      setMessage('');
-      return;
+    };
+
+    switch (selectedOption) {
+      case OPTIONS.IMAGE:
+      case OPTIONS.EDIT_IMAGE:
+        await handleImageWorkflow();
+        break;
+
+      // Add scalable feature cases here
+      // case OPTIONS.CODE:
+      //   await handleCodeWorkflow();
+      //   break;
+
+      default:
+        // Use regular mutation for options that just need a standardized API call
+        // The specific URL is already determined by getApiEndpoint()
+        mutation.mutate(message);
     }
 
-    // Use regular mutation for other options
-    mutation.mutate(message);
     setMessage('');
   };
   const {
@@ -435,8 +473,8 @@ const ChatInput = ({
           className={cn(
             'flex flex-col rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4',
             activeConversation?.knowledgebaseId &&
-            message.length < 100 &&
-            'flex',
+              message.length < 100 &&
+              'flex',
           )}
         >
           {/* Image Preview */}
