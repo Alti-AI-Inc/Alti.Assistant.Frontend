@@ -77,11 +77,7 @@ const TOOLBAR_ITEMS = [
     Icon: Newspaper,
   },
 
-  {
-    type: OPTIONS.GENERATE_PLAN,
-    label: 'Create Plan',
-    Icon: Waypoints,
-  },
+
   {
     type: OPTIONS.WRITE_CONTRACT,
     label: 'Write Contract',
@@ -91,6 +87,11 @@ const TOOLBAR_ITEMS = [
     type: OPTIONS.REVIEW_CONTRACT,
     label: 'Review Contract',
     Icon: NotepadText
+  },
+  {
+    type: OPTIONS.GENERATE_PLAN,
+    label: 'Create Plan',
+    Icon: Waypoints,
   },
   // {
   //   type: OPTIONS.PRESENTATION,
