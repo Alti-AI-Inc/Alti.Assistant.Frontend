@@ -12,7 +12,16 @@ import { cn } from '@/lib/utils';
 
 import { PostConversation } from '@/actions/conversationsAction';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
+import { useDocumentDrafting } from '@/hooks/useDocumentDrafting';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import {
   OPTIONS,
   ROLES,
@@ -38,11 +47,12 @@ import {
   PencilLine,
   PencilRuler,
   Plus,
-  Waypoints
+  Waypoints,
+  LayoutGrid,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Textarea } from './ui/textarea';
 
 const TOOLBAR_ITEMS = [
@@ -77,16 +87,15 @@ const TOOLBAR_ITEMS = [
     Icon: Newspaper,
   },
 
-
   {
     type: OPTIONS.WRITE_CONTRACT,
     label: 'Write Contract',
-    Icon: NotebookText
+    Icon: NotebookText,
   },
   {
     type: OPTIONS.REVIEW_CONTRACT,
     label: 'Review Contract',
-    Icon: NotepadText
+    Icon: NotepadText,
   },
   {
     type: OPTIONS.GENERATE_PLAN,
@@ -187,22 +196,53 @@ const ChatInput = ({
     setImageBase64,
   } = externalImageGenHook || internalImageGenHook;
 
+  // Document drafting hook
+  const {
+    drafting,
+    startDrafting,
+    handleDirectDrafting,
+    handleAssistantDrafting,
+    resetDrafting,
+  } = useDocumentDrafting();
+
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
   // const [message, setMessage] = useState('');
 
   const handleSelectOption = useCallback(
     (value: OPTIONS) => {
+      const isDeselecting = selectedOption === value;
+      const nextOption = isDeselecting ? null : value;
+
       // Reset image generation state when switching options
       if (
         (selectedOption === OPTIONS.IMAGE ||
           selectedOption === OPTIONS.EDIT_IMAGE) &&
-        value !== OPTIONS.IMAGE &&
-        value !== OPTIONS.EDIT_IMAGE
+        nextOption !== OPTIONS.IMAGE &&
+        nextOption !== OPTIONS.EDIT_IMAGE
       ) {
         resetImageGen();
       }
-      setSelectedOption(selectedOption === value ? null : value);
+
+      // Reset drafting state if switching away from TEXT (Draft Document)
+      if (selectedOption === OPTIONS.TEXT && nextOption !== OPTIONS.TEXT) {
+        resetDrafting();
+      }
+
+      // Start drafting if switching TO TEXT
+      if (nextOption === OPTIONS.TEXT) {
+        startDrafting();
+      }
+
+      setSelectedOption(nextOption);
     },
-    [selectedOption, setSelectedOption, resetImageGen],
+    [
+      selectedOption,
+      setSelectedOption,
+      resetImageGen,
+      resetDrafting,
+      startDrafting,
+    ],
   );
 
   const getApiEndpoint = () => {
@@ -356,6 +396,21 @@ const ChatInput = ({
       case OPTIONS.IMAGE:
       case OPTIONS.EDIT_IMAGE:
         await handleImageWorkflow();
+        break;
+
+      case OPTIONS.TEXT:
+        if (drafting.mode === 'direct') {
+          await handleDirectDrafting(message);
+        } else if (drafting.mode === 'assistant') {
+          await handleAssistantDrafting(message);
+        } else {
+          // Default to assistant if mode not explicitly selected but user submitted
+          await handleAssistantDrafting(message);
+        }
+        break;
+
+      case OPTIONS.REVIEW_DOCUMENTS:
+        mutation.mutate(message);
         break;
 
       // Add scalable feature cases here
@@ -532,7 +587,7 @@ const ChatInput = ({
                       ? 'Describe how you want to edit the image...'
                       : 'Chat with alti'
             }
-            className="max-h-[500px] min-h-12 w-full resize-none overflow-y-auto border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+            className="min-h-12 w-full resize-none border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
             autoFocus
           />
           {/* Responsive container */}
@@ -565,23 +620,70 @@ const ChatInput = ({
                 </TooltipContent>
               </Tooltip>
               {/* options */}
-              {TOOLBAR_ITEMS.map(({ type, label, Icon }) => (
-                <Tooltip key={type}>
-                  <TooltipTrigger>
-                    <Icon
-                      onClick={() => handleSelectOption(type)}
-                      className={cn(
-                        'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                        selectedOption === type && 'bg-black text-white',
-                      )}
-                    />
-                  </TooltipTrigger>
+              {/* Mobile Toolbar Toggle */}
+              <div className="block md:hidden">
+                <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                  <SheetTrigger asChild>
+                    <div className="flex cursor-pointer items-center justify-center">
+                      <LayoutGrid className="size-6 rounded-full border-2 border-gray-300 p-[3px] text-gray-500 hover:bg-gray-100" />
+                    </div>
+                  </SheetTrigger>
+                  <SheetContent side="bottom" className="rounded-t-3xl">
+                    <SheetHeader>
+                      <SheetTitle className="text-lg">Tools</SheetTitle>
+                      <SheetDescription>
+                        Select a tool to enhance your conversation
+                      </SheetDescription>
+                    </SheetHeader>
+                    <div className="grid grid-cols-4 gap-4 py-6">
+                      {TOOLBAR_ITEMS.map(({ type, label, Icon }) => (
+                        <div
+                          key={type}
+                          onClick={() => {
+                            const isNewSelection = selectedOption !== type;
+                            handleSelectOption(type);
+                            if (isNewSelection) {
+                              setIsSheetOpen(false);
+                            }
+                          }}
+                          className={cn(
+                            'flex cursor-pointer flex-col items-center gap-2 rounded-xl p-2 transition-colors',
+                            selectedOption === type
+                              ? 'bg-black text-white'
+                              : 'bg-gray-50 text-black hover:bg-gray-100',
+                          )}
+                        >
+                          <Icon className="size-6" />
+                          <span className="text-center text-[10px] leading-tight font-medium">
+                            {label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </SheetContent>
+                </Sheet>
+              </div>
 
-                  <TooltipContent side="bottom">
-                    <p>{label}</p>
-                  </TooltipContent>
-                </Tooltip>
-              ))}
+              {/* Desktop Toolbar - Horizontal List */}
+              <div className="hidden flex-wrap items-center gap-2 md:flex">
+                {TOOLBAR_ITEMS.map(({ type, label, Icon }) => (
+                  <Tooltip key={type}>
+                    <TooltipTrigger>
+                      <Icon
+                        onClick={() => handleSelectOption(type)}
+                        className={cn(
+                          'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black hover:bg-gray-100',
+                          selectedOption === type && 'bg-black text-white',
+                        )}
+                      />
+                    </TooltipTrigger>
+
+                    <TooltipContent side="bottom">
+                      <p>{label}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+              </div>
             </div>
 
             {/* Aspect ratio selector - shown for image options */}
