@@ -25,7 +25,6 @@ import {
   Brain,
   Code,
   FileCheck,
-  FileMinus,
   FileText,
   Image as ImageIcon,
   ImageUp,
@@ -33,11 +32,13 @@ import {
   Mail,
   Microscope,
   Minimize,
-  NotebookPen,
+  Newspaper,
+  NotebookText,
+  NotepadText,
   PencilLine,
   PencilRuler,
   Plus,
-  Presentation
+  Waypoints
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -70,22 +71,37 @@ const TOOLBAR_ITEMS = [
     label: 'Write Code',
     Icon: Code,
   },
+  {
+    type: OPTIONS.ARTICLE,
+    label: 'Write Article',
+    Icon: Newspaper,
+  },
 
   {
     type: OPTIONS.GENERATE_PLAN,
-    label: 'Generate Plan',
-    Icon: NotebookPen,
+    label: 'Create Plan',
+    Icon: Waypoints,
   },
   {
-    type: OPTIONS.PRESENTATION,
-    label: 'Generate Presentation',
-    Icon: Presentation,
+    type: OPTIONS.WRITE_CONTRACT,
+    label: 'Write Contract',
+    Icon: NotebookText
   },
   {
-    type: OPTIONS.GENERATE_REPORT,
-    label: 'Generate Report',
-    Icon: FileMinus,
+    type: OPTIONS.REVIEW_CONTRACT,
+    label: 'Review Contract',
+    Icon: NotepadText
   },
+  // {
+  //   type: OPTIONS.PRESENTATION,
+  //   label: 'Generate Presentation',
+  //   Icon: Presentation,
+  // },
+  // {
+  //   type: OPTIONS.GENERATE_REPORT,
+  //   label: 'Generate Report',
+  //   Icon: FileMinus,
+  // },
   {
     type: OPTIONS.TEXT,
     label: 'Draft Document',

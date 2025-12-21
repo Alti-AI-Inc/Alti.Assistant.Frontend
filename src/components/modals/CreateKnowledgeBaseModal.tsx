@@ -46,7 +46,7 @@ const CreateKnowledgeBaseModal = () => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create new knowledge bot</DialogTitle>
+          <DialogTitle>Create new workspace</DialogTitle>
         </DialogHeader>
         <Input
           value={name}

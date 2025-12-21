@@ -30,6 +30,9 @@ export enum OPTIONS {
   DEBUG_CODE = 'debug-code',
   REWRITE = 'rewrite',
   BRAINSTORM = 'brainstorm',
+  ARTICLE = 'article',
+  WRITE_CONTRACT = 'write-contract',
+  REVIEW_CONTRACT = 'review-contract',
 
   // VIDEO = 'video-generation',
 }
