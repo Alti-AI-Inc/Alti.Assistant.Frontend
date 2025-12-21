@@ -13,6 +13,7 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {
   ArrowUpRight,
+  CircleStop,
   Code,
   LogOut,
   MessageSquare,
@@ -89,6 +90,16 @@ const LeftSideNavMobile = () => {
                 <MessageSquare />
                 <span className="text-sm font-normal">Saved chats</span>
               </Button>
+              <Button
+                onClick={() => {
+                  router.push('/agents');
+                  close();
+                }}
+                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+              >
+                <CircleStop />
+                <span className="text-sm font-normal">Agent store</span>
+              </Button>
               {/* <Button
                 onClick={() => {
                   router.push('/apps');
@@ -140,7 +151,7 @@ const LeftSideNavMobile = () => {
                 <span>
                   <Link href="https://www.alticodestudio.com/" target="_blank">
                     <span className="absolute inset-0"></span>
-                    Code Studio
+                    Code studio
                   </Link>
                 </span>
                 <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
