@@ -137,8 +137,7 @@ export async function analyzeImageIntent(
     {
       method: 'POST',
       headers: {
-        // Authorization: `Bearer ${accessToken}`,
-        AUthorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODMwYTU3Njc1YWIzNzE0ODVhMGJlM2EiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjU1NDU0NDYsImV4cCI6MTc2NjE1MDI0Nn0.Oo6Z8muJybw9ZSEoOwbXpvxfpE1zTkQ-HKNvxZYtE4c`,
+        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

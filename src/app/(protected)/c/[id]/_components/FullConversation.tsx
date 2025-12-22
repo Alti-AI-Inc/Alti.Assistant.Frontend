@@ -3,6 +3,8 @@ import ChatInput from '@/components/ChatInput';
 import CopyButton from '@/components/CopyButton';
 import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
+import { DocumentModeSelector } from '@/components/documents/DocumentModeSelector';
+import { DocumentDraftingForm } from '@/components/documents/DocumentDraftingForm';
 import SaveConversation from '@/components/SaveConversation';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,6 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useActiveConversation } from '@/hooks/useConversations';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
+import { useDocumentStore } from '@/stores/useDocumentStore';
 import { cn, containsYouTubeUrl } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
@@ -27,6 +30,7 @@ import ReferencesList from './ReferenceList';
 
 import VideoComponent from './VideoComponent';
 import VideoComponentForContent from './YoutubePlayer';
+import FileDownloadCard from './FileDownloadCard';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
@@ -49,6 +53,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   } = useConversationsStore();
 
   const { onOpen } = useModalStore();
+
+  const { drafting } = useDocumentStore();
 
   // Initialize Image Generation Hook
   const imageGenHook = useImageGeneration({ router, queryClient });
@@ -108,16 +114,19 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const lastUserMessage = activeConversation?.messages
     .filter(message => message.role === 'user')
     .pop();
+
+  // console.log('activeConversation?.messages', activeConversation?.messages);
   // const lastMessageRole = activeConversation?.messages.at(-1)?.role;
   return (
     <div
       className={cn(
         'flex w-full flex-col',
+        // (activeConversation?.messages.length || drafting.isActive) &&
         activeConversation?.messages.length &&
-        'h-[calc(100vh-70px)] lg:h-screen',
+          'h-[calc(100vh-70px)] lg:h-screen',
         isLoading && 'h-[calc(100vh-70px)] lg:h-screen',
         // conversationId !== 'new-chat' && 'pb-24',
-        pathname !== '/' && 'pb-24',
+        pathname === '/' && !activeConversation?.messages.length && 'pb-24',
       )}
     >
       <div
@@ -162,7 +171,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         </DropdownMenu>
       </div>
       {/* Messages container - takes remaining space and scrolls */}
-      {!!activeConversation?.messages.length && (
+      {/* {!!activeConversation?.messages.length && ( */}
+      {(!!activeConversation?.messages.length || drafting.isActive) && (
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
           <div
             className={cn(
@@ -195,15 +205,14 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   {message.role === 'assistant' &&
                     // Skip rendering if content is empty and there's no image
                     !(
-                      message.content.trim() === '' &&
-                      !message.metadata?.imageUrl
+                      !message.content?.trim() && !message.metadata?.imageUrl
                     ) && (
                       <div>
                         {containsYouTubeUrl(message.content) ? (
                           <VideoComponentForContent content={message.content} />
                         ) : (
                           <div>
-                            <Streamdown className="w-full rounded-lg" >
+                            <Streamdown className="w-full rounded-lg">
                               {message.content}
                             </Streamdown>
 
@@ -237,19 +246,41 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       operationId={message.metadata?.video?.name}
                     />
                   )}
+                  {message.metadata?.document && (
+                    <FileDownloadCard document={message.metadata.document} />
+                  )}
                   {!!message.metadata?.reference?.length && (
                     <ReferencesList references={message.metadata.reference} />
                   )}
                 </div>
               ))}
-
             {/* Image Generation UI - Integrated inline */}
             {shouldShowConfirmation && (
               <ImageGenConfirmation onConfirm={handleUserConfirmation} />
             )}
-
             {isCollectingDetails && <ImageGenSuggestions />}
+            {/* Document Drafting UI */}
+            {drafting.isActive && !isLoadingResponse && (
+              <>
+                <DocumentModeSelector
+                  currentMode={
+                    drafting.mode === 'select_mode'
+                      ? null
+                      : (drafting.mode as 'assistant' | 'direct')
+                  }
+                />
 
+                {drafting.mode === 'direct' && (
+                  <div
+                    className={cn(
+                      isLoadingResponse && 'pointer-events-none opacity-50',
+                    )}
+                  >
+                    <DocumentDraftingForm />
+                  </div>
+                )}
+              </>
+            )}
             {/* Loading message - visible in the messages area */}
             {isLoadingResponse && (
               <div className="flex items-center justify-start py-4">
@@ -266,8 +297,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 //   activeConversation?.messages.length - 1
                 // ]?.role === 'user' &&
                 showStartLastMessage &&
-                // lastMessageRole === 'user' &&
-                'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
+                  // lastMessageRole === 'user' &&
+                  'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
               )}
             ></div>
           </div>
@@ -293,23 +324,13 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
       {/* Sticky chat input at bottom */}
       {/* <div className="sticky bottom-0 bg-white px-4 pb-4"> */}
-      <div
-        className={cn(
-          'bg-white',
-          pathname === '/'
-            ? 'sticky bottom-0 px-4 pb-4'
-            : 'fixed bottom-0 left-0 px-4 pb-4 shadow-lg transition-all duration-300',
-          pathname !== '/' && isLeftSidebarOpen
-            ? 'ml-68 w-[calc(100%-272px)]'
-            : 'ml-10 w-[calc(100%-40px)]',
-        )}
-      >
-        {/* <div className="mx-auto w-full max-w-3xl"> */}
-        <ChatInput
-          conversationId={conversationId}
-          imageGenHook={imageGenHook}
-        />
-        {/* </div> */}
+      <div className="sticky bottom-0 z-10 w-full bg-white p-4">
+        <div className="mx-auto max-w-[796px]">
+          <ChatInput
+            conversationId={conversationId}
+            imageGenHook={imageGenHook}
+          />
+        </div>
       </div>
     </div>
   );

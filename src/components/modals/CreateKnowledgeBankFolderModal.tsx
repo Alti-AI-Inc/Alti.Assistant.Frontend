@@ -83,8 +83,8 @@ const CreateKnowledgeBankFolderModal = () => {
               isPending ||
               renamePending ||
               foldersLoading ||
-              !name.trim() ||
-              !description.trim()
+              !name?.trim() ||
+              !description?.trim()
             }
           >
             {(isPending || renamePending) && (

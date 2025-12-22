@@ -11,6 +11,15 @@ import {
 import { cn } from '@/lib/utils';
 
 import { PostConversation } from '@/actions/conversationsAction';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { useDocumentDrafting } from '@/hooks/useDocumentDrafting';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import {
@@ -29,6 +38,7 @@ import {
   Image as ImageIcon,
   ImageUp,
   Languages,
+  LayoutGrid,
   Mail,
   Microscope,
   Minimize,
@@ -38,11 +48,11 @@ import {
   PencilLine,
   PencilRuler,
   Plus,
-  Waypoints
+  Waypoints,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Textarea } from './ui/textarea';
 
 const TOOLBAR_ITEMS = [
@@ -77,16 +87,15 @@ const TOOLBAR_ITEMS = [
     Icon: Newspaper,
   },
 
-
   {
     type: OPTIONS.WRITE_CONTRACT,
     label: 'Write Contract',
-    Icon: NotebookText
+    Icon: NotebookText,
   },
   {
     type: OPTIONS.REVIEW_CONTRACT,
     label: 'Review Contract',
-    Icon: NotepadText
+    Icon: NotepadText,
   },
   {
     type: OPTIONS.GENERATE_PLAN,
@@ -187,36 +196,96 @@ const ChatInput = ({
     setImageBase64,
   } = externalImageGenHook || internalImageGenHook;
 
+  // Document drafting hook
+  const {
+    drafting,
+    startDrafting,
+    handleDirectDrafting,
+    handleAssistantDrafting,
+    resetDrafting,
+  } = useDocumentDrafting();
+
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
   // const [message, setMessage] = useState('');
 
   const handleSelectOption = useCallback(
     (value: OPTIONS) => {
+      const isDeselecting = selectedOption === value;
+      const nextOption = isDeselecting ? null : value;
+
       // Reset image generation state when switching options
       if (
         (selectedOption === OPTIONS.IMAGE ||
           selectedOption === OPTIONS.EDIT_IMAGE) &&
-        value !== OPTIONS.IMAGE &&
-        value !== OPTIONS.EDIT_IMAGE
+        nextOption !== OPTIONS.IMAGE &&
+        nextOption !== OPTIONS.EDIT_IMAGE
       ) {
         resetImageGen();
       }
-      setSelectedOption(selectedOption === value ? null : value);
+
+      // Reset drafting state if switching away from TEXT (Draft Document)
+      if (selectedOption === OPTIONS.TEXT && nextOption !== OPTIONS.TEXT) {
+        resetDrafting();
+      }
+
+      // Start drafting if switching TO TEXT
+      if (nextOption === OPTIONS.TEXT) {
+        startDrafting();
+      }
+
+      setSelectedOption(nextOption);
     },
-    [selectedOption, setSelectedOption, resetImageGen],
+    [
+      selectedOption,
+      setSelectedOption,
+      resetImageGen,
+      resetDrafting,
+      startDrafting,
+    ],
   );
 
-  const apiUrl = activeConversation?.knowledgebaseId
-    ? `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/chat`
-    : selectedOption === OPTIONS.IMAGE
-      ? `${process.env.NEXT_PUBLIC_API_URL}/enhanced-image/analyze-intent`
-      : selectedOption === OPTIONS.CODE
-        ? `${process.env.NEXT_PUBLIC_API_URL}/search/code`
-        : selectedOption === OPTIONS.RESEARCH
-          ? `${process.env.NEXT_PUBLIC_API_URL}/deep-research/assistant`
-          : selectedOption === OPTIONS.TEXT
-            ? `${process.env.NEXT_PUBLIC_API_URL}/search/writing`
-            : `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`;
+  const getApiEndpoint = () => {
+    if (activeConversation?.knowledgebaseId) return '/knowledgebase/chat';
 
+    switch (selectedOption) {
+      case OPTIONS.IMAGE:
+        return '/enhanced-image/analyze-intent';
+      case OPTIONS.CODE:
+        return '/search/code';
+      case OPTIONS.RESEARCH:
+        return '/deep-research/assistant';
+      case OPTIONS.TEXT:
+        return '/search/writing';
+      case OPTIONS.GENERATE_PLAN:
+        return '/search/plan';
+      case OPTIONS.PRESENTATION:
+        return '/search/presentation';
+      case OPTIONS.GENERATE_REPORT:
+        return '/search/report';
+      case OPTIONS.REVIEW_DOCUMENTS:
+        return '/search/review';
+      case OPTIONS.DRAFT_EMAIL:
+        return '/search/email';
+      case OPTIONS.SUMMARIZE:
+        return '/search/summarize';
+      case OPTIONS.TRANSLATE_DOCUMENTS:
+        return '/search/translate';
+      case OPTIONS.EXTRACT_DATA:
+        return '/search/extract';
+      case OPTIONS.REWRITE:
+        return '/search/rewrite';
+      case OPTIONS.BRAINSTORM:
+        return '/search/brainstorm';
+      case OPTIONS.Transcribe:
+        return '/search/transcribe';
+      default:
+        return '/search/assistant';
+    }
+  };
+
+  const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}${getApiEndpoint()}`;
+  // console.log('apiUrl', apiUrl);
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
       if (!data?.accessToken) throw new Error('No access token1');
@@ -254,6 +323,9 @@ const ChatInput = ({
       const images = response.data?.responseMessage?.images;
       const name = response.data?.responseMessage?.video?.name;
       const reference = response.data?.responseMessage?.reference;
+      // Extract document if it exists in the response
+      const document =
+        response.data?.document || response.data?.responseMessage?.document;
 
       updateActiveConversation(
         activeConversation?.knowledgebaseId
@@ -270,6 +342,7 @@ const ChatInput = ({
           ...(images && { images }),
           ...(name && { videoName: name }),
           ...(reference && { reference }),
+          ...(document && { document }),
         },
       );
 
@@ -299,14 +372,10 @@ const ChatInput = ({
       imageWorkflow,
     });
 
-    if (message.trim() === '') return;
+    if (!message?.trim()) return;
     setShowStartLastMessage(true);
 
-    // Use image generation workflow for IMAGE option
-    if (
-      selectedOption === OPTIONS.IMAGE ||
-      selectedOption === OPTIONS.EDIT_IMAGE
-    ) {
+    const handleImageWorkflow = async () => {
       console.log('[ChatInput] Image workflow - current state:', imageWorkflow);
 
       if (isCollectingDetails) {
@@ -322,15 +391,43 @@ const ChatInput = ({
           message,
           selectedOption === OPTIONS.EDIT_IMAGE || !!imageBase64,
           imageBase64 || undefined,
-          activeConversation?.conversationId
+          activeConversation?.conversationId,
         );
       }
-      setMessage('');
-      return;
+    };
+
+    switch (selectedOption) {
+      case OPTIONS.IMAGE:
+      case OPTIONS.EDIT_IMAGE:
+        await handleImageWorkflow();
+        break;
+
+      case OPTIONS.TEXT:
+        if (drafting.mode === 'direct') {
+          await handleDirectDrafting(message);
+        } else if (drafting.mode === 'assistant') {
+          await handleAssistantDrafting(message);
+        } else {
+          // Default to assistant if mode not explicitly selected but user submitted
+          await handleAssistantDrafting(message);
+        }
+        break;
+
+      case OPTIONS.REVIEW_DOCUMENTS:
+        mutation.mutate(message);
+        break;
+
+      // Add scalable feature cases here
+      // case OPTIONS.CODE:
+      //   await handleCodeWorkflow();
+      //   break;
+
+      default:
+        // Use regular mutation for options that just need a standardized API call
+        // The specific URL is already determined by getApiEndpoint()
+        mutation.mutate(message);
     }
 
-    // Use regular mutation for other options
-    mutation.mutate(message);
     setMessage('');
   };
   const {
@@ -452,8 +549,8 @@ const ChatInput = ({
           className={cn(
             'flex flex-col rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4',
             activeConversation?.knowledgebaseId &&
-            message.length < 100 &&
-            'flex',
+              message.length < 100 &&
+              'flex',
           )}
         >
           {/* Image Preview */}
@@ -494,7 +591,7 @@ const ChatInput = ({
                       ? 'Describe how you want to edit the image...'
                       : 'Chat with alti'
             }
-            className="max-h-[500px] min-h-12 w-full resize-none overflow-y-auto border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+            className="min-h-12 w-full resize-none border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
             autoFocus
           />
           {/* Responsive container */}
@@ -502,7 +599,7 @@ const ChatInput = ({
             {/* Desktop layout */}
             <div
               className={cn(
-                'flex items-center gap-2',
+                'flex items-start gap-2',
                 activeConversation?.knowledgebaseId && 'hidden',
               )}
             >
@@ -527,23 +624,70 @@ const ChatInput = ({
                 </TooltipContent>
               </Tooltip>
               {/* options */}
-              {TOOLBAR_ITEMS.map(({ type, label, Icon }) => (
-                <Tooltip key={type}>
-                  <TooltipTrigger>
-                    <Icon
-                      onClick={() => handleSelectOption(type)}
-                      className={cn(
-                        'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black',
-                        selectedOption === type && 'bg-black text-white',
-                      )}
-                    />
-                  </TooltipTrigger>
+              {/* Mobile Toolbar Toggle */}
+              <div className="block md:hidden">
+                <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                  <SheetTrigger asChild>
+                    <div className="flex cursor-pointer items-center justify-center">
+                      <LayoutGrid className="size-6 rounded-full border-2 border-gray-300 p-[2.5px] text-gray-500 hover:bg-gray-100" />
+                    </div>
+                  </SheetTrigger>
+                  <SheetContent side="bottom" className="rounded-t-3xl">
+                    <SheetHeader>
+                      <SheetTitle className="text-lg">Tools</SheetTitle>
+                      <SheetDescription>
+                        Select a tool to enhance your conversation
+                      </SheetDescription>
+                    </SheetHeader>
+                    <div className="grid grid-cols-4 gap-4 py-6">
+                      {TOOLBAR_ITEMS.map(({ type, label, Icon }) => (
+                        <div
+                          key={type}
+                          onClick={() => {
+                            const isNewSelection = selectedOption !== type;
+                            handleSelectOption(type);
+                            if (isNewSelection) {
+                              setIsSheetOpen(false);
+                            }
+                          }}
+                          className={cn(
+                            'flex cursor-pointer flex-col items-center gap-2 rounded-xl p-2 transition-colors',
+                            selectedOption === type
+                              ? 'bg-black text-white hover:bg-black hover:text-white'
+                              : 'bg-gray-50 text-black hover:bg-gray-100',
+                          )}
+                        >
+                          <Icon className="size-6" />
+                          <span className="text-center text-[10px] leading-tight font-medium">
+                            {label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </SheetContent>
+                </Sheet>
+              </div>
 
-                  <TooltipContent side="bottom">
-                    <p>{label}</p>
-                  </TooltipContent>
-                </Tooltip>
-              ))}
+              {/* Desktop Toolbar - Horizontal List */}
+              <div className="hidden flex-wrap items-center gap-2 md:flex">
+                {TOOLBAR_ITEMS.map(({ type, label, Icon }) => (
+                  <Tooltip key={type}>
+                    <TooltipTrigger>
+                      <Icon
+                        onClick={() => handleSelectOption(type)}
+                        className={cn(
+                          'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black hover:bg-gray-100',
+                          selectedOption === type && 'bg-black text-white hover:bg-black hover:text-white',
+                        )}
+                      />
+                    </TooltipTrigger>
+
+                    <TooltipContent side="bottom">
+                      <p>{label}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+              </div>
             </div>
 
             {/* Aspect ratio selector - shown for image options */}

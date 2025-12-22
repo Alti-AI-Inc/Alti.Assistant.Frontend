@@ -67,7 +67,11 @@ const CreateKnowledgeBaseModal = () => {
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button className='bg-blue-700 disabled:opacity-100' onClick={() => mutate()} disabled={isPending || !name.trim()}>
+          <Button
+            className="bg-blue-700 disabled:opacity-100"
+            onClick={() => mutate()}
+            disabled={isPending || !name?.trim()}
+          >
             {isPending && <LoaderCircle className="mr-2 animate-spin" />}
             {isPending ? 'Saving...' : 'Create'}
           </Button>
