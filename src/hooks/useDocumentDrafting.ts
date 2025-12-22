@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { useDocumentStore } from '@/stores/useDocumentStore';
@@ -7,18 +7,24 @@ import { useConversationsStore, ROLES } from '@/stores/useConverstionsStore';
 import {
   generateDocument,
   startDocumentConversation,
+  continueDocumentConversation,
 } from '@/actions/documentActions';
 
 export function useDocumentDrafting() {
   const router = useRouter();
+  const pathname = usePathname();
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const accessToken = session?.accessToken;
 
   const { drafting, setDraftingMode, resetDrafting, startDrafting } =
     useDocumentStore();
-  const { updateActiveConversation, setLoadingResponse, setUserMessage } =
-    useConversationsStore();
+  const {
+    updateActiveConversation,
+    setLoadingResponse,
+    setUserMessage,
+    activeConversation,
+  } = useConversationsStore();
 
   const [isDraftingLoading, setIsDraftingLoading] = useState(false);
 
@@ -118,6 +124,46 @@ export function useDocumentDrafting() {
     },
   });
 
+  const assistantContinueMutation = useMutation({
+    mutationFn: async ({
+      conversationId,
+      message,
+    }: {
+      conversationId: string;
+      message: string;
+    }) => {
+      if (!accessToken) throw new Error('No access token');
+      console.log('continueDocumentConversation', {
+        conversationId,
+        message,
+      });
+      return await continueDocumentConversation(
+        { conversationId, message },
+        accessToken,
+      );
+    },
+    onMutate: () => {
+      setIsDraftingLoading(true);
+      setLoadingResponse(true);
+    },
+    onSuccess: response => {
+      if (response.success && response.data) {
+        const { message, document } = response.data;
+        updateActiveConversation(message, ROLES.ASSISTANT, undefined, {
+          ...(document && { document: document }),
+        });
+      }
+      resetDrafting();
+      setIsDraftingLoading(false);
+      setLoadingResponse(false);
+    },
+    onError: error => {
+      console.error('Assistant continue drafting error:', error);
+      setIsDraftingLoading(false);
+      setLoadingResponse(false);
+    },
+  });
+
   // --- Handlers ---
 
   const handleDirectDrafting = async (content: string) => {
@@ -131,9 +177,18 @@ export function useDocumentDrafting() {
   const handleAssistantDrafting = async (message: string) => {
     setUserMessage('');
     updateActiveConversation(message, ROLES.USER);
-    resetDrafting();
-
-    await assistantDraftingMutation.mutateAsync({ message });
+    const currentId = activeConversation?.conversationId;
+    const isEditingExisting =
+      currentId && currentId !== 'new-chat' && pathname.startsWith('/c/');
+    console.log('isEditingExisting', isEditingExisting);
+    if (isEditingExisting) {
+      await assistantContinueMutation.mutateAsync({
+        conversationId: currentId,
+        message,
+      });
+    } else {
+      await assistantDraftingMutation.mutateAsync({ message });
+    }
   };
 
   return {
