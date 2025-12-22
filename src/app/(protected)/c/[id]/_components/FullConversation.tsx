@@ -115,7 +115,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     .filter(message => message.role === 'user')
     .pop();
 
-  console.log('activeConversation?.messages', activeConversation?.messages);
+  // console.log('activeConversation?.messages', activeConversation?.messages);
   // const lastMessageRole = activeConversation?.messages.at(-1)?.role;
   return (
     <div
@@ -255,14 +255,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   )}
                 </div>
               ))}
-
             {/* Image Generation UI - Integrated inline */}
             {shouldShowConfirmation && (
               <ImageGenConfirmation onConfirm={handleUserConfirmation} />
             )}
-
             {isCollectingDetails && <ImageGenSuggestions />}
-
             {/* Document Drafting UI */}
             {drafting.isActive && (
               <>
@@ -274,10 +271,17 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     }
                   />
                 )}
-                {drafting.mode === 'direct' && <DocumentDraftingForm />}
+                {drafting.mode === 'direct' && (
+                  <div
+                    className={cn(
+                      isLoadingResponse && 'pointer-events-none opacity-50',
+                    )}
+                  >
+                    <DocumentDraftingForm />
+                  </div>
+                )}
               </>
             )}
-
             {/* Loading message - visible in the messages area */}
             {isLoadingResponse && (
               <div className="flex items-center justify-start py-4">

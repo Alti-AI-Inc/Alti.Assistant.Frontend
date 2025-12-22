@@ -144,10 +144,7 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
 
   updateActiveConversation: (message, role, conversationId, extras) =>
     set(state => {
-      if (
-        !state.activeConversation?.conversationId &&
-        !state.activeConversation?.knowledgebaseId
-      ) {
+      if (!state.activeConversation) {
         // brand new conversation
         return {
           ...state,
@@ -203,6 +200,7 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
         ...state,
         activeConversation: {
           ...state.activeConversation,
+          ...(conversationId && { conversationId }), // Allow updating ID
           messages: newMessages,
           updatedAt: timestamp,
         },

@@ -59,26 +59,15 @@ export function useDocumentDrafting() {
       const { document } = response.data;
       if (document && document.url) {
         // Create an assistant message with the document
-        const messageContent = `I've generated your ${document.metadata.documentType}.`;
+        // Use the message returned from the server action
+        const messageContent = response.message;
 
-        updateActiveConversation(
-          messageContent,
-          ROLES.ASSISTANT,
-          undefined, // No ID available yet.
-          {
-            document: document,
-            reference: [
-              {
-                title: document.metadata.title || document.file.fileName,
-                url: document.url,
-                source: 'Generated Document',
-                snippet: 'Generated via Direct Generation',
-                relevanceScore: 1,
-                searchQuery: 'Direct Generation',
-              },
-            ],
-          },
-        );
+        // Update the conversation with the assistant's response
+        // We pass undefined for conversationId to maintain the current conversation state/ID
+        // This ensures no redirect happens and the message is preserved in the history
+        updateActiveConversation(messageContent, ROLES.ASSISTANT, undefined, {
+          document: document,
+        });
       }
 
       resetDrafting(); // Workflow complete
