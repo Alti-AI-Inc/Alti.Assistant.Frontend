@@ -33,16 +33,22 @@ export function DocumentModeSelector({
         {options.map(option => (
           <button
             key={option.id}
-            onClick={() => setDraftingMode(option.id)}
-            disabled={!!currentMode}
+            onClick={() => {
+              if (currentMode === option.id) {
+                setDraftingMode('select_mode');
+              } else {
+                setDraftingMode(option.id);
+              }
+            }}
+            // disabled={!!currentMode}
             className={cn(
-              'group relative flex flex-1 flex-col items-start gap-2 rounded-xl border p-4 text-left shadow-sm backdrop-blur-sm transition-all',
+              'group relative flex flex-1 cursor-pointer flex-col items-start gap-2 rounded-xl border p-4 text-left shadow-sm backdrop-blur-sm transition-all',
               !currentMode &&
-                'cursor-pointer border-gray-200 bg-white/50 hover:border-gray-300 hover:bg-white hover:shadow-md',
+                'border-gray-200 bg-white/50 hover:border-gray-300 hover:bg-white hover:shadow-md',
               currentMode && option.id === currentMode
                 ? 'border-black bg-white opacity-100 ring-1 ring-black/5'
                 : currentMode &&
-                    'border-transparent bg-white/20 opacity-40 grayscale',
+                    'border-transparent bg-white/20 opacity-40 grayscale hover:opacity-100 hover:grayscale-0',
             )}
           >
             <div

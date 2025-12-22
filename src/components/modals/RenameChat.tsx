@@ -71,7 +71,7 @@ const RenameChat = () => {
           </Button>
           <Button
             onClick={() => mutate()}
-            disabled={isPending || !title.trim()}
+            disabled={isPending || !title?.trim()}
           >
             {isPending && <LoaderCircle className="mr-2 animate-spin" />}
             {isPending ? 'Renaming...' : 'Rename'}

@@ -372,7 +372,7 @@ const ChatInput = ({
       imageWorkflow,
     });
 
-    if (message.trim() === '') return;
+    if (!message?.trim()) return;
     setShowStartLastMessage(true);
 
     const handleImageWorkflow = async () => {
