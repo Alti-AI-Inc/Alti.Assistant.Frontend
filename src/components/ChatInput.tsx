@@ -11,9 +11,6 @@ import {
 import { cn } from '@/lib/utils';
 
 import { PostConversation } from '@/actions/conversationsAction';
-import { useImageGeneration } from '@/hooks/useImageGeneration';
-import { useDocumentDrafting } from '@/hooks/useDocumentDrafting';
-import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import {
   Sheet,
   SheetContent,
@@ -22,6 +19,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { useDocumentDrafting } from '@/hooks/useDocumentDrafting';
+import { useImageGeneration } from '@/hooks/useImageGeneration';
+import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import {
   OPTIONS,
   ROLES,
@@ -38,6 +38,7 @@ import {
   Image as ImageIcon,
   ImageUp,
   Languages,
+  LayoutGrid,
   Mail,
   Microscope,
   Minimize,
@@ -48,7 +49,6 @@ import {
   PencilRuler,
   Plus,
   Waypoints,
-  LayoutGrid,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -653,7 +653,7 @@ const ChatInput = ({
                           className={cn(
                             'flex cursor-pointer flex-col items-center gap-2 rounded-xl p-2 transition-colors',
                             selectedOption === type
-                              ? 'bg-black text-white'
+                              ? 'bg-black text-white hover:bg-black hover:text-white'
                               : 'bg-gray-50 text-black hover:bg-gray-100',
                           )}
                         >
@@ -677,7 +677,7 @@ const ChatInput = ({
                         onClick={() => handleSelectOption(type)}
                         className={cn(
                           'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black hover:bg-gray-100',
-                          selectedOption === type && 'bg-black text-white',
+                          selectedOption === type && 'bg-black text-white hover:bg-black hover:text-white',
                         )}
                       />
                     </TooltipTrigger>
