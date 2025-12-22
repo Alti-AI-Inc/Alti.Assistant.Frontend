@@ -323,6 +323,9 @@ const ChatInput = ({
       const images = response.data?.responseMessage?.images;
       const name = response.data?.responseMessage?.video?.name;
       const reference = response.data?.responseMessage?.reference;
+      // Extract document if it exists in the response
+      const document =
+        response.data?.document || response.data?.responseMessage?.document;
 
       updateActiveConversation(
         activeConversation?.knowledgebaseId
@@ -339,6 +342,7 @@ const ChatInput = ({
           ...(images && { images }),
           ...(name && { videoName: name }),
           ...(reference && { reference }),
+          ...(document && { document }),
         },
       );
 
@@ -595,7 +599,7 @@ const ChatInput = ({
             {/* Desktop layout */}
             <div
               className={cn(
-                'flex items-center gap-2',
+                'flex items-start gap-2',
                 activeConversation?.knowledgebaseId && 'hidden',
               )}
             >
@@ -625,7 +629,7 @@ const ChatInput = ({
                 <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                   <SheetTrigger asChild>
                     <div className="flex cursor-pointer items-center justify-center">
-                      <LayoutGrid className="size-6 rounded-full border-2 border-gray-300 p-[3px] text-gray-500 hover:bg-gray-100" />
+                      <LayoutGrid className="size-6 rounded-full border-2 border-gray-300 p-[2.5px] text-gray-500 hover:bg-gray-100" />
                     </div>
                   </SheetTrigger>
                   <SheetContent side="bottom" className="rounded-t-3xl">

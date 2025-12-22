@@ -91,7 +91,34 @@ export function useActiveConversation(
       // Sanitize messages to avoid showing success text in UI
       if (data && data.messages) {
         data.messages = data.messages.map((msg: any) => {
-          if (msg.role === 'assistant' && msg.content) {
+          if (msg.role === 'assistant') {
+            // Document generation metadata mapping
+            if (msg.metadata?.documentGenerated && !msg.metadata.document) {
+              const { exportResult, uploadResult, collectedParams } =
+                msg.metadata;
+              if (exportResult && uploadResult) {
+                msg.metadata.document = {
+                  content: collectedParams?.content || '', // Fallback content
+                  format: exportResult.format,
+                  file: {
+                    filePath: exportResult.filePath,
+                    fileName: exportResult.fileName,
+                    format: exportResult.format,
+                    size: exportResult.size,
+                  },
+                  url: uploadResult.publicUrl || uploadResult.url,
+                  metadata: {
+                    title:
+                      collectedParams?.title ||
+                      exportResult.fileName ||
+                      'Generated Document',
+                    documentType: collectedParams?.documentType || 'document',
+                    ...collectedParams,
+                  },
+                };
+              }
+            }
+
             if (
               msg.content.startsWith('Image generated successfully') ||
               msg.content.startsWith('Image edited successfully') ||
@@ -127,7 +154,34 @@ export function useSharedConversation(id: string) {
       // Sanitize messages to avoid showing success text in UI
       if (conversation && conversation.messages) {
         conversation.messages = conversation.messages.map((msg: any) => {
-          if (msg.role === 'assistant' && msg.content) {
+          if (msg.role === 'assistant') {
+            // Document generation metadata mapping
+            if (msg.metadata?.documentGenerated && !msg.metadata.document) {
+              const { exportResult, uploadResult, collectedParams } =
+                msg.metadata;
+              if (exportResult && uploadResult) {
+                msg.metadata.document = {
+                  content: collectedParams?.content || '',
+                  format: exportResult.format,
+                  file: {
+                    filePath: exportResult.filePath,
+                    fileName: exportResult.fileName,
+                    format: exportResult.format,
+                    size: exportResult.size,
+                  },
+                  url: uploadResult.publicUrl || uploadResult.url,
+                  metadata: {
+                    title:
+                      collectedParams?.title ||
+                      exportResult.fileName ||
+                      'Generated Document',
+                    documentType: collectedParams?.documentType || 'document',
+                    ...collectedParams,
+                  },
+                };
+              }
+            }
+
             if (
               msg.content.startsWith('Image generated successfully') ||
               msg.content.startsWith('Image edited successfully') ||

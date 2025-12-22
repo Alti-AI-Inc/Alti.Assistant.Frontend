@@ -30,6 +30,7 @@ import ReferencesList from './ReferenceList';
 
 import VideoComponent from './VideoComponent';
 import VideoComponentForContent from './YoutubePlayer';
+import FileDownloadCard from './FileDownloadCard';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
@@ -113,6 +114,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const lastUserMessage = activeConversation?.messages
     .filter(message => message.role === 'user')
     .pop();
+
+  console.log('activeConversation?.messages', activeConversation?.messages);
   // const lastMessageRole = activeConversation?.messages.at(-1)?.role;
   return (
     <div
@@ -243,6 +246,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     <VideoComponent
                       operationId={message.metadata?.video?.name}
                     />
+                  )}
+                  {message.metadata?.document && (
+                    <FileDownloadCard document={message.metadata.document} />
                   )}
                   {!!message.metadata?.reference?.length && (
                     <ReferencesList references={message.metadata.reference} />

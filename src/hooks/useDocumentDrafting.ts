@@ -56,51 +56,17 @@ export function useDocumentDrafting() {
         return;
       }
 
-      // Provide optimistic UI or success message?
-      // For now, let's assume the backend returns a document object
-      // We might need to redirect if it created a conversation or just show the result
-
-      // Since generateDocument creates a file, we should probably display it.
-      // And importantly, if it creates a NEW conversation, we need that ID.
-      // But `generateDocument` response structure in `documentActions.ts`
-      // returns `data.success` and `data.document`. It doesn't seem to return a `conversationId`
-      // in the `DirectGenerationResponse` interface we defined?
-      // WAIT. checking implementation_plan...
-      // `DirectGenerationResponse` data has `document` object.
-      // It DOES NOT have conversationId.
-      // However, usually these actions should probably be saved to a conversation history?
-      // If the backend doesn't return ID, we can't redirect.
-      // Assuming for now we just show the result in the current "new-chat" view
-      // BUT the user requirement said "redirect to new url having conversation ID".
-      // This implies the backend MUST support creating a conversation for direct generation too.
-      // If the current API definition is missing conversationId, that's a potential gap.
-      // I will proceed assuming we might need to adjust, but for now I'll follow the types
-      // and maybe just inject a "fake" assistant message with the file.
-
       const { document } = response.data;
       if (document && document.url) {
         // Create an assistant message with the document
         const messageContent = `I've generated your ${document.metadata.documentType}.`;
-        // We might need to manually handle this if we aren't redirecting
-        // or if we prefer to redirect, we need the conversation ID.
-
-        // If `generateDocument` is stateless (just returns file), we can't redirect to a "chat".
-        // The user said "similar to simple conversation and image gen".
-        // Typically that implies a persistent conversation.
-        // I'll assume for "Direct Generation" we might just show the result locally for now
-        // unless I see a conversationId in the actual response payload during runtime.
-
-        // UPDATE: I'll handle purely UI updates here.
 
         updateActiveConversation(
           messageContent,
           ROLES.ASSISTANT,
-          undefined, // No ID available yet?
+          undefined, // No ID available yet.
           {
-            // Assuming we can pass file metadata here to render it
-            // The `FullConversation` renders images mostly.
-            // We might need to tweak `FullConversation` to render Documents too.
-            // For now, I'll put the file URL in metadata simply.
+            document: document,
             reference: [
               {
                 title: document.metadata.title || document.file.fileName,
@@ -146,7 +112,10 @@ export function useDocumentDrafting() {
 
           // Update conversation store with the assistant's response so it appears immediately
           // even before the redirect fully loads the new page data
-          updateActiveConversation(message, ROLES.ASSISTANT, conversationId);
+          const { document } = response.data;
+          updateActiveConversation(message, ROLES.ASSISTANT, conversationId, {
+            ...(document && { document: document }),
+          });
         }
       }
       resetDrafting();

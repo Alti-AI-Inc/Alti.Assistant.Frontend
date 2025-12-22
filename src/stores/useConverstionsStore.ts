@@ -46,6 +46,23 @@ export interface Reference {
   searchQuery: string;
 }
 
+export interface GeneratedDocument {
+  content?: string;
+  format?: string;
+  file?: {
+    filePath?: string;
+    fileName: string;
+    format: string;
+    size?: number;
+  };
+  url: string;
+  metadata?: {
+    title?: string;
+    documentType?: string;
+    [key: string]: any;
+  };
+}
+
 // Messages inside an active conversation
 export type ConversationMessage = {
   role: ROLES;
@@ -62,6 +79,7 @@ export type ConversationMessage = {
     video?: {
       name: string;
     };
+    document?: GeneratedDocument;
   };
 };
 
@@ -99,6 +117,7 @@ interface ConversationStore {
       imageUrl?: string; // New property to align with backend
       videoName?: string;
       reference?: Reference[];
+      document?: GeneratedDocument;
     },
   ) => void;
   setLoadingActiveConversation: (loading: boolean) => void;
@@ -148,6 +167,9 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
                 ...(extras?.reference && {
                   metadata: { reference: extras.reference },
                 }),
+                ...(extras?.document && {
+                  metadata: { document: extras.document },
+                }),
                 timestamp: new Date().toISOString(),
               },
             ],
@@ -166,6 +188,9 @@ export const useConversationsStore = create<ConversationStore>()(set => ({
           ...(extras?.imageUrl && { metadata: { imageUrl: extras.imageUrl } }),
           ...(extras?.videoName && {
             metadata: { video: { name: extras.videoName } },
+          }),
+          ...(extras?.document && {
+            metadata: { document: extras.document },
           }),
           ...(extras?.reference && {
             metadata: { reference: extras.reference },
