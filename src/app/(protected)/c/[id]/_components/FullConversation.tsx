@@ -205,8 +205,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   {message.role === 'assistant' &&
                     // Skip rendering if content is empty and there's no image
                     !(
-                      message.content.trim() === '' &&
-                      !message.metadata?.imageUrl
+                      !message.content?.trim() && !message.metadata?.imageUrl
                     ) && (
                       <div>
                         {containsYouTubeUrl(message.content) ? (
@@ -261,16 +260,16 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             )}
             {isCollectingDetails && <ImageGenSuggestions />}
             {/* Document Drafting UI */}
-            {drafting.isActive && (
+            {drafting.isActive && !isLoadingResponse && (
               <>
-                {(drafting.mode === 'select_mode' ||
-                  drafting.mode === 'assistant') && (
-                  <DocumentModeSelector
-                    currentMode={
-                      drafting.mode === 'assistant' ? 'assistant' : undefined
-                    }
-                  />
-                )}
+                <DocumentModeSelector
+                  currentMode={
+                    drafting.mode === 'select_mode'
+                      ? null
+                      : (drafting.mode as 'assistant' | 'direct')
+                  }
+                />
+
                 {drafting.mode === 'direct' && (
                   <div
                     className={cn(
