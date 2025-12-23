@@ -1,5 +1,4 @@
 'use client';
-
 import AudioRecorder from '@/components/AudioRecorder';
 import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
@@ -113,7 +112,7 @@ const TOOLBAR_ITEMS = [
   //   Icon: FileMinus,
   // },
   {
-    type: OPTIONS.TEXT,
+    type: OPTIONS.DRAFT_DOCUMENT,
     label: 'Draft Document',
     Icon: PencilLine,
   },
@@ -181,7 +180,6 @@ const ChatInput = ({
   } = useConversationsStore();
 
   // Image generation hook - pass router and queryClient for URL redirect and query invalidation
-  // Image generation hook - use external if provided, otherwise create internal instance
   const internalImageGenHook = useImageGeneration({ router, queryClient });
   const {
     workflow: imageWorkflow,
@@ -225,12 +223,15 @@ const ChatInput = ({
       }
 
       // Reset drafting state if switching away from TEXT (Draft Document)
-      if (selectedOption === OPTIONS.TEXT && nextOption !== OPTIONS.TEXT) {
+      if (
+        selectedOption === OPTIONS.DRAFT_DOCUMENT &&
+        nextOption !== OPTIONS.DRAFT_DOCUMENT
+      ) {
         resetDrafting();
       }
 
       // Start drafting if switching TO TEXT
-      if (nextOption === OPTIONS.TEXT) {
+      if (nextOption === OPTIONS.DRAFT_DOCUMENT) {
         startDrafting();
       }
 
@@ -255,7 +256,7 @@ const ChatInput = ({
         return '/search/code';
       case OPTIONS.RESEARCH:
         return '/deep-research/assistant';
-      case OPTIONS.TEXT:
+      case OPTIONS.DRAFT_DOCUMENT:
         return '/search/writing';
       case OPTIONS.GENERATE_PLAN:
         return '/search/plan';
@@ -285,7 +286,7 @@ const ChatInput = ({
   };
 
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}${getApiEndpoint()}`;
-  // console.log('apiUrl', apiUrl);
+  console.log('apiUrl', apiUrl);
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
       if (!data?.accessToken) throw new Error('No access token1');
@@ -402,7 +403,7 @@ const ChatInput = ({
         await handleImageWorkflow();
         break;
 
-      case OPTIONS.TEXT:
+      case OPTIONS.DRAFT_DOCUMENT:
         if (drafting.mode === 'direct') {
           await handleDirectDrafting(message);
         } else if (drafting.mode === 'assistant') {
@@ -414,7 +415,7 @@ const ChatInput = ({
         break;
 
       case OPTIONS.REVIEW_DOCUMENTS:
-        mutation.mutate(message);
+        // TODO: implement review documents
         break;
 
       // Add scalable feature cases here
