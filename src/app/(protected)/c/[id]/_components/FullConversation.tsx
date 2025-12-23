@@ -54,7 +54,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
   const { onOpen } = useModalStore();
 
-  const { drafting } = useDocumentStore();
+  const { drafting, review } = useDocumentStore();
 
   // Initialize Image Generation Hook
   const imageGenHook = useImageGeneration({ router, queryClient });
@@ -172,7 +172,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       </div>
       {/* Messages container - takes remaining space and scrolls */}
       {/* {!!activeConversation?.messages.length && ( */}
-      {(!!activeConversation?.messages.length || drafting.isActive) && (
+      {(!!activeConversation?.messages.length ||
+        drafting.isActive ||
+        (review && review.isActive)) && (
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
           <div
             className={cn(
@@ -259,28 +261,37 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
               <ImageGenConfirmation onConfirm={handleUserConfirmation} />
             )}
             {isCollectingDetails && <ImageGenSuggestions />}
-            {/* Document Drafting UI */}
-            {drafting.isActive && !isLoadingResponse && (
-              <>
-                <DocumentModeSelector
-                  currentMode={
-                    drafting.mode === 'select_mode'
-                      ? null
-                      : (drafting.mode as 'assistant' | 'direct')
-                  }
-                />
+            {/* Document Drafting/Review UI */}
+            {(drafting.isActive || (review && review.isActive)) &&
+              !isLoadingResponse && (
+                <>
+                  <DocumentModeSelector
+                    currentMode={
+                      drafting.isActive
+                        ? drafting.mode === 'select_mode'
+                          ? null
+                          : (drafting.mode as 'assistant' | 'direct')
+                        : review.mode === 'select_mode'
+                          ? null
+                          : (review.mode as 'assistant' | 'direct')
+                    }
+                    modeContext={drafting.isActive ? 'draft' : 'review'}
+                  />
 
-                {drafting.mode === 'direct' && (
-                  <div
-                    className={cn(
-                      isLoadingResponse && 'pointer-events-none opacity-50',
-                    )}
-                  >
-                    <DocumentDraftingForm />
-                  </div>
-                )}
-              </>
-            )}
+                  {((drafting.isActive && drafting.mode === 'direct') ||
+                    (review &&
+                      review.isActive &&
+                      review.mode === 'direct')) && (
+                    <div
+                      className={cn(
+                        isLoadingResponse && 'pointer-events-none opacity-50',
+                      )}
+                    >
+                      <DocumentDraftingForm />
+                    </div>
+                  )}
+                </>
+              )}
             {/* Loading message - visible in the messages area */}
             {isLoadingResponse && (
               <div className="flex items-center justify-start py-4">
