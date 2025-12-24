@@ -76,15 +76,16 @@ export function useDocument() {
     onSuccess: response => {
       if (!response.success || !response.data) {
         console.error('Failed to generate document', response);
-        return;
-      }
-
-      const { document } = response.data;
-      if (document && document.url) {
-        const messageContent = response.message;
-        updateActiveConversation(messageContent, ROLES.ASSISTANT, undefined, {
-          document: document,
-        });
+        const errorMessage = response.message || 'Failed to generate document';
+        updateActiveConversation(errorMessage, ROLES.ASSISTANT);
+      } else {
+        const { document } = response.data;
+        if (document && document.url) {
+          const messageContent = response.message;
+          updateActiveConversation(messageContent, ROLES.ASSISTANT, undefined, {
+            document: document,
+          });
+        }
       }
 
       resetAll();
@@ -187,14 +188,14 @@ export function useDocument() {
       file,
       additionalInstructions,
     }: {
-      file: File;
+      file?: File;
       additionalInstructions?: string;
     }) => {
       if (!accessToken) throw new Error('No access token');
       const { config } = review;
 
       const formData = new FormData();
-      formData.append('file', file);
+      file && formData.append('file', file);
       formData.append('reviewType', config.reviewType);
       formData.append('reviewDepth', config.reviewDepth);
       formData.append('documentType', config.documentType);
@@ -221,6 +222,9 @@ export function useDocument() {
           reviewContent || 'Review complete.',
           ROLES.ASSISTANT,
         );
+      } else {
+        const errorMessage = response.message || 'Failed to review document';
+        updateActiveConversation(errorMessage, ROLES.ASSISTANT);
       }
       resetAll();
       setIsLoading(false);
@@ -239,11 +243,20 @@ export function useDocument() {
   });
 
   const assistantReviewMutation = useMutation({
-    mutationFn: async ({ file, message }: { file: File; message: string }) => {
+    mutationFn: async ({
+      file,
+      message,
+      conversationId,
+    }: {
+      file?: File;
+      message: string;
+      conversationId?: string;
+    }) => {
       if (!accessToken) throw new Error('No access token');
       const formData = new FormData();
-      formData.append('file', file);
       formData.append('message', message);
+      file && formData.append('file', file);
+      conversationId && formData.append('conversationId', conversationId);
 
       return await uploadReviewDocumentAssistant(formData, accessToken);
     },
@@ -279,7 +292,7 @@ export function useDocument() {
     },
   });
 
-  // --- Handlers ---
+  // --- Draft Handlers ---
 
   const handleDirectDrafting = async (content: string) => {
     setUserMessage('');
@@ -305,10 +318,11 @@ export function useDocument() {
   };
 
   // Review Handlers
-  const handleDirectReview = async (file: File, instructions?: string) => {
-    // For direct review, maybe we don't show user message if it's just a file upload?
-    // Or we show "Reviewing [filename]..."
-    updateActiveConversation(`Reviewing document: ${file.name}`, ROLES.USER);
+  const handleDirectReview = async (file?: File, instructions?: string) => {
+    updateActiveConversation(
+      `Reviewing document: ${file && file.name}`,
+      ROLES.USER,
+    );
     await directReviewMutation.mutateAsync({
       file,
       additionalInstructions: instructions,
@@ -317,34 +331,18 @@ export function useDocument() {
 
   const handleAssistantReview = async (file: File, message: string) => {
     setUserMessage('');
-    updateActiveConversation(message, ROLES.USER, undefined, {
-      // Optimistically show file?
-    });
-    // If existing conversation, we might need a different mutation (1.3 Upload New Document)
-    // The requirement 1.3 says "Upload New Document to Existing Conversatio".
-    // "Continue Document Conversation" (1.2) is just text.
-    // So if existing, we use 1.3 logic (not implemented fully in actions yet? "1.3 Upload New Document..." same endpoint?)
-    // API list says:
-    // 1.1 Upload and Review (POST /document-review/assistant)
-    // 1.3 Upload New Doc to Existing (POST /documents/assistant, with file)
-    // My assistantReviewMutation uses /document-review/assistant (1.1).
-    // I should check if we are in existing conversation.
+    updateActiveConversation(message, ROLES.USER, undefined, {});
 
     const currentId = activeConversation?.conversationId;
     const isEditingExisting =
       currentId && currentId !== 'new-chat' && pathname.startsWith('/c/');
 
     if (isEditingExisting) {
-      // Use logic for 1.3 (which I need to verify if distinct action needed or just different params)
-      // User request says: 1.3 Upload New Document to Existing Conversatio, POST, {{base_url}}/documents/assistant, body: message, conversationId, file
-      // My continueDocumentConversation uses JSON body. Use FormData for file.
-      // I need a new action or update continueDocumentConversation to support FormData.
-      // For now, I'll assume 1.1 for new chats.
-      // TODO: Handle 1.3
-      console.warn(
-        'Review for existing conversation not fully implemented, starting new.',
-      );
-      await assistantReviewMutation.mutateAsync({ file, message });
+      await assistantReviewMutation.mutateAsync({
+        file,
+        message,
+        conversationId: currentId,
+      });
     } else {
       await assistantReviewMutation.mutateAsync({ file, message });
     }

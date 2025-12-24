@@ -468,11 +468,6 @@ const ChatInput = ({
           const isExistingConversation =
             currentId && currentId !== 'new-chat' && pathname.startsWith('/c/');
 
-          if (!isExistingConversation && !selectedFile) {
-            alert('Please upload a document to start the review.');
-            return;
-          }
-
           // handleAssistantReview handles both new and continue internally
           if (selectedFile) {
             await handleAssistantReview(selectedFile, message);
@@ -486,11 +481,6 @@ const ChatInput = ({
           const currentId = activeConversation?.conversationId;
           const isExistingConversation =
             currentId && currentId !== 'new-chat' && pathname.startsWith('/c/');
-
-          if (!isExistingConversation && !selectedFile) {
-            alert('Please upload a document to start the review.');
-            return;
-          }
 
           if (selectedFile) {
             await handleAssistantReview(selectedFile, message);
@@ -750,7 +740,10 @@ const ChatInput = ({
               <div className="block md:hidden">
                 <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                   <SheetTrigger asChild>
-                    <div className="flex cursor-pointer items-center justify-center">
+                    <div
+                      suppressHydrationWarning
+                      className="flex cursor-pointer items-center justify-center"
+                    >
                       <LayoutGrid className="size-6 rounded-full border-2 border-gray-300 p-[2.5px] text-gray-500 hover:bg-gray-100" />
                     </div>
                   </SheetTrigger>
