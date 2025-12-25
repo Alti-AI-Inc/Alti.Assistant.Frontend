@@ -212,8 +212,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         return;
       }
 
-      console.log('[useImageGeneration] analyzeIntent response:', response);
-
       const {
         isEditable: respIsEditable,
         intent: respIntent,
@@ -618,7 +616,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         );
         const store = useImageGenStore.getState();
         updateActiveConversation(
-          `I encountered an error while editing your image: ${errorMsg}`,
+          `Retry: ${errorMsg}`,
           ROLES.ASSISTANT,
           store.conversationId || undefined,
         );
