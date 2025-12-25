@@ -4,7 +4,7 @@ import CopyButton from '@/components/CopyButton';
 import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
 import { DocumentModeSelector } from '@/components/documents/DocumentModeSelector';
-import { DocumentDraftingForm } from '@/components/documents/DocumentDraftingForm';
+import { DocumentDraftingForm } from '@/components/documents/DocumentConfigForm';
 import SaveConversation from '@/components/SaveConversation';
 import { Button } from '@/components/ui/button';
 import {

@@ -53,6 +53,7 @@ import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
 import { Textarea } from './ui/textarea';
+import { WarningMessageModal } from './WarningMessageModal';
 
 const ALLOWED_DOC_EXTENSIONS = [
   '.pdf',
@@ -183,6 +184,7 @@ const ChatInput = ({
   const {
     updateActiveConversation,
     setLoadingResponse,
+    isLoadingResponse,
     selectedOption,
     setSelectedOption,
     activeConversation,
@@ -222,6 +224,11 @@ const ChatInput = ({
     handleAssistantReview,
     resetReview,
   } = useDocument();
+
+  const isExistingConversation =
+    activeConversation?.conversationId &&
+    activeConversation?.conversationId !== 'new-chat' &&
+    pathname?.startsWith('/c/');
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
@@ -401,6 +408,9 @@ const ChatInput = ({
   });
 
   const handleSubmit = async () => {
+    // Prevent submission if response is loading or message is empty
+    if (isLoadingResponse) return;
+
     console.log('ChatInput submit:', {
       selectedOption,
       conversationId,
@@ -435,7 +445,14 @@ const ChatInput = ({
 
     switch (selectedOption) {
       case OPTIONS.IMAGE:
+        await handleImageWorkflow();
+        break;
+
       case OPTIONS.EDIT_IMAGE:
+        if (!imageBase64) {
+          // Warning is shown via UI component
+          return;
+        }
         await handleImageWorkflow();
         break;
 
@@ -451,6 +468,11 @@ const ChatInput = ({
         break;
 
       case OPTIONS.REVIEW_DOCUMENTS:
+        if (!isExistingConversation && !selectedFile) {
+          // Warning is shown via UI component
+          return;
+        }
+
         // Pattern matches DRAFT_DOCUMENT workflow
         if (review.mode === 'direct') {
           // Direct mode ALWAYS requires a file
@@ -464,9 +486,6 @@ const ChatInput = ({
           setSelectedFile(null);
         } else if (review.mode === 'assistant') {
           // Assistant mode - check if file is needed for new conversations
-          const currentId = activeConversation?.conversationId;
-          const isExistingConversation =
-            currentId && currentId !== 'new-chat' && pathname.startsWith('/c/');
 
           // handleAssistantReview handles both new and continue internally
           if (selectedFile) {
@@ -478,9 +497,6 @@ const ChatInput = ({
           }
         } else {
           // Default to assistant mode (fallback like DRAFT_DOCUMENT does)
-          const currentId = activeConversation?.conversationId;
-          const isExistingConversation =
-            currentId && currentId !== 'new-chat' && pathname.startsWith('/c/');
 
           if (selectedFile) {
             await handleAssistantReview(selectedFile, message);
@@ -583,6 +599,17 @@ const ChatInput = ({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Check if upload is allowed for current option
+    const isUploadAllowed =
+      selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
+      selectedOption === OPTIONS.IMAGE ||
+      selectedOption === OPTIONS.EDIT_IMAGE;
+
+    if (!isUploadAllowed) {
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
     // 1. Review Document Flow: Treats all files (including images) as documents to review
     if (selectedOption === OPTIONS.REVIEW_DOCUMENTS) {
       const extension = '.' + file.name.split('.').pop()?.toLowerCase();
@@ -603,7 +630,10 @@ const ChatInput = ({
       try {
         const compressedDataUrl = await compressImage(file);
         setImageBase64(compressedDataUrl);
-        setSelectedOption(OPTIONS.EDIT_IMAGE);
+        // Only switch if we are allowed (which we checked above, but logic implies we might want to stay in IMAGE)
+        if (selectedOption !== OPTIONS.EDIT_IMAGE) {
+          setSelectedOption(OPTIONS.EDIT_IMAGE);
+        }
       } catch (error) {
         console.error('[ChatInput] Error compressing image:', error);
       }
@@ -631,7 +661,23 @@ const ChatInput = ({
 
       {!externalImageGenHook && isCollectingDetails && <ImageGenSuggestions />}
 
-      <div className="mx-auto w-full max-w-[796px] space-y-6 bg-white px-4 lg:px-0">
+      {selectedOption === OPTIONS.REVIEW_DOCUMENTS &&
+        !selectedFile &&
+        !isExistingConversation && (
+          <WarningMessageModal
+            title="Upload File"
+            description="Please upload a file to continue with document review."
+          />
+        )}
+
+      {selectedOption === OPTIONS.EDIT_IMAGE && !imageBase64 && (
+        <WarningMessageModal
+          title="Upload Image"
+          description="Please upload an image to continue with editing."
+        />
+      )}
+
+      <div className="mx-auto w-full max-w-[796px] space-y-6 bg-white lg:px-0">
         <div
           className={cn(
             'flex flex-col rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4',
@@ -682,7 +728,7 @@ const ChatInput = ({
             name="message"
             value={message}
             onChange={e => setMessage(e.target.value)}
-            onKeyPress={e => {
+            onKeyDown={e => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 handleSubmit();
@@ -714,25 +760,47 @@ const ChatInput = ({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div
-                    onClick={() => fileInputRef.current?.click()}
-                    className="relative flex cursor-pointer items-center"
+                    onClick={() => {
+                      const isUploadAllowed =
+                        selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
+                        selectedOption === OPTIONS.IMAGE ||
+                        selectedOption === OPTIONS.EDIT_IMAGE;
+
+                      if (isUploadAllowed) {
+                        fileInputRef.current?.click();
+                      }
+                    }}
+                    className={cn(
+                      'relative flex items-center',
+                      selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
+                        selectedOption === OPTIONS.IMAGE ||
+                        selectedOption === OPTIONS.EDIT_IMAGE
+                        ? 'cursor-pointer'
+                        : 'cursor-not-allowed opacity-50',
+                    )}
                   >
                     <Plus className="size-6 rounded-full border-2 border-gray-300 p-[3px]" />
                     <input
                       ref={fileInputRef}
                       type="file"
-                      accept={
-                        selectedOption === OPTIONS.REVIEW_DOCUMENTS
-                          ? ALLOWED_DOC_EXTENSIONS.join(',')
-                          : 'image/*'
-                      } // Allow all docs in review mode
+                      accept={(() => {
+                        switch (selectedOption) {
+                          case OPTIONS.REVIEW_DOCUMENTS:
+                            return ALLOWED_DOC_EXTENSIONS.join(',');
+                          case OPTIONS.IMAGE:
+                          case OPTIONS.EDIT_IMAGE:
+                            return 'image/*';
+                          default:
+                            return 'application/x-empty';
+                        }
+                      })()}
                       onChange={handleFileChange}
                       className="hidden"
                     />
                   </div>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>Upload Image</p>
+                  <p>Upload File</p>
                 </TooltipContent>
               </Tooltip>
               {/* options */}
@@ -817,7 +885,12 @@ const ChatInput = ({
               {message ? (
                 <ArrowRight
                   onClick={handleSubmit}
-                  className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-1 text-white"
+                  className={cn(
+                    'size-6 flex-none rounded-full border-2 border-gray-300 bg-black p-1 text-white transition-opacity',
+                    isLoadingResponse
+                      ? 'cursor-not-allowed opacity-50'
+                      : 'cursor-pointer',
+                  )}
                 />
               ) : (
                 <AudioRecorder setMessage={setMessage} />

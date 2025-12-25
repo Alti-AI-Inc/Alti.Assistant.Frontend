@@ -96,10 +96,11 @@ export async function submitDirectReview(
   formData: FormData,
   accessToken: string,
 ): Promise<ReviewResponse> {
-  const response = await fetch(`${API_BASE_URL}/document-review/review`, {
+  const response = await fetch(`${API_BASE_URL}/document-review/assistant`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${accessToken}`,
+      // Content-Type header is set automatically with FormData
     },
     body: formData,
   });
