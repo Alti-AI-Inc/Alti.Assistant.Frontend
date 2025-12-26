@@ -8,7 +8,8 @@ export enum ROLES {
 export enum OPTIONS {
   RESEARCH = 'deep-research',
   CODE = 'code-generation',
-  TEXT = 'text-generation',
+  // TEXT = 'text-generation',
+  DRAFT_DOCUMENT = 'draft-document',
   IMAGE = 'image-generation',
   EDIT_IMAGE = 'edit-generation',
   TASK = 'task-automation',

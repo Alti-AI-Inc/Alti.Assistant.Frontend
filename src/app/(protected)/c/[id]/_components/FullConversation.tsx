@@ -1,10 +1,10 @@
 'use client';
 import ChatInput from '@/components/ChatInput';
 import CopyButton from '@/components/CopyButton';
+import { DocumentDraftingForm } from '@/components/documents/DocumentConfigForm';
+import { DocumentModeSelector } from '@/components/documents/DocumentModeSelector';
 import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
-import { DocumentModeSelector } from '@/components/documents/DocumentModeSelector';
-import { DocumentDraftingForm } from '@/components/documents/DocumentDraftingForm';
 import SaveConversation from '@/components/SaveConversation';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,9 +15,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useActiveConversation } from '@/hooks/useConversations';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
-import { useDocumentStore } from '@/stores/useDocumentStore';
 import { cn, containsYouTubeUrl } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useDocumentStore } from '@/stores/useDocumentStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { useQueryClient } from '@tanstack/react-query';
@@ -28,9 +28,9 @@ import { useEffect, useRef } from 'react';
 import { Streamdown } from 'streamdown';
 import ReferencesList from './ReferenceList';
 
+import FileDownloadCard from './FileDownloadCard';
 import VideoComponent from './VideoComponent';
 import VideoComponentForContent from './YoutubePlayer';
-import FileDownloadCard from './FileDownloadCard';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
@@ -54,7 +54,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
   const { onOpen } = useModalStore();
 
-  const { drafting } = useDocumentStore();
+  const { drafting, review } = useDocumentStore();
 
   // Initialize Image Generation Hook
   const imageGenHook = useImageGeneration({ router, queryClient });
@@ -172,7 +172,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       </div>
       {/* Messages container - takes remaining space and scrolls */}
       {/* {!!activeConversation?.messages.length && ( */}
-      {(!!activeConversation?.messages.length || drafting.isActive) && (
+      {(!!activeConversation?.messages.length ||
+        drafting.isActive ||
+        (review && review.isActive)) && (
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
           <div
             className={cn(
@@ -259,28 +261,37 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
               <ImageGenConfirmation onConfirm={handleUserConfirmation} />
             )}
             {isCollectingDetails && <ImageGenSuggestions />}
-            {/* Document Drafting UI */}
-            {drafting.isActive && !isLoadingResponse && (
-              <>
-                <DocumentModeSelector
-                  currentMode={
-                    drafting.mode === 'select_mode'
-                      ? null
-                      : (drafting.mode as 'assistant' | 'direct')
-                  }
-                />
+            {/* Document Drafting/Review UI */}
+            {drafting.isActive  &&
+              !isLoadingResponse && (
+                <>
+                  <DocumentModeSelector
+                    currentMode={
+                      drafting.isActive
+                        ? drafting.mode === 'select_mode'
+                          ? null
+                          : (drafting.mode as 'assistant' | 'direct')
+                        : review.mode === 'select_mode'
+                          ? null
+                          : (review.mode as 'assistant' | 'direct')
+                    }
+                    modeContext={drafting.isActive ? 'draft' : 'review'}
+                  />
 
-                {drafting.mode === 'direct' && (
-                  <div
-                    className={cn(
-                      isLoadingResponse && 'pointer-events-none opacity-50',
-                    )}
-                  >
-                    <DocumentDraftingForm />
-                  </div>
-                )}
-              </>
-            )}
+                  {((drafting.isActive && drafting.mode === 'direct') ||
+                    (review &&
+                      review.isActive &&
+                      review.mode === 'direct')) && (
+                    <div
+                      className={cn(
+                        isLoadingResponse && 'pointer-events-none opacity-50',
+                      )}
+                    >
+                      <DocumentDraftingForm />
+                    </div>
+                  )}
+                </>
+              )}
             {/* Loading message - visible in the messages area */}
             {isLoadingResponse && (
               <div className="flex items-center justify-start py-4">

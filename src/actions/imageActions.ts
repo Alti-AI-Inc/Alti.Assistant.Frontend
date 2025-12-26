@@ -143,7 +143,7 @@ export async function analyzeImageIntent(
       body: JSON.stringify({
         request,
         hasImage,
-        // ...(conversationId && { conversationId }),
+        ...(conversationId && { conversationId }),
       }),
     },
   );

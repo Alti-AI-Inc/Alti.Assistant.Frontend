@@ -1,5 +1,4 @@
 'use client';
-
 import AudioRecorder from '@/components/AudioRecorder';
 import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
@@ -19,7 +18,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { useDocumentDrafting } from '@/hooks/useDocumentDrafting';
+import { useDocument } from '@/hooks/useDocument';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import {
@@ -51,9 +50,21 @@ import {
   Waypoints,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
 import { Textarea } from './ui/textarea';
+import { WarningMessageModal } from './WarningMessageModal';
+
+const ALLOWED_DOC_EXTENSIONS = [
+  '.pdf',
+  '.docx',
+  '.doc',
+  '.txt',
+  '.xlsx',
+  '.xls',
+  '.pptx',
+  '.ppt',
+];
 
 const TOOLBAR_ITEMS = [
   {
@@ -113,7 +124,7 @@ const TOOLBAR_ITEMS = [
   //   Icon: FileMinus,
   // },
   {
-    type: OPTIONS.TEXT,
+    type: OPTIONS.DRAFT_DOCUMENT,
     label: 'Draft Document',
     Icon: PencilLine,
   },
@@ -165,6 +176,7 @@ const ChatInput = ({
   imageGenHook: externalImageGenHook,
 }: ChatInputProps) => {
   const router = useRouter();
+  const pathname = usePathname();
   const { data } = useSession();
 
   const queryClient = useQueryClient();
@@ -172,6 +184,7 @@ const ChatInput = ({
   const {
     updateActiveConversation,
     setLoadingResponse,
+    isLoadingResponse,
     selectedOption,
     setSelectedOption,
     activeConversation,
@@ -180,8 +193,10 @@ const ChatInput = ({
     setShowStartLastMessage,
   } = useConversationsStore();
 
+  // Custom file state for docs
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   // Image generation hook - pass router and queryClient for URL redirect and query invalidation
-  // Image generation hook - use external if provided, otherwise create internal instance
   const internalImageGenHook = useImageGeneration({ router, queryClient });
   const {
     workflow: imageWorkflow,
@@ -196,14 +211,24 @@ const ChatInput = ({
     setImageBase64,
   } = externalImageGenHook || internalImageGenHook;
 
-  // Document drafting hook
+  // Document hook
   const {
     drafting,
     startDrafting,
     handleDirectDrafting,
     handleAssistantDrafting,
     resetDrafting,
-  } = useDocumentDrafting();
+    review,
+    startReview,
+    handleDirectReview,
+    handleAssistantReview,
+    resetReview,
+  } = useDocument();
+
+  const isExistingConversation =
+    activeConversation?.conversationId &&
+    activeConversation?.conversationId !== 'new-chat' &&
+    pathname?.startsWith('/c/');
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
@@ -225,13 +250,30 @@ const ChatInput = ({
       }
 
       // Reset drafting state if switching away from TEXT (Draft Document)
-      if (selectedOption === OPTIONS.TEXT && nextOption !== OPTIONS.TEXT) {
+      if (
+        selectedOption === OPTIONS.DRAFT_DOCUMENT &&
+        nextOption !== OPTIONS.DRAFT_DOCUMENT
+      ) {
         resetDrafting();
       }
 
       // Start drafting if switching TO TEXT
-      if (nextOption === OPTIONS.TEXT) {
+      if (nextOption === OPTIONS.DRAFT_DOCUMENT) {
         startDrafting();
+      }
+
+      // Reset review if switching away
+      if (
+        selectedOption === OPTIONS.REVIEW_DOCUMENTS &&
+        nextOption !== OPTIONS.REVIEW_DOCUMENTS
+      ) {
+        resetReview();
+        setSelectedFile(null); // Clear file
+      }
+
+      // Start review if switching TO Review
+      if (nextOption === OPTIONS.REVIEW_DOCUMENTS) {
+        startReview();
       }
 
       setSelectedOption(nextOption);
@@ -242,6 +284,8 @@ const ChatInput = ({
       resetImageGen,
       resetDrafting,
       startDrafting,
+      resetReview,
+      startReview,
     ],
   );
 
@@ -255,16 +299,16 @@ const ChatInput = ({
         return '/search/code';
       case OPTIONS.RESEARCH:
         return '/deep-research/assistant';
-      case OPTIONS.TEXT:
-        return '/search/writing';
+      // case OPTIONS.DRAFT_DOCUMENT:
+      //   return '/search/writing';
       case OPTIONS.GENERATE_PLAN:
         return '/search/plan';
       case OPTIONS.PRESENTATION:
         return '/search/presentation';
       case OPTIONS.GENERATE_REPORT:
         return '/search/report';
-      case OPTIONS.REVIEW_DOCUMENTS:
-        return '/search/review';
+      // case OPTIONS.REVIEW_DOCUMENTS:
+      //   return '/search/review';
       case OPTIONS.DRAFT_EMAIL:
         return '/search/email';
       case OPTIONS.SUMMARIZE:
@@ -364,6 +408,9 @@ const ChatInput = ({
   });
 
   const handleSubmit = async () => {
+    // Prevent submission if response is loading or message is empty
+    if (isLoadingResponse) return;
+
     console.log('ChatInput submit:', {
       selectedOption,
       conversationId,
@@ -398,11 +445,18 @@ const ChatInput = ({
 
     switch (selectedOption) {
       case OPTIONS.IMAGE:
-      case OPTIONS.EDIT_IMAGE:
         await handleImageWorkflow();
         break;
 
-      case OPTIONS.TEXT:
+      case OPTIONS.EDIT_IMAGE:
+        if (!imageBase64) {
+          // Warning is shown via UI component
+          return;
+        }
+        await handleImageWorkflow();
+        break;
+
+      case OPTIONS.DRAFT_DOCUMENT:
         if (drafting.mode === 'direct') {
           await handleDirectDrafting(message);
         } else if (drafting.mode === 'assistant') {
@@ -414,7 +468,43 @@ const ChatInput = ({
         break;
 
       case OPTIONS.REVIEW_DOCUMENTS:
-        mutation.mutate(message);
+        if (!isExistingConversation && !selectedFile) {
+          // Warning is shown via UI component
+          return;
+        }
+
+        // Pattern matches DRAFT_DOCUMENT workflow
+        if (review.mode === 'direct') {
+          // Direct mode ALWAYS requires a file
+          if (!selectedFile) {
+            alert(
+              'Direct review mode requires a document. Please upload a file.',
+            );
+            return;
+          }
+          await handleDirectReview(selectedFile, message);
+          setSelectedFile(null);
+        } else if (review.mode === 'assistant') {
+          // Assistant mode - check if file is needed for new conversations
+
+          // handleAssistantReview handles both new and continue internally
+          if (selectedFile) {
+            await handleAssistantReview(selectedFile, message);
+            setSelectedFile(null);
+          } else {
+            // Continue existing conversation without file (reuse drafting handler)
+            await handleAssistantDrafting(message);
+          }
+        } else {
+          // Default to assistant mode (fallback like DRAFT_DOCUMENT does)
+
+          if (selectedFile) {
+            await handleAssistantReview(selectedFile, message);
+            setSelectedFile(null);
+          } else {
+            await handleAssistantDrafting(message);
+          }
+        }
         break;
 
       // Add scalable feature cases here
@@ -507,21 +597,48 @@ const ChatInput = ({
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        console.error('Only image files are supported');
+    if (!file) return;
+
+    // Check if upload is allowed for current option
+    const isUploadAllowed =
+      selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
+      selectedOption === OPTIONS.IMAGE ||
+      selectedOption === OPTIONS.EDIT_IMAGE;
+
+    if (!isUploadAllowed) {
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
+    // 1. Review Document Flow: Treats all files (including images) as documents to review
+    if (selectedOption === OPTIONS.REVIEW_DOCUMENTS) {
+      const extension = '.' + file.name.split('.').pop()?.toLowerCase();
+      // Simple extension check
+      if (!ALLOWED_DOC_EXTENSIONS.includes(extension)) {
+        alert(
+          `Invalid file type. Allowed types: ${ALLOWED_DOC_EXTENSIONS.join(', ')}`,
+        );
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
         return;
       }
-
+      setSelectedFile(file);
+    }
+    // 2. Standard flow (Image Generation): Handles image compression and switching to Edit mode
+    else if (file.type.startsWith('image/')) {
       try {
-        // Compress the image before storing
         const compressedDataUrl = await compressImage(file);
         setImageBase64(compressedDataUrl);
-        setSelectedOption(OPTIONS.EDIT_IMAGE);
+        // Only switch if we are allowed (which we checked above, but logic implies we might want to stay in IMAGE)
+        if (selectedOption !== OPTIONS.EDIT_IMAGE) {
+          setSelectedOption(OPTIONS.EDIT_IMAGE);
+        }
       } catch (error) {
         console.error('[ChatInput] Error compressing image:', error);
       }
     }
+
     // Reset input so same file can be selected again if needed
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -544,7 +661,23 @@ const ChatInput = ({
 
       {!externalImageGenHook && isCollectingDetails && <ImageGenSuggestions />}
 
-      <div className="mx-auto w-full max-w-[796px] space-y-6 bg-white px-4 lg:px-0">
+      {selectedOption === OPTIONS.REVIEW_DOCUMENTS &&
+        !selectedFile &&
+        !isExistingConversation && (
+          <WarningMessageModal
+            title="Upload File"
+            description="Please upload a file to continue with document review."
+          />
+        )}
+
+      {selectedOption === OPTIONS.EDIT_IMAGE && !imageBase64 && (
+        <WarningMessageModal
+          title="Upload Image"
+          description="Please upload an image to continue with editing."
+        />
+      )}
+
+      <div className="mx-auto w-full max-w-[796px] space-y-6 bg-white lg:px-0">
         <div
           className={cn(
             'flex flex-col rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4',
@@ -570,11 +703,32 @@ const ChatInput = ({
             </div>
           )}
 
+          {/* Document Preview */}
+          {selectedFile && (
+            <div className="relative mt-2 flex w-fit items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 p-2">
+              <FileText className="size-8 text-gray-500" />
+              <div className="flex flex-col">
+                <span className="max-w-[150px] truncate text-xs font-medium">
+                  {selectedFile.name}
+                </span>
+                <span className="text-[10px] text-gray-400">
+                  {(selectedFile.size / 1024).toFixed(1)} KB
+                </span>
+              </div>
+              <button
+                onClick={() => setSelectedFile(null)}
+                className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
+              >
+                <Plus className="bold size-3 rotate-45" />
+              </button>
+            </div>
+          )}
+
           <Textarea
             name="message"
             value={message}
             onChange={e => setMessage(e.target.value)}
-            onKeyPress={e => {
+            onKeyDown={e => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 handleSubmit();
@@ -606,21 +760,47 @@ const ChatInput = ({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div
-                    onClick={() => fileInputRef.current?.click()}
-                    className="relative flex cursor-pointer items-center"
+                    onClick={() => {
+                      const isUploadAllowed =
+                        selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
+                        selectedOption === OPTIONS.IMAGE ||
+                        selectedOption === OPTIONS.EDIT_IMAGE;
+
+                      if (isUploadAllowed) {
+                        fileInputRef.current?.click();
+                      }
+                    }}
+                    className={cn(
+                      'relative flex items-center',
+                      selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
+                        selectedOption === OPTIONS.IMAGE ||
+                        selectedOption === OPTIONS.EDIT_IMAGE
+                        ? 'cursor-pointer'
+                        : 'cursor-not-allowed opacity-50',
+                    )}
                   >
                     <Plus className="size-6 rounded-full border-2 border-gray-300 p-[3px]" />
                     <input
                       ref={fileInputRef}
                       type="file"
-                      accept="image/*"
+                      accept={(() => {
+                        switch (selectedOption) {
+                          case OPTIONS.REVIEW_DOCUMENTS:
+                            return ALLOWED_DOC_EXTENSIONS.join(',');
+                          case OPTIONS.IMAGE:
+                          case OPTIONS.EDIT_IMAGE:
+                            return 'image/*';
+                          default:
+                            return 'application/x-empty';
+                        }
+                      })()}
                       onChange={handleFileChange}
                       className="hidden"
                     />
                   </div>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>Upload Image</p>
+                  <p>Upload File</p>
                 </TooltipContent>
               </Tooltip>
               {/* options */}
@@ -628,7 +808,10 @@ const ChatInput = ({
               <div className="block md:hidden">
                 <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                   <SheetTrigger asChild>
-                    <div className="flex cursor-pointer items-center justify-center">
+                    <div
+                      suppressHydrationWarning
+                      className="flex cursor-pointer items-center justify-center"
+                    >
                       <LayoutGrid className="size-6 rounded-full border-2 border-gray-300 p-[2.5px] text-gray-500 hover:bg-gray-100" />
                     </div>
                   </SheetTrigger>
@@ -677,7 +860,8 @@ const ChatInput = ({
                         onClick={() => handleSelectOption(type)}
                         className={cn(
                           'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black hover:bg-gray-100',
-                          selectedOption === type && 'bg-black text-white hover:bg-black hover:text-white',
+                          selectedOption === type &&
+                            'bg-black text-white hover:bg-black hover:text-white',
                         )}
                       />
                     </TooltipTrigger>
@@ -701,7 +885,12 @@ const ChatInput = ({
               {message ? (
                 <ArrowRight
                   onClick={handleSubmit}
-                  className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-1 text-white"
+                  className={cn(
+                    'size-6 flex-none rounded-full border-2 border-gray-300 bg-black p-1 text-white transition-opacity',
+                    isLoadingResponse
+                      ? 'cursor-not-allowed opacity-50'
+                      : 'cursor-pointer',
+                  )}
                 />
               ) : (
                 <AudioRecorder setMessage={setMessage} />

@@ -4,22 +4,39 @@ import { cn } from '@/lib/utils';
 
 export function DocumentModeSelector({
   currentMode,
+  modeContext = 'draft',
 }: {
   currentMode?: 'assistant' | 'direct' | null;
+  modeContext?: 'draft' | 'review';
 }) {
-  const { setDraftingMode } = useDocumentStore();
+  const { setDraftingMode, setReviewMode } = useDocumentStore();
+
+  const handleSetMode = (mode: 'assistant' | 'direct' | 'select_mode') => {
+    if (modeContext === 'review') {
+      // @ts-ignore - mismatch in strict types if any, but string union matches
+      setReviewMode(mode);
+    } else {
+      setDraftingMode(mode);
+    }
+  };
 
   const options = [
     {
       id: 'assistant' as const,
       label: 'Conversation Assistant',
-      description: 'Collaborate with AI to draft your document step-by-step.',
+      description:
+        modeContext === 'review'
+          ? 'Collaborate with AI to review your document step-by-step.'
+          : 'Collaborate with AI to draft your document step-by-step.',
       icon: Bot,
     },
     {
       id: 'direct' as const,
       label: 'Direct Generation',
-      description: 'Fill in the details and generate a document instantly.',
+      description:
+        modeContext === 'review'
+          ? 'Upload a file and get an instant review.'
+          : 'Fill in the details and generate a document instantly.',
       icon: FileText,
     },
   ];
@@ -27,7 +44,9 @@ export function DocumentModeSelector({
   return (
     <div className="flex w-full flex-col gap-4 py-2">
       <p className="text-sm text-gray-500">
-        How would you like to draft your document?
+        {modeContext === 'review'
+          ? 'How would you like to review your document?'
+          : 'How would you like to draft your document?'}
       </p>
       <div className="flex w-full gap-4">
         {options.map(option => (
@@ -35,9 +54,9 @@ export function DocumentModeSelector({
             key={option.id}
             onClick={() => {
               if (currentMode === option.id) {
-                setDraftingMode('select_mode');
+                handleSetMode('select_mode');
               } else {
-                setDraftingMode(option.id);
+                handleSetMode(option.id);
               }
             }}
             // disabled={!!currentMode}

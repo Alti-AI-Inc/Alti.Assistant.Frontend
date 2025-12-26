@@ -212,8 +212,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         return;
       }
 
-      console.log('[useImageGeneration] analyzeIntent response:', response);
-
       const {
         isEditable: respIsEditable,
         intent: respIntent,
@@ -229,9 +227,18 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         setConversationId(backendConversationId);
 
         // Determine if we need to redirect
-        const needsRedirect =
+        let needsRedirect =
           !existingConversationId ||
           backendConversationId !== existingConversationId;
+
+        // SAFEGUARD: If intent is edit but no image is uploaded, DO NOT REDIRECT.
+        const currentStore = useImageGenStore.getState();
+        if (respIsEditable && !currentStore.imageBase64 && needsRedirect) {
+          console.log(
+            '[useImageGeneration] Blocking redirect for implicit edit without image',
+          );
+          needsRedirect = false;
+        }
 
         if (needsRedirect) {
           console.log(
@@ -603,9 +610,13 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         setError(errorMsg);
         setLoadingResponse(false);
 
+        console.log(
+          '[useImageGeneration] editImage error - sending error message:',
+          errorMsg,
+        );
         const store = useImageGenStore.getState();
         updateActiveConversation(
-          `I encountered an error while editing your image: ${errorMsg}`,
+          `Retry: ${errorMsg}`,
           ROLES.ASSISTANT,
           store.conversationId || undefined,
         );

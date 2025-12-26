@@ -116,3 +116,57 @@ export interface DirectGenerationResponse {
     };
   };
 }
+
+// --- Group 3: Document Review ---
+
+export type ReviewType =
+  | 'general_review'
+  | 'content_analysis'
+  | 'grammar_check'
+  | 'tone_analysis';
+
+export type ReviewDepth = 'standard' | 'comprehensive' | 'detailed';
+
+export interface DocumentReviewConfig {
+  reviewType: ReviewType;
+  reviewDepth: ReviewDepth;
+  documentType: DocumentType | 'general';
+  additionalInstructions?: string;
+}
+
+// 1.1 Upload and Review Document (Assistant)
+export interface UploadReviewDocumentRequest {
+  message?: string;
+  // file is handled via FormData
+}
+
+// 2. Direct Review Request
+// Fields sent as FormData: file (required), reviewType, reviewDepth, documentType, additionalInstructions
+
+export interface ReviewResponseData {
+  success: boolean;
+  conversationId?: string; // For assistant flows
+  response?: string; // For assistant flows (chat message)
+  review?: string; // For direct generation (the review content)
+  documentInfo: {
+    filename: string;
+    size: number;
+    contentLength: number;
+  };
+  reviewParams: {
+    reviewDepth: ReviewDepth;
+    documentType: string;
+    reviewType: ReviewType;
+    aspects?: string[];
+    additionalInstructions?: string;
+  };
+  needsFile?: boolean;
+  needsMoreInfo?: boolean;
+}
+
+export interface ReviewResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: ReviewResponseData;
+}
