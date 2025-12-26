@@ -1,10 +1,10 @@
 'use client';
 import ChatInput from '@/components/ChatInput';
 import CopyButton from '@/components/CopyButton';
+import { DocumentDraftingForm } from '@/components/documents/DocumentConfigForm';
+import { DocumentModeSelector } from '@/components/documents/DocumentModeSelector';
 import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
-import { DocumentModeSelector } from '@/components/documents/DocumentModeSelector';
-import { DocumentDraftingForm } from '@/components/documents/DocumentConfigForm';
 import SaveConversation from '@/components/SaveConversation';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,9 +15,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useActiveConversation } from '@/hooks/useConversations';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
-import { useDocumentStore } from '@/stores/useDocumentStore';
 import { cn, containsYouTubeUrl } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useDocumentStore } from '@/stores/useDocumentStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { useQueryClient } from '@tanstack/react-query';
@@ -28,9 +28,9 @@ import { useEffect, useRef } from 'react';
 import { Streamdown } from 'streamdown';
 import ReferencesList from './ReferenceList';
 
+import FileDownloadCard from './FileDownloadCard';
 import VideoComponent from './VideoComponent';
 import VideoComponentForContent from './YoutubePlayer';
-import FileDownloadCard from './FileDownloadCard';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
@@ -262,7 +262,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             )}
             {isCollectingDetails && <ImageGenSuggestions />}
             {/* Document Drafting/Review UI */}
-            {(drafting.isActive || (review && review.isActive)) &&
+            {drafting.isActive  &&
               !isLoadingResponse && (
                 <>
                   <DocumentModeSelector
