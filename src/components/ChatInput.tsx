@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/sheet';
 import { useDocument } from '@/hooks/useDocument';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
+import { useRewrite } from '@/hooks/useRewrite';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import {
   OPTIONS,
@@ -225,6 +226,14 @@ const ChatInput = ({
     resetReview,
   } = useDocument();
 
+  const {
+    rewriteConfig,
+    rewriteMode,
+    handleDirectRewrite,
+    handleAssistantRewrite,
+    resetRewriteConfig,
+  } = useRewrite();
+
   const isExistingConversation =
     activeConversation?.conversationId &&
     activeConversation?.conversationId !== 'new-chat' &&
@@ -274,6 +283,15 @@ const ChatInput = ({
       // Start review if switching TO Review
       if (nextOption === OPTIONS.REVIEW_DOCUMENTS) {
         startReview();
+      }
+
+      // Reset rewrite if switching away
+      if (
+        selectedOption === OPTIONS.REWRITE &&
+        nextOption !== OPTIONS.REWRITE
+      ) {
+        resetRewriteConfig();
+        setSelectedFile(null);
       }
 
       setSelectedOption(nextOption);
@@ -330,6 +348,8 @@ const ChatInput = ({
 
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}${getApiEndpoint()}`;
   // console.log('apiUrl', apiUrl);
+  // console.log('token', data?.accessToken);
+  // console.log('userid', data?.user);
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
       if (!data?.accessToken) throw new Error('No access token1');
@@ -507,6 +527,24 @@ const ChatInput = ({
         }
         break;
 
+      case OPTIONS.REWRITE:
+        if (rewriteMode === 'direct') {
+          await handleDirectRewrite(message);
+        } else {
+          // Assistant mode (default)
+          if (selectedFile) {
+            await handleAssistantRewrite(
+              message,
+              rewriteConfig.textContent,
+              selectedFile,
+            );
+            setSelectedFile(null);
+          } else {
+            await handleAssistantRewrite(message, rewriteConfig.textContent);
+          }
+        }
+        break;
+
       // Add scalable feature cases here
       // case OPTIONS.CODE:
       //   await handleCodeWorkflow();
@@ -602,6 +640,7 @@ const ChatInput = ({
     // Check if upload is allowed for current option
     const isUploadAllowed =
       selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
+      selectedOption === OPTIONS.REWRITE ||
       selectedOption === OPTIONS.IMAGE ||
       selectedOption === OPTIONS.EDIT_IMAGE;
 
@@ -764,7 +803,8 @@ const ChatInput = ({
                       const isUploadAllowed =
                         selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
                         selectedOption === OPTIONS.IMAGE ||
-                        selectedOption === OPTIONS.EDIT_IMAGE;
+                        selectedOption === OPTIONS.EDIT_IMAGE ||
+                        selectedOption === OPTIONS.REWRITE;
 
                       if (isUploadAllowed) {
                         fileInputRef.current?.click();
@@ -774,7 +814,8 @@ const ChatInput = ({
                       'relative flex items-center',
                       selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
                         selectedOption === OPTIONS.IMAGE ||
-                        selectedOption === OPTIONS.EDIT_IMAGE
+                        selectedOption === OPTIONS.EDIT_IMAGE ||
+                        selectedOption === OPTIONS.REWRITE
                         ? 'cursor-pointer'
                         : 'cursor-not-allowed opacity-50',
                     )}
@@ -786,6 +827,7 @@ const ChatInput = ({
                       accept={(() => {
                         switch (selectedOption) {
                           case OPTIONS.REVIEW_DOCUMENTS:
+                          case OPTIONS.REWRITE:
                             return ALLOWED_DOC_EXTENSIONS.join(',');
                           case OPTIONS.IMAGE:
                           case OPTIONS.EDIT_IMAGE:

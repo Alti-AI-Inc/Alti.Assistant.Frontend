@@ -1,59 +1,108 @@
 import { useDocumentStore } from '@/stores/useDocumentStore';
-import {
-  DocumentType,
-  DocumentTone,
-  DocumentLength,
-  OutputFormat,
-  TemplateType,
-  ReviewType,
-  ReviewDepth,
-} from '@/types/document-generation';
-import { cn } from '@/lib/utils'; // Keep import
-import { ChevronDown } from 'lucide-react'; // Keep import
+import { useConversationsStore, OPTIONS } from '@/stores/useConverstionsStore';
+import { DocumentType } from '@/types/document-generation';
+import { cn } from '@/lib/utils';
 
 export function DocumentDraftingForm() {
   const { drafting, updateDraftingConfig, review, updateReviewConfig } =
     useDocumentStore();
+  const { selectedOption, rewriteConfig, updateRewriteConfig, rewriteMode } =
+    useConversationsStore();
 
   const isReviewMode = review.isActive;
+  const isRewriteMode = selectedOption === OPTIONS.REWRITE;
   const config = isReviewMode ? review.config : drafting.config;
 
-  // Options for Drafting
-  const draftOptions = {
-    docType: Object.values(DocumentType),
-    tone: [
-      'professional',
-      'casual',
-      'technical',
-      'academic',
-      'formal',
-    ] as DocumentTone[],
-    length: ['short', 'medium', 'long'] as DocumentLength[],
-    format: ['pdf', 'docx', 'md', 'html'] as OutputFormat[],
-  };
+  // Configuration Definitions
+  const REWRITE_CONFIGS = [
+    {
+      label: 'Intent',
+      key: 'intent',
+      options: [
+        'formal',
+        'simplify',
+        'expand',
+        'creative',
+        'academic',
+        'professional',
+      ],
+    },
+    {
+      label: 'Style',
+      key: 'style',
+      options: [
+        'conversational',
+        'formal',
+        'professional',
+        'creative',
+        'academic',
+      ],
+    },
+    {
+      label: 'Mode',
+      key: 'mode',
+      options: ['preserve_meaning', 'improve_clarity', 'expand', 'simplify'],
+    },
+    {
+      label: 'Output Format',
+      key: 'outputFormat',
+      options: ['text', 'file', 'both'],
+    },
+  ];
 
-  // Options for Review
-  const reviewOptions = {
-    reviewType: [
-      'general_review',
-      'content_analysis',
-      'grammar_check',
-      'tone_analysis',
-    ] as ReviewType[],
-    reviewDepth: ['standard', 'comprehensive', 'detailed'] as ReviewDepth[],
-    documentType: [...Object.values(DocumentType), 'general'] as (
-      | DocumentType
-      | 'general'
-    )[],
-  };
+  const REVIEW_CONFIGS = [
+    {
+      label: 'Review Type',
+      key: 'reviewType',
+      options: [
+        'general_review',
+        'content_analysis',
+        'grammar_check',
+        'tone_analysis',
+      ],
+    },
+    {
+      label: 'Depth',
+      key: 'reviewDepth',
+      options: ['standard', 'comprehensive', 'detailed'],
+    },
+    {
+      label: 'Document Type',
+      key: 'documentType',
+      options: [...Object.values(DocumentType), 'general'],
+    },
+  ];
 
-  const renderPillGroup = <T extends string>(
+  const DRAFTING_CONFIGS = [
+    {
+      label: 'Type',
+      key: 'docType',
+      options: Object.values(DocumentType),
+    },
+    {
+      label: 'Tone',
+      key: 'tone',
+      options: ['professional', 'casual', 'technical', 'academic', 'formal'],
+    },
+    {
+      label: 'Length',
+      key: 'length',
+      options: ['short', 'medium', 'long'],
+    },
+    {
+      label: 'Format',
+      key: 'format',
+      options: ['pdf', 'docx', 'md', 'html'],
+    },
+  ];
+
+  const renderPillGroup = (
     label: string,
-    value: T,
-    options: T[],
-    onChange: (val: T) => void,
+    value: string,
+    options: string[],
+    onChange: (val: string) => void,
   ) => (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2" key={label}>
       <span className="text-xs font-medium tracking-wider text-gray-500 uppercase">
         {label}
       </span>
@@ -76,6 +125,96 @@ export function DocumentDraftingForm() {
     </div>
   );
 
+  const renderTextInput = (
+    label: string,
+    value: string | undefined,
+    placeholder: string,
+    onChange: (val: string) => void,
+    multiline: boolean = false,
+  ) => (
+    <div className="flex flex-col gap-2" key={label}>
+      <span className="text-xs font-medium tracking-wider text-gray-500 uppercase">
+        {label}
+      </span>
+      {multiline ? (
+        <textarea
+          value={value || ''}
+          onChange={e => onChange(e.target.value)}
+          placeholder={placeholder}
+          className="max-h-[150px] min-h-[100px] w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-black focus:ring-1 focus:ring-black focus:outline-none md:max-h-[250px]"
+        />
+      ) : (
+        <input
+          type="text"
+          value={value || ''}
+          onChange={e => onChange(e.target.value)}
+          placeholder={placeholder}
+          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
+        />
+      )}
+    </div>
+  );
+
+  if (isRewriteMode) {
+    return (
+      <div className="flex w-full flex-col gap-6 rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
+        <div className="flex flex-col gap-1">
+          <h3 className="font-semibold text-gray-900">Rewrite Configuration</h3>
+          <p className="text-xs text-gray-500">
+            Customize how you want to rewrite your content.
+          </p>
+        </div>
+        <div className="flex flex-col gap-5">
+          {/* Text Content Input for Assistant/General usage */}
+          {rewriteMode === 'assistant' &&
+            renderTextInput(
+              'Content to Rewrite',
+              rewriteConfig.textContent,
+              'Paste the text you want to rewrite here...',
+              val => updateRewriteConfig({ textContent: val }),
+              true, // multiline
+            )}
+
+          {rewriteMode !== 'assistant' && (
+            <>
+              {REWRITE_CONFIGS.map(conf =>
+                renderPillGroup(
+                  conf.label,
+                  (rewriteConfig as any)[conf.key],
+                  conf.options,
+                  val => updateRewriteConfig({ [conf.key]: val }),
+                ),
+              )}
+
+              {renderTextInput(
+                'Target Audience',
+                rewriteConfig.targetAudience,
+                'e.g. Beginners, C-Level Execs...',
+                val => updateRewriteConfig({ targetAudience: val }),
+              )}
+
+              {renderTextInput(
+                'Additional Instructions',
+                rewriteConfig.additionalInstructions,
+                'Any specific requirements...',
+                val => updateRewriteConfig({ additionalInstructions: val }),
+              )}
+            </>
+          )}
+
+          {/* OR Upload a file to rewrite */}
+          <div className="relative flex items-center py-2">
+            <div className="grow border-t border-gray-200"></div>
+            <span className="mx-2 flex items-center gap-1 text-xs font-medium tracking-wider text-gray-500 uppercase">
+              OR Upload a file to rewrite
+            </span>
+            <div className="grow border-t border-gray-200"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (isReviewMode) {
     return (
       <div className="flex w-full flex-col gap-6 rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
@@ -86,23 +225,13 @@ export function DocumentDraftingForm() {
           </p>
         </div>
         <div className="flex flex-col gap-5">
-          {renderPillGroup(
-            'Review Type',
-            (config as any).reviewType,
-            reviewOptions.reviewType,
-            val => updateReviewConfig({ reviewType: val }),
-          )}
-          {renderPillGroup(
-            'Depth',
-            (config as any).reviewDepth,
-            reviewOptions.reviewDepth,
-            val => updateReviewConfig({ reviewDepth: val }),
-          )}
-          {renderPillGroup(
-            'Document Type',
-            (config as any).documentType,
-            reviewOptions.documentType,
-            val => updateReviewConfig({ documentType: val }),
+          {REVIEW_CONFIGS.map(conf =>
+            renderPillGroup(
+              conf.label,
+              (config as any)[conf.key],
+              conf.options,
+              val => updateReviewConfig({ [conf.key]: val } as any),
+            ),
           )}
         </div>
       </div>
@@ -121,31 +250,14 @@ export function DocumentDraftingForm() {
       </div>
 
       <div className="flex flex-col gap-5">
-        {renderPillGroup(
-          'Type',
-          (config as any).docType,
-          draftOptions.docType,
-          val => updateDraftingConfig({ docType: val }),
+        {DRAFTING_CONFIGS.map(conf =>
+          renderPillGroup(
+            conf.label,
+            (config as any)[conf.key],
+            conf.options,
+            val => updateDraftingConfig({ [conf.key]: val } as any),
+          ),
         )}
-
-        {renderPillGroup('Tone', (config as any).tone, draftOptions.tone, val =>
-          updateDraftingConfig({ tone: val }),
-        )}
-
-        <div className="grid grid-cols-2 gap-4">
-          {renderPillGroup(
-            'Length',
-            (config as any).length,
-            draftOptions.length,
-            val => updateDraftingConfig({ length: val }),
-          )}
-          {renderPillGroup(
-            'Format',
-            (config as any).format,
-            draftOptions.format,
-            val => updateDraftingConfig({ format: val }),
-          )}
-        </div>
       </div>
     </div>
   );
