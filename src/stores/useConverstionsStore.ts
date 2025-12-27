@@ -28,6 +28,7 @@ export enum OPTIONS {
   GENERATE_FLAYER = 'generate-flayer',
   GENERATE_PLAN = 'generate-plan',
   DRAFT_EMAIL = 'draft-email',
+  CREATIVE_WRITING = 'creative-writing',  
   DEBUG_CODE = 'debug-code',
   REWRITE = 'rewrite',
   BRAINSTORM = 'brainstorm',

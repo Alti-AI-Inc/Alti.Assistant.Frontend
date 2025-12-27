@@ -42,12 +42,13 @@ import {
   Microscope,
   Minimize,
   Newspaper,
+  NotebookPen,
   NotebookText,
   NotepadText,
   PencilLine,
   PencilRuler,
   Plus,
-  Waypoints,
+  Waypoints
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -137,6 +138,11 @@ const TOOLBAR_ITEMS = [
     type: OPTIONS.DRAFT_EMAIL,
     label: 'Draft Email',
     Icon: Mail,
+  },
+  {
+    type: OPTIONS.CREATIVE_WRITING,
+    label: 'Creative Writing',
+    Icon: NotebookPen,
   },
 
   {
