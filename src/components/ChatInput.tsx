@@ -170,11 +170,15 @@ const TOOLBAR_ITEMS = [
 interface ChatInputProps {
   conversationId?: string;
   imageGenHook?: ReturnType<typeof useImageGeneration>;
+  selectedFile?: File | undefined;
+  onFileSelect?: (file: File | undefined) => void;
 }
 
 const ChatInput = ({
   conversationId,
   imageGenHook: externalImageGenHook,
+  selectedFile: externalSelectedFile,
+  onFileSelect,
 }: ChatInputProps) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -194,8 +198,22 @@ const ChatInput = ({
     setShowStartLastMessage,
   } = useConversationsStore();
 
-  // Custom file state for docs
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  // Custom file state for docs (controlled or uncontrolled)
+  const [internalSelectedFile, setInternalSelectedFile] = useState<
+    File | undefined
+  >(undefined);
+
+  const selectedFile =
+    externalSelectedFile !== undefined
+      ? externalSelectedFile
+      : internalSelectedFile;
+  const setSelectedFile = (file: File | undefined) => {
+    if (onFileSelect) {
+      onFileSelect(file);
+    } else {
+      setInternalSelectedFile(file);
+    }
+  };
 
   // Image generation hook - pass router and queryClient for URL redirect and query invalidation
   const internalImageGenHook = useImageGeneration({ router, queryClient });
@@ -229,6 +247,7 @@ const ChatInput = ({
   const {
     rewriteConfig,
     rewriteMode,
+    setRewriteMode,
     handleDirectRewrite,
     handleAssistantRewrite,
     resetRewriteConfig,
@@ -277,7 +296,7 @@ const ChatInput = ({
         nextOption !== OPTIONS.REVIEW_DOCUMENTS
       ) {
         resetReview();
-        setSelectedFile(null); // Clear file
+        setSelectedFile(undefined); // Clear file
       }
 
       // Start review if switching TO Review
@@ -291,7 +310,12 @@ const ChatInput = ({
         nextOption !== OPTIONS.REWRITE
       ) {
         resetRewriteConfig();
-        setSelectedFile(null);
+        setSelectedFile(undefined);
+      }
+
+      // 4. Default to 'select_mode' for Rewrite always (as per user request to show selector first)
+      if (nextOption === OPTIONS.REWRITE) {
+        setRewriteMode('select_mode');
       }
 
       setSelectedOption(nextOption);
@@ -304,6 +328,8 @@ const ChatInput = ({
       startDrafting,
       resetReview,
       startReview,
+      resetRewriteConfig,
+      setRewriteMode,
     ],
   );
 
@@ -311,36 +337,36 @@ const ChatInput = ({
     if (activeConversation?.knowledgebaseId) return '/knowledgebase/chat';
 
     switch (selectedOption) {
-      case OPTIONS.IMAGE:
-        return '/enhanced-image/analyze-intent';
-      case OPTIONS.CODE:
-        return '/search/code';
-      case OPTIONS.RESEARCH:
-        return '/deep-research/assistant';
+      // case OPTIONS.IMAGE:
+      //   return '/enhanced-image/analyze-intent';
+      // case OPTIONS.CODE:
+      //   return '/search/code';
+      // case OPTIONS.RESEARCH:
+      //   return '/deep-research/assistant';
       // case OPTIONS.DRAFT_DOCUMENT:
       //   return '/search/writing';
-      case OPTIONS.GENERATE_PLAN:
-        return '/search/plan';
-      case OPTIONS.PRESENTATION:
-        return '/search/presentation';
-      case OPTIONS.GENERATE_REPORT:
-        return '/search/report';
+      // case OPTIONS.GENERATE_PLAN:
+      //   return '/search/plan';
+      // case OPTIONS.PRESENTATION:
+      //   return '/search/presentation';
+      // case OPTIONS.GENERATE_REPORT:
+      //   return '/search/report';
       // case OPTIONS.REVIEW_DOCUMENTS:
       //   return '/search/review';
-      case OPTIONS.DRAFT_EMAIL:
-        return '/search/email';
-      case OPTIONS.SUMMARIZE:
-        return '/search/summarize';
-      case OPTIONS.TRANSLATE_DOCUMENTS:
-        return '/search/translate';
-      case OPTIONS.EXTRACT_DATA:
-        return '/search/extract';
-      case OPTIONS.REWRITE:
-        return '/search/rewrite';
-      case OPTIONS.BRAINSTORM:
-        return '/search/brainstorm';
-      case OPTIONS.Transcribe:
-        return '/search/transcribe';
+      // case OPTIONS.DRAFT_EMAIL:
+      //   return '/search/email';
+      // case OPTIONS.SUMMARIZE:
+      //   return '/search/summarize';
+      // case OPTIONS.TRANSLATE_DOCUMENTS:
+      //   return '/search/translate';
+      // case OPTIONS.EXTRACT_DATA:
+      //   return '/search/extract';
+      // case OPTIONS.REWRITE:
+      //   return '/search/rewrite';
+      // case OPTIONS.BRAINSTORM:
+      //   return '/search/brainstorm';
+      // case OPTIONS.Transcribe:
+      //   return '/search/transcribe';
       default:
         return '/search/assistant';
     }
@@ -503,14 +529,14 @@ const ChatInput = ({
             return;
           }
           await handleDirectReview(selectedFile, message);
-          setSelectedFile(null);
+          setSelectedFile(undefined);
         } else if (review.mode === 'assistant') {
           // Assistant mode - check if file is needed for new conversations
 
           // handleAssistantReview handles both new and continue internally
           if (selectedFile) {
             await handleAssistantReview(selectedFile, message);
-            setSelectedFile(null);
+            setSelectedFile(undefined);
           } else {
             // Continue existing conversation without file (reuse drafting handler)
             await handleAssistantDrafting(message);
@@ -520,7 +546,7 @@ const ChatInput = ({
 
           if (selectedFile) {
             await handleAssistantReview(selectedFile, message);
-            setSelectedFile(null);
+            setSelectedFile(undefined);
           } else {
             await handleAssistantDrafting(message);
           }
@@ -532,23 +558,23 @@ const ChatInput = ({
           await handleDirectRewrite(message);
         } else {
           // Assistant mode (default)
-          if (selectedFile) {
-            await handleAssistantRewrite(
-              message,
-              rewriteConfig.textContent,
-              selectedFile,
-            );
-            setSelectedFile(null);
-          } else {
-            await handleAssistantRewrite(message, rewriteConfig.textContent);
-          }
+          // if (selectedFile) {
+          await handleAssistantRewrite(
+            message,
+            rewriteConfig.textContent,
+            selectedFile,
+          );
+          //   await handleAssistantRewrite(
+          //     message,
+          //     rewriteConfig.textContent,
+          //     selectedFile,
+          //   );
+          //   // setSelectedFile(null);
+          // } else {
+          //   await handleAssistantRewrite(message, rewriteConfig.textContent);
+          // }
         }
         break;
-
-      // Add scalable feature cases here
-      // case OPTIONS.CODE:
-      //   await handleCodeWorkflow();
-      //   break;
 
       default:
         // Use regular mutation for options that just need a standardized API call
@@ -664,7 +690,21 @@ const ChatInput = ({
       }
       setSelectedFile(file);
     }
-    // 2. Standard flow (Image Generation): Handles image compression and switching to Edit mode
+    // 2. Rewrite Flow: Also allows files
+    else if (selectedOption === OPTIONS.REWRITE) {
+      const extension = '.' + file.name.split('.').pop()?.toLowerCase();
+      if (!ALLOWED_DOC_EXTENSIONS.includes(extension)) {
+        alert(
+          `Invalid file type. Allowed types: ${ALLOWED_DOC_EXTENSIONS.join(', ')}`,
+        );
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+        return;
+      }
+      setSelectedFile(file);
+    }
+    // 3. Standard flow (Image Generation): Handles image compression and switching to Edit mode
     else if (file.type.startsWith('image/')) {
       try {
         const compressedDataUrl = await compressImage(file);
@@ -755,7 +795,7 @@ const ChatInput = ({
                 </span>
               </div>
               <button
-                onClick={() => setSelectedFile(null)}
+                onClick={() => setSelectedFile(undefined)}
                 className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
               >
                 <Plus className="bold size-3 rotate-45" />

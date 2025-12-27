@@ -3,7 +3,7 @@ import { useConversationsStore, OPTIONS } from '@/stores/useConverstionsStore';
 import { DocumentType } from '@/types/document-generation';
 import { cn } from '@/lib/utils';
 
-export function DocumentDraftingForm() {
+export function ConfigForm() {
   const { drafting, updateDraftingConfig, review, updateReviewConfig } =
     useDocumentStore();
   const { selectedOption, rewriteConfig, updateRewriteConfig, rewriteMode } =
@@ -158,12 +158,12 @@ export function DocumentDraftingForm() {
   if (isRewriteMode) {
     return (
       <div className="flex w-full flex-col gap-6 rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
-        <div className="flex flex-col gap-1">
+        {/* <div className="flex flex-col gap-1">
           <h3 className="font-semibold text-gray-900">Rewrite Configuration</h3>
           <p className="text-xs text-gray-500">
             Customize how you want to rewrite your content.
           </p>
-        </div>
+        </div> */}
         <div className="flex flex-col gap-5">
           {/* Text Content Input for Assistant/General usage */}
           {rewriteMode === 'assistant' &&

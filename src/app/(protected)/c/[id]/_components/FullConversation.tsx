@@ -1,8 +1,8 @@
 'use client';
 import ChatInput from '@/components/ChatInput';
 import CopyButton from '@/components/CopyButton';
-import { DocumentDraftingForm } from '@/components/documents/DocumentConfigForm';
-import { DocumentModeSelector } from '@/components/documents/DocumentModeSelector';
+import { ConfigForm } from '@/components/documents/ConfigForm';
+import { ModeSelector } from '@/components/documents/ModeSelector';
 import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
 import SaveConversation from '@/components/SaveConversation';
@@ -24,7 +24,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { EllipsisVertical, Share, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Streamdown } from 'streamdown';
 import ReferencesList from './ReferenceList';
 
@@ -119,6 +119,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
   // console.log('activeConversation?.messages', activeConversation?.messages);
   // const lastMessageRole = activeConversation?.messages.at(-1)?.role;
+  const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+
   return (
     <div
       className={cn(
@@ -268,40 +270,51 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             {(drafting.isActive || selectedOption === OPTIONS.REWRITE) &&
               !isLoadingResponse && (
                 <>
-                  <DocumentModeSelector
-                    currentMode={
-                      drafting.isActive
-                        ? drafting.mode === 'select_mode'
-                          ? null
-                          : (drafting.mode as 'assistant' | 'direct')
-                        : selectedOption === OPTIONS.REWRITE
-                          ? (rewriteMode as 'assistant' | 'direct')
-                          : review.mode === 'select_mode'
+                  {!(
+                    selectedOption === OPTIONS.REWRITE &&
+                    activeConversation?.conversationId &&
+                    activeConversation?.conversationId !== 'new-chat' &&
+                    rewriteMode !== 'select_mode'
+                  ) && (
+                    <ModeSelector
+                      currentMode={
+                        drafting.isActive
+                          ? drafting.mode === 'select_mode'
                             ? null
-                            : (review.mode as 'assistant' | 'direct')
-                    }
-                    modeContext={
-                      drafting.isActive
-                        ? 'draft'
-                        : selectedOption === OPTIONS.REWRITE
-                          ? 'rewrite'
-                          : 'review'
-                    }
-                  />
+                            : (drafting.mode as 'assistant' | 'direct')
+                          : selectedOption === OPTIONS.REWRITE
+                            ? rewriteMode === 'select_mode'
+                              ? null
+                              : (rewriteMode as 'assistant' | 'direct')
+                            : review.mode === 'select_mode'
+                              ? null
+                              : (review.mode as 'assistant' | 'direct')
+                      }
+                      modeContext={
+                        drafting.isActive
+                          ? 'draft'
+                          : selectedOption === OPTIONS.REWRITE
+                            ? 'rewrite'
+                            : 'review'
+                      }
+                    />
+                  )}
 
                   {((drafting.isActive && drafting.mode === 'direct') ||
                     (review && review.isActive && review.mode === 'direct') ||
                     (selectedOption === OPTIONS.REWRITE &&
                       (rewriteMode === 'direct' ||
-                        rewriteMode === 'assistant'))) && (
-                    <div
-                      className={cn(
-                        isLoadingResponse && 'pointer-events-none opacity-50',
-                      )}
-                    >
-                      <DocumentDraftingForm />
-                    </div>
-                  )}
+                        rewriteMode === 'assistant'))) &&
+                    // HIDE CONFIG FORM IF FILE IS SELECTED IN REWRITE MODE
+                    !(selectedOption === OPTIONS.REWRITE && selectedFile) && (
+                      <div
+                        className={cn(
+                          isLoadingResponse && 'pointer-events-none opacity-50',
+                        )}
+                      >
+                        <ConfigForm />
+                      </div>
+                    )}
                 </>
               )}
             {/* Loading message - visible in the messages area */}
@@ -352,6 +365,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
           <ChatInput
             conversationId={conversationId}
             imageGenHook={imageGenHook}
+            selectedFile={selectedFile}
+            onFileSelect={setSelectedFile}
           />
         </div>
       </div>

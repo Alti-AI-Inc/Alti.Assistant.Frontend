@@ -50,7 +50,7 @@ export async function handleRewriteRequest(
     body = JSON.stringify(payload);
     headers['Content-Type'] = 'application/json';
   }
-
+  console.log('[rewriteActions] handleRewriteRequest payload:', payload);
   const response = await fetch(`${API_BASE_URL}/rewrite/assistant`, {
     method: 'POST',
     headers,

@@ -75,7 +75,8 @@ export function useRewrite() {
         const errorMessage = response.message || 'Failed to rewrite text';
         updateActiveConversation(errorMessage, ROLES.ASSISTANT);
       }
-      resetAll();
+      // Do NOT reset config for assistant rewrite to keep UI visible for follow-up
+      setRewriteMode('direct');
       setIsLoading(false);
       setLoadingResponse(false);
     },
@@ -116,7 +117,7 @@ export function useRewrite() {
         // Continue conversation - Pattern 2
         // Pass textContent if available (now supported)
         return await handleRewriteRequest(
-          { message, textContent: textContent || '', conversationId },
+          { message, textContent: textContent, conversationId },
           accessToken,
         );
       }
@@ -134,19 +135,7 @@ export function useRewrite() {
         if (conversationId) {
           router.replace(`/c/${conversationId}`);
 
-          // Construct message to update in store
-          // If we have a file, does the backend include it in message?
-          // The response.data.file is metadata about the file.
-          // We can update the conversation with the text content.
-          // Backend usually syncs DB, so basic router replace fetches it.
-          // But to be snappy, we update local store too.
-
           const displayContent = rewrittenContent || message || 'Processed.';
-
-          // If response has a file, we might want to attach it to the message in store?
-          // updateActiveConversation accepts options for documents/images.
-          // But response.data.file type matches what we might expect?
-          // Let's just pass displayContent for now to be safe.
 
           updateActiveConversation(
             displayContent,
@@ -155,7 +144,8 @@ export function useRewrite() {
           );
         }
       }
-      resetAll();
+      // Do NOT reset config for assistant rewrite to keep UI visible for follow-up
+      setRewriteMode('assistant');
       setIsLoading(false);
       setLoadingResponse(false);
     },
@@ -190,8 +180,8 @@ export function useRewrite() {
       // Continue
       await assistantRewriteMutation.mutateAsync({
         message,
+        textContent,
         conversationId: currentId,
-        // file? user might upload file in continue? assuming yes if passed
         file,
       });
     } else {

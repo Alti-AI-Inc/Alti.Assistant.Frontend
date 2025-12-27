@@ -3,7 +3,7 @@ import { useDocumentStore } from '@/stores/useDocumentStore';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { cn } from '@/lib/utils';
 
-export function DocumentModeSelector({
+export function ModeSelector({
   currentMode,
   modeContext = 'draft',
 }: {
@@ -11,18 +11,12 @@ export function DocumentModeSelector({
   modeContext?: 'draft' | 'review' | 'rewrite';
 }) {
   const { setDraftingMode, setReviewMode } = useDocumentStore();
-  // We import the store directly to avoid circular hook dependencies if any,
-  // or just use the hook if available. Ideally useConversationsStore has the rewrite logic now.
-  // But wait, I can't import useConversationsStore inside this component file easily if it wasn't imported before?
-  // It is a simple import.
   const { setRewriteMode } = useConversationsStore();
 
   const handleSetMode = (mode: 'assistant' | 'direct' | 'select_mode') => {
     if (modeContext === 'review') {
-      // @ts-ignore
       setReviewMode(mode);
     } else if (modeContext === 'rewrite') {
-      // @ts-ignore
       setRewriteMode(mode);
     } else {
       setDraftingMode(mode);
