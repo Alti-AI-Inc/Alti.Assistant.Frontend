@@ -12,6 +12,7 @@ import { DeleteKnowledgeBankFileModal } from './DeleteKnowledgeBankFileModal';
 import { DeleteKnowledgeBankFolderModal } from './DeleteKnowledgeBankFolderModal';
 import { EditChatbotModal } from './EditChatbotModal';
 import { ForgotPasswordDialog } from './ForgotPasswordDialog';
+import { InviteFriends } from './InviteFriends';
 import { Logout } from './logout';
 import RenameChat from './RenameChat';
 import SearchChats from './SearchChats';
@@ -32,6 +33,7 @@ export const ModalProvider = () => {
   return (
     <>
       {type === 'logout' && <Logout />}
+      {type === 'invite' && <InviteFriends />}
       {type === 'search-chats' && <SearchChats />}
       {type === 'rename-chat' && <RenameChat />}
       {type === 'forgot-password' && <ForgotPasswordDialog />}

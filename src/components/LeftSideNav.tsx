@@ -24,7 +24,8 @@ import {
   Scale,
   Search,
   Settings,
-  SquarePen
+  SquarePen,
+  SquareUserRound
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -321,6 +322,13 @@ const LeftSideNav = () => {
               <DropdownMenuGroup>
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() =>
+                  onOpen({
+                    type: 'invite',
+                  })
+                }>
+                  <SquareUserRound className="text-black" /> Invite
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/knowledge')}>
                   <BookA className="text-black" /> Knowledge
