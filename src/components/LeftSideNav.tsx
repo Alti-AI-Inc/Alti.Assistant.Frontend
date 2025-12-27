@@ -119,7 +119,7 @@ const LeftSideNav = () => {
             <span
               className={cn('text-sm font-normal', hideSidebar && 'hidden')}
             >
-              New chat
+              New
             </span>
           </Button>
 
@@ -137,7 +137,7 @@ const LeftSideNav = () => {
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Search chats
+                Search
               </span>
             </Button>
             <Button
@@ -151,7 +151,7 @@ const LeftSideNav = () => {
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Saved chats
+                Saved
               </span>
             </Button>
             <Button
@@ -165,7 +165,7 @@ const LeftSideNav = () => {
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Agent store
+                Agents
               </span>
             </Button>
             {/* <Button
@@ -199,7 +199,7 @@ const LeftSideNav = () => {
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Workspaces
+                Spaces
               </span>
             </Button>
             {/* <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
@@ -233,7 +233,7 @@ const LeftSideNav = () => {
               >
                 <Link href="https://www.alticodestudio.com/" target="_blank">
                   <span className="absolute inset-0"></span>
-                  Code studio
+                  Code
                 </Link>
               </span>
               <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />

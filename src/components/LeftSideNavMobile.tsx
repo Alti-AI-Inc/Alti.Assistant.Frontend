@@ -62,7 +62,7 @@ const LeftSideNavMobile = () => {
             className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
           >
             <SquarePen />
-            <span className="text-sm font-normal">New chat</span>
+            <span className="text-sm font-normal">New</span>
           </Button>
 
           {isLoggedIn && (
@@ -77,7 +77,7 @@ const LeftSideNavMobile = () => {
                 className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
               >
                 <Search />
-                <span className="text-sm font-normal">Search chats</span>
+                <span className="text-sm font-normal">Search</span>
               </Button>
 
               <Button
@@ -88,7 +88,7 @@ const LeftSideNavMobile = () => {
                 className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
               >
                 <MessageSquare />
-                <span className="text-sm font-normal">Saved chats</span>
+                <span className="text-sm font-normal">Saved</span>
               </Button>
               <Button
                 onClick={() => {
@@ -98,7 +98,7 @@ const LeftSideNavMobile = () => {
                 className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
               >
                 <CircleStop />
-                <span className="text-sm font-normal">Agent store</span>
+                <span className="text-sm font-normal">Agents</span>
               </Button>
               {/* <Button
                 onClick={() => {
@@ -124,7 +124,7 @@ const LeftSideNavMobile = () => {
                 className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-vector-square-icon lucide-vector-square"><path d="M19.5 7a24 24 0 0 1 0 10" /><path d="M4.5 7a24 24 0 0 0 0 10" /><path d="M7 19.5a24 24 0 0 0 10 0" /><path d="M7 4.5a24 24 0 0 1 10 0" /><rect x="17" y="17" width="5" height="5" rx="1" /><rect x="17" y="2" width="5" height="5" rx="1" /><rect x="2" y="17" width="5" height="5" rx="1" /><rect x="2" y="2" width="5" height="5" rx="1" /></svg>
-                <span className="text-sm font-normal">Workspaces</span>
+                <span className="text-sm font-normal">Spaces</span>
               </Button>
               {/* <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
                 <Bot />
@@ -151,7 +151,7 @@ const LeftSideNavMobile = () => {
                 <span>
                   <Link href="https://www.alticodestudio.com/" target="_blank">
                     <span className="absolute inset-0"></span>
-                    Code studio
+                    Code
                   </Link>
                 </span>
                 <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
