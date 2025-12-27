@@ -24,7 +24,8 @@ import {
   Scale,
   Search,
   Settings,
-  SquarePen
+  SquarePen,
+  SquareUserRound
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -119,7 +120,7 @@ const LeftSideNav = () => {
             <span
               className={cn('text-sm font-normal', hideSidebar && 'hidden')}
             >
-              New chat
+              New
             </span>
           </Button>
 
@@ -137,7 +138,7 @@ const LeftSideNav = () => {
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Search chats
+                Search
               </span>
             </Button>
             <Button
@@ -151,7 +152,7 @@ const LeftSideNav = () => {
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Saved chats
+                Saved
               </span>
             </Button>
             <Button
@@ -165,7 +166,7 @@ const LeftSideNav = () => {
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Agent store
+                Agents
               </span>
             </Button>
             {/* <Button
@@ -199,7 +200,7 @@ const LeftSideNav = () => {
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
-                Workspaces
+                Spaces
               </span>
             </Button>
             {/* <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
@@ -233,7 +234,7 @@ const LeftSideNav = () => {
               >
                 <Link href="https://www.alticodestudio.com/" target="_blank">
                   <span className="absolute inset-0"></span>
-                  Code studio
+                  Code
                 </Link>
               </span>
               <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
@@ -321,6 +322,13 @@ const LeftSideNav = () => {
               <DropdownMenuGroup>
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() =>
+                  onOpen({
+                    type: 'invite',
+                  })
+                }>
+                  <SquareUserRound className="text-black" /> Invite
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/knowledge')}>
                   <BookA className="text-black" /> Knowledge
