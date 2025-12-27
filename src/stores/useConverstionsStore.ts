@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import {
-  createConversationSlice,
   ConversationSlice,
+  createConversationSlice,
 } from './slices/createConversationSlice';
 import { createRewriteSlice, RewriteSlice } from './slices/createRewriteSlice';
 

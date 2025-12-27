@@ -32,6 +32,7 @@ export enum OPTIONS {
   ARTICLE = 'article',
   WRITE_CONTRACT = 'write-contract',
   REVIEW_CONTRACT = 'review-contract',
+  CREATIVE_WRITING = 'creative-writing',
 
   // VIDEO = 'video-generation',
 }
