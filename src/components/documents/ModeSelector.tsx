@@ -1,42 +1,56 @@
 import { Bot, FileText } from 'lucide-react';
 import { useDocumentStore } from '@/stores/useDocumentStore';
+import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { cn } from '@/lib/utils';
 
-export function DocumentModeSelector({
+export function ModeSelector({
   currentMode,
   modeContext = 'draft',
 }: {
   currentMode?: 'assistant' | 'direct' | null;
-  modeContext?: 'draft' | 'review';
+  modeContext?: 'draft' | 'review' | 'rewrite';
 }) {
   const { setDraftingMode, setReviewMode } = useDocumentStore();
+  const { setRewriteMode } = useConversationsStore();
 
   const handleSetMode = (mode: 'assistant' | 'direct' | 'select_mode') => {
     if (modeContext === 'review') {
-      // @ts-ignore - mismatch in strict types if any, but string union matches
       setReviewMode(mode);
+    } else if (modeContext === 'rewrite') {
+      setRewriteMode(mode);
     } else {
       setDraftingMode(mode);
     }
+  };
+
+  const getDescriptions = (id: 'assistant' | 'direct') => {
+    if (modeContext === 'rewrite') {
+      return id === 'assistant'
+        ? 'Collaborate with AI to rewrite your text step-by-step.'
+        : 'Paste text and get an instant rewrite.';
+    }
+    if (modeContext === 'review') {
+      return id === 'assistant'
+        ? 'Collaborate with AI to review your document step-by-step.'
+        : 'Upload a file and get an instant review.';
+    }
+    // draft
+    return id === 'assistant'
+      ? 'Collaborate with AI to draft your document step-by-step.'
+      : 'Fill in the details and generate a document instantly.';
   };
 
   const options = [
     {
       id: 'assistant' as const,
       label: 'Conversation Assistant',
-      description:
-        modeContext === 'review'
-          ? 'Collaborate with AI to review your document step-by-step.'
-          : 'Collaborate with AI to draft your document step-by-step.',
+      description: getDescriptions('assistant'),
       icon: Bot,
     },
     {
       id: 'direct' as const,
       label: 'Direct Generation',
-      description:
-        modeContext === 'review'
-          ? 'Upload a file and get an instant review.'
-          : 'Fill in the details and generate a document instantly.',
+      description: getDescriptions('direct'),
       icon: FileText,
     },
   ];
@@ -46,7 +60,9 @@ export function DocumentModeSelector({
       <p className="text-sm text-gray-500">
         {modeContext === 'review'
           ? 'How would you like to review your document?'
-          : 'How would you like to draft your document?'}
+          : modeContext === 'rewrite'
+            ? 'How would you like to rewrite your text?'
+            : 'How would you like to draft your document?'}
       </p>
       <div className="flex w-full gap-4">
         {options.map(option => (
