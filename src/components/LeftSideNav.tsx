@@ -321,8 +321,15 @@ const LeftSideNav = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuGroup>
+
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/knowledge')}>
+                  <BookA className="text-black" /> Knowledge
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/billing')}>
+                  <ReceiptText className="text-black" /> Billing
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() =>
                   onOpen({
@@ -330,15 +337,6 @@ const LeftSideNav = () => {
                   })
                 }>
                   <SquareUserRound className="text-black" /> Invite
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/knowledge')}>
-                  <BookA className="text-black" /> Knowledge
-
-                </DropdownMenuItem>
-
-
-                <DropdownMenuItem onClick={() => router.push('/billing')}>
-                  <ReceiptText className="text-black" /> Billing
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/legal')}>
                   <Scale className="text-black" /> Legal
