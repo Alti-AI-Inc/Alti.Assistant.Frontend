@@ -17,6 +17,7 @@ type Person = {
   firstName: string;
   lastName: string;
   email: string;
+  role: string;
 };
 
 export const data: Person[] = [
@@ -24,53 +25,64 @@ export const data: Person[] = [
     firstName: 'John',
     lastName: 'Smith',
     email: 'john.smith@example.com',
+    role: 'Admin',
   },
   {
     firstName: 'Emily',
     lastName: 'Johnson',
     email: 'emily.johnson@example.com',
+    role: 'Manager',
   },
   {
     firstName: 'Michael',
     lastName: 'Brown',
     email: 'michael.brown@example.com',
+    role: 'User',
   },
   {
     firstName: 'Sophia',
     lastName: 'Davis',
     email: 'sophia.davis@example.com',
+    role: 'User',
   },
   {
     firstName: 'James',
     lastName: 'Wilson',
     email: 'james.wilson@example.com',
+    role: 'User',
   },
   {
     firstName: 'Olivia',
     lastName: 'Martinez',
     email: 'olivia.martinez@example.com',
+    role: 'User',
   },
   {
     firstName: 'Daniel',
     lastName: 'Taylor',
     email: 'daniel.taylor@example.com',
+    role: 'User',
   },
   {
     firstName: 'Ava',
     lastName: 'Anderson',
     email: 'ava.anderson@example.com',
+    role: 'User',
   },
   {
     firstName: 'William',
     lastName: 'Thomas',
     email: 'william.thomas@example.com',
+    role: 'User',
   },
   {
     firstName: 'Mia',
     lastName: 'Harris',
     email: 'mia.harris@example.com',
+    role: 'User',
   },
 ];
+
 
 export const columns: ColumnDef<Person>[] = [
   {
@@ -80,6 +92,11 @@ export const columns: ColumnDef<Person>[] = [
   {
     accessorKey: 'lastName',
     header: 'Last name',
+  },
+
+  {
+    accessorKey: 'role',
+    header: 'Role',
   },
   {
     accessorKey: 'email',
@@ -95,7 +112,6 @@ export const columns: ColumnDef<Person>[] = [
       );
     },
   },
-
   {
     id: 'actions',
     cell: ({ row }) => {

@@ -21,6 +21,7 @@ import {
   MessageSquare,
   Orbit,
   PanelLeftClose,
+  ReceiptText,
   Scale,
   Search,
   Settings,
@@ -335,11 +336,15 @@ const LeftSideNav = () => {
 
                 </DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => router.push('/settings')}>
-                  <Settings className="text-black" /> Settings
+
+                <DropdownMenuItem onClick={() => router.push('/billing')}>
+                  <ReceiptText className="text-black" /> Billing
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/legal')}>
                   <Scale className="text-black" /> Legal
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/settings')}>
+                  <Settings className="text-black" /> Settings
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

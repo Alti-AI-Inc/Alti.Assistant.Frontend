@@ -20,7 +20,7 @@ export function AddBillingModal() {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <form>
         <DialogTrigger asChild>
-          <Button variant="default">Add Billing</Button>
+          <Button variant="default">Add Card</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
