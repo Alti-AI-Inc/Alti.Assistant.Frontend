@@ -11,7 +11,6 @@ import {
 import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
 import {
-  Bot,
   CircleUserRound,
   LogOut,
   ReceiptText,
@@ -68,16 +67,6 @@ const DashboardLeftSideNav = () => {
           >
             <ReceiptText />
             <span className={cn('text-sm font-normal')}>Billing</span>
-          </Button>
-        
-        
-          <Button
-            onClick={() => router.push('/dashboard/chatbots')}
-            className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-          >
-            <Bot />
-
-            <span className={cn('text-sm font-normal')}>Chatbots</span>
           </Button>
         </div>
 
