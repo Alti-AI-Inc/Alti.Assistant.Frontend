@@ -21,7 +21,19 @@ export function useKnowledgeBankGetFoldersQuery() {
   const { data: session } = useSession();
   return useQuery<KnowledgeBankFolder[]>({
     queryKey: ['knowledgeBankFolders', session?.accessToken],
-    queryFn: () => fetchKnowledgeBankFolders(session?.accessToken as string),
+    queryFn: async () => {
+      const response = await fetchKnowledgeBankFolders(
+        session?.accessToken as string,
+      );
+      if (!response.success) {
+        console.error(
+          'fetchKnowledgeBankFolders failed:',
+          response.debugMessage,
+        );
+        throw new Error(response.message);
+      }
+      return response.data!;
+    },
     enabled: !!session?.accessToken, // only run if token exists
     staleTime: 15000 * 60, // 15 min caching
   });
@@ -33,7 +45,20 @@ export function useKnowledgeBankFolderContent(
 ): UseQueryResult<KnowledgeBankFolderContentResponse> {
   return useQuery<KnowledgeBankFolderContentResponse>({
     queryKey: ['knowledgeBankFolderContent', folderId],
-    queryFn: () => fetchKnowledgeBankFolderContent(folderId, accessToken!),
+    queryFn: async () => {
+      const response = await fetchKnowledgeBankFolderContent(
+        folderId,
+        accessToken!,
+      );
+      if (!response.success) {
+        console.error(
+          'fetchKnowledgeBankFolderContent failed:',
+          response.debugMessage,
+        );
+        throw new Error(response.message);
+      }
+      return response.data!;
+    },
     enabled: !!accessToken && !!folderId, // only run if token exists
     staleTime: 15000 * 60, // 15 min caching
   });
@@ -53,11 +78,19 @@ export function useKnowledgeBankCreateFolderMutation(onClose: () => void) {
       if (!session?.data?.accessToken) {
         throw new Error('Token not found');
       }
-      return createKnowledgeBankFolderAction(
+      const response = await createKnowledgeBankFolderAction(
         name,
         description,
         session.data.accessToken,
       );
+      if (!response.success) {
+        console.error(
+          'createKnowledgeBankFolderAction failed:',
+          response.debugMessage,
+        );
+        throw new Error(response.message);
+      }
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -86,12 +119,20 @@ export function useKnowledgeBankUpdateFolderMutation(onClose: () => void) {
       if (!session?.data?.accessToken) {
         throw new Error('Token not found');
       }
-      return updateKnowledgeBankFolderAction(
+      const response = await updateKnowledgeBankFolderAction(
         name,
         description,
         folderId,
         session.data.accessToken,
       );
+      if (!response.success) {
+        console.error(
+          'updateKnowledgeBankFolderAction failed:',
+          response.debugMessage,
+        );
+        throw new Error(response.message);
+      }
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -110,8 +151,20 @@ export function useDeleteKnowledgeBankFolder(onClose?: () => void) {
   const { data } = useSession();
 
   return useMutation({
-    mutationFn: (folderId: string) =>
-      deleteKnowledgeBankFolderAction(folderId, data?.accessToken),
+    mutationFn: async (folderId: string) => {
+      const response = await deleteKnowledgeBankFolderAction(
+        folderId,
+        data?.accessToken,
+      );
+      if (!response.success) {
+        console.error(
+          'deleteKnowledgeBankFolderAction failed:',
+          response.debugMessage,
+        );
+        throw new Error(response.message);
+      }
+      return response.data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['knowledgeBankFolders', data?.accessToken],
@@ -132,8 +185,14 @@ export function useDeleteKnowledgeBankFile(
   const { data } = useSession();
 
   return useMutation({
-    mutationFn: ({ fileId }: { fileId: string }) =>
-      deleteKnowledgeBankFile(fileId, data?.accessToken),
+    mutationFn: async ({ fileId }: { fileId: string }) => {
+      const response = await deleteKnowledgeBankFile(fileId, data?.accessToken);
+      if (!response.success) {
+        console.error('deleteKnowledgeBankFile failed:', response.debugMessage);
+        throw new Error(response.message);
+      }
+      return response.data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['knowledgeBankFolderContent', folderId],
@@ -150,8 +209,20 @@ export function useProcessKnowledgeBankFile(folderId: string) {
   const { data } = useSession();
 
   return useMutation({
-    mutationFn: ({ fileId }: { fileId: string }) =>
-      processKnowledgeBankFile(fileId, data?.accessToken as string),
+    mutationFn: async ({ fileId }: { fileId: string }) => {
+      const response = await processKnowledgeBankFile(
+        fileId,
+        data?.accessToken as string,
+      );
+      if (!response.success) {
+        console.error(
+          'processKnowledgeBankFile failed:',
+          response.debugMessage,
+        );
+        throw new Error(response.message);
+      }
+      return response.data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['knowledgeBankFolderContent', folderId],

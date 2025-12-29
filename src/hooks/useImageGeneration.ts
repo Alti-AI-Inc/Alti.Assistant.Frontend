@@ -139,6 +139,9 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setWorkflow('evaluating');
     },
     onSuccess: response => {
+      if (!response.success && response.debugMessage) {
+        console.error('Action failed:', response.debugMessage);
+      }
       if (!response.success || !response.data) {
         setError(response.message || 'Failed to evaluate prompt');
         setLoadingResponse(false);
@@ -206,6 +209,9 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setUserMessage('');
     },
     onSuccess: async (response, variables) => {
+      if (!response.success && response.debugMessage) {
+        console.error('Action failed:', response.debugMessage);
+      }
       if (!response.success || !response.data) {
         setError(response.message || 'Failed to analyze intent');
         setLoadingResponse(false);
@@ -374,6 +380,9 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setUserMessage('');
     },
     onSuccess: response => {
+      if (!response.success && response.debugMessage) {
+        console.error('Action failed:', response.debugMessage);
+      }
       if (!response.success || !response.data) {
         setError(response.message || 'Failed to add detail');
         setLoadingResponse(false);
@@ -451,6 +460,9 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setLoadingResponse(true);
     },
     onSuccess: response => {
+      if (!response.success && response.debugMessage) {
+        console.error('Action failed:', response.debugMessage);
+      }
       if (!response.success || !response.data) {
         setError(response.message || 'Failed to finalize prompt');
         setLoadingResponse(false);
@@ -514,6 +526,9 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setUserMessage('');
     },
     onSuccess: response => {
+      if (!response.success && response.debugMessage) {
+        console.error('Action failed:', response.debugMessage);
+      }
       if (!response.success || !response.data) {
         setError(response.message || 'Failed to generate image');
         setLoadingResponse(false);
@@ -605,6 +620,9 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setUserMessage('');
     },
     onSuccess: response => {
+      if (!response.success && response.debugMessage) {
+        console.error('Action failed:', response.debugMessage);
+      }
       if (!response.success || !response.data) {
         const errorMsg = response.message || 'Failed to edit image';
         setError(errorMsg);

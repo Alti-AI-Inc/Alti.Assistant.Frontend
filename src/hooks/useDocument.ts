@@ -74,11 +74,11 @@ export function useDocument() {
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (!response.success || !response.data) {
-        console.error('Failed to generate document', response);
+      if (!response.success) {
+        console.error('Failed to generate document:', response.debugMessage);
         const errorMessage = response.message || 'Failed to generate document';
         updateActiveConversation(errorMessage, ROLES.ASSISTANT);
-      } else {
+      } else if (response.data) {
         const { document } = response.data;
         if (document && document.url) {
           const messageContent = response.message;
@@ -114,7 +114,13 @@ export function useDocument() {
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (response.success && response.data) {
+      if (!response.success) {
+        console.error('Assistant drafting failed:', response.debugMessage);
+        updateActiveConversation(
+          response.message || 'An error occurred.',
+          ROLES.ASSISTANT,
+        );
+      } else if (response.data) {
         const { conversationId, message, document } = response.data;
 
         if (conversationId) {
@@ -159,7 +165,16 @@ export function useDocument() {
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (response.success && response.data) {
+      if (!response.success) {
+        console.error(
+          'Assistant continue drafting failed:',
+          response.debugMessage,
+        );
+        updateActiveConversation(
+          response.message || 'An error occurred.',
+          ROLES.ASSISTANT,
+        );
+      } else if (response.data) {
         const { message, document } = response.data;
         updateActiveConversation(message, ROLES.ASSISTANT, undefined, {
           ...(document && { document: document }),
@@ -214,7 +229,11 @@ export function useDocument() {
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (response.success && response.data) {
+      if (!response.success) {
+        console.error('Direct review failed:', response.debugMessage);
+        const errorMessage = response.message || 'Failed to review document';
+        updateActiveConversation(errorMessage, ROLES.ASSISTANT);
+      } else if (response.data) {
         const { review: reviewContent, documentInfo } = response.data;
         // Display review content
         // Assuming we want to show it as an assistant message
@@ -222,9 +241,6 @@ export function useDocument() {
           reviewContent || 'Review complete.',
           ROLES.ASSISTANT,
         );
-      } else {
-        const errorMessage = response.message || 'Failed to review document';
-        updateActiveConversation(errorMessage, ROLES.ASSISTANT);
       }
       resetAll();
       setIsLoading(false);
@@ -265,7 +281,13 @@ export function useDocument() {
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (response.success && response.data) {
+      if (!response.success) {
+        console.error('Assistant review failed:', response.debugMessage);
+        updateActiveConversation(
+          response.message || 'Failed to upload document.',
+          ROLES.ASSISTANT,
+        );
+      } else if (response.data) {
         const { conversationId, response: assistantResponse } = response.data;
         if (conversationId) {
           router.replace(`/c/${conversationId}`);

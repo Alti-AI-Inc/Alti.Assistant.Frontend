@@ -46,13 +46,19 @@ export function useConversations(accessToken?: string) {
   return useInfiniteQuery<ConversationListResponse>({
     queryKey: ['conversations', accessToken],
     initialPageParam: 1,
-    queryFn: ({ pageParam }) =>
-      fetchConversationList(
+    queryFn: async ({ pageParam }) => {
+      const response = await fetchConversationList(
         accessToken!,
         typeof pageParam === 'number'
           ? (pageParam as number)
           : Number(pageParam || 1),
-      ),
+      );
+      if (!response.success) {
+        console.error('fetchConversationList failed:', response.debugMessage);
+        throw new Error(response.message);
+      }
+      return response.data!;
+    },
     getNextPageParam: lastPage =>
       lastPage.pagination.hasNext ? lastPage.pagination.page + 1 : undefined,
     enabled: !!accessToken,
@@ -62,7 +68,17 @@ export function useConversations(accessToken?: string) {
 export function useSavedConversations(accessToken?: string) {
   return useQuery({
     queryKey: ['saved-conversations', accessToken],
-    queryFn: () => fetchSavedConversationList(accessToken!),
+    queryFn: async () => {
+      const response = await fetchSavedConversationList(accessToken!);
+      if (!response.success) {
+        console.error(
+          'fetchSavedConversationList failed:',
+          response.debugMessage,
+        );
+        throw new Error(response.message);
+      }
+      return response.data;
+    },
     enabled: !!accessToken, // only run if token exists
     // staleTime: 1000 * 60, // 1 min caching
     staleTime: Infinity,
@@ -83,6 +99,7 @@ export function useActiveConversation(
       );
 
       if (!response.success) {
+        console.error('loadSingleConversation failed:', response.debugMessage);
         throw new Error(response.message || 'Failed to load conversation');
       }
 
@@ -146,6 +163,10 @@ export function useSharedConversation(id: string) {
       const response = await loadSingleSharedConversation(id);
 
       if (!response.success) {
+        console.error(
+          'loadSingleSharedConversation failed:',
+          response.debugMessage,
+        );
         throw new Error(response.message || 'Failed to load conversation');
       }
 
@@ -214,7 +235,15 @@ export function useDeleteConversation() {
   return useMutation({
     mutationFn: async (conversationId: string) => {
       if (!data?.accessToken) throw new Error('No access token');
-      return await deleteConversation(data.accessToken, conversationId);
+      const response = await deleteConversation(
+        data.accessToken,
+        conversationId,
+      );
+      if (!response.success) {
+        console.error('deleteConversation failed:', response.debugMessage);
+        throw new Error(response.message);
+      }
+      return response.data;
     },
     onSuccess: (resp, deletedId) => {
       console.log('Deleted conversation: resp', resp);
@@ -243,7 +272,14 @@ export function useSearchConversations(
 ) {
   return useQuery({
     queryKey: ['search-conversations', accessToken, searchTerm],
-    queryFn: () => searchConversations(accessToken!, searchTerm!),
+    queryFn: async () => {
+      const response = await searchConversations(accessToken!, searchTerm!);
+      if (!response.success) {
+        console.error('searchConversations failed:', response.debugMessage);
+        throw new Error(response.message);
+      }
+      return response.data;
+    },
     enabled: !!accessToken && !!searchTerm, // only run when both exist
     staleTime: 0, // always fresh
   });

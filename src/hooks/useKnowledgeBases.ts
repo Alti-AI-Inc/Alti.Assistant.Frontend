@@ -53,7 +53,14 @@ export type KnowledgebaseConversationsResponse = {
 export function useKnowledgeBases(accessToken?: string) {
   return useQuery<Knowledgebase[]>({
     queryKey: ['knowledgeBasesList', accessToken],
-    queryFn: () => fetchKnowledgeBaseList(accessToken!),
+    queryFn: async () => {
+      const response = await fetchKnowledgeBaseList(accessToken!);
+      if (!response.success) {
+        console.error('fetchKnowledgeBaseList failed:', response.debugMessage);
+        throw new Error(response.message);
+      }
+      return response.data;
+    },
     enabled: !!accessToken, // only run if token exists
     staleTime: 15000 * 60, // 15 min caching
   });
@@ -65,7 +72,20 @@ export function useKnowledgeBaseConversations(
 ) {
   return useQuery<KnowledgebaseConversationsResponse>({
     queryKey: ['knowledgeBasesConversations', baseId, accessToken],
-    queryFn: () => fetchKnowledgeBaseConversations(baseId, accessToken!),
+    queryFn: async () => {
+      const response = await fetchKnowledgeBaseConversations(
+        baseId,
+        accessToken!,
+      );
+      if (!response.success) {
+        console.error(
+          'fetchKnowledgeBaseConversations failed:',
+          response.debugMessage,
+        );
+        throw new Error(response.message);
+      }
+      return response.data;
+    },
     enabled: !!accessToken, // only run if token exists
     staleTime: 15000 * 60, // 15 min caching
   });
@@ -85,6 +105,10 @@ export function useActiveBaseConversation(
       );
 
       if (!response.success) {
+        console.error(
+          'loadSingleBaseConversation failed:',
+          response.debugMessage,
+        );
         throw new Error(response.message || 'Failed to load conversation');
       }
 
@@ -101,7 +125,14 @@ export function useKnowledgeBaseFiles(
 ): UseQueryResult<KnowledgeBaseFilesResponse> {
   return useQuery<KnowledgeBaseFilesResponse>({
     queryKey: ['knowledgeBasesFiles', baseId, accessToken],
-    queryFn: () => getKnowledgeBaseFiles(baseId, accessToken!),
+    queryFn: async () => {
+      const response = await getKnowledgeBaseFiles(baseId, accessToken!);
+      if (!response.success) {
+        console.error('getKnowledgeBaseFiles failed:', response.debugMessage);
+        throw new Error(response.message);
+      }
+      return response.data!;
+    },
     enabled: !!accessToken && !!baseId, // only run if token exists
     staleTime: 15000 * 60, // 15 min caching
   });
@@ -115,8 +146,14 @@ export function useDeleteKnowledgeBaseFile(
   const { data } = useSession();
 
   return useMutation({
-    mutationFn: (fileId: string) =>
-      deleteKnowledgeBaseFile(fileId, data?.accessToken),
+    mutationFn: async (fileId: string) => {
+      const response = await deleteKnowledgeBaseFile(fileId, data?.accessToken);
+      if (!response.success) {
+        console.error('deleteKnowledgeBaseFile failed:', response.debugMessage);
+        throw new Error(response.message);
+      }
+      return response.data;
+    },
     onSuccess: () => {
       // ✅ Automatically refresh file list
       queryClient.invalidateQueries({
@@ -136,8 +173,14 @@ export function useDeleteKnowledgeBase(onClose?: () => void) {
   const { setActiveConversation } = useConversationsStore();
 
   return useMutation({
-    mutationFn: (baseId: string) =>
-      deleteKnowledgeBase(baseId, data?.accessToken),
+    mutationFn: async (baseId: string) => {
+      const response = await deleteKnowledgeBase(baseId, data?.accessToken);
+      if (!response.success) {
+        console.error('deleteKnowledgeBase failed:', response.debugMessage);
+        throw new Error(response.message);
+      }
+      return response.data;
+    },
     onSuccess: () => {
       // ✅ Automatically refresh file list
       queryClient.invalidateQueries({

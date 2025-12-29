@@ -10,14 +10,21 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 export const useConnectionsQuery = (accessToken?: string) => {
   return useQuery({
     queryKey: ['connections', accessToken],
-    queryFn: () => getConnections(accessToken),
+    queryFn: async () => {
+      const response = await getConnections(accessToken);
+      if (!response.success) {
+        console.error('getConnections failed:', response.debugMessage);
+        throw new Error(response.message);
+      }
+      return response.data!;
+    },
     enabled: !!accessToken, // only run when userId is available
   });
 };
 
 export const useInitiateConnectionMutation = () => {
   return useMutation({
-    mutationFn: ({
+    mutationFn: async ({
       app_name,
       user_id,
       accessToken,
@@ -25,7 +32,14 @@ export const useInitiateConnectionMutation = () => {
       app_name: string;
       user_id: string;
       accessToken: string;
-    }) => initiateConnection(app_name, user_id, accessToken),
+    }) => {
+      const response = await initiateConnection(app_name, user_id, accessToken);
+      if (!response.success) {
+        console.error('initiateConnection failed:', response.debugMessage);
+        throw new Error(response.message);
+      }
+      return response.data!;
+    },
   });
 };
 
@@ -33,8 +47,14 @@ export const useWaitForConnectionMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (connectedAccountId: string) =>
-      waitForConnection(connectedAccountId),
+    mutationFn: async (connectedAccountId: string) => {
+      const response = await waitForConnection(connectedAccountId);
+      if (!response.success) {
+        console.error('waitForConnection failed:', response.debugMessage);
+        throw new Error(response.message);
+      }
+      return response.data!;
+    },
     onSuccess: () => {
       console.log('✅ Connection established, refreshing connections');
       // ✅ refresh connections after success

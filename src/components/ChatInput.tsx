@@ -400,6 +400,15 @@ const ChatInput = ({
       setLoadingResponse(true);
     },
     onSuccess: (response, userMessage) => {
+      if (!response.success) {
+        console.error('PostConversation failed:', response.debugMessage);
+        updateActiveConversation(
+          response.message || 'An unexpected error occurred.',
+          ROLES.ASSISTANT,
+        );
+        setLoadingResponse(false);
+        return;
+      }
       if (!response?.data) return;
       // setShowStartLastMessage(false);
       const newId =
