@@ -1,4 +1,5 @@
 'use client';
+import { useEffect } from 'react';
 
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
@@ -8,12 +9,12 @@ import { useSession } from 'next-auth/react';
 
 function App() {
   const { data } = useSession();
-  const { activeConversation } = useConversationsStore();
+  const { activeConversation, setActiveConversation } = useConversationsStore();
   // const { data } = useSession();
   // console.log(data?.accessToken);
-  // useEffect(() => {
-  //   setActiveConversation(null);
-  // }, [setActiveConversation]);
+  useEffect(() => {
+    setActiveConversation(null);
+  }, [setActiveConversation]);
 
   const {
     data: knowledgeBases,

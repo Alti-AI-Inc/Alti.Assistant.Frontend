@@ -117,8 +117,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
     if (activeConversation?.messages?.length) {
       if (isFirstLoad.current) {
-        // Continuous crawling for first load to handle lazy images/content
-        // Try scrolling every 200ms for 2 seconds
+        // Handle lazy images/content
+        // Scrolling every 200ms for 2 seconds
         let attempts = 0;
         const maxAttempts = 10;
 
@@ -127,7 +127,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
           attempts++;
 
           if (attempts < maxAttempts) {
-            setTimeout(forceScrollLoop, 300);
+            console.log('Scrolling...', attempts);
+            setTimeout(forceScrollLoop, 200);
           } else {
             isFirstLoad.current = false;
           }
