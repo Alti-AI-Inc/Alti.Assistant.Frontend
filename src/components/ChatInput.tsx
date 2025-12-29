@@ -49,7 +49,7 @@ import {
   PencilLine,
   PencilRuler,
   Plus,
-  Waypoints
+  Waypoints,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -408,11 +408,11 @@ const ChatInput = ({
           : conversationId;
 
       if (conversationId === 'new-chat') {
-        updateActiveConversation(
-          userMessage,
-          ROLES.USER,
-          response.data.conversationId,
-        );
+        // updateActiveConversation(
+        //   userMessage,
+        //   ROLES.USER,
+        //   response.data.conversationId,
+        // );
         router.replace(`/c/${response.data.conversationId}`);
       }
 

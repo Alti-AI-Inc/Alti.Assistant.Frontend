@@ -84,27 +84,60 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
   // Sync query result into Zustand
   useEffect(() => {
-    if (queryConversation) {
+    if (queryConversation && !showStartLastMessage) {
       setActiveConversation(queryConversation);
     }
-  }, [queryConversation, setActiveConversation]);
+  }, [queryConversation, setActiveConversation, showStartLastMessage]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const hasScrolledToUserMessage = useRef(false);
+  const isFirstLoad = useRef(true);
 
   // Auto-scroll to bottom function
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
+    if (behavior === 'auto' && messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+      return;
+    }
+    messagesEndRef.current?.scrollIntoView({ behavior });
   };
 
   const scrollToLastUserMessage = () => {
-    lastMessageRef.current?.scrollIntoView();
+    lastMessageRef.current?.scrollIntoView({
+      block: 'start',
+      behavior: 'smooth',
+    });
   };
 
   // Auto-scroll when messages change or loading state changes
   useEffect(() => {
-    if (showStartLastMessage) return;
-    scrollToBottom();
+    if (showStartLastMessage || hasScrolledToUserMessage.current) return;
+
+    if (activeConversation?.messages?.length) {
+      if (isFirstLoad.current) {
+        // Continuous crawling for first load to handle lazy images/content
+        // Try scrolling every 200ms for 2 seconds
+        let attempts = 0;
+        const maxAttempts = 10;
+
+        const forceScrollLoop = () => {
+          scrollToBottom('smooth');
+          attempts++;
+
+          if (attempts < maxAttempts) {
+            setTimeout(forceScrollLoop, 300);
+          } else {
+            isFirstLoad.current = false;
+          }
+        };
+
+        forceScrollLoop();
+      } else {
+        scrollToBottom('smooth');
+      }
+    }
   }, [activeConversation?.messages, showStartLastMessage]);
 
   useEffect(() => {
