@@ -381,11 +381,14 @@ const ChatInput = ({
 
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}${getApiEndpoint()}`;
   // console.log('apiUrl', apiUrl);
-  // console.log('token', data?.accessToken);
+  console.log('token', data?.accessToken);
   // console.log('userid', data?.user);
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
-      if (!data?.accessToken) throw new Error('No access token1');
+      if (!data?.accessToken) {
+        console.error('No access token1');
+        return null; // throw new Error(...)
+      }
       return await PostConversation(
         apiUrl,
         userMessage,
@@ -401,10 +404,13 @@ const ChatInput = ({
       setLoadingResponse(true);
     },
     onSuccess: (response, userMessage) => {
-      if (!response.success) {
-        console.error('PostConversation failed:', response.debugMessage);
+      if (!response || !response.success) {
+        console.error(
+          'PostConversation failed:',
+          response?.debugMessage || 'Unknown error',
+        );
         updateActiveConversation(
-          response.message || 'An unexpected error occurred.',
+          response?.message || 'An unexpected error occurred.',
           ROLES.ASSISTANT,
         );
         setLoadingResponse(false);

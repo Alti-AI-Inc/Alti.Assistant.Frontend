@@ -37,7 +37,10 @@ export function useRewrite() {
   // --- Direct Rewrite Mutation ---
   const directRewriteMutation = useMutation({
     mutationFn: async ({ content }: { content: string }) => {
-      if (!accessToken) throw new Error('No access token');
+      if (!accessToken) {
+        console.error('No access token');
+        return null;
+      }
       const {
         intent,
         style,
@@ -65,9 +68,9 @@ export function useRewrite() {
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (!response.success) {
-        console.error('Direct rewrite failed:', response.debugMessage);
-        const errorMessage = response.message || 'Failed to rewrite text';
+      if (!response || !response.success) {
+        console.error('Direct rewrite failed:', response?.debugMessage);
+        const errorMessage = response?.message || 'Failed to rewrite text';
         updateActiveConversation(errorMessage, ROLES.ASSISTANT);
       } else if (response.data) {
         const { rewrittenContent, message } = response.data;
@@ -101,7 +104,10 @@ export function useRewrite() {
       file?: File;
       conversationId?: string;
     }) => {
-      if (!accessToken) throw new Error('No access token');
+      if (!accessToken) {
+        console.error('No access token');
+        return null;
+      }
 
       if (file) {
         const formData = new FormData();
@@ -122,7 +128,8 @@ export function useRewrite() {
           accessToken,
         );
       }
-      throw new Error('Invalid parameters for assistant rewrite');
+      console.error('Invalid parameters for assistant rewrite');
+      return null;
     },
     onMutate: () => {
       setIsLoading(true);

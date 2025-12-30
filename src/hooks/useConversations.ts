@@ -282,7 +282,10 @@ export function useDeleteConversation() {
 
   return useMutation({
     mutationFn: async (conversationId: string) => {
-      if (!data?.accessToken) throw new Error('No access token');
+      if (!data?.accessToken) {
+        console.error('No access token');
+        return null; // throw new Error('No access token');
+      }
       try {
         const response = await deleteConversation(
           data.accessToken,
@@ -293,15 +296,18 @@ export function useDeleteConversation() {
             'deleteConversation failed:',
             response.debugMessage || response.message,
           );
-          throw new Error(response.message);
+          // throw new Error(response.message);
+          return null;
         }
         return response.data;
       } catch (error) {
         console.error('deleteConversation exception:', error);
-        throw error;
+        return null;
+        // throw error;
       }
     },
     onSuccess: (resp, deletedId) => {
+      if (!resp) return;
       console.log('Deleted conversation: resp', resp);
       // navigate home if currently viewing deleted chat
       if (

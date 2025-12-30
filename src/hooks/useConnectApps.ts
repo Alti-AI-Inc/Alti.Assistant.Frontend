@@ -14,7 +14,9 @@ export const useConnectionsQuery = (accessToken?: string) => {
       const response = await getConnections(accessToken);
       if (!response.success) {
         console.error('getConnections failed:', response.debugMessage);
-        throw new Error(response.message);
+        console.error('getConnections failed:', response.debugMessage);
+        // throw new Error(response.message);
+        return [];
       }
       return response.data!;
     },
@@ -36,7 +38,9 @@ export const useInitiateConnectionMutation = () => {
       const response = await initiateConnection(app_name, user_id, accessToken);
       if (!response.success) {
         console.error('initiateConnection failed:', response.debugMessage);
-        throw new Error(response.message);
+        console.error(response.debugMessage);
+        // throw new Error(response.message);
+        return null;
       }
       return response.data!;
     },
@@ -51,7 +55,9 @@ export const useWaitForConnectionMutation = () => {
       const response = await waitForConnection(connectedAccountId);
       if (!response.success) {
         console.error('waitForConnection failed:', response.debugMessage);
-        throw new Error(response.message);
+        console.error(response.debugMessage);
+        // throw new Error(response.message);
+        return null;
       }
       return response.data!;
     },

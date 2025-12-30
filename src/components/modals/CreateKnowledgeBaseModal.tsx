@@ -26,7 +26,8 @@ const CreateKnowledgeBaseModal = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: () => {
       if (!session?.accessToken) {
-        throw new Error('Token not found');
+        console.error('Token not found');
+        return null;
       }
       return createKnowledgeBaseAction(name, session.accessToken);
     },

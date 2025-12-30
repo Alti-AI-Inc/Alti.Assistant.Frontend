@@ -30,7 +30,9 @@ export function useKnowledgeBankGetFoldersQuery() {
           'fetchKnowledgeBankFolders failed:',
           response.debugMessage,
         );
-        throw new Error(response.message);
+        console.error(response.debugMessage);
+        // throw new Error(response.message);
+        return null as any;
       }
       return response.data!;
     },
@@ -55,7 +57,9 @@ export function useKnowledgeBankFolderContent(
           'fetchKnowledgeBankFolderContent failed:',
           response.debugMessage,
         );
-        throw new Error(response.message);
+        console.error(response.debugMessage);
+        // throw new Error(response.message);
+        return null as any;
       }
       return response.data!;
     },
@@ -76,7 +80,8 @@ export function useKnowledgeBankCreateFolderMutation(onClose: () => void) {
       description: string;
     }) => {
       if (!session?.data?.accessToken) {
-        throw new Error('Token not found');
+        console.error('Token not found');
+        return null;
       }
       const response = await createKnowledgeBankFolderAction(
         name,
@@ -88,7 +93,9 @@ export function useKnowledgeBankCreateFolderMutation(onClose: () => void) {
           'createKnowledgeBankFolderAction failed:',
           response.debugMessage,
         );
-        throw new Error(response.message);
+        console.error(response.debugMessage);
+        // throw new Error(response.message);
+        return null;
       }
       return response.data;
     },
@@ -117,7 +124,8 @@ export function useKnowledgeBankUpdateFolderMutation(onClose: () => void) {
       folderId: string;
     }) => {
       if (!session?.data?.accessToken) {
-        throw new Error('Token not found');
+        console.error('Token not found');
+        return null;
       }
       const response = await updateKnowledgeBankFolderAction(
         name,
@@ -130,7 +138,9 @@ export function useKnowledgeBankUpdateFolderMutation(onClose: () => void) {
           'updateKnowledgeBankFolderAction failed:',
           response.debugMessage,
         );
-        throw new Error(response.message);
+        console.error(response.debugMessage);
+        // throw new Error(response.message);
+        return null;
       }
       return response.data;
     },
@@ -161,7 +171,9 @@ export function useDeleteKnowledgeBankFolder(onClose?: () => void) {
           'deleteKnowledgeBankFolderAction failed:',
           response.debugMessage,
         );
-        throw new Error(response.message);
+        console.error(response.debugMessage);
+        // throw new Error(response.message);
+        return null;
       }
       return response.data;
     },
@@ -189,7 +201,9 @@ export function useDeleteKnowledgeBankFile(
       const response = await deleteKnowledgeBankFile(fileId, data?.accessToken);
       if (!response.success) {
         console.error('deleteKnowledgeBankFile failed:', response.debugMessage);
-        throw new Error(response.message);
+        console.error(response.debugMessage);
+        // throw new Error(response.message);
+        return null;
       }
       return response.data;
     },
@@ -219,7 +233,9 @@ export function useProcessKnowledgeBankFile(folderId: string) {
           'processKnowledgeBankFile failed:',
           response.debugMessage,
         );
-        throw new Error(response.message);
+        console.error(response.debugMessage);
+        // throw new Error(response.message);
+        return null;
       }
       return response.data;
     },

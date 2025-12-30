@@ -25,7 +25,10 @@ export function ShareConversationModal() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['share-conversation', conversationId],
     queryFn: () => {
-      if (!conversationId || !token) throw new Error('Missing token or id');
+      if (!conversationId || !token) {
+        console.error('Missing token or id');
+        return null; // throw new Error(...)
+      }
       return shareConversation(conversationId, token);
     },
     enabled: isOpen && !!conversationId && !!token, // only run when modal opens

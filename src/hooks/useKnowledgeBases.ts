@@ -57,7 +57,9 @@ export function useKnowledgeBases(accessToken?: string) {
       const response = await fetchKnowledgeBaseList(accessToken!);
       if (!response.success) {
         console.error('fetchKnowledgeBaseList failed:', response.debugMessage);
-        throw new Error(response.message);
+        console.error(response.message);
+        // throw new Error(response.message);
+        return [];
       }
       return response.data;
     },
@@ -82,7 +84,14 @@ export function useKnowledgeBaseConversations(
           'fetchKnowledgeBaseConversations failed:',
           response.debugMessage,
         );
-        throw new Error(response.message);
+        console.error(response.message);
+        // throw new Error(response.message);
+        return {
+          conversations: [],
+          totalCount: 0,
+          knowledgebaseId: baseId,
+          knowledgebaseName: '',
+        };
       }
       return response.data;
     },
@@ -98,7 +107,11 @@ export function useActiveBaseConversation(
   return useQuery({
     queryKey: ['activeBaseConversation', conversationId, accessToken],
     queryFn: async () => {
-      if (!accessToken) throw new Error('No access token');
+      if (!accessToken) {
+        console.error('No access token');
+        // throw new Error('No access token');
+        return null;
+      }
       const response = await loadSingleBaseConversation(
         conversationId,
         accessToken,
@@ -109,7 +122,8 @@ export function useActiveBaseConversation(
           'loadSingleBaseConversation failed:',
           response.debugMessage,
         );
-        throw new Error(response.message || 'Failed to load conversation');
+        // throw new Error(response.message || 'Failed to load conversation');
+        return null;
       }
 
       return response.data; // should match ActiveConversation type
@@ -129,7 +143,9 @@ export function useKnowledgeBaseFiles(
       const response = await getKnowledgeBaseFiles(baseId, accessToken!);
       if (!response.success) {
         console.error('getKnowledgeBaseFiles failed:', response.debugMessage);
-        throw new Error(response.message);
+        console.error(response.message);
+        // throw new Error(response.message);
+        return { files: [], totalCount: 0, knowledgebotId: baseId };
       }
       return response.data!;
     },
@@ -150,7 +166,9 @@ export function useDeleteKnowledgeBaseFile(
       const response = await deleteKnowledgeBaseFile(fileId, data?.accessToken);
       if (!response.success) {
         console.error('deleteKnowledgeBaseFile failed:', response.debugMessage);
-        throw new Error(response.message);
+        console.error(response.message);
+        // throw new Error(response.message);
+        return null;
       }
       return response.data;
     },
@@ -177,7 +195,9 @@ export function useDeleteKnowledgeBase(onClose?: () => void) {
       const response = await deleteKnowledgeBase(baseId, data?.accessToken);
       if (!response.success) {
         console.error('deleteKnowledgeBase failed:', response.debugMessage);
-        throw new Error(response.message);
+        console.error(response.message);
+        // throw new Error(response.message);
+        return null;
       }
       return response.data;
     },

@@ -39,7 +39,11 @@ export function FileList({ baseId, accessToken }: FileListProps) {
     e.stopPropagation();
     try {
       const blob = await getFileBlob(file);
-      if (!blob) throw new Error('Failed to get file blob');
+      if (!blob) {
+        console.error('Failed to get file blob');
+        alert('Failed to download file.');
+        return;
+      }
       const url = window.URL.createObjectURL(blob);
 
       const a = document.createElement('a');
