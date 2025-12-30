@@ -319,7 +319,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                           : selectedOption === OPTIONS.REWRITE
                             ? rewriteMode === 'select_mode'
                               ? null
-                              : (rewriteMode as 'assistant' | 'direct')
+                              : rewriteMode === 'chat'
+                                ? null
+                                : (rewriteMode as 'assistant' | 'direct')
                             : review.mode === 'select_mode'
                               ? null
                               : (review.mode as 'assistant' | 'direct')

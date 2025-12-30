@@ -149,8 +149,12 @@ export function useRewrite() {
           );
         }
       }
-      // Do NOT reset config for assistant rewrite to keep UI visible for follow-up
-      setRewriteMode('assistant');
+
+      // Transition to 'chat' mode to hide config form but keep rewrite active
+      setRewriteMode('chat');
+      // Reset text content so it's not re-sent automatically
+      updateRewriteConfig({ textContent: '' });
+
       setIsLoading(false);
       setLoadingResponse(false);
     },

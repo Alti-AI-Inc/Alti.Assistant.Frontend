@@ -47,17 +47,46 @@ export function useConversations(accessToken?: string) {
     queryKey: ['conversations', accessToken],
     initialPageParam: 1,
     queryFn: async ({ pageParam }) => {
-      const response = await fetchConversationList(
-        accessToken!,
-        typeof pageParam === 'number'
-          ? (pageParam as number)
-          : Number(pageParam || 1),
-      );
-      if (!response.success) {
-        console.error('fetchConversationList failed:', response.debugMessage);
-        throw new Error(response.message);
+      try {
+        const response = await fetchConversationList(
+          accessToken!,
+          typeof pageParam === 'number'
+            ? (pageParam as number)
+            : Number(pageParam || 1),
+        );
+        if (!response.success) {
+          console.error(
+            'fetchConversationList failed:',
+            response.debugMessage || response.message,
+          );
+          // Return empty list instead of throwing
+          return {
+            conversations: [],
+            pagination: {
+              page: 1,
+              limit: 20,
+              total: 0,
+              pages: 0,
+              hasNext: false,
+              hasPrev: false,
+            },
+          };
+        }
+        return response.data!;
+      } catch (error) {
+        console.error('fetchConversationList exception:', error);
+        return {
+          conversations: [],
+          pagination: {
+            page: 1,
+            limit: 20,
+            total: 0,
+            pages: 0,
+            hasNext: false,
+            hasPrev: false,
+          },
+        };
       }
-      return response.data!;
     },
     getNextPageParam: lastPage =>
       lastPage.pagination.hasNext ? lastPage.pagination.page + 1 : undefined,
@@ -69,15 +98,20 @@ export function useSavedConversations(accessToken?: string) {
   return useQuery({
     queryKey: ['saved-conversations', accessToken],
     queryFn: async () => {
-      const response = await fetchSavedConversationList(accessToken!);
-      if (!response.success) {
-        console.error(
-          'fetchSavedConversationList failed:',
-          response.debugMessage,
-        );
-        throw new Error(response.message);
+      try {
+        const response = await fetchSavedConversationList(accessToken!);
+        if (!response.success) {
+          console.error(
+            'fetchSavedConversationList failed:',
+            response.debugMessage || response.message,
+          );
+          return [];
+        }
+        return response.data;
+      } catch (error) {
+        console.error('fetchSavedConversationList exception:', error);
+        return [];
       }
-      return response.data;
     },
     enabled: !!accessToken, // only run if token exists
     // staleTime: 1000 * 60, // 1 min caching
@@ -92,64 +126,73 @@ export function useActiveConversation(
   return useQuery({
     queryKey: ['activeConversation', conversationId, accessToken],
     queryFn: async () => {
-      if (!accessToken) throw new Error('No access token');
-      const response = await loadSingleConversation(
-        conversationId,
-        accessToken,
-      );
+      if (!accessToken) return { messages: [] };
 
-      if (!response.success) {
-        console.error('loadSingleConversation failed:', response.debugMessage);
-        throw new Error(response.message || 'Failed to load conversation');
-      }
+      try {
+        const response = await loadSingleConversation(
+          conversationId,
+          accessToken,
+        );
 
-      const data = response.data; // should match ActiveConversation type
+        if (!response.success) {
+          console.error(
+            'loadSingleConversation failed:',
+            response.debugMessage || response.message,
+          );
+          return { messages: [] };
+        }
 
-      // Sanitize messages to avoid showing success text in UI
-      if (data && data.messages) {
-        data.messages = data.messages.map((msg: any) => {
-          if (msg.role === 'assistant') {
-            // Document generation metadata mapping
-            if (msg.metadata?.documentGenerated && !msg.metadata.document) {
-              const { exportResult, uploadResult, collectedParams } =
-                msg.metadata;
-              if (exportResult && uploadResult) {
-                msg.metadata.document = {
-                  content: collectedParams?.content || '', // Fallback content
-                  format: exportResult.format,
-                  file: {
-                    filePath: exportResult.filePath,
-                    fileName: exportResult.fileName,
+        const data = response.data; // should match ActiveConversation type
+
+        // Sanitize messages to avoid showing success text in UI
+        if (data && data.messages) {
+          data.messages = data.messages.map((msg: any) => {
+            if (msg.role === 'assistant') {
+              // Document generation metadata mapping
+              if (msg.metadata?.documentGenerated && !msg.metadata.document) {
+                const { exportResult, uploadResult, collectedParams } =
+                  msg.metadata;
+                if (exportResult && uploadResult) {
+                  msg.metadata.document = {
+                    content: collectedParams?.content || '', // Fallback content
                     format: exportResult.format,
-                    size: exportResult.size,
-                  },
-                  url: uploadResult.publicUrl || uploadResult.url,
-                  metadata: {
-                    title:
-                      collectedParams?.title ||
-                      exportResult.fileName ||
-                      'Generated Document',
-                    documentType: collectedParams?.documentType || 'document',
-                    ...collectedParams,
-                  },
-                };
+                    file: {
+                      filePath: exportResult.filePath,
+                      fileName: exportResult.fileName,
+                      format: exportResult.format,
+                      size: exportResult.size,
+                    },
+                    url: uploadResult.publicUrl || uploadResult.url,
+                    metadata: {
+                      title:
+                        collectedParams?.title ||
+                        exportResult.fileName ||
+                        'Generated Document',
+                      documentType: collectedParams?.documentType || 'document',
+                      ...collectedParams,
+                    },
+                  };
+                }
+              }
+
+              if (
+                msg.content.startsWith('Image generated successfully') ||
+                msg.content.startsWith('Image edited successfully') ||
+                // msg.content.startsWith('Video generated successfully') ||
+                msg.content.startsWith('Intent analysis:')
+              ) {
+                return { ...msg, content: '' };
               }
             }
+            return msg;
+          });
+        }
 
-            if (
-              msg.content.startsWith('Image generated successfully') ||
-              msg.content.startsWith('Image edited successfully') ||
-              // msg.content.startsWith('Video generated successfully') ||
-              msg.content.startsWith('Intent analysis:')
-            ) {
-              return { ...msg, content: '' };
-            }
-          }
-          return msg;
-        });
+        return data;
+      } catch (error) {
+        console.error('loadSingleConversation exception:', error);
+        return { messages: [] };
       }
-
-      return data;
     },
     enabled: !!conversationId && conversationId !== 'new-chat' && !!accessToken,
     // staleTime: 1000 * 60 * 2, // 2 min
@@ -160,63 +203,68 @@ export function useSharedConversation(id: string) {
   return useQuery({
     queryKey: ['sharedConversation', id],
     queryFn: async (): Promise<ActiveConversation> => {
-      const response = await loadSingleSharedConversation(id);
+      try {
+        const response = await loadSingleSharedConversation(id);
 
-      if (!response.success) {
-        console.error(
-          'loadSingleSharedConversation failed:',
-          response.debugMessage,
-        );
-        throw new Error(response.message || 'Failed to load conversation');
-      }
+        if (!response.success) {
+          console.error(
+            'loadSingleSharedConversation failed:',
+            response.debugMessage || response.message,
+          );
+          return { messages: [] };
+        }
 
-      const conversation = response.data.conversation; // should match ActiveConversation type
+        const conversation = response.data.conversation; // should match ActiveConversation type
 
-      // Sanitize messages to avoid showing success text in UI
-      if (conversation && conversation.messages) {
-        conversation.messages = conversation.messages.map((msg: any) => {
-          if (msg.role === 'assistant') {
-            // Document generation metadata mapping
-            if (msg.metadata?.documentGenerated && !msg.metadata.document) {
-              const { exportResult, uploadResult, collectedParams } =
-                msg.metadata;
-              if (exportResult && uploadResult) {
-                msg.metadata.document = {
-                  content: collectedParams?.content || '',
-                  format: exportResult.format,
-                  file: {
-                    filePath: exportResult.filePath,
-                    fileName: exportResult.fileName,
+        // Sanitize messages to avoid showing success text in UI
+        if (conversation && conversation.messages) {
+          conversation.messages = conversation.messages.map((msg: any) => {
+            if (msg.role === 'assistant') {
+              // Document generation metadata mapping
+              if (msg.metadata?.documentGenerated && !msg.metadata.document) {
+                const { exportResult, uploadResult, collectedParams } =
+                  msg.metadata;
+                if (exportResult && uploadResult) {
+                  msg.metadata.document = {
+                    content: collectedParams?.content || '',
                     format: exportResult.format,
-                    size: exportResult.size,
-                  },
-                  url: uploadResult.publicUrl || uploadResult.url,
-                  metadata: {
-                    title:
-                      collectedParams?.title ||
-                      exportResult.fileName ||
-                      'Generated Document',
-                    documentType: collectedParams?.documentType || 'document',
-                    ...collectedParams,
-                  },
-                };
+                    file: {
+                      filePath: exportResult.filePath,
+                      fileName: exportResult.fileName,
+                      format: exportResult.format,
+                      size: exportResult.size,
+                    },
+                    url: uploadResult.publicUrl || uploadResult.url,
+                    metadata: {
+                      title:
+                        collectedParams?.title ||
+                        exportResult.fileName ||
+                        'Generated Document',
+                      documentType: collectedParams?.documentType || 'document',
+                      ...collectedParams,
+                    },
+                  };
+                }
+              }
+
+              if (
+                msg.content.startsWith('Image generated successfully') ||
+                msg.content.startsWith('Image edited successfully') ||
+                msg.content.startsWith('Video generated successfully') ||
+                msg.content.startsWith('Intent analysis:')
+              ) {
+                return { ...msg, content: '' };
               }
             }
+            return msg;
+          });
+        }
 
-            if (
-              msg.content.startsWith('Image generated successfully') ||
-              msg.content.startsWith('Image edited successfully') ||
-              msg.content.startsWith('Video generated successfully') ||
-              msg.content.startsWith('Intent analysis:')
-            ) {
-              return { ...msg, content: '' };
-            }
-          }
-          return msg;
-        });
+        return conversation;
+      } catch (error) {
+        console.error('loadSingleSharedConversation exception:', error);
+        return { messages: [] };
       }
-
-      return conversation;
     },
     enabled: !!id,
     staleTime: 1000 * 60 * 5, // 2 min
@@ -235,15 +283,23 @@ export function useDeleteConversation() {
   return useMutation({
     mutationFn: async (conversationId: string) => {
       if (!data?.accessToken) throw new Error('No access token');
-      const response = await deleteConversation(
-        data.accessToken,
-        conversationId,
-      );
-      if (!response.success) {
-        console.error('deleteConversation failed:', response.debugMessage);
-        throw new Error(response.message);
+      try {
+        const response = await deleteConversation(
+          data.accessToken,
+          conversationId,
+        );
+        if (!response.success) {
+          console.error(
+            'deleteConversation failed:',
+            response.debugMessage || response.message,
+          );
+          throw new Error(response.message);
+        }
+        return response.data;
+      } catch (error) {
+        console.error('deleteConversation exception:', error);
+        throw error;
       }
-      return response.data;
     },
     onSuccess: (resp, deletedId) => {
       console.log('Deleted conversation: resp', resp);
@@ -273,12 +329,20 @@ export function useSearchConversations(
   return useQuery({
     queryKey: ['search-conversations', accessToken, searchTerm],
     queryFn: async () => {
-      const response = await searchConversations(accessToken!, searchTerm!);
-      if (!response.success) {
-        console.error('searchConversations failed:', response.debugMessage);
-        throw new Error(response.message);
+      try {
+        const response = await searchConversations(accessToken!, searchTerm!);
+        if (!response.success) {
+          console.error(
+            'searchConversations failed:',
+            response.debugMessage || response.message,
+          );
+          return [];
+        }
+        return response.data;
+      } catch (error) {
+        console.error('searchConversations exception:', error);
+        return [];
       }
-      return response.data;
     },
     enabled: !!accessToken && !!searchTerm, // only run when both exist
     staleTime: 0, // always fresh
