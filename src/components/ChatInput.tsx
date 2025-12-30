@@ -21,6 +21,7 @@ import {
 import { useDocument } from '@/hooks/useDocument';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { useRewrite } from '@/hooks/useRewrite';
+import { useTranslation } from '@/hooks/useTranslation';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import {
   OPTIONS,
@@ -259,6 +260,15 @@ const ChatInput = ({
     resetRewriteConfig,
   } = useRewrite();
 
+  const {
+    translationConfig,
+    translationMode,
+    setTranslationMode,
+    resetTranslationConfig,
+    handleDirectTranslate,
+    handleAssistantTranslate,
+  } = useTranslation();
+
   const isExistingConversation =
     activeConversation?.conversationId &&
     activeConversation?.conversationId !== 'new-chat' &&
@@ -324,6 +334,20 @@ const ChatInput = ({
         setRewriteMode('select_mode');
       }
 
+      // Reset translation if switching away
+      if (
+        selectedOption === OPTIONS.TRANSLATE_DOCUMENTS &&
+        nextOption !== OPTIONS.TRANSLATE_DOCUMENTS
+      ) {
+        resetTranslationConfig();
+        setSelectedFile(undefined);
+      }
+
+      // Default to 'select_mode' for Translation
+      if (nextOption === OPTIONS.TRANSLATE_DOCUMENTS) {
+        setTranslationMode('select_mode');
+      }
+
       setSelectedOption(nextOption);
     },
     [
@@ -336,6 +360,8 @@ const ChatInput = ({
       startReview,
       resetRewriteConfig,
       setRewriteMode,
+      resetTranslationConfig,
+      setTranslationMode,
       isExistingConversation,
     ],
   );
@@ -381,7 +407,7 @@ const ChatInput = ({
 
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}${getApiEndpoint()}`;
   // console.log('apiUrl', apiUrl);
-  console.log('token', data?.accessToken);
+  // console.log('token', data?.accessToken);
   // console.log('userid', data?.user);
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
@@ -592,7 +618,7 @@ const ChatInput = ({
         } else {
           // Assistant mode (default)
           const hasContent = rewriteConfig.textContent?.trim() || selectedFile;
-          console.log('hasContent', rewriteConfig.textContent);
+          // console.log('hasContent', rewriteConfig.textContent);
 
           if (!hasContent) {
             if (isExistingConversation) {
@@ -608,6 +634,32 @@ const ChatInput = ({
             rewriteConfig.textContent,
             selectedFile,
           );
+        }
+        break;
+
+      case OPTIONS.TRANSLATE_DOCUMENTS:
+        if (translationMode === 'select_mode') {
+          return;
+        }
+
+        if (translationMode === 'direct') {
+          // Check if we have message (since config text is removed)
+          if (!message?.trim()) {
+            // UI typically handles empty message button state, but good to have safety
+            return;
+          }
+          // If translating, check if target lang is set
+          if (
+            !translationConfig.isDetectMode &&
+            !translationConfig.targetLanguage
+          ) {
+            alert('Please select a target language.');
+            return;
+          }
+          await handleDirectTranslate(message);
+        } else {
+          // Assistant Mode or Chat Mode (handled same for now)
+          await handleAssistantTranslate(message, selectedFile);
         }
         break;
 
@@ -702,6 +754,7 @@ const ChatInput = ({
     const isUploadAllowed =
       selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
       selectedOption === OPTIONS.REWRITE ||
+      selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
       selectedOption === OPTIONS.IMAGE ||
       selectedOption === OPTIONS.EDIT_IMAGE;
 
@@ -726,7 +779,10 @@ const ChatInput = ({
       setSelectedFile(file);
     }
     // 2. Rewrite Flow: Also allows files
-    else if (selectedOption === OPTIONS.REWRITE) {
+    else if (
+      selectedOption === OPTIONS.REWRITE ||
+      selectedOption === OPTIONS.TRANSLATE_DOCUMENTS
+    ) {
       const extension = '.' + file.name.split('.').pop()?.toLowerCase();
       if (!ALLOWED_DOC_EXTENSIONS.includes(extension)) {
         alert(

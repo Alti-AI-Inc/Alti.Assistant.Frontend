@@ -20,6 +20,7 @@ import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDocumentStore } from '@/stores/useDocumentStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
+import { useTranslation } from '@/hooks/useTranslation';
 import { useQueryClient } from '@tanstack/react-query';
 import { EllipsisVertical, Share, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -57,6 +58,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { onOpen } = useModalStore();
 
   const { drafting, review } = useDocumentStore();
+  const { translationMode } = useTranslation();
 
   // Initialize Image Generation Hook
   const imageGenHook = useImageGeneration({ router, queryClient });
@@ -213,7 +215,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       {(!!activeConversation?.messages.length ||
         drafting.isActive ||
         (review && review.isActive) ||
-        selectedOption === OPTIONS.REWRITE) && (
+        selectedOption === OPTIONS.REWRITE ||
+        selectedOption === OPTIONS.TRANSLATE_DOCUMENTS) && (
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
           <div
             className={cn(
@@ -300,15 +303,21 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
               <ImageGenConfirmation onConfirm={handleUserConfirmation} />
             )}
             {isCollectingDetails && <ImageGenSuggestions />}
-            {/* Document Drafting/Review/Rewrite UI */}
-            {(drafting.isActive || selectedOption === OPTIONS.REWRITE) &&
+            {/* Document Drafting/Review/Rewrite/Translate UI */}
+            {(drafting.isActive ||
+              selectedOption === OPTIONS.REWRITE ||
+              selectedOption === OPTIONS.TRANSLATE_DOCUMENTS) &&
               !isLoadingResponse && (
                 <>
                   {!(
-                    selectedOption === OPTIONS.REWRITE &&
-                    activeConversation?.conversationId &&
-                    activeConversation?.conversationId !== 'new-chat' &&
-                    rewriteMode !== 'select_mode'
+                    (selectedOption === OPTIONS.REWRITE &&
+                      activeConversation?.conversationId &&
+                      activeConversation?.conversationId !== 'new-chat' &&
+                      rewriteMode !== 'select_mode') ||
+                    (selectedOption === OPTIONS.TRANSLATE_DOCUMENTS &&
+                      activeConversation?.conversationId &&
+                      activeConversation?.conversationId !== 'new-chat' &&
+                      translationMode !== 'select_mode')
                   ) && (
                     <ModeSelector
                       currentMode={
@@ -322,16 +331,24 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                               : rewriteMode === 'chat'
                                 ? null
                                 : (rewriteMode as 'assistant' | 'direct')
-                            : review.mode === 'select_mode'
-                              ? null
-                              : (review.mode as 'assistant' | 'direct')
+                            : selectedOption === OPTIONS.TRANSLATE_DOCUMENTS
+                              ? translationMode === 'select_mode'
+                                ? null
+                                : translationMode === 'chat'
+                                  ? null
+                                  : (translationMode as 'assistant' | 'direct')
+                              : review.mode === 'select_mode'
+                                ? null
+                                : (review.mode as 'assistant' | 'direct')
                       }
                       modeContext={
                         drafting.isActive
                           ? 'draft'
                           : selectedOption === OPTIONS.REWRITE
                             ? 'rewrite'
-                            : 'review'
+                            : selectedOption === OPTIONS.TRANSLATE_DOCUMENTS
+                              ? 'translate'
+                              : 'review'
                       }
                     />
                   )}
@@ -340,7 +357,10 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     (review && review.isActive && review.mode === 'direct') ||
                     (selectedOption === OPTIONS.REWRITE &&
                       (rewriteMode === 'direct' ||
-                        rewriteMode === 'assistant'))) &&
+                        rewriteMode === 'assistant')) ||
+                    (selectedOption === OPTIONS.TRANSLATE_DOCUMENTS &&
+                      (translationMode === 'direct' || // Config form for Direct/Detect
+                        translationMode === 'assistant'))) && // Wait, Assistant usually uses chat, but if we want config (like file upload hint) we might show something. But current ConfigForm returns null for assistant mode in translate context. So this is safe.
                     // HIDE CONFIG FORM IF FILE IS SELECTED IN REWRITE MODE
                     !(selectedOption === OPTIONS.REWRITE && selectedFile) && (
                       <div

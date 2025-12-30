@@ -8,22 +8,29 @@ export function ModeSelector({
   modeContext = 'draft',
 }: {
   currentMode?: 'assistant' | 'direct' | null;
-  modeContext?: 'draft' | 'review' | 'rewrite';
+  modeContext?: 'draft' | 'review' | 'rewrite' | 'translate';
 }) {
   const { setDraftingMode, setReviewMode } = useDocumentStore();
-  const { setRewriteMode } = useConversationsStore();
+  const { setRewriteMode, setTranslationMode } = useConversationsStore();
 
   const handleSetMode = (mode: 'assistant' | 'direct' | 'select_mode') => {
     if (modeContext === 'review') {
       setReviewMode(mode);
     } else if (modeContext === 'rewrite') {
       setRewriteMode(mode);
+    } else if (modeContext === 'translate') {
+      setTranslationMode(mode);
     } else {
       setDraftingMode(mode);
     }
   };
 
   const getDescriptions = (id: 'assistant' | 'direct') => {
+    if (modeContext === 'translate') {
+      return id === 'assistant'
+        ? 'Collaborate with AI to translate text or documents.'
+        : 'Instant translation or language detection.';
+    }
     if (modeContext === 'rewrite') {
       return id === 'assistant'
         ? 'Collaborate with AI to rewrite your text step-by-step.'
@@ -62,7 +69,9 @@ export function ModeSelector({
           ? 'How would you like to review your document?'
           : modeContext === 'rewrite'
             ? 'How would you like to rewrite your text?'
-            : 'How would you like to draft your document?'}
+            : modeContext === 'translate'
+              ? 'How would you like to translate your content?'
+              : 'How would you like to draft your document?'}
       </p>
       <div className="flex w-full gap-4">
         {options.map(option => (
