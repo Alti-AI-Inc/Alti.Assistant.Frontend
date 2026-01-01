@@ -91,7 +91,7 @@ export default function ConversationsList() {
 
           <DropdownMenu>
             <DropdownMenuTrigger className="focus-visible:outline-none">
-              <EllipsisVertical className="mr-2 rotate-90 opacity-0 group-hover:opacity-100" />
+              <EllipsisVertical className="mr-2 rotate-90 text-black opacity-100 md:opacity-0 md:group-hover:opacity-100" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="rounded-2xl">
               <DropdownMenuItem onSelect={e => e.preventDefault()}>
