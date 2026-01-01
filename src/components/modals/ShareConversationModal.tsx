@@ -34,9 +34,7 @@ export function ShareConversationModal() {
 
   const shareLink = isLoading
     ? ''
-    : process.env.NODE_ENV === 'production'
-      ? `https://www.chatalti.com/shared/${data?.data?.shareId}`
-      : `http://localhost:3000/shared/${data?.data?.shareId}`;
+    : `${window.location.origin}/shared/${data?.data?.shareId}`;
 
   //e26b78ad-21c7-4558-af8d-6351f8e53a7f
   return (
@@ -52,8 +50,10 @@ export function ShareConversationModal() {
           </div>
         ) : isError ? (
           <div>{error.message}</div>
-        ) : !data.success ? (
-          <div className="flex items-center justify-center">{data.message}</div>
+        ) : !data?.success ? (
+          <div className="flex items-center justify-center">
+            {data?.message}
+          </div>
         ) : (
           <>
             <DialogHeader>

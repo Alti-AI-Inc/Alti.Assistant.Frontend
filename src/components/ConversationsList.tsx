@@ -98,7 +98,14 @@ export default function ConversationsList() {
                 <SaveConversation conversationId={chat.conversationId} />
               </DropdownMenuItem>
 
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  onOpen({
+                    type: 'share-conversation',
+                    actionId: chat._id,
+                  })
+                }
+              >
                 <Share className="text-black" /> Share
               </DropdownMenuItem>
 
