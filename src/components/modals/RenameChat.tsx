@@ -26,7 +26,8 @@ const RenameChat = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: () => {
       if (!session?.accessToken || !actionId) {
-        throw new Error('Id not found');
+        console.error('Id not found');
+        return Promise.reject(new Error('Id or Token not found'));
       }
       return renameConversationAction(actionId, title, session.accessToken);
     },

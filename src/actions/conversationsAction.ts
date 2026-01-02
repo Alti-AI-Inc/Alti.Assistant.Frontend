@@ -1,38 +1,69 @@
 'use server';
 
+export interface ApiResponse<T = any> {
+  success: boolean;
+  message: string;
+  data?: T;
+  debugMessage?: string;
+  statusCode?: number;
+}
+
 export async function PostConversation(
   apiUrl: string,
   message: string,
   accessToken: string,
   conversationId?: string,
   knowledgebaseId?: string,
-) {
-  console.log({ apiUrl, knowledgebaseId });
-  const response = await fetch(apiUrl, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      message,
-      ...(conversationId && { conversationId }),
-      ...(knowledgebaseId && { knowledgebaseId }),
-    }),
-  });
-  const data = await response.json();
-  console.log('PostConversation response:', data);
-  // await new Promise((resolve) => setTimeout(resolve, 5000));
-  // const data = { data: { responseMessage: { answer: 'test' } } };
-  return data;
+): Promise<ApiResponse> {
+  try {
+    console.log({ apiUrl, knowledgebaseId });
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        message,
+        ...(conversationId && { conversationId }),
+        ...(knowledgebaseId && { knowledgebaseId }),
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to send message.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('PostConversation response:', data);
+    // Unwrap data if present to avoid nesting
+    return { success: true, message: 'Success', data: data.data || data };
+  } catch (error: any) {
+    console.error('PostConversation Error:', error);
+    return {
+      success: false,
+      message: 'An unexpected error occurred. Please try again.',
+      debugMessage: error.message || String(error),
+    };
+  }
 }
+
+import { ConversationMessage } from '@/types/conversation';
 
 export interface Conversation {
   _id: string;
   conversationId: string;
   title: string;
+  is_saved?: boolean;
   updatedAt: string;
   createdAt: string;
+  messages?: ConversationMessage[];
 }
 
 export interface Pagination {
@@ -52,94 +83,196 @@ export interface ConversationListResponse {
 export async function fetchConversationList(
   accessToken: string,
   page = 1,
-): Promise<ConversationListResponse> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/conversations?page=${page}&limit=20`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
+): Promise<ApiResponse<ConversationListResponse>> {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/conversations?page=${page}&limit=20`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
+        cache: 'no-store',
       },
-      cache: 'no-store',
-    },
-  );
+    );
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch conversations: ${res.statusText}`);
+    if (!res.ok) {
+      const errorText = await res.text();
+      return {
+        success: false,
+        message: 'Failed to fetch conversations.',
+        debugMessage: `HTTP Error ${res.status}: ${errorText}`,
+        statusCode: res.status,
+      };
+    }
+
+    const data = await res.json();
+    return { success: true, message: 'Success', data: data.data };
+  } catch (error: any) {
+    console.error('fetchConversationList Error:', error);
+    return {
+      success: false,
+      message: 'Failed to fetch conversations.',
+      debugMessage: error.message || String(error),
+    };
   }
-
-  const data = await res.json();
-  return data.data as ConversationListResponse;
 }
 
-export async function fetchSavedConversationList(accessToken: string) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/conversations/saved?limit=30&page=1`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
+export async function fetchSavedConversationList(
+  accessToken: string,
+): Promise<ApiResponse<Conversation[]>> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/conversations/saved?limit=30&page=1`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
+        cache: 'no-store',
       },
-      cache: 'no-store',
-    },
-  );
-  const data = await response.json();
-  return data.data.conversations;
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to fetch saved conversations.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data.data.conversations };
+  } catch (error: any) {
+    console.error('fetchSavedConversationList Error:', error);
+    return {
+      success: false,
+      message: 'Failed to fetch saved conversations.',
+      debugMessage: error.message || String(error),
+    };
+  }
 }
 
 export async function searchConversations(
   accessToken: string,
   searchTerm: string,
-) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/conversations/search?searchTerm=${encodeURIComponent(searchTerm)}`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
+): Promise<ApiResponse> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/conversations/search?searchTerm=${encodeURIComponent(searchTerm)}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
+        cache: 'no-store',
       },
-      cache: 'no-store',
-    },
-  );
-  const data = await response.json();
-  return data.data;
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Search failed.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data.data };
+  } catch (error: any) {
+    console.error('searchConversations Error:', error);
+    return {
+      success: false,
+      message: 'Search failed.',
+      debugMessage: error.message || String(error),
+    };
+  }
 }
 
 export async function loadSingleConversation(
   conversationId: string,
   accessToken: string,
-) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/conversations/${conversationId}`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
+): Promise<ApiResponse> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/conversations/${conversationId}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
       },
-    },
-  );
-  const data = await response.json();
+    );
 
-  return data;
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to load conversation.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    // Assuming data is already the shape we want or wrapped?
+    // The original code returned 'data'. Let's check if 'data' has 'success' field or if it is the payload.
+    // Original: const data = await response.json(); return data;
+    // Usually backend returns { success: true, data: ... } or just data.
+    // I'll wrap it in standard ApiResponse structure.
+    return { success: true, message: 'Success', data: data?.data || data };
+  } catch (error: any) {
+    console.error('loadSingleConversation Error:', error);
+    return {
+      success: false,
+      message: 'Failed to load conversation.',
+      debugMessage: error.message || String(error),
+    };
+  }
 }
-export async function loadSingleSharedConversation(id: string) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/conversations/shared/${id}`,
-  );
-  const data = await response.json();
 
-  return data;
+export async function loadSingleSharedConversation(
+  id: string,
+): Promise<ApiResponse> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/conversations/shared/${id}`,
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to load shared conversation.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data?.data || data };
+  } catch (error: any) {
+    console.error('loadSingleSharedConversation Error:', error);
+    return {
+      success: false,
+      message: 'Failed to load shared conversation.',
+      debugMessage: error.message || String(error),
+    };
+  }
 }
 
 export const deleteConversation = async (
   token: string | null | undefined,
   conversationId: string,
-) => {
-  // const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/${model}/delete-single-response/${objectId}`;
+): Promise<ApiResponse> => {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/conversations/${conversationId}`;
   try {
     const response = await fetch(apiUrl, {
@@ -149,73 +282,147 @@ export const deleteConversation = async (
         'Content-Type': 'application/json',
       },
     });
-    return response.json();
-  } catch (error) {
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to delete conversation.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data.data || data };
+  } catch (error: any) {
     console.error('Error deleting session:', error);
-    throw error;
+    return {
+      success: false,
+      message: 'Failed to delete conversation.',
+      debugMessage: error.message || String(error),
+    };
   }
 };
 
 export const shareConversation = async (
   conversationId: string,
   accessToken: string,
-) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/conversations/${conversationId}/share`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
+): Promise<ApiResponse> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/conversations/${conversationId}/share`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
       },
-    },
-  );
-  const data = await response.json();
-  return data;
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to share conversation.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data.data || data };
+  } catch (error: any) {
+    console.error('shareConversation Error:', error);
+    return {
+      success: false,
+      message: 'Failed to share conversation.',
+      debugMessage: error.message || String(error),
+    };
+  }
 };
 
 export async function renameConversationAction(
   conversationId: string,
   newTitle: string,
   accessToken: string,
-) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/conversations/rename/${conversationId}`,
-    {
-      method: 'PATCH',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
+): Promise<ApiResponse> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/conversations/rename/${conversationId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          newTitle,
+        }),
       },
-      body: JSON.stringify({
-        newTitle,
-      }),
-    },
-  );
-  const data = await response.json();
+    );
 
-  return data;
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to rename conversation.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data.data || data };
+  } catch (error: any) {
+    console.error('renameConversationAction Error:', error);
+    return {
+      success: false,
+      message: 'Failed to rename conversation.',
+      debugMessage: error.message || String(error),
+    };
+  }
 }
 
 export async function saveConversationAction(
   conversationId: string,
   is_saved = true,
   accessToken: string,
-) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/conversations/save/${conversationId}`,
-    {
-      method: 'PATCH',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
+): Promise<ApiResponse> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/conversations/save/${conversationId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          is_saved,
+        }),
       },
-      body: JSON.stringify({
-        is_saved,
-      }),
-    },
-  );
-  const data = await response.json();
+    );
 
-  return data;
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to save conversation.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data.data || data };
+  } catch (error: any) {
+    console.error('saveConversationAction Error:', error);
+    return {
+      success: false,
+      message: 'Failed to save conversation.',
+      debugMessage: error.message || String(error),
+    };
+  }
 }

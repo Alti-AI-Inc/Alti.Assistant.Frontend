@@ -75,8 +75,7 @@ export default function Component() {
       console.log({ response });
       if (response.success) {
         setShowSuccessMessage(true);
-      }
-      if (!response.status) {
+      } else {
         setErrorMessage(response.message);
       }
     } catch (error) {
@@ -98,7 +97,7 @@ export default function Component() {
         </Link>
       </div>
       {showSuccessMessage ? (
-        <div className="flex h-[calc(100vh_-_80px)] items-center justify-center">
+        <div className="flex h-[calc(100vh-80px)] items-center justify-center">
           <div className="pb-6 text-center">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
               <Mail className="h-8 w-8 text-blue-600" />
@@ -112,7 +111,7 @@ export default function Component() {
           </div>
         </div>
       ) : (
-        <div className="flex h-[calc(100vh_-_80px)] w-full items-center justify-center bg-white">
+        <div className="flex h-[calc(100vh-80px)] w-full items-center justify-center bg-white">
           <div className="flex w-full max-w-md items-center justify-center md:translate-x-[10%]">
             <div className="rounded-large flex w-full max-w-lg flex-col gap-4 px-8 pt-6 pb-10">
               <p className="pb-4 text-center text-3xl font-semibold">

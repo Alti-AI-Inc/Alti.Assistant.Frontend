@@ -37,8 +37,8 @@ const AppCard = ({
       },
       {
         onSuccess: response => {
-          if (response.error) {
-            setErrorMessage(response.error);
+          if (!response || response.error) {
+            setErrorMessage(response?.error || 'An unexpected error occurred');
             return;
           }
           const redirectUrl = response.authConfig.authConfig.redirectUrl;

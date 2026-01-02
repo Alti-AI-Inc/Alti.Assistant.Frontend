@@ -51,7 +51,10 @@ export function useDocument() {
 
   const directDraftingMutation = useMutation({
     mutationFn: async ({ content }: { content: string }) => {
-      if (!accessToken) throw new Error('No access token');
+      if (!accessToken) {
+        console.error('No access token');
+        return null;
+      }
 
       const { config } = drafting;
 
@@ -74,11 +77,14 @@ export function useDocument() {
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (!response.success || !response.data) {
-        console.error('Failed to generate document', response);
-        const errorMessage = response.message || 'Failed to generate document';
+      if (!response || !response.success) {
+        console.error(
+          'Failed to generate document:',
+          response?.debugMessage || 'Unknown error',
+        );
+        const errorMessage = response?.message || 'Failed to generate document';
         updateActiveConversation(errorMessage, ROLES.ASSISTANT);
-      } else {
+      } else if (response.data) {
         const { document } = response.data;
         if (document && document.url) {
           const messageContent = response.message;
@@ -106,7 +112,10 @@ export function useDocument() {
 
   const assistantDraftingMutation = useMutation({
     mutationFn: async ({ message }: { message: string }) => {
-      if (!accessToken) throw new Error('No access token');
+      if (!accessToken) {
+        console.error('No access token');
+        return null;
+      }
       return await startDocumentConversation({ message }, accessToken);
     },
     onMutate: () => {
@@ -114,7 +123,16 @@ export function useDocument() {
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (response.success && response.data) {
+      if (!response || !response.success) {
+        console.error(
+          'Assistant drafting failed:',
+          response?.debugMessage || 'Unknown error',
+        );
+        updateActiveConversation(
+          response?.message || 'An error occurred.',
+          ROLES.ASSISTANT,
+        );
+      } else if (response.data) {
         const { conversationId, message, document } = response.data;
 
         if (conversationId) {
@@ -148,7 +166,10 @@ export function useDocument() {
       conversationId: string;
       message: string;
     }) => {
-      if (!accessToken) throw new Error('No access token');
+      if (!accessToken) {
+        console.error('No access token');
+        return null;
+      }
       return await continueDocumentConversation(
         { conversationId, message },
         accessToken,
@@ -159,7 +180,16 @@ export function useDocument() {
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (response.success && response.data) {
+      if (!response || !response.success) {
+        console.error(
+          'Assistant continue drafting failed:',
+          response?.debugMessage || 'Unknown error',
+        );
+        updateActiveConversation(
+          response?.message || 'An error occurred.',
+          ROLES.ASSISTANT,
+        );
+      } else if (response.data) {
         const { message, document } = response.data;
         updateActiveConversation(message, ROLES.ASSISTANT, undefined, {
           ...(document && { document: document }),
@@ -191,7 +221,10 @@ export function useDocument() {
       file?: File;
       additionalInstructions?: string;
     }) => {
-      if (!accessToken) throw new Error('No access token');
+      if (!accessToken) {
+        console.error('No access token');
+        return null;
+      }
       const { config } = review;
 
       const formData = new FormData();
@@ -214,7 +247,14 @@ export function useDocument() {
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (response.success && response.data) {
+      if (!response || !response.success) {
+        console.error(
+          'Direct review failed:',
+          response?.debugMessage || 'Unknown error',
+        );
+        const errorMessage = response?.message || 'Failed to review document';
+        updateActiveConversation(errorMessage, ROLES.ASSISTANT);
+      } else if (response.data) {
         const { review: reviewContent, documentInfo } = response.data;
         // Display review content
         // Assuming we want to show it as an assistant message
@@ -222,9 +262,6 @@ export function useDocument() {
           reviewContent || 'Review complete.',
           ROLES.ASSISTANT,
         );
-      } else {
-        const errorMessage = response.message || 'Failed to review document';
-        updateActiveConversation(errorMessage, ROLES.ASSISTANT);
       }
       resetAll();
       setIsLoading(false);
@@ -252,7 +289,10 @@ export function useDocument() {
       message: string;
       conversationId?: string;
     }) => {
-      if (!accessToken) throw new Error('No access token');
+      if (!accessToken) {
+        console.error('No access token');
+        return null;
+      }
       const formData = new FormData();
       formData.append('message', message);
       file && formData.append('file', file);
@@ -265,7 +305,16 @@ export function useDocument() {
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (response.success && response.data) {
+      if (!response || !response.success) {
+        console.error(
+          'Assistant review failed:',
+          response?.debugMessage || 'Unknown error',
+        );
+        updateActiveConversation(
+          response?.message || 'Failed to upload document.',
+          ROLES.ASSISTANT,
+        );
+      } else if (response.data) {
         const { conversationId, response: assistantResponse } = response.data;
         if (conversationId) {
           router.replace(`/c/${conversationId}`);

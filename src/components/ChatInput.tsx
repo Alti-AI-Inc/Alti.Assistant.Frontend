@@ -21,6 +21,7 @@ import {
 import { useDocument } from '@/hooks/useDocument';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { useRewrite } from '@/hooks/useRewrite';
+import { useTranslation } from '@/hooks/useTranslation';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import {
   OPTIONS,
@@ -53,7 +54,7 @@ import {
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { Textarea } from './ui/textarea';
 import { WarningMessageModal } from './WarningMessageModal';
 
@@ -259,6 +260,15 @@ const ChatInput = ({
     resetRewriteConfig,
   } = useRewrite();
 
+  const {
+    translationConfig,
+    translationMode,
+    setTranslationMode,
+    resetTranslationConfig,
+    handleDirectTranslate,
+    handleAssistantTranslate,
+  } = useTranslation();
+
   const isExistingConversation =
     activeConversation?.conversationId &&
     activeConversation?.conversationId !== 'new-chat' &&
@@ -319,9 +329,23 @@ const ChatInput = ({
         setSelectedFile(undefined);
       }
 
-      // 4. Default to 'select_mode' for Rewrite always (as per user request to show selector first)
+      // 4. Default to 'select_mode' for Rewrite always
       if (nextOption === OPTIONS.REWRITE) {
         setRewriteMode('select_mode');
+      }
+
+      // Reset translation if switching away
+      if (
+        selectedOption === OPTIONS.TRANSLATE_DOCUMENTS &&
+        nextOption !== OPTIONS.TRANSLATE_DOCUMENTS
+      ) {
+        resetTranslationConfig();
+        setSelectedFile(undefined);
+      }
+
+      // Default to 'select_mode' for Translation
+      if (nextOption === OPTIONS.TRANSLATE_DOCUMENTS) {
+        setTranslationMode('select_mode');
       }
 
       setSelectedOption(nextOption);
@@ -336,6 +360,9 @@ const ChatInput = ({
       startReview,
       resetRewriteConfig,
       setRewriteMode,
+      resetTranslationConfig,
+      setTranslationMode,
+      isExistingConversation,
     ],
   );
 
@@ -384,7 +411,10 @@ const ChatInput = ({
   // console.log('userid', data?.user);
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
-      if (!data?.accessToken) throw new Error('No access token1');
+      if (!data?.accessToken) {
+        console.error('No access token1');
+        return null; // throw new Error(...)
+      }
       return await PostConversation(
         apiUrl,
         userMessage,
@@ -400,6 +430,18 @@ const ChatInput = ({
       setLoadingResponse(true);
     },
     onSuccess: (response, userMessage) => {
+      if (!response || !response.success) {
+        console.error(
+          'PostConversation failed:',
+          response?.debugMessage || 'Unknown error',
+        );
+        updateActiveConversation(
+          response?.message || 'An unexpected error occurred.',
+          ROLES.ASSISTANT,
+        );
+        setLoadingResponse(false);
+        return;
+      }
       if (!response?.data) return;
       // setShowStartLastMessage(false);
       const newId =
@@ -560,25 +602,64 @@ const ChatInput = ({
         break;
 
       case OPTIONS.REWRITE:
+        if (rewriteMode === 'select_mode') {
+          return;
+        }
+
         if (rewriteMode === 'direct') {
           await handleDirectRewrite(message);
+        } else if (rewriteMode === 'chat') {
+          // Chat mode (continued conversation)
+          await handleAssistantRewrite(
+            message,
+            undefined, // No text content needed for continue
+            selectedFile,
+          );
         } else {
           // Assistant mode (default)
-          // if (selectedFile) {
+          const hasContent = rewriteConfig.textContent?.trim() || selectedFile;
+          // console.log('hasContent', rewriteConfig.textContent);
+
+          if (!hasContent) {
+            if (isExistingConversation) {
+              // Allow continue without specific rewrite content
+              await handleAssistantRewrite(message);
+              return;
+            }
+            return;
+          }
+
           await handleAssistantRewrite(
             message,
             rewriteConfig.textContent,
             selectedFile,
           );
-          //   await handleAssistantRewrite(
-          //     message,
-          //     rewriteConfig.textContent,
-          //     selectedFile,
-          //   );
-          //   // setSelectedFile(null);
-          // } else {
-          //   await handleAssistantRewrite(message, rewriteConfig.textContent);
-          // }
+        }
+        break;
+
+      case OPTIONS.TRANSLATE_DOCUMENTS:
+        if (translationMode === 'select_mode') {
+          return;
+        }
+
+        if (translationMode === 'direct') {
+          // Check if we have message (since config text is removed)
+          if (!message?.trim()) {
+            // UI typically handles empty message button state, but good to have safety
+            return;
+          }
+          // If translating, check if target lang is set
+          if (
+            !translationConfig.isDetectMode &&
+            !translationConfig.targetLanguage
+          ) {
+            alert('Please select a target language.');
+            return;
+          }
+          await handleDirectTranslate(message);
+        } else {
+          // Assistant Mode or Chat Mode (handled same for now)
+          await handleAssistantTranslate(message, selectedFile);
         }
         break;
 
@@ -673,6 +754,7 @@ const ChatInput = ({
     const isUploadAllowed =
       selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
       selectedOption === OPTIONS.REWRITE ||
+      selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
       selectedOption === OPTIONS.IMAGE ||
       selectedOption === OPTIONS.EDIT_IMAGE;
 
@@ -697,7 +779,10 @@ const ChatInput = ({
       setSelectedFile(file);
     }
     // 2. Rewrite Flow: Also allows files
-    else if (selectedOption === OPTIONS.REWRITE) {
+    else if (
+      selectedOption === OPTIONS.REWRITE ||
+      selectedOption === OPTIONS.TRANSLATE_DOCUMENTS
+    ) {
       const extension = '.' + file.name.split('.').pop()?.toLowerCase();
       if (!ALLOWED_DOC_EXTENSIONS.includes(extension)) {
         alert(
@@ -737,6 +822,54 @@ const ChatInput = ({
     }
   };
 
+  const warningConfig = useMemo(
+    () => [
+      {
+        condition:
+          selectedOption === OPTIONS.REVIEW_DOCUMENTS &&
+          !selectedFile &&
+          !isExistingConversation,
+        title: 'Upload File',
+        description: 'Please upload a file to continue with document review.',
+      },
+      {
+        condition: selectedOption === OPTIONS.EDIT_IMAGE && !imageBase64,
+        title: 'Upload Image',
+        description: 'Please upload an image to continue with editing.',
+      },
+      {
+        condition:
+          selectedOption === OPTIONS.REWRITE &&
+          rewriteMode === 'select_mode' &&
+          (activeConversation?.conversationId === 'new-chat' ||
+            activeConversation?.conversationId === undefined),
+        title: 'Select Rewrite Mode',
+        description: 'Please select a rewrite mode to continue.',
+      },
+      {
+        condition:
+          selectedOption === OPTIONS.REWRITE &&
+          rewriteMode === 'assistant' &&
+          !rewriteConfig.textContent &&
+          !selectedFile &&
+          !isExistingConversation,
+        title: 'Add Content',
+        description: 'Please enter text or upload a file to rewrite.',
+      },
+    ],
+    [
+      selectedOption,
+      selectedFile,
+      isExistingConversation,
+      imageBase64,
+      rewriteMode,
+      activeConversation?.conversationId,
+      rewriteConfig.textContent,
+    ],
+  );
+
+  const activeWarning = warningConfig.find(w => w.condition);
+
   return (
     <>
       {/* Image Gen UI is now handled by parent in FullConversation, but kept here for fallback/other pages */}
@@ -746,19 +879,10 @@ const ChatInput = ({
 
       {!externalImageGenHook && isCollectingDetails && <ImageGenSuggestions />}
 
-      {selectedOption === OPTIONS.REVIEW_DOCUMENTS &&
-        !selectedFile &&
-        !isExistingConversation && (
-          <WarningMessageModal
-            title="Upload File"
-            description="Please upload a file to continue with document review."
-          />
-        )}
-
-      {selectedOption === OPTIONS.EDIT_IMAGE && !imageBase64 && (
+      {activeWarning && (
         <WarningMessageModal
-          title="Upload Image"
-          description="Please upload an image to continue with editing."
+          title={activeWarning.title}
+          description={activeWarning.description}
         />
       )}
 

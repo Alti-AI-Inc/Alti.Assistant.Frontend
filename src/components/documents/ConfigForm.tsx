@@ -10,8 +10,49 @@ export function ConfigForm() {
     useConversationsStore();
 
   const isReviewMode = review.isActive;
+  const isTranslateMode = selectedOption === OPTIONS.TRANSLATE_DOCUMENTS;
   const isRewriteMode = selectedOption === OPTIONS.REWRITE;
   const config = isReviewMode ? review.config : drafting.config;
+  const { translationConfig, updateTranslationConfig, translationMode } =
+    useConversationsStore();
+
+  const SUPPORTED_LANGUAGES = [
+    { code: 'en', name: 'English' },
+    { code: 'es', name: 'Spanish' },
+    { code: 'fr', name: 'French' },
+    { code: 'de', name: 'German' },
+    { code: 'it', name: 'Italian' },
+    { code: 'pt', name: 'Portuguese' },
+    { code: 'ru', name: 'Russian' },
+    { code: 'ja', name: 'Japanese' },
+    { code: 'ko', name: 'Korean' },
+    { code: 'zh-CN', name: 'Chinese (Simplified)' },
+    { code: 'zh-TW', name: 'Chinese (Traditional)' },
+    { code: 'ar', name: 'Arabic' },
+    { code: 'hi', name: 'Hindi' },
+    { code: 'bn', name: 'Bengali' },
+    { code: 'tr', name: 'Turkish' },
+    { code: 'vi', name: 'Vietnamese' },
+    { code: 'th', name: 'Thai' },
+    { code: 'nl', name: 'Dutch' },
+    { code: 'pl', name: 'Polish' },
+    { code: 'sv', name: 'Swedish' },
+    { code: 'no', name: 'Norwegian' },
+    { code: 'da', name: 'Danish' },
+    { code: 'fi', name: 'Finnish' },
+    { code: 'el', name: 'Greek' },
+    { code: 'cs', name: 'Czech' },
+    { code: 'hu', name: 'Hungarian' },
+    { code: 'ro', name: 'Romanian' },
+    { code: 'uk', name: 'Ukrainian' },
+    { code: 'id', name: 'Indonesian' },
+    { code: 'ms', name: 'Malay' },
+    { code: 'fil', name: 'Filipino' },
+    { code: 'he', name: 'Hebrew' },
+    { code: 'fa', name: 'Persian' },
+    { code: 'ur', name: 'Urdu' },
+    { code: 'sw', name: 'Swahili' },
+  ];
 
   // Configuration Definitions
   const REWRITE_CONFIGS = [
@@ -65,6 +106,11 @@ export function ConfigForm() {
       label: 'Depth',
       key: 'reviewDepth',
       options: ['standard', 'comprehensive', 'detailed'],
+    },
+    {
+      label: 'Document Type',
+      key: 'documentType',
+      options: [...Object.values(DocumentType), 'general'],
     },
     {
       label: 'Document Type',
@@ -154,6 +200,104 @@ export function ConfigForm() {
       )}
     </div>
   );
+
+  const renderSelect = (
+    label: string,
+    value: string,
+    onChange: (val: string) => void,
+    options: { code: string; name: string }[],
+  ) => (
+    <div className="flex flex-col gap-2" key={label}>
+      <span className="text-xs font-medium tracking-wider text-gray-500 uppercase">
+        {label}
+      </span>
+      <select
+        value={value || ''}
+        onChange={e => onChange(e.target.value)}
+        className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
+      >
+        <option value="" disabled>
+          Select {label}
+        </option>
+        {options.map(opt => (
+          <option key={opt.code} value={opt.code}>
+            {opt.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+
+  if (isTranslateMode) {
+    if (translationMode === 'assistant') {
+      return null;
+    }
+
+    // Direct Mode Configuration
+    const isDetectMode = translationConfig.isDetectMode;
+
+    return (
+      <div className="flex w-full flex-col gap-6 rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
+        <div className="flex flex-col gap-5">
+          {/* Action Type Toggle */}
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-medium tracking-wider text-gray-500 uppercase">
+              Action
+            </span>
+            <div className="flex gap-2 rounded-lg border border-gray-200 bg-gray-50 p-1">
+              <button
+                onClick={() => updateTranslationConfig({ isDetectMode: false })}
+                className={cn(
+                  'flex-1 rounded-md py-1.5 text-sm font-medium transition-all',
+                  !isDetectMode
+                    ? 'border-b-2 border-gray-300 bg-white text-black shadow-sm'
+                    : 'text-gray-500 hover:text-gray-900',
+                )}
+              >
+                Translate
+              </button>
+              <button
+                onClick={() => updateTranslationConfig({ isDetectMode: true })}
+                className={cn(
+                  'flex-1 rounded-md py-1.5 text-sm font-medium transition-all',
+                  isDetectMode
+                    ? 'border-b-2 border-gray-300 bg-white text-black shadow-sm'
+                    : 'text-gray-500 hover:text-gray-900',
+                )}
+              >
+                Detect Language
+              </button>
+            </div>
+          </div>
+
+          {!isDetectMode && (
+            <div className="grid grid-cols-2 gap-4">
+              {renderSelect(
+                'Source Language',
+                translationConfig.sourceLanguage,
+                val => updateTranslationConfig({ sourceLanguage: val }),
+                [{ code: 'auto', name: 'Auto Detect' }, ...SUPPORTED_LANGUAGES],
+              )}
+              {renderSelect(
+                'Target Language',
+                translationConfig.targetLanguage,
+                val => updateTranslationConfig({ targetLanguage: val }),
+                SUPPORTED_LANGUAGES,
+              )}
+            </div>
+          )}
+
+          <div className="relative flex items-center py-2">
+            <div className="grow border-t border-gray-200"></div>
+            <span className="mx-2 flex items-center gap-1 text-xs font-medium tracking-wider text-gray-500 uppercase">
+              Type text in the field below.
+            </span>
+            <div className="grow border-t border-gray-200"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isRewriteMode) {
     return (

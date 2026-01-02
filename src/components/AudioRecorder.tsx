@@ -54,11 +54,13 @@ export default function AudioRecorder({
       try {
         const res = await getTranscription(formData);
         console.log({ res });
-        // if (!res.text) throw new Error('Upload failed');
-        if (res.transcription) {
-          setMessage(res?.transcription);
+
+        if (!res.success) {
+          console.error('Transcription failed:', res.debugMessage);
+          // throw new Error(res.message);
+        } else if (res.data && res.data.transcription) {
+          setMessage(res.data.transcription);
         }
-        // setMessage('lorem')
       } catch (err) {
         setLoadingText(false);
         console.error('❌ Error uploading:', err);
