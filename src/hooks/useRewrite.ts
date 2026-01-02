@@ -37,7 +37,10 @@ export function useRewrite() {
   // --- Direct Rewrite Mutation ---
   const directRewriteMutation = useMutation({
     mutationFn: async ({ content }: { content: string }) => {
-      if (!accessToken) throw new Error('No access token');
+      if (!accessToken) {
+        console.error('No access token');
+        return null;
+      }
       const {
         intent,
         style,
@@ -65,15 +68,16 @@ export function useRewrite() {
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (response.success && response.data) {
+      if (!response || !response.success) {
+        console.error('Direct rewrite failed:', response?.debugMessage);
+        const errorMessage = response?.message || 'Failed to rewrite text';
+        updateActiveConversation(errorMessage, ROLES.ASSISTANT);
+      } else if (response.data) {
         const { rewrittenContent, message } = response.data;
         const result = rewrittenContent || message || 'Rewrite complete.';
         // For direct rewrite, we verify if there's a file?
         // API example 1 has "file": null.
         updateActiveConversation(result, ROLES.ASSISTANT);
-      } else {
-        const errorMessage = response.message || 'Failed to rewrite text';
-        updateActiveConversation(errorMessage, ROLES.ASSISTANT);
       }
       // Do NOT reset config for assistant rewrite to keep UI visible for follow-up
       setRewriteMode('direct');
@@ -100,7 +104,10 @@ export function useRewrite() {
       file?: File;
       conversationId?: string;
     }) => {
-      if (!accessToken) throw new Error('No access token');
+      if (!accessToken) {
+        console.error('No access token');
+        return null;
+      }
 
       if (file) {
         const formData = new FormData();
@@ -121,14 +128,19 @@ export function useRewrite() {
           accessToken,
         );
       }
-      throw new Error('Invalid parameters for assistant rewrite');
+      console.error('Invalid parameters for assistant rewrite');
+      return null;
     },
     onMutate: () => {
       setIsLoading(true);
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (response.success && response.data) {
+      if (!response.success) {
+        console.error('Assistant rewrite failed:', response.debugMessage);
+        const errorMessage = response.message || 'Failed to process rewrite';
+        updateActiveConversation(errorMessage, ROLES.ASSISTANT);
+      } else if (response.data) {
         const { conversationId, message, rewrittenContent, file } =
           response.data;
 
@@ -144,8 +156,12 @@ export function useRewrite() {
           );
         }
       }
-      // Do NOT reset config for assistant rewrite to keep UI visible for follow-up
-      setRewriteMode('assistant');
+
+      // Transition to 'chat' mode to hide config form but keep rewrite active
+      setRewriteMode('chat');
+      // Reset text content so it's not re-sent automatically
+      updateRewriteConfig({ textContent: '' });
+
       setIsLoading(false);
       setLoadingResponse(false);
     },

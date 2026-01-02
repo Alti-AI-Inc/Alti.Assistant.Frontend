@@ -7,6 +7,14 @@ enum FileStatus {
   FAILED = 'failed',
 }
 
+export interface ApiResponse<T = any> {
+  success: boolean;
+  message: string;
+  data?: T;
+  debugMessage?: string;
+  statusCode?: number;
+}
+
 export type KnowledgeBankFile = {
   id: string;
   fileName: string;
@@ -70,146 +78,218 @@ export type KnowledgeBankFolderContentResponse = {
 export const fileUploadAction = async (
   formData: FormData,
   accessToken: string,
-) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/upload`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+): Promise<ApiResponse<any>> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/upload`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: formData,
       },
-      body: formData,
-    },
-  );
-  const data = await response.json();
-  return data;
+    );
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data.data || data };
+  } catch (error: any) {
+    console.error('fileUploadAction Error:', error);
+    return {
+      success: false,
+      message: 'Failed to upload file.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
+  }
 };
 
 export async function fetchKnowledgeBankFolders(
   accessToken: string,
-): Promise<KnowledgeBankFolder[]> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/folders`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
+): Promise<ApiResponse<KnowledgeBankFolder[]>> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/folders`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
+        cache: 'no-store',
       },
-      cache: 'no-store',
-    },
-  );
-  const data = await response.json();
-  // console.log(data?.data);
-  return data?.data?.folders;
+    );
+    const data = await response.json();
+    return {
+      success: true,
+      message: 'Success',
+      data: data?.data?.folders ?? [],
+    };
+  } catch (error: any) {
+    console.error('fetchKnowledgeBankFolders Error:', error);
+    return {
+      success: false,
+      message: 'Failed to fetch folders.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
+  }
 }
+
 export async function fetchKnowledgeBankFolderContent(
   folderId: string,
   accessToken: string,
-): Promise<KnowledgeBankFolderContentResponse> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/folders/${folderId}/contents`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
+): Promise<ApiResponse<KnowledgeBankFolderContentResponse>> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/folders/${folderId}/contents`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
+        cache: 'no-store',
       },
-      cache: 'no-store',
-    },
-  );
-  const data = await response.json();
-  // console.log('folder content', data);
-  return data?.data;
+    );
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data?.data };
+  } catch (error: any) {
+    console.error('fetchKnowledgeBankFolderContent Error:', error);
+    return {
+      success: false,
+      message: 'Failed to fetch folder content.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
+  }
 }
 
 export async function createKnowledgeBankFolderAction(
   name: string,
   description: string,
   accessToken: string,
-) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/folders`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
+): Promise<ApiResponse<any>> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/folders`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          description,
+        }),
       },
-      body: JSON.stringify({
-        name,
-        description,
-      }),
-    },
-  );
-  const data = await response.json();
-  return data;
+    );
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data.data || data };
+  } catch (error: any) {
+    console.error('createKnowledgeBankFolderAction Error:', error);
+    return {
+      success: false,
+      message: 'Failed to create folder.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
+  }
 }
+
 export async function updateKnowledgeBankFolderAction(
   name: string,
   description: string,
   folderId: string,
   accessToken: string,
-) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/folders/${folderId}`,
-    {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
+): Promise<ApiResponse<any>> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/folders/${folderId}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          description,
+        }),
       },
-      body: JSON.stringify({
-        name,
-        description,
-      }),
-    },
-  );
-  const data = await response.json();
-  return data;
+    );
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data.data || data };
+  } catch (error: any) {
+    console.error('updateKnowledgeBankFolderAction Error:', error);
+    return {
+      success: false,
+      message: 'Failed to update folder.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
+  }
 }
 
 export const uploadfileToKnowledgeBankAction = async (
   formData: FormData,
   accessToken: string,
-) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/upload`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+): Promise<ApiResponse<any>> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/upload`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: formData,
       },
-      body: formData,
-    },
-  );
-  const data = await response.json();
-  // console.log('upload file to knowledge bank response', data);
-  return data;
+    );
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data.data || data };
+  } catch (error: any) {
+    console.error('uploadfileToKnowledgeBankAction Error:', error);
+    return {
+      success: false,
+      message: 'Failed to upload file to knowledge bank.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
+  }
 };
+
 export const processKnowledgeBankFile = async (
   fileId: string,
   accessToken: string,
-) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/files/${fileId}/process`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+): Promise<ApiResponse<any>> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/files/${fileId}/process`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       },
-    },
-  );
-  const data = await response.json();
-  // console.log('process file response', data);
-  return data;
+    );
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data.data || data };
+  } catch (error: any) {
+    console.error('processKnowledgeBankFile Error:', error);
+    return {
+      success: false,
+      message: 'Failed to process file.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
+  }
 };
 
 export const deleteKnowledgeBankFolderAction = async (
   folderId: string,
   token: string | null | undefined,
-) => {
-  // const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/${model}/delete-single-response/${objectId}`;
+): Promise<ApiResponse<any>> => {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/folders/${folderId}`;
   try {
     const response = await fetch(apiUrl, {
@@ -219,18 +299,23 @@ export const deleteKnowledgeBankFolderAction = async (
         'Content-Type': 'application/json',
       },
     });
-    return response.json();
-  } catch (error) {
-    console.error('Error deleting session:', error);
-    throw error;
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data.data || data };
+  } catch (error: any) {
+    console.error('deleteKnowledgeBankFolderAction Error:', error);
+    return {
+      success: false,
+      message: 'Failed to delete folder.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
   }
 };
 
 export const deleteKnowledgeBankFile = async (
   fileId: string,
   token: string | null | undefined,
-) => {
-  // const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/${model}/delete-single-response/${objectId}`;
+): Promise<ApiResponse<any>> => {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/files/${fileId}`;
   try {
     const response = await fetch(apiUrl, {
@@ -240,12 +325,15 @@ export const deleteKnowledgeBankFile = async (
         'Content-Type': 'application/json',
       },
     });
-    const result = await response.json(); // ✅ Read once
-    console.log('file deleted', result);
-
-    return result;
-  } catch (error) {
-    console.error('Error deleting session:', error);
-    throw error;
+    const data = await response.json();
+    return { success: true, message: 'Success', data: data.data || data };
+  } catch (error: any) {
+    console.error('deleteKnowledgeBankFile Error:', error);
+    return {
+      success: false,
+      message: 'Failed to delete file.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
   }
 };

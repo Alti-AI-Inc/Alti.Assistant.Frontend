@@ -2,9 +2,7 @@
 
 import { KnowledgeBankFile } from '@/actions/knowledgeBankAction';
 import { getFileBlob } from '@/actions/knowledgeBaseAction';
-import {
-  useKnowledgeBankFolderContent
-} from '@/hooks/useKnowledgeBank';
+import { useKnowledgeBankFolderContent } from '@/hooks/useKnowledgeBank';
 import { useModalStore } from '@/stores/useModalStore';
 import { Download, File, LoaderCircle, Trash } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -43,7 +41,11 @@ export function KnowledgeBankFolderContent({ folderId }: { folderId: string }) {
     e.stopPropagation();
     try {
       const blob = await getFileBlob(file);
-      if (!blob) throw new Error('Failed to get file blob');
+      if (!blob) {
+        console.error('Failed to get file blob');
+        alert('Failed to download file.');
+        return;
+      }
       const url = window.URL.createObjectURL(blob);
 
       const a = document.createElement('a');

@@ -119,7 +119,10 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       prompt: string;
       convId: string;
     }) => {
-      if (!accessToken) throw new Error('Missing access token');
+      if (!accessToken) {
+        console.error('Missing access token');
+        return null;
+      }
 
       // Get conversation history from store
       const { activeConversation } = useConversationsStore.getState();
@@ -139,8 +142,11 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setWorkflow('evaluating');
     },
     onSuccess: response => {
-      if (!response.success || !response.data) {
-        setError(response.message || 'Failed to evaluate prompt');
+      if (!response?.success && response?.debugMessage) {
+        console.error('Action failed:', response.debugMessage);
+      }
+      if (!response || !response.success || !response.data) {
+        setError(response?.message || 'Failed to evaluate prompt');
         setLoadingResponse(false);
         return;
       }
@@ -183,7 +189,10 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       hasImage: boolean;
       existingConversationId?: string;
     }) => {
-      if (!accessToken) throw new Error('No access token');
+      if (!accessToken) {
+        console.error('No access token');
+        return null;
+      }
 
       console.log('[useImageGeneration] analyzeIntent - calling API:', {
         request,
@@ -206,8 +215,11 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setUserMessage('');
     },
     onSuccess: async (response, variables) => {
-      if (!response.success || !response.data) {
-        setError(response.message || 'Failed to analyze intent');
+      if (!response?.success && response?.debugMessage) {
+        console.error('Action failed:', response.debugMessage);
+      }
+      if (!response || !response.success || !response.data) {
+        setError(response?.message || 'Failed to analyze intent');
         setLoadingResponse(false);
         return;
       }
@@ -347,9 +359,10 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       const currentUserId = store.userId || userId;
 
       if (!accessToken || !currentConvId || !currentUserId) {
-        throw new Error(
+        console.error(
           `Missing required data: accessToken=${!!accessToken}, convId=${currentConvId}, userId=${currentUserId}`,
         );
+        return null; // throw new Error(...)
       }
 
       console.log('[useImageGeneration] addDetail - sending:', {
@@ -374,8 +387,11 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setUserMessage('');
     },
     onSuccess: response => {
-      if (!response.success || !response.data) {
-        setError(response.message || 'Failed to add detail');
+      if (!response?.success && response?.debugMessage) {
+        console.error('Action failed:', response.debugMessage);
+      }
+      if (!response || !response.success || !response.data) {
+        setError(response?.message || 'Failed to add detail');
         setLoadingResponse(false);
         return;
       }
@@ -429,7 +445,8 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       const currentUserId = store.userId || userId;
 
       if (!accessToken || !currentConvId || !currentUserId) {
-        throw new Error('Missing required data');
+        console.error('Missing required data');
+        return null;
       }
 
       // TODO: Add backend sync API here to push conversation to backend
@@ -451,8 +468,11 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (!response.success || !response.data) {
-        setError(response.message || 'Failed to finalize prompt');
+      if (!response?.success && response?.debugMessage) {
+        console.error('Action failed:', response.debugMessage);
+      }
+      if (!response || !response.success || !response.data) {
+        setError(response?.message || 'Failed to finalize prompt');
         setLoadingResponse(false);
         return;
       }
@@ -489,7 +509,10 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       const currentAspectRatio = store.aspectRatio;
       const currentNegativePrompt = store.negativePrompt;
 
-      if (!accessToken) throw new Error('No access token');
+      if (!accessToken) {
+        console.error('No access token');
+        return null;
+      }
 
       console.log('[useImageGeneration] generateImage - sending:', {
         prompt,
@@ -514,8 +537,11 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setUserMessage('');
     },
     onSuccess: response => {
-      if (!response.success || !response.data) {
-        setError(response.message || 'Failed to generate image');
+      if (!response?.success && response?.debugMessage) {
+        console.error('Action failed:', response.debugMessage);
+      }
+      if (!response || !response.success || !response.data) {
+        setError(response?.message || 'Failed to generate image');
         setLoadingResponse(false);
         return;
       }
@@ -573,7 +599,8 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       const currentAspectRatio = store.aspectRatio;
 
       if (!accessToken || !currentConvId || !currentUserId) {
-        throw new Error('Missing required data');
+        console.error('Missing required data');
+        return null;
       }
 
       console.log('[useImageGeneration] editImage - sending:', {
@@ -605,8 +632,11 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setUserMessage('');
     },
     onSuccess: response => {
-      if (!response.success || !response.data) {
-        const errorMsg = response.message || 'Failed to edit image';
+      if (!response?.success && response?.debugMessage) {
+        console.error('Action failed:', response.debugMessage);
+      }
+      if (!response || !response.success || !response.data) {
+        const errorMsg = response?.message || 'Failed to edit image';
         setError(errorMsg);
         setLoadingResponse(false);
 
@@ -662,10 +692,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       );
 
       // 1. Update Zustand Store (Local State)
-      // User requested empty string for message content to avoid duplicate text if backend sends it separately?
-      // Or maybe the 'answer' is what caused the flicker if it was empty?
-      // We'll respect the user's change to '' but use 'answer' for the cache if available/appropriate.
-      // Actually, if we use '' locally, we should probably stick to it unless we want to show the answer.
       // Only add to chat if we have an image
       if (imageUrl) {
         updateActiveConversation(

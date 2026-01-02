@@ -1,5 +1,8 @@
 import { saveConversationAction } from '@/actions/conversationsAction';
-import { ConversationDetails, useSavedConversations } from '@/hooks/useConversations';
+import {
+  ConversationDetails,
+  useSavedConversations,
+} from '@/hooks/useConversations';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Bookmark, BookmarkCheck, LoaderCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -22,7 +25,8 @@ const SaveConversation = ({ conversationId }: { conversationId: string }) => {
   const { mutate, isPending } = useMutation({
     mutationFn: () => {
       if (!session?.accessToken || !conversationId) {
-        throw new Error('Id not found');
+        console.error('Id not found');
+        return null;
       }
       return saveConversationAction(
         conversationId,

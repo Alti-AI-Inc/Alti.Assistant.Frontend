@@ -113,7 +113,8 @@ export interface ApiResponse<T> {
   statusCode: number;
   success: boolean;
   message: string;
-  data: T;
+  data?: T;
+  debugMessage?: string;
 }
 
 // ============ Server Actions ============
@@ -127,33 +128,43 @@ export async function analyzeImageIntent(
   conversationId: string | undefined,
   accessToken: string,
 ): Promise<ApiResponse<ImageIntentResponse>> {
-  console.log('action data:', {
-    request,
-    hasImage,
-    ...(conversationId && { conversationId }),
-  });
-  const response = await fetch(
-    `${API_URL}/enhanced-image/analyze-image-intent`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
+  try {
+    console.log('action data:', {
+      request,
+      hasImage,
+      ...(conversationId && { conversationId }),
+    });
+    const response = await fetch(
+      `${API_URL}/enhanced-image/analyze-image-intent`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          request,
+          hasImage,
+          ...(conversationId && { conversationId }),
+        }),
       },
-      body: JSON.stringify({
-        request,
-        hasImage,
-        ...(conversationId && { conversationId }),
-      }),
-    },
-  );
+    );
 
-  const data = await response.json();
-  console.log(
-    '[imageActions] analyzeImageIntent response:',
-    JSON.stringify(data, null, 2),
-  );
-  return data;
+    const data = await response.json();
+    console.log(
+      '[imageActions] analyzeImageIntent response:',
+      JSON.stringify(data, null, 2),
+    );
+    return data;
+  } catch (error: any) {
+    console.error('analyzeImageIntent Error:', error);
+    return {
+      statusCode: 500,
+      success: false,
+      message: 'Failed to analyze image intent.',
+      debugMessage: error.message || String(error),
+    };
+  }
 }
 
 /**
@@ -165,28 +176,38 @@ export async function evaluatePrompt(
   conversationHistory: string,
   accessToken: string,
 ): Promise<ApiResponse<EvaluatePromptResponse>> {
-  const finalPrompt = conversationHistory
-    ? `Conversation History:\n${conversationHistory}\n\nCurrent Request: ${prompt}`
-    : prompt;
+  try {
+    const finalPrompt = conversationHistory
+      ? `Conversation History:\n${conversationHistory}\n\nCurrent Request: ${prompt}`
+      : prompt;
 
-  const response = await fetch(`${API_URL}/enhanced-image/evaluate-prompt`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      prompt: finalPrompt,
-      conversationId,
-    }),
-  });
+    const response = await fetch(`${API_URL}/enhanced-image/evaluate-prompt`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt: finalPrompt,
+        conversationId,
+      }),
+    });
 
-  const data = await response.json();
-  console.log(
-    '[imageActions] evaluatePrompt response:',
-    JSON.stringify(data, null, 2),
-  );
-  return data;
+    const data = await response.json();
+    console.log(
+      '[imageActions] evaluatePrompt response:',
+      JSON.stringify(data, null, 2),
+    );
+    return data;
+  } catch (error: any) {
+    console.error('evaluatePrompt Error:', error);
+    return {
+      statusCode: 500,
+      success: false,
+      message: 'Failed to evaluate prompt.',
+      debugMessage: error.message || String(error),
+    };
+  }
 }
 
 /**
@@ -198,25 +219,35 @@ export async function addDetail(
   detail: string,
   accessToken: string,
 ): Promise<ApiResponse<AddDetailResponse>> {
-  const response = await fetch(`${API_URL}/enhanced-image/add-detail`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      conversationId,
-      userId,
-      detail,
-    }),
-  });
+  try {
+    const response = await fetch(`${API_URL}/enhanced-image/add-detail`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        conversationId,
+        userId,
+        detail,
+      }),
+    });
 
-  const data = await response.json();
-  console.log(
-    '[imageActions] addDetail response:',
-    JSON.stringify(data, null, 2),
-  );
-  return data;
+    const data = await response.json();
+    console.log(
+      '[imageActions] addDetail response:',
+      JSON.stringify(data, null, 2),
+    );
+    return data;
+  } catch (error: any) {
+    console.error('addDetail Error:', error);
+    return {
+      statusCode: 500,
+      success: false,
+      message: 'Failed to add detail.',
+      debugMessage: error.message || String(error),
+    };
+  }
 }
 
 /**
@@ -227,24 +258,34 @@ export async function finalizePrompt(
   userId: string,
   accessToken: string,
 ): Promise<ApiResponse<FinalizePromptResponse>> {
-  const response = await fetch(`${API_URL}/enhanced-image/finalize-prompt`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      conversationId,
-      userId,
-    }),
-  });
+  try {
+    const response = await fetch(`${API_URL}/enhanced-image/finalize-prompt`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        conversationId,
+        userId,
+      }),
+    });
 
-  const data = await response.json();
-  console.log(
-    '[imageActions] finalizePrompt response:',
-    JSON.stringify(data, null, 2),
-  );
-  return data;
+    const data = await response.json();
+    console.log(
+      '[imageActions] finalizePrompt response:',
+      JSON.stringify(data, null, 2),
+    );
+    return data;
+  } catch (error: any) {
+    console.error('finalizePrompt Error:', error);
+    return {
+      statusCode: 500,
+      success: false,
+      message: 'Failed to finalize prompt.',
+      debugMessage: error.message || String(error),
+    };
+  }
 }
 
 /**
@@ -258,27 +299,37 @@ export async function generateImage(
   conversationId?: string,
   userId?: string,
 ): Promise<ApiResponse<GenerateImageResponse>> {
-  const response = await fetch(`${API_URL}/enhanced-image/generate`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      prompt,
-      ...(aspectRatio && { aspectRatio }),
-      ...(negativePrompt && { negativePrompt }),
-      ...(conversationId && { conversationId }),
-      ...(userId && { userId }),
-    }),
-  });
+  try {
+    const response = await fetch(`${API_URL}/enhanced-image/generate`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt,
+        ...(aspectRatio && { aspectRatio }),
+        ...(negativePrompt && { negativePrompt }),
+        ...(conversationId && { conversationId }),
+        ...(userId && { userId }),
+      }),
+    });
 
-  const data = await response.json();
-  console.log(
-    '[imageActions] generateImage response:',
-    JSON.stringify(data, null, 2),
-  );
-  return data;
+    const data = await response.json();
+    console.log(
+      '[imageActions] generateImage response:',
+      JSON.stringify(data, null, 2),
+    );
+    return data;
+  } catch (error: any) {
+    console.error('generateImage Error:', error);
+    return {
+      statusCode: 500,
+      success: false,
+      message: 'Failed to generate image.',
+      debugMessage: error.message || String(error),
+    };
+  }
 }
 
 /**
@@ -293,25 +344,35 @@ export async function editImage(
   accessToken: string,
   aspectRatio?: string,
 ): Promise<ApiResponse<EditImageResponse>> {
-  const response = await fetch(`${API_URL}/enhanced-image/edit`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      prompt,
-      imageBase64,
-      conversationId,
-      userId,
-      ...(aspectRatio && { aspectRatio }),
-    }),
-  });
+  try {
+    const response = await fetch(`${API_URL}/enhanced-image/edit`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt,
+        imageBase64,
+        conversationId,
+        userId,
+        ...(aspectRatio && { aspectRatio }),
+      }),
+    });
 
-  const data = await response.json();
-  console.log(
-    '[imageActions] editImage response:',
-    JSON.stringify(data, null, 2),
-  );
-  return data;
+    const data = await response.json();
+    console.log(
+      '[imageActions] editImage response:',
+      JSON.stringify(data, null, 2),
+    );
+    return data;
+  } catch (error: any) {
+    console.error('editImage Error:', error);
+    return {
+      statusCode: 500,
+      success: false,
+      message: 'Failed to edit image.',
+      debugMessage: error.message || String(error),
+    };
+  }
 }

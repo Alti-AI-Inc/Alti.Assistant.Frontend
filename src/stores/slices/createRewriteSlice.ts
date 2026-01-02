@@ -13,12 +13,14 @@ export interface RewriteConfig {
 
 export interface RewriteSlice {
   rewriteConfig: RewriteConfig;
-  rewriteMode: 'assistant' | 'direct' | 'select_mode' | null;
+  rewriteMode: 'assistant' | 'direct' | 'select_mode' | 'chat' | null;
 
   setRewriteConfig: (config: Partial<RewriteConfig>) => void;
   updateRewriteConfig: (config: Partial<RewriteConfig>) => void;
   resetRewriteConfig: () => void;
-  setRewriteMode: (mode: 'assistant' | 'direct' | 'select_mode' | null) => void;
+  setRewriteMode: (
+    mode: 'assistant' | 'direct' | 'select_mode' | 'chat' | null,
+  ) => void;
 }
 
 const DEFAULT_REWRITE_CONFIG: RewriteConfig = {

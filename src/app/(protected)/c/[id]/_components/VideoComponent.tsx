@@ -14,13 +14,15 @@ const VideoComponent = ({ operationId }: { operationId: string }) => {
 
     const checkStatus = async () => {
       try {
-        const url = await getVideoUrl(operationId);
-        if (url) {
-          setVideoUrl(url);
+        const response = await getVideoUrl(operationId);
+        if (response.success && response.data) {
+          setVideoUrl(response.data);
           setLoading(false);
 
           // stop polling once we get the URL
           clearInterval(intervalId);
+        } else if (!response.success && response.debugMessage) {
+          console.error('Video fetch failed:', response.debugMessage);
         }
       } catch (err) {
         console.error('❌ Error fetching video URL:', err);

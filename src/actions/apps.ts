@@ -1,5 +1,13 @@
 'use server';
 
+export interface ApiResponse<T = any> {
+  success: boolean;
+  message: string;
+  data?: T;
+  debugMessage?: string;
+  statusCode?: number;
+}
+
 export interface Connection {
   _id: string;
   userId: string;
@@ -44,60 +52,90 @@ interface WaitForConnectionResponse {
 
 export const getConnections = async (
   accessToken?: string,
-): Promise<Connection[]> => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/composio_v2/user-connections`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
+): Promise<ApiResponse<Connection[]>> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/composio_v2/user-connections`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
       },
-    },
-  );
-  const data = await response.json();
+    );
+    const data = await response.json();
 
-  return data.data ?? [];
+    return { success: true, message: 'Success', data: data.data ?? [] };
+  } catch (error: any) {
+    console.error('getConnections Error:', error);
+    return {
+      success: false,
+      message: 'Failed to fetch connections.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
+  }
 };
 
 export async function initiateConnection(
   app_name: string,
   user_id: string,
   accessToken: string,
-): Promise<InitiateResponse> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/composio_v2/initiate`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
+): Promise<ApiResponse<InitiateResponse>> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/composio_v2/initiate`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          app_name,
+          user_id,
+        }),
       },
-      body: JSON.stringify({
-        app_name,
-        user_id,
-      }),
-    },
-  );
-  const data = await response.json();
-  return data;
+    );
+    const data = await response.json();
+    return { success: true, message: 'Success', data };
+  } catch (error: any) {
+    console.error('initiateConnection Error:', error);
+    return {
+      success: false,
+      message: 'Failed to initiate connection.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
+  }
 }
 
 export async function waitForConnection(
   connected_account_id: string,
-): Promise<WaitForConnectionResponse> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/composio_v2/wait-for-connection`,
-    {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
+): Promise<ApiResponse<WaitForConnectionResponse>> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/composio_v2/wait-for-connection`,
+      {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          connected_account_id,
+        }),
       },
-      body: JSON.stringify({
-        connected_account_id,
-      }),
-    },
-  );
-  const data = await response.json();
-  return data;
+    );
+    const data = await response.json();
+    return { success: true, message: 'Success', data };
+  } catch (error: any) {
+    console.error('waitForConnection Error:', error);
+    return {
+      success: false,
+      message: 'Failed to wait for connection.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
+  }
 }
