@@ -11,7 +11,7 @@ import {
   useSavedConversations,
 } from '@/hooks/useConversations';
 import { formatConversationTitle } from '@/lib/utils';
-import { ActiveConversation } from '@/stores/useConverstionsStore';
+import { Conversation } from '@/actions/conversationsAction';
 import { useModalStore } from '@/stores/useModalStore';
 import {
   EllipsisVertical,
@@ -33,7 +33,7 @@ const Page = () => {
   } = useSavedConversations(session?.accessToken);
   const deleteMutation = useDeleteConversation();
 
-  const sortedConversations: ActiveConversation[] = conversations
+  const sortedConversations: Conversation[] = conversations
     ? [...conversations].sort(
         (a, b) =>
           new Date(b?.updatedAt).getTime() - new Date(a?.updatedAt).getTime(),
@@ -55,7 +55,7 @@ const Page = () => {
             >
               <div className="absolute top-2 right-2 z-10">
                 <DropdownMenu>
-                  <DropdownMenuTrigger className='p-2 outline-none'>
+                  <DropdownMenuTrigger className="p-2 outline-none">
                     <EllipsisVertical className="size-5 rotate-90 opacity-0 group-hover:opacity-100" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="mr-5 rounded-2xl">
@@ -104,7 +104,11 @@ const Page = () => {
                   {formatConversationTitle(chat.title!)}
                 </Link>
               </h2>
-              <p className="line-clamp-2">{chat.messages[1].content}</p>
+              <p className="line-clamp-2">
+                {chat.messages && chat.messages[1]
+                  ? chat.messages[1].content
+                  : 'No preview available'}
+              </p>
             </div>
           ))}
         </div>

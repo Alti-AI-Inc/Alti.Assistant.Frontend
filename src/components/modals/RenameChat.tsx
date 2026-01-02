@@ -27,7 +27,7 @@ const RenameChat = () => {
     mutationFn: () => {
       if (!session?.accessToken || !actionId) {
         console.error('Id not found');
-        return null;
+        return Promise.reject(new Error('Id or Token not found'));
       }
       return renameConversationAction(actionId, title, session.accessToken);
     },

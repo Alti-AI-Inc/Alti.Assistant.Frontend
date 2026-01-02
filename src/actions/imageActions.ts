@@ -129,11 +129,18 @@ export async function analyzeImageIntent(
   accessToken: string,
 ): Promise<ApiResponse<ImageIntentResponse>> {
   try {
-    console.log('action data:', {
-      request,
-      hasImage,
-      ...(conversationId && { conversationId }),
-    });
+    console.log(
+      '[imageActions] analyzeImageIntent payload:',
+      JSON.stringify(
+        {
+          request,
+          hasImage,
+          conversationId,
+        },
+        null,
+        2,
+      ),
+    );
     const response = await fetch(
       `${API_URL}/enhanced-image/analyze-image-intent`,
       {
@@ -177,6 +184,19 @@ export async function evaluatePrompt(
   accessToken: string,
 ): Promise<ApiResponse<EvaluatePromptResponse>> {
   try {
+    console.log(
+      '[imageActions] evaluatePrompt payload:',
+      JSON.stringify(
+        {
+          prompt,
+          conversationId,
+          conversationHistory,
+        },
+        null,
+        2,
+      ),
+    );
+
     const finalPrompt = conversationHistory
       ? `Conversation History:\n${conversationHistory}\n\nCurrent Request: ${prompt}`
       : prompt;
@@ -220,6 +240,19 @@ export async function addDetail(
   accessToken: string,
 ): Promise<ApiResponse<AddDetailResponse>> {
   try {
+    console.log(
+      '[imageActions] addDetail payload:',
+      JSON.stringify(
+        {
+          conversationId,
+          userId,
+          detail,
+        },
+        null,
+        2,
+      ),
+    );
+
     const response = await fetch(`${API_URL}/enhanced-image/add-detail`, {
       method: 'POST',
       headers: {
@@ -259,6 +292,18 @@ export async function finalizePrompt(
   accessToken: string,
 ): Promise<ApiResponse<FinalizePromptResponse>> {
   try {
+    console.log(
+      '[imageActions] finalizePrompt payload:',
+      JSON.stringify(
+        {
+          conversationId,
+          userId,
+        },
+        null,
+        2,
+      ),
+    );
+
     const response = await fetch(`${API_URL}/enhanced-image/finalize-prompt`, {
       method: 'POST',
       headers: {
@@ -300,6 +345,21 @@ export async function generateImage(
   userId?: string,
 ): Promise<ApiResponse<GenerateImageResponse>> {
   try {
+    console.log(
+      '[imageActions] generateImage payload:',
+      JSON.stringify(
+        {
+          prompt,
+          aspectRatio,
+          negativePrompt,
+          conversationId,
+          userId,
+        },
+        null,
+        2,
+      ),
+    );
+
     const response = await fetch(`${API_URL}/enhanced-image/generate`, {
       method: 'POST',
       headers: {
@@ -345,6 +405,23 @@ export async function editImage(
   aspectRatio?: string,
 ): Promise<ApiResponse<EditImageResponse>> {
   try {
+    console.log(
+      '[imageActions] editImage payload:',
+      JSON.stringify(
+        {
+          prompt,
+          imageBase64: imageBase64
+            ? `${imageBase64.slice(0, 50)}...`
+            : undefined,
+          conversationId,
+          userId,
+          aspectRatio,
+        },
+        null,
+        2,
+      ),
+    );
+
     const response = await fetch(`${API_URL}/enhanced-image/edit`, {
       method: 'POST',
       headers: {

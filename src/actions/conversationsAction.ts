@@ -54,12 +54,16 @@ export async function PostConversation(
   }
 }
 
+import { ConversationMessage } from '@/types/conversation';
+
 export interface Conversation {
   _id: string;
   conversationId: string;
   title: string;
+  is_saved?: boolean;
   updatedAt: string;
   createdAt: string;
+  messages?: ConversationMessage[];
 }
 
 export interface Pagination {

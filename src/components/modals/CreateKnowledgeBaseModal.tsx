@@ -27,7 +27,7 @@ const CreateKnowledgeBaseModal = () => {
     mutationFn: () => {
       if (!session?.accessToken) {
         console.error('Token not found');
-        return null;
+        return Promise.reject(new Error('Token not found'));
       }
       return createKnowledgeBaseAction(name, session.accessToken);
     },

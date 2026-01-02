@@ -39,7 +39,7 @@ export function useRewrite() {
     mutationFn: async ({ content }: { content: string }) => {
       if (!accessToken) {
         console.error('No access token');
-        return null;
+        return Promise.reject(new Error('No access token'));
       }
       const {
         intent,
@@ -106,7 +106,7 @@ export function useRewrite() {
     }) => {
       if (!accessToken) {
         console.error('No access token');
-        return null;
+        return Promise.reject(new Error('No access token'));
       }
 
       if (file) {
@@ -129,14 +129,16 @@ export function useRewrite() {
         );
       }
       console.error('Invalid parameters for assistant rewrite');
-      return null;
+      return Promise.reject(
+        new Error('Invalid parameters for assistant rewrite'),
+      );
     },
     onMutate: () => {
       setIsLoading(true);
       setLoadingResponse(true);
     },
     onSuccess: response => {
-      if (!response.success) {
+      if (!response || !response.success) {
         console.error('Assistant rewrite failed:', response.debugMessage);
         const errorMessage = response.message || 'Failed to process rewrite';
         updateActiveConversation(errorMessage, ROLES.ASSISTANT);

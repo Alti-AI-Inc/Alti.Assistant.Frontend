@@ -27,7 +27,7 @@ export function ShareConversationModal() {
     queryFn: () => {
       if (!conversationId || !token) {
         console.error('Missing token or id');
-        return null; // throw new Error(...)
+        return Promise.reject(new Error('Conversation Id not found'));
       }
       return shareConversation(conversationId, token);
     },

@@ -18,15 +18,14 @@ const SaveConversation = ({ conversationId }: { conversationId: string }) => {
   const queryClient = useQueryClient();
 
   const isSaved = conversations?.find(
-    (conversation: ConversationDetails) =>
-      conversation.conversationId === conversationId,
+    conversation => conversation.conversationId === conversationId,
   )?.is_saved;
 
   const { mutate, isPending } = useMutation({
     mutationFn: () => {
       if (!session?.accessToken || !conversationId) {
         console.error('Id not found');
-        return null;
+        return Promise.reject(new Error('Id or Token not found'));
       }
       return saveConversationAction(
         conversationId,
