@@ -22,6 +22,7 @@ const formSchema = z.object({
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useModalStore } from '@/stores/useModalStore';
+import { Eye, EyeOff } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -29,6 +30,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Component() {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const router = useRouter();
   const { onOpen } = useModalStore();
 
@@ -100,26 +102,30 @@ export default function Component() {
                     </FormItem>
                   )}
                 />
+                <div className='relative'>
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type={isPasswordVisible ? "text" : "password"}
+                            id="password"
+                            placeholder="Password"
+                            className="max-w-md border-none bg-gray-100 focus-visible:ring-0"
+                          />
+                        </FormControl>
 
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          type="password"
-                          id="password"
-                          placeholder="Password"
-                          className="max-w-md border-none bg-gray-100 focus-visible:ring-0"
-                        />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div onClick={() => setIsPasswordVisible(!isPasswordVisible)} className='absolute right-2 cursor-pointer top-2'>
+                    {isPasswordVisible ? <EyeOff className='text-[#7f7f7f] size-5.5' /> : <Eye className='text-[#7f7f7f] size-5.5' />}
+                  </div>
+                </div>
 
                 <Button
                   type="button"

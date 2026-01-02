@@ -26,12 +26,16 @@ const formSchema = z.object({
 import { RegisterUser } from '@/actions/register';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Mail } from 'lucide-react';
+import { Eye, EyeOff, Mail } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
 export default function Component() {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+    useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -137,45 +141,56 @@ export default function Component() {
                       </FormItem>
                     )}
                   />
+                  <div className='relative'>
+                    <div onClick={() => setIsPasswordVisible(!isPasswordVisible)} className='absolute right-2 cursor-pointer top-2'>
+                      {isPasswordVisible ? <EyeOff className='text-[#7f7f7f] size-5.5' /> : <Eye className='text-[#7f7f7f] size-5.5' />}
+                    </div>
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              type={isPasswordVisible ? "text" : "password"}
+                              id="password"
+                              placeholder="Password"
+                              className="max-w-md border-none bg-gray-100 focus-visible:ring-0"
+                            />
+                          </FormControl>
 
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="password"
-                            id="password"
-                            placeholder="Password"
-                            className="max-w-md border-none bg-gray-100 focus-visible:ring-0"
-                          />
-                        </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className='relative'>
 
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="password"
-                            id="confirmPassword"
-                            placeholder="Confirm password"
-                            className="max-w-md border-none bg-gray-100 focus-visible:ring-0"
-                          />
-                        </FormControl>
+                    <div onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)} className='absolute right-2 cursor-pointer top-2'>
+                      {isConfirmPasswordVisible ? <EyeOff className='text-[#7f7f7f] size-5.5' /> : <Eye className='text-[#7f7f7f] size-5.5' />}
+                    </div>
 
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <FormField
+                      control={form.control}
+                      name="confirmPassword"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              type={isConfirmPasswordVisible ? "text" : "password"}
+                              id="confirmPassword"
+                              placeholder="Confirm password"
+                              className="max-w-md border-none bg-gray-100 focus-visible:ring-0"
+                            />
+                          </FormControl>
+
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
                   <Button
                     disabled={isLoading}
