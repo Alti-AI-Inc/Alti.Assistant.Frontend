@@ -51,6 +51,7 @@ import {
   PencilLine,
   PencilRuler,
   Plus,
+  Presentation,
   Waypoints,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -101,7 +102,6 @@ const TOOLBAR_ITEMS = [
     label: 'Write Article',
     Icon: Newspaper,
   },
-
   {
     type: OPTIONS.WRITE_CONTRACT,
     label: 'Write Contract',
@@ -117,11 +117,11 @@ const TOOLBAR_ITEMS = [
     label: 'Create Plan',
     Icon: Waypoints,
   },
-  // {
-  //   type: OPTIONS.PRESENTATION,
-  //   label: 'Generate Presentation',
-  //   Icon: Presentation,
-  // },
+  {
+    type: OPTIONS.PRESENTATION,
+    label: 'Generate Presentation',
+    Icon: Presentation,
+  },
   // {
   //   type: OPTIONS.GENERATE_REPORT,
   //   label: 'Generate Report',
@@ -394,28 +394,22 @@ const ChatInput = ({
     if (activeConversation?.knowledgebaseId) return '/knowledgebase/chat';
 
     switch (selectedOption) {
-      // case OPTIONS.IMAGE:
-      //   return '/enhanced-image/analyze-intent';
+      case OPTIONS.CREATIVE_WRITING:
+        return '/creative-writing/assistant';
+      case OPTIONS.PRESENTATION:
+        return '/presentation/assistant';
       // case OPTIONS.CODE:
       //   return '/search/code';
       // case OPTIONS.RESEARCH:
       //   return '/deep-research/assistant';
-      // case OPTIONS.DRAFT_DOCUMENT:
-      //   return '/search/writing';
       // case OPTIONS.GENERATE_PLAN:
       //   return '/search/plan';
-      // case OPTIONS.PRESENTATION:
-      //   return '/search/presentation';
       // case OPTIONS.GENERATE_REPORT:
       //   return '/search/report';
-      // case OPTIONS.REVIEW_DOCUMENTS:
-      //   return '/search/review';
       // case OPTIONS.DRAFT_EMAIL:
       //   return '/search/email';
       // case OPTIONS.SUMMARIZE:
       //   return '/search/summarize';
-      // case OPTIONS.TRANSLATE_DOCUMENTS:
-      //   return '/search/translate';
       // case OPTIONS.EXTRACT_DATA:
       //   return '/search/extract';
       // case OPTIONS.REWRITE:
@@ -489,14 +483,32 @@ const ChatInput = ({
       const document =
         response.data?.document || response.data?.responseMessage?.document;
 
+      // Determine the appropriate response text based on the context
+      const getResponseText = () => {
+        if (activeConversation?.knowledgebaseId) {
+          return response.data?.message;
+        }
+
+        switch (selectedOption) {
+          case OPTIONS.IMAGE:
+            return response.data?.responseMessage?.text;
+
+          case OPTIONS.CREATIVE_WRITING:
+            return response.data?.response;
+
+          case OPTIONS.CODE:
+            return response.data?.responseMessage?.answer;
+
+          case OPTIONS.PRESENTATION:
+            return response.data?.message;
+
+          default:
+            return response.data?.responseMessage?.answer;
+        }
+      };
+
       updateActiveConversation(
-        activeConversation?.knowledgebaseId
-          ? response.data?.message
-          : selectedOption === OPTIONS.IMAGE
-            ? response.data?.responseMessage?.text
-            : selectedOption === OPTIONS.CODE
-              ? response.data?.responseMessage?.answer
-              : response.data?.responseMessage?.answer,
+        getResponseText(),
         ROLES.ASSISTANT,
 
         newId,

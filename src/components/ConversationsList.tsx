@@ -38,8 +38,11 @@ export default function ConversationsList() {
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  const conversations: Conversation[] =
+  const rawConversations: Conversation[] =
     data?.pages.flatMap(p => p.conversations) ?? [];
+  const conversations = Array.from(
+    new Map(rawConversations.map(chat => [chat._id, chat])).values(),
+  );
 
   useEffect(() => {
     if (!hasNextPage || isFetchingNextPage) return;

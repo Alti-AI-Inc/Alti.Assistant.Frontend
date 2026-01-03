@@ -16,7 +16,12 @@ export async function PostConversation(
   knowledgebaseId?: string,
 ): Promise<ApiResponse> {
   try {
-    console.log({ apiUrl, knowledgebaseId });
+    console.log('[conversationsAction] PostConversation payload:', {
+      apiUrl,
+      knowledgebaseId,
+      conversationId,
+      message,
+    });
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
@@ -41,7 +46,10 @@ export async function PostConversation(
     }
 
     const data = await response.json();
-    console.log('PostConversation response:', data);
+    console.log(
+      '[conversationsAction] PostConversation response:',
+      data.data || data,
+    );
     // Unwrap data if present to avoid nesting
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
