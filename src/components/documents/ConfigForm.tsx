@@ -2,6 +2,7 @@ import { useDocumentStore } from '@/stores/useDocumentStore';
 import { useConversationsStore, OPTIONS } from '@/stores/useConverstionsStore';
 import { DocumentType } from '@/types/document-generation';
 import { cn } from '@/lib/utils';
+import { BrainstormConfig } from '@/types/brainstorm';
 
 export function ConfigForm() {
   const { drafting, updateDraftingConfig, review, updateReviewConfig } =
@@ -12,9 +13,12 @@ export function ConfigForm() {
   const isReviewMode = review.isActive;
   const isTranslateMode = selectedOption === OPTIONS.TRANSLATE_DOCUMENTS;
   const isRewriteMode = selectedOption === OPTIONS.REWRITE;
+  const isBrainstormMode = selectedOption === OPTIONS.BRAINSTORM;
   const config = isReviewMode ? review.config : drafting.config;
   const { translationConfig, updateTranslationConfig, translationMode } =
     useConversationsStore();
+
+  const { brainstormConfig, updateBrainstormConfig } = useConversationsStore();
 
   const SUPPORTED_LANGUAGES = [
     { code: 'en', name: 'English' },
@@ -171,6 +175,44 @@ export function ConfigForm() {
     </div>
   );
 
+  const renderMultiSelectPillGroup = (
+    label: string,
+    values: string[] = [],
+    options: string[],
+    onChange: (vals: string[]) => void,
+  ) => (
+    <div className="flex flex-col gap-2" key={label}>
+      <span className="text-xs font-medium tracking-wider text-gray-500 uppercase">
+        {label}
+      </span>
+      <div className="flex flex-wrap gap-2">
+        {options.map(opt => {
+          const isSelected = values.includes(opt);
+          return (
+            <button
+              key={opt}
+              onClick={() => {
+                if (isSelected) {
+                  onChange(values.filter(v => v !== opt));
+                } else {
+                  onChange([...values, opt]);
+                }
+              }}
+              className={cn(
+                'rounded-full border px-3 py-1 text-xs font-medium transition-colors',
+                isSelected
+                  ? 'border-black bg-black text-white'
+                  : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50',
+              )}
+            >
+              {opt.replace(/_/g, ' ')}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
   const renderTextInput = (
     label: string,
     value: string | undefined,
@@ -228,6 +270,137 @@ export function ConfigForm() {
     </div>
   );
 
+  if (isBrainstormMode) {
+    return (
+      <div className="flex max-h-[40vh] w-full flex-col gap-6 overflow-y-auto rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
+        <div className="flex flex-col gap-1">
+          <h3 className="font-semibold text-gray-900">Brainstorm Details</h3>
+          <p className="text-xs text-gray-500">
+            Define your brainstorming parameters. All fields are optional.
+          </p>
+        </div>
+        <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-2 gap-4">
+            {renderSelect(
+              'Brainstorm Type',
+              brainstormConfig.brainstormType || '',
+              val => updateBrainstormConfig({ brainstormType: val as any }),
+              [
+                { code: 'product_idea', name: 'Product Idea' },
+                { code: 'business_strategy', name: 'Business Strategy' },
+                { code: 'technical_solution', name: 'Technical Solution' },
+                { code: 'problem_solving', name: 'Problem Solving' },
+                { code: 'creative_content', name: 'Creative Content' },
+              ],
+            )}
+
+            {renderSelect(
+              'Technique',
+              brainstormConfig.technique || '',
+              val => updateBrainstormConfig({ technique: val as any }),
+              [
+                { code: 'scamper', name: 'SCAMPER' },
+                { code: 'swot', name: 'SWOT Analysis' },
+                { code: 'free_association', name: 'Free Association' },
+                { code: 'mind_map', name: 'Mind Mapping' },
+                { code: 'five_whys', name: 'Five Whys' },
+                { code: 'six_thinking_hats', name: 'Six Thinking Hats' },
+                { code: 'reverse_brainstorm', name: 'Reverse Brainstorming' },
+                { code: 'starbursting', name: 'Starbursting' },
+              ],
+            )}
+          </div>
+
+          {renderPillGroup(
+            'Depth',
+            brainstormConfig.depth || '',
+            ['quick', 'standard', 'deep', 'comprehensive'],
+            val => updateBrainstormConfig({ depth: val as any }),
+          )}
+
+          {renderMultiSelectPillGroup(
+            'Perspectives',
+            brainstormConfig.perspective,
+            [
+              'creative',
+              'user_centric',
+              'business',
+              'technical',
+              'financial',
+              'competitive',
+              'operational',
+            ],
+            vals => updateBrainstormConfig({ perspective: vals as any }),
+          )}
+
+          {renderMultiSelectPillGroup(
+            'Focus Areas',
+            brainstormConfig.focusAreas,
+            ['innovation', 'profitability', 'user_value', 'uniqueness'],
+            vals => updateBrainstormConfig({ focusAreas: vals as any }),
+          )}
+
+          {renderTextInput(
+            'Additional Instructions',
+            brainstormConfig.additionalInstructions,
+            'Any specific goals or context...',
+            val => updateBrainstormConfig({ additionalInstructions: val }),
+          )}
+
+          <div className="grid grid-cols-2 gap-4">
+            {renderTextInput(
+              'Budget Constraint',
+              brainstormConfig.constraints?.budget,
+              'e.g. $5000',
+              val =>
+                updateBrainstormConfig({
+                  constraints: { ...brainstormConfig.constraints, budget: val },
+                }),
+            )}
+            {renderTextInput(
+              'Timeline Constraint',
+              brainstormConfig.constraints?.timeline,
+              'e.g. 2 weeks',
+              val =>
+                updateBrainstormConfig({
+                  constraints: {
+                    ...brainstormConfig.constraints,
+                    timeline: val,
+                  },
+                }),
+            )}
+          </div>
+          {renderTextInput(
+            'Technology Constraint',
+            Array.isArray(brainstormConfig.constraints?.technology)
+              ? brainstormConfig.constraints.technology.join(', ')
+              : brainstormConfig.constraints?.technology || '',
+            'e.g. React, Node.js (comma separated)',
+            val =>
+              updateBrainstormConfig({
+                constraints: {
+                  ...brainstormConfig.constraints,
+                  technology: val,
+                },
+              }),
+          )}
+          {renderTextInput(
+            'Target Audience Constraint',
+            brainstormConfig.constraints?.targetAudience,
+            'e.g. Millennials',
+            val =>
+              updateBrainstormConfig({
+                constraints: {
+                  ...brainstormConfig.constraints,
+                  targetAudience: val,
+                },
+              }),
+          )}
+        </div>
+      </div>
+    );
+  }
+
   if (isTranslateMode) {
     if (translationMode === 'assistant') {
       return null;
@@ -237,7 +410,7 @@ export function ConfigForm() {
     const isDetectMode = translationConfig.isDetectMode;
 
     return (
-      <div className="flex w-full flex-col gap-6 rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
+      <div className="flex max-h-[55vh] w-full flex-col gap-6 overflow-y-auto rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
         <div className="flex flex-col gap-5">
           {/* Action Type Toggle */}
           <div className="flex flex-col gap-2">
@@ -301,7 +474,7 @@ export function ConfigForm() {
 
   if (isRewriteMode) {
     return (
-      <div className="flex w-full flex-col gap-6 rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
+      <div className="flex max-h-[55vh] w-full flex-col gap-6 overflow-y-auto rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
         {/* <div className="flex flex-col gap-1">
           <h3 className="font-semibold text-gray-900">Rewrite Configuration</h3>
           <p className="text-xs text-gray-500">
@@ -361,7 +534,7 @@ export function ConfigForm() {
 
   if (isReviewMode) {
     return (
-      <div className="flex w-full flex-col gap-6 rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
+      <div className="flex max-h-[55vh] w-full flex-col gap-6 overflow-y-auto rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
         <div className="flex flex-col gap-1">
           <h3 className="font-semibold text-gray-900">Review Configuration</h3>
           <p className="text-xs text-gray-500">
@@ -384,7 +557,7 @@ export function ConfigForm() {
 
   // Default Drafting View
   return (
-    <div className="flex w-full flex-col gap-6 rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
+    <div className="flex max-h-[55vh] w-full flex-col gap-6 overflow-y-auto rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
       <div className="flex flex-col gap-1">
         <h3 className="font-semibold text-gray-900">Configuration</h3>
         <p className="text-xs text-gray-500">

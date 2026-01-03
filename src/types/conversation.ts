@@ -1,3 +1,4 @@
+import { BrainstormData, BrainstormMetadata, IdeaAnalysis } from './brainstorm';
 export enum ROLES {
   USER = 'user',
   ASSISTANT = 'assistant',
@@ -80,6 +81,9 @@ export type ConversationMessage = {
       name: string;
     };
     document?: GeneratedDocument;
+    brainstormData?: BrainstormData;
+    brainstormMetadata?: BrainstormMetadata;
+    ideaAnalysis?: IdeaAnalysis;
   };
 };
 

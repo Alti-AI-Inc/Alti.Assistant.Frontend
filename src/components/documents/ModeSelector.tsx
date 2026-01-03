@@ -7,11 +7,12 @@ export function ModeSelector({
   currentMode,
   modeContext = 'draft',
 }: {
-  currentMode?: 'assistant' | 'direct' | null;
-  modeContext?: 'draft' | 'review' | 'rewrite' | 'translate';
+  currentMode?: 'assistant' | 'direct' | 'structured' | 'select_mode' | null;
+  modeContext?: 'draft' | 'review' | 'rewrite' | 'translate' | 'brainstorm';
 }) {
   const { setDraftingMode, setReviewMode } = useDocumentStore();
-  const { setRewriteMode, setTranslationMode } = useConversationsStore();
+  const { setRewriteMode, setTranslationMode, setBrainstormMode } =
+    useConversationsStore();
 
   const handleSetMode = (mode: 'assistant' | 'direct' | 'select_mode') => {
     if (modeContext === 'review') {
@@ -20,6 +21,10 @@ export function ModeSelector({
       setRewriteMode(mode);
     } else if (modeContext === 'translate') {
       setTranslationMode(mode);
+    } else if (modeContext === 'brainstorm') {
+      setBrainstormMode(
+        mode === 'direct' ? 'structured' : (mode as 'assistant' | 'structured'),
+      );
     } else {
       setDraftingMode(mode);
     }
@@ -40,6 +45,11 @@ export function ModeSelector({
       return id === 'assistant'
         ? 'Collaborate with AI to review your document step-by-step.'
         : 'Upload a file and get an instant review.';
+    }
+    if (modeContext === 'brainstorm') {
+      return id === 'assistant'
+        ? 'Start a new chat or continue an existing one.'
+        : 'Brainstorm with strict frameworks and parameters.';
     }
     // draft
     return id === 'assistant'
@@ -71,48 +81,67 @@ export function ModeSelector({
             ? 'How would you like to rewrite your text?'
             : modeContext === 'translate'
               ? 'How would you like to translate your content?'
-              : 'How would you like to draft your document?'}
+              : modeContext === 'brainstorm'
+                ? 'How would you like to brainstorm?'
+                : 'How would you like to draft your document?'}
       </p>
       <div className="flex w-full gap-4">
-        {options.map(option => (
-          <button
-            key={option.id}
-            onClick={() => {
-              if (currentMode === option.id) {
-                handleSetMode('select_mode');
-              } else {
-                handleSetMode(option.id);
-              }
-            }}
-            // disabled={!!currentMode}
-            className={cn(
-              'group relative flex flex-1 cursor-pointer flex-col items-start gap-2 rounded-xl border p-4 text-left shadow-sm backdrop-blur-sm transition-all',
-              !currentMode &&
-                'border-gray-200 bg-white/50 hover:border-gray-300 hover:bg-white hover:shadow-md',
-              currentMode && option.id === currentMode
-                ? 'border-black bg-white opacity-100 ring-1 ring-black/5'
-                : currentMode &&
-                    'border-transparent bg-white/20 opacity-40 grayscale hover:opacity-100 hover:grayscale-0',
-            )}
-          >
-            <div
+        {options.map(option => {
+          let label = option.label;
+          let id = option.id;
+
+          // Override for Brainstorm Structured mode
+          if (modeContext === 'brainstorm' && option.id === 'direct') {
+            label = 'Structured Generation';
+          }
+
+          return (
+            <button
+              key={id}
+              onClick={() => {
+                if (currentMode === id) {
+                  handleSetMode('select_mode');
+                } else {
+                  handleSetMode(id);
+                }
+              }}
               className={cn(
-                'rounded-lg p-2 transition-colors',
+                'group relative flex flex-1 cursor-pointer flex-col items-start gap-2 rounded-xl border p-4 text-left shadow-sm backdrop-blur-sm transition-all',
                 !currentMode &&
-                  'bg-gray-100 text-black group-hover:bg-black group-hover:text-white',
-                currentMode && option.id === currentMode
-                  ? 'bg-black text-white'
-                  : 'bg-gray-50 text-gray-500',
+                  'border-gray-200 bg-white/50 hover:border-gray-300 hover:bg-white hover:shadow-md',
+                currentMode &&
+                  (id === currentMode ||
+                    (modeContext === 'brainstorm' &&
+                      id === 'direct' &&
+                      currentMode === 'structured'))
+                  ? 'border-black bg-white opacity-100 ring-1 ring-black/5'
+                  : currentMode &&
+                      'border-transparent bg-white/20 opacity-40 grayscale hover:opacity-100 hover:grayscale-0',
               )}
             >
-              <option.icon className="h-5 w-5" />
-            </div>
-            <div>
-              <h3 className="font-medium text-gray-900">{option.label}</h3>
-              <p className="text-xs text-gray-500">{option.description}</p>
-            </div>
-          </button>
-        ))}
+              <div
+                className={cn(
+                  'rounded-lg p-2 transition-colors',
+                  !currentMode &&
+                    'bg-gray-100 text-black group-hover:bg-black group-hover:text-white',
+                  currentMode &&
+                    (id === currentMode ||
+                      (modeContext === 'brainstorm' &&
+                        id === 'direct' &&
+                        currentMode === 'structured'))
+                    ? 'bg-black text-white'
+                    : 'bg-gray-50 text-gray-500',
+                )}
+              >
+                <option.icon className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="font-medium text-gray-900">{label}</h3>
+                <p className="text-xs text-gray-500">{option.description}</p>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

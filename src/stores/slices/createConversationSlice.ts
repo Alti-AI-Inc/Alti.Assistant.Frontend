@@ -6,6 +6,11 @@ import {
   Reference,
   GeneratedDocument,
 } from '@/types/conversation';
+import {
+  BrainstormData,
+  BrainstormMetadata,
+  IdeaAnalysis,
+} from '@/types/brainstorm';
 
 export interface ConversationSlice {
   userMessage: string;
@@ -30,6 +35,9 @@ export interface ConversationSlice {
       videoName?: string;
       reference?: Reference[];
       document?: GeneratedDocument;
+      brainstormData?: BrainstormData;
+      metadata?: BrainstormMetadata; // This name conflicts slightly with 'metadata' property in message but let's see how it's used
+      ideaAnalysis?: IdeaAnalysis;
     },
   ) => void;
   setLoadingActiveConversation: (loading: boolean) => void;
@@ -85,6 +93,13 @@ export const createConversationSlice: StateCreator<
                 ...(extras?.document && {
                   metadata: { document: extras.document },
                 }),
+                ...(extras?.brainstormData && {
+                  metadata: {
+                    brainstormData: extras.brainstormData,
+                    brainstormMetadata: extras.metadata,
+                    ideaAnalysis: extras.ideaAnalysis,
+                  },
+                }),
                 timestamp: new Date().toISOString(),
               },
             ],
@@ -106,6 +121,13 @@ export const createConversationSlice: StateCreator<
           }),
           ...(extras?.document && {
             metadata: { document: extras.document },
+          }),
+          ...(extras?.brainstormData && {
+            metadata: {
+              brainstormData: extras.brainstormData,
+              brainstormMetadata: extras.metadata,
+              ideaAnalysis: extras.ideaAnalysis,
+            },
           }),
           ...(extras?.reference && {
             metadata: { reference: extras.reference },

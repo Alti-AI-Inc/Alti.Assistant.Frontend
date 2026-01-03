@@ -23,6 +23,7 @@ import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { useRewrite } from '@/hooks/useRewrite';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
+import { useBrainstorm } from '@/hooks/useBrainstorm';
 import {
   OPTIONS,
   ROLES,
@@ -269,6 +270,14 @@ const ChatInput = ({
     handleAssistantTranslate,
   } = useTranslation();
 
+  const {
+    brainstormMode,
+    setBrainstormMode,
+    resetBrainstormConfig,
+    handleAssistantBrainstorm,
+    handleStructuredGeneration,
+  } = useBrainstorm();
+
   const isExistingConversation =
     activeConversation?.conversationId &&
     activeConversation?.conversationId !== 'new-chat' &&
@@ -346,6 +355,21 @@ const ChatInput = ({
       // Default to 'select_mode' for Translation
       if (nextOption === OPTIONS.TRANSLATE_DOCUMENTS) {
         setTranslationMode('select_mode');
+      }
+
+      // Reset Brainstorm if switching away
+      if (
+        selectedOption === OPTIONS.BRAINSTORM &&
+        nextOption !== OPTIONS.BRAINSTORM
+      ) {
+        resetBrainstormConfig();
+      }
+
+      // Brainstorm Mode Logic:
+      if (nextOption === OPTIONS.BRAINSTORM) {
+        if (isExistingConversation) {
+          setBrainstormMode('select_mode');
+        }
       }
 
       setSelectedOption(nextOption);
@@ -660,6 +684,38 @@ const ChatInput = ({
         } else {
           // Assistant Mode or Chat Mode (handled same for now)
           await handleAssistantTranslate(message, selectedFile);
+        }
+        break;
+
+      case OPTIONS.BRAINSTORM:
+        if (brainstormMode === 'select_mode') {
+          return;
+        }
+
+        const brainstormMessage = message;
+        setMessage('');
+
+        if (brainstormMode === 'structured') {
+          // In structured mode, 'message' might be the idea if user typed one
+          // ConfigForm handles configuration
+          if (!brainstormMessage?.trim()) {
+            // UI usually disables button, but just in case
+            return;
+          }
+          await handleStructuredGeneration(
+            brainstormMessage,
+            isExistingConversation
+              ? activeConversation?.conversationId
+              : undefined,
+          );
+        } else {
+          // Assistant mode (default)
+          await handleAssistantBrainstorm(
+            brainstormMessage,
+            isExistingConversation
+              ? activeConversation?.conversationId
+              : undefined,
+          );
         }
         break;
 

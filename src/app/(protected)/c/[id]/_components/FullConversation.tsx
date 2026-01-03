@@ -33,6 +33,9 @@ import FileDownloadCard from './FileDownloadCard';
 import VideoComponent from './VideoComponent';
 import VideoComponentForContent from './YoutubePlayer';
 
+import { BrainstormData } from './BrainstormData';
+import { useBrainstorm } from '@/hooks/useBrainstorm';
+
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
   const pathname = usePathname();
@@ -59,6 +62,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
   const { drafting, review } = useDocumentStore();
   const { translationMode } = useTranslation();
+  const { brainstormMode } = useBrainstorm();
 
   // Initialize Image Generation Hook
   const imageGenHook = useImageGeneration({ router, queryClient });
@@ -166,7 +170,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
           'h-[calc(100vh-70px)] lg:h-screen',
         isLoading && 'h-[calc(100vh-70px)] lg:h-screen',
         // conversationId !== 'new-chat' && 'pb-24',
-        pathname === '/' && !activeConversation?.messages.length && 'pb-24',
+        // pathname === '/' && !activeConversation?.messages.length && 'pb-24',
       )}
     >
       <div
@@ -216,7 +220,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         drafting.isActive ||
         (review && review.isActive) ||
         selectedOption === OPTIONS.REWRITE ||
-        selectedOption === OPTIONS.TRANSLATE_DOCUMENTS) && (
+        selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
+        selectedOption === OPTIONS.BRAINSTORM) && (
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
           <div
             className={cn(
@@ -296,6 +301,12 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   {!!message.metadata?.reference?.length && (
                     <ReferencesList references={message.metadata.reference} />
                   )}
+                  {message.metadata?.brainstormData && (
+                    <BrainstormData
+                      data={message.metadata.brainstormData}
+                      analysis={message.metadata.ideaAnalysis}
+                    />
+                  )}
                 </div>
               ))}
             {/* Image Generation UI - Integrated inline */}
@@ -303,10 +314,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
               <ImageGenConfirmation onConfirm={handleUserConfirmation} />
             )}
             {isCollectingDetails && <ImageGenSuggestions />}
-            {/* Document Drafting/Review/Rewrite/Translate UI */}
+            {/* Document Drafting/Review/Rewrite/Translate/Brainstorm UI */}
             {(drafting.isActive ||
               selectedOption === OPTIONS.REWRITE ||
-              selectedOption === OPTIONS.TRANSLATE_DOCUMENTS) &&
+              selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
+              selectedOption === OPTIONS.BRAINSTORM) &&
               !isLoadingResponse && (
                 <>
                   {!(
@@ -317,7 +329,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     (selectedOption === OPTIONS.TRANSLATE_DOCUMENTS &&
                       activeConversation?.conversationId &&
                       activeConversation?.conversationId !== 'new-chat' &&
-                      translationMode !== 'select_mode')
+                      translationMode !== 'select_mode') ||
+                    (selectedOption === OPTIONS.BRAINSTORM &&
+                      activeConversation?.conversationId &&
+                      activeConversation?.conversationId !== 'new-chat' &&
+                      brainstormMode !== 'select_mode')
                   ) && (
                     <ModeSelector
                       currentMode={
@@ -337,9 +353,13 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                                 : translationMode === 'chat'
                                   ? null
                                   : (translationMode as 'assistant' | 'direct')
-                              : review.mode === 'select_mode'
-                                ? null
-                                : (review.mode as 'assistant' | 'direct')
+                              : selectedOption === OPTIONS.BRAINSTORM
+                                ? brainstormMode === 'select_mode'
+                                  ? null
+                                  : (brainstormMode as 'assistant' | 'direct')
+                                : review.mode === 'select_mode'
+                                  ? null
+                                  : (review.mode as 'assistant' | 'direct')
                       }
                       modeContext={
                         drafting.isActive
@@ -348,7 +368,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                             ? 'rewrite'
                             : selectedOption === OPTIONS.TRANSLATE_DOCUMENTS
                               ? 'translate'
-                              : 'review'
+                              : selectedOption === OPTIONS.BRAINSTORM
+                                ? 'brainstorm'
+                                : 'review'
                       }
                     />
                   )}
@@ -359,8 +381,10 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       (rewriteMode === 'direct' ||
                         rewriteMode === 'assistant')) ||
                     (selectedOption === OPTIONS.TRANSLATE_DOCUMENTS &&
-                      (translationMode === 'direct' || // Config form for Direct/Detect
-                        translationMode === 'assistant'))) && // Wait, Assistant usually uses chat, but if we want config (like file upload hint) we might show something. But current ConfigForm returns null for assistant mode in translate context. So this is safe.
+                      (translationMode === 'direct' ||
+                        translationMode === 'assistant')) ||
+                    (selectedOption === OPTIONS.BRAINSTORM &&
+                      brainstormMode === 'structured')) &&
                     // HIDE CONFIG FORM IF FILE IS SELECTED IN REWRITE MODE
                     !(selectedOption === OPTIONS.REWRITE && selectedFile) && (
                       <div
