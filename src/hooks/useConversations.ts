@@ -57,7 +57,8 @@ export function useConversations(accessToken?: string) {
         if (!response.success) {
           console.error(
             'fetchConversationList failed:',
-            response.debugMessage || response.message,
+            response.debugMessage,
+            response.message,
           );
           // Return empty list instead of throwing
           return {
@@ -103,7 +104,8 @@ export function useSavedConversations(accessToken?: string) {
         if (!response.success) {
           console.error(
             'fetchSavedConversationList failed:',
-            response.debugMessage || response.message,
+            response.debugMessage,
+            response.message,
           );
           return [];
         }
@@ -137,7 +139,8 @@ export function useActiveConversation(
         if (!response.success) {
           console.error(
             'loadSingleConversation failed:',
-            response.debugMessage || response.message,
+            response.debugMessage,
+            response.message,
           );
           return { messages: [] };
         }
@@ -209,7 +212,8 @@ export function useSharedConversation(id: string) {
         if (!response.success) {
           console.error(
             'loadSingleSharedConversation failed:',
-            response.debugMessage || response.message,
+            response.debugMessage,
+            response.message,
           );
           return { messages: [] };
         }
@@ -294,7 +298,8 @@ export function useDeleteConversation() {
         if (!response.success) {
           console.error(
             'deleteConversation failed:',
-            response.debugMessage || response.message,
+            response.debugMessage,
+            response.message,
           );
           // throw new Error(response.message);
           return null;
@@ -340,7 +345,8 @@ export function useSearchConversations(
         if (!response.success) {
           console.error(
             'searchConversations failed:',
-            response.debugMessage || response.message,
+            response.debugMessage,
+            response.message,
           );
           return [];
         }

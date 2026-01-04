@@ -9,10 +9,18 @@ import {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export interface ApiResponse<T = any> {
+  success: boolean;
+  message: string;
+  data?: T;
+  debugMessage?: string;
+  statusCode?: number;
+}
+
 export async function postBrainstormAssistant(
   payload: AssistantBrainstormRequest,
   accessToken: string,
-): Promise<BrainstormResponse | null> {
+): Promise<ApiResponse<BrainstormResponse | any>> {
   const apiUrl = `${API_BASE_URL}/brainstorm/assistant`;
   console.log('[brainstormActions] postBrainstormAssistant payload:', payload);
 
@@ -27,27 +35,25 @@ export async function postBrainstormAssistant(
     });
 
     if (!response.ok) {
-      console.error(
-        'postBrainstormAssistant failed:',
-        response.status,
-        response.statusText,
-      );
-      // Try to parse error body if JSON
-      try {
-        const errorData = await response.json();
-        console.error('Error details:', errorData);
-      } catch (e) {
-        // ignore
-      }
-      return null;
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
     console.log('[brainstormActions] postBrainstormAssistant data:', data);
-    return data;
-  } catch (error) {
+    return {
+      success: data.success ?? true,
+      message: data.message || 'Success',
+      data: data.data || data,
+      statusCode: data.statusCode,
+    };
+  } catch (error: any) {
     console.error('postBrainstormAssistant error:', error);
-    return null;
+    return {
+      success: false,
+      message: 'Failed to process brainstorm assistant request. Try again.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
   }
 }
 
@@ -55,7 +61,7 @@ export async function generateStructuredBrainstorm(
   idea: string,
   config: BrainstormConfig,
   accessToken: string,
-): Promise<BrainstormResponse | null> {
+): Promise<ApiResponse<BrainstormResponse | any>> {
   const apiUrl = `${API_BASE_URL}/brainstorm/generate`;
 
   // Filter out undefined/null values from config to ensure clean payload as per request
@@ -101,25 +107,24 @@ export async function generateStructuredBrainstorm(
     });
 
     if (!response.ok) {
-      console.error(
-        'generateStructuredBrainstorm failed:',
-        response.status,
-        response.statusText,
-      );
-      try {
-        const errorData = await response.json();
-        console.error('Error details:', errorData);
-      } catch (e) {
-        // ignore
-      }
-      return null;
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
     console.log('[brainstormActions] generateStructuredBrainstorm data:', data);
-    return data;
-  } catch (error) {
+    return {
+      success: data.success ?? true,
+      message: data.message || 'Success',
+      data: data.data || data,
+      statusCode: data.statusCode,
+    };
+  } catch (error: any) {
     console.error('generateStructuredBrainstorm error:', error);
-    return null;
+    return {
+      success: false,
+      message: 'Failed to generate structured brainstorm. Try again.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
   }
 }

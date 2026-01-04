@@ -117,11 +117,11 @@ const TOOLBAR_ITEMS = [
     label: 'Create Plan',
     Icon: Waypoints,
   },
-  {
-    type: OPTIONS.PRESENTATION,
-    label: 'Generate Presentation',
-    Icon: Presentation,
-  },
+  // {
+  //   type: OPTIONS.PRESENTATION,
+  //   label: 'Generate Presentation',
+  //   Icon: Presentation,
+  // },
   // {
   //   type: OPTIONS.GENERATE_REPORT,
   //   label: 'Generate Report',
