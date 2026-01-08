@@ -15,10 +15,10 @@ import { useSidebarStore } from '@/stores/useSidebarStore';
 import {
   ArrowUpRight,
   BookA,
+  Bookmark,
   CircleStop,
   Code,
   LogOut,
-  MessageSquare,
   Orbit,
   PanelLeftClose,
   ReceiptText,
@@ -126,36 +126,7 @@ const LeftSideNav = () => {
           </Button>
 
           <div className={cn('space-y-0.5', !isLoggedIn && 'hidden')}>
-            <Button
-              onClick={() => {
-                onOpen({
-                  type: 'search-chats',
-                });
-                close();
-              }}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <Search />{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Search
-              </span>
-            </Button>
-            <Button
-              onClick={() => {
-                router.push('/saved-chats');
-                close();
-              }}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <MessageSquare />{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Saved
-              </span>
-            </Button>
+
             <Button
               onClick={() => {
                 router.push('/agents');
@@ -170,20 +141,7 @@ const LeftSideNav = () => {
                 Agents
               </span>
             </Button>
-            {/* <Button
-              onClick={() => {
-                router.push('/apps');
-                setTimeout(() => close(), 50);
-              }}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <LayoutGrid />{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Connect apps
-              </span>
-            </Button> */}
+
 
             <Button
               disabled={pathname === '/workspaces'}
@@ -204,30 +162,7 @@ const LeftSideNav = () => {
                 Spaces
               </span>
             </Button>
-            {/* <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
-              <Bot />
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                <Link href="https://www.altiagents.com/" target="_blank">
-                  <span className="absolute inset-0"></span>
-                  Agents
-                </Link>
-              </span>
-              <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
-            </Button> */}
-            {/* <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
-              <Workflow />
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                <Link href="http://altiworkflows.com/" target="_blank">
-                  <span className="absolute inset-0"></span>
-                  Workflows
-                </Link>
-              </span>
-              <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
-            </Button> */}
+
             <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
               <Code />
               <span
@@ -240,33 +175,28 @@ const LeftSideNav = () => {
               </span>
               <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
             </Button>
-            {/* <Button
-              disabled={pathname === '/apps'}
-              onClick={() => {
-                setActiveConversation(null);
-                setShowStartLastMessage(false);
-                setUserMessage('');
-                setSelectedOption(null);
-                if (pathname !== '/apps') router.push('/apps');
-                close();
-              }}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
-            >
-              <LayoutGrid />
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Connectors
-              </span>
-            </Button> */}
 
-            <div
-              className={cn(
-                'mt-6 pl-4 text-sm text-gray-500',
-                hideSidebar && 'hidden',
-              )}
-            >
-              Chat history
+            <div className='flex mt-6 space-x-4 items-center'>
+              <div
+                className={cn(
+                  'pl-4 text-sm text-gray-500',
+                  hideSidebar && 'hidden',
+                )}
+              >
+                Chat history
+              </div>
+              <div className='flex items-center space-x-3'>
+
+                <Bookmark onClick={() => {
+                  router.push('/saved-chats');
+                  close();
+                }} className='size-3.5 text-gray-500' />
+                <Search className='size-3.5 text-gray-500' onClick={() => {
+                  onOpen({
+                    type: 'search-chats',
+                  });
+                }} />
+              </div>
             </div>
           </div>
         </div>
