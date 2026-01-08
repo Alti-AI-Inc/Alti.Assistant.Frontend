@@ -13,10 +13,10 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {
   ArrowUpRight,
+  Bookmark,
   CircleStop,
   Code,
   LogOut,
-  MessageSquare,
   Orbit,
   Scale,
   Search,
@@ -28,6 +28,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import ConversationsList from './ConversationsList';
 import { Button } from './ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 const LeftSideNavMobile = () => {
   const { data } = useSession();
@@ -69,29 +70,6 @@ const LeftSideNavMobile = () => {
             <>
               <Button
                 onClick={() => {
-                  onOpen({
-                    type: 'search-chats',
-                  });
-                  close();
-                }}
-                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-              >
-                <Search />
-                <span className="text-sm font-normal">Search</span>
-              </Button>
-
-              <Button
-                onClick={() => {
-                  router.push('/saved-chats');
-                  close();
-                }}
-                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-              >
-                <MessageSquare />
-                <span className="text-sm font-normal">Saved</span>
-              </Button>
-              <Button
-                onClick={() => {
                   router.push('/agents');
                   close();
                 }}
@@ -100,16 +78,7 @@ const LeftSideNavMobile = () => {
                 <CircleStop />
                 <span className="text-sm font-normal">Agents</span>
               </Button>
-              {/* <Button
-                onClick={() => {
-                  router.push('/apps');
-                  close();
-                }}
-                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-              >
-                <LayoutGrid />
-                <span className="text-sm font-normal"> Connect apps</span>
-              </Button> */}
+
 
               <Button
                 disabled={pathname === '/workspaces'}
@@ -126,26 +95,7 @@ const LeftSideNavMobile = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-vector-square-icon lucide-vector-square"><path d="M19.5 7a24 24 0 0 1 0 10" /><path d="M4.5 7a24 24 0 0 0 0 10" /><path d="M7 19.5a24 24 0 0 0 10 0" /><path d="M7 4.5a24 24 0 0 1 10 0" /><rect x="17" y="17" width="5" height="5" rx="1" /><rect x="17" y="2" width="5" height="5" rx="1" /><rect x="2" y="17" width="5" height="5" rx="1" /><rect x="2" y="2" width="5" height="5" rx="1" /></svg>
                 <span className="text-sm font-normal">Spaces</span>
               </Button>
-              {/* <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
-                <Bot />
-                <span>
-                  <Link href="https://www.altiagents.com/" target="_blank">
-                    <span className="absolute inset-0"></span>
-                    Agents
-                  </Link>
-                </span>
-                <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
-              </Button> */}
-              {/* <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
-                <Workflow />
-                <span>
-                  <Link href="http://altiworkflows.com/" target="_blank">
-                    <span className="absolute inset-0"></span>
-                    Workflows
-                  </Link>
-                </span>
-                <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
-              </Button> */}
+
               <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
                 <Code />
                 <span>
@@ -156,24 +106,40 @@ const LeftSideNavMobile = () => {
                 </span>
                 <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
               </Button>
-              {/* <Button
-                disabled={pathname === '/apps'}
-                onClick={() => {
-                  setActiveConversation(null);
-                  setShowStartLastMessage(false);
-                  setUserMessage('');
-                  setSelectedOption(null);
-                  if (pathname !== '/apps') router.push('/apps');
-                  close();
-                }}
-                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
-              >
-                <LayoutGrid />
-                <span className="text-sm font-normal">Connectors</span>
-              </Button> */}
 
-              <div className="mt-6 pl-4 text-sm text-gray-500">
-                Chat history
+
+              <div className='flex mt-6 space-x-4 items-center'>
+                <div
+                  className=
+                  'pl-4 text-sm text-gray-500'>
+                  Chat history
+                </div>
+                <div className='flex items-center space-x-3'>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Bookmark onClick={() => {
+                        router.push('/saved-chats');
+                        close();
+                      }} className='size-3.5 text-gray-500' />
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Saved Chats</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Search className='size-3.5 text-gray-500' onClick={() => {
+                        onOpen({
+                          type: 'search-chats',
+                        });
+                        close();
+                      }} />
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Search Chats</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
               </div>
             </>
           )}

@@ -174,16 +174,17 @@ const LeftSideNav = () => {
                   Code
                 </Link>
               </span>
-              <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
+              <ArrowUpRight className={cn("ml-auto hidden size-5 text-gray-600 group-hover:flex",
+                hideSidebar && 'hidden',
+              )} />
             </Button>
 
-            <div className='flex mt-6 space-x-4 items-center'>
+            <div className={cn('flex mt-6 space-x-4 items-center',
+              hideSidebar && 'hidden',
+            )}>
               <div
-                className={cn(
-                  'pl-4 text-sm text-gray-500',
-                  hideSidebar && 'hidden',
-                )}
-              >
+                className=
+                'pl-4 text-sm text-gray-500'>
                 Chat history
               </div>
               <div className='flex items-center space-x-3'>
