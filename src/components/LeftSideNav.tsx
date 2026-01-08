@@ -175,7 +175,7 @@ const LeftSideNav = () => {
                 </Link>
               </span>
               <ArrowUpRight className={cn("ml-auto hidden size-5 text-gray-600 group-hover:flex",
-                hideSidebar && 'hidden',
+                hideSidebar && 'hidden group-hover:hidden',
               )} />
             </Button>
 
