@@ -35,6 +35,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ConversationsList from './ConversationsList';
 import { Button } from './ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 const LeftSideNav = () => {
   const { data } = useSession();
@@ -186,16 +187,31 @@ const LeftSideNav = () => {
                 Chat history
               </div>
               <div className='flex items-center space-x-3'>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Bookmark onClick={() => {
+                      router.push('/saved-chats');
+                      close();
+                    }} className='size-3.5 text-gray-500' />
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>Saved Chats</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Search className='size-3.5 text-gray-500' onClick={() => {
+                      onOpen({
+                        type: 'search-chats',
+                      });
+                    }} />
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>Search Chats</p>
+                  </TooltipContent>
+                </Tooltip>
 
-                <Bookmark onClick={() => {
-                  router.push('/saved-chats');
-                  close();
-                }} className='size-3.5 text-gray-500' />
-                <Search className='size-3.5 text-gray-500' onClick={() => {
-                  onOpen({
-                    type: 'search-chats',
-                  });
-                }} />
+
               </div>
             </div>
           </div>
