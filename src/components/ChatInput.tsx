@@ -18,12 +18,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { useBrainstorm } from '@/hooks/useBrainstorm';
 import { useDocument } from '@/hooks/useDocument';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
+import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import { useRewrite } from '@/hooks/useRewrite';
 import { useTranslation } from '@/hooks/useTranslation';
-import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
-import { useBrainstorm } from '@/hooks/useBrainstorm';
 import {
   OPTIONS,
   ROLES,
@@ -34,11 +34,11 @@ import {
   ArrowRight,
   AudioLines,
   Brain,
+  ChartArea,
   Code,
   FileCheck,
+  FileMinus,
   FileText,
-  Image as ImageIcon,
-  ImageUp,
   Languages,
   LayoutGrid,
   Mail,
@@ -52,7 +52,7 @@ import {
   PencilRuler,
   Plus,
   Presentation,
-  Waypoints,
+  Waypoints
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -82,16 +82,16 @@ const TOOLBAR_ITEMS = [
     label: 'Transcribe Audio',
     Icon: AudioLines,
   },
-  {
-    type: OPTIONS.IMAGE,
-    label: 'Create Image',
-    Icon: ImageIcon,
-  },
-  {
-    type: OPTIONS.EDIT_IMAGE,
-    label: 'Edit Image',
-    Icon: ImageUp,
-  },
+  // {
+  //   type: OPTIONS.IMAGE,
+  //   label: 'Create Image',
+  //   Icon: ImageIcon,
+  // },
+  // {
+  //   type: OPTIONS.EDIT_IMAGE,
+  //   label: 'Edit Image',
+  //   Icon: ImageUp,
+  // },
   {
     type: OPTIONS.CODE,
     label: 'Write Code',
@@ -117,16 +117,21 @@ const TOOLBAR_ITEMS = [
     label: 'Create Plan',
     Icon: Waypoints,
   },
-  // {
-  //   type: OPTIONS.PRESENTATION,
-  //   label: 'Generate Presentation',
-  //   Icon: Presentation,
-  // },
-  // {
-  //   type: OPTIONS.GENERATE_REPORT,
-  //   label: 'Generate Report',
-  //   Icon: FileMinus,
-  // },
+  {
+    type: OPTIONS.PRESENTATION,
+    label: 'Generate Presentation',
+    Icon: Presentation,
+  },
+  {
+    type: OPTIONS.GENERATE_REPORT,
+    label: 'Generate Report',
+    Icon: FileMinus,
+  },
+  {
+    type: OPTIONS.GENERATE_CHART,
+    label: 'Create Chart',
+    Icon: ChartArea,
+  },
   {
     type: OPTIONS.DRAFT_DOCUMENT,
     label: 'Draft Document',
@@ -959,8 +964,8 @@ const ChatInput = ({
           className={cn(
             'flex flex-col rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4',
             activeConversation?.knowledgebaseId &&
-              message.length < 100 &&
-              'flex',
+            message.length < 100 &&
+            'flex',
           )}
         >
           {/* Image Preview */}
@@ -1141,7 +1146,7 @@ const ChatInput = ({
                         className={cn(
                           'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black hover:bg-gray-100',
                           selectedOption === type &&
-                            'bg-black text-white hover:bg-black hover:text-white',
+                          'bg-black text-white hover:bg-black hover:text-white',
                         )}
                       />
                     </TooltipTrigger>

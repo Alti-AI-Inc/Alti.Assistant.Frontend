@@ -16,7 +16,6 @@ import {
   ArrowUpRight,
   BookA,
   Bookmark,
-  CircleStop,
   Code,
   LogOut,
   Orbit,
@@ -127,22 +126,6 @@ const LeftSideNav = () => {
           </Button>
 
           <div className={cn('space-y-0.5', !isLoggedIn && 'hidden')}>
-
-            <Button
-              onClick={() => {
-                router.push('/agents');
-                close();
-              }}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-            >
-              <CircleStop />{' '}
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Agents
-              </span>
-            </Button>
-
 
             <Button
               disabled={pathname === '/workspaces'}

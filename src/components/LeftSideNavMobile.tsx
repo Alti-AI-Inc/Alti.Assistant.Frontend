@@ -14,7 +14,6 @@ import { useModalStore } from '@/stores/useModalStore';
 import {
   ArrowUpRight,
   Bookmark,
-  CircleStop,
   Code,
   LogOut,
   Orbit,
@@ -68,17 +67,6 @@ const LeftSideNavMobile = () => {
 
           {isLoggedIn && (
             <>
-              <Button
-                onClick={() => {
-                  router.push('/agents');
-                  close();
-                }}
-                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-              >
-                <CircleStop />
-                <span className="text-sm font-normal">Agents</span>
-              </Button>
-
 
               <Button
                 disabled={pathname === '/workspaces'}
