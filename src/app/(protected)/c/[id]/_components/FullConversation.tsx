@@ -35,6 +35,8 @@ import VideoComponentForContent from './YoutubePlayer';
 
 import { BrainstormData } from './BrainstormData';
 import { useBrainstorm } from '@/hooks/useBrainstorm';
+import PresentationLoadingCard from './PresentationLoadingCard';
+import { getPresentationStatus } from '@/actions/presentationActions';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
@@ -56,6 +58,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     isLoadingResponse,
     selectedOption,
     rewriteMode,
+    presentationTask,
+    setPresentationTask,
+    updateActiveConversation,
   } = useConversationsStore();
 
   const { onOpen } = useModalStore();
@@ -160,6 +165,96 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   // console.log('activeConversation?.messages', activeConversation?.messages);
   // const lastMessageRole = activeConversation?.messages.at(-1)?.role;
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+
+  // Presentation task polling effect
+  // Use ref to track current task to avoid re-triggering effect on message updates
+  const presentationTaskRef = useRef(presentationTask);
+  presentationTaskRef.current = presentationTask;
+
+  // Only depend on taskId to prevent infinite loop when message updates
+  const taskId = presentationTask?.taskId;
+  const taskStatus = presentationTask?.status;
+
+  useEffect(() => {
+    // Guard: only run if we have a pending task
+    if (!taskId || taskStatus !== 'pending') return;
+    if (!data?.accessToken) return;
+
+    let isCancelled = false;
+
+    const pollStatus = async () => {
+      const currentTask = presentationTaskRef.current;
+      if (!currentTask || isCancelled) return;
+
+      const result = await getPresentationStatus(
+        currentTask.taskId,
+        currentTask.conversationId,
+        data.accessToken,
+        data.user?.id,
+      );
+
+      if (isCancelled) return;
+
+      if (!result.success) {
+        console.error('[FullConversation] Polling error:', result.debugMessage);
+        return;
+      }
+
+      if (result.data?.status === 'completed' && result.data.publicUrl) {
+        // Update conversation with download card
+        updateActiveConversation(
+          'Your presentation is ready! Click below to download.',
+          'assistant' as any,
+          currentTask.conversationId,
+          {
+            document: {
+              url: result.data.publicUrl,
+              file: {
+                fileName: 'Presentation.pptx',
+                format: 'pptx',
+              },
+              metadata: {
+                title: 'Generated Presentation',
+                documentType: 'PPTX',
+              },
+            },
+          },
+        );
+        setPresentationTask(null);
+      } else if (result.data?.status === 'failed') {
+        updateActiveConversation(
+          result.data.error || 'Presentation generation failed.',
+          'assistant' as any,
+          currentTask.conversationId,
+        );
+        setPresentationTask(null);
+      } else {
+        // Update status message (ref prevents effect re-trigger)
+        setPresentationTask({
+          ...currentTask,
+          message: result.data?.message || currentTask.message,
+        });
+      }
+    };
+
+    // Initial poll
+    pollStatus();
+
+    // Poll every 30 seconds
+    const interval = setInterval(pollStatus, 30000);
+
+    return () => {
+      isCancelled = true;
+      clearInterval(interval);
+    };
+  }, [
+    taskId,
+    taskStatus,
+    data?.accessToken,
+    data?.user?.id,
+    setPresentationTask,
+    updateActiveConversation,
+  ]);
 
   return (
     <div
@@ -309,6 +404,10 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   )}
                 </div>
               ))}
+            {/* Presentation Loading Card - shown during polling */}
+            {presentationTask && presentationTask.status === 'pending' && (
+              <PresentationLoadingCard message={presentationTask.message} />
+            )}
             {/* Image Generation UI - Integrated inline */}
             {shouldShowConfirmation && (
               <ImageGenConfirmation onConfirm={handleUserConfirmation} />

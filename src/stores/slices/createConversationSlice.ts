@@ -5,6 +5,7 @@ import {
   ROLES,
   Reference,
   GeneratedDocument,
+  PresentationTask,
 } from '@/types/conversation';
 import {
   BrainstormData,
@@ -43,6 +44,9 @@ export interface ConversationSlice {
   setLoadingActiveConversation: (loading: boolean) => void;
   setLoadingResponse: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  // Presentation polling
+  presentationTask: PresentationTask | null;
+  setPresentationTask: (task: PresentationTask | null) => void;
 }
 
 export const createConversationSlice: StateCreator<
@@ -153,4 +157,8 @@ export const createConversationSlice: StateCreator<
   setLoadingResponse: isLoadingResponse => set({ isLoadingResponse }),
 
   setError: error => set({ error }),
+
+  // Presentation polling
+  presentationTask: null,
+  setPresentationTask: task => set({ presentationTask: task }),
 });
