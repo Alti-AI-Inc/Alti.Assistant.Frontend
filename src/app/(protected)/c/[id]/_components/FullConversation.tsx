@@ -35,6 +35,8 @@ import VideoComponentForContent from './YoutubePlayer';
 
 import { BrainstormData } from './BrainstormData';
 import { useBrainstorm } from '@/hooks/useBrainstorm';
+import PresentationLoadingCard from './PresentationLoadingCard';
+import { getPresentationStatus } from '@/actions/presentationActions';
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
@@ -56,6 +58,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     isLoadingResponse,
     selectedOption,
     rewriteMode,
+    presentationTask,
+    setPresentationTask,
+    updateActiveConversation,
   } = useConversationsStore();
 
   const { onOpen } = useModalStore();
@@ -94,6 +99,70 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       setActiveConversation(queryConversation);
     }
   }, [queryConversation, setActiveConversation, showStartLastMessage]);
+
+  // Track which conversation's presentation metadata we've already processed
+  const processedPresentationRef = useRef<string | null>(null);
+
+  // Check presentation metadata on conversation load (page refresh / reopen)
+  useEffect(() => {
+    if (!queryConversation?.metadata?.presentation_metadata) return;
+
+    const presMeta = queryConversation.metadata.presentation_metadata;
+    const convId = queryConversation.conversationId || conversationId;
+
+    // Skip if we already processed this conversation's metadata
+    if (processedPresentationRef.current === convId) return;
+    // Don't override if we already have a task in progress from this session
+    if (presentationTask) return;
+
+    if (presMeta.status === 'pending' && presMeta.taskId) {
+      // Resume polling for pending task
+      processedPresentationRef.current = convId;
+      setPresentationTask({
+        taskId: presMeta.taskId,
+        conversationId: convId,
+        status: 'pending',
+        message: 'Resuming generation...',
+      });
+    } else if (presMeta.status === 'completed' && presMeta.publicUrl) {
+      // Mark as processed immediately to prevent loops
+      processedPresentationRef.current = convId;
+
+      // Check if last assistant message already has the document
+      const lastAssistantMsg = queryConversation.messages
+        ?.filter((m: any) => m.role === 'assistant')
+        .pop();
+
+      if (!lastAssistantMsg?.metadata?.document) {
+        // Add download card to conversation
+        updateActiveConversation(
+          'Your presentation is ready! Click below to download.',
+          'assistant' as any,
+          convId,
+          {
+            document: {
+              url: presMeta.publicUrl,
+              file: {
+                fileName:
+                  presMeta.publicUrl.split('/').pop() || 'Presentation.pptx',
+                format: 'pptx',
+              },
+              metadata: {
+                title: 'Generated Presentation',
+                documentType: 'PPTX',
+              },
+            },
+          },
+        );
+      }
+    }
+  }, [
+    queryConversation,
+    conversationId,
+    presentationTask,
+    setPresentationTask,
+    updateActiveConversation,
+  ]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -160,6 +229,96 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   // console.log('activeConversation?.messages', activeConversation?.messages);
   // const lastMessageRole = activeConversation?.messages.at(-1)?.role;
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+
+  // Presentation task polling effect
+  // Use ref to track current task to avoid re-triggering effect on message updates
+  const presentationTaskRef = useRef(presentationTask);
+  presentationTaskRef.current = presentationTask;
+
+  // Only depend on taskId to prevent infinite loop when message updates
+  const taskId = presentationTask?.taskId;
+  const taskStatus = presentationTask?.status;
+
+  useEffect(() => {
+    // Guard: only run if we have a pending task
+    if (!taskId || taskStatus !== 'pending') return;
+    if (!data?.accessToken) return;
+
+    let isCancelled = false;
+
+    const pollStatus = async () => {
+      const currentTask = presentationTaskRef.current;
+      if (!currentTask || isCancelled) return;
+
+      const result = await getPresentationStatus(
+        currentTask.taskId,
+        currentTask.conversationId,
+        data.accessToken,
+        data.user?.id,
+      );
+
+      if (isCancelled) return;
+
+      if (!result.success) {
+        console.error('[FullConversation] Polling error:', result.debugMessage);
+        return;
+      }
+
+      if (result.data?.status === 'completed' && result.data.publicUrl) {
+        // Update conversation with download card
+        updateActiveConversation(
+          'Your presentation is ready! Click below to download.',
+          'assistant' as any,
+          currentTask.conversationId,
+          {
+            document: {
+              url: result.data.publicUrl,
+              file: {
+                fileName: 'Presentation.pptx',
+                format: 'pptx',
+              },
+              metadata: {
+                title: 'Generated Presentation',
+                documentType: 'PPTX',
+              },
+            },
+          },
+        );
+        setPresentationTask(null);
+      } else if (result.data?.status === 'failed') {
+        updateActiveConversation(
+          result.data.error || 'Presentation generation failed.',
+          'assistant' as any,
+          currentTask.conversationId,
+        );
+        setPresentationTask(null);
+      } else {
+        // Update status message (ref prevents effect re-trigger)
+        setPresentationTask({
+          ...currentTask,
+          message: result.data?.message || currentTask.message,
+        });
+      }
+    };
+
+    // Initial poll
+    pollStatus();
+
+    // Poll every 30 seconds
+    const interval = setInterval(pollStatus, 30000);
+
+    return () => {
+      isCancelled = true;
+      clearInterval(interval);
+    };
+  }, [
+    taskId,
+    taskStatus,
+    data?.accessToken,
+    data?.user?.id,
+    setPresentationTask,
+    updateActiveConversation,
+  ]);
 
   return (
     <div
@@ -309,6 +468,10 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   )}
                 </div>
               ))}
+            {/* Presentation Loading Card - shown during polling */}
+            {presentationTask && presentationTask.status === 'pending' && (
+              <PresentationLoadingCard message={presentationTask.message} />
+            )}
             {/* Image Generation UI - Integrated inline */}
             {shouldShowConfirmation && (
               <ImageGenConfirmation onConfirm={handleUserConfirmation} />

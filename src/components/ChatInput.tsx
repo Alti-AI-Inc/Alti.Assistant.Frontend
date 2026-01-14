@@ -52,7 +52,7 @@ import {
   PencilRuler,
   Plus,
   Presentation,
-  Waypoints
+  Waypoints,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -488,6 +488,7 @@ const ChatInput = ({
       const document =
         response.data?.document || response.data?.responseMessage?.document;
 
+      console.log('full response', response);
       // Determine the appropriate response text based on the context
       const getResponseText = () => {
         if (activeConversation?.knowledgebaseId) {
@@ -964,8 +965,8 @@ const ChatInput = ({
           className={cn(
             'flex flex-col rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4',
             activeConversation?.knowledgebaseId &&
-            message.length < 100 &&
-            'flex',
+              message.length < 100 &&
+              'flex',
           )}
         >
           {/* Image Preview */}
@@ -1146,7 +1147,7 @@ const ChatInput = ({
                         className={cn(
                           'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black hover:bg-gray-100',
                           selectedOption === type &&
-                          'bg-black text-white hover:bg-black hover:text-white',
+                            'bg-black text-white hover:bg-black hover:text-white',
                         )}
                       />
                     </TooltipTrigger>

@@ -98,3 +98,12 @@ export type ActiveConversation = {
   createdAt?: string;
   updatedAt?: string;
 };
+
+// Presentation task for async generation with polling
+export interface PresentationTask {
+  taskId: string;
+  conversationId: string;
+  status: 'pending' | 'completed' | 'failed';
+  message: string;
+  publicUrl?: string;
+}
