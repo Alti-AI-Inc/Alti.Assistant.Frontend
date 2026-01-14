@@ -99,6 +99,70 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       setActiveConversation(queryConversation);
     }
   }, [queryConversation, setActiveConversation, showStartLastMessage]);
+
+  // Track which conversation's presentation metadata we've already processed
+  const processedPresentationRef = useRef<string | null>(null);
+
+  // Check presentation metadata on conversation load (page refresh / reopen)
+  useEffect(() => {
+    if (!queryConversation?.metadata?.presentation_metadata) return;
+
+    const presMeta = queryConversation.metadata.presentation_metadata;
+    const convId = queryConversation.conversationId || conversationId;
+
+    // Skip if we already processed this conversation's metadata
+    if (processedPresentationRef.current === convId) return;
+    // Don't override if we already have a task in progress from this session
+    if (presentationTask) return;
+
+    if (presMeta.status === 'pending' && presMeta.taskId) {
+      // Resume polling for pending task
+      processedPresentationRef.current = convId;
+      setPresentationTask({
+        taskId: presMeta.taskId,
+        conversationId: convId,
+        status: 'pending',
+        message: 'Resuming generation...',
+      });
+    } else if (presMeta.status === 'completed' && presMeta.publicUrl) {
+      // Mark as processed immediately to prevent loops
+      processedPresentationRef.current = convId;
+
+      // Check if last assistant message already has the document
+      const lastAssistantMsg = queryConversation.messages
+        ?.filter((m: any) => m.role === 'assistant')
+        .pop();
+
+      if (!lastAssistantMsg?.metadata?.document) {
+        // Add download card to conversation
+        updateActiveConversation(
+          'Your presentation is ready! Click below to download.',
+          'assistant' as any,
+          convId,
+          {
+            document: {
+              url: presMeta.publicUrl,
+              file: {
+                fileName:
+                  presMeta.publicUrl.split('/').pop() || 'Presentation.pptx',
+                format: 'pptx',
+              },
+              metadata: {
+                title: 'Generated Presentation',
+                documentType: 'PPTX',
+              },
+            },
+          },
+        );
+      }
+    }
+  }, [
+    queryConversation,
+    conversationId,
+    presentationTask,
+    setPresentationTask,
+    updateActiveConversation,
+  ]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);

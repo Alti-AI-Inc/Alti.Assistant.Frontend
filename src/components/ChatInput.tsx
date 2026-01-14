@@ -209,7 +209,6 @@ const ChatInput = ({
     userMessage: message,
     setUserMessage: setMessage,
     setShowStartLastMessage,
-    setPresentationTask,
   } = useConversationsStore();
 
   // Custom file state for docs (controlled or uncontrolled)
@@ -526,16 +525,6 @@ const ChatInput = ({
           ...(document && { document }),
         },
       );
-
-      // Check if presentation task started (has taskId) - set polling state
-      if (selectedOption === OPTIONS.PRESENTATION && response.data?.taskId) {
-        setPresentationTask({
-          taskId: response.data.taskId,
-          conversationId: response.data.conversationId,
-          status: response.data.status || 'pending',
-          message: response.data.message,
-        });
-      }
 
       if (response?.data) {
         queryClient.invalidateQueries({
