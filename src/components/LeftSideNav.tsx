@@ -25,7 +25,7 @@ import {
   Search,
   Settings,
   SquarePen,
-  SquareUserRound
+  SquareUserRound,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -126,7 +126,6 @@ const LeftSideNav = () => {
           </Button>
 
           <div className={cn('space-y-0.5', !isLoggedIn && 'hidden')}>
-
             <Button
               disabled={pathname === '/workspaces'}
               onClick={() => {
@@ -139,7 +138,27 @@ const LeftSideNav = () => {
               }}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-vector-square-icon lucide-vector-square"><path d="M19.5 7a24 24 0 0 1 0 10" /><path d="M4.5 7a24 24 0 0 0 0 10" /><path d="M7 19.5a24 24 0 0 0 10 0" /><path d="M7 4.5a24 24 0 0 1 10 0" /><rect x="17" y="17" width="5" height="5" rx="1" /><rect x="17" y="2" width="5" height="5" rx="1" /><rect x="2" y="17" width="5" height="5" rx="1" /><rect x="2" y="2" width="5" height="5" rx="1" /></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-vector-square-icon lucide-vector-square"
+              >
+                <path d="M19.5 7a24 24 0 0 1 0 10" />
+                <path d="M4.5 7a24 24 0 0 0 0 10" />
+                <path d="M7 19.5a24 24 0 0 0 10 0" />
+                <path d="M7 4.5a24 24 0 0 1 10 0" />
+                <rect x="17" y="17" width="5" height="5" rx="1" />
+                <rect x="17" y="2" width="5" height="5" rx="1" />
+                <rect x="2" y="17" width="5" height="5" rx="1" />
+                <rect x="2" y="2" width="5" height="5" rx="1" />
+              </svg>
               <span
                 className={cn('text-sm font-normal', hideSidebar && 'hidden')}
               >
@@ -157,26 +176,31 @@ const LeftSideNav = () => {
                   Code
                 </Link>
               </span>
-              <ArrowUpRight className={cn("ml-auto hidden size-5 text-gray-600 group-hover:flex",
-                hideSidebar && 'hidden group-hover:hidden',
-              )} />
+              <ArrowUpRight
+                className={cn(
+                  'ml-auto hidden size-5 text-gray-600 group-hover:flex',
+                  hideSidebar && 'hidden group-hover:hidden',
+                )}
+              />
             </Button>
 
-            <div className={cn('flex mt-6 space-x-4 items-center',
-              hideSidebar && 'hidden',
-            )}>
-              <div
-                className=
-                'pl-4 text-sm text-gray-500'>
-                Chat history
-              </div>
-              <div className='flex items-center space-x-3'>
+            <div
+              className={cn(
+                'mt-6 flex items-center space-x-4',
+                hideSidebar && 'hidden',
+              )}
+            >
+              <div className="pl-4 text-sm text-gray-500">Chat history</div>
+              <div className="flex items-center space-x-3">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Bookmark onClick={() => {
-                      router.push('/saved-chats');
-                      close();
-                    }} className='size-3.5 text-gray-500' />
+                    <Bookmark
+                      onClick={() => {
+                        router.push('/saved-chats');
+                        close();
+                      }}
+                      className="size-3.5 text-gray-500"
+                    />
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
                     <p>Saved Chats</p>
@@ -184,18 +208,19 @@ const LeftSideNav = () => {
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Search className='size-3.5 text-gray-500' onClick={() => {
-                      onOpen({
-                        type: 'search-chats',
-                      });
-                    }} />
+                    <Search
+                      className="size-3.5 text-gray-500"
+                      onClick={() => {
+                        onOpen({
+                          type: 'search-chats',
+                        });
+                      }}
+                    />
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
                     <p>Search Chats</p>
                   </TooltipContent>
                 </Tooltip>
-
-
               </div>
             </div>
           </div>
@@ -251,21 +276,22 @@ const LeftSideNav = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuGroup>
-
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/knowledge')}>
                   <BookA className="text-black" /> Knowledge
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/billing')}>
+                {/* <DropdownMenuItem onClick={() => router.push('/billing')}>
                   <ReceiptText className="text-black" /> Billing
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() =>
-                  onOpen({
-                    type: 'invite',
-                  })
-                }>
+                </DropdownMenuItem> */}
+                <DropdownMenuItem
+                  onClick={() =>
+                    onOpen({
+                      type: 'invite',
+                    })
+                  }
+                >
                   <SquareUserRound className="text-black" /> Invite
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/legal')}>
