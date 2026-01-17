@@ -14,11 +14,14 @@ export function ConfigForm() {
   const isTranslateMode = selectedOption === OPTIONS.TRANSLATE_DOCUMENTS;
   const isRewriteMode = selectedOption === OPTIONS.REWRITE;
   const isBrainstormMode = selectedOption === OPTIONS.BRAINSTORM;
+  const isPlanGenerationMode = selectedOption === OPTIONS.GENERATE_PLAN;
   const config = isReviewMode ? review.config : drafting.config;
   const { translationConfig, updateTranslationConfig, translationMode } =
     useConversationsStore();
 
   const { brainstormConfig, updateBrainstormConfig } = useConversationsStore();
+  const { planGenerationConfig, updatePlanGenerationConfig } =
+    useConversationsStore();
 
   const SUPPORTED_LANGUAGES = [
     { code: 'en', name: 'English' },
@@ -269,6 +272,111 @@ export function ConfigForm() {
       </select>
     </div>
   );
+
+  if (isPlanGenerationMode) {
+    return (
+      <div className="flex max-h-[40vh] w-full flex-col gap-6 overflow-y-auto rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
+        <div className="flex flex-col gap-1">
+          <h3 className="font-semibold text-gray-900">Plan Configuration</h3>
+          <p className="text-xs text-gray-500">
+            Configure your plan generation parameters.
+          </p>
+        </div>
+        <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-2 gap-4">
+            {renderSelect(
+              'Plan Type',
+              planGenerationConfig.planType || '',
+              val =>
+                updatePlanGenerationConfig({
+                  planType: val as any,
+                }),
+              [
+                { code: 'business_plan', name: 'Business Plan' },
+                { code: 'product_launch', name: 'Product Launch' },
+                { code: 'event_plan', name: 'Event Plan' },
+                { code: 'marketing_campaign', name: 'Marketing Campaign' },
+                { code: 'project_plan', name: 'Project Plan' },
+              ],
+            )}
+          </div>
+
+          {renderPillGroup(
+            'Complexity',
+            planGenerationConfig.complexity || '',
+            ['simple', 'moderate', 'complex'],
+            val => updatePlanGenerationConfig({ complexity: val as any }),
+          )}
+
+          {renderPillGroup(
+            'Plan Depth',
+            planGenerationConfig.planDepth || '',
+            ['quick', 'standard', 'detailed', 'comprehensive'],
+            val => updatePlanGenerationConfig({ planDepth: val as any }),
+          )}
+
+          {renderMultiSelectPillGroup(
+            'Domains',
+            planGenerationConfig.domains,
+            ['business', 'marketing', 'technical', 'design'],
+            vals => updatePlanGenerationConfig({ domains: vals as any }),
+          )}
+
+          {renderMultiSelectPillGroup(
+            'Brainstorm Aspects',
+            planGenerationConfig.brainstormAspects,
+            [
+              'swot_analysis',
+              'market_analysis',
+              'technical_feasibility',
+              'financial_projections',
+            ],
+            vals =>
+              updatePlanGenerationConfig({ brainstormAspects: vals as any }),
+          )}
+
+          <div className="grid grid-cols-3 gap-4">
+            {renderTextInput(
+              'Budget',
+              planGenerationConfig.constraints?.budget?.toString() || '',
+              'e.g. 50000',
+              val =>
+                updatePlanGenerationConfig({
+                  constraints: {
+                    ...planGenerationConfig.constraints,
+                    budget: val ? parseInt(val, 10) : undefined,
+                  },
+                }),
+            )}
+            {renderTextInput(
+              'Timeline',
+              planGenerationConfig.constraints?.timeline || '',
+              'e.g. 6 months',
+              val =>
+                updatePlanGenerationConfig({
+                  constraints: {
+                    ...planGenerationConfig.constraints,
+                    timeline: val,
+                  },
+                }),
+            )}
+            {renderTextInput(
+              'Team Size',
+              planGenerationConfig.constraints?.teamSize?.toString() || '',
+              'e.g. 5',
+              val =>
+                updatePlanGenerationConfig({
+                  constraints: {
+                    ...planGenerationConfig.constraints,
+                    teamSize: val ? parseInt(val, 10) : undefined,
+                  },
+                }),
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isBrainstormMode) {
     return (

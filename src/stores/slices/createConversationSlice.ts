@@ -12,6 +12,12 @@ import {
   BrainstormMetadata,
   IdeaAnalysis,
 } from '@/types/brainstorm';
+import {
+  PlanAnalysis,
+  PlanBrainstorm,
+  PlanData,
+  PlanStage,
+} from '@/types/plan-generation';
 
 export interface ConversationSlice {
   userMessage: string;
@@ -39,6 +45,14 @@ export interface ConversationSlice {
       brainstormData?: BrainstormData;
       metadata?: BrainstormMetadata; // This name conflicts slightly with 'metadata' property in message but let's see how it's used
       ideaAnalysis?: IdeaAnalysis;
+      // Plan generation extras
+      planStage?: PlanStage;
+      hasAnalysis?: boolean;
+      hasBrainstorm?: boolean;
+      hasPlan?: boolean;
+      planAnalysis?: PlanAnalysis;
+      planBrainstorm?: PlanBrainstorm;
+      planData?: PlanData;
     },
   ) => void;
   setLoadingActiveConversation: (loading: boolean) => void;
@@ -104,6 +118,21 @@ export const createConversationSlice: StateCreator<
                     ideaAnalysis: extras.ideaAnalysis,
                   },
                 }),
+                ...(extras?.planStage && {
+                  metadata: {
+                    planStage: extras.planStage,
+                    hasAnalysis: extras.hasAnalysis,
+                    hasBrainstorm: extras.hasBrainstorm,
+                    hasPlan: extras.hasPlan,
+                  },
+                }),
+                ...(extras?.planData && {
+                  metadata: {
+                    planAnalysis: extras.planAnalysis,
+                    planBrainstorm: extras.planBrainstorm,
+                    planData: extras.planData,
+                  },
+                }),
                 timestamp: new Date().toISOString(),
               },
             ],
@@ -135,6 +164,21 @@ export const createConversationSlice: StateCreator<
           }),
           ...(extras?.reference && {
             metadata: { reference: extras.reference },
+          }),
+          ...(extras?.planStage && {
+            metadata: {
+              planStage: extras.planStage,
+              hasAnalysis: extras.hasAnalysis,
+              hasBrainstorm: extras.hasBrainstorm,
+              hasPlan: extras.hasPlan,
+            },
+          }),
+          ...(extras?.planData && {
+            metadata: {
+              planAnalysis: extras.planAnalysis,
+              planBrainstorm: extras.planBrainstorm,
+              planData: extras.planData,
+            },
           }),
           timestamp,
         },

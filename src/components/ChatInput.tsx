@@ -22,6 +22,7 @@ import { useBrainstorm } from '@/hooks/useBrainstorm';
 import { useDocument } from '@/hooks/useDocument';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
+import { usePlanGeneration } from '@/hooks/usePlanGeneration';
 import { useRewrite } from '@/hooks/useRewrite';
 import { useTranslation } from '@/hooks/useTranslation';
 import {
@@ -283,6 +284,14 @@ const ChatInput = ({
     handleStructuredGeneration,
   } = useBrainstorm();
 
+  const {
+    planGenerationMode,
+    setPlanGenerationMode,
+    resetPlanGenerationConfig,
+    handleAssistantPlanGeneration,
+    handleDirectPlanGeneration,
+  } = usePlanGeneration();
+
   const isExistingConversation =
     activeConversation?.conversationId &&
     activeConversation?.conversationId !== 'new-chat' &&
@@ -377,6 +386,21 @@ const ChatInput = ({
         }
       }
 
+      // Reset Plan Generation if switching away
+      if (
+        selectedOption === OPTIONS.GENERATE_PLAN &&
+        nextOption !== OPTIONS.GENERATE_PLAN
+      ) {
+        resetPlanGenerationConfig();
+      }
+
+      // Plan Generation Mode Logic:
+      if (nextOption === OPTIONS.GENERATE_PLAN) {
+        if (isExistingConversation) {
+          setPlanGenerationMode('select_mode');
+        }
+      }
+
       setSelectedOption(nextOption);
     },
     [
@@ -430,7 +454,7 @@ const ChatInput = ({
 
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}${getApiEndpoint()}`;
   // console.log('apiUrl', apiUrl);
-  // console.log('token', data?.accessToken);
+  console.log('token', data?.accessToken);
   // console.log('userid', data?.user);
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
@@ -737,6 +761,35 @@ const ChatInput = ({
         }
         break;
 
+      case OPTIONS.GENERATE_PLAN:
+        if (planGenerationMode === 'select_mode') {
+          return;
+        }
+
+        const planMessage = message;
+        setMessage('');
+
+        if (planGenerationMode === 'direct') {
+          // Direct mode uses config form parameters
+          if (!planMessage?.trim()) {
+            return;
+          }
+          await handleDirectPlanGeneration(planMessage);
+        } else {
+          // Assistant mode (default) - supports file upload
+          await handleAssistantPlanGeneration(
+            planMessage,
+            isExistingConversation
+              ? activeConversation?.conversationId
+              : undefined,
+            selectedFile,
+          );
+          if (selectedFile) {
+            setSelectedFile(undefined);
+          }
+        }
+        break;
+
       default:
         // Use regular mutation for options that just need a standardized API call
         // The specific URL is already determined by getApiEndpoint()
@@ -829,6 +882,7 @@ const ChatInput = ({
       selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
       selectedOption === OPTIONS.REWRITE ||
       selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
+      selectedOption === OPTIONS.GENERATE_PLAN ||
       selectedOption === OPTIONS.IMAGE ||
       selectedOption === OPTIONS.EDIT_IMAGE;
 
@@ -852,10 +906,11 @@ const ChatInput = ({
       }
       setSelectedFile(file);
     }
-    // 2. Rewrite Flow: Also allows files
+    // 2. Rewrite/Translate/Plan Generation Flow: Allows document files
     else if (
       selectedOption === OPTIONS.REWRITE ||
-      selectedOption === OPTIONS.TRANSLATE_DOCUMENTS
+      selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
+      selectedOption === OPTIONS.GENERATE_PLAN
     ) {
       const extension = '.' + file.name.split('.').pop()?.toLowerCase();
       if (!ALLOWED_DOC_EXTENSIONS.includes(extension)) {
@@ -1048,7 +1103,9 @@ const ChatInput = ({
                         selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
                         selectedOption === OPTIONS.IMAGE ||
                         selectedOption === OPTIONS.EDIT_IMAGE ||
-                        selectedOption === OPTIONS.REWRITE;
+                        selectedOption === OPTIONS.REWRITE ||
+                        (selectedOption === OPTIONS.GENERATE_PLAN &&
+                          planGenerationMode !== 'direct');
 
                       if (isUploadAllowed) {
                         fileInputRef.current?.click();
@@ -1059,7 +1116,9 @@ const ChatInput = ({
                       selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
                         selectedOption === OPTIONS.IMAGE ||
                         selectedOption === OPTIONS.EDIT_IMAGE ||
-                        selectedOption === OPTIONS.REWRITE
+                        selectedOption === OPTIONS.REWRITE ||
+                        (selectedOption === OPTIONS.GENERATE_PLAN &&
+                          planGenerationMode !== 'direct')
                         ? 'cursor-pointer'
                         : 'cursor-not-allowed opacity-50',
                     )}
@@ -1072,6 +1131,7 @@ const ChatInput = ({
                         switch (selectedOption) {
                           case OPTIONS.REVIEW_DOCUMENTS:
                           case OPTIONS.REWRITE:
+                          case OPTIONS.GENERATE_PLAN:
                             return ALLOWED_DOC_EXTENSIONS.join(',');
                           case OPTIONS.IMAGE:
                           case OPTIONS.EDIT_IMAGE:

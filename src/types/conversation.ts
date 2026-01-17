@@ -1,4 +1,10 @@
 import { BrainstormData, BrainstormMetadata, IdeaAnalysis } from './brainstorm';
+import {
+  PlanAnalysis,
+  PlanBrainstorm,
+  PlanData,
+  PlanStage,
+} from './plan-generation';
 export enum ROLES {
   USER = 'user',
   ASSISTANT = 'assistant',
@@ -84,6 +90,14 @@ export type ConversationMessage = {
     brainstormData?: BrainstormData;
     brainstormMetadata?: BrainstormMetadata;
     ideaAnalysis?: IdeaAnalysis;
+    // Plan generation metadata
+    planStage?: PlanStage;
+    hasAnalysis?: boolean;
+    hasBrainstorm?: boolean;
+    hasPlan?: boolean;
+    planAnalysis?: PlanAnalysis;
+    planBrainstorm?: PlanBrainstorm;
+    planData?: PlanData;
   };
 };
 

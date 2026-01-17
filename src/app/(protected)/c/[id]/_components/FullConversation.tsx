@@ -34,7 +34,9 @@ import VideoComponent from './VideoComponent';
 import VideoComponentForContent from './YoutubePlayer';
 
 import { BrainstormData } from './BrainstormData';
+import { PlanDataComponent } from './PlanData';
 import { useBrainstorm } from '@/hooks/useBrainstorm';
+import { usePlanGeneration } from '@/hooks/usePlanGeneration';
 import PresentationLoadingCard from './PresentationLoadingCard';
 import { getPresentationStatus } from '@/actions/presentationActions';
 
@@ -68,6 +70,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { drafting, review } = useDocumentStore();
   const { translationMode } = useTranslation();
   const { brainstormMode } = useBrainstorm();
+  const { planGenerationMode } = usePlanGeneration();
 
   // Initialize Image Generation Hook
   const imageGenHook = useImageGeneration({ router, queryClient });
@@ -380,7 +383,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         (review && review.isActive) ||
         selectedOption === OPTIONS.REWRITE ||
         selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
-        selectedOption === OPTIONS.BRAINSTORM) && (
+        selectedOption === OPTIONS.BRAINSTORM ||
+        selectedOption === OPTIONS.GENERATE_PLAN) && (
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
           <div
             className={cn(
@@ -466,6 +470,13 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       analysis={message.metadata.ideaAnalysis}
                     />
                   )}
+                  {message.metadata?.planData && (
+                    <PlanDataComponent
+                      plan={message.metadata.planData}
+                      analysis={message.metadata.planAnalysis}
+                      brainstorm={message.metadata.planBrainstorm}
+                    />
+                  )}
                 </div>
               ))}
             {/* Presentation Loading Card - shown during polling */}
@@ -477,11 +488,12 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
               <ImageGenConfirmation onConfirm={handleUserConfirmation} />
             )}
             {isCollectingDetails && <ImageGenSuggestions />}
-            {/* Document Drafting/Review/Rewrite/Translate/Brainstorm UI */}
+            {/* Document Drafting/Review/Rewrite/Translate/Brainstorm/Plan Generation UI */}
             {(drafting.isActive ||
               selectedOption === OPTIONS.REWRITE ||
               selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
-              selectedOption === OPTIONS.BRAINSTORM) &&
+              selectedOption === OPTIONS.BRAINSTORM ||
+              selectedOption === OPTIONS.GENERATE_PLAN) &&
               !isLoadingResponse && (
                 <>
                   {!(
@@ -496,7 +508,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     (selectedOption === OPTIONS.BRAINSTORM &&
                       activeConversation?.conversationId &&
                       activeConversation?.conversationId !== 'new-chat' &&
-                      brainstormMode !== 'select_mode')
+                      brainstormMode !== 'select_mode') ||
+                    (selectedOption === OPTIONS.GENERATE_PLAN &&
+                      activeConversation?.conversationId &&
+                      activeConversation?.conversationId !== 'new-chat' &&
+                      planGenerationMode !== 'select_mode')
                   ) && (
                     <ModeSelector
                       currentMode={
@@ -520,9 +536,15 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                                 ? brainstormMode === 'select_mode'
                                   ? null
                                   : (brainstormMode as 'assistant' | 'direct')
-                                : review.mode === 'select_mode'
-                                  ? null
-                                  : (review.mode as 'assistant' | 'direct')
+                                : selectedOption === OPTIONS.GENERATE_PLAN
+                                  ? planGenerationMode === 'select_mode'
+                                    ? null
+                                    : (planGenerationMode as
+                                        | 'assistant'
+                                        | 'direct')
+                                  : review.mode === 'select_mode'
+                                    ? null
+                                    : (review.mode as 'assistant' | 'direct')
                       }
                       modeContext={
                         drafting.isActive
@@ -533,7 +555,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                               ? 'translate'
                               : selectedOption === OPTIONS.BRAINSTORM
                                 ? 'brainstorm'
-                                : 'review'
+                                : selectedOption === OPTIONS.GENERATE_PLAN
+                                  ? 'plan-generation'
+                                  : 'review'
                       }
                     />
                   )}
@@ -547,7 +571,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       (translationMode === 'direct' ||
                         translationMode === 'assistant')) ||
                     (selectedOption === OPTIONS.BRAINSTORM &&
-                      brainstormMode === 'structured')) &&
+                      brainstormMode === 'structured') ||
+                    (selectedOption === OPTIONS.GENERATE_PLAN &&
+                      planGenerationMode === 'direct')) &&
                     // HIDE CONFIG FORM IF FILE IS SELECTED IN REWRITE MODE
                     !(selectedOption === OPTIONS.REWRITE && selectedFile) && (
                       <div
