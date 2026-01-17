@@ -19,6 +19,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { useBrainstorm } from '@/hooks/useBrainstorm';
+import { useContractReview } from '@/hooks/useContractReview';
 import { useDocument } from '@/hooks/useDocument';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
@@ -31,155 +32,13 @@ import {
   useConversationsStore,
 } from '@/stores/useConverstionsStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  ArrowRight,
-  AudioLines,
-  Brain,
-  ChartArea,
-  Code,
-  FileCheck,
-  FileMinus,
-  FileText,
-  Languages,
-  LayoutGrid,
-  Mail,
-  Microscope,
-  Minimize,
-  Newspaper,
-  NotebookPen,
-  NotebookText,
-  NotepadText,
-  PencilLine,
-  PencilRuler,
-  Plus,
-  Presentation,
-  Waypoints,
-} from 'lucide-react';
+import { ArrowRight, FileText, LayoutGrid, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { Textarea } from './ui/textarea';
 import { WarningMessageModal } from './WarningMessageModal';
-
-const ALLOWED_DOC_EXTENSIONS = [
-  '.pdf',
-  '.docx',
-  '.doc',
-  '.txt',
-  '.xlsx',
-  '.xls',
-  '.pptx',
-  '.ppt',
-];
-
-const TOOLBAR_ITEMS = [
-  {
-    type: OPTIONS.RESEARCH,
-    label: 'Deep Research',
-    Icon: Microscope,
-  },
-  {
-    type: OPTIONS.Transcribe,
-    label: 'Transcribe Audio',
-    Icon: AudioLines,
-  },
-  // {
-  //   type: OPTIONS.IMAGE,
-  //   label: 'Create Image',
-  //   Icon: ImageIcon,
-  // },
-  // {
-  //   type: OPTIONS.EDIT_IMAGE,
-  //   label: 'Edit Image',
-  //   Icon: ImageUp,
-  // },
-  {
-    type: OPTIONS.CODE,
-    label: 'Write Code',
-    Icon: Code,
-  },
-  {
-    type: OPTIONS.ARTICLE,
-    label: 'Write Article',
-    Icon: Newspaper,
-  },
-  {
-    type: OPTIONS.WRITE_CONTRACT,
-    label: 'Write Contract',
-    Icon: NotebookText,
-  },
-  {
-    type: OPTIONS.REVIEW_CONTRACT,
-    label: 'Review Contract',
-    Icon: NotepadText,
-  },
-  {
-    type: OPTIONS.GENERATE_PLAN,
-    label: 'Create Plan',
-    Icon: Waypoints,
-  },
-  {
-    type: OPTIONS.PRESENTATION,
-    label: 'Generate Presentation',
-    Icon: Presentation,
-  },
-  {
-    type: OPTIONS.GENERATE_REPORT,
-    label: 'Generate Report',
-    Icon: FileMinus,
-  },
-  {
-    type: OPTIONS.GENERATE_CHART,
-    label: 'Create Chart',
-    Icon: ChartArea,
-  },
-  {
-    type: OPTIONS.DRAFT_DOCUMENT,
-    label: 'Draft Document',
-    Icon: PencilLine,
-  },
-  {
-    type: OPTIONS.REVIEW_DOCUMENTS,
-    label: 'Review Document',
-    Icon: FileText,
-  },
-  {
-    type: OPTIONS.DRAFT_EMAIL,
-    label: 'Draft Email',
-    Icon: Mail,
-  },
-  {
-    type: OPTIONS.CREATIVE_WRITING,
-    label: 'Creative Writing',
-    Icon: NotebookPen,
-  },
-
-  {
-    type: OPTIONS.SUMMARIZE,
-    label: 'Summarize',
-    Icon: FileCheck,
-  },
-  {
-    type: OPTIONS.TRANSLATE_DOCUMENTS,
-    label: 'Translate',
-    Icon: Languages,
-  },
-  {
-    type: OPTIONS.EXTRACT_DATA,
-    label: 'Analyze',
-    Icon: Minimize,
-  },
-  {
-    type: OPTIONS.REWRITE,
-    label: 'Rewrite',
-    Icon: PencilRuler,
-  },
-  {
-    type: OPTIONS.BRAINSTORM,
-    label: 'Brainstorm',
-    Icon: Brain,
-  },
-];
+import { ALLOWED_DOC_EXTENSIONS, TOOLBAR_ITEMS } from './constants';
 
 interface ChatInputProps {
   conversationId?: string;
@@ -292,6 +151,14 @@ const ChatInput = ({
     handleDirectPlanGeneration,
   } = usePlanGeneration();
 
+  const {
+    contractReviewMode,
+    setContractReviewMode,
+    resetContractReviewConfig,
+    handleAssistantContractReview,
+    handleDirectContractReview,
+  } = useContractReview();
+
   const isExistingConversation =
     activeConversation?.conversationId &&
     activeConversation?.conversationId !== 'new-chat' &&
@@ -401,6 +268,21 @@ const ChatInput = ({
         }
       }
 
+      // Reset Contract Review if switching away
+      if (
+        selectedOption === OPTIONS.REVIEW_CONTRACT &&
+        nextOption !== OPTIONS.REVIEW_CONTRACT
+      ) {
+        resetContractReviewConfig();
+      }
+
+      // Contract Review Mode Logic:
+      if (nextOption === OPTIONS.REVIEW_CONTRACT) {
+        if (isExistingConversation) {
+          setContractReviewMode('select_mode');
+        }
+      }
+
       setSelectedOption(nextOption);
     },
     [
@@ -454,7 +336,7 @@ const ChatInput = ({
 
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}${getApiEndpoint()}`;
   // console.log('apiUrl', apiUrl);
-  console.log('token', data?.accessToken);
+  // console.log('token', data?.accessToken);
   // console.log('userid', data?.user);
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
@@ -790,6 +672,37 @@ const ChatInput = ({
         }
         break;
 
+      case OPTIONS.REVIEW_CONTRACT:
+        if (contractReviewMode === 'select_mode') {
+          return;
+        }
+
+        const contractMessage = message;
+        setMessage('');
+
+        if (contractReviewMode === 'direct') {
+          // Direct mode requires file upload
+          if (!selectedFile) {
+            // Warning is shown via UI component
+            return;
+          }
+          await handleDirectContractReview(selectedFile);
+          setSelectedFile(undefined);
+        } else {
+          // Assistant mode - file is optional
+          await handleAssistantContractReview(
+            contractMessage,
+            isExistingConversation
+              ? activeConversation?.conversationId
+              : undefined,
+            selectedFile,
+          );
+          if (selectedFile) {
+            setSelectedFile(undefined);
+          }
+        }
+        break;
+
       default:
         // Use regular mutation for options that just need a standardized API call
         // The specific URL is already determined by getApiEndpoint()
@@ -883,6 +796,7 @@ const ChatInput = ({
       selectedOption === OPTIONS.REWRITE ||
       selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
       selectedOption === OPTIONS.GENERATE_PLAN ||
+      selectedOption === OPTIONS.REVIEW_CONTRACT ||
       selectedOption === OPTIONS.IMAGE ||
       selectedOption === OPTIONS.EDIT_IMAGE;
 
@@ -906,11 +820,12 @@ const ChatInput = ({
       }
       setSelectedFile(file);
     }
-    // 2. Rewrite/Translate/Plan Generation Flow: Allows document files
+    // 2. Rewrite/Translate/Plan Generation/Contract Review Flow: Allows document files
     else if (
       selectedOption === OPTIONS.REWRITE ||
       selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
-      selectedOption === OPTIONS.GENERATE_PLAN
+      selectedOption === OPTIONS.GENERATE_PLAN ||
+      selectedOption === OPTIONS.REVIEW_CONTRACT
     ) {
       const extension = '.' + file.name.split('.').pop()?.toLowerCase();
       if (!ALLOWED_DOC_EXTENSIONS.includes(extension)) {
@@ -985,6 +900,14 @@ const ChatInput = ({
         title: 'Add Content',
         description: 'Please enter text or upload a file to rewrite.',
       },
+      {
+        condition:
+          selectedOption === OPTIONS.REVIEW_CONTRACT &&
+          contractReviewMode === 'direct' &&
+          !selectedFile,
+        title: 'Upload Contract',
+        description: 'Please upload a contract file to review.',
+      },
     ],
     [
       selectedOption,
@@ -994,6 +917,7 @@ const ChatInput = ({
       rewriteMode,
       activeConversation?.conversationId,
       rewriteConfig.textContent,
+      contractReviewMode,
     ],
   );
 
@@ -1104,6 +1028,7 @@ const ChatInput = ({
                         selectedOption === OPTIONS.IMAGE ||
                         selectedOption === OPTIONS.EDIT_IMAGE ||
                         selectedOption === OPTIONS.REWRITE ||
+                        selectedOption === OPTIONS.REVIEW_CONTRACT ||
                         (selectedOption === OPTIONS.GENERATE_PLAN &&
                           planGenerationMode !== 'direct');
 
@@ -1117,6 +1042,7 @@ const ChatInput = ({
                         selectedOption === OPTIONS.IMAGE ||
                         selectedOption === OPTIONS.EDIT_IMAGE ||
                         selectedOption === OPTIONS.REWRITE ||
+                        selectedOption === OPTIONS.REVIEW_CONTRACT ||
                         (selectedOption === OPTIONS.GENERATE_PLAN &&
                           planGenerationMode !== 'direct')
                         ? 'cursor-pointer'
@@ -1132,6 +1058,7 @@ const ChatInput = ({
                           case OPTIONS.REVIEW_DOCUMENTS:
                           case OPTIONS.REWRITE:
                           case OPTIONS.GENERATE_PLAN:
+                          case OPTIONS.REVIEW_CONTRACT:
                             return ALLOWED_DOC_EXTENSIONS.join(',');
                           case OPTIONS.IMAGE:
                           case OPTIONS.EDIT_IMAGE:

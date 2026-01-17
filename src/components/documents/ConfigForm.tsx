@@ -15,12 +15,15 @@ export function ConfigForm() {
   const isRewriteMode = selectedOption === OPTIONS.REWRITE;
   const isBrainstormMode = selectedOption === OPTIONS.BRAINSTORM;
   const isPlanGenerationMode = selectedOption === OPTIONS.GENERATE_PLAN;
+  const isContractReviewMode = selectedOption === OPTIONS.REVIEW_CONTRACT;
   const config = isReviewMode ? review.config : drafting.config;
   const { translationConfig, updateTranslationConfig, translationMode } =
     useConversationsStore();
 
   const { brainstormConfig, updateBrainstormConfig } = useConversationsStore();
   const { planGenerationConfig, updatePlanGenerationConfig } =
+    useConversationsStore();
+  const { contractReviewConfig, updateContractReviewConfig } =
     useConversationsStore();
 
   const SUPPORTED_LANGUAGES = [
@@ -272,6 +275,128 @@ export function ConfigForm() {
       </select>
     </div>
   );
+
+  // Contract Review Configuration Form
+  if (isContractReviewMode) {
+    return (
+      <div className="flex max-h-[40vh] w-full flex-col gap-6 overflow-y-auto rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
+        <div className="flex flex-col gap-1">
+          <h3 className="font-semibold text-gray-900">
+            Contract Review Configuration
+          </h3>
+          <p className="text-xs text-gray-500">
+            Configure your contract review parameters. A contract file is
+            required.
+          </p>
+        </div>
+        <div className="flex flex-col gap-5">
+          {/* Review Type */}
+          {renderSelect(
+            'Review Type',
+            contractReviewConfig.reviewType || 'general_review',
+            (value: string) =>
+              updateContractReviewConfig({
+                reviewType: value as
+                  | 'general_review'
+                  | 'risk_assessment'
+                  | 'clause_analysis'
+                  | 'compliance_check'
+                  | 'fairness_evaluation',
+              }),
+            [
+              { code: 'general_review', name: 'General Review' },
+              { code: 'risk_assessment', name: 'Risk Assessment' },
+              { code: 'clause_analysis', name: 'Clause Analysis' },
+              { code: 'compliance_check', name: 'Compliance Check' },
+              { code: 'fairness_evaluation', name: 'Fairness Evaluation' },
+            ],
+          )}
+          {/* Review Depth */}
+          {renderPillGroup(
+            'Review Depth',
+            contractReviewConfig.reviewDepth || 'standard',
+            ['standard', 'detailed', 'comprehensive'],
+            (value: string) =>
+              updateContractReviewConfig({
+                reviewDepth: value as 'standard' | 'detailed' | 'comprehensive',
+              }),
+          )}
+          {/* Contract Type */}
+          {renderSelect(
+            'Contract Type',
+            contractReviewConfig.contractType || 'general',
+            (value: string) =>
+              updateContractReviewConfig({
+                contractType: value as
+                  | 'general'
+                  | 'employment'
+                  | 'nda'
+                  | 'service_agreement'
+                  | 'lease',
+              }),
+            [
+              { code: 'general', name: 'General' },
+              { code: 'employment', name: 'Employment' },
+              { code: 'nda', name: 'NDA' },
+              { code: 'service_agreement', name: 'Service Agreement' },
+              { code: 'lease', name: 'Lease' },
+            ],
+          )}
+          {/* Output Format */}
+          {renderPillGroup(
+            'Output Format',
+            contractReviewConfig.outputFormat || 'markdown',
+            ['text', 'markdown', 'json'],
+            (value: string) =>
+              updateContractReviewConfig({
+                outputFormat: value as 'text' | 'markdown' | 'json',
+              }),
+          )}
+          {/* Aspects to Review */}
+          {renderMultiSelectPillGroup(
+            'Aspects to Review',
+            contractReviewConfig.aspects || [],
+            [
+              'confidentiality',
+              'liabilities',
+              'termination',
+              'obligations',
+              'payment_terms',
+              'intellectual_property',
+            ],
+            (values: string[]) =>
+              updateContractReviewConfig({
+                aspects: values as (
+                  | 'confidentiality'
+                  | 'liabilities'
+                  | 'termination'
+                  | 'obligations'
+                  | 'payment_terms'
+                  | 'intellectual_property'
+                )[],
+              }),
+          )}
+          {/* Additional Instructions */}
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-medium text-gray-700">
+              Additional Instructions
+            </span>
+            <textarea
+              placeholder="Any specific areas to focus on or questions about the contract..."
+              value={contractReviewConfig.additionalInstructions || ''}
+              onChange={e =>
+                updateContractReviewConfig({
+                  additionalInstructions: e.target.value,
+                })
+              }
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              rows={3}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isPlanGenerationMode) {
     return (

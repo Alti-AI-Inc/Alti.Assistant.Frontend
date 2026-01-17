@@ -18,6 +18,7 @@ import {
   PlanData,
   PlanStage,
 } from '@/types/plan-generation';
+import { ContractInfo, ReviewParams } from '@/types/contract-review';
 
 export interface ConversationSlice {
   userMessage: string;
@@ -53,6 +54,9 @@ export interface ConversationSlice {
       planAnalysis?: PlanAnalysis;
       planBrainstorm?: PlanBrainstorm;
       planData?: PlanData;
+      // Contract review extras
+      contractInfo?: ContractInfo;
+      reviewParams?: ReviewParams;
     },
   ) => void;
   setLoadingActiveConversation: (loading: boolean) => void;
@@ -178,6 +182,12 @@ export const createConversationSlice: StateCreator<
               planAnalysis: extras.planAnalysis,
               planBrainstorm: extras.planBrainstorm,
               planData: extras.planData,
+            },
+          }),
+          ...(extras?.contractInfo && {
+            metadata: {
+              contractInfo: extras.contractInfo,
+              reviewParams: extras.reviewParams,
             },
           }),
           timestamp,
