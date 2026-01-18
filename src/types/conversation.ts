@@ -1,4 +1,11 @@
 import { BrainstormData, BrainstormMetadata, IdeaAnalysis } from './brainstorm';
+import {
+  PlanAnalysis,
+  PlanBrainstorm,
+  PlanData,
+  PlanStage,
+} from './plan-generation';
+import { ContractInfo, ReviewParams } from './contract-review';
 export enum ROLES {
   USER = 'user',
   ASSISTANT = 'assistant',
@@ -32,7 +39,7 @@ export enum OPTIONS {
   BRAINSTORM = 'brainstorm',
   ARTICLE = 'article',
   WRITE_CONTRACT = 'write-contract',
-  REVIEW_CONTRACT = 'review-contract',
+  REVIEW_CONTRACT = 'contract-review',
   CREATIVE_WRITING = 'creative-writing',
 
   // VIDEO = 'video-generation',
@@ -84,6 +91,17 @@ export type ConversationMessage = {
     brainstormData?: BrainstormData;
     brainstormMetadata?: BrainstormMetadata;
     ideaAnalysis?: IdeaAnalysis;
+    // Plan generation metadata
+    planStage?: PlanStage;
+    hasAnalysis?: boolean;
+    hasBrainstorm?: boolean;
+    hasPlan?: boolean;
+    planAnalysis?: PlanAnalysis;
+    planBrainstorm?: PlanBrainstorm;
+    planData?: PlanData;
+    // Contract review metadata
+    contractInfo?: ContractInfo;
+    reviewParams?: ReviewParams;
   };
 };
 
