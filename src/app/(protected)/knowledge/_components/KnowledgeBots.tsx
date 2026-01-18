@@ -88,7 +88,7 @@ function KnowledgeBots() {
             </div>
           ) : (
             <Button
-              className="]"
+              className=""
               onClick={() => onOpen({ type: 'create-knowledge-base' })}
             >
               {/* New Folder */}
