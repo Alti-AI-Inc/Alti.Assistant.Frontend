@@ -8,11 +8,23 @@ export function ModeSelector({
   modeContext = 'draft',
 }: {
   currentMode?: 'assistant' | 'direct' | 'structured' | 'select_mode' | null;
-  modeContext?: 'draft' | 'review' | 'rewrite' | 'translate' | 'brainstorm';
+  modeContext?:
+    | 'draft'
+    | 'review'
+    | 'rewrite'
+    | 'translate'
+    | 'brainstorm'
+    | 'plan-generation'
+    | 'contract-review';
 }) {
   const { setDraftingMode, setReviewMode } = useDocumentStore();
-  const { setRewriteMode, setTranslationMode, setBrainstormMode } =
-    useConversationsStore();
+  const {
+    setRewriteMode,
+    setTranslationMode,
+    setBrainstormMode,
+    setPlanGenerationMode,
+    setContractReviewMode,
+  } = useConversationsStore();
 
   const handleSetMode = (mode: 'assistant' | 'direct' | 'select_mode') => {
     if (modeContext === 'review') {
@@ -25,6 +37,10 @@ export function ModeSelector({
       setBrainstormMode(
         mode === 'direct' ? 'structured' : (mode as 'assistant' | 'structured'),
       );
+    } else if (modeContext === 'plan-generation') {
+      setPlanGenerationMode(mode as 'assistant' | 'direct');
+    } else if (modeContext === 'contract-review') {
+      setContractReviewMode(mode as 'assistant' | 'direct');
     } else {
       setDraftingMode(mode);
     }
@@ -50,6 +66,16 @@ export function ModeSelector({
       return id === 'assistant'
         ? 'Start a new chat or continue an existing one.'
         : 'Brainstorm with strict frameworks and parameters.';
+    }
+    if (modeContext === 'plan-generation') {
+      return id === 'assistant'
+        ? 'Collaborate with AI to develop your plan step-by-step.'
+        : 'Configure parameters and generate a complete plan instantly.';
+    }
+    if (modeContext === 'contract-review') {
+      return id === 'assistant'
+        ? 'Chat with AI to review contracts interactively.'
+        : 'Upload a contract and get an instant structured review.';
     }
     // draft
     return id === 'assistant'
@@ -83,7 +109,11 @@ export function ModeSelector({
               ? 'How would you like to translate your content?'
               : modeContext === 'brainstorm'
                 ? 'How would you like to brainstorm?'
-                : 'How would you like to draft your document?'}
+                : modeContext === 'plan-generation'
+                  ? 'How would you like to generate your plan?'
+                  : modeContext === 'contract-review'
+                    ? 'How would you like to review your contract?'
+                    : 'How would you like to draft your document?'}
       </p>
       <div className="flex w-full gap-4">
         {options.map(option => {
