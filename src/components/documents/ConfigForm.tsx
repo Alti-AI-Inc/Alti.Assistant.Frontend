@@ -276,6 +276,176 @@ export function ConfigForm() {
     </div>
   );
 
+  const isReportGenerationMode = selectedOption === OPTIONS.GENERATE_REPORT;
+  const {
+    reportGenerationConfig,
+    updateReportGenerationConfig,
+    reportGenerationMode,
+  } = useConversationsStore();
+  const { activeConversation } = useConversationsStore();
+
+  // Check if we're in an existing conversation
+  const isExistingReportConversation =
+    activeConversation?.conversationId &&
+    activeConversation?.conversationId !== 'new-chat';
+
+  // Report Generation Configuration Form
+  if (isReportGenerationMode) {
+    // For assistant mode in existing conversation, don't show config
+    if (reportGenerationMode === 'assistant' && isExistingReportConversation) {
+      return null;
+    }
+
+    // For assistant mode (new chat) - show only reportType and outputFormat
+    if (reportGenerationMode === 'assistant') {
+      return (
+        <div className="flex max-h-[40vh] w-full flex-col gap-6 overflow-y-auto rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
+          <div className="flex flex-col gap-1">
+            <h3 className="font-semibold text-gray-900">Report Settings</h3>
+            <p className="text-xs text-gray-500">
+              Configure your report type and format before starting the
+              conversation.
+            </p>
+          </div>
+          <div className="flex flex-col gap-5">
+            {renderSelect(
+              'Report Type',
+              reportGenerationConfig.reportType || '',
+              val => updateReportGenerationConfig({ reportType: val as any }),
+              [
+                { code: 'executive_summary', name: 'Executive Summary' },
+                { code: 'analytical', name: 'Analytical' },
+                { code: 'financial', name: 'Financial' },
+                { code: 'technical', name: 'Technical' },
+                { code: 'research', name: 'Research' },
+                { code: 'business', name: 'Business' },
+                { code: 'comparison', name: 'Comparison' },
+              ],
+            )}
+
+            {renderPillGroup(
+              'Output Format',
+              reportGenerationConfig.outputFormat || '',
+              ['pdf', 'docx', 'xlsx', 'csv', 'txt', 'md', 'html', 'json'],
+              val => updateReportGenerationConfig({ outputFormat: val as any }),
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // Direct mode - show full configuration form
+    return (
+      <div className="flex max-h-[40vh] w-full flex-col gap-6 overflow-y-auto rounded-xl border border-gray-200 bg-white/80 p-5 shadow-sm backdrop-blur-sm">
+        <div className="flex flex-col gap-1">
+          <h3 className="font-semibold text-gray-900">Report Configuration</h3>
+          <p className="text-xs text-gray-500">
+            Configure all report parameters for direct generation.
+          </p>
+        </div>
+        <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-2 gap-4">
+            {renderSelect(
+              'Report Type',
+              reportGenerationConfig.reportType || '',
+              val => updateReportGenerationConfig({ reportType: val as any }),
+              [
+                { code: 'executive_summary', name: 'Executive Summary' },
+                { code: 'analytical', name: 'Analytical' },
+                { code: 'financial', name: 'Financial' },
+                { code: 'technical', name: 'Technical' },
+                { code: 'research', name: 'Research' },
+                { code: 'business', name: 'Business' },
+                { code: 'comparison', name: 'Comparison' },
+              ],
+            )}
+          </div>
+
+          {renderPillGroup(
+            'Output Format',
+            reportGenerationConfig.outputFormat || '',
+            ['pdf', 'docx', 'xlsx', 'csv', 'txt', 'md', 'html', 'json'],
+            val => updateReportGenerationConfig({ outputFormat: val as any }),
+          )}
+
+          {renderPillGroup(
+            'Tone',
+            reportGenerationConfig.tone || '',
+            [
+              'professional',
+              'formal',
+              'technical',
+              'casual',
+              'academic',
+              'persuasive',
+            ],
+            val => updateReportGenerationConfig({ tone: val }),
+          )}
+
+          {renderTextInput(
+            'Report Title',
+            reportGenerationConfig.title || '',
+            'Enter the report title...',
+            val => updateReportGenerationConfig({ title: val }),
+          )}
+
+          {renderTextInput(
+            'Report Content',
+            reportGenerationConfig.content || '',
+            'Enter the raw data or text content for the report...',
+            val => updateReportGenerationConfig({ content: val }),
+            true, // multiline
+          )}
+
+          {/* Toggle options */}
+          <div className="flex flex-wrap gap-4">
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={reportGenerationConfig.includeTitlePage ?? false}
+                onChange={e =>
+                  updateReportGenerationConfig({
+                    includeTitlePage: e.target.checked,
+                  })
+                }
+                className="h-4 w-4 rounded border-gray-300"
+              />
+              Include Title Page
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={reportGenerationConfig.includeTableOfContents ?? false}
+                onChange={e =>
+                  updateReportGenerationConfig({
+                    includeTableOfContents: e.target.checked,
+                  })
+                }
+                className="h-4 w-4 rounded border-gray-300"
+              />
+              Include Table of Contents
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={
+                  reportGenerationConfig.includeExecutiveSummary ?? false
+                }
+                onChange={e =>
+                  updateReportGenerationConfig({
+                    includeExecutiveSummary: e.target.checked,
+                  })
+                }
+                className="h-4 w-4 rounded border-gray-300"
+              />
+              Include Executive Summary
+            </label>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Contract Review Configuration Form
   if (isContractReviewMode) {
     return (

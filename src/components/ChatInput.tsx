@@ -26,6 +26,7 @@ import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import { usePlanGeneration } from '@/hooks/usePlanGeneration';
 import { useRewrite } from '@/hooks/useRewrite';
 import { useTranslation } from '@/hooks/useTranslation';
+import { useReportGeneration } from '@/hooks/useReportGeneration';
 import {
   OPTIONS,
   ROLES,
@@ -39,6 +40,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { Textarea } from './ui/textarea';
 import { WarningMessageModal } from './WarningMessageModal';
 import { ALLOWED_DOC_EXTENSIONS, TOOLBAR_ITEMS } from './constants';
+import { createFileChangeHandler } from '@/utils/fileChangeHandler';
 
 interface ChatInputProps {
   conversationId?: string;
@@ -158,6 +160,14 @@ const ChatInput = ({
     handleAssistantContractReview,
     handleDirectContractReview,
   } = useContractReview();
+
+  const {
+    reportGenerationMode,
+    setReportGenerationMode,
+    resetReportGenerationConfig,
+    handleAssistantReportGeneration,
+    handleDirectReportGeneration,
+  } = useReportGeneration();
 
   const isExistingConversation =
     activeConversation?.conversationId &&
@@ -283,6 +293,20 @@ const ChatInput = ({
         }
       }
 
+      // Reset Report Generation if switching away
+      if (
+        selectedOption === OPTIONS.GENERATE_REPORT &&
+        nextOption !== OPTIONS.GENERATE_REPORT
+      ) {
+        resetReportGenerationConfig();
+      }
+
+      // Report Generation Mode Logic:
+      // Always default to 'assistant' mode (conversational assistant)
+      if (nextOption === OPTIONS.GENERATE_REPORT) {
+        setReportGenerationMode('assistant');
+      }
+
       setSelectedOption(nextOption);
     },
     [
@@ -336,7 +360,7 @@ const ChatInput = ({
 
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}${getApiEndpoint()}`;
   // console.log('apiUrl', apiUrl);
-  // console.log('token', data?.accessToken);
+  console.log('token', data?.accessToken);
   // console.log('userid', data?.user);
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
@@ -703,6 +727,34 @@ const ChatInput = ({
         }
         break;
 
+      case OPTIONS.GENERATE_REPORT:
+        const reportMessage = message;
+        setMessage('');
+
+        // Fallback: if somehow still in select_mode, default to assistant
+        const effectiveReportMode =
+          reportGenerationMode === 'select_mode' || !reportGenerationMode
+            ? 'assistant'
+            : reportGenerationMode;
+
+        if (effectiveReportMode === 'direct') {
+          await handleDirectReportGeneration(reportMessage);
+          if (selectedFile) setSelectedFile(undefined);
+        } else {
+          // Assistant mode (default) - supports file upload
+          await handleAssistantReportGeneration(
+            reportMessage,
+            isExistingConversation
+              ? activeConversation?.conversationId
+              : undefined,
+            selectedFile,
+          );
+          if (selectedFile) {
+            setSelectedFile(undefined);
+          }
+        }
+        break;
+
       default:
         // Use regular mutation for options that just need a standardized API call
         // The specific URL is already determined by getApiEndpoint()
@@ -724,140 +776,15 @@ const ChatInput = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const compressImage = (
-    file: File,
-    maxWidth: number = 1920,
-    maxHeight: number = 1920,
-    quality: number = 0.8,
-  ): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = event => {
-        const img = new Image();
-        img.src = event.target?.result as string;
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
-
-          // Calculate new dimensions while maintaining aspect ratio
-          if (width > height) {
-            if (width > maxWidth) {
-              height = (height * maxWidth) / width;
-              width = maxWidth;
-            }
-          } else {
-            if (height > maxHeight) {
-              width = (width * maxHeight) / height;
-              height = maxHeight;
-            }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-
-          const ctx = canvas.getContext('2d');
-          ctx?.drawImage(img, 0, 0, width, height);
-
-          // Convert to base64 with compression
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
-
-          console.log('[ChatInput] Image compression:', {
-            originalSize: file.size,
-            originalDimensions: `${img.width}x${img.height}`,
-            newDimensions: `${width}x${height}`,
-            originalBase64Length: (event.target?.result as string).length,
-            compressedBase64Length: compressedDataUrl.length,
-            compressionRatio:
-              (
-                (((event.target?.result as string).length -
-                  compressedDataUrl.length) /
-                  (event.target?.result as string).length) *
-                100
-              ).toFixed(2) + '%',
-          });
-
-          resolve(compressedDataUrl);
-        };
-        img.onerror = reject;
-      };
-      reader.onerror = reject;
-    });
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Check if upload is allowed for current option
-    const isUploadAllowed =
-      selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
-      selectedOption === OPTIONS.REWRITE ||
-      selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
-      selectedOption === OPTIONS.GENERATE_PLAN ||
-      selectedOption === OPTIONS.REVIEW_CONTRACT ||
-      selectedOption === OPTIONS.IMAGE ||
-      selectedOption === OPTIONS.EDIT_IMAGE;
-
-    if (!isUploadAllowed) {
-      if (fileInputRef.current) fileInputRef.current.value = '';
-      return;
-    }
-
-    // 1. Review Document Flow: Treats all files (including images) as documents to review
-    if (selectedOption === OPTIONS.REVIEW_DOCUMENTS) {
-      const extension = '.' + file.name.split('.').pop()?.toLowerCase();
-      // Simple extension check
-      if (!ALLOWED_DOC_EXTENSIONS.includes(extension)) {
-        alert(
-          `Invalid file type. Allowed types: ${ALLOWED_DOC_EXTENSIONS.join(', ')}`,
-        );
-        if (fileInputRef.current) {
-          fileInputRef.current.value = '';
-        }
-        return;
-      }
-      setSelectedFile(file);
-    }
-    // 2. Rewrite/Translate/Plan Generation/Contract Review Flow: Allows document files
-    else if (
-      selectedOption === OPTIONS.REWRITE ||
-      selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
-      selectedOption === OPTIONS.GENERATE_PLAN ||
-      selectedOption === OPTIONS.REVIEW_CONTRACT
-    ) {
-      const extension = '.' + file.name.split('.').pop()?.toLowerCase();
-      if (!ALLOWED_DOC_EXTENSIONS.includes(extension)) {
-        alert(
-          `Invalid file type. Allowed types: ${ALLOWED_DOC_EXTENSIONS.join(', ')}`,
-        );
-        if (fileInputRef.current) {
-          fileInputRef.current.value = '';
-        }
-        return;
-      }
-      setSelectedFile(file);
-    }
-    // 3. Standard flow (Image Generation): Handles image compression and switching to Edit mode
-    else if (file.type.startsWith('image/')) {
-      try {
-        const compressedDataUrl = await compressImage(file);
-        setImageBase64(compressedDataUrl);
-        // Only switch if we are allowed (which we checked above, but logic implies we might want to stay in IMAGE)
-        if (selectedOption !== OPTIONS.EDIT_IMAGE) {
-          setSelectedOption(OPTIONS.EDIT_IMAGE);
-        }
-      } catch (error) {
-        console.error('[ChatInput] Error compressing image:', error);
-      }
-    }
-
-    // Reset input so same file can be selected again if needed
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
+  // Use extracted file change handler
+  const handleFileChange = createFileChangeHandler({
+    selectedOption,
+    fileInputRef,
+    setSelectedFile,
+    setImageBase64,
+    setSelectedOption,
+    allowedDocExtensions: ALLOWED_DOC_EXTENSIONS,
+  });
 
   const handleRemoveImage = () => {
     setImageBase64(null);
@@ -1030,7 +957,9 @@ const ChatInput = ({
                         selectedOption === OPTIONS.REWRITE ||
                         selectedOption === OPTIONS.REVIEW_CONTRACT ||
                         (selectedOption === OPTIONS.GENERATE_PLAN &&
-                          planGenerationMode !== 'direct');
+                          planGenerationMode !== 'direct') ||
+                        (selectedOption === OPTIONS.GENERATE_REPORT &&
+                          reportGenerationMode !== 'direct');
 
                       if (isUploadAllowed) {
                         fileInputRef.current?.click();
@@ -1044,7 +973,9 @@ const ChatInput = ({
                         selectedOption === OPTIONS.REWRITE ||
                         selectedOption === OPTIONS.REVIEW_CONTRACT ||
                         (selectedOption === OPTIONS.GENERATE_PLAN &&
-                          planGenerationMode !== 'direct')
+                          planGenerationMode !== 'direct') ||
+                        (selectedOption === OPTIONS.GENERATE_REPORT &&
+                          reportGenerationMode !== 'direct')
                         ? 'cursor-pointer'
                         : 'cursor-not-allowed opacity-50',
                     )}
@@ -1059,6 +990,7 @@ const ChatInput = ({
                           case OPTIONS.REWRITE:
                           case OPTIONS.GENERATE_PLAN:
                           case OPTIONS.REVIEW_CONTRACT:
+                          case OPTIONS.GENERATE_REPORT:
                             return ALLOWED_DOC_EXTENSIONS.join(',');
                           case OPTIONS.IMAGE:
                           case OPTIONS.EDIT_IMAGE:

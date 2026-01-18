@@ -38,6 +38,7 @@ import { PlanDataComponent } from './PlanData';
 import { useBrainstorm } from '@/hooks/useBrainstorm';
 import { useContractReview } from '@/hooks/useContractReview';
 import { usePlanGeneration } from '@/hooks/usePlanGeneration';
+import { useReportGeneration } from '@/hooks/useReportGeneration';
 import PresentationLoadingCard from './PresentationLoadingCard';
 import { getPresentationStatus } from '@/actions/presentationActions';
 
@@ -73,6 +74,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { brainstormMode } = useBrainstorm();
   const { planGenerationMode } = usePlanGeneration();
   const { contractReviewMode } = useContractReview();
+  const { reportGenerationMode } = useReportGeneration();
 
   // Initialize Image Generation Hook
   const imageGenHook = useImageGeneration({ router, queryClient });
@@ -235,6 +237,126 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   // const lastMessageRole = activeConversation?.messages.at(-1)?.role;
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
 
+  // Helper functions for ModeSelector
+  const getCurrentMode = (): 'assistant' | 'direct' | null => {
+    if (drafting.isActive) {
+      return drafting.mode === 'select_mode'
+        ? null
+        : (drafting.mode as 'assistant' | 'direct');
+    }
+
+    switch (selectedOption) {
+      case OPTIONS.REWRITE:
+        return rewriteMode === 'select_mode' || rewriteMode === 'chat'
+          ? null
+          : (rewriteMode as 'assistant' | 'direct');
+      case OPTIONS.TRANSLATE_DOCUMENTS:
+        return translationMode === 'select_mode' || translationMode === 'chat'
+          ? null
+          : (translationMode as 'assistant' | 'direct');
+      case OPTIONS.BRAINSTORM:
+        return brainstormMode === 'select_mode'
+          ? null
+          : (brainstormMode as 'assistant' | 'direct');
+      case OPTIONS.GENERATE_PLAN:
+        return planGenerationMode === 'select_mode'
+          ? null
+          : (planGenerationMode as 'assistant' | 'direct');
+      case OPTIONS.REVIEW_CONTRACT:
+        return contractReviewMode === 'select_mode'
+          ? null
+          : (contractReviewMode as 'assistant' | 'direct');
+      case OPTIONS.GENERATE_REPORT:
+        return reportGenerationMode === 'select_mode'
+          ? null
+          : (reportGenerationMode as 'assistant' | 'direct');
+      default:
+        // Default fallback to review mode (legacy behavior)
+        return review.mode === 'select_mode'
+          ? null
+          : (review.mode as 'assistant' | 'direct');
+    }
+  };
+
+  const getModeContext = () => {
+    if (drafting.isActive) return 'draft';
+    switch (selectedOption) {
+      case OPTIONS.REWRITE:
+        return 'rewrite';
+      case OPTIONS.TRANSLATE_DOCUMENTS:
+        return 'translate';
+      case OPTIONS.BRAINSTORM:
+        return 'brainstorm';
+      case OPTIONS.GENERATE_PLAN:
+        return 'plan-generation';
+      case OPTIONS.REVIEW_CONTRACT:
+        return 'contract-review';
+      case OPTIONS.GENERATE_REPORT:
+        return 'report-generation';
+      default:
+        return 'review';
+    }
+  };
+
+  const shouldHideModeSelector = () => {
+    const isExistingConversation =
+      activeConversation?.conversationId &&
+      activeConversation?.conversationId !== 'new-chat';
+
+    if (!isExistingConversation) return false;
+
+    switch (selectedOption) {
+      case OPTIONS.REWRITE:
+        return rewriteMode !== 'select_mode';
+      case OPTIONS.TRANSLATE_DOCUMENTS:
+        return translationMode !== 'select_mode';
+      case OPTIONS.BRAINSTORM:
+        return brainstormMode !== 'select_mode';
+      case OPTIONS.GENERATE_PLAN:
+        return planGenerationMode !== 'select_mode';
+      case OPTIONS.REVIEW_CONTRACT:
+        return contractReviewMode !== 'select_mode';
+      case OPTIONS.GENERATE_REPORT:
+        // Always show mode selector to allow switching between assistant/direct
+        return false;
+      default:
+        return false;
+    }
+  };
+
+  const shouldShowConfigForm = () => {
+    // Special case: hide if file selected in rewrite mode
+    if (selectedOption === OPTIONS.REWRITE && selectedFile) return false;
+
+    if (drafting.isActive) {
+      return drafting.mode === 'direct';
+    }
+
+    if (review && review.isActive) {
+      return review.mode === 'direct';
+    }
+
+    switch (selectedOption) {
+      case OPTIONS.REWRITE:
+        return rewriteMode === 'direct' || rewriteMode === 'assistant';
+      case OPTIONS.TRANSLATE_DOCUMENTS:
+        return translationMode === 'direct' || translationMode === 'assistant';
+      case OPTIONS.BRAINSTORM:
+        return brainstormMode === 'structured';
+      case OPTIONS.GENERATE_PLAN:
+        return planGenerationMode === 'direct';
+      case OPTIONS.REVIEW_CONTRACT:
+        return contractReviewMode === 'direct';
+      case OPTIONS.GENERATE_REPORT:
+        return (
+          reportGenerationMode === 'direct' ||
+          reportGenerationMode === 'assistant'
+        );
+      default:
+        return false;
+    }
+  };
+
   // Presentation task polling effect
   // Use ref to track current task to avoid re-triggering effect on message updates
   const presentationTaskRef = useRef(presentationTask);
@@ -387,7 +509,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
         selectedOption === OPTIONS.BRAINSTORM ||
         selectedOption === OPTIONS.GENERATE_PLAN ||
-        selectedOption === OPTIONS.REVIEW_CONTRACT) && (
+        selectedOption === OPTIONS.REVIEW_CONTRACT ||
+        selectedOption === OPTIONS.GENERATE_REPORT) && (
         <div className="flex-1 overflow-y-auto" ref={messagesContainerRef}>
           <div
             className={cn(
@@ -486,122 +609,37 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             {presentationTask && presentationTask.status === 'pending' && (
               <PresentationLoadingCard message={presentationTask.message} />
             )}
-            {/* Image Generation UI - Integrated inline */}
+            {/* Image Generation UI */}
             {shouldShowConfirmation && (
               <ImageGenConfirmation onConfirm={handleUserConfirmation} />
             )}
             {isCollectingDetails && <ImageGenSuggestions />}
-            {/* Document Drafting/Review/Rewrite/Translate/Brainstorm/Plan Generation UI */}
+            {/* Document Drafting/Review/Rewrite/Translate/Brainstorm/Plan Generation/Report Generation UI */}
             {(drafting.isActive ||
               selectedOption === OPTIONS.REWRITE ||
               selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
               selectedOption === OPTIONS.BRAINSTORM ||
               selectedOption === OPTIONS.GENERATE_PLAN ||
-              selectedOption === OPTIONS.REVIEW_CONTRACT) &&
+              selectedOption === OPTIONS.REVIEW_CONTRACT ||
+              selectedOption === OPTIONS.GENERATE_REPORT) &&
               !isLoadingResponse && (
                 <>
-                  {!(
-                    (selectedOption === OPTIONS.REWRITE &&
-                      activeConversation?.conversationId &&
-                      activeConversation?.conversationId !== 'new-chat' &&
-                      rewriteMode !== 'select_mode') ||
-                    (selectedOption === OPTIONS.TRANSLATE_DOCUMENTS &&
-                      activeConversation?.conversationId &&
-                      activeConversation?.conversationId !== 'new-chat' &&
-                      translationMode !== 'select_mode') ||
-                    (selectedOption === OPTIONS.BRAINSTORM &&
-                      activeConversation?.conversationId &&
-                      activeConversation?.conversationId !== 'new-chat' &&
-                      brainstormMode !== 'select_mode') ||
-                    (selectedOption === OPTIONS.GENERATE_PLAN &&
-                      activeConversation?.conversationId &&
-                      activeConversation?.conversationId !== 'new-chat' &&
-                      planGenerationMode !== 'select_mode') ||
-                    (selectedOption === OPTIONS.REVIEW_CONTRACT &&
-                      activeConversation?.conversationId &&
-                      activeConversation?.conversationId !== 'new-chat' &&
-                      contractReviewMode !== 'select_mode')
-                  ) && (
+                  {!shouldHideModeSelector() && (
                     <ModeSelector
-                      currentMode={
-                        drafting.isActive
-                          ? drafting.mode === 'select_mode'
-                            ? null
-                            : (drafting.mode as 'assistant' | 'direct')
-                          : selectedOption === OPTIONS.REWRITE
-                            ? rewriteMode === 'select_mode'
-                              ? null
-                              : rewriteMode === 'chat'
-                                ? null
-                                : (rewriteMode as 'assistant' | 'direct')
-                            : selectedOption === OPTIONS.TRANSLATE_DOCUMENTS
-                              ? translationMode === 'select_mode'
-                                ? null
-                                : translationMode === 'chat'
-                                  ? null
-                                  : (translationMode as 'assistant' | 'direct')
-                              : selectedOption === OPTIONS.BRAINSTORM
-                                ? brainstormMode === 'select_mode'
-                                  ? null
-                                  : (brainstormMode as 'assistant' | 'direct')
-                                : selectedOption === OPTIONS.GENERATE_PLAN
-                                  ? planGenerationMode === 'select_mode'
-                                    ? null
-                                    : (planGenerationMode as
-                                        | 'assistant'
-                                        | 'direct')
-                                  : selectedOption === OPTIONS.REVIEW_CONTRACT
-                                    ? contractReviewMode === 'select_mode'
-                                      ? null
-                                      : (contractReviewMode as
-                                          | 'assistant'
-                                          | 'direct')
-                                    : review.mode === 'select_mode'
-                                      ? null
-                                      : (review.mode as 'assistant' | 'direct')
-                      }
-                      modeContext={
-                        drafting.isActive
-                          ? 'draft'
-                          : selectedOption === OPTIONS.REWRITE
-                            ? 'rewrite'
-                            : selectedOption === OPTIONS.TRANSLATE_DOCUMENTS
-                              ? 'translate'
-                              : selectedOption === OPTIONS.BRAINSTORM
-                                ? 'brainstorm'
-                                : selectedOption === OPTIONS.GENERATE_PLAN
-                                  ? 'plan-generation'
-                                  : selectedOption === OPTIONS.REVIEW_CONTRACT
-                                    ? 'contract-review'
-                                    : 'review'
-                      }
+                      currentMode={getCurrentMode()}
+                      modeContext={getModeContext()}
                     />
                   )}
 
-                  {((drafting.isActive && drafting.mode === 'direct') ||
-                    (review && review.isActive && review.mode === 'direct') ||
-                    (selectedOption === OPTIONS.REWRITE &&
-                      (rewriteMode === 'direct' ||
-                        rewriteMode === 'assistant')) ||
-                    (selectedOption === OPTIONS.TRANSLATE_DOCUMENTS &&
-                      (translationMode === 'direct' ||
-                        translationMode === 'assistant')) ||
-                    (selectedOption === OPTIONS.BRAINSTORM &&
-                      brainstormMode === 'structured') ||
-                    (selectedOption === OPTIONS.GENERATE_PLAN &&
-                      planGenerationMode === 'direct') ||
-                    (selectedOption === OPTIONS.REVIEW_CONTRACT &&
-                      contractReviewMode === 'direct')) &&
-                    // HIDE CONFIG FORM IF FILE IS SELECTED IN REWRITE MODE
-                    !(selectedOption === OPTIONS.REWRITE && selectedFile) && (
-                      <div
-                        className={cn(
-                          isLoadingResponse && 'pointer-events-none opacity-50',
-                        )}
-                      >
-                        <ConfigForm />
-                      </div>
-                    )}
+                  {shouldShowConfigForm() && (
+                    <div
+                      className={cn(
+                        isLoadingResponse && 'pointer-events-none opacity-50',
+                      )}
+                    >
+                      <ConfigForm />
+                    </div>
+                  )}
                 </>
               )}
             {/* Loading message - visible in the messages area */}

@@ -15,7 +15,8 @@ export function ModeSelector({
     | 'translate'
     | 'brainstorm'
     | 'plan-generation'
-    | 'contract-review';
+    | 'contract-review'
+    | 'report-generation';
 }) {
   const { setDraftingMode, setReviewMode } = useDocumentStore();
   const {
@@ -24,6 +25,7 @@ export function ModeSelector({
     setBrainstormMode,
     setPlanGenerationMode,
     setContractReviewMode,
+    setReportGenerationMode,
   } = useConversationsStore();
 
   const handleSetMode = (mode: 'assistant' | 'direct' | 'select_mode') => {
@@ -41,6 +43,8 @@ export function ModeSelector({
       setPlanGenerationMode(mode as 'assistant' | 'direct');
     } else if (modeContext === 'contract-review') {
       setContractReviewMode(mode as 'assistant' | 'direct');
+    } else if (modeContext === 'report-generation') {
+      setReportGenerationMode(mode as 'assistant' | 'direct');
     } else {
       setDraftingMode(mode);
     }
@@ -76,6 +80,11 @@ export function ModeSelector({
       return id === 'assistant'
         ? 'Chat with AI to review contracts interactively.'
         : 'Upload a contract and get an instant structured review.';
+    }
+    if (modeContext === 'report-generation') {
+      return id === 'assistant'
+        ? 'Chat with AI to generate reports step-by-step.'
+        : 'Configure parameters and generate a report instantly.';
     }
     // draft
     return id === 'assistant'
@@ -113,7 +122,9 @@ export function ModeSelector({
                   ? 'How would you like to generate your plan?'
                   : modeContext === 'contract-review'
                     ? 'How would you like to review your contract?'
-                    : 'How would you like to draft your document?'}
+                    : modeContext === 'report-generation'
+                      ? 'How would you like to generate your report?'
+                      : 'How would you like to draft your document?'}
       </p>
       <div className="flex w-full gap-4">
         {options.map(option => {

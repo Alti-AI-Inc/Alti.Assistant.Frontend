@@ -102,6 +102,11 @@ export type ConversationMessage = {
     // Contract review metadata
     contractInfo?: ContractInfo;
     reviewParams?: ReviewParams;
+    // Report generation metadata
+    report?: import('./report-generation').GeneratedReport;
+    reportSections?: import('./report-generation').ReportSection[];
+    needsMoreInfo?: boolean;
+    missingParams?: string[];
   };
 };
 
