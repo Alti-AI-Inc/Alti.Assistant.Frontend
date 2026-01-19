@@ -1,6 +1,5 @@
 import { OPTIONS } from '@/types/conversation';
 import {
-  ArrowRight,
   AudioLines,
   Brain,
   ChartArea,
@@ -9,7 +8,6 @@ import {
   FileMinus,
   FileText,
   Languages,
-  LayoutGrid,
   Mail,
   Microscope,
   Minimize,
@@ -19,9 +17,7 @@ import {
   NotepadText,
   PencilLine,
   PencilRuler,
-  Plus,
-  Presentation,
-  Waypoints,
+  Waypoints
 } from 'lucide-react';
 
 export const ALLOWED_DOC_EXTENSIONS = [
@@ -81,11 +77,11 @@ export const TOOLBAR_ITEMS = [
     label: 'Create Plan',
     Icon: Waypoints,
   },
-  {
-    type: OPTIONS.PRESENTATION,
-    label: 'Generate Presentation',
-    Icon: Presentation,
-  },
+  // {
+  //   type: OPTIONS.PRESENTATION,
+  //   label: 'Generate Presentation',
+  //   Icon: Presentation,
+  // },
   {
     type: OPTIONS.GENERATE_REPORT,
     label: 'Generate Report',
