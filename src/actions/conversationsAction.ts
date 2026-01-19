@@ -208,6 +208,9 @@ export async function loadSingleConversation(
   conversationId: string,
   accessToken: string,
 ): Promise<ApiResponse> {
+  console.log('[conversationsAction] loadSingleConversation payload:', {
+    conversationId,
+  });
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/conversations/${conversationId}`,
@@ -231,6 +234,10 @@ export async function loadSingleConversation(
     }
 
     const data = await response.json();
+    console.log(
+      '[conversationsAction] loadSingleConversation response:',
+      data.data || data,
+    );
     // Assuming data is already the shape we want or wrapped?
     // The original code returned 'data'. Let's check if 'data' has 'success' field or if it is the payload.
     // Original: const data = await response.json(); return data;

@@ -309,6 +309,8 @@ const ChatInput = ({
         return '/creative-writing/assistant';
       case OPTIONS.PRESENTATION:
         return '/presentation/assistant';
+      case OPTIONS.WRITE_CONTRACT:
+        return '/legal-contract/assistant';
       // case OPTIONS.CODE:
       //   return '/search/code';
       // case OPTIONS.RESEARCH:
@@ -323,10 +325,6 @@ const ChatInput = ({
       //   return '/search/summarize';
       // case OPTIONS.EXTRACT_DATA:
       //   return '/search/extract';
-      // case OPTIONS.REWRITE:
-      //   return '/search/rewrite';
-      // case OPTIONS.BRAINSTORM:
-      //   return '/search/brainstorm';
       // case OPTIONS.Transcribe:
       //   return '/search/transcribe';
       default:
@@ -338,6 +336,7 @@ const ChatInput = ({
   // console.log('apiUrl', apiUrl);
   // console.log('token', data?.accessToken);
   // console.log('userid', data?.user);
+  // console.log('knowledgebaseId', activeConversation?.knowledgebaseId);
   const mutation = useMutation({
     mutationFn: async (userMessage: string) => {
       if (!data?.accessToken) {
@@ -404,16 +403,14 @@ const ChatInput = ({
         switch (selectedOption) {
           case OPTIONS.IMAGE:
             return response.data?.responseMessage?.text;
-
           case OPTIONS.CREATIVE_WRITING:
             return response.data?.response;
-
           case OPTIONS.CODE:
             return response.data?.responseMessage?.answer;
-
           case OPTIONS.PRESENTATION:
             return response.data?.message;
-
+          case OPTIONS.WRITE_CONTRACT:
+            return response.data?.contract;
           default:
             return response.data?.responseMessage?.answer;
         }
