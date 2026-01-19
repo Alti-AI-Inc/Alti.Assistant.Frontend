@@ -24,23 +24,23 @@ import { useDocument } from '@/hooks/useDocument';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import { usePlanGeneration } from '@/hooks/usePlanGeneration';
+import { useReportGeneration } from '@/hooks/useReportGeneration';
 import { useRewrite } from '@/hooks/useRewrite';
 import { useTranslation } from '@/hooks/useTranslation';
-import { useReportGeneration } from '@/hooks/useReportGeneration';
 import {
   OPTIONS,
   ROLES,
   useConversationsStore,
 } from '@/stores/useConverstionsStore';
+import { createFileChangeHandler } from '@/utils/fileChangeHandler';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowRight, FileText, LayoutGrid, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { ALLOWED_DOC_EXTENSIONS, TOOLBAR_ITEMS } from './constants';
 import { Textarea } from './ui/textarea';
 import { WarningMessageModal } from './WarningMessageModal';
-import { ALLOWED_DOC_EXTENSIONS, TOOLBAR_ITEMS } from './constants';
-import { createFileChangeHandler } from '@/utils/fileChangeHandler';
 
 interface ChatInputProps {
   conversationId?: string;
@@ -868,8 +868,8 @@ const ChatInput = ({
           className={cn(
             'flex flex-col rounded-2xl border-2 border-gray-200 px-3 shadow-sm sm:px-4',
             activeConversation?.knowledgebaseId &&
-              message.length < 100 &&
-              'flex',
+            message.length < 100 &&
+            'flex',
           )}
         >
           {/* Image Preview */}
@@ -947,34 +947,10 @@ const ChatInput = ({
                 <TooltipTrigger asChild>
                   <div
                     onClick={() => {
-                      const isUploadAllowed =
-                        selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
-                        selectedOption === OPTIONS.IMAGE ||
-                        selectedOption === OPTIONS.EDIT_IMAGE ||
-                        selectedOption === OPTIONS.REWRITE ||
-                        selectedOption === OPTIONS.REVIEW_CONTRACT ||
-                        (selectedOption === OPTIONS.GENERATE_PLAN &&
-                          planGenerationMode !== 'direct') ||
-                        (selectedOption === OPTIONS.GENERATE_REPORT &&
-                          reportGenerationMode !== 'direct');
-
-                      if (isUploadAllowed) {
-                        fileInputRef.current?.click();
-                      }
+                      fileInputRef.current?.click();
                     }}
                     className={cn(
-                      'relative flex items-center',
-                      selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
-                        selectedOption === OPTIONS.IMAGE ||
-                        selectedOption === OPTIONS.EDIT_IMAGE ||
-                        selectedOption === OPTIONS.REWRITE ||
-                        selectedOption === OPTIONS.REVIEW_CONTRACT ||
-                        (selectedOption === OPTIONS.GENERATE_PLAN &&
-                          planGenerationMode !== 'direct') ||
-                        (selectedOption === OPTIONS.GENERATE_REPORT &&
-                          reportGenerationMode !== 'direct')
-                        ? 'cursor-pointer'
-                        : 'cursor-not-allowed opacity-50',
+                      'relative flex items-center'
                     )}
                   >
                     <Plus className="size-6 rounded-full border-2 border-gray-300 p-[3px]" />
@@ -1063,7 +1039,7 @@ const ChatInput = ({
                         className={cn(
                           'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black hover:bg-gray-100',
                           selectedOption === type &&
-                            'bg-black text-white hover:bg-black hover:text-white',
+                          'bg-black text-white hover:bg-black hover:text-white',
                         )}
                       />
                     </TooltipTrigger>
