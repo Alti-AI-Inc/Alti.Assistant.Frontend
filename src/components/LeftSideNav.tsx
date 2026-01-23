@@ -282,8 +282,8 @@ const LeftSideNav = () => {
                 <DropdownMenuItem onClick={() => router.push('/knowledge')}>
                   <BookA className="text-black" /> Knowledge
                 </DropdownMenuItem>
-                {/* <DropdownMenuItem onClick={() => router.push('/billing')}>
-                  <ReceiptText className="text-black" /> Billing
+                {/* <DropdownMenuItem onClick={() => router.push('/admin/stripe')}>
+                  <ReceiptText className="text-black" /> Admin Billing
                 </DropdownMenuItem> */}
                 <DropdownMenuItem
                   onClick={() =>
