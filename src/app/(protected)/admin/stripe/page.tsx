@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import {
@@ -34,28 +34,38 @@ import {
   getStripeCustomers,
   getStripeSubscriptions,
   getStripeProducts,
-  type StripeCustomer,
-  type StripeSubscription,
-  type StripeProduct,
 } from '@/actions/stripeActions';
+
+import { useStripeAdminStore } from '@/stores/useStripeAdminStore';
 
 export default function StripeAdminDashboard() {
   const { data: session } = useSession();
   const router = useRouter();
   const accessToken = session?.accessToken as string;
 
-  const [customers, setCustomers] = useState<StripeCustomer[]>([]);
-  const [subscriptions, setSubscriptions] = useState<StripeSubscription[]>([]);
-  const [products, setProducts] = useState<StripeProduct[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState('customers');
-  const [isCreateCustomerOpen, setIsCreateCustomerOpen] = useState(false);
+  // Zustand store
+  const {
+    customers,
+    subscriptions,
+    products,
+    isLoading,
+    searchTerm,
+    activeTab,
+    isCreateCustomerOpen,
+    filteredCustomers,
+    activeSubscriptions,
+    totalRevenue,
+    setStripeData,
+    setLoading,
+    setSearchTerm,
+    setActiveTab,
+    setCreateCustomerOpen,
+  } = useStripeAdminStore();
 
   const loadData = useCallback(async () => {
     if (!accessToken) return;
 
-    setIsLoading(true);
+    setLoading(true);
     try {
       const [customersRes, subscriptionsRes, productsRes] = await Promise.all([
         getStripeCustomers(accessToken),
@@ -63,51 +73,37 @@ export default function StripeAdminDashboard() {
         getStripeProducts(accessToken),
       ]);
 
-      if (customersRes.success && Array.isArray(customersRes.data)) {
-        setCustomers(customersRes.data);
-      } else {
-        setCustomers([]);
-      }
-      if (subscriptionsRes.success && Array.isArray(subscriptionsRes.data)) {
-        setSubscriptions(subscriptionsRes.data);
-      } else {
-        setSubscriptions([]);
-      }
-      if (productsRes.success && Array.isArray(productsRes.data)) {
-        setProducts(productsRes.data);
-      } else {
-        setProducts([]);
-      }
+      setStripeData({
+        customers:
+          customersRes.success && Array.isArray(customersRes.data)
+            ? customersRes.data
+            : [],
+        subscriptions:
+          subscriptionsRes.success && Array.isArray(subscriptionsRes.data)
+            ? subscriptionsRes.data
+            : [],
+        products:
+          productsRes.success && Array.isArray(productsRes.data)
+            ? productsRes.data
+            : [],
+      });
     } catch (error) {
       console.error('Failed to load Stripe data:', error);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
-  }, [accessToken]);
+  }, [accessToken, setLoading, setStripeData]);
 
   useEffect(() => {
     loadData();
   }, [loadData]);
-
-  const filteredCustomers = customers.filter(
-    customer =>
-      customer.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      customer.id.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
-
-  const activeSubscriptions = subscriptions.filter(s => s.status === 'active');
-  const totalRevenue = subscriptions.reduce((acc, sub) => {
-    const amount = sub.items?.data?.[0]?.price?.unit_amount || 0;
-    return sub.status === 'active' ? acc + amount : acc;
-  }, 0);
 
   const handleCustomerClick = (customerId: string) => {
     router.push(`/admin/stripe/customers/${customerId}`);
   };
 
   const handleCustomerCreated = () => {
-    setIsCreateCustomerOpen(false);
+    setCreateCustomerOpen(false);
     loadData();
   };
 
@@ -142,7 +138,7 @@ export default function StripeAdminDashboard() {
               className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
             />
           </Button>
-          <Button onClick={() => setIsCreateCustomerOpen(true)}>
+          <Button onClick={() => setCreateCustomerOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             Add Customer
           </Button>
@@ -175,7 +171,7 @@ export default function StripeAdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {activeSubscriptions.length}
+              {activeSubscriptions().length}
             </div>
             <p className="text-muted-foreground text-xs">
               Currently active plans
@@ -192,7 +188,7 @@ export default function StripeAdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              ${(totalRevenue / 100).toFixed(2)}
+              ${(totalRevenue() / 100).toFixed(2)}
             </div>
             <p className="text-muted-foreground text-xs">
               From active subscriptions
@@ -207,7 +203,7 @@ export default function StripeAdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {/* {products.filter(p => p.active).length} */}0
+              {products.filter(p => p.active).length}
             </div>
             <p className="text-muted-foreground text-xs">
               Active pricing plans
@@ -219,7 +215,7 @@ export default function StripeAdminDashboard() {
       {/* Main Content */}
       <Tabs
         value={activeTab}
-        onValueChange={setActiveTab}
+        onValueChange={tab => setActiveTab(tab as typeof activeTab)}
         className="space-y-4"
       >
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -251,13 +247,13 @@ export default function StripeAdminDashboard() {
 
         <TabsContent value="customers" className="space-y-4">
           <CustomersTable
-            customers={filteredCustomers}
+            customers={filteredCustomers()}
             onCustomerClick={handleCustomerClick}
             onRefresh={loadData}
           />
         </TabsContent>
 
-        {/* <TabsContent value="subscriptions" className="space-y-4">
+        <TabsContent value="subscriptions" className="space-y-4">
           <SubscriptionsTable
             subscriptions={subscriptions}
             customers={customers}
@@ -267,13 +263,13 @@ export default function StripeAdminDashboard() {
 
         <TabsContent value="products" className="space-y-4">
           <ProductsTable products={products} onRefresh={loadData} />
-        </TabsContent> */}
+        </TabsContent>
       </Tabs>
 
       {/* Create Customer Dialog */}
       <CreateCustomerDialog
         open={isCreateCustomerOpen}
-        onOpenChange={setIsCreateCustomerOpen}
+        onOpenChange={setCreateCustomerOpen}
         onSuccess={handleCustomerCreated}
       />
     </div>

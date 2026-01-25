@@ -69,7 +69,7 @@ export default async function IntentPage({}: IntentPageProps) {
     }
 
     return (
-      <div className="from-background via-background to-muted/30 flex min-h-screen items-center justify-center bg-gradient-to-br p-4">
+      <div className="from-background via-background to-muted/30 flex min-h-screen items-center justify-center bg-linear-to-br p-4">
         <div className="w-full max-w-md">
           <div className="mb-8 text-center">
             <h1 className="text-2xl font-bold tracking-tight">Checkout</h1>
