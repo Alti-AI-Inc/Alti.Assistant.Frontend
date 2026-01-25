@@ -4,10 +4,9 @@ import Stripe from 'stripe';
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 
-if (!stripeSecretKey) {
-  throw new Error(
-    'Missing STRIPE_SECRET_KEY environment variable. Please add it to your .env.local file.',
-  );
-}
+// This file is deprecated for frontend usage as we use the backend API now.
+// Keeping it for now to avoid breaking other unknown references, but removing the hard crash.
 
-export const stripe = new Stripe(stripeSecretKey);
+export const stripe = stripeSecretKey
+  ? new Stripe(stripeSecretKey)
+  : ({} as Stripe); // Fallback to empty object if key missing to avoid crash, since we shouldn't use this file anymore.

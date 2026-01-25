@@ -1,63 +1,112 @@
 import CheckoutForm from '@/components/stripe/checkout';
-import { stripe } from '@/lib/stripe';
+import { auth } from '@/auth';
+import { createPaymentIntent } from '@/actions/stripeActions';
+import { AlertCircle } from 'lucide-react';
 
-interface OrderItem {
-  id: string;
-  quantity?: number;
-}
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
-/**
- * Calculate order amount in cents
- * Replace this with your actual order calculation logic
- */
-function calculateOrderAmount(items: OrderItem[]): number {
-  // Replace this constant with a calculation of the order's amount
-  // Calculate the order total on the server to prevent
-  // people from directly manipulating the amount on the client
-
-  // Example: You would typically look up prices from your database
-  // and calculate based on quantity
-  console.log('Calculating order for items:', items);
-  return 1400; // Amount in cents (e.g., €14.00)
-}
+// Test configuration
+const TEST_CONFIG = {
+  amount: 9900, // $99.00 in cents
+  currency: 'usd',
+  customerId: 'cus_TqolRr7s2T5sPh',
+};
 
 interface IntentPageProps {
   // Add any props if needed (e.g., from searchParams or params)
 }
 
 export default async function IntentPage({}: IntentPageProps) {
-  try {
-    // Create PaymentIntent as soon as the page loads
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: calculateOrderAmount([{ id: 'xl-tshirt' }]),
-      currency: 'eur',
-      // In the latest version of the API, specifying the `automatic_payment_methods`
-      // parameter is optional because Stripe enables its functionality by default.
-      automatic_payment_methods: {
-        enabled: true,
-      },
-    });
+  const session = await auth();
+  const accessToken = session?.accessToken;
+  console.log('sessionData', session);
 
-    if (!paymentIntent.client_secret) {
+  if (!accessToken) {
+    return (
+      <div className="bg-background flex min-h-screen items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="bg-destructive/10 mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full">
+              <AlertCircle className="text-destructive h-6 w-6" />
+            </div>
+            <CardTitle>Authentication Required</CardTitle>
+            <CardDescription>
+              You must be signed in to access the payment page.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    );
+  }
+
+  try {
+    // Create PaymentIntent via Backend API
+    const response = await createPaymentIntent(
+      TEST_CONFIG.amount,
+      TEST_CONFIG.currency,
+      TEST_CONFIG.customerId,
+      accessToken,
+    );
+
+    console.log('[stripe-test] createPaymentIntent response:', response);
+
+    // Handle both snake_case and camelCase from backend
+    const clientSecret =
+      response.data?.client_secret ||
+      (response.data as unknown as { clientSecret?: string })?.clientSecret;
+
+    if (!response.success || !clientSecret) {
       throw new Error(
-        'Failed to create payment intent: No client secret returned',
+        response.message ||
+          'Failed to create payment intent: No client secret returned',
       );
     }
 
     return (
-      <div id="checkout">
-        <CheckoutForm clientSecret={paymentIntent.client_secret} />
+      <div className="from-background via-background to-muted/30 flex min-h-screen items-center justify-center bg-gradient-to-br p-4">
+        <div className="w-full max-w-md">
+          <div className="mb-8 text-center">
+            <h1 className="text-2xl font-bold tracking-tight">Checkout</h1>
+            <p className="text-muted-foreground mt-1">
+              Complete your payment securely
+            </p>
+          </div>
+          <CheckoutForm
+            clientSecret={clientSecret}
+            amount={TEST_CONFIG.amount}
+            currency={TEST_CONFIG.currency}
+          />
+        </div>
       </div>
     );
   } catch (error) {
     console.error('Error creating payment intent:', error);
 
     return (
-      <div id="checkout-error">
-        <h2>Unable to initialize payment</h2>
-        <p>
-          There was an error setting up your payment. Please try again later.
-        </p>
+      <div className="bg-background flex min-h-screen items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="bg-destructive/10 mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full">
+              <AlertCircle className="text-destructive h-6 w-6" />
+            </div>
+            <CardTitle>Unable to Initialize Payment</CardTitle>
+            <CardDescription>
+              There was an error setting up your payment. Please try again
+              later.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-center">
+            <p className="text-muted-foreground text-xs">
+              If the problem persists, please contact support.
+            </p>
+          </CardContent>
+        </Card>
       </div>
     );
   }
