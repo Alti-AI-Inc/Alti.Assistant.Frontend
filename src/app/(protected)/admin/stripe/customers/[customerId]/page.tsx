@@ -14,6 +14,7 @@ import {
   RefreshCw,
   Trash2,
   DollarSign,
+  Edit,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -40,6 +41,9 @@ import {
 
 import { PaymentMethodsList } from '@/components/stripe/admin/PaymentMethodsList';
 import { CreatePaymentDialog } from '@/components/stripe/admin/CreatePaymentDialog';
+import { AddPaymentMethodDialog } from '@/components/stripe/admin/AddPaymentMethodDialog';
+import { CreateSubscriptionDialog } from '@/components/stripe/admin/CreateSubscriptionDialog';
+import { EditCustomerDialog } from '@/components/stripe/admin/EditCustomerDialog';
 
 import {
   getStripeCustomer,
@@ -65,6 +69,9 @@ export default function CustomerDetailPage() {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
+  const [isAddPaymentMethodOpen, setIsAddPaymentMethodOpen] = useState(false);
+  const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const loadData = useCallback(async () => {
     if (!accessToken || !customerId) return;
@@ -156,6 +163,13 @@ export default function CustomerDetailPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setIsEditOpen(true)}
+          >
+            <Edit className="h-4 w-4" />
+          </Button>
           <Button variant="outline" size="icon" onClick={loadData}>
             <RefreshCw className="h-4 w-4" />
           </Button>
@@ -255,9 +269,19 @@ export default function CustomerDetailPage() {
                 <Plus className="mr-2 h-4 w-4" />
                 Create Payment
               </Button>
-              <Button variant="outline">
+              <Button
+                variant="outline"
+                onClick={() => setIsAddPaymentMethodOpen(true)}
+              >
                 <CreditCard className="mr-2 h-4 w-4" />
                 Add Payment Method
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => setIsSubscriptionOpen(true)}
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Create Subscription
               </Button>
             </CardContent>
           </Card>
@@ -314,6 +338,32 @@ export default function CustomerDetailPage() {
         onOpenChange={setIsPaymentOpen}
         customerId={customerId}
         customerName={customer.name || customerId}
+      />
+
+      {/* Add Payment Method Dialog */}
+      <AddPaymentMethodDialog
+        key={`add-pm-${customerId}`}
+        open={isAddPaymentMethodOpen}
+        onOpenChange={setIsAddPaymentMethodOpen}
+        customerId={customerId}
+        customerName={customer.name || undefined}
+        onSuccess={loadData}
+      />
+
+      {/* Create Subscription Dialog */}
+      <CreateSubscriptionDialog
+        open={isSubscriptionOpen}
+        onOpenChange={setIsSubscriptionOpen}
+        customer={customer}
+        onSuccess={loadData}
+      />
+
+      {/* Edit Customer Dialog */}
+      <EditCustomerDialog
+        open={isEditOpen}
+        onOpenChange={setIsEditOpen}
+        customer={customer}
+        onSuccess={loadData}
       />
     </div>
   );

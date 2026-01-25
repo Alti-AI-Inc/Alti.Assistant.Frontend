@@ -41,6 +41,8 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 
+import { EditCustomerDialog } from './EditCustomerDialog';
+
 import {
   deleteStripeCustomer,
   type StripeCustomer,
@@ -62,6 +64,7 @@ export function CustomersTable({
   const accessToken = session?.accessToken as string;
 
   const [deleteCustomerId, setDeleteCustomerId] = useState<string | null>(null);
+  const [editCustomer, setEditCustomer] = useState<StripeCustomer | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -187,7 +190,7 @@ export function CustomersTable({
                       <DropdownMenuItem
                         onClick={e => {
                           e.stopPropagation();
-                          // TODO: Implement edit
+                          setEditCustomer(customer);
                         }}
                       >
                         <Edit className="mr-2 h-4 w-4" />
@@ -212,6 +215,14 @@ export function CustomersTable({
           </TableBody>
         </Table>
       </Card>
+
+      {/* Edit Customer Dialog */}
+      <EditCustomerDialog
+        open={!!editCustomer}
+        onOpenChange={open => !open && setEditCustomer(null)}
+        customer={editCustomer || undefined}
+        onSuccess={onRefresh}
+      />
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog

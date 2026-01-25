@@ -487,7 +487,7 @@ export async function getStripePrices(
     return {
       success: true,
       message: 'Prices fetched successfully',
-      data: data.prices || data.data || [],
+      data: data.prices?.data || data.prices || data.data || [],
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -495,6 +495,98 @@ export async function getStripePrices(
     return {
       success: false,
       message: 'Failed to fetch prices',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+export async function createStripeProducts(
+  accessToken: string,
+): Promise<ApiResponse<StripeProduct[]>> {
+  console.log('[stripeActions] POST - createStripeProducts payload:', {});
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/stripe/products`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to create products',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] POST - createStripeProducts response:', data);
+    return {
+      success: true,
+      message: 'Products created successfully',
+      data: data.products || data.data || [],
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] POST - createStripeProducts error:', error);
+    return {
+      success: false,
+      message: 'Failed to create products',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+export async function getStripeProduct(
+  productId: string,
+  accessToken: string,
+): Promise<ApiResponse<StripeProduct>> {
+  console.log('[stripeActions] GET - getStripeProduct payload:', { productId });
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/stripe/products/${productId}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to fetch product',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] GET - getStripeProduct response:', data);
+    return {
+      success: true,
+      message: 'Product fetched successfully',
+      data: data.product || data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] GET - getStripeProduct error:', error);
+    return {
+      success: false,
+      message: 'Failed to fetch product',
       debugMessage: errorMessage,
       statusCode: 500,
     };
@@ -725,6 +817,54 @@ export async function getStripeSubscriptions(
     return {
       success: false,
       message: 'Failed to fetch subscriptions',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+export async function getStripeSubscription(
+  subscriptionId: string,
+  accessToken: string,
+): Promise<ApiResponse<StripeSubscription>> {
+  console.log('[stripeActions] GET - getStripeSubscription payload:', {
+    subscriptionId,
+  });
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/stripe/subscription/${subscriptionId}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to fetch subscription',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] GET - getStripeSubscription response:', data);
+    return {
+      success: true,
+      message: 'Subscription fetched successfully',
+      data: data.subscription || data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] GET - getStripeSubscription error:', error);
+    return {
+      success: false,
+      message: 'Failed to fetch subscription',
       debugMessage: errorMessage,
       statusCode: 500,
     };

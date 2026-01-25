@@ -1,6 +1,8 @@
 'use client';
 
-import { Package, Check, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { Package, Check, X, Plus, Loader2, DollarSign } from 'lucide-react';
 
 import {
   Table,
@@ -11,26 +13,109 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
 
-import { type StripeProduct } from '@/actions/stripeActions';
-import { formatDate } from '@/utils/formatters';
+import {
+  type StripeProduct,
+  type StripePrice,
+  createStripeProducts,
+  getStripePrices,
+} from '@/actions/stripeActions';
+import { formatDate, formatCurrency } from '@/utils/formatters';
 
 interface ProductsTableProps {
   products: StripeProduct[];
   onRefresh: () => void;
 }
 
-export function ProductsTable({ products }: ProductsTableProps) {
+export function ProductsTable({ products, onRefresh }: ProductsTableProps) {
+  const { data: session } = useSession();
+  const accessToken = session?.accessToken as string;
+
+  const [prices, setPrices] = useState<StripePrice[]>([]);
+  const [isInitializing, setIsInitializing] = useState(false);
+  const [isLoadingPrices, setIsLoadingPrices] = useState(false);
+
+  useEffect(() => {
+    if (accessToken && products.length > 0) {
+      loadPrices();
+    }
+  }, [accessToken, products.length]);
+
+  const loadPrices = async () => {
+    if (!accessToken) return;
+    setIsLoadingPrices(true);
+    try {
+      const result = await getStripePrices(accessToken);
+      if (result.success && result.data) {
+        setPrices(result.data);
+      }
+    } catch (error) {
+      console.error('Failed to load prices:', error);
+    } finally {
+      setIsLoadingPrices(false);
+    }
+  };
+
+  const handleInitializeProducts = async () => {
+    if (!accessToken) return;
+    setIsInitializing(true);
+    try {
+      const result = await createStripeProducts(accessToken);
+      if (result.success) {
+        onRefresh();
+      } else {
+        console.error('Failed to initialize products:', result.message);
+      }
+    } catch (error) {
+      console.error('Initialize products error:', error);
+    } finally {
+      setIsInitializing(false);
+    }
+  };
+
+  const getProductPrices = (productId: string) => {
+    return prices.filter(p => p.product === productId);
+  };
+
   if (products.length === 0) {
     return (
       <Card>
-        <CardContent className="flex flex-col items-center justify-center py-12">
-          <Package className="text-muted-foreground mb-4 h-12 w-12" />
-          <h3 className="mb-2 text-lg font-semibold">No products yet</h3>
-          <p className="text-muted-foreground text-sm">
-            Products and pricing plans will appear here
-          </p>
+        <CardHeader className="text-center">
+          <div className="bg-muted mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
+            <Package className="text-muted-foreground h-8 w-8" />
+          </div>
+          <CardTitle>No Products Yet</CardTitle>
+          <CardDescription>
+            Initialize your subscription products to get started with Base,
+            Professional, and Enterprise plans.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex justify-center pb-6">
+          <Button
+            onClick={handleInitializeProducts}
+            disabled={isInitializing}
+            size="lg"
+          >
+            {isInitializing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Initializing...
+              </>
+            ) : (
+              <>
+                <Plus className="mr-2 h-4 w-4" />
+                Initialize Products
+              </>
+            )}
+          </Button>
         </CardContent>
       </Card>
     );
@@ -38,71 +123,104 @@ export function ProductsTable({ products }: ProductsTableProps) {
 
   return (
     <Card>
+      <CardHeader className="flex flex-row items-center justify-between pb-4">
+        <div>
+          <CardTitle className="text-lg">Products & Pricing</CardTitle>
+          <CardDescription>
+            {products.length} product{products.length !== 1 ? 's' : ''}{' '}
+            available
+          </CardDescription>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleInitializeProducts}
+          disabled={isInitializing}
+        >
+          {isInitializing ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <>
+              <Plus className="mr-1 h-3 w-3" />
+              Reinitialize
+            </>
+          )}
+        </Button>
+      </CardHeader>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Product</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Product ID</TableHead>
+            <TableHead>Pricing</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Metadata</TableHead>
             <TableHead>Created</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {products.map(product => (
-            <TableRow key={product.id}>
-              <TableCell>
-                <div className="flex items-center gap-3">
-                  <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
-                    <Package className="text-primary h-5 w-5" />
-                  </div>
-                  <div className="font-medium">{product.name}</div>
-                </div>
-              </TableCell>
-              <TableCell>
-                <span className="text-muted-foreground text-sm">
-                  {product.description || '—'}
-                </span>
-              </TableCell>
-              <TableCell>
-                <Badge variant="secondary" className="font-mono text-xs">
-                  {product.id}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                {product.active ? (
-                  <Badge variant="default" className="gap-1">
-                    <Check className="h-3 w-3" />
-                    Active
-                  </Badge>
-                ) : (
-                  <Badge variant="outline" className="gap-1">
-                    <X className="h-3 w-3" />
-                    Inactive
-                  </Badge>
-                )}
-              </TableCell>
-              <TableCell>
-                {product.metadata &&
-                Object.keys(product.metadata).length > 0 ? (
-                  <div className="space-y-1">
-                    {Object.entries(product.metadata).map(([key, value]) => (
-                      <div key={key} className="text-xs">
-                        <span className="text-muted-foreground">{key}:</span>{' '}
-                        <span>{value}</span>
+          {products.map(product => {
+            const productPrices = getProductPrices(product.id);
+            return (
+              <TableRow key={product.id}>
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
+                      <Package className="text-primary h-5 w-5" />
+                    </div>
+                    <div>
+                      <div className="font-medium">{product.name}</div>
+                      <div className="text-muted-foreground text-xs">
+                        {product.description || product.id}
                       </div>
-                    ))}
+                    </div>
                   </div>
-                ) : (
-                  <span className="text-muted-foreground text-sm">—</span>
-                )}
-              </TableCell>
-              <TableCell className="text-muted-foreground text-sm">
-                {formatDate(new Date(product.created * 1000))}
-              </TableCell>
-            </TableRow>
-          ))}
+                </TableCell>
+                <TableCell>
+                  {isLoadingPrices ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : productPrices.length > 0 ? (
+                    <div className="space-y-1">
+                      {productPrices.map(price => (
+                        <div key={price.id} className="flex items-center gap-2">
+                          <DollarSign className="text-muted-foreground h-3 w-3" />
+                          <span className="text-sm font-medium">
+                            {formatCurrency(price.unit_amount)}
+                          </span>
+                          <span className="text-muted-foreground text-xs">
+                            /{price.recurring?.interval || 'one-time'}
+                          </span>
+                          {price.nickname && (
+                            <Badge variant="outline" className="text-xs">
+                              {price.nickname}
+                            </Badge>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="text-muted-foreground text-sm">
+                      No pricing
+                    </span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {product.active ? (
+                    <Badge variant="default" className="gap-1">
+                      <Check className="h-3 w-3" />
+                      Active
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline" className="gap-1">
+                      <X className="h-3 w-3" />
+                      Inactive
+                    </Badge>
+                  )}
+                </TableCell>
+                <TableCell className="text-muted-foreground text-sm">
+                  {formatDate(new Date(product.created * 1000))}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </Card>
