@@ -3,7 +3,13 @@ import ChangePassword from '@/components/ChangePassword';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useTenant } from '@/contexts/TenantContext';
+import { UserMode } from '@/types/tenant';
+import { useRouter } from 'next/navigation';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Building2, User as UserIcon } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const optionsList = [
   // {
@@ -24,8 +30,58 @@ const optionsList = [
 ];
 const Page = () => {
   const [selectedOption, setSelectedOption] = useState(1);
+  const { mode, currentTenant } = useTenant();
+  const router = useRouter();
+
+  // Redirect to organization settings if in tenant mode
+  useEffect(() => {
+    if (mode === UserMode.TENANT && currentTenant) {
+      router.push(`/organizations/${currentTenant.id}/settings`);
+    }
+  }, [mode, currentTenant, router]);
+
+  // Show organization settings redirect message if in tenant mode
+  if (mode === UserMode.TENANT && currentTenant) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center p-6">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Building2 className="size-5" />
+              Organization Mode Active
+            </CardTitle>
+            <CardDescription>
+              You&apos;re currently in {currentTenant.name} organization mode.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-gray-600">
+              To configure organization settings, visit the organization settings page.
+            </p>
+            <div className="flex flex-col gap-2">
+              <Button onClick={() => router.push(`/organizations/${currentTenant.id}/settings`)}>
+                Go to Organization Settings
+              </Button>
+              <Button variant="outline" onClick={() => router.push('/organizations')}>
+                View All Organizations
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-40 pl-20">
+      {/* Personal Mode Indicator */}
+      <div className="mb-6 flex items-center gap-2">
+        <Badge variant="outline" className="flex items-center gap-1">
+          <UserIcon className="size-3" />
+          Personal Settings
+        </Badge>
+      </div>
+
       <div className="flex space-x-6">
         <div className="flex w-40 flex-col space-y-2">
           {optionsList.map(item => (

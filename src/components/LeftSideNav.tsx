@@ -16,6 +16,7 @@ import {
   ArrowUpRight,
   BookA,
   Bookmark,
+  Building2,
   Code,
   LogOut,
   Orbit,
@@ -26,6 +27,7 @@ import {
   Settings,
   SquarePen,
   SquareUserRound,
+  User,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -35,11 +37,15 @@ import { useState } from 'react';
 import ConversationsList from './ConversationsList';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { useTenant } from '@/contexts/TenantContext';
+import { Badge } from './ui/badge';
+import { UserMode } from '@/types/tenant';
 
 const LeftSideNav = () => {
   const { data } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+  const { mode, currentTenant } = useTenant();
 
   const { onOpen } = useModalStore();
   const {
@@ -184,13 +190,85 @@ const LeftSideNav = () => {
               />
             </Button>
 
+            <Button
+              disabled={pathname === '/organizations'}
+              onClick={() => {
+                setActiveConversation(null);
+                setShowStartLastMessage(false);
+                setUserMessage('');
+                setSelectedOption(null);
+                if (pathname !== '/organizations') router.push('/organizations');
+                close();
+              }}
+              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
+            >
+              <Building2 />
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                Organizations
+              </span>
+            </Button>
+
+            {mode === UserMode.TENANT && currentTenant && !hideSidebar && (
+              <div className="ml-4 mt-2 space-y-1 border-l-2 border-gray-200 pl-3">
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <Building2 className="size-3" />
+                  <span className="truncate">{currentTenant.name}</span>
+                </div>
+                <div className="space-y-0.5">
+                  <Button
+                    onClick={() => {
+                      router.push(`/organizations/${currentTenant.id}`);
+                      close();
+                    }}
+                    className="flex h-7 w-full items-center justify-start bg-transparent px-2 text-xs text-gray-600 shadow-none hover:bg-black/5"
+                  >
+                    Dashboard
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      router.push(`/organizations/${currentTenant.id}/members`);
+                      close();
+                    }}
+                    className="flex h-7 w-full items-center justify-start bg-transparent px-2 text-xs text-gray-600 shadow-none hover:bg-black/5"
+                  >
+                    Members
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      router.push(`/organizations/${currentTenant.id}/settings`);
+                      close();
+                    }}
+                    className="flex h-7 w-full items-center justify-start bg-transparent px-2 text-xs text-gray-600 shadow-none hover:bg-black/5"
+                  >
+                    Settings
+                  </Button>
+                </div>
+              </div>
+            )}
+
             <div
               className={cn(
                 'mt-6 flex items-center space-x-4',
                 hideSidebar && 'hidden',
               )}
             >
-              <div className="pl-4 text-sm text-gray-500">Chat history</div>
+              <div className="flex items-center gap-2 pl-4 text-sm text-gray-500">
+                <span>Chat history</span>
+                {mode === UserMode.TENANT && currentTenant && (
+                  <Badge variant="outline" className="h-5 px-1.5 text-[10px] font-normal">
+                    <Building2 className="mr-1 size-2.5" />
+                    {currentTenant.name}
+                  </Badge>
+                )}
+                {mode === UserMode.PERSONAL && (
+                  <Badge variant="outline" className="h-5 px-1.5 text-[10px] font-normal">
+                    <User className="mr-1 size-2.5" />
+                    Personal
+                  </Badge>
+                )}
+              </div>
               <div className="flex items-center space-x-3">
                 <Tooltip>
                   <TooltipTrigger asChild>

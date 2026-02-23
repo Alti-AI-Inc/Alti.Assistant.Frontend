@@ -74,12 +74,12 @@ export interface StripeSubscription {
   id: string; // sub_xxxx
   customer: string;
   status:
-    | 'active'
-    | 'canceled'
-    | 'incomplete'
-    | 'past_due'
-    | 'trialing'
-    | 'unpaid';
+  | 'active'
+  | 'canceled'
+  | 'incomplete'
+  | 'past_due'
+  | 'trialing'
+  | 'unpaid';
   current_period_start: number;
   current_period_end: number;
   items: {
@@ -972,6 +972,457 @@ export async function cancelSubscription(
     return {
       success: false,
       message: 'Failed to cancel subscription',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+// ============================================================================
+// TENANT-AWARE SUBSCRIPTION FUNCTIONS
+// ============================================================================
+
+/**
+ * Get subscription plans (public endpoint)
+ */
+export async function getSubscriptionPlans(): Promise<ApiResponse<any[]>> {
+  console.log('[stripeActions] GET - getSubscriptionPlans');
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/plans`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to fetch subscription plans',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] GET - getSubscriptionPlans response:', data);
+    return {
+      success: true,
+      message: 'Plans fetched successfully',
+      data: data.data || data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] GET - getSubscriptionPlans error:', error);
+    return {
+      success: false,
+      message: 'Failed to fetch subscription plans',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+/**
+ * Get current user/tenant subscription with usage
+ * Context-aware - returns subscription based on current tenant context in JWT
+ */
+export async function getMySubscription(
+  accessToken: string,
+): Promise<ApiResponse<any>> {
+  console.log('[stripeActions] GET - getMySubscription');
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/my-subscription`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to fetch subscription',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] GET - getMySubscription response:', data);
+    return {
+      success: true,
+      message: 'Subscription fetched successfully',
+      data: data.data || data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] GET - getMySubscription error:', error);
+    return {
+      success: false,
+      message: 'Failed to fetch subscription',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+/**
+ * Get subscription for a specific tenant
+ */
+export async function getTenantSubscription(
+  tenantId: string,
+  accessToken: string,
+): Promise<ApiResponse<any>> {
+  console.log('[stripeActions] GET - getTenantSubscription:', { tenantId });
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/tenant/${tenantId}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to fetch tenant subscription',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] GET - getTenantSubscription response:', data);
+    return {
+      success: true,
+      message: 'Tenant subscription fetched successfully',
+      data: data.data || data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] GET - getTenantSubscription error:', error);
+    return {
+      success: false,
+      message: 'Failed to fetch tenant subscription',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+/**
+ * Create free subscription
+ */
+export async function createFreeSubscription(
+  tenantId: string,
+  accessToken: string,
+): Promise<ApiResponse<any>> {
+  console.log('[stripeActions] POST - createFreeSubscription:', { tenantId });
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/create-free`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ tenantId }),
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to create free subscription',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] POST - createFreeSubscription response:', data);
+    return {
+      success: true,
+      message: 'Free subscription created successfully',
+      data: data.data || data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] POST - createFreeSubscription error:', error);
+    return {
+      success: false,
+      message: 'Failed to create free subscription',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+/**
+ * Upgrade subscription
+ */
+export async function upgradeSubscription(
+  data: {
+    stripeProductId?: string;
+    planName?: string;
+    tenantId: string;
+    seats: number;
+  },
+  accessToken: string,
+): Promise<ApiResponse<any>> {
+  console.log('[stripeActions] POST - upgradeSubscription:', data);
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/upgrade`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to upgrade subscription',
+        statusCode: response.status,
+      };
+    }
+
+    const responseData = await response.json();
+    console.log('[stripeActions] POST - upgradeSubscription response:', responseData);
+    return {
+      success: true,
+      message: 'Checkout session created successfully',
+      data: responseData.data || responseData,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] POST - upgradeSubscription error:', error);
+    return {
+      success: false,
+      message: 'Failed to upgrade subscription',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+/**
+ * Get usage statistics
+ */
+export async function getUsageStats(
+  accessToken: string,
+): Promise<ApiResponse<any>> {
+  console.log('[stripeActions] GET - getUsageStats');
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/usage`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to fetch usage stats',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] GET - getUsageStats response:', data);
+    return {
+      success: true,
+      message: 'Usage stats fetched successfully',
+      data: data.data || data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] GET - getUsageStats error:', error);
+    return {
+      success: false,
+      message: 'Failed to fetch usage stats',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+/**
+ * Check usage limit for a specific feature
+ */
+export async function checkUsageLimit(
+  limitType: string,
+  accessToken: string,
+): Promise<ApiResponse<any>> {
+  console.log('[stripeActions] GET - checkUsageLimit:', { limitType });
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/check-limit?limitType=${limitType}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to check usage limit',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] GET - checkUsageLimit response:', data);
+    return {
+      success: true,
+      message: 'Usage limit checked successfully',
+      data: data.data || data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] GET - checkUsageLimit error:', error);
+    return {
+      success: false,
+      message: 'Failed to check usage limit',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+/**
+ * Add seat to subscription
+ */
+export async function addSeatToSubscription(
+  subscriptionId: string,
+  userId: string,
+  accessToken: string,
+): Promise<ApiResponse<any>> {
+  console.log('[stripeActions] POST - addSeatToSubscription:', { subscriptionId, userId });
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/add-seat`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ subscriptionId, userId }),
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to add seat',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] POST - addSeatToSubscription response:', data);
+    return {
+      success: true,
+      message: 'Seat added successfully',
+      data: data.data || data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] POST - addSeatToSubscription error:', error);
+    return {
+      success: false,
+      message: 'Failed to add seat',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+/**
+ * Remove seat from subscription
+ */
+export async function removeSeatFromSubscription(
+  subscriptionId: string,
+  userId: string,
+  accessToken: string,
+): Promise<ApiResponse<any>> {
+  console.log('[stripeActions] POST - removeSeatFromSubscription:', { subscriptionId, userId });
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/remove-seat`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ subscriptionId, userId }),
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to remove seat',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] POST - removeSeatFromSubscription response:', data);
+    return {
+      success: true,
+      message: 'Seat removed successfully',
+      data: data.data || data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] POST - removeSeatFromSubscription error:', error);
+    return {
+      success: false,
+      message: 'Failed to remove seat',
       debugMessage: errorMessage,
       statusCode: 500,
     };

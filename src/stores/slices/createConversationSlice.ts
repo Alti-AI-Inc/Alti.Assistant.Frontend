@@ -71,6 +71,8 @@ export interface ConversationSlice {
   // Presentation polling
   presentationTask: PresentationTask | null;
   setPresentationTask: (task: PresentationTask | null) => void;
+  // Context switching
+  clearConversationData: () => void;
 }
 
 export const createConversationSlice: StateCreator<
@@ -229,4 +231,17 @@ export const createConversationSlice: StateCreator<
   // Presentation polling
   presentationTask: null,
   setPresentationTask: task => set({ presentationTask: task }),
+
+  // Context switching - clear all conversation data when switching contexts
+  clearConversationData: () =>
+    set({
+      activeConversation: null,
+      userMessage: '',
+      showStartLastMessage: false,
+      isLoadingActiveConversation: false,
+      isLoadingResponse: false,
+      error: null,
+      selectedOption: null,
+      presentationTask: null,
+    }),
 });

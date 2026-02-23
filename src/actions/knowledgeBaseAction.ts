@@ -1,5 +1,6 @@
 'use server';
 
+import { apiClient } from '@/lib/api-client';
 import { KnowledgeBankFile } from './knowledgeBankAction';
 
 export interface ApiResponse<T = any> {
@@ -15,7 +16,7 @@ export const uploadfileToKnowledgeBaseAction = async (
   accessToken: string,
 ): Promise<ApiResponse<any>> => {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/upload`,
       {
         method: 'POST',
@@ -42,7 +43,7 @@ export async function fetchKnowledgeBaseList(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/list`,
       {
         method: 'GET',
@@ -75,7 +76,7 @@ export async function fetchKnowledgeBaseConversations(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/${baseId}/conversations`,
       {
         method: 'GET',
@@ -104,7 +105,7 @@ export async function createKnowledgeBaseAction(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/create`,
       {
         method: 'POST',
@@ -138,7 +139,7 @@ export async function PostKnowledgeConversation(
   conversationId?: string,
 ): Promise<ApiResponse<any>> {
   try {
-    const response = await fetch(apiUrl, {
+    const response = await apiClient(apiUrl, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -168,7 +169,7 @@ export async function loadSingleBaseConversation(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/conversations/${conversationId}/messages`,
       {
         method: 'GET',
@@ -217,7 +218,7 @@ export async function getKnowledgeBaseFiles(
   accessToken: string,
 ): Promise<ApiResponse<KnowledgeBaseFilesResponse>> {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/files?knowledgebotId=${knowledgebotId}`,
       {
         method: 'GET',
@@ -242,7 +243,7 @@ export async function getKnowledgeBaseFiles(
 
 export async function getFileBlob(file: KnowledgeBaseFile | KnowledgeBankFile) {
   try {
-    const response = await fetch(file.gcsUrl);
+    const response = await apiClient(file.gcsUrl, { skipTenantHeader: true });
     const blob = await response.blob();
 
     return blob;
@@ -256,7 +257,7 @@ export const deleteKnowledgeBaseFile = async (
 ): Promise<ApiResponse<any>> => {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/files/${fileId}`;
   try {
-    const response = await fetch(apiUrl, {
+    const response = await apiClient(apiUrl, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -281,7 +282,7 @@ export const deleteKnowledgeBase = async (
 ): Promise<ApiResponse<any>> => {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/${baseId}`;
   try {
-    const response = await fetch(apiUrl, {
+    const response = await apiClient(apiUrl, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,

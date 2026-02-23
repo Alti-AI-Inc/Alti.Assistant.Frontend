@@ -1,5 +1,7 @@
 'use server';
 
+import { apiClient } from '@/lib/api-client';
+
 export interface ApiResponse<T = any> {
   success: boolean;
   message: string;
@@ -22,7 +24,7 @@ export async function PostConversation(
       conversationId,
       message,
     });
-    const response = await fetch(apiUrl, {
+    const response = await apiClient(apiUrl, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -93,7 +95,7 @@ export async function fetchConversationList(
   page = 1,
 ): Promise<ApiResponse<ConversationListResponse>> {
   try {
-    const res = await fetch(
+    const res = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/conversations?page=${page}&limit=20`,
       {
         method: 'GET',
@@ -131,7 +133,7 @@ export async function fetchSavedConversationList(
   accessToken: string,
 ): Promise<ApiResponse<Conversation[]>> {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/conversations/saved?limit=30&page=1`,
       {
         method: 'GET',
@@ -170,7 +172,7 @@ export async function searchConversations(
   searchTerm: string,
 ): Promise<ApiResponse> {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/conversations/search?searchTerm=${encodeURIComponent(searchTerm)}`,
       {
         method: 'GET',
@@ -212,7 +214,7 @@ export async function loadSingleConversation(
     conversationId,
   });
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/conversations/${conversationId}`,
       {
         method: 'GET',
@@ -258,8 +260,9 @@ export async function loadSingleSharedConversation(
   id: string,
 ): Promise<ApiResponse> {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/conversations/shared/${id}`,
+      { skipTenantHeader: true }, // Shared conversations don't use tenant context
     );
 
     if (!response.ok) {
@@ -290,7 +293,7 @@ export const deleteConversation = async (
 ): Promise<ApiResponse> => {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/conversations/${conversationId}`;
   try {
-    const response = await fetch(apiUrl, {
+    const response = await apiClient(apiUrl, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -325,7 +328,7 @@ export const shareConversation = async (
   accessToken: string,
 ): Promise<ApiResponse> => {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/conversations/${conversationId}/share`,
       {
         method: 'POST',
@@ -364,7 +367,7 @@ export async function renameConversationAction(
   accessToken: string,
 ): Promise<ApiResponse> {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/conversations/rename/${conversationId}`,
       {
         method: 'PATCH',
@@ -406,7 +409,7 @@ export async function saveConversationAction(
   accessToken: string,
 ): Promise<ApiResponse> {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/conversations/save/${conversationId}`,
       {
         method: 'PATCH',

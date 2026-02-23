@@ -1,5 +1,6 @@
 'use server';
 
+import { apiClient } from '@/lib/api-client';
 import {
   StartDocConversationRequest,
   ContinueDocConversationRequest,
@@ -26,7 +27,7 @@ export async function startDocumentConversation(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
   try {
-    const response = await fetch(`${API_BASE_URL}/documents/assistant`, {
+    const response = await apiClient(`${API_BASE_URL}/documents/assistant`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -54,7 +55,7 @@ export async function continueDocumentConversation(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
   try {
-    const response = await fetch(`${API_BASE_URL}/documents/assistant`, {
+    const response = await apiClient(`${API_BASE_URL}/documents/assistant`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -87,7 +88,7 @@ export async function generateDocument(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
   try {
-    const response = await fetch(`${API_BASE_URL}/documents/generate`, {
+    const response = await apiClient(`${API_BASE_URL}/documents/generate`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -117,7 +118,7 @@ export async function uploadReviewDocumentAssistant(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
   try {
-    const response = await fetch(`${API_BASE_URL}/document-review/assistant`, {
+    const response = await apiClient(`${API_BASE_URL}/document-review/assistant`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -148,7 +149,7 @@ export async function submitDirectReview(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
   try {
-    const response = await fetch(`${API_BASE_URL}/document-review/assistant`, {
+    const response = await apiClient(`${API_BASE_URL}/document-review/assistant`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,

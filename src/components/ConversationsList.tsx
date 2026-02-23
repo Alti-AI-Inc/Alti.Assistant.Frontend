@@ -1,5 +1,9 @@
 'use client';
 
+// Note: Tenant filtering for conversations will be implemented in Phase 6
+// Currently displays all user conversations regardless of tenant context
+// Phase 6 will add X-Tenant-Id headers to API calls and backend filtering
+
 import { Conversation } from '@/actions/conversationsAction';
 import { useConversations } from '@/hooks/useConversations';
 import { formatConversationTitle } from '@/lib/utils';

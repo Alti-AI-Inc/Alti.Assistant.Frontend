@@ -8,6 +8,7 @@ declare module 'next-auth' {
     accessToken?: string;
     id?: string;
     role?: string;
+    tenants?: Array<{ id: string; name: string; role: string }>;
     iat?: number;
     exp?: number;
   }
@@ -22,6 +23,7 @@ declare module 'next-auth' {
     accessToken?: string;
     id?: string;
     role?: string;
+    tenants?: Array<{ id: string; name: string; role: string }>;
     iat?: number;
     exp?: number;
   }
@@ -75,7 +77,38 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      // Handle token updates (e.g., after creating tenant)
+      if (trigger === 'update' && session?.accessToken) {
+        const decoded = jwt.decode(session.accessToken) as jwt.JwtPayload & {
+          _id?: string;
+          role?: string;
+          tenants?: Array<{ tenantId: string; role: string }>;
+          iat?: number;
+          exp?: number;
+        };
+
+        if (decoded) {
+          token.accessToken = session.accessToken;
+          token.id = decoded._id || token.id;
+          token.role = decoded.role;
+          token.iat = decoded.iat;
+          token.exp = decoded.exp;
+
+          // Transform backend tenant structure to frontend structure
+          if (decoded.tenants && decoded.tenants.length > 0) {
+            token.tenants = decoded.tenants.map((t) => ({
+              id: t.tenantId,
+              name: '', // Will be populated from API call
+              role: t.role,
+            }));
+          } else {
+            token.tenants = [];
+          }
+        }
+        return token;
+      }
+
       // On first login
       if (user?.accessToken) {
         token.id = user.id;
@@ -84,6 +117,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const decoded = jwt.decode(user.accessToken) as jwt.JwtPayload & {
           _id?: string;
           role?: string;
+          tenants?: Array<{ tenantId: string; role: string }>;
           iat?: number;
           exp?: number;
         };
@@ -93,6 +127,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.role = decoded.role;
           token.iat = decoded.iat;
           token.exp = decoded.exp;
+
+          // Transform backend tenant structure to frontend structure
+          if (decoded.tenants && decoded.tenants.length > 0) {
+            token.tenants = decoded.tenants.map((t) => ({
+              id: t.tenantId,
+              name: '', // Will be populated from API call
+              role: t.role,
+            }));
+          } else {
+            token.tenants = [];
+          }
         }
       }
 
@@ -105,6 +150,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.id = token.id as string;
       session.user.role =
         typeof token.role === 'string' ? token.role : undefined;
+      session.user.tenants = token.tenants as Array<{ id: string; name: string; role: string }> | undefined;
       session.user.iat = token.iat;
       session.user.exp = token.exp;
 

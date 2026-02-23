@@ -1,5 +1,7 @@
 'use server';
 
+import { apiClient } from '@/lib/api-client';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // ============ Types ============
@@ -141,7 +143,7 @@ export async function analyzeImageIntent(
         2,
       ),
     );
-    const response = await fetch(
+    const response = await apiClient(
       `${API_URL}/enhanced-image/analyze-image-intent`,
       {
         method: 'POST',
@@ -201,7 +203,7 @@ export async function evaluatePrompt(
       ? `Conversation History:\n${conversationHistory}\n\nCurrent Request: ${prompt}`
       : prompt;
 
-    const response = await fetch(`${API_URL}/enhanced-image/evaluate-prompt`, {
+    const response = await apiClient(`${API_URL}/enhanced-image/evaluate-prompt`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -253,7 +255,7 @@ export async function addDetail(
       ),
     );
 
-    const response = await fetch(`${API_URL}/enhanced-image/add-detail`, {
+    const response = await apiClient(`${API_URL}/enhanced-image/add-detail`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -304,7 +306,7 @@ export async function finalizePrompt(
       ),
     );
 
-    const response = await fetch(`${API_URL}/enhanced-image/finalize-prompt`, {
+    const response = await apiClient(`${API_URL}/enhanced-image/finalize-prompt`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -360,7 +362,7 @@ export async function generateImage(
       ),
     );
 
-    const response = await fetch(`${API_URL}/enhanced-image/generate`, {
+    const response = await apiClient(`${API_URL}/enhanced-image/generate`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -422,7 +424,7 @@ export async function editImage(
       ),
     );
 
-    const response = await fetch(`${API_URL}/enhanced-image/edit`, {
+    const response = await apiClient(`${API_URL}/enhanced-image/edit`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,

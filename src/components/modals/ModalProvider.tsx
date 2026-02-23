@@ -18,6 +18,8 @@ import RenameChat from './RenameChat';
 import SearchChats from './SearchChats';
 import SearchWorkflows from './SearchWorkflows';
 import { ShareConversationModal } from './ShareConversationModal';
+import { InviteMemberModal } from './InviteMemberModal';
+import { CreateOrganizationModal } from './CreateOrganizationModal';
 
 export const ModalProvider = () => {
   const { type, isOpen } = useModalStore();
@@ -59,6 +61,8 @@ export const ModalProvider = () => {
         )
       }
       {type === 'delete-knowledge-base' && <DeleteKnowledgeBaseModal />}
+      {type === 'invite-member' && <InviteMemberModal />}
+      {type === 'create-organization' && <CreateOrganizationModal />}
     </>
   );
 };

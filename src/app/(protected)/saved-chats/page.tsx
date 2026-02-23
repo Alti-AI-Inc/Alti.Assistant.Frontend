@@ -1,4 +1,9 @@
 'use client';
+
+// Note: Tenant filtering for saved conversations will be implemented in Phase 6
+// Currently displays all user's saved conversations regardless of tenant context
+// Phase 6 will add X-Tenant-Id headers to API calls and backend filtering
+
 import {
   DropdownMenu,
   DropdownMenuContent,

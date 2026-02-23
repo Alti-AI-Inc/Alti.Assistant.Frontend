@@ -1,5 +1,7 @@
 'use server';
 
+import { apiClient } from '@/lib/api-client';
+
 enum FileStatus {
   PENDING = 'pending',
   PROCESSING = 'processing',
@@ -80,7 +82,7 @@ export const fileUploadAction = async (
   accessToken: string,
 ): Promise<ApiResponse<any>> => {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/upload`,
       {
         method: 'POST',
@@ -107,7 +109,7 @@ export async function fetchKnowledgeBankFolders(
   accessToken: string,
 ): Promise<ApiResponse<KnowledgeBankFolder[]>> {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/folders`,
       {
         method: 'GET',
@@ -140,7 +142,7 @@ export async function fetchKnowledgeBankFolderContent(
   accessToken: string,
 ): Promise<ApiResponse<KnowledgeBankFolderContentResponse>> {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/folders/${folderId}/contents`,
       {
         method: 'GET',
@@ -170,7 +172,7 @@ export async function createKnowledgeBankFolderAction(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/folders`,
       {
         method: 'POST',
@@ -204,7 +206,7 @@ export async function updateKnowledgeBankFolderAction(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/folders/${folderId}`,
       {
         method: 'PUT',
@@ -236,7 +238,7 @@ export const uploadfileToKnowledgeBankAction = async (
   accessToken: string,
 ): Promise<ApiResponse<any>> => {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/upload`,
       {
         method: 'POST',
@@ -264,7 +266,7 @@ export const processKnowledgeBankFile = async (
   accessToken: string,
 ): Promise<ApiResponse<any>> => {
   try {
-    const response = await fetch(
+    const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/files/${fileId}/process`,
       {
         method: 'POST',
@@ -292,7 +294,7 @@ export const deleteKnowledgeBankFolderAction = async (
 ): Promise<ApiResponse<any>> => {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/folders/${folderId}`;
   try {
-    const response = await fetch(apiUrl, {
+    const response = await apiClient(apiUrl, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -318,7 +320,7 @@ export const deleteKnowledgeBankFile = async (
 ): Promise<ApiResponse<any>> => {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/knowledge-bank/files/${fileId}`;
   try {
-    const response = await fetch(apiUrl, {
+    const response = await apiClient(apiUrl, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
