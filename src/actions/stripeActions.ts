@@ -60,14 +60,34 @@ export interface StripePrice {
 
 export interface StripePaymentMethod {
   id: string; // pm_xxxx
+  object: string;
   type: string;
   card?: {
     brand: string;
     last4: string;
     exp_month: number;
     exp_year: number;
+    display_brand?: string;
+    funding?: string;
+    country?: string;
+  };
+  billing_details?: {
+    address?: {
+      city?: string | null;
+      country?: string | null;
+      line1?: string | null;
+      line2?: string | null;
+      postal_code?: string | null;
+      state?: string | null;
+    };
+    email?: string | null;
+    name?: string | null;
+    phone?: string | null;
   };
   created: number;
+  customer?: string;
+  livemode?: boolean;
+  metadata?: Record<string, unknown>;
 }
 
 export interface StripeSubscription {
@@ -94,6 +114,7 @@ export interface StripeSubscription {
 export interface StripePaymentIntent {
   id: string; // pi_xxxx
   client_secret: string;
+  clientSecret: string
   amount: number;
   currency: string;
   status: string;
@@ -598,18 +619,13 @@ export async function getStripeProduct(
 // ============================================================================
 
 export async function getPaymentMethods(
-  customerId: string,
   accessToken: string,
-  type: string = 'card',
 ): Promise<ApiResponse<StripePaymentMethod[]>> {
-  console.log('[stripeActions] GET - getPaymentMethods payload:', {
-    customerId,
-    type,
-  });
+  console.log('[stripeActions] GET - getPaymentMethods');
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/stripe/payment-methods/${customerId}/${type}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/stripe/my-payment-methods`,
       {
         method: 'GET',
         headers: {
@@ -631,13 +647,12 @@ export async function getPaymentMethods(
     const data = await response.json();
     console.log(
       '[stripeActions] GET - getPaymentMethods response:',
-      // JSON.stringify(data),
       data,
     );
     return {
       success: true,
       message: 'Payment methods fetched successfully',
-      data: data.paymentMethods || data.data || [],
+      data: data.data?.paymentMethods || [],
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -1087,7 +1102,7 @@ export async function getTenantSubscription(
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/tenant/${tenantId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/stripe/my-subscriptions`,
       {
         method: 'GET',
         headers: {
@@ -1106,12 +1121,51 @@ export async function getTenantSubscription(
       };
     }
 
-    const data = await response.json();
-    console.log('[stripeActions] GET - getTenantSubscription response:', data);
+    const apiData = await response.json();
+    console.log('[stripeActions] GET - getTenantSubscription response:', apiData);
+    console.log('[stripeActions] Full API data structure:', JSON.stringify(apiData, null, 2));
+
+    // Extract subscription data from API response
+    const subscriptions = apiData.data?.subscriptions || [];
+    console.log('[stripeActions] Subscriptions array:', subscriptions);
+    console.log('[stripeActions] Number of subscriptions:', subscriptions.length);
+
+    // There will always be one subscription according to user
+    if (subscriptions.length === 0) {
+      return {
+        success: true,
+        message: 'No active subscription found',
+        data: null,
+      };
+    }
+
+    const subscription = subscriptions[0];
+    console.log('[stripeActions] First subscription:', subscription);
+    console.log('[stripeActions] Subscription plan:', subscription.plan);
+    console.log('[stripeActions] Subscription items:', subscription.items);
+
+    // Transform Stripe subscription data to match expected format
+    const transformedData = {
+      id: subscription.id,
+      status: subscription.status,
+      plan: subscription.plan?.metadata?.plan || subscription.items?.data?.[0]?.price?.metadata?.plan || 'free',
+      amount: subscription.plan?.amount || subscription.items?.data?.[0]?.price?.unit_amount,
+      interval: subscription.plan?.interval || subscription.items?.data?.[0]?.price?.recurring?.interval || 'month',
+      nextBillingDate: subscription.current_period_end
+        ? new Date(subscription.current_period_end * 1000).toISOString()
+        : undefined,
+      seats: subscription.quantity || 1,
+      usedSeats: 0, // This would need to come from another source
+      billingCycle: subscription.plan?.interval || subscription.items?.data?.[0]?.price?.recurring?.interval || 'month',
+      customerId: apiData.data?.customerId,
+    };
+
+    console.log('[stripeActions] Transformed data:', transformedData);
+
     return {
       success: true,
       message: 'Tenant subscription fetched successfully',
-      data: data.data || data,
+      data: transformedData,
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -1427,4 +1481,266 @@ export async function removeSeatFromSubscription(
       statusCode: 500,
     };
   }
+}
+
+// ============================================================================
+// TENANT-AWARE PAYMENT INTEGRATION (For Organization Plan Upgrades)
+// ============================================================================
+
+/**
+ * Get current user's payment methods (tenant-aware)
+ * GET /api/v1/stripe/my-payment-methods
+ */
+export async function getMyPaymentMethods(
+  accessToken: string,
+): Promise<ApiResponse<StripePaymentMethod[]>> {
+  console.log('[stripeActions] GET - getMyPaymentMethods');
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/stripe/my-payment-methods`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to fetch payment methods',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] GET - getMyPaymentMethods response:', data);
+
+    // Handle various response formats
+    const paymentMethods =
+      data.paymentMethods?.data ||
+      data.data?.data ||
+      data.data ||
+      [];
+
+    return {
+      success: true,
+      message: 'Payment methods fetched successfully',
+      data: paymentMethods,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] GET - getMyPaymentMethods error:', error);
+    return {
+      success: false,
+      message: 'Failed to fetch payment methods',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+/**
+ * Create payment intent for current tenant
+ * POST /api/v1/stripe/payment-intent
+ */
+export async function createTenantPaymentIntent(
+  amount: number,
+  currency: string,
+  accessToken: string,
+): Promise<ApiResponse<StripePaymentIntent>> {
+  console.log('[stripeActions] POST - createTenantPaymentIntent:', {
+    amount,
+    currency,
+  });
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/stripe/payment-intent`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ amount, currency }),
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to create payment intent',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] POST - createTenantPaymentIntent response:', data);
+
+    // Extract paymentIntent from nested response structure
+    // Backend returns: { data: { paymentIntent: { clientSecret: '...' } } }
+    const paymentIntentData = data.data?.paymentIntent || data.paymentIntent || data.data || data;
+
+    return {
+      success: true,
+      message: 'Payment intent created successfully',
+      data: paymentIntentData,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] POST - createTenantPaymentIntent error:', error);
+    return {
+      success: false,
+      message: 'Failed to create payment intent',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+/**
+ * Add payment method to current tenant
+ * POST /api/v1/stripe/payment-method
+ */
+export async function addPaymentMethodToTenant(
+  paymentMethodId: string,
+  accessToken: string,
+): Promise<ApiResponse<StripePaymentMethod>> {
+  console.log('[stripeActions] POST - addPaymentMethodToTenant:', {
+    paymentMethodId,
+  });
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/stripe/payment-method`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ paymentMethodId }),
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to add payment method',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] POST - addPaymentMethodToTenant response:', data);
+
+    return {
+      success: true,
+      message: 'Payment method added successfully',
+      data: data.paymentMethod || data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] POST - addPaymentMethodToTenant error:', error);
+    return {
+      success: false,
+      message: 'Failed to add payment method',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+/**
+ * Create subscription for current tenant
+ * POST /api/v1/stripe/subscription
+ */
+export async function createTenantSubscription(
+  priceId: string,
+  accessToken: string,
+): Promise<ApiResponse<StripeSubscription>> {
+  console.log('[stripeActions] POST - createTenantSubscription:', { priceId });
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/stripe/subscription`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ priceId }),
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to create subscription',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] POST - createTenantSubscription response:', data);
+
+    return {
+      success: true,
+      message: 'Subscription created successfully',
+      data: data.subscription || data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] POST - createTenantSubscription error:', error);
+    return {
+      success: false,
+      message: 'Failed to create subscription',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+/**
+ * Cancel subscription (alias for existing function)
+ * DELETE /api/v1/stripe/subscription/:subscriptionId
+ */
+export async function cancelTenantSubscription(
+  subscriptionId: string,
+  accessToken: string,
+): Promise<ApiResponse<StripeSubscription>> {
+  // Reuse existing function
+  return cancelSubscription(subscriptionId, accessToken);
+}
+
+/**
+ * Get Stripe products (alias for existing function with clearer name)
+ * GET /api/v1/stripe/products
+ */
+export async function getProducts(
+  accessToken: string,
+): Promise<ApiResponse<StripeProduct[]>> {
+  // Reuse existing function
+  return getStripeProducts(accessToken);
+}
+
+/**
+ * Get prices for a product (alias for existing function with clearer name)
+ * GET /api/v1/stripe/prices?productId=
+ */
+export async function getProductPrices(
+  accessToken: string,
+  productId?: string,
+): Promise<ApiResponse<StripePrice[]>> {
+  // Reuse existing function
+  return getStripePrices(accessToken, productId);
 }

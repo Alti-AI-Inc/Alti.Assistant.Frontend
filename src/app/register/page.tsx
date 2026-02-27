@@ -22,28 +22,39 @@ const formSchema = z.object({
   }),
 });
 
-// import { RegisterUser } from '@/actions/register';
-import { RegisterUser } from '@/actions/register';
+import { confirmRegistration, RegisterUser } from '@/actions/register';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Eye, EyeOff, Mail } from 'lucide-react';
+import { Building2, Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Suspense, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-export default function Component() {
+function RegisterForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const invitationToken = searchParams.get('invitationToken') ?? undefined;
+  const invitedEmail = searchParams.get('email') ?? '';
+  const tenantName = searchParams.get('tenantName') ?? '';
+
+  const isInvited = !!invitationToken;
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showVerification, setShowVerification] = useState(false);
+  const [verifyCode, setVerifyCode] = useState('');
+  const [isVerifying, setIsVerifying] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [verifyError, setVerifyError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
+      email: invitedEmail,
       password: '',
       confirmPassword: '',
     },
@@ -55,26 +66,20 @@ export default function Component() {
     console.log({ values });
 
     try {
-      //  const res = await fetch(
-      //   `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
-      //   {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify({ email:values.email, password:values.password, confirmPassword:values.confirmPassword }),
-      //   },
-      // );
-      // const data = await res.json();
-      // console.log(data);
       const response = await RegisterUser({
         email: values.email,
         password: values.password,
         confirmPassword: values.confirmPassword,
+        invitationToken,
       });
       console.log({ response });
       if (response.success) {
-        setShowSuccessMessage(true);
+        if (isInvited) {
+          // Backend auto-accepted the invitation — go straight to the org dashboard
+          router.push('/organizations');
+        } else {
+          setShowVerification(true);
+        }
       } else {
         setErrorMessage(response.message);
       }
@@ -84,6 +89,28 @@ export default function Component() {
       setIsLoading(false);
     }
   }
+
+  async function handleVerify() {
+    if (verifyCode.length !== 6) {
+      setVerifyError('Please enter the 6-digit code');
+      return;
+    }
+    setIsVerifying(true);
+    setVerifyError(null);
+    try {
+      const response = await confirmRegistration(verifyCode);
+      if (response.success) {
+        router.push('/login');
+      } else {
+        setVerifyError(response.message || 'Invalid code. Please try again.');
+      }
+    } catch {
+      setVerifyError('An error occurred. Please try again.');
+    } finally {
+      setIsVerifying(false);
+    }
+  }
+
   return (
     <div>
       <div className="h-20 p-10">
@@ -96,18 +123,58 @@ export default function Component() {
           />
         </Link>
       </div>
-      {showSuccessMessage ? (
+      {showVerification ? (
         <div className="flex h-[calc(100vh-80px)] items-center justify-center">
-          <div className="pb-6 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
-              <Mail className="h-8 w-8 text-blue-600" />
+          <div className="flex w-full max-w-sm flex-col items-center gap-6 px-8">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
+              <svg className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
             </div>
-            <div className="text-2xl font-bold text-gray-900">
-              Check Your Email
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-gray-900">Check Your Email</h2>
+              <p className="mt-2 text-sm text-gray-600">
+                We&apos;ve sent a 6-digit verification code to your email address.
+              </p>
             </div>
-            <p className="mt-2 text-gray-600">
-              We&apos;ve sent a confirmation link to your email address
-            </p>
+            <div className="w-full space-y-4">
+              <Input
+                type="text"
+                inputMode="numeric"
+                maxLength={6}
+                placeholder="Enter 6-digit code"
+                value={verifyCode}
+                onChange={(e) => {
+                  setVerifyCode(e.target.value.replace(/\D/g, '').slice(0, 6));
+                  setVerifyError(null);
+                }}
+                className="w-full border-none bg-gray-100 text-center text-xl tracking-[0.5em] focus-visible:ring-0"
+              />
+              {verifyError && (
+                <p className="text-center text-sm text-red-500">{verifyError}</p>
+              )}
+              <Button
+                onClick={handleVerify}
+                disabled={isVerifying || verifyCode.length !== 6}
+                className="w-full bg-black text-white dark:bg-white dark:text-black"
+              >
+                {isVerifying && (
+                  <span className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></span>
+                )}
+                Verify Email
+              </Button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowVerification(false);
+                  setVerifyCode('');
+                  setVerifyError(null);
+                }}
+                className="w-full text-center text-sm text-gray-500 hover:text-gray-700 underline"
+              >
+                Back to registration
+              </button>
+            </div>
           </div>
         </div>
       ) : (
@@ -117,6 +184,18 @@ export default function Component() {
               <p className="pb-4 text-center text-3xl font-semibold">
                 Register
               </p>
+
+              {/* Invitation banner */}
+              {isInvited && tenantName && (
+                <div className="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 dark:border-blue-800 dark:bg-blue-950/30">
+                  <Building2 className="mt-0.5 size-4 shrink-0 text-blue-600 dark:text-blue-400" />
+                  <p className="text-sm text-blue-900 dark:text-blue-100">
+                    You&apos;ve been invited to join{' '}
+                    <span className="font-semibold">{tenantName}</span> — create your account to continue.
+                  </p>
+                </div>
+              )}
+
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
@@ -133,7 +212,10 @@ export default function Component() {
                             type="email"
                             id="email"
                             placeholder="Email"
-                            className="max-w-md border-none bg-gray-100 focus-visible:ring-0"
+                            readOnly={isInvited}
+                            className={`max-w-md border-none bg-gray-100 focus-visible:ring-0${
+                              isInvited ? ' cursor-not-allowed opacity-70' : ''
+                            }`}
                           />
                         </FormControl>
                         <FormMessage />
@@ -228,5 +310,13 @@ export default function Component() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function Component() {
+  return (
+    <Suspense>
+      <RegisterForm />
+    </Suspense>
   );
 }

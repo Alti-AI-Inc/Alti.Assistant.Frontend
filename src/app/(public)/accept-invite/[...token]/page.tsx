@@ -1,11 +1,12 @@
 'use client';
 
 import { verifyInvitationToken, acceptInvitation } from '@/actions/memberActions';
+import { switchTenant } from '@/actions/tenantActions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Building2, Loader2, XCircle } from 'lucide-react';
+import { Building2, CheckCircle2, Loader2, XCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { use, useEffect, useState } from 'react';
@@ -15,17 +16,21 @@ import type { VerifyInvitationResponse } from '@/types/tenant';
 export default function AcceptInvitePage({
   params,
 }: {
-  params: Promise<{ token: string }>;
+  params: Promise<{ token: string[] }>;
 }) {
-  const { token } = use(params);
+  // [...token] catch-all route — param is an array of path segments
+  const { token: tokenSegments } = use(params);
+  const token = Array.isArray(tokenSegments) ? tokenSegments.join('/') : tokenSegments;
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const [invitation, setInvitation] = useState<VerifyInvitationResponse | null>(null);
   const [isVerifying, setIsVerifying] = useState(true);
   const [isAccepting, setIsAccepting] = useState(false);
   const [isRejecting, setIsRejecting] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Step 1 — verify the token
   useEffect(() => {
     const verifyToken = async () => {
       setIsVerifying(true);
@@ -50,20 +55,50 @@ export default function AcceptInvitePage({
     verifyToken();
   }, [token]);
 
+  // Step 2 — once both invitation and auth status are known, redirect unauthenticated users
+  useEffect(() => {
+    if (!invitation || status === 'loading' || status === 'authenticated') return;
+
+    // Unauthenticated — send to register or login based on whether account exists
+    setIsRedirecting(true);
+    const params = new URLSearchParams({
+      invitationToken: token,
+      email: invitation.email,
+      tenantName: invitation.tenantName,
+    });
+
+    const destination = invitation.isUserExistWithEmail
+      ? `/login?${params.toString()}`
+      : `/register?${params.toString()}`;
+
+    router.push(destination);
+  }, [invitation, status, token, router]);
+
+  // Authenticated — accept the invitation via API
   const handleAccept = async () => {
-    if (!session?.accessToken) {
-      // Redirect to login with return URL
-      router.push(`/login?callbackUrl=/accept-invite/${token}`);
-      return;
-    }
+    if (!session?.accessToken) return;
 
     setIsAccepting(true);
     try {
       const response = await acceptInvitation(token);
 
       if (response.success) {
+        const tenantId = response.data?.tenantId ?? invitation?.tenantId;
+
+        // Switch to the new tenant to get a JWT with tenant context embedded
+        if (tenantId) {
+          try {
+            const switchResponse = await switchTenant(tenantId);
+            if (switchResponse.success && switchResponse.data?.accessToken) {
+              await update({ accessToken: switchResponse.data.accessToken });
+            }
+          } catch (switchErr) {
+            console.warn('Failed to switch tenant context after accept:', switchErr);
+          }
+        }
+
         toast.success('Invitation accepted! Welcome to the organization.');
-        router.push(`/organizations/${invitation?.tenantId}`);
+        router.push(tenantId ? `/organizations/${tenantId}` : '/organizations');
       } else {
         toast.error(response.message || 'Failed to accept invitation');
       }
@@ -83,7 +118,7 @@ export default function AcceptInvitePage({
     }, 1500);
   };
 
-  // Loading state
+  // Loading/verifying state
   if (isVerifying || status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
@@ -128,7 +163,41 @@ export default function AcceptInvitePage({
     );
   }
 
-  // Success state - show invitation details
+  // Unauthenticated — show brief redirect interstitial
+  if (isRedirecting || status === 'unauthenticated') {
+    const message = invitation.isUserExistWithEmail
+      ? 'Redirecting to sign in...'
+      : 'Setting up your account...';
+
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="container max-w-md">
+          <Card>
+            <CardContent className="pt-8 pb-8">
+              <div className="flex flex-col items-center gap-4 text-center">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Building2 className="size-6 text-primary" />
+                </div>
+                <div>
+                  <p className="font-semibold text-lg">{invitation.tenantName}</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    You&apos;ve been invited as{' '}
+                    <span className="font-medium capitalize">{invitation.role}</span>
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="size-4 animate-spin" />
+                  {message}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Authenticated — show accept/decline card
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="container max-w-md">
@@ -147,49 +216,30 @@ export default function AcceptInvitePage({
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="space-y-4">
-              <div className="p-4 bg-muted rounded-lg space-y-3">
-                <div>
-                  <div className="text-sm text-muted-foreground mb-1">
-                    Organization
-                  </div>
-                  <div className="font-semibold text-lg">
-                    {invitation.tenantName}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-sm text-muted-foreground mb-1">
-                    Your Email
-                  </div>
-                  <div className="font-medium">{invitation.email}</div>
-                </div>
-
-                <div>
-                  <div className="text-sm text-muted-foreground mb-1">Role</div>
-                  <Badge variant="secondary" className="capitalize">
-                    {invitation.role}
-                  </Badge>
-                </div>
-
-                {invitation.invitedBy && (
-                  <div>
-                    <div className="text-sm text-muted-foreground mb-1">
-                      Invited by
-                    </div>
-                    <div className="text-sm">{invitation.invitedBy}</div>
-                  </div>
-                )}
+            <div className="p-4 bg-muted rounded-lg space-y-3">
+              <div>
+                <div className="text-sm text-muted-foreground mb-1">Organization</div>
+                <div className="font-semibold text-lg">{invitation.tenantName}</div>
               </div>
 
-              {!session ? (
-                <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
-                  <p className="text-sm text-blue-900 dark:text-blue-100">
-                    You need to be logged in to accept this invitation. You&apos;ll be
-                    redirected to the login page.
-                  </p>
+              <div>
+                <div className="text-sm text-muted-foreground mb-1">Your Email</div>
+                <div className="font-medium">{invitation.email}</div>
+              </div>
+
+              <div>
+                <div className="text-sm text-muted-foreground mb-1">Role</div>
+                <Badge variant="secondary" className="capitalize">
+                  {invitation.role}
+                </Badge>
+              </div>
+
+              {invitation.inviterName && (
+                <div>
+                  <div className="text-sm text-muted-foreground mb-1">Invited by</div>
+                  <div className="text-sm">{invitation.inviterName}</div>
                 </div>
-              ) : null}
+              )}
             </div>
 
             <div className="flex flex-col gap-3">
@@ -198,10 +248,12 @@ export default function AcceptInvitePage({
                 disabled={isAccepting || isRejecting}
                 className="w-full"
               >
-                {isAccepting && <Loader2 className="size-4 mr-2 animate-spin" />}
+                {isAccepting
+                  ? <Loader2 className="size-4 mr-2 animate-spin" />
+                  : <CheckCircle2 className="size-4 mr-2" />}
                 {isAccepting ? 'Accepting...' : 'Accept Invitation'}
               </Button>
-              
+
               <Button
                 variant="outline"
                 onClick={handleReject}
@@ -212,13 +264,10 @@ export default function AcceptInvitePage({
               </Button>
             </div>
 
-            {session && (
-              <p className="text-xs text-center text-muted-foreground">
-                Accepting this invitation will give you access to{' '}
-                <span className="font-medium">{invitation.tenantName}</span> and its
-                resources.
-              </p>
-            )}
+            <p className="text-xs text-center text-muted-foreground">
+              Accepting this invitation will give you access to{' '}
+              <span className="font-medium">{invitation.tenantName}</span> and its resources.
+            </p>
           </CardContent>
         </Card>
       </div>

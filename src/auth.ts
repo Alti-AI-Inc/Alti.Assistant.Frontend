@@ -36,10 +36,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
+        invitationToken: { label: 'Invitation Token', type: 'text' },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
         try {
+          const body: Record<string, string> = {
+            email: credentials.email as string,
+            password: credentials.password as string,
+          };
+          if (credentials.invitationToken) {
+            body.invitationToken = credentials.invitationToken as string;
+          }
+
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
             {
@@ -47,10 +56,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({
-                email: credentials.email,
-                password: credentials.password,
-              }),
+              body: JSON.stringify(body),
             },
           );
           if (!response.ok) return null;

@@ -73,7 +73,7 @@ function KnowledgeBots() {
                       setUserMessage('');
                       setSelectedOption(null);
 
-                      router.push("/");
+                      router.push(`/knowledge/${activeConversation.knowledgebaseId}/chat`);
                     }}
                     className="flex items-center justify-start text-sm"
                   >

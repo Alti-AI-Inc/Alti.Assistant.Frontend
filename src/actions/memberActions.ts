@@ -35,7 +35,16 @@ export async function getTenantMembers(): Promise<ApiResponse<TenantMember[]>> {
       throw new Error(error.message || 'Failed to get tenant members');
     }
 
-    return await response.json();
+    const result = await response.json();
+
+    // Backend may wrap the array under data.members
+    return {
+      success: result.success,
+      message: result.message,
+      data: Array.isArray(result.data)
+        ? result.data
+        : result.data?.members ?? [],
+    };
   } catch (error: any) {
     console.error('Error getting tenant members:', error);
     throw error;
@@ -100,7 +109,16 @@ export async function getPendingInvitations(): Promise<
       throw new Error(error.message || 'Failed to get pending invitations');
     }
 
-    return await response.json();
+    const result = await response.json();
+
+    // Backend may wrap the array under data.invitations
+    return {
+      success: result.success,
+      message: result.message,
+      data: Array.isArray(result.data)
+        ? result.data
+        : result.data?.invitations ?? [],
+    };
   } catch (error: any) {
     console.error('Error getting pending invitations:', error);
     throw error;
@@ -117,7 +135,7 @@ export async function verifyInvitationToken(
     const response = await fetch(
       `${API_URL}/tenant/members/invitations/${token}/verify`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },

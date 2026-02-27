@@ -36,6 +36,54 @@ export interface Tenant {
   settings?: TenantSettings;
   createdAt?: string;
   updatedAt?: string;
+  limits?: {
+    maxApiCalls?: number;
+    maxStorage?: number;
+    maxUsers?: number;
+  };
+  usage?: {
+    apiCallsUsed?: number;
+    storageUsed?: number;
+    usersCount?: number;
+    lastResetAt?: string;
+  };
+  subscription?: {
+    _id: string;
+    userId: string;
+    tenantId: string;
+    price: {
+      _id: string;
+      plan: string;
+      name: string;
+      displayName?: string;
+      description?: string;
+      price: number;
+      interval: string;
+      currency: string;
+      stripePriceId: string;
+      stripeProductId: string;
+      isActive: boolean;
+      isVisible: boolean;
+      featuresList?: string[];
+      features?: {
+        dailyWebSearchLimit?: number;
+        dailyDeepResearchLimit?: number;
+        canInviteTeam?: boolean;
+        unlimitedSeats?: boolean;
+      };
+      sortOrder?: number;
+      metadata?: Record<string, unknown>;
+      createdAt: string;
+      updatedAt: string;
+    };
+    invoiceUrl?: string | null;
+    usage?: {
+      promptsUsed?: number;
+      imagesUsed?: number;
+    };
+    createdAt: string;
+    updatedAt: string;
+  };
 }
 
 // User's tenant with their role (returned from /tenant/all)
@@ -58,13 +106,19 @@ export interface TenantSettings {
 }
 
 export interface TenantMember {
-  userId: string;
+  _id: string;           // membership record ID
+  userId: {
+    _id: string;
+    email: string;
+  };
   tenantId: string;
-  role: TenantRole;
-  email?: string;
-  firstName?: string;
-  lastName?: string;
+  role: TenantRole | string;
+  permissions?: string[];
+  status?: string;
   joinedAt?: string;
+  lastAccessedAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface TenantInvitation {
@@ -120,11 +174,14 @@ export interface SwitchTenantResponse {
 }
 
 export interface VerifyInvitationResponse {
+  id: string;
   email: string;
   tenantName: string;
   tenantId: string;
   role: string;
-  invitedBy?: string;
+  isUserExistWithEmail: boolean;
+  inviterName?: string;
+  expiresAt?: string;
 }
 
 // API Response Types

@@ -22,47 +22,60 @@ const formSchema = z.object({
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useModalStore } from '@/stores/useModalStore';
-import { Eye, EyeOff } from 'lucide-react';
+import { Building2, Eye, EyeOff } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useState } from 'react';
 
-export default function Component() {
+function LoginForm() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { onOpen } = useModalStore();
 
+  const invitationToken = searchParams.get('invitationToken') ?? undefined;
+  const invitedEmail = searchParams.get('email') ?? '';
+  const tenantName = searchParams.get('tenantName') ?? '';
+  const isInvited = !!invitationToken;
+
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
+      email: invitedEmail,
       password: '',
     },
   });
-  // 2. Define a submit handler.
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
+    setErrorMessage(null);
 
     try {
       const response = await signIn('credentials', {
         email: values.email,
         password: values.password,
+        invitationToken: invitationToken ?? '',
         redirect: false,
       });
-      // console.log({ response });
-      if (response.ok) {
-        router.push('/');
+
+      if (response?.ok) {
+        router.push(isInvited ? '/organizations' : '/');
+      } else {
+        setErrorMessage('Invalid email or password');
       }
     } catch (error) {
       console.log(error);
+      setErrorMessage('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
   }
+
   return (
     <div className="flex-1">
       <div className="h-20 p-10">
@@ -79,6 +92,18 @@ export default function Component() {
         <div className="flex w-full max-w-md items-center justify-center md:translate-x-[10%]">
           <div className="rounded-large flex w-full max-w-lg flex-col gap-4 px-8 pt-6 pb-10">
             <p className="pb-4 text-center text-3xl font-semibold">Login</p>
+
+            {/* Invitation banner */}
+            {isInvited && tenantName && (
+              <div className="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 dark:border-blue-800 dark:bg-blue-950/30">
+                <Building2 className="mt-0.5 size-4 shrink-0 text-blue-600 dark:text-blue-400" />
+                <p className="text-sm text-blue-900 dark:text-blue-100">
+                  Sign in to join{' '}
+                  <span className="font-semibold">{tenantName}</span>.
+                </p>
+              </div>
+            )}
+
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -95,7 +120,10 @@ export default function Component() {
                           type="email"
                           id="email"
                           placeholder="Email"
-                          className="max-w-md border-none bg-gray-100 focus-visible:ring-0"
+                          readOnly={isInvited}
+                          className={`max-w-md border-none bg-gray-100 focus-visible:ring-0${
+                            isInvited ? ' cursor-not-allowed opacity-70' : ''
+                          }`}
                         />
                       </FormControl>
                       <FormMessage />
@@ -152,6 +180,9 @@ export default function Component() {
                 </Button>
               </form>
             </Form>
+            {errorMessage && (
+              <p className="text-center text-sm text-red-500">{errorMessage}</p>
+            )}
             <p className="text-small text-center">
               <Link href="/register" className="text-[#00f] underline">
                 Create an account
@@ -169,5 +200,13 @@ export default function Component() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Component() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }

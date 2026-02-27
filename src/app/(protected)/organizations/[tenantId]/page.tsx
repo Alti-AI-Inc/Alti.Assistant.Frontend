@@ -48,7 +48,7 @@ export default function OrganizationDashboardPage({
           getCurrentTenant(),
           getTenantMembers(),
         ]);
-
+        console.log('Organization response:', orgResponse);
         if (orgResponse.success && orgResponse.data) {
           setOrganization(orgResponse.data);
         }
@@ -110,7 +110,7 @@ export default function OrganizationDashboardPage({
             </p>
           </div>
           <Badge variant="outline" className="capitalize">
-            {organization.plan}
+            {organization.subscription?.price?.displayName || organization.plan}
           </Badge>
         </div>
         <div className="flex gap-2">
@@ -151,7 +151,7 @@ export default function OrganizationDashboardPage({
             <CreditCard className="size-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold capitalize">{organization.plan}</div>
+            <div className="text-2xl font-bold capitalize">{organization.subscription?.price?.displayName || organization.plan}</div>
             <Button
               variant="link"
               className="px-0 h-auto text-xs"
@@ -168,7 +168,9 @@ export default function OrganizationDashboardPage({
             <Building2 className="size-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold capitalize">{organization.status}</div>
+            <div className="text-2xl font-bold capitalize">
+              {(organization.subscription?.price?.plan || organization.plan) === 'free' ? 'Trial' : 'Active'}
+            </div>
             <p className="text-xs text-muted-foreground">
               Organization status
             </p>

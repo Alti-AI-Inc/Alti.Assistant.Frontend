@@ -56,7 +56,7 @@ export function MembersList({ members, tenantId, onUpdate }: MembersListProps) {
 
     setIsRemoving(true);
     try {
-      const response = await removeMember(memberToRemove.userId);
+      const response = await removeMember(memberToRemove.userId._id);
 
       if (response.success) {
         toast.success('Member removed successfully');
@@ -98,42 +98,42 @@ export function MembersList({ members, tenantId, onUpdate }: MembersListProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Member</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
               <TableHead>Joined</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Status</TableHead>
               {canManageMembers && <TableHead className="w-[50px]"></TableHead>}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {members.map((member) => {
-              const isCurrentUser = member.userId === session?.user?.id;
+            {members.filter((member) => member?.userId?._id).map((member) => {
+              const userId = member.userId._id;
+              const email = member.userId.email;
+              const isCurrentUser = userId === session?.user?.id;
               const canModify = canManageMembers && !isCurrentUser && member.role !== 'owner';
 
               return (
-                <TableRow key={member.userId}>
+                <TableRow key={member._id}>
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-2">
                       <div>
-                        {member.firstName || member.lastName ? (
-                          <div>
-                            {member.firstName} {member.lastName}
-                          </div>
-                        ) : (
-                          <div className="text-muted-foreground">No name</div>
-                        )}
+                        <div className="font-medium">{email}</div>
                         {isCurrentUser && (
                           <span className="text-xs text-muted-foreground">(You)</span>
                         )}
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>{member.email}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {member.joinedAt
+                      ? new Date(member.joinedAt).toLocaleDateString()
+                      : 'N/A'}
+                  </TableCell>
                   <TableCell>
                     {canModify ? (
                       <MemberRoleSelector
                         currentRole={member.role}
-                        memberId={member.userId}
+                        memberId={userId}
                         onUpdate={onUpdate}
                       />
                     ) : (
@@ -143,9 +143,13 @@ export function MembersList({ members, tenantId, onUpdate }: MembersListProps) {
                     )}
                   </TableCell>
                   <TableCell>
-                    {member.joinedAt
-                      ? new Date(member.joinedAt).toLocaleDateString()
-                      : 'N/A'}
+                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                      member.status === 'active'
+                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                        : 'bg-muted text-muted-foreground'
+                    }`}>
+                      {member.status ?? 'active'}
+                    </span>
                   </TableCell>
                   {canManageMembers && (
                     <TableCell>
@@ -184,7 +188,7 @@ export function MembersList({ members, tenantId, onUpdate }: MembersListProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Remove Member</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to remove {memberToRemove?.email} from this
+              Are you sure you want to remove {memberToRemove?.userId.email} from this
               organization? They will lose access immediately.
             </AlertDialogDescription>
           </AlertDialogHeader>

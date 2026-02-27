@@ -39,9 +39,14 @@ export async function PostConversation(
 
     if (!response.ok) {
       const errorText = await response.text();
+      console.error('PostConversation API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText,
+      });
       return {
         success: false,
-        message: 'Failed to send message.',
+        message: JSON.parse(errorText)?.message || 'This is not you this is an error on our side, please try again later.',
         debugMessage: `HTTP Error ${response.status}: ${errorText}`,
         statusCode: response.status,
       };
