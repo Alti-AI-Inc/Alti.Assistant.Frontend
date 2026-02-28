@@ -3,10 +3,10 @@
 import { OrganizationCard } from './OrganizationCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Building2 } from 'lucide-react';
-import type { Tenant } from '@/types/tenant';
+import type { UserTenant } from '@/types/tenant';
 
 interface OrganizationListProps {
-  organizations: Tenant[];
+  organizations: (UserTenant & { memberCount?: number })[];
   isLoading?: boolean;
 }
 

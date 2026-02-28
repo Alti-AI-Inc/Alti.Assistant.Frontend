@@ -9,6 +9,7 @@ export interface Tenant {
   role: string;
   subdomain?: string;
   slug?: string;
+  memberCount?: number;
 }
 
 interface TenantStore {

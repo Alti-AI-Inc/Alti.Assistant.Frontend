@@ -34,6 +34,7 @@ export interface Tenant {
   plan: string;
   status: TenantStatus;
   settings?: TenantSettings;
+  memberCount?: number;
   createdAt?: string;
   updatedAt?: string;
   limits?: {

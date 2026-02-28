@@ -3,15 +3,16 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { OrganizationPricingCards } from '@/components/organizations/OrganizationPricingCards';
+import type { OrganizationPlan } from '@/components/organizations/OrganizationPricingCards';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function OrganizationPricingPage() {
   const router = useRouter();
 
-  const handleSelectPlan = (planId: string) => {
+  const handleSelectPlan = (plan: OrganizationPlan) => {
     // Redirect to organization creation with selected plan
-    router.push(`/organizations/create?plan=${planId}`);
+    router.push(`/organizations/create?plan=${plan.id}`);
   };
 
   return (

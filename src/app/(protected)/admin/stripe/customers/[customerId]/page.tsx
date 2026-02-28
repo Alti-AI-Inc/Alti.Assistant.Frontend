@@ -80,7 +80,7 @@ export default function CustomerDetailPage() {
     try {
       const [customerRes, paymentMethodsRes] = await Promise.all([
         getStripeCustomer(customerId, accessToken),
-        getPaymentMethods(customerId, accessToken),
+        getPaymentMethods(accessToken),
       ]);
 
       if (customerRes.success && customerRes.data) {
