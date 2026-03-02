@@ -102,6 +102,7 @@ const useTenantStore = create<TenantStore>()(
     {
       name: 'tenant-store',
       onRehydrateStorage: () => (state: any) => {
+        console.log('Rehydrated tenant store with state:', state);
         state?.setHydrated();
       },
     }
