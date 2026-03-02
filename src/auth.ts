@@ -48,9 +48,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (credentials.invitationToken) {
             body.invitationToken = credentials.invitationToken as string;
           }
-
+          const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
+          console.log('Attempting login with:', body);
+          console.log('API URL:', apiUrl);
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+            `${apiUrl}/auth/login`,
             {
               method: 'POST',
               headers: {
@@ -59,8 +61,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               body: JSON.stringify(body),
             },
           );
-          if (!response.ok) return null;
           const user = await response.json();
+          console.log('Login response status:', response.status, response.ok);
+          if (!response.ok) return null;
 
           return {
             id: user.data._id,
