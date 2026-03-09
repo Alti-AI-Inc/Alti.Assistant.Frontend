@@ -18,6 +18,7 @@ import {
   Code,
   LogOut,
   Orbit,
+  ReceiptText,
   Scale,
   Search,
   Settings,
@@ -108,23 +109,6 @@ const LeftSideNavMobile = () => {
                 </span>
                 <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
               </Button>
-
-              <Button
-                disabled={pathname === '/organizations'}
-                onClick={() => {
-                  setActiveConversation(null);
-                  setShowStartLastMessage(false);
-                  setUserMessage('');
-                  setSelectedOption(null);
-                  if (pathname !== '/organizations') router.push('/organizations');
-                  close();
-                }}
-                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
-              >
-                <Building2 />
-                <span className="text-sm font-normal">Organizations</span>
-              </Button>
-
 
               <div className='flex mt-6 space-x-4 items-center'>
                 <div className='flex items-center gap-2 pl-4 text-sm text-gray-500'>
@@ -228,6 +212,26 @@ const LeftSideNavMobile = () => {
                   }}
                 >
                   <Orbit className="text-black" /> Upgrade
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push('/organizations');
+                    close();
+                  }}
+                >
+                  <Building2 className="text-black" /> Organizations
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push(
+                      mode === UserMode.TENANT && currentTenant
+                        ? `/organizations/${currentTenant.id}/billing`
+                        : '/billing',
+                    );
+                    close();
+                  }}
+                >
+                  <ReceiptText className="text-black" /> Billing
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {

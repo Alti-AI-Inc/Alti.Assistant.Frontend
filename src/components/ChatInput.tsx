@@ -36,6 +36,7 @@ import { createFileChangeHandler } from '@/utils/fileChangeHandler';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowRight, FileText, LayoutGrid, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import { toast } from 'sonner';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { ALLOWED_DOC_EXTENSIONS, TOOLBAR_ITEMS } from './constants';
@@ -387,6 +388,15 @@ const ChatInput = ({
           'PostConversation failed:',
           response?.debugMessage || 'Unknown error',
         );
+        if (response?.statusCode === 429) {
+          toast.error('Daily request limit reached', {
+            description: response.message,
+            action: {
+              label: 'Upgrade Plan',
+              onClick: () => router.push('/upgrade'),
+            },
+          });
+        }
         updateActiveConversation(
           response?.message || 'An unexpected error occurred.',
           ROLES.ASSISTANT,

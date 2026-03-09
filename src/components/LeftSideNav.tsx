@@ -190,64 +190,6 @@ const LeftSideNav = () => {
               />
             </Button>
 
-            <Button
-              disabled={pathname === '/organizations'}
-              onClick={() => {
-                setActiveConversation(null);
-                setShowStartLastMessage(false);
-                setUserMessage('');
-                setSelectedOption(null);
-                if (pathname !== '/organizations') router.push('/organizations');
-                close();
-              }}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
-            >
-              <Building2 />
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Organizations
-              </span>
-            </Button>
-
-            {mode === UserMode.TENANT && currentTenant && !hideSidebar && (
-              <div className="ml-4 mt-2 space-y-1 border-l-2 border-gray-200 pl-3">
-                <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <Building2 className="size-3" />
-                  <span className="truncate">{currentTenant.name}</span>
-                </div>
-                <div className="space-y-0.5">
-                  <Button
-                    onClick={() => {
-                      router.push(`/organizations/${currentTenant.id}`);
-                      close();
-                    }}
-                    className="flex h-7 w-full items-center justify-start bg-transparent px-2 text-xs text-gray-600 shadow-none hover:bg-black/5"
-                  >
-                    Dashboard
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      router.push(`/organizations/${currentTenant.id}/members`);
-                      close();
-                    }}
-                    className="flex h-7 w-full items-center justify-start bg-transparent px-2 text-xs text-gray-600 shadow-none hover:bg-black/5"
-                  >
-                    Members
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      router.push(`/organizations/${currentTenant.id}/settings`);
-                      close();
-                    }}
-                    className="flex h-7 w-full items-center justify-start bg-transparent px-2 text-xs text-gray-600 shadow-none hover:bg-black/5"
-                  >
-                    Settings
-                  </Button>
-                </div>
-              </div>
-            )}
-
             <div
               className={cn(
                 'mt-6 flex items-center space-x-4',
@@ -357,12 +299,23 @@ const LeftSideNav = () => {
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/organizations')}>
+                  <Building2 className="text-black" /> Organizations
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    router.push(
+                      mode === UserMode.TENANT && currentTenant
+                        ? `/organizations/${currentTenant.id}/billing`
+                        : '/billing',
+                    )
+                  }
+                >
+                  <ReceiptText className="text-black" /> Billing
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/knowledge')}>
                   <BookA className="text-black" /> Knowledge
                 </DropdownMenuItem>
-                {/* <DropdownMenuItem onClick={() => router.push('/admin/stripe')}>
-                  <ReceiptText className="text-black" /> Admin Billing
-                </DropdownMenuItem> */}
                 <DropdownMenuItem
                   onClick={() =>
                     onOpen({

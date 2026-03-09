@@ -8,8 +8,11 @@ import { useTenant } from '@/contexts/TenantContext';
 import { UserMode } from '@/types/tenant';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Building2, User as UserIcon } from 'lucide-react';
+import { Building2, CreditCard, User as UserIcon, Zap } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useSession } from 'next-auth/react';
+import { getMyPersonalSubscription } from '@/actions/stripeActions';
 
 const optionsList = [
   // {
@@ -17,6 +20,11 @@ const optionsList = [
   //   title: 'Theme',
   //   value: 'theme',
   // },
+  {
+    id: 3,
+    title: 'Subscription',
+    value: 'subscription',
+  },
   {
     id: 1,
     title: 'Memory',
@@ -96,10 +104,79 @@ const Page = () => {
         </div>
         <div className="flex flex-1 items-center justify-start ml-10">
           {/* {selectedOption === 1 && <SwitchThem />} */}
+          {selectedOption === 3 && <Subscription />}
           {selectedOption === 1 && <Memory />}
           {selectedOption === 2 && <ChangePassword />}
         </div>
       </div>
+    </div>
+  );
+};
+
+const Subscription = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [planName, setPlanName] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      const accessToken = session?.accessToken as string | undefined;
+      if (!accessToken) return;
+      setIsLoading(true);
+      try {
+        const res = await getMyPersonalSubscription(accessToken);
+        if (res.success && res.data?.hasSubscription && res.data.dbRecord?.plan_name) {
+          setPlanName(res.data.dbRecord.plan_name);
+        } else {
+          setPlanName('Free');
+        }
+      } catch {
+        setPlanName('Free');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    load();
+  }, [session?.accessToken]);
+
+  return (
+    <div className="w-full max-w-md">
+      <h1 className="text-2xl font-semibold">Subscription</h1>
+      <p className="my-4 text-muted-foreground">
+        Your current personal plan and billing details.
+      </p>
+
+      {isLoading ? (
+        <Skeleton className="h-28 w-full rounded-xl" />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <CreditCard className="size-5" />
+                Current Plan
+              </span>
+              <Badge className="capitalize">{planName}</Badge>
+            </CardTitle>
+            <CardDescription>
+              Manage your subscription and payment methods.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex gap-2">
+            <Button onClick={() => router.push('/billing')}>
+              <CreditCard className="size-4 mr-2" />
+              Manage Billing
+            </Button>
+            {planName?.toLowerCase() === 'free' && (
+              <Button variant="outline" onClick={() => router.push('/upgrade')}>
+                <Zap className="size-4 mr-2" />
+                Upgrade Plan
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
