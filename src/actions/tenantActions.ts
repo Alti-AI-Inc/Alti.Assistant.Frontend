@@ -91,6 +91,33 @@ export async function createTenant(
   }
 }
 
+export async function getTenantById(tenantId: string): Promise<ApiResponse<Tenant>> {
+  try {
+    const session = await auth();
+    if (!session?.accessToken) {
+      throw new Error('Unauthorized');
+    }
+
+    const response = await fetch(`${API_URL}/tenant/details/${tenantId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to get tenant by ID');
+    }
+
+    return await response.json();
+  } catch (error: any) {
+    console.error('Error getting tenant by ID:', error);
+    throw error;
+  }
+}
+
 /**
  * Get current tenant details
  */

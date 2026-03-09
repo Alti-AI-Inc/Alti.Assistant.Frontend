@@ -1,6 +1,6 @@
 'use client';
 
-import { getCurrentTenant } from '@/actions/tenantActions';
+import { getCurrentTenant, getTenantById } from '@/actions/tenantActions';
 import { getTenantMembers } from '@/actions/memberActions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -45,7 +45,7 @@ export default function OrganizationDashboardPage({
 
         // Fetch organization data
         const [orgResponse, membersResponse] = await Promise.all([
-          getCurrentTenant(),
+          getTenantById(tenantId),
           getTenantMembers(),
         ]);
         console.log('Organization response:', orgResponse);

@@ -1,6 +1,6 @@
 'use client';
 
-import { getCurrentTenant, updateTenantSettings } from '@/actions/tenantActions';
+import { getCurrentTenant, getTenantById, updateTenantSettings } from '@/actions/tenantActions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -36,7 +36,8 @@ export default function OrganizationSettingsPage({
 
       setIsLoading(true);
       try {
-        const response = await getCurrentTenant();
+        const response = await getTenantById(tenantId);
+        console.log('Get tenant by ID response:', response);
         if (response.success && response.data) {
           setOrganization(response.data);
           if (response.data.settings) {

@@ -1745,3 +1745,70 @@ export async function getProductPrices(
   // Reuse existing function
   return getStripePrices(accessToken, productId);
 }
+
+/**
+ * Get the current user's personal (non-org) active subscription.
+ * Uses the new GET /stripe/my-subscription endpoint added in Phase 1.
+ * Returns both the live Stripe subscription and the local SubscriptionModel DB record.
+ */
+export async function getMyPersonalSubscription(
+  accessToken: string,
+): Promise<ApiResponse<{
+  context: string;
+  hasSubscription: boolean;
+  hasStripeCustomer: boolean;
+  subscription: StripeSubscription | null;
+  dbRecord: {
+    _id: string;
+    plan_name: string;
+    stripePriceId: string;
+    currentPeriodEnd?: string;
+    limits?: {
+      dailyRequestLimit: number;
+      ragType: string;
+      canInviteTeam: boolean;
+    };
+  } | null;
+}>> {
+  console.log('[stripeActions] GET - getMyPersonalSubscription');
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/stripe/my-subscription`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to fetch personal subscription',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] GET - getMyPersonalSubscription response:', data);
+
+    return {
+      success: true,
+      message: 'Personal subscription fetched successfully',
+      data: data.data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] GET - getMyPersonalSubscription error:', error);
+    return {
+      success: false,
+      message: 'Failed to fetch personal subscription',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}

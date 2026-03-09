@@ -51,6 +51,42 @@ export async function getTenantMembers(): Promise<ApiResponse<TenantMember[]>> {
   }
 }
 
+export async function getTenantMemberByTenantId(tenantId: string): Promise<ApiResponse<TenantMember[]>> {
+  try {
+    const session = await auth();
+    if (!session?.accessToken) {
+      throw new Error('Unauthorized');
+    }
+
+    const response = await fetch(`${API_URL}/tenant/members/${tenantId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to get tenant members');
+    }
+
+    const result = await response.json();
+
+    // Backend may wrap the array under data.members
+    return {
+      success: result.success,
+      message: result.message,
+      data: Array.isArray(result.data)
+        ? result.data
+        : result.data?.members ?? [],
+    };
+  } catch (error: any) {
+    console.error('Error getting tenant members by tenant ID:', error);
+    throw error;
+  }
+}
+
 /**
  * Invite a member to the current tenant
  */

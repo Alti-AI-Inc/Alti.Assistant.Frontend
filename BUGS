@@ -1,0 +1,13 @@
+Identified Issues / Gaps
+Bug in createSubscriptionController — stripe.controller.js: Product.findOne(...) is missing await — always returns a Query object, not a document, so productId is never correctly saved.
+
+Missing backend routes — Several functions exist in stripeActions.ts calling endpoints that don't exist in either route file:
+
+GET /subscriptions/plans
+GET /subscriptions/my-subscription
+POST /subscriptions/create-free
+POST /subscriptions/upgrade
+POST /subscriptions/add-seat / remove-seat
+No webhook for direct subscriptions — Subscriptions created via POST /stripe/subscription (Flow 1) have no webhook listener for lifecycle events (payment_failed, subscription.updated, subscription.deleted). Only the Checkout Session flow has a webhook handler.
+
+addPaymentMethod action passes customerId in body — stripeActions.ts sends { customerId, paymentMethodId } but the backend addPaymentMethodController ignores body's customerId and resolves it from the JWT token — functionally works but the extra field is misleading.
