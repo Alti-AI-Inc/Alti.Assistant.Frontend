@@ -1522,8 +1522,9 @@ export async function getMyPaymentMethods(
 
     // Handle various response formats
     const paymentMethods =
+      data.data?.paymentMethods ||
       data.paymentMethods?.data ||
-      data.data?.data ||
+      data.paymentMethods ||
       data.data ||
       [];
 
