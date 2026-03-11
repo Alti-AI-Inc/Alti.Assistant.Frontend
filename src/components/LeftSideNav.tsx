@@ -17,7 +17,6 @@ import {
   BookA,
   Bookmark,
   Building2,
-  Code,
   LogOut,
   Orbit,
   PanelLeftClose,

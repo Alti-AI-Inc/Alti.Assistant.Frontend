@@ -15,7 +15,6 @@ import {
   ArrowUpRight,
   Bookmark,
   Building2,
-  Code,
   LogOut,
   Orbit,
   ReceiptText,
