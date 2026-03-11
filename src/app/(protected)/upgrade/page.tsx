@@ -107,10 +107,7 @@ function UpgradePage() {
             return (
               <div
                 key={product._id}
-                className={cn(
-                  'bg-secondary rounded-lg border p-6',
-                  isCurrent && 'border-primary/50 ring-1 ring-primary/30',
-                )}
+                className="bg-secondary rounded-lg p-6"
               >
                 <h3 className="text-lg font-medium">
                   {product.displayName || product.name}
@@ -128,7 +125,7 @@ function UpgradePage() {
                   className={cn(
                     'mt-4 mb-8 w-full shadow-none',
                     isCurrent
-                      ? 'bg-primary/90 text-white cursor-default hover:bg-primary/90'
+                      ? 'bg-blue-600 text-white cursor-default hover:bg-blue-600'
                       : 'bg-white text-black hover:bg-white hover:text-black',
                   )}
                 >

@@ -99,16 +99,7 @@ const LeftSideNavMobile = () => {
                 <span className="text-sm font-normal">Spaces</span>
               </Button>
 
-              <Button className="group relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100">
-                <Code />
-                <span>
-                  <Link href="https://www.alticodestudio.com/" target="_blank">
-                    <span className="absolute inset-0"></span>
-                    Code
-                  </Link>
-                </span>
-                <ArrowUpRight className="ml-auto hidden size-5 text-gray-600 group-hover:flex" />
-              </Button>
+
 
               <div className='flex mt-6 space-x-4 items-center'>
                 <div className='flex items-center gap-2 pl-4 text-sm text-gray-500'>
