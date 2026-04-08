@@ -1,3 +1,4 @@
+export { default as ChatOptionsSelector } from './ChatOptionsSelector';
 export { default as ColumnPanel } from './ColumnPanel';
 export { default as ColumnPanelsContainer } from './ColumnPanelsContainer';
 export { default as CreateMatterModal } from './CreateMatterModal';

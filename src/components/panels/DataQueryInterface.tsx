@@ -2,8 +2,8 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { AlertCircle, Send } from 'lucide-react';
-import { useState } from 'react';
+import { AlertCircle, Plus, Send } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { UploadedFile } from './DataRoom';
 
 interface Message {
@@ -15,18 +15,29 @@ interface Message {
 
 interface DataQueryInterfaceProps {
   selectedMatterId?: string;
-  selectedMatterName?: string;
   uploadedFiles: UploadedFile[];
+  onAddMessage?: (message: Message) => void;
+  selectedChatOptionId?: string;
+  onCreateChatOption?: (name: string) => void;
+  onUpdateChatName?: (id: string, name: string) => void;
 }
 
 export const DataQueryInterface = ({
   selectedMatterId,
-  selectedMatterName,
   uploadedFiles,
+  onAddMessage,
+  selectedChatOptionId,
+  onCreateChatOption,
+  onUpdateChatName,
 }: DataQueryInterfaceProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Clear messages when switching to a new chat
+  useEffect(() => {
+    setMessages([]);
+  }, [selectedChatOptionId]);
 
   // Filter files for the selected matter
   const matterFiles = selectedMatterId
@@ -34,7 +45,11 @@ export const DataQueryInterface = ({
     : [];
 
   const handleSendQuery = async () => {
-    if (!query.trim() || !selectedMatterId) return;
+    if (!query.trim() || !selectedMatterId || !selectedChatOptionId) return;
+
+    // Update chat name from first question if not already named
+    const chatName = query.length > 50 ? query.substring(0, 50) + '...' : query;
+    onUpdateChatName?.(selectedChatOptionId, chatName);
 
     // Add user question to messages
     const userMessage: Message = {
@@ -48,6 +63,7 @@ export const DataQueryInterface = ({
     };
 
     setMessages(prev => [...prev, userMessage]);
+    onAddMessage?.(userMessage);
     setQuery('');
     setIsLoading(true);
 
@@ -58,7 +74,7 @@ export const DataQueryInterface = ({
     const answerMessage: Message = {
       id: `msg-${Date.now()}-ans`,
       type: 'answer',
-      content: `This is a response to your question about "${query}" based on the ${matterFiles.length} file(s) in this matter.`,
+      content: `This is a response to your question about "${query}" based on the ${matterFiles.length} file(s) in this matter. In a real application, this would process your uploaded data and provide actual insights.`,
       timestamp: new Date().toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit',
@@ -66,6 +82,7 @@ export const DataQueryInterface = ({
     };
 
     setMessages(prev => [...prev, answerMessage]);
+    onAddMessage?.(answerMessage);
     setIsLoading(false);
   };
 
@@ -93,15 +110,15 @@ export const DataQueryInterface = ({
 
   return (
     <div className="flex h-full flex-col bg-white dark:bg-gray-950">
-      {/* Header with Matter Info */}
-      <div className="border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 dark:border-gray-800 dark:from-blue-950/50 dark:to-indigo-950/50">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-          {selectedMatterName}
-        </h2>
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-          {matterFiles.length} file{matterFiles.length !== 1 ? 's' : ''}{' '}
-          uploaded
-        </p>
+      {/* Header with New Chat Button */}
+      <div className="border-b border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950">
+        <Button
+          onClick={() => onCreateChatOption?.('')}
+          className="w-full gap-2 bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+        >
+          <Plus className="h-4 w-4" />
+          New Chat
+        </Button>
       </div>
 
       {/* Messages Area */}
@@ -187,7 +204,6 @@ export const DataQueryInterface = ({
             <Send className="h-4 w-4" />
           </Button>
         </div>
-      
       </div>
     </div>
   );
