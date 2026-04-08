@@ -111,11 +111,22 @@ export const DataRoom = ({
         </p>
       </div>
 
-      {/* Files List */}
+      {/* File Categories Summary */}
+
       <div>
-        <h3 className="mb-3 text-xs font-semibold text-gray-700 uppercase dark:text-gray-300">
-          Files ({matterFiles.length})
-        </h3>
+        <div className="my-2 flex justify-between align-middle">
+          <h3 className="mb-3 text-xs font-semibold text-gray-700 uppercase dark:text-gray-300">
+            Files ({matterFiles.length})
+          </h3>
+          <h3 className="mb-3 text-xs font-semibold text-gray-700 uppercase dark:text-gray-300">
+            Total Size :{' '}
+            {formatFileSize(
+              matterFiles.reduce((total, file) => total + file.size, 0),
+            )}
+          </h3>
+        </div>
+
+        {/* Files List */}
 
         {matterFiles.length === 0 ? (
           <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-center dark:border-gray-700 dark:bg-gray-900">
@@ -155,35 +166,6 @@ export const DataRoom = ({
           </div>
         )}
       </div>
-
-      {/* File Categories Summary */}
-      {matterFiles.length > 0 && (
-        <div className="space-y-2 border-t border-gray-200 pt-4 dark:border-gray-700">
-          <h3 className="text-xs font-semibold text-gray-700 uppercase dark:text-gray-300">
-            Summary
-          </h3>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="rounded-lg bg-blue-50 p-2 dark:bg-blue-900/20">
-              <p className="text-xs font-medium text-blue-900 dark:text-blue-100">
-                Total Files
-              </p>
-              <p className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                {matterFiles.length}
-              </p>
-            </div>
-            <div className="rounded-lg bg-green-50 p-2 dark:bg-green-900/20">
-              <p className="text-xs font-medium text-green-900 dark:text-green-100">
-                Total Size
-              </p>
-              <p className="text-lg font-bold text-green-600 dark:text-green-400">
-                {formatFileSize(
-                  matterFiles.reduce((total, file) => total + file.size, 0),
-                )}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

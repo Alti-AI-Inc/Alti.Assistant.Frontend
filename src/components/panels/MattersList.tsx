@@ -2,7 +2,7 @@
 
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { CheckCircle2, FileText, Plus, Search } from 'lucide-react';
+import { CheckCircle2, FileText } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import CreateMatterModal from './CreateMatterModal';
 
@@ -67,19 +67,24 @@ export const MattersList = ({
   return (
     <>
       {/* Search and Create Section */}
-      <div className="mb-4 flex items-center justify-center gap-2 space-y-3">
-        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
+      <div className="flex items-center gap-2 ">
         <Input
           placeholder="Search matters..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           className="pl-9"
         />
-        <Plus className="h-4 w-4" onClick={() => setIsCreateModalOpen(true)} />
+
+        <button
+          onClick={() => setIsCreateModalOpen(true)}
+          className="flex h-8 w-8 items-center justify-center rounded-sm border bg-white transition hover:bg-gray-100"
+        >
+          <span className="text-xl font-semibold">+</span>
+        </button>
       </div>
 
       {/* Divider */}
-      <div className="mb-4 h-px bg-gray-200 dark:bg-gray-800" />
+      <div className="mb-4 h-px bg-gray-200 dark:bg-gray-800 mt-4" />
 
       {/* Matters List */}
       <div className="space-y-2">
@@ -107,7 +112,7 @@ export const MattersList = ({
         ) : (
           <div className="py-8 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              No matters found matching "{searchQuery}"
+              No matters found matching `{searchQuery}`
             </p>
           </div>
         )}

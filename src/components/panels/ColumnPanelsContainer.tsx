@@ -132,10 +132,6 @@ export const ColumnPanelsContainer = () => {
     }));
   };
 
-  const currentMatterMessages =
-    selectedMatterId && selectedChatOptionId
-      ? chatHistory[selectedChatOptionId]?.[selectedMatterId] || []
-      : [];
 
   return (
     <div className="flex h-full w-full bg-gray-50 dark:bg-gray-900">
