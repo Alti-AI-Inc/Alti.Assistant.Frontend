@@ -1,14 +1,14 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
-import { Plus, Search } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { CheckCircle2, FileText, Plus, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import CreateMatterModal from './CreateMatterModal';
 
 interface Matter {
   id: string;
   name: string;
-  description: string;
   status: 'Active' | 'Completed' | 'Pending';
   statusColor: string;
 }
@@ -24,7 +24,6 @@ const DEFAULT_MATTERS: Matter[] = [
   {
     id: '1',
     name: 'Project Documentation Review',
-    description: 'Matter #001',
     status: 'Active',
     statusColor:
       'bg-blue-200 dark:bg-blue-900 text-blue-900 dark:text-blue-100',
@@ -32,7 +31,6 @@ const DEFAULT_MATTERS: Matter[] = [
   {
     id: '2',
     name: 'Contract Analysis',
-    description: 'Matter #002',
     status: 'Completed',
     statusColor:
       'bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-100',
@@ -40,7 +38,6 @@ const DEFAULT_MATTERS: Matter[] = [
   {
     id: '3',
     name: 'Data Analysis & Review',
-    description: 'Matter #003',
     status: 'Pending',
     statusColor:
       'bg-amber-200 dark:bg-amber-900 text-amber-900 dark:text-amber-100',
@@ -57,10 +54,8 @@ export const MattersList = ({
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const filteredMatters = useMemo(() => {
-    return matters.filter(
-      matter =>
-        matter.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        matter.description.toLowerCase().includes(searchQuery.toLowerCase()),
+    return matters.filter(matter =>
+      matter.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [matters, searchQuery]);
 
@@ -87,31 +82,26 @@ export const MattersList = ({
       <div className="mb-4 h-px bg-gray-200 dark:bg-gray-800" />
 
       {/* Matters List */}
-      <div className="space-y-3">
+      <div className="space-y-2">
         {filteredMatters.length > 0 ? (
           filteredMatters.map(matter => (
             <div
               key={matter.id}
               onClick={() => onSelectMatter?.(matter.id)}
-              className="cursor-pointer rounded-lg border border-gray-200 p-3 transition-all hover:shadow-md dark:border-gray-700 hover:dark:border-gray-600"
+              className={cn(
+                'flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 transition-colors',
+                selectedMatterId === matter.id
+                  ? 'bg-blue-100 dark:bg-blue-900/30'
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-800',
+              )}
             >
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex-1">
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    {matter.name}
-                  </h3>
-                  <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">
-                    {matter.description}
-                  </p>
-                </div>
-              </div>
-              <div className="mt-2 flex gap-1">
-                <span
-                  className={`inline-block rounded px-2 py-1 text-xs font-medium ${matter.statusColor}`}
-                >
-                  {matter.status}
-                </span>
-              </div>
+              <FileText className="h-4 w-4 flex-shrink-0 text-gray-600 dark:text-gray-400" />
+              <h3 className="flex-1 truncate text-sm font-medium text-gray-900 dark:text-gray-100">
+                {matter.name}
+              </h3>
+              {selectedMatterId === matter.id && (
+                <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-blue-600 dark:text-blue-400" />
+              )}
             </div>
           ))
         ) : (

@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogDescription,
   DialogFooter,
-  DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -46,25 +45,25 @@ export const CreateMatterModal = ({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
+        <div className="mb-4">
           <DialogTitle>Create New Matter</DialogTitle>
           <DialogDescription>
             Enter the name of the new matter you want to create.
           </DialogDescription>
-        </DialogHeader>
+        </div>
 
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="matter-name" className="text-right">
-              Matter Name
+              Name
             </Label>
             <Input
               id="matter-name"
-              placeholder="Enter matter name..."
+              placeholder="Matter name"
               value={matterName}
               onChange={e => setMatterName(e.target.value)}
               onKeyDown={e => {
-                if (e.key === 'Enter') {
+                if (e.key === 'Enter' && matterName.trim()) {
                   handleCreate();
                 }
               }}

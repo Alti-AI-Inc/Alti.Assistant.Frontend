@@ -4,12 +4,13 @@ import { useColumnPanelStore } from '@/stores/useColumnPanelStore';
 import { Activity, BookOpen, MessageSquare } from 'lucide-react';
 import { useState } from 'react';
 import ColumnPanel from './ColumnPanel';
+import DataQueryInterface from './DataQueryInterface';
+import DataRoom, { UploadedFile } from './DataRoom';
 import MattersList from './MattersList';
 
 interface Matter {
   id: string;
   name: string;
-  description: string;
   status: 'Active' | 'Completed' | 'Pending';
   statusColor: string;
 }
@@ -18,7 +19,6 @@ const DEFAULT_MATTERS: Matter[] = [
   {
     id: '1',
     name: 'Project Documentation Review',
-    description: 'Matter #001',
     status: 'Active',
     statusColor:
       'bg-blue-200 dark:bg-blue-900 text-blue-900 dark:text-blue-100',
@@ -26,7 +26,6 @@ const DEFAULT_MATTERS: Matter[] = [
   {
     id: '2',
     name: 'Contract Analysis',
-    description: 'Matter #002',
     status: 'Completed',
     statusColor:
       'bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-100',
@@ -34,7 +33,6 @@ const DEFAULT_MATTERS: Matter[] = [
   {
     id: '3',
     name: 'Data Analysis & Review',
-    description: 'Matter #003',
     status: 'Pending',
     statusColor:
       'bg-amber-200 dark:bg-amber-900 text-amber-900 dark:text-amber-100',
@@ -47,6 +45,7 @@ export const ColumnPanelsContainer = () => {
   const [selectedMatterId, setSelectedMatterId] = useState<
     string | undefined
   >();
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
 
   const handleCreateMatter = (matterName: string) => {
     const newMatter: Matter = {
@@ -58,6 +57,14 @@ export const ColumnPanelsContainer = () => {
         'bg-blue-200 dark:bg-blue-900 text-blue-900 dark:text-blue-100',
     };
     setMatters([newMatter, ...matters]);
+  };
+
+  const handleFileUpload = (files: UploadedFile[]) => {
+    setUploadedFiles(files);
+  };
+
+  const handleFileDelete = (fileId: string) => {
+    setUploadedFiles(uploadedFiles.filter(file => file.id !== fileId));
   };
 
   return (
@@ -90,49 +97,12 @@ export const ColumnPanelsContainer = () => {
         onToggle={() => store.togglePanel('panel2')}
         onResize={width => store.setPanelWidth('panel2', width)}
       >
-        <div className="space-y-3">
-          <div className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                Documents
-              </h3>
-              <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
-                15
-              </span>
-            </div>
-            <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">
-              Contracts, Agreements, Reports
-            </p>
-          </div>
-
-          <div className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                Spreadsheets
-              </h3>
-              <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
-                8
-              </span>
-            </div>
-            <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">
-              Data Analysis, Metrics, Reports
-            </p>
-          </div>
-
-          <div className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                Media
-              </h3>
-              <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
-                12
-              </span>
-            </div>
-            <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">
-              Images, Videos, Audio Files
-            </p>
-          </div>
-        </div>
+        <DataRoom
+          selectedMatterId={selectedMatterId}
+          uploadedFiles={uploadedFiles}
+          onFileUpload={handleFileUpload}
+          onFileDelete={handleFileDelete}
+        />
       </ColumnPanel>
 
       {/* Panel 3 - Chat History */}
@@ -177,18 +147,15 @@ export const ColumnPanelsContainer = () => {
         </div>
       </ColumnPanel>
 
-      {/* Main Content Area - Placeholder */}
+      {/* Main Content Area - Data Query Interface */}
       <main className="flex flex-1 flex-col overflow-auto bg-white dark:bg-gray-950">
-        <div className="flex h-full items-center justify-center">
-          <div className="text-center">
-            <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
-              Main Content Area
-            </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Central workspace content will be displayed here
-            </p>
-          </div>
-        </div>
+        <DataQueryInterface
+          selectedMatterId={selectedMatterId}
+          selectedMatterName={
+            matters.find(m => m.id === selectedMatterId)?.name
+          }
+          uploadedFiles={uploadedFiles}
+        />
       </main>
     </div>
   );
