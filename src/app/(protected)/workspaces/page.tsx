@@ -1,11 +1,16 @@
-import KnowledgeBots from '../knowledge/_components/KnowledgeBots'
+'use client';
+
+import SpacesLayout from '@/components/sidebars/SpacesLayout';
+import KnowledgeBots from '../knowledge/_components/KnowledgeBots';
 
 const page = () => {
   return (
-    <div className='pt-6'>
-      <KnowledgeBots />
-    </div>
-  )
-}
+    <SpacesLayout>
+      <div className="p-6">
+        <KnowledgeBots />
+      </div>
+    </SpacesLayout>
+  );
+};
 
-export default page
+export default page;
