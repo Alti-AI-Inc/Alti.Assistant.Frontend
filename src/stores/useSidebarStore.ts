@@ -6,6 +6,8 @@ interface SidebarStore {
   // Multi-sidebar states for Spaces page (left side)
   isLeftSidebar2Open: boolean;
   isLeftSidebar3Open: boolean;
+  // Right sidebar variant for Activity & Alerts
+  isRightSidebar2Open: boolean;
 
   setRightSidebarOpen: (isOpen: boolean) => void;
   setLeftSidebarOpen: (isOpen: boolean) => void;
@@ -16,6 +18,9 @@ interface SidebarStore {
   setLeftSidebar3Open: (isOpen: boolean) => void;
   toggleLeftSidebar2: () => void;
   toggleLeftSidebar3: () => void;
+  // Right sidebar variant methods
+  setRightSidebar2Open: (isOpen: boolean) => void;
+  toggleRightSidebar2: () => void;
 }
 
 export const useSidebarStore = create<SidebarStore>(set => ({
@@ -23,6 +28,7 @@ export const useSidebarStore = create<SidebarStore>(set => ({
   isRightSidebarOpen: true,
   isLeftSidebar2Open: true,
   isLeftSidebar3Open: true,
+  isRightSidebar2Open: true,
 
   setRightSidebarOpen: (isOpen: boolean) =>
     set({
@@ -62,5 +68,15 @@ export const useSidebarStore = create<SidebarStore>(set => ({
   toggleLeftSidebar3: () =>
     set(state => ({
       isLeftSidebar3Open: !state.isLeftSidebar3Open,
+    })),
+
+  setRightSidebar2Open: (isOpen: boolean) =>
+    set({
+      isRightSidebar2Open: isOpen,
+    }),
+
+  toggleRightSidebar2: () =>
+    set(state => ({
+      isRightSidebar2Open: !state.isRightSidebar2Open,
     })),
 }));
