@@ -132,22 +132,20 @@ export const ColumnPanelsContainer = () => {
     }));
   };
 
-
   return (
     <div className="flex h-full w-full bg-gray-50 dark:bg-gray-900">
-      {/* Panels Container */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Panel 1 - Matters with Chat Options */}
+      {/* Panels Container - Always visible */}
+      <div className="flex overflow-hidden">
+        {/* Panel 1 - Workspace with Chat Options */}
         <ColumnPanel
           id="panel1"
-          title="Matters"
+          title="Workspace"
           icon={
             <BookOpen className="h-4 w-4 text-gray-600 dark:text-gray-400" />
           }
           isVisible={store.panels.panel1.isVisible}
           width={store.panels.panel1.width}
           onToggle={() => store.togglePanel('panel1')}
-          onResize={width => store.setPanelWidth('panel1', width)}
         >
           <MattersList
             matters={matters}
@@ -167,7 +165,6 @@ export const ColumnPanelsContainer = () => {
           isVisible={store.panels.panel2.isVisible}
           width={store.panels.panel2.width}
           onToggle={() => store.togglePanel('panel2')}
-          onResize={width => store.setPanelWidth('panel2', width)}
         >
           <DataRoom
             selectedMatterId={selectedMatterId}
@@ -187,7 +184,6 @@ export const ColumnPanelsContainer = () => {
           isVisible={store.panels.panel3.isVisible}
           width={store.panels.panel3.width}
           onToggle={() => store.togglePanel('panel3')}
-          onResize={width => store.setPanelWidth('panel3', width)}
         >
           <div className="flex h-full flex-col">
             {/* Chat Switcher */}
@@ -197,23 +193,21 @@ export const ColumnPanelsContainer = () => {
               onSelectChatOption={setSelectedChatOptionId}
               onDeleteChatOption={handleDeleteChatOption}
             />
-
-          
           </div>
         </ColumnPanel>
-
-        {/* Main Content Area - Data Query Interface */}
-        <main className="flex flex-1 flex-col overflow-auto bg-white dark:bg-gray-950">
-          <DataQueryInterface
-            selectedMatterId={selectedMatterId}
-            uploadedFiles={uploadedFiles}
-            onAddMessage={handleAddMessage}
-            selectedChatOptionId={selectedChatOptionId}
-            onCreateChatOption={handleCreateChatOption}
-            onUpdateChatName={handleUpdateChatName}
-          />
-        </main>
       </div>
+
+      {/* Main Content Area - Data Query Interface */}
+      <main className="flex flex-1 flex-col overflow-auto bg-white dark:bg-gray-950">
+        <DataQueryInterface
+          selectedMatterId={selectedMatterId}
+          uploadedFiles={uploadedFiles}
+          onAddMessage={handleAddMessage}
+          selectedChatOptionId={selectedChatOptionId}
+          onCreateChatOption={handleCreateChatOption}
+          onUpdateChatName={handleUpdateChatName}
+        />
+      </main>
     </div>
   );
 };

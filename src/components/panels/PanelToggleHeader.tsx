@@ -14,7 +14,7 @@ export const PanelToggleHeader = () => {
   const panels = [
     {
       id: 'panel1' as const,
-      label: 'Matters',
+      label: 'Workspace',
       icon: BookOpen,
       isVisible: store.panels.panel1.isVisible,
     },

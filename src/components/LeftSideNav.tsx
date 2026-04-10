@@ -7,13 +7,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useTenant } from '@/contexts/TenantContext';
 import { cn } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
+import { UserMode } from '@/types/tenant';
 import {
-  ArrowUpRight,
   BookA,
   Bookmark,
   Building2,
@@ -34,11 +35,9 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ConversationsList from './ConversationsList';
+import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-import { useTenant } from '@/contexts/TenantContext';
-import { Badge } from './ui/badge';
-import { UserMode } from '@/types/tenant';
 
 const LeftSideNav = () => {
   const { data } = useSession();
@@ -69,13 +68,13 @@ const LeftSideNav = () => {
 
   return (
     <>
-      <div className=" pt-4 pb-2" style={{backgroundColor:"#F2F3F5"}}>
+      <div className="pt-4 pb-2" style={{ backgroundColor: '#F2F3F5' }}>
         <div
           className={cn(
-            ' sticky top-0 z-30 flex items-center justify-between px-4 pt-2',
+            'sticky top-0 z-30 flex items-center justify-between px-4 pt-2',
             hideSidebar && 'justify-center',
           )}
-          style={{backgroundColor:"#F2F3F5"}}
+          style={{ backgroundColor: '#F2F3F5' }}
         >
           <div
             className={cn(
@@ -172,7 +171,41 @@ const LeftSideNav = () => {
               </span>
             </Button>
 
-
+            <Button
+              disabled={pathname === '/apps'}
+              onClick={() => {
+                setActiveConversation(null);
+                setShowStartLastMessage(false);
+                setUserMessage('');
+                setSelectedOption(null);
+                if (pathname !== '/apps') router.push('/apps');
+                close();
+              }}
+              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-package"
+              >
+                <line x1="16.5" y1="9.4" x2="7.5" y2="4.21" />
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                <line x1="12" y1="22.08" x2="12" y2="12" />
+              </svg>
+              <span
+                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
+              >
+                Apps
+              </span>
+            </Button>
 
             <div
               className={cn(
@@ -183,13 +216,19 @@ const LeftSideNav = () => {
               <div className="flex items-center gap-2 pl-4 text-sm text-gray-500">
                 <span>Chat history</span>
                 {mode === UserMode.TENANT && currentTenant && (
-                  <Badge variant="outline" className="h-5 px-1.5 text-[10px] font-normal">
+                  <Badge
+                    variant="outline"
+                    className="h-5 px-1.5 text-[10px] font-normal"
+                  >
                     <Building2 className="mr-1 size-2.5" />
                     {currentTenant.name}
                   </Badge>
                 )}
                 {mode === UserMode.PERSONAL && (
-                  <Badge variant="outline" className="h-5 px-1.5 text-[10px] font-normal">
+                  <Badge
+                    variant="outline"
+                    className="h-5 px-1.5 text-[10px] font-normal"
+                  >
                     <User className="mr-1 size-2.5" />
                     Personal
                   </Badge>
@@ -237,7 +276,7 @@ const LeftSideNav = () => {
             'flex flex-1 flex-col overflow-y-scroll px-4',
             hideSidebar && 'hidden',
           )}
-          style={{backgroundColor:"#F2F3F5"}}
+          style={{ backgroundColor: '#F2F3F5' }}
         >
           <ConversationsList />
         </div>
@@ -247,10 +286,10 @@ const LeftSideNav = () => {
 
       <div
         className={cn(
-          ' sticky bottom-0 z-30 flex h-20 items-center justify-center p-4 py-1.5',
+          'sticky bottom-0 z-30 flex h-20 items-center justify-center p-4 py-1.5',
           hideSidebar && 'hidden',
         )}
-        style={{backgroundColor:"#F2F3F5"}}
+        style={{ backgroundColor: '#F2F3F5' }}
       >
         {!isLoggedIn ? (
           <div className="flex items-center space-x-2">

@@ -69,7 +69,7 @@ export const MattersList = ({
       {/* Search and Create Section */}
       <div className="flex items-center gap-2 ">
         <Input
-          placeholder="Search matters..."
+          placeholder="Search Workspace..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           className="pl-9"

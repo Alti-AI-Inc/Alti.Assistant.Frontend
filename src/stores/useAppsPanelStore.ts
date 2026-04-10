@@ -5,26 +5,22 @@ interface PanelState {
   width: number; // in pixels
 }
 
-interface ColumnPanelStore {
+interface AppsPanelStore {
   panels: {
     panel1: PanelState;
     panel2: PanelState;
-    panel3: PanelState;
   };
 
   // Panel visibility
-  togglePanel: (panelId: 'panel1' | 'panel2' | 'panel3') => void;
+  togglePanel: (panelId: 'panel1' | 'panel2') => void;
   setPanelVisibility: (
-    panelId: 'panel1' | 'panel2' | 'panel3',
+    panelId: 'panel1' | 'panel2',
     isVisible: boolean,
   ) => void;
 
   // Panel width resize
-  setPanelWidth: (
-    panelId: 'panel1' | 'panel2' | 'panel3',
-    width: number,
-  ) => void;
-  resetPanelWidth: (panelId: 'panel1' | 'panel2' | 'panel3') => void;
+  setPanelWidth: (panelId: 'panel1' | 'panel2', width: number) => void;
+  resetPanelWidth: (panelId: 'panel1' | 'panel2') => void;
 
   // Bulk operations
   showAllPanels: () => void;
@@ -32,9 +28,9 @@ interface ColumnPanelStore {
   resetAllPanels: () => void;
 }
 
-const DEFAULT_PANEL_WIDTH = 250; // Professional compact width
+const DEFAULT_PANEL_WIDTH = 280; // Bigger width for better app display
 
-export const useColumnPanelStore = create<ColumnPanelStore>(set => ({
+export const useAppsPanelStore = create<AppsPanelStore>(set => ({
   panels: {
     panel1: {
       isVisible: true,
@@ -44,13 +40,9 @@ export const useColumnPanelStore = create<ColumnPanelStore>(set => ({
       isVisible: true,
       width: DEFAULT_PANEL_WIDTH,
     },
-    panel3: {
-      isVisible: true,
-      width: DEFAULT_PANEL_WIDTH,
-    },
   },
 
-  togglePanel: (panelId: 'panel1' | 'panel2' | 'panel3') =>
+  togglePanel: (panelId: 'panel1' | 'panel2') =>
     set(state => ({
       panels: {
         ...state.panels,
@@ -61,10 +53,7 @@ export const useColumnPanelStore = create<ColumnPanelStore>(set => ({
       },
     })),
 
-  setPanelVisibility: (
-    panelId: 'panel1' | 'panel2' | 'panel3',
-    isVisible: boolean,
-  ) =>
+  setPanelVisibility: (panelId: 'panel1' | 'panel2', isVisible: boolean) =>
     set(state => ({
       panels: {
         ...state.panels,
@@ -75,7 +64,7 @@ export const useColumnPanelStore = create<ColumnPanelStore>(set => ({
       },
     })),
 
-  setPanelWidth: (panelId: 'panel1' | 'panel2' | 'panel3', width: number) =>
+  setPanelWidth: (panelId: 'panel1' | 'panel2', width: number) =>
     set(state => ({
       panels: {
         ...state.panels,
@@ -86,7 +75,7 @@ export const useColumnPanelStore = create<ColumnPanelStore>(set => ({
       },
     })),
 
-  resetPanelWidth: (panelId: 'panel1' | 'panel2' | 'panel3') =>
+  resetPanelWidth: (panelId: 'panel1' | 'panel2') =>
     set(state => ({
       panels: {
         ...state.panels,
@@ -102,7 +91,6 @@ export const useColumnPanelStore = create<ColumnPanelStore>(set => ({
       panels: {
         panel1: { ...state.panels.panel1, isVisible: true },
         panel2: { ...state.panels.panel2, isVisible: true },
-        panel3: { ...state.panels.panel3, isVisible: true },
       },
     })),
 
@@ -111,7 +99,6 @@ export const useColumnPanelStore = create<ColumnPanelStore>(set => ({
       panels: {
         panel1: { ...state.panels.panel1, isVisible: false },
         panel2: { ...state.panels.panel2, isVisible: false },
-        panel3: { ...state.panels.panel3, isVisible: false },
       },
     })),
 
@@ -123,10 +110,6 @@ export const useColumnPanelStore = create<ColumnPanelStore>(set => ({
           width: DEFAULT_PANEL_WIDTH,
         },
         panel2: {
-          isVisible: true,
-          width: DEFAULT_PANEL_WIDTH,
-        },
-        panel3: {
           isVisible: true,
           width: DEFAULT_PANEL_WIDTH,
         },

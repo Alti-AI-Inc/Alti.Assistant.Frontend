@@ -101,7 +101,7 @@ export const DataQueryInterface = ({
           Select a Matter
         </h3>
         <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-          Please select a matter from the Matters panel to start asking
+          Please select a matter from the Workspace panel to start asking
           questions about its data.
         </p>
       </div>
@@ -145,7 +145,7 @@ export const DataQueryInterface = ({
                 }`}
               >
                 <div
-                  className={`max-w-xs rounded-lg px-4 py-3 ${
+                  className={`max-w-lg rounded-lg px-4 py-3 ${
                     message.type === 'question'
                       ? 'bg-blue-600 text-white dark:bg-blue-700'
                       : 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100'

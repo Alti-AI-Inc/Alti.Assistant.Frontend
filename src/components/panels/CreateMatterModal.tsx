@@ -45,17 +45,17 @@ export const CreateMatterModal = ({
       <DialogContent className="sm:max-w-[400px]">
         <div className="mb-6">
           <DialogTitle className="text-2xl font-bold text-gray-900">
-            Create New Matter
+            Create New Workspace
           </DialogTitle>
           <DialogDescription className="mt-2 text-gray-600">
-            Enter the name of the new matter you want to create.
+            Enter the name of the new workspace you want to create.
           </DialogDescription>
         </div>
 
         <div className="space-y-4">
           <Input
             id="matter-name-input"
-            placeholder="Enter matter name..."
+            placeholder="Enter workspace name..."
             value={matterName}
             onChange={e => setMatterName(e.target.value)}
             onKeyDown={e => {
@@ -78,10 +78,10 @@ export const CreateMatterModal = ({
             {isLoading ? (
               <span className="flex items-center justify-center gap-2">
                 <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-black"></span>
-                Creating Matter...
+                Creating workspace...
               </span>
             ) : (
-              'Create Matter'
+              'Create Workspace'
             )}
           </Button>
         </div>
