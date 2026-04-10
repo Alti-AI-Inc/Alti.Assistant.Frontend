@@ -238,19 +238,7 @@ export const AppsPanelsContainer = () => {
         >
           {selectedAppId ? (
             <div className="flex h-full flex-col">
-              {/* App Name Header with New Chat Button */}
-              <div className="mb-3 flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                  {apps.find(a => a.id === selectedAppId)?.name}
-                </h3>
-                <Button
-                  onClick={handleNewChat}
-                  size="sm"
-                  className="h-6 bg-blue-600 px-2 text-xs hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800"
-                >
-                  New Chat
-                </Button>
-              </div>
+      
 
               {/* Chat Messages - Only show first message */}
               <div className="flex-1 space-y-3 overflow-y-auto">
@@ -316,14 +304,28 @@ export const AppsPanelsContainer = () => {
 
       {/* Main Content Area - App Query Interface */}
       <main className="flex flex-1 flex-col overflow-auto bg-white dark:bg-gray-950">
-        <DataQueryInterface
-          selectedMatterId={selectedAppId}
-          uploadedFiles={[]}
-          onAddMessage={handleAddMessage}
-          selectedChatOptionId={selectedAppId}
-          onCreateChatOption={() => {}}
-          onUpdateChatName={() => {}}
-        />
+        {selectedAppId ? (
+          <DataQueryInterface
+            selectedMatterId={selectedAppId}
+            uploadedFiles={[]}
+            onAddMessage={handleAddMessage}
+            selectedChatOptionId={selectedAppId}
+            onCreateChatOption={() => {}}
+            onUpdateChatName={() => {}}
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center">
+            <div className="text-center">
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+                Select an App
+              </h2>
+              <p className="mt-2 text-gray-600 dark:text-gray-400">
+                Please select an app from the Available Apps panel to start
+                chatting.
+              </p>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
