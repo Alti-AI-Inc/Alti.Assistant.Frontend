@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAppsPanelStore } from '@/stores/useAppsPanelStore';
-import { Package, Search, Zap } from 'lucide-react';
+import { MessageSquare, Package, Search } from 'lucide-react';
 import { useState } from 'react';
 import ColumnPanel from './ColumnPanel';
 import DataQueryInterface from './DataQueryInterface';
@@ -231,15 +231,15 @@ export const AppsPanelsContainer = () => {
         <ColumnPanel
           id="panel2"
           title="Chat History"
-          icon={<Zap className="h-4 w-4 text-gray-600 dark:text-gray-400" />}
+          icon={
+            <MessageSquare className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+          }
           isVisible={store.panels.panel2.isVisible}
           width={store.panels.panel2.width}
           onToggle={() => store.togglePanel('panel2')}
         >
           {selectedAppId ? (
             <div className="flex h-full flex-col">
-      
-
               {/* Chat Messages - Only show first message */}
               <div className="flex-1 space-y-3 overflow-y-auto">
                 {chatHistoryByApp[selectedAppId] &&

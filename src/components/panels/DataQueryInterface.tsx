@@ -98,10 +98,10 @@ export const DataQueryInterface = ({
       <div className="flex h-full flex-col items-center justify-center bg-white p-6 dark:bg-gray-950">
         <AlertCircle className="mb-4 h-12 w-12 text-gray-400 dark:text-gray-600" />
         <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
-          Select a Matter
+          Select a workspace
         </h3>
         <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-          Please select a matter from the Workspace panel to start asking
+          Please select a matter to start asking
           questions about its data.
         </p>
       </div>

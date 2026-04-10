@@ -1,7 +1,7 @@
 'use client';
 
 import { useColumnPanelStore } from '@/stores/useColumnPanelStore';
-import { Activity, BookOpen, MessageSquare } from 'lucide-react';
+import { Briefcase, Database, MessageSquare } from 'lucide-react';
 import { useState } from 'react';
 import ChatOptionsSelector, { type ChatOption } from './ChatOptionsSelector';
 import ColumnPanel from './ColumnPanel';
@@ -141,7 +141,7 @@ export const ColumnPanelsContainer = () => {
           id="panel1"
           title="Workspace"
           icon={
-            <BookOpen className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+            <Briefcase className="h-4 w-4 text-gray-600 dark:text-gray-400" />
           }
           isVisible={store.panels.panel1.isVisible}
           width={store.panels.panel1.width}
@@ -158,9 +158,9 @@ export const ColumnPanelsContainer = () => {
         {/* Panel 2 - Data Room */}
         <ColumnPanel
           id="panel2"
-          title="Data Room"
+          title="Data"
           icon={
-            <Activity className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+            <Database className="h-4 w-4 text-gray-600 dark:text-gray-400" />
           }
           isVisible={store.panels.panel2.isVisible}
           width={store.panels.panel2.width}

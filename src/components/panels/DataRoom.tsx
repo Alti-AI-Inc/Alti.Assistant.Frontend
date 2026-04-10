@@ -79,7 +79,7 @@ export const DataRoom = ({
         <div>
           <Upload className="mx-auto mb-3 h-8 w-8 text-gray-400 dark:text-gray-600" />
           <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-            Select a matter to upload files
+            Select a workspace to upload files
           </p>
         </div>
       </div>
