@@ -8,11 +8,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useTenant } from '@/contexts/TenantContext';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
+import { UserMode } from '@/types/tenant';
 import {
-  ArrowUpRight,
   Bookmark,
   Building2,
   LogOut,
@@ -28,12 +29,10 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import ConversationsList from './ConversationsList';
+import { TenantModeSwitcher } from './TenantModeSwitcher';
+import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-import { TenantModeSwitcher } from './TenantModeSwitcher';
-import { useTenant } from '@/contexts/TenantContext';
-import { UserMode } from '@/types/tenant';
-import { Badge } from './ui/badge';
 
 const LeftSideNavMobile = () => {
   const { data } = useSession();
@@ -81,7 +80,6 @@ const LeftSideNavMobile = () => {
 
           {isLoggedIn && (
             <>
-
               <Button
                 disabled={pathname === '/workspaces'}
                 onClick={() => {
@@ -94,35 +92,94 @@ const LeftSideNavMobile = () => {
                 }}
                 className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-vector-square-icon lucide-vector-square"><path d="M19.5 7a24 24 0 0 1 0 10" /><path d="M4.5 7a24 24 0 0 0 0 10" /><path d="M7 19.5a24 24 0 0 0 10 0" /><path d="M7 4.5a24 24 0 0 1 10 0" /><rect x="17" y="17" width="5" height="5" rx="1" /><rect x="17" y="2" width="5" height="5" rx="1" /><rect x="2" y="17" width="5" height="5" rx="1" /><rect x="2" y="2" width="5" height="5" rx="1" /></svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-vector-square-icon lucide-vector-square"
+                >
+                  <path d="M19.5 7a24 24 0 0 1 0 10" />
+                  <path d="M4.5 7a24 24 0 0 0 0 10" />
+                  <path d="M7 19.5a24 24 0 0 0 10 0" />
+                  <path d="M7 4.5a24 24 0 0 1 10 0" />
+                  <rect x="17" y="17" width="5" height="5" rx="1" />
+                  <rect x="17" y="2" width="5" height="5" rx="1" />
+                  <rect x="2" y="17" width="5" height="5" rx="1" />
+                  <rect x="2" y="2" width="5" height="5" rx="1" />
+                </svg>
                 <span className="text-sm font-normal">Spaces</span>
               </Button>
 
+              <Button
+                disabled={pathname === '/apps'}
+                onClick={() => {
+                  setActiveConversation(null);
+                  setShowStartLastMessage(false);
+                  setUserMessage('');
+                  setSelectedOption(null);
+                  if (pathname !== '/apps') router.push('/apps');
+                  close();
+                }}
+                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-package"
+                >
+                  <line x1="16.5" y1="9.4" x2="7.5" y2="4.21" />
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                  <line x1="12" y1="22.08" x2="12" y2="12" />
+                </svg>
+                <span className="text-sm font-normal">Apps</span>
+              </Button>
 
-
-              <div className='flex mt-6 space-x-4 items-center'>
-                <div className='flex items-center gap-2 pl-4 text-sm text-gray-500'>
+              <div className="mt-6 flex items-center space-x-4">
+                <div className="flex items-center gap-2 pl-4 text-sm text-gray-500">
                   <span>Chat history</span>
                   {mode === UserMode.TENANT && currentTenant && (
-                    <Badge variant="outline" className="h-5 px-1.5 text-[10px] font-normal">
+                    <Badge
+                      variant="outline"
+                      className="h-5 px-1.5 text-[10px] font-normal"
+                    >
                       <Building2 className="mr-1 size-2.5" />
                       {currentTenant.name}
                     </Badge>
                   )}
                   {mode === UserMode.PERSONAL && (
-                    <Badge variant="outline" className="h-5 px-1.5 text-[10px] font-normal">
+                    <Badge
+                      variant="outline"
+                      className="h-5 px-1.5 text-[10px] font-normal"
+                    >
                       <User className="mr-1 size-2.5" />
                       Personal
                     </Badge>
                   )}
                 </div>
-                <div className='flex items-center space-x-3'>
+                <div className="flex items-center space-x-3">
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Bookmark onClick={() => {
-                        router.push('/saved-chats');
-                        close();
-                      }} className='size-3.5 text-gray-500' />
+                      <Bookmark
+                        onClick={() => {
+                          router.push('/saved-chats');
+                          close();
+                        }}
+                        className="size-3.5 text-gray-500"
+                      />
                     </TooltipTrigger>
                     <TooltipContent side="bottom">
                       <p>Saved Chats</p>
@@ -130,12 +187,15 @@ const LeftSideNavMobile = () => {
                   </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Search className='size-3.5 text-gray-500' onClick={() => {
-                        onOpen({
-                          type: 'search-chats',
-                        });
-                        close();
-                      }} />
+                      <Search
+                        className="size-3.5 text-gray-500"
+                        onClick={() => {
+                          onOpen({
+                            type: 'search-chats',
+                          });
+                          close();
+                        }}
+                      />
                     </TooltipTrigger>
                     <TooltipContent side="bottom">
                       <p>Search Chats</p>

@@ -162,8 +162,8 @@ export const AppsPanelsContainer = () => {
   };
 
   return (
-    <div className="flex h-full w-full bg-gray-50 dark:bg-gray-900">
-      {/* Panels Container - Always visible */}
+    <div className="flex h-full w-full flex-row bg-gray-50 dark:bg-gray-900">
+      {/* Panels Container - Visible on all screens */}
       <div className="flex overflow-hidden">
         {/* Panel 1 - Available Apps */}
         <ColumnPanel
