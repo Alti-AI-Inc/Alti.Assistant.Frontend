@@ -2,7 +2,9 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { AlertCircle, Plus, Send } from 'lucide-react';
+import { ArrowRight, Plus, Send } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { UploadedFile } from './DataRoom';
 
@@ -96,13 +98,20 @@ export const DataQueryInterface = ({
   if (!selectedMatterId) {
     return (
       <div className="flex h-full flex-col items-center justify-center bg-white p-6 dark:bg-gray-950">
-        <AlertCircle className="mb-4 h-12 w-12 text-gray-400 dark:text-gray-600" />
+        {/* <AlertCircle className="mb-4 h-12 w-12 text-gray-400 dark:text-gray-600" /> */}
+        <Link href="/" className="mb-2">
+          <Image
+            src="/assets/logo-icon.png"
+            alt="logo"
+            height={28}
+            width={28}
+          />
+        </Link>
         <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
           Select a workspace
         </h3>
         <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-          Please select a matter to start asking
-          questions about its data.
+          Please select a matter to start asking questions about its data.
         </p>
       </div>
     );
@@ -194,15 +203,14 @@ export const DataQueryInterface = ({
             onChange={e => setQuery(e.target.value)}
             onKeyPress={handleKeyPress}
             disabled={isLoading}
-            className="flex-1"
+            className="flex-1 align-middle"
           />
-          <Button
+
+          <ArrowRight
             onClick={handleSendQuery}
-            disabled={isLoading || !query.trim()}
-            className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800"
-          >
-            <Send className="h-4 w-4" />
-          </Button>
+            // disabled={isLoading || !query.trim()}
+            className="size-7 flex-none rounded-full border-2 border-gray-300 bg-black p-1 text-white transition-opacity border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+          />
         </div>
       </div>
     </div>
