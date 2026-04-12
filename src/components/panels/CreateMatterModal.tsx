@@ -48,14 +48,14 @@ export const CreateMatterModal = ({
             Create New Workspace
           </DialogTitle>
           <DialogDescription className="mt-2 text-gray-600">
-            Enter the name of the new workspace you want to create.
+            Enter the name of the new workspace.
           </DialogDescription>
         </div>
 
         <div className="space-y-4">
           <Input
             id="matter-name-input"
-            placeholder="Enter workspace name..."
+            placeholder="Enter workspace name"
             value={matterName}
             onChange={e => setMatterName(e.target.value)}
             onKeyDown={e => {

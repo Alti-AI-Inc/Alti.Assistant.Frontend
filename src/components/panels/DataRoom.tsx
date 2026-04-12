@@ -79,7 +79,8 @@ export const DataRoom = ({
         <div>
           <Upload className="mx-auto mb-3 h-8 w-8 text-gray-400 dark:text-gray-600" />
           <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-            Select a workspace to upload files
+            Select a workspace <br/>
+            and upload your files
           </p>
         </div>
       </div>
@@ -106,9 +107,9 @@ export const DataRoom = ({
           <Upload className="mr-2 h-4 w-4" />
           {isUploading ? 'Uploading...' : 'Upload Files'}
         </Button>
-        <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+        {/* <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
           Drag and drop files here or click to browse
-        </p>
+        </p> */}
       </div>
 
       {/* File Categories Summary */}
@@ -129,11 +130,12 @@ export const DataRoom = ({
         {/* Files List */}
 
         {matterFiles.length === 0 ? (
-          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-center dark:border-gray-700 dark:bg-gray-900">
-            <p className="text-xs text-gray-600 dark:text-gray-400">
-              No files uploaded for this matter yet
-            </p>
-          </div>
+          // <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-center dark:border-gray-700 dark:bg-gray-900">
+          //   <p className="text-xs text-gray-600 dark:text-gray-400">
+          //     No files uploaded for this matter yet
+          //   </p>
+          // </div>
+          <></>
         ) : (
           <div className="space-y-2">
             {matterFiles.map(file => (
