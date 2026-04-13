@@ -131,7 +131,7 @@ const LeftSideNav = () => {
           </Button>
 
           <div className={cn('space-y-0.5', !isLoggedIn && 'hidden')}>
-            <Button
+            {/* <Button
               disabled={pathname === '/workspaces'}
               onClick={() => {
                 setActiveConversation(null);
@@ -205,7 +205,7 @@ const LeftSideNav = () => {
               >
                 Apps
               </span>
-            </Button>
+            </Button> */}
 
             <div
               className={cn(
