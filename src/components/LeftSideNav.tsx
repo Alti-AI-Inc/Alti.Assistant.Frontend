@@ -126,7 +126,7 @@ const LeftSideNav = () => {
             <span
               className={cn('text-sm font-normal', hideSidebar && 'hidden')}
             >
-              New
+              New Chat
             </span>
           </Button>
 

@@ -75,12 +75,12 @@ const LeftSideNavMobile = () => {
             className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
           >
             <SquarePen />
-            <span className="text-sm font-normal">New</span>
+            <span className="text-sm font-normal">New Chat</span>
           </Button>
 
           {isLoggedIn && (
             <>
-              <Button
+              {/* <Button
                 disabled={pathname === '/workspaces'}
                 onClick={() => {
                   setActiveConversation(null);
@@ -146,7 +146,7 @@ const LeftSideNavMobile = () => {
                   <line x1="12" y1="22.08" x2="12" y2="12" />
                 </svg>
                 <span className="text-sm font-normal">Apps</span>
-              </Button>
+              </Button> */}
 
               <div className="mt-6 flex items-center space-x-4">
                 <div className="flex items-center gap-2 pl-4 text-sm text-gray-500">
