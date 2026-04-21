@@ -30,7 +30,18 @@ import {
 } from '@/stores/useConverstionsStore';
 import { createFileChangeHandler } from '@/utils/fileChangeHandler';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowUp, FileText, Microscope, Plus } from 'lucide-react';
+import {
+  ArrowUp,
+  File,
+  FileSpreadsheet,
+  FileText,
+  FileType,
+  Image as ImageIcon,
+  Microscope,
+  Plus,
+  Presentation,
+  X,
+} from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
@@ -45,6 +56,38 @@ interface ChatInputProps {
   selectedFile?: File | undefined;
   onFileSelect?: (file: File | undefined) => void;
 }
+
+// Helper function to get file icon based on extension
+const getFileIcon = (fileName: string) => {
+  const extension = fileName.split('.').pop()?.toLowerCase();
+  switch (extension) {
+    case 'pdf':
+      return <FileText className="size-5 text-red-500" />;
+    case 'doc':
+    case 'docx':
+      return <FileType className="size-5 text-blue-500" />;
+    case 'xls':
+    case 'xlsx':
+    case 'csv':
+      return <FileSpreadsheet className="size-5 text-green-600" />;
+    case 'jpg':
+    case 'jpeg':
+    case 'png':
+    case 'gif':
+    case 'webp':
+      return <ImageIcon className="size-5 text-purple-500" />;
+    case 'ppt':
+    case 'pptx':
+      return <Presentation className="size-5 text-orange-500" />;
+    default:
+      return <File className="size-5 text-gray-500" />;
+  }
+};
+
+// Helper function to get file extension
+const getFileExtension = (fileName: string) => {
+  return fileName.split('.').pop()?.toUpperCase() || 'FILE';
+};
 
 const ChatInput = ({
   conversationId,
@@ -916,23 +959,48 @@ const ChatInput = ({
             </div>
           )}
 
-          {/* Document Preview */}
+          {/* Hidden file input - must be outside Popover to persist */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept={(() => {
+              switch (selectedOption) {
+                case OPTIONS.IMAGE:
+                case OPTIONS.EDIT_IMAGE:
+                  return 'image/*';
+                default:
+                  return ALLOWED_DOC_EXTENSIONS.join(',');
+              }
+            })()}
+            onChange={handleFileChange}
+            className="hidden"
+          />
+
+          {/* File Card Preview - Shows above input field */}
           {selectedFile && (
-            <div className="relative mt-2 flex w-fit items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 p-2">
-              <FileText className="size-8 text-gray-500" />
-              <div className="flex flex-col">
-                <span className="max-w-[150px] truncate text-xs font-medium">
+            <div className="mt-2 inline-flex w-fit items-center gap-3 rounded-xl bg-gray-800 px-3 py-2.5">
+              {/* File Type Icon with background */}
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-red-500">
+                <FileText className="size-5 text-white" />
+              </div>
+
+              {/* File Info */}
+              <div className="flex min-w-0 flex-col gap-0.5">
+                <span className="truncate text-sm font-medium text-white">
                   {selectedFile.name}
                 </span>
-                <span className="text-[10px] text-gray-400">
-                  {(selectedFile.size / 1024).toFixed(1)} KB
+                <span className="text-xs text-gray-400 uppercase">
+                  {getFileExtension(selectedFile.name)}
                 </span>
               </div>
+
+              {/* Remove Button */}
               <button
                 onClick={() => setSelectedFile(undefined)}
-                className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
+                className="flex-shrink-0 rounded-full bg-gray-700 p-1 transition-colors hover:bg-gray-600"
+                title="Remove file"
               >
-                <Plus className="bold size-3 rotate-45" />
+                <X className="size-4 text-white" />
               </button>
             </div>
           )}
@@ -993,24 +1061,10 @@ const ChatInput = ({
                       <span className="text-sm">Deep Research</span>
                     </div>
                   </div>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept={(() => {
-                      switch (selectedOption) {
-                        case OPTIONS.IMAGE:
-                        case OPTIONS.EDIT_IMAGE:
-                          return 'image/*';
-                        default:
-                          return ALLOWED_DOC_EXTENSIONS.join(',');
-                      }
-                    })()}
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
                 </PopoverContent>
               </Popover>
             )}
+
             <Textarea
               name="message"
               value={message}
