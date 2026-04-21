@@ -824,7 +824,7 @@ const ChatInput = ({
           selectedOption === OPTIONS.REVIEW_DOCUMENTS &&
           !selectedFile &&
           !isExistingConversation,
-        title: 'Upload File',
+        title: 'Add File',
         description: 'Please upload a file to continue with document review.',
       },
       {
@@ -969,7 +969,7 @@ const ChatInput = ({
                       className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100"
                     >
                       <FileText className="size-4" />
-                      <span className="text-sm">File Upload</span>
+                      <span className="text-sm">Add File</span>
                     </div>
                     <div
                       onClick={() => {
