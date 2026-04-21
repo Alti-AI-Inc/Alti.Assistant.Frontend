@@ -30,7 +30,7 @@ import {
 } from '@/stores/useConverstionsStore';
 import { createFileChangeHandler } from '@/utils/fileChangeHandler';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowRight, ArrowUp, FileText, Microscope, Plus } from 'lucide-react';
+import { ArrowUp, FileText, Microscope, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
@@ -943,7 +943,14 @@ const ChatInput = ({
               <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                 <PopoverTrigger asChild>
                   <div className="flex cursor-pointer items-center">
-                    <Plus className="size-5 flex-shrink-0 rounded-full border-2 border-gray-300 p-[2px]" />
+                    <Plus
+                      className={cn(
+                        'size-5 flex-shrink-0 rounded-full border-2 p-[2px]',
+                        selectedOption === OPTIONS.RESEARCH || selectedFile
+                          ? 'border-black bg-black text-white'
+                          : 'border-gray-300 bg-white text-black',
+                      )}
+                    />
                   </div>
                 </PopoverTrigger>
                 <PopoverContent side="top" align="start" className="w-48 p-2">

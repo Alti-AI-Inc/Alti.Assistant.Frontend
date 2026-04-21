@@ -40,7 +40,7 @@ function App() {
       )}
       {!activeConversation?.knowledgebaseId &&
         !activeConversation?.messages.length && (
-          <h1 className="mb-8 text-4xl font-medium">How can I help you?</h1>
+          <h1 className="mb-8 text-4xl font-medium">Real-Time Intelligence</h1>
         )}
 
       <FullConversation conversationId="new-chat" />
