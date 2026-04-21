@@ -2,11 +2,6 @@
 import AudioRecorder from '@/components/AudioRecorder';
 import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
 import {
@@ -14,13 +9,10 @@ import {
   PostConversationWithFile,
 } from '@/actions/conversationsAction';
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { useBrainstorm } from '@/hooks/useBrainstorm';
 import { useContractReview } from '@/hooks/useContractReview';
 import { useDocument } from '@/hooks/useDocument';
@@ -38,12 +30,12 @@ import {
 } from '@/stores/useConverstionsStore';
 import { createFileChangeHandler } from '@/utils/fileChangeHandler';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowRight, FileText, LayoutGrid, Plus } from 'lucide-react';
+import { ArrowRight, ArrowUp, FileText, Microscope, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
-import { ALLOWED_DOC_EXTENSIONS, TOOLBAR_ITEMS } from './constants';
+import { ALLOWED_DOC_EXTENSIONS } from './constants';
 import { Textarea } from './ui/textarea';
 import { WarningMessageModal } from './WarningMessageModal';
 
@@ -182,6 +174,7 @@ const ChatInput = ({
     pathname?.startsWith('/c/');
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   // const [message, setMessage] = useState('');
 
@@ -944,176 +937,111 @@ const ChatInput = ({
             </div>
           )}
 
-          <Textarea
-            name="message"
-            value={message}
-            onChange={e => setMessage(e.target.value)}
-            onKeyDown={e => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSubmit();
-              }
-            }}
-            placeholder={
-              activeConversation?.knowledgebaseId && isLoading
-                ? 'Loading...'
-                : activeConversation?.knowledgebaseId && activeKnowledgeBaseName
-                  ? `Chat with ${activeKnowledgeBaseName}`
-                  : selectedOption === OPTIONS.IMAGE
-                    ? 'Describe the image you want to create...'
-                    : selectedOption === OPTIONS.EDIT_IMAGE
-                      ? 'Describe how you want to edit the image...'
-                      : 'Chat with alti'
-            }
-            className="min-h-12 w-full resize-none border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
-            autoFocus
-          />
-          {/* Responsive container */}
-          <div className="flex items-end justify-between gap-2 py-2">
-            {/* Desktop layout */}
-            <div
-              className={cn(
-                'flex items-start gap-2',
-                activeConversation?.knowledgebaseId && 'hidden',
-              )}
-            >
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div
-                    onClick={() => {
-                      if (isFreeUser) {
-                        toast.error(
-                          'File upload is not available on the free plan',
-                          {
-                            // description:
-                            //   'Upgrade to a paid plan to upload files.',
-                            action: {
-                              label: 'Upgrade Plan',
-                              onClick: () => router.push('/upgrade'),
-                            },
-                          },
-                        );
-                        return;
-                      }
-                      fileInputRef.current?.click();
-                    }}
-                    className={cn('relative flex items-center')}
-                  >
-                    <Plus className="size-6 rounded-full border-2 border-gray-300 p-[3px]" />
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept={(() => {
-                        switch (selectedOption) {
-                          case OPTIONS.IMAGE:
-                          case OPTIONS.EDIT_IMAGE:
-                            return 'image/*';
-                          default:
-                            return ALLOWED_DOC_EXTENSIONS.join(',');
-                        }
-                      })()}
-                      onChange={handleFileChange}
-                      className="hidden"
-                    />
+          {/* Input container with Plus icon inside */}
+          <div className="relative flex items-center gap-2 py-2">
+            {!activeConversation?.knowledgebaseId && (
+              <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                <PopoverTrigger asChild>
+                  <div className="flex cursor-pointer items-center">
+                    <Plus className="size-5 flex-shrink-0 rounded-full border-2 border-gray-300 p-[2px]" />
                   </div>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>Upload File</p>
-                </TooltipContent>
-              </Tooltip>
-              {/* options */}
-              {/* Mobile Toolbar Toggle */}
-              <div className="block md:hidden">
-                <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                  <SheetTrigger asChild>
+                </PopoverTrigger>
+                <PopoverContent side="top" align="start" className="w-48 p-2">
+                  <div className="flex flex-col gap-1">
                     <div
-                      suppressHydrationWarning
-                      className="flex cursor-pointer items-center justify-center"
+                      onClick={() => {
+                        if (isFreeUser) {
+                          toast.error(
+                            'File upload is not available on the free plan',
+                            {
+                              action: {
+                                label: 'Upgrade Plan',
+                                onClick: () => router.push('/upgrade'),
+                              },
+                            },
+                          );
+                          setIsPopoverOpen(false);
+                          return;
+                        }
+                        fileInputRef.current?.click();
+                        setIsPopoverOpen(false);
+                      }}
+                      className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100"
                     >
-                      <LayoutGrid className="size-6 rounded-full border-2 border-gray-300 p-[2.5px] text-gray-500 hover:bg-gray-100" />
+                      <FileText className="size-4" />
+                      <span className="text-sm">File Upload</span>
                     </div>
-                  </SheetTrigger>
-                  <SheetContent side="bottom" className="rounded-t-3xl">
-                    <SheetHeader>
-                      <SheetTitle className="text-lg">Tools</SheetTitle>
-                      <SheetDescription>
-                        Select a tool to enhance your conversation
-                      </SheetDescription>
-                    </SheetHeader>
-                    <div className="grid grid-cols-4 gap-4 py-6">
-                      {TOOLBAR_ITEMS.map(({ type, label, Icon }) => (
-                        <div
-                          key={type}
-                          onClick={() => {
-                            const isNewSelection = selectedOption !== type;
-                            handleSelectOption(type);
-                            if (isNewSelection) {
-                              setIsSheetOpen(false);
-                            }
-                          }}
-                          className={cn(
-                            'flex cursor-pointer flex-col items-center gap-2 rounded-xl p-2 transition-colors',
-                            selectedOption === type
-                              ? 'bg-black text-white hover:bg-black hover:text-white'
-                              : 'bg-gray-50 text-black hover:bg-gray-100',
-                          )}
-                        >
-                          <Icon className="size-6" />
-                          <span className="text-center text-[10px] leading-tight font-medium">
-                            {label}
-                          </span>
-                        </div>
-                      ))}
+                    <div
+                      onClick={() => {
+                        handleSelectOption(OPTIONS.RESEARCH);
+                        setIsPopoverOpen(false);
+                      }}
+                      className={cn(
+                        'flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100',
+                        selectedOption === OPTIONS.RESEARCH &&
+                          'bg-black text-white hover:bg-black',
+                      )}
+                    >
+                      <Microscope className="size-4" />
+                      <span className="text-sm">Deep Research</span>
                     </div>
-                  </SheetContent>
-                </Sheet>
-              </div>
-
-              {/* Desktop Toolbar - Horizontal List */}
-              <div className="hidden flex-wrap items-center gap-2 md:flex">
-                {TOOLBAR_ITEMS.map(({ type, label, Icon }) => (
-                  <Tooltip key={type}>
-                    <TooltipTrigger>
-                      <Icon
-                        onClick={() => handleSelectOption(type)}
-                        className={cn(
-                          'size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-white p-[3px] text-black hover:bg-gray-100',
-                          selectedOption === type &&
-                            'bg-black text-white hover:bg-black hover:text-white',
-                        )}
-                      />
-                    </TooltipTrigger>
-
-                    <TooltipContent side="bottom">
-                      <p>{label}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                ))}
-              </div>
-            </div>
-
-            {/* Aspect ratio selector - shown for image options */}
-            {/* {(selectedOption === OPTIONS.IMAGE ||
-              selectedOption === OPTIONS.EDIT_IMAGE) && (
-              <AspectRatioSelector className="mr-2" />
-            )} */}
-
-            {/* Right: Mic or send button */}
-            <div className="ml-auto flex items-center">
-              {message ? (
-                <ArrowRight
-                  onClick={handleSubmit}
-                  className={cn(
-                    'size-6 flex-none rounded-full border-2 border-gray-300 bg-black p-1 text-white transition-opacity',
-                    isLoadingResponse
-                      ? 'cursor-not-allowed opacity-50'
-                      : 'cursor-pointer',
-                  )}
-                />
-              ) : (
-                <AudioRecorder setMessage={setMessage} />
-              )}
-            </div>
+                  </div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept={(() => {
+                      switch (selectedOption) {
+                        case OPTIONS.IMAGE:
+                        case OPTIONS.EDIT_IMAGE:
+                          return 'image/*';
+                        default:
+                          return ALLOWED_DOC_EXTENSIONS.join(',');
+                      }
+                    })()}
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </PopoverContent>
+              </Popover>
+            )}
+            <Textarea
+              name="message"
+              value={message}
+              onChange={e => setMessage(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSubmit();
+                }
+              }}
+              placeholder={
+                activeConversation?.knowledgebaseId && isLoading
+                  ? 'Loading...'
+                  : activeConversation?.knowledgebaseId &&
+                      activeKnowledgeBaseName
+                    ? `Chat with ${activeKnowledgeBaseName}`
+                    : selectedOption === OPTIONS.IMAGE
+                      ? 'Describe the image you want to create...'
+                      : selectedOption === OPTIONS.EDIT_IMAGE
+                        ? 'Describe how you want to edit the image...'
+                        : 'Chat with alti'
+              }
+              className="min-h-8 w-full flex-1 resize-none border-none px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+              autoFocus
+            />
+            {message ? (
+              <ArrowUp
+                onClick={handleSubmit}
+                className={cn(
+                  'size-6 flex-shrink-0 rounded-full border-2 border-gray-300 bg-black p-1 text-white transition-opacity',
+                  isLoadingResponse
+                    ? 'cursor-not-allowed opacity-50'
+                    : 'cursor-pointer',
+                )}
+              />
+            ) : (
+              <AudioRecorder setMessage={setMessage} />
+            )}
           </div>
         </div>
       </div>
