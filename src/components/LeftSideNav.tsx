@@ -327,9 +327,6 @@ const LeftSideNav = () => {
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/organizations')}>
-                  <Building2 className="text-black" /> Organizations
-                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() =>
                     router.push(
