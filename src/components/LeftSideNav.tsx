@@ -319,7 +319,10 @@ const LeftSideNav = () => {
                 My Account
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="start">
+            <DropdownMenuContent
+              className="w-[var(--radix-dropdown-menu-trigger-width)]"
+              align="start"
+            >
               <DropdownMenuGroup>
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
