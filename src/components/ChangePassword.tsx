@@ -82,7 +82,7 @@ export default function ChangePassword() {
   return (
     <div className="flex-1">
       {/*  h-[calc(100vh_-_80px)] */}
-      <div className="flex h-full w-full bg-white">
+      <div className="flex h-full w-full">
         <div className="flex w-full max-w-md items-center justify-center">
           <div className="rounded-large flex w-full max-w-lg flex-col gap-4 pb-10">
             <p className="pb-4 text-2xl font-semibold">
