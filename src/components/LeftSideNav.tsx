@@ -15,7 +15,6 @@ import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { UserMode } from '@/types/tenant';
 import {
-  BookA,
   Bookmark,
   Building2,
   LogOut,
@@ -327,6 +326,9 @@ const LeftSideNav = () => {
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/organizations')}>
+                  <Building2 className="text-black" /> Organizations
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() =>
                     router.push(
@@ -337,9 +339,6 @@ const LeftSideNav = () => {
                   }
                 >
                   <ReceiptText className="text-black" /> Billing
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/knowledge')}>
-                  <BookA className="text-black" /> Knowledge
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() =>
