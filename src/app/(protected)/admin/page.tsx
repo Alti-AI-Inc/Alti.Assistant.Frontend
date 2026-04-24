@@ -1,13 +1,8 @@
 import Link from 'next/link';
 import {
   ArrowUpRight,
-  BookOpen,
-  Bot,
   BriefcaseBusiness,
   CreditCard,
-  MessageSquare,
-  ShieldCheck,
-  Store,
   Users,
 } from 'lucide-react';
 
@@ -36,24 +31,21 @@ const kpiCards = [
     value: '12,840',
     delta: '+8.4% this month',
     icon: Users,
+    href: '/admin/metrics/total-users',
   },
   {
     title: 'Active Organizations',
     value: '428',
     delta: '+5.1% this month',
     icon: BriefcaseBusiness,
+    href: '/admin/metrics/active-organizations',
   },
   {
     title: 'Monthly Revenue',
     value: '$48,920',
     delta: '+11.7% this month',
     icon: CreditCard,
-  },
-  {
-    title: 'Platform Health',
-    value: '99.94%',
-    delta: 'No incidents in 21 days',
-    icon: ShieldCheck,
+    href: '/admin/metrics/monthly-revenue',
   },
 ];
 
@@ -95,37 +87,6 @@ const recentTenants = [
   },
 ];
 
-const moduleWidgets = [
-  {
-    title: 'Chat Sessions',
-    value: '3,920',
-    hint: 'Active this week',
-    icon: MessageSquare,
-    href: '/',
-  },
-  {
-    title: 'Knowledge Bases',
-    value: '248',
-    hint: 'Indexed workspaces',
-    icon: BookOpen,
-    href: '/knowledge',
-  },
-  {
-    title: 'My Chatbots',
-    value: '92',
-    hint: 'Published assistants',
-    icon: Bot,
-    href: '/my-chatbots',
-  },
-  {
-    title: 'Agent Store',
-    value: '36',
-    hint: 'Installed agents',
-    icon: Store,
-    href: '/agent-store',
-  },
-];
-
 const funnelMetrics = [
   { step: 'Signups', value: '1,480', conversion: 100 },
   { step: 'Activated Users', value: '1,102', conversion: 74 },
@@ -158,7 +119,7 @@ export default function AdminDashboardPage() {
           </div>
         </section>
 
-        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {kpiCards.map(card => {
             const Icon = card.icon;
             return (
@@ -170,29 +131,13 @@ export default function AdminDashboardPage() {
                   </div>
                   <Icon className="text-muted-foreground h-5 w-5" />
                 </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground text-xs">{card.delta}</p>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </section>
-
-        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {moduleWidgets.map(widget => {
-            const Icon = widget.icon;
-            return (
-              <Card key={widget.title}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardDescription>{widget.title}</CardDescription>
-                  <Icon className="text-muted-foreground h-4 w-4" />
-                </CardHeader>
                 <CardContent className="space-y-2">
-                  <div className="text-2xl font-semibold">{widget.value}</div>
-                  <p className="text-muted-foreground text-xs">{widget.hint}</p>
-                  <Button asChild size="sm" variant="outline" className="mt-1">
-                    <Link href={widget.href}>Open</Link>
-                  </Button>
+                  <p className="text-muted-foreground text-xs">{card.delta}</p>
+                  {card.href ? (
+                    <Button asChild size="sm" variant="outline" className="w-full">
+                      <Link href={card.href}>View Month-wise Details</Link>
+                    </Button>
+                  ) : null}
                 </CardContent>
               </Card>
             );
@@ -249,7 +194,7 @@ export default function AdminDashboardPage() {
           </Card>
         </section>
 
-        <section className="grid gap-4">
+        <section className="grid w-full gap-4 lg:grid-cols-2">
           <Card>
             <CardHeader>
               <CardTitle>Operational Performance</CardTitle>
@@ -269,9 +214,7 @@ export default function AdminDashboardPage() {
               ))}
             </CardContent>
           </Card>
-        </section>
 
-        <section className="grid gap-4">
           <Card>
             <CardHeader>
               <CardTitle>User Growth Funnel</CardTitle>
