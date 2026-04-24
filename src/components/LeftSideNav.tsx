@@ -17,6 +17,7 @@ import { UserMode } from '@/types/tenant';
 import {
   Bookmark,
   Building2,
+  LayoutDashboard,
   LogOut,
   Orbit,
   PanelLeftClose,
@@ -323,6 +324,9 @@ const LeftSideNav = () => {
               align="start"
             >
               <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => router.push('/admin')}>
+                  <LayoutDashboard className="text-black" /> Admin Dashboard
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
                 </DropdownMenuItem>
