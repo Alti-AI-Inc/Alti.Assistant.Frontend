@@ -67,9 +67,11 @@ export function StaticOrganizationWidgets() {
       m.email.toLowerCase().includes(search.toLowerCase()),
   );
 
+  type MemberKey = 'name' | 'email' | 'role' | 'joined';
   const sortedMembers = [...filteredMembers].sort((a, b) => {
-    if (a[sortKey] < b[sortKey]) return sortAsc ? -1 : 1;
-    if (a[sortKey] > b[sortKey]) return sortAsc ? 1 : -1;
+    const key = sortKey as MemberKey;
+    if (a[key] < b[key]) return sortAsc ? -1 : 1;
+    if (a[key] > b[key]) return sortAsc ? 1 : -1;
     return 0;
   });
 
