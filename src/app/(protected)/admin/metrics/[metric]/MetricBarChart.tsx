@@ -10,7 +10,6 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import type { TooltipProps } from 'recharts';
 
 type MonthlyPoint = {
   month: string;
@@ -20,6 +19,13 @@ type MonthlyPoint = {
 type MetricBarChartProps = {
   data: MonthlyPoint[];
   unit: 'count' | 'currency';
+};
+
+type CustomTooltipProps = {
+  active?: boolean;
+  payload?: Array<{ value?: number | string }>;
+  label?: string | number;
+  unit: MetricBarChartProps['unit'];
 };
 
 function formatValue(value: number, unit: MetricBarChartProps['unit']) {
@@ -34,7 +40,7 @@ function CustomTooltip({
   payload,
   label,
   unit,
-}: TooltipProps<number, string> & { unit: MetricBarChartProps['unit'] }) {
+}: CustomTooltipProps) {
   if (!active || !payload?.length) return null;
 
   const rawValue = Number(payload[0]?.value ?? 0);
