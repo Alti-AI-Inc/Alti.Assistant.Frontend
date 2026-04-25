@@ -1,26 +1,26 @@
 'use client';
 
-import { getTenantMembers, getPendingInvitations } from '@/actions/memberActions';
+import { getPendingInvitations, getTenantMembers } from '@/actions/memberActions';
 import { getCurrentTenant } from '@/actions/tenantActions';
+import { MembersList } from '@/components/organizations/MembersList';
+import { PendingInvitations } from '@/components/organizations/PendingInvitations';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useTenant } from '@/contexts/TenantContext';
 import { useModalStore } from '@/stores/useModalStore';
+import type { Tenant, TenantInvitation, TenantMember } from '@/types/tenant';
 import { ArrowLeft, Lock, UserPlus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { use, useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { MembersList } from '@/components/organizations/MembersList';
-import { PendingInvitations } from '@/components/organizations/PendingInvitations';
-import type { Tenant, TenantMember, TenantInvitation } from '@/types/tenant';
 
 export default function OrganizationMembersPage({
   params,

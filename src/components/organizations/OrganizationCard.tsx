@@ -1,20 +1,20 @@
 'use client';
 
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { Building2, MoreVertical, Settings, Users, ExternalLink } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import type { UserTenant } from '@/types/tenant';
-import { cn } from '@/lib/utils';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useTenant } from '@/contexts/TenantContext';
+import { cn } from '@/lib/utils';
+import type { UserTenant } from '@/types/tenant';
+import { Building2, ExternalLink, MoreVertical, Settings, Users } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface OrganizationCardProps {

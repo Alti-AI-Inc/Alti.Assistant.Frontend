@@ -28,8 +28,8 @@ export default auth(async function middleware(req: NextRequest) {
   if (orgRouteMatch) {
     const tenantId = orgRouteMatch[1];
 
-    // Skip validation for create route
-    if (tenantId === 'create') {
+    // Skip validation for static organization routes
+    if (tenantId === 'create' || tenantId === 'dashboard') {
       return NextResponse.next();
     }
 

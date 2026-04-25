@@ -1,11 +1,11 @@
 'use client';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTenant } from '@/contexts/TenantContext';
 import { cn } from '@/lib/utils';
@@ -15,19 +15,19 @@ import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { UserMode } from '@/types/tenant';
 import {
-  Bookmark,
-  Building2,
-  LayoutDashboard,
-  LogOut,
-  Orbit,
-  PanelLeftClose,
-  ReceiptText,
-  Scale,
-  Search,
-  Settings,
-  SquarePen,
-  SquareUserRound,
-  User,
+    Bookmark,
+    Building2,
+    LayoutDashboard,
+    LogOut,
+    Orbit,
+    PanelLeftClose,
+    ReceiptText,
+    Scale,
+    Search,
+    Settings,
+    SquarePen,
+    SquareUserRound,
+    User,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -332,6 +332,9 @@ const LeftSideNav = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/organizations')}>
                   <Building2 className="text-black" /> Organizations
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/organizations/dashboard')}>
+                  <LayoutDashboard className="text-black" /> Organization Dashboard
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() =>

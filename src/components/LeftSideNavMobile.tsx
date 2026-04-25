@@ -1,12 +1,12 @@
 'use client';
 
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTenant } from '@/contexts/TenantContext';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
@@ -14,17 +14,17 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { UserMode } from '@/types/tenant';
 import {
-  Bookmark,
-  Building2,
-  LayoutDashboard,
-  LogOut,
-  Orbit,
-  ReceiptText,
-  Scale,
-  Search,
-  Settings,
-  SquarePen,
-  User,
+    Bookmark,
+    Building2,
+    LayoutDashboard,
+    LogOut,
+    Orbit,
+    ReceiptText,
+    Scale,
+    Search,
+    Settings,
+    SquarePen,
+    User,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -279,6 +279,14 @@ const LeftSideNavMobile = () => {
                   }}
                 >
                   <Building2 className="text-black" /> Organizations
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push('/organizations/dashboard');
+                    close();
+                  }}
+                >
+                  <LayoutDashboard className="text-black" /> Organization Dashboard
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {

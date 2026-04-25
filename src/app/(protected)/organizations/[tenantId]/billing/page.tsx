@@ -1,20 +1,20 @@
 'use client';
 
-import { getTenantUsage, getCurrentTenant } from '@/actions/tenantActions';
 import { getPaymentMethods, type StripePaymentMethod } from '@/actions/stripeActions';
+import { getCurrentTenant, getTenantUsage } from '@/actions/tenantActions';
+import { OrganizationPricingCards, type OrganizationPlan } from '@/components/organizations/OrganizationPricingCards';
+import { PaymentConfirmationModal } from '@/components/stripe/PaymentConfirmationModal';
+import { StripeProviderWithErrorBoundary } from '@/components/stripe/StripeProvider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
-import { OrganizationPricingCards, type OrganizationPlan } from '@/components/organizations/OrganizationPricingCards';
-import { StripeProviderWithErrorBoundary } from '@/components/stripe/StripeProvider';
-import { PaymentConfirmationModal } from '@/components/stripe/PaymentConfirmationModal';
-import { ArrowLeft, CreditCard, TrendingUp, Users, Zap, X, Trash2 } from 'lucide-react';
+import type { TenantUsage } from '@/types/tenant';
+import { ArrowLeft, CreditCard, Trash2, TrendingUp, Users, X, Zap } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { use, useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import type { TenantUsage } from '@/types/tenant';
 
 export default function OrganizationBillingPage({
   params,

@@ -1,18 +1,18 @@
 'use client';
 
-import { getCurrentTenant, getTenantById, updateTenantSettings } from '@/actions/tenantActions';
+import { getTenantById, updateTenantSettings } from '@/actions/tenantActions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
+import type { TenantSettings as ITenantSettings, Tenant } from '@/types/tenant';
 import { ArrowLeft, Loader2, Save } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { use, useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import type { Tenant, TenantSettings as ITenantSettings } from '@/types/tenant';
 
 export default function OrganizationSettingsPage({
   params,
