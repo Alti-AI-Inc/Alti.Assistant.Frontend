@@ -1,7 +1,11 @@
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { ArrowLeft, TrendingUp } from 'lucide-react';
-
+import {
+  getAllPayments,
+  getAllUsers,
+  type AdminUser,
+  type PaymentRecord,
+} from '@/actions/adminActions';
+import { PaymentsTable } from '@/components/admin/PaymentsTable';
+import { UsersTable } from '@/components/admin/UsersTable';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -10,6 +14,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { ArrowLeft, TrendingUp } from 'lucide-react';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { MetricBarChart } from './MetricBarChart';
 
 type MetricKey = 'total-users' | 'active-organizations' | 'monthly-revenue';
@@ -68,6 +75,27 @@ const metricConfigs: Record<MetricKey, MetricConfig> = {
   },
 };
 
+function getLastNMonths(n: number) {
+  const res: { month: string; year: number }[] = [];
+  const now = new Date();
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const month = d.toLocaleString('en-US', { month: 'short' });
+    res.push({ month, year: d.getFullYear() });
+  }
+  return res;
+}
+
+function monthKeyFromDate(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
+function monthLabelFromKey(key: string) {
+  const [y, m] = key.split('-').map(Number);
+  const d = new Date(y, m - 1, 1);
+  return d.toLocaleString('en-US', { month: 'short' });
+}
+
 function formatValue(value: number, unit: MetricConfig['unit']) {
   if (unit === 'currency') {
     return `$${value.toLocaleString()}`;
@@ -88,14 +116,116 @@ export default async function MetricDetailsPage({
     notFound();
   }
 
-  const latest = config.monthlyData[config.monthlyData.length - 1]?.value ?? 0;
-  const previous = config.monthlyData[config.monthlyData.length - 2]?.value ?? 0;
+  let monthlyData = config.monthlyData;
+
+  if (metricKey === 'monthly-revenue') {
+    const paymentsRes = await getAllPayments();
+    const paymentsPayload: any = paymentsRes?.data ?? paymentsRes ?? [];
+    const paymentsList = Array.isArray(paymentsPayload)
+      ? paymentsPayload
+      : (paymentsPayload?.data ?? []);
+
+    const months = getLastNMonths(6);
+    const monthKeys = months.map(
+      m =>
+        `${m.year}-${String(new Date(`${m.month} 1`).getMonth() + 1).padStart(2, '0')}`,
+    );
+
+    const sums: Record<string, number> = {};
+    monthKeys.forEach(k => (sums[k] = 0));
+
+    paymentsList.forEach((p: any) => {
+      const date = p.createdAt
+        ? new Date(p.createdAt)
+        : p.createdAtMillis
+          ? new Date(p.createdAtMillis)
+          : null;
+      if (!date) return;
+      const key = monthKeyFromDate(date);
+      if (key in sums) {
+        sums[key] = (sums[key] || 0) + (p.price || 0);
+      }
+    });
+
+    monthlyData = monthKeys.map(k => ({
+      month: monthLabelFromKey(k),
+      value: Math.round((sums[k] || 0) / 100),
+    }));
+  }
+
+  if (metricKey === 'active-organizations') {
+    const usersRes = await getAllUsers();
+    const usersPayload: any = usersRes?.data ?? usersRes ?? [];
+    const usersList = Array.isArray(usersPayload)
+      ? usersPayload
+      : (usersPayload?.data ?? []);
+
+    const months = getLastNMonths(6);
+    const monthKeys = months.map(
+      m =>
+        `${m.year}-${String(new Date(`${m.month} 1`).getMonth() + 1).padStart(2, '0')}`,
+    );
+    const uniquePerMonth: Record<string, Set<string>> = {};
+    monthKeys.forEach(k => (uniquePerMonth[k] = new Set()));
+
+    usersList.forEach((u: any) => {
+      if (!u.createdAt) return;
+      const date = new Date(u.createdAt);
+      const key = monthKeyFromDate(date);
+      if (!(key in uniquePerMonth)) return;
+      if (u.tenantId) uniquePerMonth[key].add(String(u.tenantId));
+      else uniquePerMonth[key].add(String(u._id));
+    });
+
+    monthlyData = monthKeys.map(k => ({
+      month: monthLabelFromKey(k),
+      value: uniquePerMonth[k]?.size || 0,
+    }));
+  }
+
+  if (metricKey === 'total-users') {
+    const usersRes = await getAllUsers();
+    const usersPayload: any = usersRes?.data ?? usersRes ?? [];
+    const usersList = Array.isArray(usersPayload)
+      ? usersPayload
+      : (usersPayload?.data ?? []);
+
+    const months = getLastNMonths(6);
+    const monthKeys = months.map(
+      m =>
+        `${m.year}-${String(new Date(`${m.month} 1`).getMonth() + 1).padStart(2, '0')}`,
+    );
+
+    const counts: Record<string, number> = {};
+    monthKeys.forEach(k => (counts[k] = 0));
+
+    usersList.forEach((u: any) => {
+      const date = u.createdAt
+        ? new Date(u.createdAt)
+        : u.createdAtMillis
+          ? new Date(u.createdAtMillis)
+          : null;
+      if (!date) return;
+      const key = monthKeyFromDate(date);
+      if (key in counts) {
+        counts[key] = (counts[key] || 0) + 1;
+      }
+    });
+
+    monthlyData = monthKeys.map(k => ({
+      month: monthLabelFromKey(k),
+      value: counts[k] || 0,
+    }));
+  }
+
+  const latest = monthlyData[monthlyData.length - 1]?.value ?? 0;
+  const previous = monthlyData[monthlyData.length - 2]?.value ?? 0;
   const growth =
     previous > 0 ? (((latest - previous) / previous) * 100).toFixed(1) : '0.0';
 
   return (
     <div className="bg-background min-h-screen">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-8 md:px-6">
+      <div className="container mx-auto max-w-7xl px-4 py-8">
         <div className="flex items-center justify-between gap-3">
           <div className="space-y-1">
             <h1 className="text-foreground text-3xl font-bold tracking-tight">
@@ -114,7 +244,9 @@ export default async function MetricDetailsPage({
         <section className="grid gap-4 sm:grid-cols-2">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Latest Value</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Latest Value
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
@@ -123,19 +255,21 @@ export default async function MetricDetailsPage({
             </CardContent>
           </Card>
           <Card>
-            <CardHeader className="pb-2">
+            <CardHeader>
               <CardTitle className="text-sm font-medium">
                 Month-over-Month Growth
               </CardTitle>
             </CardHeader>
             <CardContent className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-emerald-600" />
-              <div className="text-2xl font-bold text-emerald-600">+{growth}%</div>
+              <div className="text-2xl font-bold text-emerald-600">
+                +{growth}%
+              </div>
             </CardContent>
           </Card>
         </section>
 
-        <Card>
+        <Card className="mt-4">
           <CardHeader>
             <CardTitle>Month-wise Bar Chart</CardTitle>
             <CardDescription>
@@ -143,10 +277,96 @@ export default async function MetricDetailsPage({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <MetricBarChart data={config.monthlyData} unit={config.unit} />
+            <MetricBarChart data={monthlyData} unit={config.unit} />
           </CardContent>
         </Card>
+
+        {metricKey === 'total-users' && (
+          <Card className="mt-4">
+            <CardHeader>
+              <CardTitle>User Summary</CardTitle>
+              <CardDescription>
+                Summary of users; full user list and management live on the
+                Users page.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex items-center justify-between">
+              <div className="text-lg font-medium">
+                {formatValue(latest, config.unit)} total (latest month)
+              </div>
+              <Link href="/admin/users">
+                <Button variant="outline">Open Users</Button>
+              </Link>
+            </CardContent>
+          </Card>
+        )}
+
+        {metricKey === 'monthly-revenue' && (
+          <Card className="mt-4">
+            <CardHeader>
+              <CardTitle>Payments Summary</CardTitle>
+              <CardDescription>
+                Summary of revenue; full payment records live on the Payments
+                page.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex items-center justify-between">
+              <div className="text-lg font-medium">
+                {formatValue(latest, config.unit)} total (latest month)
+              </div>
+              <Link href="/admin/payments">
+                <Button variant="outline">Open Payments</Button>
+              </Link>
+            </CardContent>
+          </Card>
+        )}
+        {metricKey === 'active-organizations' && <OrganizationMetricsSection />}
       </div>
+      {/* Users client section removed per request */}
     </div>
+  );
+}
+
+async function PaymentMetricsSection() {
+  const paymentsRes = await getAllPayments();
+  const paymentsPayload: any = paymentsRes?.data ?? paymentsRes ?? [];
+  const paymentsList: PaymentRecord[] = Array.isArray(paymentsPayload)
+    ? paymentsPayload
+    : (paymentsPayload?.data ?? []);
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>All Payments</CardTitle>
+        <CardDescription>
+          Complete list of all payment records from the API.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <PaymentsTable payments={paymentsList} />
+      </CardContent>
+    </Card>
+  );
+}
+
+async function OrganizationMetricsSection() {
+  const usersRes = await getAllUsers();
+  const usersPayload: any = usersRes?.data ?? usersRes ?? [];
+  const usersList: AdminUser[] = Array.isArray(usersPayload)
+    ? usersPayload
+    : (usersPayload?.data ?? []);
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>All Users / Organizations</CardTitle>
+        <CardDescription>
+          Complete list of all users with their organization details.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <UsersTable users={usersList} onRefresh={() => {}} />
+      </CardContent>
+    </Card>
   );
 }

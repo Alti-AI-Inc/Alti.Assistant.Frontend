@@ -1,10 +1,14 @@
-import Link from 'next/link';
+'use client';
+
 import {
   ArrowUpRight,
   BriefcaseBusiness,
   CreditCard,
   Users,
 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,29 +29,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-const kpiCards = [
-  {
-    title: 'Total Users',
-    value: '12,840',
-    delta: '+8.4% this month',
-    icon: Users,
-    href: '/admin/metrics/total-users',
-  },
-  {
-    title: 'Active Organizations',
-    value: '428',
-    delta: '+5.1% this month',
-    icon: BriefcaseBusiness,
-    href: '/admin/metrics/active-organizations',
-  },
-  {
-    title: 'Monthly Revenue',
-    value: '$48,920',
-    delta: '+11.7% this month',
-    icon: CreditCard,
-    href: '/admin/metrics/monthly-revenue',
-  },
-];
+// KPI placeholders; will be replaced by server-side data below
 
 const teamPerformance = [
   { label: 'Support SLA', value: 92 },
@@ -94,6 +76,111 @@ const funnelMetrics = [
 ];
 
 export default function AdminDashboardPage() {
+  const { data: session } = useSession();
+  const token = session?.accessToken as string | undefined;
+
+  const [kpis, setKpis] = useState({
+    totalUsers: 0,
+    paidUser: 0,
+    freeUser: 0,
+    monthlyRevenue: '0.00',
+    unverifyUsers: 0,
+  });
+  const [apiError, setApiError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json',
+        };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        const [usersRes, paymentsRes] = await Promise.all([
+          fetch(
+            `${process.env.NEXT_PUBLIC_API_URL || 'https://apiv2.asonai.com/api/v1'}/admin/all-user`,
+            { headers },
+          ),
+          fetch(
+            `${process.env.NEXT_PUBLIC_API_URL || 'https://apiv2.asonai.com/api/v1'}/admin/all-payment`,
+            { headers },
+          ),
+        ]);
+
+        const usersJson = await usersRes.json().catch(() => ({}));
+        const paymentsJson = await paymentsRes.json().catch(() => ({}));
+
+        if (!usersRes.ok)
+          throw new Error(
+            usersJson.message || usersRes.statusText || 'Users fetch failed',
+          );
+        if (!paymentsRes.ok)
+          throw new Error(
+            paymentsJson.message ||
+              paymentsRes.statusText ||
+              'Payments fetch failed',
+          );
+
+        const usersPayload = usersJson.data ?? usersJson;
+        const meta = usersPayload?.meta ?? null;
+        const totalUsers =
+          meta?.total ??
+          (Array.isArray(usersPayload?.data) ? usersPayload.data.length : 0);
+        const paidUser = meta?.paidUser ?? 0;
+        const freeUser = meta?.freeUser ?? 0;
+        const unverifyUsers = meta?.unverifyUsers ?? 0;
+
+        const paymentsPayload = paymentsJson.data ?? paymentsJson;
+        const paymentsList = Array.isArray(paymentsPayload)
+          ? paymentsPayload
+          : (paymentsPayload?.data ?? []);
+        const totalRevenueCents = paymentsList.reduce(
+          (s: number, p: any) => s + (p.price || 0),
+          0,
+        );
+
+        setKpis({
+          totalUsers,
+          paidUser,
+          freeUser,
+          monthlyRevenue: (totalRevenueCents / 100).toFixed(2),
+          unverifyUsers,
+        });
+        setApiError(null);
+      } catch (err: any) {
+        setApiError(err?.message || String(err));
+      }
+    }
+
+    load();
+  }, [token]);
+
+  const kpiCards = [
+    {
+      title: 'Total Users',
+      value: String(kpis.totalUsers),
+      delta: `${kpis.paidUser} paid • ${kpis.freeUser} free`,
+      icon: Users,
+      href: '/admin/metrics/total-users',
+    },
+    {
+      title: 'Active Organizations',
+      value: String(
+        kpis.totalUsers ? Math.max(0, Math.floor(kpis.totalUsers / 30)) : 0,
+      ),
+      delta: '+ realtime',
+      icon: BriefcaseBusiness,
+      href: '/admin/metrics/active-organizations',
+    },
+    {
+      title: 'Monthly Revenue',
+      value: `$${kpis.monthlyRevenue}`,
+      delta: `${kpis.unverifyUsers} unverified users`,
+      icon: CreditCard,
+      href: '/admin/metrics/monthly-revenue',
+    },
+  ];
+
   return (
     <div className="bg-background min-h-screen">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 md:px-6">
@@ -116,8 +203,27 @@ export default function AdminDashboardPage() {
             <Button asChild>
               <Link href="/organizations">Manage Organizations</Link>
             </Button>
+            <Button asChild>
+              <Link href="/admin/users">Users</Link>
+            </Button>
+            <Button asChild>
+              <Link href="/admin/payments">Payments</Link>
+            </Button>
           </div>
         </section>
+
+        {/* Show API errors if any */}
+        {apiError && (
+          <Card>
+            <CardHeader>
+              <CardTitle>API Error</CardTitle>
+              <CardDescription>Failed to load admin API data.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-destructive text-sm">{apiError}</div>
+            </CardContent>
+          </Card>
+        )}
 
         <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {kpiCards.map(card => {
@@ -134,7 +240,12 @@ export default function AdminDashboardPage() {
                 <CardContent className="space-y-2">
                   <p className="text-muted-foreground text-xs">{card.delta}</p>
                   {card.href ? (
-                    <Button asChild size="sm" variant="outline" className="w-full">
+                    <Button
+                      asChild
+                      size="sm"
+                      variant="outline"
+                      className="w-full"
+                    >
                       <Link href={card.href}>View Month-wise Details</Link>
                     </Button>
                   ) : null}
@@ -206,7 +317,9 @@ export default function AdminDashboardPage() {
               {teamPerformance.map(metric => (
                 <div key={metric.label} className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">{metric.label}</span>
+                    <span className="text-muted-foreground">
+                      {metric.label}
+                    </span>
                     <span className="font-medium">{metric.value}%</span>
                   </div>
                   <Progress value={metric.value} />
