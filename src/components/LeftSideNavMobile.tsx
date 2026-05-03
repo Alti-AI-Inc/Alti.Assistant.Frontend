@@ -286,7 +286,7 @@ const LeftSideNavMobile = () => {
                     close();
                   }}
                 >
-                  <LayoutDashboard className="text-black" /> Organization Dashboard
+                  <LayoutDashboard className="text-black" /> Manage Organization
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {

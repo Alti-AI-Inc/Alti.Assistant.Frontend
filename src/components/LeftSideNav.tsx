@@ -334,7 +334,7 @@ const LeftSideNav = () => {
                   <Building2 className="text-black" /> Organizations
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/organizations/dashboard')}>
-                  <LayoutDashboard className="text-black" /> Organization Dashboard
+                  <LayoutDashboard className="text-black" /> Manage Organization
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() =>

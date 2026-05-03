@@ -182,7 +182,7 @@ export default function OrganizationsDashboardPage() {
         <section className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">
-              Organization Dashboard
+              Manage Organization
             </h1>
             <p className="text-muted-foreground">
               Manage organization members and monitor key organization metrics.

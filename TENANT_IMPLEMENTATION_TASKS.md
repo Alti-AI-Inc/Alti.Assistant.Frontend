@@ -150,7 +150,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Redirect to new organization on success
 
 - [x] Create `src/app/(protected)/organizations/[tenantId]/page.tsx`:
-  - [x] Design organization dashboard
+  - [x] Design Manage Organization
   - [x] Show organization overview
   - [x] Display key metrics (members, usage, plan)
   - [x] Add quick actions (invite, settings)

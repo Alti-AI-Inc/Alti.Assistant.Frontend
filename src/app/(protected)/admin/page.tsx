@@ -203,12 +203,12 @@ export default function AdminDashboardPage() {
             <Button asChild>
               <Link href="/organizations">Manage Organizations</Link>
             </Button>
-            <Button asChild>
+            {/* <Button asChild>
               <Link href="/admin/users">Users</Link>
             </Button>
             <Button asChild>
               <Link href="/admin/payments">Payments</Link>
-            </Button>
+            </Button> */}
           </div>
         </section>
 
