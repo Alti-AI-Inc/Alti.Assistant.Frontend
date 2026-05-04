@@ -40,6 +40,7 @@ import {
   Microscope,
   Plus,
   Presentation,
+  TrendingUp,
   X,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -416,6 +417,49 @@ const ChatInput = ({
         console.error('No access token1');
         return null;
       }
+
+      if (selectedOption === OPTIONS.STOCK_INTELLIGENCE) {
+        try {
+          const res = await fetch(
+            'http://localhost:5100/api/v1/stock-intelligence/chat',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${data.accessToken}`,
+              },
+              body: JSON.stringify({ prompt: userMessage }),
+            },
+          );
+          const resData = await res.json();
+
+          let answerText = '';
+          const target = resData?.data || resData;
+
+          if (typeof target === 'string') answerText = target;
+          else if (target?.answer) answerText = target.answer;
+          else if (target?.response) answerText = target.response;
+          else if (target?.message) answerText = target.message;
+          else answerText = JSON.stringify(target);
+
+          return {
+            success: true,
+            message: 'Success',
+            data: {
+              conversationId:
+                conversationId === 'new-chat' ? undefined : conversationId,
+              responseMessage: { answer: answerText },
+            },
+          };
+        } catch (err: any) {
+          console.error('Stock Intelligence API failed', err);
+          return {
+            success: false,
+            message: 'Stock Intelligence API failed: ' + err.message,
+          };
+        }
+      }
+
       if (file) {
         const formData = new FormData();
         formData.append('message', userMessage);
@@ -1059,6 +1103,20 @@ const ChatInput = ({
                     >
                       <Microscope className="size-4" />
                       <span className="text-sm">Deep Research</span>
+                    </div>
+                    <div
+                      onClick={() => {
+                        handleSelectOption(OPTIONS.STOCK_INTELLIGENCE);
+                        setIsPopoverOpen(false);
+                      }}
+                      className={cn(
+                        'flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100',
+                        selectedOption === OPTIONS.STOCK_INTELLIGENCE &&
+                          'bg-black text-white hover:bg-black',
+                      )}
+                    >
+                      <TrendingUp className="size-4" />
+                      <span className="text-sm">Finance Intelligence</span>
                     </div>
                   </div>
                 </PopoverContent>

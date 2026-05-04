@@ -1,11 +1,11 @@
 import { BrainstormData, BrainstormMetadata, IdeaAnalysis } from './brainstorm';
+import { ContractInfo, ReviewParams } from './contract-review';
 import {
   PlanAnalysis,
   PlanBrainstorm,
   PlanData,
   PlanStage,
 } from './plan-generation';
-import { ContractInfo, ReviewParams } from './contract-review';
 export enum ROLES {
   USER = 'user',
   ASSISTANT = 'assistant',
@@ -41,6 +41,7 @@ export enum OPTIONS {
   WRITE_CONTRACT = 'write-contract',
   REVIEW_CONTRACT = 'contract-review',
   CREATIVE_WRITING = 'creative-writing',
+  STOCK_INTELLIGENCE = 'stock-intelligence',
 
   // VIDEO = 'video-generation',
 }
