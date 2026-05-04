@@ -421,7 +421,7 @@ const ChatInput = ({
       if (selectedOption === OPTIONS.STOCK_INTELLIGENCE) {
         try {
           const res = await fetch(
-            'http://localhost:5100/api/v1/stock-intelligence/chat',
+            'https://apiv2.asonai.com/api/v1/stock-intelligence/chat',
             {
               method: 'POST',
               headers: {
