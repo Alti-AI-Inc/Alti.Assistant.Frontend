@@ -1,6 +1,6 @@
 'use client';
 
-import { Mail, MoreHorizontal, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, Mail, MoreHorizontal, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
@@ -36,12 +36,52 @@ import {
 import { deleteUser, type AdminUser } from '@/actions/adminActions';
 import { formatDate } from '@/utils/formatters';
 
+export type UsersTableSortable = {
+  sortBy: string;
+  sortOrder: 'asc' | 'desc';
+  /** API field names, e.g. email, role, createdAt */
+  onSort: (apiField: string) => void;
+};
+
 interface UsersTableProps {
   users: AdminUser[];
   onRefresh: () => void;
+  sortable?: UsersTableSortable;
 }
 
-export function UsersTable({ users, onRefresh }: UsersTableProps) {
+function SortHeader({
+  label,
+  field,
+  sortable,
+}: {
+  label: string;
+  field: string;
+  sortable?: UsersTableSortable;
+}) {
+  if (!sortable) {
+    return <span>{label}</span>;
+  }
+
+  const active = sortable.sortBy === field;
+  return (
+    <button
+      type="button"
+      onClick={() => sortable.onSort(field)}
+      className="hover:text-foreground text-muted-foreground inline-flex items-center gap-1 font-medium transition-colors"
+    >
+      {label}
+      {active ? (
+        sortable.sortOrder === 'asc' ? (
+          <ArrowUp className="size-3.5" />
+        ) : (
+          <ArrowDown className="size-3.5" />
+        )
+      ) : null}
+    </button>
+  );
+}
+
+export function UsersTable({ users, onRefresh, sortable }: UsersTableProps) {
   const { data: session } = useSession();
   const accessToken = session?.accessToken as string;
 
@@ -85,10 +125,28 @@ export function UsersTable({ users, onRefresh }: UsersTableProps) {
           <TableHeader>
             <TableRow>
               <TableHead>User</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Subscribed</TableHead>
-              <TableHead className="text-right">Created</TableHead>
+              <TableHead>
+                <SortHeader label="Email" field="email" sortable={sortable} />
+              </TableHead>
+              <TableHead>
+                <SortHeader label="Role" field="role" sortable={sortable} />
+              </TableHead>
+              <TableHead>
+                <SortHeader
+                  label="Subscribed"
+                  field="isSubscribed"
+                  sortable={sortable}
+                />
+              </TableHead>
+              <TableHead className="text-right">
+                <div className="flex justify-end">
+                  <SortHeader
+                    label="Created"
+                    field="createdAt"
+                    sortable={sortable}
+                  />
+                </div>
+              </TableHead>
               <TableHead className="w-[50px]"></TableHead>
             </TableRow>
           </TableHeader>

@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+import { AdminDashboardMonthCharts } from '@/components/admin/AdminDashboardMonthCharts';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -203,12 +204,6 @@ export default function AdminDashboardPage() {
             <Button asChild>
               <Link href="/organizations/dashboard">Manage Organizations</Link>
             </Button>
-            {/* <Button asChild>
-              <Link href="/admin/users">Users</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/admin/payments">Payments</Link>
-            </Button> */}
           </div>
         </section>
 
@@ -255,9 +250,7 @@ export default function AdminDashboardPage() {
           })}
         </section>
 
-        
-
-        
+        <AdminDashboardMonthCharts accessToken={token} />
       </div>
     </div>
   );

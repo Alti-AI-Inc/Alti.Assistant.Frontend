@@ -1,5 +1,7 @@
 'use client';
 
+import { ArrowDown, ArrowUp } from 'lucide-react';
+
 import { Card } from '@/components/ui/card';
 import {
   Table,
@@ -13,11 +15,56 @@ import { formatCurrency, formatDate } from '@/utils/formatters';
 
 import type { PaymentRecord } from '@/actions/adminActions';
 
-interface PaymentsTableProps {
-  payments: PaymentRecord[];
+export type PaymentsTableSortable = {
+  sortBy: string;
+  sortOrder: 'asc' | 'desc';
+  onSort: (apiField: string) => void;
+};
+
+function SortHeaderPayments({
+  label,
+  field,
+  sortable,
+  align = 'left',
+}: {
+  label: string;
+  field: string;
+  sortable?: PaymentsTableSortable;
+  align?: 'left' | 'right';
+}) {
+  if (!sortable) {
+    return <span>{label}</span>;
+  }
+
+  const active = sortable.sortBy === field;
+  return (
+    <button
+      type="button"
+      onClick={() => sortable.onSort(field)}
+      className={
+        align === 'right'
+          ? 'hover:text-foreground text-muted-foreground ml-auto inline-flex items-center gap-1 font-medium transition-colors'
+          : 'hover:text-foreground text-muted-foreground inline-flex items-center gap-1 font-medium transition-colors'
+      }
+    >
+      {label}
+      {active ? (
+        sortable.sortOrder === 'asc' ? (
+          <ArrowUp className="size-3.5" />
+        ) : (
+          <ArrowDown className="size-3.5" />
+        )
+      ) : null}
+    </button>
+  );
 }
 
-export function PaymentsTable({ payments }: PaymentsTableProps) {
+interface PaymentsTableProps {
+  payments: PaymentRecord[];
+  sortable?: PaymentsTableSortable;
+}
+
+export function PaymentsTable({ payments, sortable }: PaymentsTableProps) {
   if (!payments || payments.length === 0) {
     return (
       <Card>
@@ -34,10 +81,40 @@ export function PaymentsTable({ payments }: PaymentsTableProps) {
         <TableHeader>
           <TableRow>
             <TableHead>Payment ID</TableHead>
-            <TableHead>User</TableHead>
-            <TableHead>Plan</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-            <TableHead className="text-right">Created</TableHead>
+            <TableHead>
+              <SortHeaderPayments
+                label="User"
+                field="userEmail"
+                sortable={sortable}
+              />
+            </TableHead>
+            <TableHead>
+              <SortHeaderPayments
+                label="Plan"
+                field="planName"
+                sortable={sortable}
+              />
+            </TableHead>
+            <TableHead className="text-right">
+              <div className="flex justify-end">
+                <SortHeaderPayments
+                  label="Amount"
+                  field="price"
+                  sortable={sortable}
+                  align="right"
+                />
+              </div>
+            </TableHead>
+            <TableHead className="text-right">
+              <div className="flex justify-end">
+                <SortHeaderPayments
+                  label="Created"
+                  field="createdAt"
+                  sortable={sortable}
+                  align="right"
+                />
+              </div>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

@@ -1,10 +1,6 @@
-import {
-  getAllPayments,
-  getAllUsers,
-  type AdminUser,
-  type PaymentRecord,
-} from '@/actions/adminActions';
-import { PaymentsTable } from '@/components/admin/PaymentsTable';
+import { getAllPayments, getAllUsers, type AdminUser } from '@/actions/adminActions';
+import { MetricMonthlyRevenuePaymentsTableSection } from '@/components/admin/MetricMonthlyRevenuePaymentsTableSection';
+import { MetricTotalUsersTableSection } from '@/components/admin/MetricTotalUsersTableSection';
 import { UsersTable } from '@/components/admin/UsersTable';
 import { Button } from '@/components/ui/button';
 import {
@@ -269,83 +265,16 @@ export default async function MetricDetailsPage({
           </Card>
         </section>
 
-        <Card className="mt-4">
-          <CardHeader>
-            <CardTitle>Month-wise Bar Chart</CardTitle>
-            <CardDescription>
-              Visual trend for {config.title.toLowerCase()} over time.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <MetricBarChart data={monthlyData} unit={config.unit} />
-          </CardContent>
-        </Card>
+        
 
-        {metricKey === 'total-users' && (
-          <Card className="mt-4">
-            <CardHeader>
-              <CardTitle>User Summary</CardTitle>
-              <CardDescription>
-                Summary of users; full user list and management live on the
-                Users page.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex items-center justify-between">
-              <div className="text-lg font-medium">
-                {formatValue(latest, config.unit)} total (latest month)
-              </div>
-              <Link href="/admin/users">
-                <Button variant="outline">Open Users</Button>
-              </Link>
-            </CardContent>
-          </Card>
-        )}
+        {metricKey === 'total-users' && <MetricTotalUsersTableSection />}
 
         {metricKey === 'monthly-revenue' && (
-          <Card className="mt-4">
-            <CardHeader>
-              <CardTitle>Payments Summary</CardTitle>
-              <CardDescription>
-                Summary of revenue; full payment records live on the Payments
-                page.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex items-center justify-between">
-              <div className="text-lg font-medium">
-                {formatValue(latest, config.unit)} total (latest month)
-              </div>
-              <Link href="/admin/payments">
-                <Button variant="outline">Open Payments</Button>
-              </Link>
-            </CardContent>
-          </Card>
+          <MetricMonthlyRevenuePaymentsTableSection />
         )}
         {metricKey === 'active-organizations' && <OrganizationMetricsSection />}
       </div>
-      {/* Users client section removed per request */}
     </div>
-  );
-}
-
-async function PaymentMetricsSection() {
-  const paymentsRes = await getAllPayments();
-  const paymentsPayload: any = paymentsRes?.data ?? paymentsRes ?? [];
-  const paymentsList: PaymentRecord[] = Array.isArray(paymentsPayload)
-    ? paymentsPayload
-    : (paymentsPayload?.data ?? []);
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>All Payments</CardTitle>
-        <CardDescription>
-          Complete list of all payment records from the API.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <PaymentsTable payments={paymentsList} />
-      </CardContent>
-    </Card>
   );
 }
 
