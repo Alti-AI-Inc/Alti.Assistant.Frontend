@@ -91,6 +91,33 @@ const getFileExtension = (fileName: string) => {
   return fileName.split('.').pop()?.toUpperCase() || 'FILE';
 };
 
+const ANONYMOUS_PROMPT_LIMIT = 10;
+const ANONYMOUS_PROMPT_COUNT_KEY = 'anonymous-prompt-count';
+
+const extractAssistantText = (payload: any): string => {
+  const target = payload?.data || payload;
+
+  if (typeof target === 'string') return target;
+  if (!target || typeof target !== 'object') return '';
+
+  // Handle common API response shapes first.
+  if (typeof target.reply === 'string') return target.reply;
+  if (typeof target.answer === 'string') return target.answer;
+  if (typeof target.response === 'string') return target.response;
+  if (typeof target.message === 'string') return target.message;
+  if (typeof target.text === 'string') return target.text;
+  if (typeof target.content === 'string') return target.content;
+
+  if (typeof target.data?.reply === 'string') return target.data.reply;
+  if (typeof target.data?.answer === 'string') return target.data.answer;
+  if (typeof target.data?.response === 'string') return target.data.response;
+  if (typeof target.data?.message === 'string') return target.data.message;
+  if (typeof target.data?.text === 'string') return target.data.text;
+  if (typeof target.data?.content === 'string') return target.data.content;
+
+  return JSON.stringify(target);
+};
+
 const ChatInput = ({
   conversationId,
   imageGenHook: externalImageGenHook,
@@ -416,35 +443,29 @@ const ChatInput = ({
       message: string;
       file?: File;
     }) => {
-      if (!data?.accessToken) {
-        console.error('No access token1');
-        onOpen({ type: 'auth-modal', actionId: 'login' });
-        return null;
-      }
+      const isHomePage = pathname === '/';
+      const accessToken = data?.accessToken;
 
       if (selectedOption === OPTIONS.STOCK_INTELLIGENCE) {
         try {
+          const headers: Record<string, string> = {
+            'Content-Type': 'application/json',
+          };
+
+          if (accessToken) {
+            headers.Authorization = `Bearer ${accessToken}`;
+          }
+
           const res = await fetch(
             'https://apiv2.asonai.com/api/v1/stock-intelligence/chat',
             {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${data.accessToken}`,
-              },
+              headers,
               body: JSON.stringify({ prompt: userMessage }),
             },
           );
           const resData = await res.json();
-
-          let answerText = '';
-          const target = resData?.data || resData;
-
-          if (typeof target === 'string') answerText = target;
-          else if (target?.answer) answerText = target.answer;
-          else if (target?.response) answerText = target.response;
-          else if (target?.message) answerText = target.message;
-          else answerText = JSON.stringify(target);
+          const answerText = extractAssistantText(resData);
 
           return {
             success: true,
@@ -460,6 +481,63 @@ const ChatInput = ({
           return {
             success: false,
             message: 'Stock Intelligence API failed: ' + err.message,
+          };
+        }
+      }
+
+      if (!accessToken) {
+        if (!isHomePage) {
+          console.error('No access token');
+          onOpen({ type: 'auth-modal', actionId: 'login' });
+          return null;
+        }
+
+        const currentPromptCount = Number(
+          localStorage.getItem(ANONYMOUS_PROMPT_COUNT_KEY) || '0',
+        );
+
+        if (currentPromptCount >= ANONYMOUS_PROMPT_LIMIT) {
+          onOpen({ type: 'auth-modal', actionId: 'register' });
+          return {
+            success: false,
+            message:
+              'You have reached the 10 prompt limit. Please register to continue chatting.',
+          };
+        }
+
+        try {
+          const res = await fetch(
+            'https://apiv2.asonai.com/api/v1/openai/anonymous-response',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ prompt: userMessage }),
+            },
+          );
+          const resData = await res.json();
+          const answerText = extractAssistantText(resData);
+
+          localStorage.setItem(
+            ANONYMOUS_PROMPT_COUNT_KEY,
+            String(currentPromptCount + 1),
+          );
+
+          return {
+            success: true,
+            message: 'Success',
+            data: {
+              conversationId:
+                conversationId === 'new-chat' ? undefined : conversationId,
+              responseMessage: { answer: answerText },
+            },
+          };
+        } catch (err: any) {
+          console.error('Anonymous chat API failed', err);
+          return {
+            success: false,
+            message: 'Anonymous chat API failed: ' + err.message,
           };
         }
       }
@@ -518,7 +596,7 @@ const ChatInput = ({
           ? response.data.conversationId
           : conversationId;
 
-      if (conversationId === 'new-chat') {
+      if (conversationId === 'new-chat' && response.data.conversationId) {
         // updateActiveConversation(
         //   userMessage,
         //   ROLES.USER,
@@ -1062,7 +1140,9 @@ const ChatInput = ({
                     <Plus
                       className={cn(
                         'size-5 flex-shrink-0 rounded-full border-2 p-[2px]',
-                        selectedOption === OPTIONS.RESEARCH || selectedFile
+                        selectedOption === OPTIONS.RESEARCH ||
+                          selectedOption === OPTIONS.STOCK_INTELLIGENCE ||
+                          selectedFile
                           ? 'border-black bg-black text-white'
                           : 'border-gray-300 bg-white text-black',
                       )}
@@ -1120,7 +1200,7 @@ const ChatInput = ({
                       )}
                     >
                       <TrendingUp className="size-4" />
-                      <span className="text-sm">Finance Intelligence</span>
+                      <span className="text-sm">Stock Intelligence</span>
                     </div>
                   </div>
                 </PopoverContent>
