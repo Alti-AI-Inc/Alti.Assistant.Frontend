@@ -1,12 +1,12 @@
 'use client';
 
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTenant } from '@/contexts/TenantContext';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
@@ -14,20 +14,19 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { UserMode } from '@/types/tenant';
 import {
-    Bookmark,
-    Building2,
-    LayoutDashboard,
-    LogOut,
-    Orbit,
-    ReceiptText,
-    Scale,
-    Search,
-    Settings,
-    SquarePen,
-    User,
+  Bookmark,
+  Building2,
+  LayoutDashboard,
+  LogOut,
+  Orbit,
+  ReceiptText,
+  Scale,
+  Search,
+  Settings,
+  SquarePen,
+  User,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import ConversationsList from './ConversationsList';
 import { TenantModeSwitcher } from './TenantModeSwitcher';
@@ -219,24 +218,26 @@ const LeftSideNavMobile = () => {
       {/* Footer fixed at bottom */}
       <div className="bg-secondary sticky bottom-0 flex h-20 items-center justify-center p-4">
         {!isLoggedIn ? (
-          <div className="flex items-center space-x-2">
+          <div className="flex w-full items-center gap-2">
             <Button
               variant="default"
-              className="relative w-20 bg-black text-white"
+              className="flex-1 bg-black px-0 text-white hover:bg-black/90"
+              onClick={() => {
+                onOpen({ type: 'auth-modal', actionId: 'login' });
+                close();
+              }}
             >
-              <Link href="/login">
-                Login
-                <span className="absolute inset-0"></span>
-              </Link>
+              Login
             </Button>
             <Button
               variant="default"
-              className="relative w-20 bg-black text-white"
+              className="flex-1 bg-black px-0 text-white hover:bg-black/90"
+              onClick={() => {
+                onOpen({ type: 'auth-modal', actionId: 'register' });
+                close();
+              }}
             >
-              <Link href="/register">
-                Register
-                <span className="absolute inset-0"></span>
-              </Link>
+              Register
             </Button>
           </div>
         ) : (

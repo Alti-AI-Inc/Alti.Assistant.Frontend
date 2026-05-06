@@ -22,9 +22,8 @@ export function Logout() {
     await signOut({
       redirect: false,
     });
-    router.push('/login');
+    router.push('/');
     onClose();
-    
   };
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

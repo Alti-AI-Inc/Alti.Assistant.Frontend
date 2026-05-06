@@ -415,6 +415,7 @@ const ChatInput = ({
     }) => {
       if (!data?.accessToken) {
         console.error('No access token1');
+        onOpen({ type: 'auth-modal', actionId: 'login' });
         return null;
       }
 

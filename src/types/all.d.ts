@@ -19,6 +19,7 @@ type ModalType =
   | 'delete-knowledge-bank-file'
   | 'invite-member'
   | 'create-organization'
+  | 'auth-modal'
   | null;
 
 enum APP_STATUS {

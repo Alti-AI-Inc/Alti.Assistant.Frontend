@@ -42,7 +42,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!credentials?.email || !credentials?.password) {
           console.warn('Missing email or password in credentials');
           return null;
-        };
+        }
         try {
           console.log('Authorizing user with email:', credentials.email);
           const body: Record<string, string> = {
@@ -55,16 +55,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
           console.log('Attempting login with:', body);
           console.log('API URL:', apiUrl);
-          const response = await fetch(
-            `${apiUrl}/auth/login`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(body),
+          const response = await fetch(`${apiUrl}/auth/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
             },
-          );
+            body: JSON.stringify(body),
+          });
           const user = await response.json();
           console.log('Login response status:', response.status, response.ok);
           if (!response.ok) return null;
@@ -86,7 +83,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
 
   pages: {
-    signIn: '/login',
+    signIn: '/',
   },
 
   callbacks: {
@@ -110,7 +107,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           // Transform backend tenant structure to frontend structure
           if (decoded.tenants && decoded.tenants.length > 0) {
-            token.tenants = decoded.tenants.map((t) => ({
+            token.tenants = decoded.tenants.map(t => ({
               id: t.tenantId,
               name: '', // Will be populated from API call
               role: t.role,
@@ -143,7 +140,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           // Transform backend tenant structure to frontend structure
           if (decoded.tenants && decoded.tenants.length > 0) {
-            token.tenants = decoded.tenants.map((t) => ({
+            token.tenants = decoded.tenants.map(t => ({
               id: t.tenantId,
               name: '', // Will be populated from API call
               role: t.role,
@@ -163,7 +160,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.id = token.id as string;
       session.user.role =
         typeof token.role === 'string' ? token.role : undefined;
-      session.user.tenants = token.tenants as Array<{ id: string; name: string; role: string }> | undefined;
+      session.user.tenants = token.tenants as
+        | Array<{ id: string; name: string; role: string }>
+        | undefined;
       session.user.iat = token.iat;
       session.user.exp = token.exp;
 

@@ -10,12 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
-import {
-  CircleUserRound,
-  LogOut,
-  ReceiptText,
-  Settings
-} from 'lucide-react';
+import { CircleUserRound, LogOut, ReceiptText, Settings } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -74,30 +69,30 @@ const DashboardLeftSideNav = () => {
 
         <div
           className={cn(
-            ' sticky bottom-0 z-30 flex h-20 items-center justify-center p-4 py-1.5',
+            'sticky bottom-0 z-30 flex h-20 items-center justify-center p-4 py-1.5',
             // hideSidebar && 'hidden',
           )}
-          style={{backgroundColor:"#F2F3F5"}}
+          style={{ backgroundColor: '#F2F3F5' }}
         >
           {!isLoggedIn ? (
-            <div className="flex items-center space-x-2">
+            <div className="flex w-full items-center gap-2">
               <Button
                 variant="default"
-                className="relative w-20 bg-black text-white"
+                className="flex-1 bg-black px-0 text-white hover:bg-black/90"
+                onClick={() =>
+                  onOpen({ type: 'auth-modal', actionId: 'login' })
+                }
               >
-                <Link href="/login">
-                  Login
-                  <span className="absolute inset-0"></span>
-                </Link>
+                Login
               </Button>
               <Button
                 variant="default"
-                className="relative w-20 bg-black text-white"
+                className="flex-1 bg-black px-0 text-white hover:bg-black/90"
+                onClick={() =>
+                  onOpen({ type: 'auth-modal', actionId: 'register' })
+                }
               >
-                <Link href="/register">
-                  Register
-                  <span className="absolute inset-0"></span>
-                </Link>
+                Register
               </Button>
             </div>
           ) : (
