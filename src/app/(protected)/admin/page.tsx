@@ -241,7 +241,7 @@ export default function AdminDashboardPage() {
                       variant="outline"
                       className="w-full"
                     >
-                      <Link href={card.href}>View Month-wise Details</Link>
+                      <Link href={card.href}>View all of the users</Link>
                     </Button>
                   ) : null}
                 </CardContent>
