@@ -28,6 +28,7 @@ import {
   ROLES,
   useConversationsStore,
 } from '@/stores/useConverstionsStore';
+import { useModalStore } from '@/stores/useModalStore';
 import { createFileChangeHandler } from '@/utils/fileChangeHandler';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -216,6 +217,8 @@ const ChatInput = ({
     activeConversation?.conversationId &&
     activeConversation?.conversationId !== 'new-chat' &&
     pathname?.startsWith('/c/');
+
+  const { onOpen } = useModalStore();
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
