@@ -323,7 +323,7 @@ const LeftSideNav = () => {
             >
               <DropdownMenuGroup>
                 <DropdownMenuItem onClick={() => router.push('/admin')}>
-                  <LayoutDashboard className="text-black" /> Admin Dashboard
+                  <LayoutDashboard className="text-black" /> Dashboard
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
@@ -331,11 +331,7 @@ const LeftSideNav = () => {
                 <DropdownMenuItem onClick={() => router.push('/organizations')}>
                   <Building2 className="text-black" /> Organizations
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => router.push('/organizations/dashboard')}
-                >
-                  <LayoutDashboard className="text-black" /> Manage Organization
-                </DropdownMenuItem>
+              
                 <DropdownMenuItem
                   onClick={() =>
                     router.push(

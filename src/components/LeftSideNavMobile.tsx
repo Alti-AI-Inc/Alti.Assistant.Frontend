@@ -271,7 +271,7 @@ const LeftSideNavMobile = () => {
                     close();
                   }}
                 >
-                  <LayoutDashboard className="text-black" /> Admin Dashboard
+                  <LayoutDashboard className="text-black" /> Dashboard
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
@@ -281,14 +281,7 @@ const LeftSideNavMobile = () => {
                 >
                   <Building2 className="text-black" /> Organizations
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push('/organizations/dashboard');
-                    close();
-                  }}
-                >
-                  <LayoutDashboard className="text-black" /> Manage Organization
-                </DropdownMenuItem>
+               
                 <DropdownMenuItem
                   onClick={() => {
                     router.push(

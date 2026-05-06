@@ -121,7 +121,7 @@ export default function StripeAdminDashboard() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            Stripe Admin Dashboard
+            Stripe Dashboard
           </h1>
           <p className="text-muted-foreground mt-1">
             Manage customers, subscriptions, and payments for all organizations

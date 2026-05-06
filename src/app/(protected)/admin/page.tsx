@@ -187,7 +187,7 @@ export default function AdminDashboardPage() {
         <section className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="space-y-1">
             <h1 className="text-foreground text-3xl font-bold tracking-tight">
-              Admin Dashboard
+              Dashboard
             </h1>
             <p className="text-muted-foreground">
               Central overview of your platform, customers, billing, and growth.
@@ -201,7 +201,7 @@ export default function AdminDashboardPage() {
               </Link>
             </Button>
             <Button asChild>
-              <Link href="/organizations">Manage Organizations</Link>
+              <Link href="/organizations/dashboard">Manage Organizations</Link>
             </Button>
             {/* <Button asChild>
               <Link href="/admin/users">Users</Link>
@@ -255,101 +255,9 @@ export default function AdminDashboardPage() {
           })}
         </section>
 
-        <section className="grid gap-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Organizations</CardTitle>
-              <CardDescription>
-                New and recently changed tenants across your workspace.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Organization</TableHead>
-                    <TableHead>Plan</TableHead>
-                    <TableHead>Users</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Joined</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {recentTenants.map(item => (
-                    <TableRow key={item.name}>
-                      <TableCell className="font-medium">{item.name}</TableCell>
-                      <TableCell>{item.plan}</TableCell>
-                      <TableCell>{item.users}</TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={
-                            item.status === 'active'
-                              ? 'success'
-                              : item.status === 'trial'
-                                ? 'secondary'
-                                : 'outline'
-                          }
-                          className="capitalize"
-                        >
-                          {item.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground text-right">
-                        {item.joined}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </section>
+        
 
-        <section className="grid w-full gap-4 lg:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Operational Performance</CardTitle>
-              <CardDescription>
-                Key admin metrics for service quality.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-5">
-              {teamPerformance.map(metric => (
-                <div key={metric.label} className="space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">
-                      {metric.label}
-                    </span>
-                    <span className="font-medium">{metric.value}%</span>
-                  </div>
-                  <Progress value={metric.value} />
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>User Growth Funnel</CardTitle>
-              <CardDescription>
-                Progression from signup to active paid organizations.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-5">
-              {funnelMetrics.map(metric => (
-                <div key={metric.step} className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium">{metric.step}</p>
-                    <p className="text-muted-foreground text-sm">
-                      {metric.value} ({metric.conversion}%)
-                    </p>
-                  </div>
-                  <Progress value={metric.conversion} />
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </section>
+        
       </div>
     </div>
   );
