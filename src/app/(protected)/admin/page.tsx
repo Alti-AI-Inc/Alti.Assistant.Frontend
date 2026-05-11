@@ -77,8 +77,9 @@ const funnelMetrics = [
 ];
 
 export default function AdminDashboardPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const token = session?.accessToken as string | undefined;
+  const isSuperAdmin = session?.user?.role === 'super_admin';
 
   const [kpis, setKpis] = useState({
     totalUsers: 0,
@@ -88,6 +89,23 @@ export default function AdminDashboardPage() {
     unverifyUsers: 0,
   });
   const [apiError, setApiError] = useState<string | null>(null);
+
+  if (status !== 'loading' && !isSuperAdmin) {
+    return (
+      <div className="bg-background min-h-screen">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 md:px-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Access Restricted</CardTitle>
+              <CardDescription>
+                The admin dashboard is available only for `super_admin` users.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   useEffect(() => {
     async function load() {
@@ -200,9 +218,6 @@ export default function AdminDashboardPage() {
                 Open Billing Console
                 <ArrowUpRight className="ml-2 h-4 w-4" />
               </Link>
-            </Button>
-            <Button asChild>
-              <Link href="/organizations/dashboard">Manage Organizations</Link>
             </Button>
           </div>
         </section>

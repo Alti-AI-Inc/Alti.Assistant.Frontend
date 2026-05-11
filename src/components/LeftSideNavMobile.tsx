@@ -265,14 +265,16 @@ const LeftSideNavMobile = () => {
                 >
                   <Orbit className="text-black" /> Upgrade
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push('/admin');
-                    close();
-                  }}
-                >
-                  <LayoutDashboard className="text-black" /> Dashboard
-                </DropdownMenuItem>
+                {data?.user?.role === 'super_admin' && (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      router.push('/admin');
+                      close();
+                    }}
+                  >
+                    <LayoutDashboard className="text-black" /> Dashboard
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem
                   onClick={() => {
                     router.push('/organizations');

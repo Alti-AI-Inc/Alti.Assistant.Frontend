@@ -322,9 +322,11 @@ const LeftSideNav = () => {
               align="start"
             >
               <DropdownMenuGroup>
-                <DropdownMenuItem onClick={() => router.push('/admin')}>
-                  <LayoutDashboard className="text-black" /> Dashboard
-                </DropdownMenuItem>
+                {data?.user?.role === 'super_admin' && (
+                  <DropdownMenuItem onClick={() => router.push('/admin')}>
+                    <LayoutDashboard className="text-black" /> Dashboard
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Upgrade
                 </DropdownMenuItem>

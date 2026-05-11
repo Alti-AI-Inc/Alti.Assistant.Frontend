@@ -362,28 +362,62 @@ function normalizeVerifyInvitationBody(
   raw: Record<string, unknown>,
   pathToken: string,
 ): VerifyInvitationResponse {
-  const data =
-    raw.data && typeof raw.data === 'object'
-      ? (raw.data as Record<string, unknown>)
-      : raw;
+  const asRecord = (value: unknown): Record<string, unknown> | null =>
+    value && typeof value === 'object' ? (value as Record<string, unknown>) : null;
 
-  const id =
-    (typeof data._id === 'string' && data._id) ||
-    (typeof data.id === 'string' && data.id) ||
-    pathToken;
+  const data = asRecord(raw.data) ?? raw;
+  const invitation = asRecord(data.invitation) ?? asRecord(raw.invitation);
+  const tenant =
+    asRecord(data.tenant) ??
+    asRecord(invitation?.tenant) ??
+    asRecord(raw.tenant);
+  const invitedBy =
+    asRecord(data.invitedBy) ??
+    asRecord(invitation?.invitedBy) ??
+    asRecord(raw.invitedBy);
+
+  const firstString = (...values: unknown[]): string | undefined => {
+    for (const value of values) {
+      if (typeof value === 'string' && value.trim()) return value.trim();
+    }
+    return undefined;
+  };
+
+  const id = firstString(
+    data._id,
+    data.id,
+    invitation?._id,
+    invitation?.id,
+    pathToken,
+  )!;
+
+  const tenantId =
+    firstString(
+      data.tenantId,
+      invitation?.tenantId,
+      tenant?._id,
+      tenant?.id,
+    ) ?? '';
+
+  const tenantName =
+    firstString(
+      data.tenantName,
+      invitation?.tenantName,
+      tenant?.name,
+    ) ?? '';
 
   return {
     id,
-    _id: typeof data._id === 'string' ? data._id : undefined,
-    email: String(data.email ?? ''),
-    tenantName: String(data.tenantName ?? ''),
-    tenantId: String(data.tenantId ?? ''),
-    role: String(data.role ?? 'member'),
+    _id: firstString(data._id, invitation?._id),
+    email: firstString(data.email, invitation?.email) ?? '',
+    tenantName,
+    tenantId,
+    role: firstString(data.tenantRole, invitation?.tenantRole, data.role, invitation?.role) ?? 'member',
     isUserExistWithEmail: Boolean(data.isUserExistWithEmail),
     inviterName:
-      typeof data.inviterName === 'string' ? data.inviterName : undefined,
+      firstString(data.inviterName, invitation?.inviterName, invitedBy?.name),
     expiresAt:
-      typeof data.expiresAt === 'string' ? data.expiresAt : undefined,
+      firstString(data.expiresAt, invitation?.expiresAt),
   };
 }
 
