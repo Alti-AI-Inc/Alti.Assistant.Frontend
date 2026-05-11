@@ -1,7 +1,7 @@
-import { getAllPayments, getAllUsers, type AdminUser } from '@/actions/adminActions';
+import { getAllPayments, getAllUsers } from '@/actions/adminActions';
 import { MetricMonthlyRevenuePaymentsTableSection } from '@/components/admin/MetricMonthlyRevenuePaymentsTableSection';
+import { MetricTenantsTableSection } from '@/components/admin/MetricTenantsTableSection';
 import { MetricTotalUsersTableSection } from '@/components/admin/MetricTotalUsersTableSection';
-import { UsersTable } from '@/components/admin/UsersTable';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -272,30 +272,8 @@ export default async function MetricDetailsPage({
         {metricKey === 'monthly-revenue' && (
           <MetricMonthlyRevenuePaymentsTableSection />
         )}
-        {metricKey === 'active-organizations' && <OrganizationMetricsSection />}
+        {metricKey === 'active-organizations' && <MetricTenantsTableSection />}
       </div>
     </div>
-  );
-}
-
-async function OrganizationMetricsSection() {
-  const usersRes = await getAllUsers();
-  const usersPayload: any = usersRes?.data ?? usersRes ?? [];
-  const usersList: AdminUser[] = Array.isArray(usersPayload)
-    ? usersPayload
-    : (usersPayload?.data ?? []);
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>All Users / Organizations</CardTitle>
-        <CardDescription>
-          Complete list of all users with their organization details.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <UsersTable users={usersList} onRefresh={() => {}} />
-      </CardContent>
-    </Card>
   );
 }

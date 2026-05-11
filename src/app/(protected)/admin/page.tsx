@@ -181,6 +181,7 @@ export default function AdminDashboardPage() {
       delta: `${kpis.paidUser} paid • ${kpis.freeUser} free`,
       icon: Users,
       href: '/admin/metrics/total-users',
+      linkLabel: 'View all of the users',
     },
     {
       title: 'Active Organizations',
@@ -190,6 +191,7 @@ export default function AdminDashboardPage() {
       delta: '+ realtime',
       icon: BriefcaseBusiness,
       href: '/admin/metrics/active-organizations',
+      linkLabel: 'View all of the Organizations',
     },
     {
       title: 'Monthly Revenue',
@@ -197,6 +199,7 @@ export default function AdminDashboardPage() {
       delta: `${kpis.unverifyUsers} unverified users`,
       icon: CreditCard,
       href: '/admin/metrics/monthly-revenue',
+      linkLabel: 'View all of the Payments',
     },
   ];
 
@@ -256,7 +259,7 @@ export default function AdminDashboardPage() {
                       variant="outline"
                       className="w-full"
                     >
-                      <Link href={card.href}>View all of the users</Link>
+                      <Link href={card.href}>{card.linkLabel}</Link>
                     </Button>
                   ) : null}
                 </CardContent>
