@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useTenant } from '@/contexts/TenantContext';
+import type { Tenant } from '@/types/tenant';
 
 export default function CreateOrganizationPage() {
   const router = useRouter();
@@ -82,12 +83,29 @@ export default function CreateOrganizationPage() {
         if (response.data.accessToken && update) {
           await update({ accessToken: response.data.accessToken });
         }
-        
-        // Refresh the tenant list to sync the switcher
+
         await refreshTenants();
-        
+
+        const created = response.data as Tenant & {
+          _id?: string;
+          tenant?: { id?: string; _id?: string };
+        };
+        const newId =
+          created.id ??
+          (created._id != null ? String(created._id) : undefined) ??
+          (created.tenant?.id != null
+            ? String(created.tenant.id)
+            : created.tenant?._id != null
+              ? String(created.tenant._id)
+              : undefined);
+
         toast.success('Organization created successfully!');
-        router.push(`/organizations/${response.data.id}`);
+        if (newId) {
+          router.push(`/organizations/${newId}/members`);
+        } else {
+          router.push('/organizations');
+        }
+        router.refresh();
       } else {
         toast.error(response.message || 'Failed to create organization');
       }

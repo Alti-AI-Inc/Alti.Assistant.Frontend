@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -19,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useTenant } from '@/contexts/TenantContext';
 import { useModalStore } from '@/stores/useModalStore';
 import { TenantInvitation, TenantRole } from '@/types/tenant';
 import { CheckCircle2, Copy, Loader2 } from 'lucide-react';
@@ -28,8 +30,10 @@ import { toast } from 'sonner';
 
 export function InviteMemberModal() {
   const { data: session } = useSession();
+  const { activeTenantId, switchToTenantMode } = useTenant();
   const { isOpen, type, actionId, onClose, onConfirm } = useModalStore();
   const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
   const [role, setRole] = useState<string>(TenantRole.MEMBER);
   const [isInviting, setIsInviting] = useState(false);
   const [successInvitation, setSuccessInvitation] = useState<TenantInvitation | null>(null);
@@ -39,6 +43,7 @@ export function InviteMemberModal() {
 
   const handleClose = () => {
     setEmail('');
+    setMessage('');
     setRole(TenantRole.MEMBER);
     setSuccessInvitation(null);
     onClose();
@@ -75,9 +80,15 @@ export function InviteMemberModal() {
 
     setIsInviting(true);
     try {
+      if (tenantId && activeTenantId !== tenantId) {
+        await switchToTenantMode(tenantId);
+      }
+
       const response = await inviteMember({
+        tenantId,
         email: email.trim(),
         role,
+        message: message.trim(),
       });
 
       if (response.success && response.data) {
@@ -87,7 +98,11 @@ export function InviteMemberModal() {
       }
     } catch (error) {
       console.error('Failed to invite member:', error);
-      toast.error('An error occurred while sending the invitation');
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : 'An error occurred while sending the invitation',
+      );
     } finally {
       setIsInviting(false);
     }
@@ -171,25 +186,38 @@ export function InviteMemberModal() {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="invite-message">Message (optional)</Label>
+                <Textarea
+                  id="invite-message"
+                  value={message}
+                  onChange={e => setMessage(e.target.value)}
+                  placeholder="Add a short note for the invitee..."
+                  disabled={isInviting}
+                  rows={3}
+                  className="resize-none"
+                />
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="role">Role *</Label>
                 <Select value={role} onValueChange={setRole} disabled={isInviting}>
                   <SelectTrigger id="role">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={TenantRole.ADMIN}>
-                      <div>
-                        <div className="font-medium capitalize">{TenantRole.ADMIN}</div>
-                        <div className="text-xs text-muted-foreground">
-                          Can manage members and settings
-                        </div>
-                      </div>
-                    </SelectItem>
                     <SelectItem value={TenantRole.MEMBER}>
                       <div>
                         <div className="font-medium capitalize">{TenantRole.MEMBER}</div>
                         <div className="text-xs text-muted-foreground">
                           Can use organization resources
+                        </div>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value={TenantRole.OWNER}>
+                      <div>
+                        <div className="font-medium capitalize">{TenantRole.OWNER}</div>
+                        <div className="text-xs text-muted-foreground">
+                          Full control of the organization
                         </div>
                       </div>
                     </SelectItem>

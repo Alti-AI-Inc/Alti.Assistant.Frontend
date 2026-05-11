@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,7 +16,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from './ui/button';
 
-export function TenantModeSwitcher() {
+function TenantModeSwitcherInner() {
   const router = useRouter();
   const { mode, currentTenant, tenants, switchToPersonalMode, switchToTenantMode } = useTenant();
   const [isOpen, setIsOpen] = useState(false);
@@ -129,3 +130,5 @@ export function TenantModeSwitcher() {
     </DropdownMenu>
   );
 }
+
+export const TenantModeSwitcher = memo(TenantModeSwitcherInner);

@@ -76,11 +76,19 @@ export default function AcceptInvitePage({
 
   // Authenticated — accept the invitation via API
   const handleAccept = async () => {
-    if (!session?.accessToken) return;
+    if (!session?.accessToken || !invitation) return;
+
+    const inviteId = invitation._id ?? invitation.id;
+    if (!invitation.tenantId?.trim() || !inviteId?.trim()) {
+      toast.error(
+        'This invitation is missing organization or invitation details. Please use the link from your email or ask for a new invite.',
+      );
+      return;
+    }
 
     setIsAccepting(true);
     try {
-      const response = await acceptInvitation(token);
+      const response = await acceptInvitation(invitation.tenantId, inviteId);
 
       if (response.success) {
         const tenantId = response.data?.tenantId ?? invitation?.tenantId;
@@ -104,7 +112,11 @@ export default function AcceptInvitePage({
       }
     } catch (err) {
       console.error('Failed to accept invitation:', err);
-      toast.error('An error occurred while accepting the invitation');
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : 'An error occurred while accepting the invitation',
+      );
     } finally {
       setIsAccepting(false);
     }

@@ -24,7 +24,7 @@ import type { TenantInvitation } from '@/types/tenant';
 
 interface PendingInvitationsProps {
   invitations: TenantInvitation[];
-  onUpdate: () => void;
+  onUpdate: () => void | Promise<void>;
 }
 
 export function PendingInvitations({

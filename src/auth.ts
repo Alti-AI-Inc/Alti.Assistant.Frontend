@@ -93,7 +93,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const decoded = jwt.decode(session.accessToken) as jwt.JwtPayload & {
           _id?: string;
           role?: string;
-          tenants?: Array<{ tenantId: string; role: string }>;
+          tenants?: Array<{
+            tenantId: string;
+            role?: string;
+            tenantRole?: string;
+          }>;
           iat?: number;
           exp?: number;
         };
@@ -110,7 +114,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             token.tenants = decoded.tenants.map(t => ({
               id: t.tenantId,
               name: '', // Will be populated from API call
-              role: t.role,
+              role: t.role ?? t.tenantRole ?? 'member',
             }));
           } else {
             token.tenants = [];
@@ -127,7 +131,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const decoded = jwt.decode(user.accessToken) as jwt.JwtPayload & {
           _id?: string;
           role?: string;
-          tenants?: Array<{ tenantId: string; role: string }>;
+          tenants?: Array<{
+            tenantId: string;
+            role?: string;
+            tenantRole?: string;
+          }>;
           iat?: number;
           exp?: number;
         };
@@ -143,7 +151,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             token.tenants = decoded.tenants.map(t => ({
               id: t.tenantId,
               name: '', // Will be populated from API call
-              role: t.role,
+              role: t.role ?? t.tenantRole ?? 'member',
             }));
           } else {
             token.tenants = [];

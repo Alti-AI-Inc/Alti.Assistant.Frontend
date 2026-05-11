@@ -26,6 +26,10 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
   const { switchToTenantMode } = useTenant();
   const [isNavigating, setIsNavigating] = useState(false);
 
+  const userTotal =
+    organization.usersCount ?? organization.memberCount ?? 0;
+  const userLabel = userTotal === 1 ? 'member' : 'members';
+
   const getRoleBadgeVariant = (role?: string) => {
     switch (role) {
       case 'owner':
@@ -143,7 +147,9 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <Users className="size-4" />
-              <span>{organization.memberCount || 0} members</span>
+              <span>
+                {userTotal} {userLabel}
+              </span>
             </div>
             <Badge variant={getRoleBadgeVariant(organization.role)} className="capitalize">
               {organization.role || 'member'}

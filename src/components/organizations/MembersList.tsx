@@ -29,7 +29,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { MoreVertical, Trash2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { toast } from 'sonner';
 import { MemberRoleSelector } from './MemberRoleSelector';
 import type { TenantMember } from '@/types/tenant';
@@ -37,19 +37,24 @@ import type { TenantMember } from '@/types/tenant';
 interface MembersListProps {
   members: TenantMember[];
   tenantId: string;
-  onUpdate: () => void;
+  onUpdate: () => void | Promise<void>;
 }
 
-export function MembersList({ members, tenantId, onUpdate }: MembersListProps) {
+function MembersListComponent({ members, tenantId, onUpdate }: MembersListProps) {
   const { data: session } = useSession();
   const [memberToRemove, setMemberToRemove] = useState<TenantMember | null>(null);
   const [isRemoving, setIsRemoving] = useState(false);
 
-  const currentUserRole = session?.user?.tenants?.find(
-    (t) => t.id === tenantId
-  )?.role;
+  const tenantMembership = session?.user?.tenants?.find(
+    t =>
+      t.id === tenantId ||
+      ('tenantId' in t &&
+        String((t as { tenantId?: string }).tenantId) === tenantId),
+  );
+  const currentUserRole = tenantMembership?.role?.toLowerCase();
 
-  const canManageMembers = currentUserRole === 'owner' || currentUserRole === 'admin';
+  /** Only organization owners may remove members or change roles (admins/members cannot). */
+  const isTenantOwner = currentUserRole === 'owner';
 
   const handleRemoveMember = async () => {
     if (!memberToRemove || !session?.accessToken) return;
@@ -77,8 +82,6 @@ export function MembersList({ members, tenantId, onUpdate }: MembersListProps) {
     switch (role.toLowerCase()) {
       case 'owner':
         return 'default';
-      case 'admin':
-        return 'secondary';
       default:
         return 'outline';
     }
@@ -102,7 +105,7 @@ export function MembersList({ members, tenantId, onUpdate }: MembersListProps) {
               <TableHead>Joined</TableHead>
               <TableHead>Role</TableHead>
               <TableHead>Status</TableHead>
-              {canManageMembers && <TableHead className="w-[50px]"></TableHead>}
+              {isTenantOwner && <TableHead className="w-[50px]"></TableHead>}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -110,7 +113,10 @@ export function MembersList({ members, tenantId, onUpdate }: MembersListProps) {
               const userId = member.userId._id;
               const email = member.userId.email;
               const isCurrentUser = userId === session?.user?.id;
-              const canModify = canManageMembers && !isCurrentUser && member.role !== 'owner';
+              const memberRole = String(
+                member.tenantRole ?? member.role ?? 'member',
+              ).toLowerCase();
+              const canModify = isTenantOwner && !isCurrentUser;
 
               return (
                 <TableRow key={member._id}>
@@ -132,13 +138,14 @@ export function MembersList({ members, tenantId, onUpdate }: MembersListProps) {
                   <TableCell>
                     {canModify ? (
                       <MemberRoleSelector
-                        currentRole={member.role}
+                        currentRole={memberRole}
                         memberId={userId}
+                        viewerIsOwner
                         onUpdate={onUpdate}
                       />
                     ) : (
-                      <Badge variant={getRoleBadgeVariant(member.role)} className="capitalize">
-                        {member.role}
+                      <Badge variant={getRoleBadgeVariant(memberRole)} className="capitalize">
+                        {memberRole}
                       </Badge>
                     )}
                   </TableCell>
@@ -151,7 +158,7 @@ export function MembersList({ members, tenantId, onUpdate }: MembersListProps) {
                       {member.status ?? 'active'}
                     </span>
                   </TableCell>
-                  {canManageMembers && (
+                  {isTenantOwner && (
                     <TableCell>
                       {canModify && (
                         <DropdownMenu>
@@ -207,3 +214,6 @@ export function MembersList({ members, tenantId, onUpdate }: MembersListProps) {
     </>
   );
 }
+
+export const MembersList = memo(MembersListComponent);
+MembersList.displayName = 'MembersList';

@@ -98,6 +98,8 @@ export interface UserTenant {
   role: string;
   permissions?: string[];
   joinedAt?: string;
+  /** From GET /tenant/user/:tenantId — total users in the tenant */
+  usersCount?: number;
 }
 
 export interface TenantSettings {
@@ -113,7 +115,9 @@ export interface TenantMember {
     email: string;
   };
   tenantId: string;
+  /** Tenant-scoped role; APIs often send this as `tenantRole` instead of `role`. */
   role: TenantRole | string;
+  tenantRole?: TenantRole | string;
   permissions?: string[];
   status?: string;
   joinedAt?: string;
@@ -158,8 +162,10 @@ export interface CheckSubdomainAvailability {
 }
 
 export interface InviteMemberData {
+  tenantId: string;
   email: string;
   role: TenantRole | string;
+  message?: string;
 }
 
 export interface UpdateMemberRoleData {
@@ -175,7 +181,9 @@ export interface SwitchTenantResponse {
 }
 
 export interface VerifyInvitationResponse {
+  /** Invitation document id used by accept API (often same as `id` or `_id` from backend) */
   id: string;
+  _id?: string;
   email: string;
   tenantName: string;
   tenantId: string;

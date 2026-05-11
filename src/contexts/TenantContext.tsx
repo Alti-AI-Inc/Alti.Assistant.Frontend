@@ -2,7 +2,14 @@
 
 import { getUserTenants, switchTenant } from '@/actions/tenantActions';
 import { useSession } from 'next-auth/react';
-import React, { createContext, useContext, useEffect, useCallback, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useCallback,
+  useMemo,
+  ReactNode,
+} from 'react';
 import useTenantStore, { Tenant } from '@/stores/useTenantStore';
 import { toast } from 'sonner';
 
@@ -31,6 +38,26 @@ export function TenantProvider({ children }: { children: ReactNode }) {
     switchToTenantMode: storeSwitchToTenantMode,
     setTenants,
   } = useTenantStore();
+
+  const refreshTenants = useCallback(async () => {
+    if (!session?.accessToken) return;
+
+    try {
+      const response = await getUserTenants();
+      if (response.success && response.data) {
+        const storeTenants: Tenant[] = response.data.map(t => ({
+          id: t.id,
+          name: t.name,
+          role: t.role,
+          subdomain: t.subdomain,
+          slug: t.slug,
+        }));
+        setTenants(storeTenants);
+      }
+    } catch (error) {
+      console.error('Failed to refresh tenant details:', error);
+    }
+  }, [session?.accessToken, setTenants]);
 
   // Wrapper for switchToPersonalMode with API call and token refresh
   const switchToPersonalMode = useCallback(async () => {
@@ -78,9 +105,12 @@ export function TenantProvider({ children }: { children: ReactNode }) {
         if (update) {
           await update({ accessToken: response.data.accessToken });
         }
-        
-        // Update local store state
+
+        // Enter tenant mode immediately; do not block on full /tenant/all refetch
         storeSwitchToTenantMode(tenantId);
+        void refreshTenants().catch(err =>
+          console.error('refreshTenants after switch:', err),
+        );
       } else {
         toast.error(response.message || 'Failed to switch organization');
         throw new Error(response.message || 'Failed to switch tenant');
@@ -90,28 +120,7 @@ export function TenantProvider({ children }: { children: ReactNode }) {
       toast.error(error instanceof Error ? error.message : 'Failed to switch organization');
       throw error;
     }
-  }, [mode, activeTenantId, update, storeSwitchToTenantMode]);
-
-  // Function to manually refresh tenants list
-  const refreshTenants = useCallback(async () => {
-    if (!session?.accessToken) return;
-
-    try {
-      const response = await getUserTenants();
-      if (response.success && response.data) {
-        const storeTenants: Tenant[] = response.data.map(t => ({
-          id: t.id,
-          name: t.name,
-          role: t.role,
-          subdomain: t.subdomain,
-          slug: t.slug,
-        }));
-        setTenants(storeTenants);
-      }
-    } catch (error) {
-      console.error('Failed to refresh tenant details:', error);
-    }
-  }, [session?.accessToken, setTenants]);
+  }, [mode, activeTenantId, update, storeSwitchToTenantMode, refreshTenants]);
 
   // Fetch full tenant details from API when session is available
   useEffect(() => {
@@ -145,16 +154,29 @@ export function TenantProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.accessToken, isHydrated, session?.user?.tenants?.length]);
 
-  const value: TenantContextValue = {
-    mode,
-    activeTenantId,
-    currentTenant,
-    tenants,
-    isLoading: status === 'loading' || !isHydrated,
-    switchToPersonalMode,
-    switchToTenantMode,
-    refreshTenants,
-  };
+  const value = useMemo<TenantContextValue>(
+    () => ({
+      mode,
+      activeTenantId,
+      currentTenant,
+      tenants,
+      isLoading: status === 'loading' || !isHydrated,
+      switchToPersonalMode,
+      switchToTenantMode,
+      refreshTenants,
+    }),
+    [
+      mode,
+      activeTenantId,
+      currentTenant,
+      tenants,
+      status,
+      isHydrated,
+      switchToPersonalMode,
+      switchToTenantMode,
+      refreshTenants,
+    ],
+  );
 
   return (
     <TenantContext.Provider value={value}>{children}</TenantContext.Provider>

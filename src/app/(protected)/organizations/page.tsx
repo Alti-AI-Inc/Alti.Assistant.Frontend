@@ -1,45 +1,98 @@
 'use client';
 
-import { getUserTenants } from '@/actions/tenantActions';
+import { getTenantUserCount, getUserTenants } from '@/actions/tenantActions';
 import { TenantModeSwitcher } from '@/components/TenantModeSwitcher';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Building2, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { OrganizationCard } from '@/components/organizations/OrganizationCard';
 import type { UserTenant } from '@/types/tenant';
-import { useTenant } from '@/contexts/TenantContext';
+import useTenantStore from '@/stores/useTenantStore';
 
 export default function OrganizationsPage() {
   const router = useRouter();
-  const { data: session } = useSession();
-  const { refreshTenants } = useTenant();
+  const pathname = usePathname();
+  const { data: session, status } = useSession();
+  const setTenants = useTenantStore(s => s.setTenants);
   const [organizations, setOrganizations] = useState<UserTenant[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (pathname !== '/organizations') return;
+
+    if (status === 'loading') {
+      return;
+    }
+
+    if (!session?.accessToken) {
+      setIsLoading(false);
+      setOrganizations([]);
+      return;
+    }
+
+    let cancelled = false;
+
     const fetchOrganizations = async () => {
-      if (!session?.accessToken) return;
-      
       setIsLoading(true);
       try {
         const response = await getUserTenants();
-        if (response.success && response.data) {
-          setOrganizations(response.data);
-          // Refresh the TenantContext to sync the switcher
-          await refreshTenants();
+        if (cancelled) return;
+
+        if (response.success) {
+          const list = Array.isArray(response.data) ? response.data : [];
+
+          const countResults = await Promise.all(
+            list.map(org =>
+              getTenantUserCount(org.id).then(res => ({
+                id: org.id,
+                usersCount: res.success ? res.data.usersCount : undefined,
+              })),
+            ),
+          );
+          const countById = new Map(
+            countResults.map(r => [r.id, r.usersCount] as const),
+          );
+          const enriched: UserTenant[] = list.map(org => {
+            const fromApi = countById.get(org.id);
+            let usersCount: number | undefined;
+            if (fromApi === undefined) {
+              usersCount = org.usersCount;
+            } else {
+              usersCount = Math.max(fromApi, org.usersCount ?? 0);
+            }
+            return { ...org, usersCount };
+          });
+
+          setOrganizations(enriched);
+          setTenants(
+            enriched.map(t => ({
+              id: t.id,
+              name: t.name,
+              role: t.role,
+              subdomain: t.subdomain,
+              slug: t.slug,
+            })),
+          );
+        } else {
+          setOrganizations([]);
         }
       } catch (error) {
         console.error('Failed to fetch organizations:', error);
+        if (!cancelled) setOrganizations([]);
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     };
 
-    fetchOrganizations();
-  }, [session?.accessToken, refreshTenants]);
+    void fetchOrganizations();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [pathname, session?.accessToken, setTenants, status]);
 
   return (
     <div className="container max-w-6xl mx-auto py-8 px-4">

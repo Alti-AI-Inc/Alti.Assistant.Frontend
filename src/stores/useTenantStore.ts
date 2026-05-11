@@ -56,7 +56,16 @@ const useTenantStore = create<TenantStore>()(
             currentTenant: tenant,
           });
         } else {
-          console.warn(`Tenant with id ${tenantId} not found`);
+          // e.g. org just created — list not refreshed yet; still enter tenant mode
+          set({
+            mode: 'tenant',
+            activeTenantId: tenantId,
+            currentTenant: {
+              id: tenantId,
+              name: 'Organization',
+              role: 'member',
+            },
+          });
         }
       },
 

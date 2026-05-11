@@ -3,11 +3,17 @@
 import { TenantProvider } from '@/contexts/TenantContext';
 import { useContextSwitch } from '@/hooks/useContextSwitch';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { SessionProvider, useSession } from 'next-auth/react';
+import dynamic from 'next/dynamic';
 import { ThemeProvider } from 'next-themes';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+
+const ReactQueryDevtools = dynamic(
+  () =>
+    import('@tanstack/react-query-devtools').then(mod => mod.ReactQueryDevtools),
+  { ssr: false },
+);
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -24,7 +30,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             <AuthWatcher>{children}</AuthWatcher>
           </TenantProvider>
         </SessionProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {process.env.NODE_ENV === 'development' ? (
+          <ReactQueryDevtools initialIsOpen={false} />
+        ) : null}
       </QueryClientProvider>
     </ThemeProvider>
   );

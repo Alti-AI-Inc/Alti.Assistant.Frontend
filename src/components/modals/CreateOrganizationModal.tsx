@@ -13,7 +13,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SubdomainChecker } from '@/components/organizations/SubdomainChecker';
+import { useTenant } from '@/contexts/TenantContext';
 import { useModalStore } from '@/stores/useModalStore';
+import type { Tenant } from '@/types/tenant';
 import { Building2, Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -23,6 +25,7 @@ import { toast } from 'sonner';
 export function CreateOrganizationModal() {
   const router = useRouter();
   const { data: session, update } = useSession();
+  const { refreshTenants } = useTenant();
   const { isOpen, type, onClose, onConfirm } = useModalStore();
   const [isCreating, setIsCreating] = useState(false);
   const [isSubdomainAvailable, setIsSubdomainAvailable] = useState(false);
@@ -89,11 +92,32 @@ export function CreateOrganizationModal() {
         if (response.data.accessToken && update) {
           await update({ accessToken: response.data.accessToken });
         }
-        
+
+        await refreshTenants();
+
+        const created = response.data as Tenant & {
+          _id?: string;
+          tenant?: { id?: string; _id?: string };
+        };
+        const newId =
+          created.id ??
+          (created._id != null ? String(created._id) : undefined) ??
+          (created.tenant?.id != null
+            ? String(created.tenant.id)
+            : created.tenant?._id != null
+              ? String(created.tenant._id)
+              : undefined);
+
         toast.success('Organization created successfully!');
         handleClose();
         onConfirm?.();
-        router.push(`/organizations/${response.data.id}`);
+
+        if (newId) {
+          router.push(`/organizations/${newId}/members`);
+        } else {
+          router.push('/organizations');
+        }
+        router.refresh();
       } else {
         toast.error(response.message || 'Failed to create organization');
       }

@@ -27,12 +27,15 @@ import { toast } from 'sonner';
 interface MemberRoleSelectorProps {
   currentRole: TenantRole | string;
   memberId: string;
-  onUpdate: () => void;
+  /** When true, owner may assign the owner role via PATCH /tenant/members/:id/role */
+  viewerIsOwner?: boolean;
+  onUpdate: () => void | Promise<void>;
 }
 
 export function MemberRoleSelector({
   currentRole,
   memberId,
+  viewerIsOwner = false,
   onUpdate,
 }: MemberRoleSelectorProps) {
   const { data: session } = useSession();
@@ -49,13 +52,15 @@ export function MemberRoleSelector({
       if (response.success) {
         toast.success('Member role updated successfully');
         setPendingRole(null);
-        onUpdate();
+        await onUpdate();
       } else {
         toast.error(response.message || 'Failed to update role');
       }
     } catch (error) {
       console.error('Failed to update role:', error);
-      toast.error('An error occurred while updating the role');
+      toast.error(
+        error instanceof Error ? error.message : 'An error occurred while updating the role',
+      );
     } finally {
       setIsChanging(false);
     }
@@ -65,18 +70,23 @@ export function MemberRoleSelector({
     switch (role.toLowerCase()) {
       case 'owner':
         return 'default';
-      case 'admin':
-        return 'secondary';
       default:
         return 'outline';
     }
   };
 
-  // If member is owner, show badge only (owners can't be changed)
-  if (currentRole === TenantRole.OWNER || currentRole === 'owner') {
+  const normalizedRole = String(currentRole ?? 'member').toLowerCase();
+  /** Tenant only supports owner + member; legacy values map to member for the control. */
+  const supportedTenantRoles = new Set(['owner', 'member']);
+  const selectValue = supportedTenantRoles.has(normalizedRole)
+    ? normalizedRole
+    : 'member';
+
+  // Non-owners see a static badge for tenant owners (only an org owner may change roles)
+  if (normalizedRole === 'owner' && !viewerIsOwner) {
     return (
-      <Badge variant={getRoleBadgeVariant(currentRole)} className="capitalize">
-        {currentRole}
+      <Badge variant={getRoleBadgeVariant(normalizedRole)} className="capitalize">
+        {normalizedRole}
       </Badge>
     );
   }
@@ -84,22 +94,30 @@ export function MemberRoleSelector({
   return (
     <>
       <Select
-        value={currentRole}
-        onValueChange={(value) => setPendingRole(value)}
+        key={`${memberId}-${selectValue}`}
+        value={selectValue}
+        onValueChange={value => {
+          if (value === selectValue) return;
+          setPendingRole(value);
+        }}
         disabled={isChanging}
       >
-        <SelectTrigger className="w-[120px] h-8">
+        <SelectTrigger className="h-7 w-[96px] text-xs">
           <SelectValue>
-            <span className="capitalize">{currentRole}</span>
+            <span className="capitalize">
+              {supportedTenantRoles.has(normalizedRole) ? normalizedRole : selectValue}
+            </span>
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={TenantRole.ADMIN}>
-            <span className="capitalize">{TenantRole.ADMIN}</span>
-          </SelectItem>
           <SelectItem value={TenantRole.MEMBER}>
             <span className="capitalize">{TenantRole.MEMBER}</span>
           </SelectItem>
+          {viewerIsOwner && (
+            <SelectItem value={TenantRole.OWNER}>
+              <span className="capitalize">{TenantRole.OWNER}</span>
+            </SelectItem>
+          )}
         </SelectContent>
       </Select>
 

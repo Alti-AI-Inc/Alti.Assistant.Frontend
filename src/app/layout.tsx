@@ -22,7 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistExo2.variable} antialiased`}>
+      <body
+        className={`${geistExo2.variable} antialiased`}
+        suppressHydrationWarning
+      >
         <Providers>
           {children}
           <ModalProvider />
