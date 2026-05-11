@@ -2,6 +2,7 @@
 
 import {
   getPendingInvitations,
+  getTenantMemberByTenantId,
   getTenantMembers,
 } from '@/actions/memberActions';
 import {
@@ -116,8 +117,8 @@ export function OrganizationTenantOverview({
   const [invitations, setInvitations] = useState<TenantInvitation[]>([]);
   const [usage, setUsage] = useState<TenantUsage | null>(null);
   const [isLoadingDashboard, setIsLoadingDashboard] = useState(false);
-  /** Stale-parallel load guard (strict mode / fast navigation) */
-  const dashboardLoadGenRef = useRef(0);
+  /** Ignore late results if user switched org or navigated away mid-flight */
+  const latestTenantLoadRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (fixedTenantId) {
@@ -154,13 +155,15 @@ export function OrganizationTenantOverview({
         return;
       }
 
-      const loadGen = ++dashboardLoadGenRef.current;
+      latestTenantLoadRef.current = tenantId;
       setIsLoadingDashboard(true);
+
+      const isStale = () => latestTenantLoadRef.current !== tenantId;
 
       try {
         await switchToTenantMode(tenantId);
       } catch {
-        if (dashboardLoadGenRef.current === loadGen) {
+        if (!isStale()) {
           setOrganization(null);
           setMembers([]);
           setInvitations([]);
@@ -170,23 +173,81 @@ export function OrganizationTenantOverview({
         return;
       }
 
-      if (dashboardLoadGenRef.current !== loadGen) return;
+      if (isStale()) return;
 
-      const [
-        currentSettled,
-        byIdSettled,
-        membersSettled,
-        invitationsSettled,
-        usageSettled,
-      ] = await Promise.allSettled([
-        getCurrentTenant(),
-        getTenantById(tenantId),
-        getTenantMembers(),
-        getPendingInvitations(),
-        getTenantUsage(),
-      ]);
+      /**
+       * After `session.update({ accessToken })`, parallel server actions can still
+       * read the previous cookie for `auth()`. Run members first in its own request,
+       * then fan out the rest.
+       */
+      let membersList: TenantMember[] = [];
+      try {
+        const membersRes = await getTenantMembers();
+        if (!isStale() && membersRes.success && Array.isArray(membersRes.data)) {
+          membersList = membersRes.data;
+        }
+      } catch (e) {
+        console.warn('getTenantMembers failed:', e);
+      }
 
-      if (dashboardLoadGenRef.current !== loadGen) return;
+      if (!isStale() && membersList.length === 0) {
+        try {
+          const alt = await getTenantMemberByTenantId(tenantId);
+          if (
+            !isStale() &&
+            alt.success &&
+            Array.isArray(alt.data) &&
+            alt.data.length
+          ) {
+            membersList = alt.data;
+          }
+        } catch (e) {
+          console.warn('getTenantMemberByTenantId fallback failed:', e);
+        }
+      }
+
+      if (
+        !isStale() &&
+        fixedTenantId === tenantId &&
+        membersList.length === 0
+      ) {
+        await new Promise(r => setTimeout(r, 200));
+        if (!isStale()) {
+          try {
+            const retry = await getTenantMembers();
+            if (
+              retry.success &&
+              Array.isArray(retry.data) &&
+              retry.data.length
+            ) {
+              membersList = retry.data;
+            }
+          } catch {
+            /* ignore */
+          }
+        }
+      }
+
+      if (!isStale()) {
+        setMembers(membersList);
+      }
+
+      const isMembersRoute = Boolean(fixedTenantId && fixedTenantId === tenantId);
+      if (isMembersRoute && !isStale()) {
+        setIsLoadingDashboard(false);
+      }
+
+      if (isStale()) return;
+
+      const [currentSettled, byIdSettled, invitationsSettled, usageSettled] =
+        await Promise.allSettled([
+          getCurrentTenant(),
+          getTenantById(tenantId),
+          getPendingInvitations(),
+          getTenantUsage(),
+        ]);
+
+      if (isStale()) return;
 
       let organizationData: Tenant | null = null;
       if (
@@ -205,23 +266,6 @@ export function OrganizationTenantOverview({
         organizationData = normalizeTenantPayload(byIdSettled.value.data);
       }
       setOrganization(organizationData);
-
-      if (
-        membersSettled.status === 'fulfilled' &&
-        membersSettled.value.success &&
-        membersSettled.value.data
-      ) {
-        setMembers(
-          Array.isArray(membersSettled.value.data)
-            ? membersSettled.value.data
-            : [],
-        );
-      } else {
-        if (membersSettled.status === 'rejected') {
-          console.warn('getTenantMembers failed:', membersSettled.reason);
-        }
-        setMembers([]);
-      }
 
       if (
         invitationsSettled.status === 'fulfilled' &&
@@ -256,9 +300,11 @@ export function OrganizationTenantOverview({
         setUsage(null);
       }
 
-      setIsLoadingDashboard(false);
+      if (!isMembersRoute && !isStale()) {
+        setIsLoadingDashboard(false);
+      }
     },
-    [session?.accessToken, switchToTenantMode],
+    [session?.accessToken, switchToTenantMode, fixedTenantId],
   );
 
   const loadTenantDashboardRef = useRef(loadTenantDashboard);
@@ -270,10 +316,8 @@ export function OrganizationTenantOverview({
     if (sessionStatus !== 'authenticated' || !selectedTenantId || !hasAccessToken)
       return;
     void loadTenantDashboardRef.current(selectedTenantId);
-    // Omit raw accessToken string: JWT rotates after switchTenant and would refetch in a loop.
-    // hasAccessToken still flips false→true on first login.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTenantId, sessionStatus, hasAccessToken]);
+    // Omit raw accessToken: JWT rotates after switchTenant; `hasAccessToken` covers login.
+  }, [selectedTenantId, sessionStatus, hasAccessToken, fixedTenantId]);
 
   const seatUsage = useMemo(() => {
     const maxSeats =
@@ -389,10 +433,9 @@ export function OrganizationTenantOverview({
 
       {isLoadingDashboard && fixedTenantId ? (
         <div className="space-y-6">
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            {[1, 2, 3, 4].map(i => (
-              <Skeleton key={i} className="h-20 rounded-lg" />
-            ))}
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Skeleton className="h-20 rounded-lg" />
+            <Skeleton className="h-20 rounded-lg" />
           </div>
           <Card>
             <CardHeader>
@@ -400,7 +443,7 @@ export function OrganizationTenantOverview({
               <Skeleton className="h-4 w-72 max-w-full mt-2" />
             </CardHeader>
             <CardContent className="space-y-2">
-              {[1, 2, 3, 4, 5, 6].map(i => (
+              {[1, 2, 3, 4].map(i => (
                 <Skeleton key={i} className="h-10 w-full" />
               ))}
             </CardContent>
