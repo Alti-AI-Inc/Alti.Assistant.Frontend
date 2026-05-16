@@ -1,13 +1,29 @@
 'use client';
 
-import { getTenants, type AdminTenantListItem } from '@/actions/adminActions';
+import {
+  getTenants,
+  updateTenantStatus,
+  type AdminTenantListItem,
+  type TenantLifecycleStatus,
+} from '@/actions/adminActions';
 import {
   paginationLabel,
   parseAdminListPayload,
   type SortOrder,
 } from '@/components/admin/AdminPaginatedDatasetHelpers';
+import { TenantAdministrationDialog } from '@/components/admin/TenantAdministrationDialog';
 import { TenantDetailDialog } from '@/components/admin/TenantDetailDialog';
 import { TenantsTable } from '@/components/admin/TenantsTable';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -21,8 +37,15 @@ import { Spinner } from '@/components/ui/spinner';
 import { RefreshCw, Search } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 const PAGE_SIZE = 10;
+
+type StatusConfirm = {
+  tenantId: string;
+  tenantName: string;
+  status: TenantLifecycleStatus;
+};
 
 export function MetricTenantsTableSection() {
   const { data: session } = useSession();
@@ -41,6 +64,15 @@ export function MetricTenantsTableSection() {
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [detailTenantId, setDetailTenantId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+
+  const [adminTenantId, setAdminTenantId] = useState<string | null>(null);
+  const [adminTenantLabel, setAdminTenantLabel] = useState('');
+  const [adminOpen, setAdminOpen] = useState(false);
+
+  const [statusConfirm, setStatusConfirm] = useState<StatusConfirm | null>(
+    null,
+  );
+  const [statusConfirmBusy, setStatusConfirmBusy] = useState(false);
 
   useEffect(() => {
     setPage(1);
@@ -95,6 +127,60 @@ export function MetricTenantsTableSection() {
     setDetailOpen(true);
   }, []);
 
+  const openAdministration = useCallback(
+    (args: { tenantId: string; tenantName: string }) => {
+      setAdminTenantId(args.tenantId);
+      setAdminTenantLabel(args.tenantName);
+      setAdminOpen(true);
+    },
+    [],
+  );
+
+  const applyTenantStatus = useCallback(
+    async (tenantId: string, status: TenantLifecycleStatus) => {
+      if (!accessToken) return;
+      const res = await updateTenantStatus(tenantId, status, accessToken);
+      if (res.success) {
+        toast.success(
+          `Tenant status set to ${status.charAt(0).toUpperCase()}${status.slice(1)}.`,
+        );
+        await loadTenants();
+      } else {
+        toast.error(res.message || 'Failed to update status');
+      }
+    },
+    [accessToken, loadTenants],
+  );
+
+  const handleTenantStatusIntent = useCallback(
+    (args: {
+      tenantId: string;
+      tenantName: string;
+      status: TenantLifecycleStatus;
+    }) => {
+      if (!accessToken) return;
+      if (args.status === 'active') {
+        void (async () => {
+          await applyTenantStatus(args.tenantId, 'active');
+        })();
+        return;
+      }
+      setStatusConfirm({
+        tenantId: args.tenantId,
+        tenantName: args.tenantName,
+        status: args.status,
+      });
+    },
+    [accessToken, applyTenantStatus],
+  );
+
+  const confirmStatusDescription = (s: TenantLifecycleStatus) => {
+    if (s === 'suspended') {
+      return 'Suspended tenants keep data but should lose access until reactivated.';
+    }
+    return 'Cancelled is typically irreversible for billing and access. Confirm only if you intend to close this organization.';
+  };
+
   const pagination = paginationLabel(meta, tenants.length, PAGE_SIZE);
   const totalPages =
     pagination.total <= 0
@@ -120,8 +206,8 @@ export function MetricTenantsTableSection() {
             <CardTitle>All tenants</CardTitle>
             <CardDescription>
               From <code className="text-xs">/admin/tenants</code>. Click a row
-              for full details (
-              <code className="text-xs">/admin/tenants/:id</code>).
+              for read-only details. Use the row menu → Administration for
+              status and trial, or use quick status shortcuts.
             </CardDescription>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -154,6 +240,8 @@ export function MetricTenantsTableSection() {
                   onSort: handleSortField,
                 }}
                 onRowClick={openDetail}
+                onTenantStatusIntent={handleTenantStatusIntent}
+                onOpenAdministration={openAdministration}
               />
               <div className="flex flex-col gap-3 border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-muted-foreground text-sm">
@@ -199,6 +287,75 @@ export function MetricTenantsTableSection() {
         tenantId={detailTenantId}
         accessToken={accessToken}
       />
+
+      <TenantAdministrationDialog
+        open={adminOpen}
+        onOpenChange={open => {
+          setAdminOpen(open);
+          if (!open) {
+            setAdminTenantId(null);
+            setAdminTenantLabel('');
+          }
+        }}
+        tenantId={adminTenantId}
+        tenantLabel={adminTenantLabel}
+        accessToken={accessToken}
+        onSuccess={() => void loadTenants()}
+      />
+
+      <AlertDialog
+        open={!!statusConfirm}
+        onOpenChange={open => {
+          if (!open && !statusConfirmBusy) setStatusConfirm(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Set “{statusConfirm?.tenantName}” to{' '}
+              <span className="capitalize">{statusConfirm?.status}</span>?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {statusConfirm
+                ? confirmStatusDescription(statusConfirm.status)
+                : null}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={statusConfirmBusy}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className={
+                statusConfirm?.status === 'cancelled'
+                  ? 'bg-rose-600 text-white hover:bg-rose-600/90 dark:bg-rose-600 dark:hover:bg-rose-600/90'
+                  : statusConfirm?.status === 'suspended'
+                    ? 'bg-amber-700 text-white hover:bg-amber-700/90 dark:bg-amber-700 dark:hover:bg-amber-700/90'
+                    : undefined
+              }
+              disabled={statusConfirmBusy}
+              onClick={e => {
+                e.preventDefault();
+                if (!statusConfirm) return;
+                setStatusConfirmBusy(true);
+                void (async () => {
+                  try {
+                    await applyTenantStatus(
+                      statusConfirm.tenantId,
+                      statusConfirm.status,
+                    );
+                    setStatusConfirm(null);
+                  } finally {
+                    setStatusConfirmBusy(false);
+                  }
+                })();
+              }}
+            >
+              {statusConfirmBusy ? 'Updating…' : 'Confirm'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

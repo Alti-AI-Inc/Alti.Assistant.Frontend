@@ -87,6 +87,7 @@ export function UsersTable({ users, onRefresh, sortable }: UsersTableProps) {
 
   const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const handleDelete = async () => {
     if (!deleteUserId) return;
@@ -100,6 +101,7 @@ export function UsersTable({ users, onRefresh, sortable }: UsersTableProps) {
       }
     } finally {
       setIsDeleting(false);
+      setConfirmOpen(false);
       setDeleteUserId(null);
     }
   };
@@ -178,14 +180,27 @@ export function UsersTable({ users, onRefresh, sortable }: UsersTableProps) {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem
-                        onClick={() => navigator.clipboard.writeText(u.email)}
+                        onClick={() => {
+                          navigator.clipboard.writeText(u.email);
+                          if (document.activeElement instanceof HTMLElement) {
+                            document.activeElement.blur();
+                          }
+                        }}
                       >
                         Copy Email
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         className="text-destructive"
-                        onClick={() => setDeleteUserId(u._id)}
+                        onClick={() => {
+                          setDeleteUserId(u._id);
+                          if (document.activeElement instanceof HTMLElement) {
+                            document.activeElement.blur();
+                          }
+                          // open the confirm dialog after a brief delay so the
+                          // dropdown has time to close and focus traps are removed
+                          setTimeout(() => setConfirmOpen(true), 120);
+                        }}
                       >
                         <Trash2 className="mr-2 h-4 w-4" />
                         Delete User
@@ -200,8 +215,11 @@ export function UsersTable({ users, onRefresh, sortable }: UsersTableProps) {
       </Card>
 
       <AlertDialog
-        open={!!deleteUserId}
-        onOpenChange={() => setDeleteUserId(null)}
+        open={confirmOpen}
+        onOpenChange={open => {
+          setConfirmOpen(open);
+          if (!open) setDeleteUserId(null);
+        }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>

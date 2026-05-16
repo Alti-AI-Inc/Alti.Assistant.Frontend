@@ -1,9 +1,20 @@
 'use client';
 
-import { ArrowDown, ArrowUp, Building2 } from 'lucide-react';
-
-import { Badge } from '@/components/ui/badge';
+import type {
+  AdminTenantListItem,
+  TenantLifecycleStatus,
+} from '@/actions/adminActions';
+import { TenantStatusBadge } from '@/components/admin/TenantStatusBadge';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   Table,
   TableBody,
@@ -13,8 +24,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { formatDate } from '@/utils/formatters';
-
-import type { AdminTenantListItem } from '@/actions/adminActions';
+import {
+  ArrowDown,
+  ArrowUp,
+  Building2,
+  MoreHorizontal,
+  Shield,
+} from 'lucide-react';
 
 export type TenantsTableSortable = {
   sortBy: string;
@@ -64,13 +80,27 @@ interface TenantsTableProps {
   tenants: AdminTenantListItem[];
   sortable?: TenantsTableSortable;
   onRowClick: (tenantId: string) => void;
+  /** Row menu: admin requests a lifecycle status change (parent may confirm). */
+  onTenantStatusIntent?: (args: {
+    tenantId: string;
+    tenantName: string;
+    status: TenantLifecycleStatus;
+  }) => void;
+  /** Row menu: open administration dialog (status + trial). */
+  onOpenAdministration?: (args: {
+    tenantId: string;
+    tenantName: string;
+  }) => void;
 }
 
 export function TenantsTable({
   tenants,
   sortable,
   onRowClick,
+  onTenantStatusIntent,
+  onOpenAdministration,
 }: TenantsTableProps) {
+  const showRowMenu = Boolean(onTenantStatusIntent || onOpenAdministration);
   if (!tenants || tenants.length === 0) {
     return (
       <Card>
@@ -117,6 +147,11 @@ export function TenantsTable({
                 />
               </div>
             </TableHead>
+            {showRowMenu ? (
+              <TableHead className="w-[52px] text-right">
+                <span className="sr-only">Actions</span>
+              </TableHead>
+            ) : null}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -130,19 +165,98 @@ export function TenantsTable({
               <TableCell className="text-muted-foreground text-sm">
                 {t.subdomain || '—'}
               </TableCell>
-              <TableCell>
-                <Badge variant="outline" className="capitalize">
-                  {t.status || '—'}
-                </Badge>
+              <TableCell onClick={e => e.stopPropagation()}>
+                <TenantStatusBadge status={t.status} />
               </TableCell>
               <TableCell>
-                <Badge variant="secondary" className="capitalize">
+                <span className="text-muted-foreground text-sm capitalize">
                   {t.plan || '—'}
-                </Badge>
+                </span>
               </TableCell>
               <TableCell className="text-muted-foreground text-right text-sm">
                 {t.createdAt ? formatDate(new Date(t.createdAt)) : '—'}
               </TableCell>
+              {showRowMenu ? (
+                <TableCell
+                  className="text-right"
+                  onClick={e => e.stopPropagation()}
+                >
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        aria-label="Open tenant actions"
+                      >
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                      {onOpenAdministration ? (
+                        <DropdownMenuItem
+                          onClick={() =>
+                            onOpenAdministration({
+                              tenantId: t._id,
+                              tenantName: t.name || t.subdomain || t._id,
+                            })
+                          }
+                        >
+                          <Shield className="mr-2 h-4 w-4 opacity-70" />
+                          Administration
+                        </DropdownMenuItem>
+                      ) : null}
+                      {onOpenAdministration && onTenantStatusIntent ? (
+                        <DropdownMenuSeparator />
+                      ) : null}
+                      {onTenantStatusIntent ? (
+                        <>
+                          <DropdownMenuLabel>Quick status</DropdownMenuLabel>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              onTenantStatusIntent({
+                                tenantId: t._id,
+                                tenantName: t.name || t.subdomain || t._id,
+                                status: 'active',
+                              })
+                            }
+                          >
+                            Set to Active
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              onTenantStatusIntent({
+                                tenantId: t._id,
+                                tenantName: t.name || t.subdomain || t._id,
+                                status: 'suspended',
+                              })
+                            }
+                          >
+                            Set to Suspended
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-rose-700 focus:text-rose-800 dark:text-rose-400 dark:focus:text-rose-300"
+                            onClick={() =>
+                              onTenantStatusIntent({
+                                tenantId: t._id,
+                                tenantName: t.name || t.subdomain || t._id,
+                                status: 'cancelled',
+                              })
+                            }
+                          >
+                            Set to Cancelled
+                          </DropdownMenuItem>
+                        </>
+                      ) : null}
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => onRowClick(t._id)}>
+                        View details…
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              ) : null}
             </TableRow>
           ))}
         </TableBody>

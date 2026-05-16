@@ -132,6 +132,9 @@ export interface AllPaymentsResponse {
   data: PaymentRecord[];
 }
 
+/** Values accepted by PATCH /admin/tenants/:id/status */
+export type TenantLifecycleStatus = 'active' | 'suspended' | 'cancelled';
+
 export interface AdminTenantListItem {
   _id: string;
   name: string;
@@ -156,7 +159,9 @@ export interface AdminTenantDetail {
   _id: string;
   name: string;
   slug?: string;
-  subdomain: string;
+  subdomain?: string;
+  /** Some API responses use camelCase */
+  subDomain?: string;
   status: string;
   plan: string;
   createdAt: string;
@@ -302,6 +307,81 @@ export async function getTenantById(
     return {
       success: true,
       message: data.message || 'Tenant fetched',
+      data: data.data,
+    };
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    return { success: false, message: 'Network error', debugMessage: msg };
+  }
+}
+
+export async function updateTenantStatus(
+  tenantId: string,
+  status: TenantLifecycleStatus,
+  accessToken?: string,
+): Promise<ApiResponse<unknown>> {
+  try {
+    const res = await fetch(`${BASE_URL}/admin/tenants/${tenantId}/status`, {
+      method: 'PATCH',
+      headers: {
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ status }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      return {
+        success: false,
+        message: err.message || 'Failed to update tenant status',
+        statusCode: res.status,
+      };
+    }
+
+    const data = await res.json().catch(() => ({}));
+    return {
+      success: true,
+      message: data.message || 'Status updated',
+      data: data.data,
+    };
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    return { success: false, message: 'Network error', debugMessage: msg };
+  }
+}
+
+export async function extendTenantTrial(
+  tenantId: string,
+  days: string | number,
+  accessToken?: string,
+): Promise<ApiResponse<unknown>> {
+  try {
+    const res = await fetch(
+      `${BASE_URL}/admin/tenants/${tenantId}/extend-trial`,
+      {
+        method: 'POST',
+        headers: {
+          ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ days: String(days) }),
+      },
+    );
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      return {
+        success: false,
+        message: err.message || 'Failed to extend trial',
+        statusCode: res.status,
+      };
+    }
+
+    const data = await res.json().catch(() => ({}));
+    return {
+      success: true,
+      message: data.message || 'Trial extended',
       data: data.data,
     };
   } catch (error: unknown) {

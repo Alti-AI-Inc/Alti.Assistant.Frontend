@@ -5,6 +5,7 @@ import {
   type AdminTenantDetail,
   type AdminTenantOwnerRef,
 } from '@/actions/adminActions';
+import { TenantStatusBadge } from '@/components/admin/TenantStatusBadge';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,7 +17,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Spinner } from '@/components/ui/spinner';
-import { formatDate, formatDateTime } from '@/utils/formatters';
+import { formatDateTime } from '@/utils/formatters';
 import { type ReactNode, useEffect, useState } from 'react';
 
 function formatBytes(n: number) {
@@ -27,6 +28,10 @@ function formatBytes(n: number) {
   const mb = kb / 1024;
   if (mb < 1024) return `${mb.toFixed(1)} MB`;
   return `${(mb / 1024).toFixed(2)} GB`;
+}
+
+function tenantSubdomain(d: AdminTenantDetail) {
+  return d.subdomain ?? d.subDomain ?? '—';
 }
 
 function DetailRow({ label, value }: { label: string; value: ReactNode }) {
@@ -87,7 +92,6 @@ export function TenantDetailDialog({
     let cancelled = false;
     setLoading(true);
     setError(null);
-    setDetail(null);
 
     void (async () => {
       const res = await getTenantById(tenantId, accessToken);
@@ -96,6 +100,7 @@ export function TenantDetailDialog({
       if (res.success && res.data) {
         setDetail(res.data);
       } else {
+        setDetail(null);
         setError(res.message || 'Could not load tenant');
       }
     })();
@@ -116,20 +121,18 @@ export function TenantDetailDialog({
         </DialogHeader>
 
         <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">
-          {loading && (
+          {loading && !detail && (
             <div className="flex justify-center py-12">
               <Spinner className="h-8 w-8" />
             </div>
           )}
-          {!loading && error && (
+          {!loading && error && !detail && (
             <p className="text-destructive text-sm">{error}</p>
           )}
-          {!loading && detail && (
+          {detail && (
             <div className="space-y-5">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="outline" className="capitalize">
-                  {detail.status}
-                </Badge>
+                <TenantStatusBadge status={detail.status} />
                 <Badge variant="secondary" className="capitalize">
                   {detail.plan}
                 </Badge>
@@ -143,30 +146,13 @@ export function TenantDetailDialog({
               <Section title="Workspace">
                 <DetailRow label="ID" value={detail._id} />
                 <DetailRow label="Name" value={detail.name} />
-                <DetailRow label="Slug" value={detail.slug ?? '—'} />
-                <DetailRow label="Subdomain" value={detail.subdomain} />
+                <DetailRow label="Subdomain" value={tenantSubdomain(detail)} />
                 <DetailRow label="Owner" value={ownerLabel(detail.ownerId)} />
                 <DetailRow
                   label="Created"
                   value={
                     detail.createdAt
                       ? formatDateTime(new Date(detail.createdAt))
-                      : '—'
-                  }
-                />
-                <DetailRow
-                  label="Updated"
-                  value={
-                    detail.updatedAt
-                      ? formatDateTime(new Date(detail.updatedAt))
-                      : '—'
-                  }
-                />
-                <DetailRow
-                  label="Deleted"
-                  value={
-                    detail.deletedAt
-                      ? formatDate(new Date(detail.deletedAt))
                       : '—'
                   }
                 />
