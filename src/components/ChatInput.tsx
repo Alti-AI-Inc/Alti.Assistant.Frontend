@@ -1098,13 +1098,7 @@ const ChatInput = ({
                 <PopoverTrigger asChild>
                   <div className="flex cursor-pointer items-center">
                     <Plus
-                      className={cn(
-                        'size-5 flex-shrink-0 rounded-full border-2 p-[2px]',
-                        selectedOption === OPTIONS.RESEARCH ||
-                          selectedFile
-                          ? 'border-black bg-black text-white'
-                          : 'border-gray-300 bg-white text-black',
-                      )}
+                      className="size-6 flex-shrink-0 rounded-full border-2 border-gray-300 bg-black p-1 text-white hover:bg-gray-800 transition-colors"
                     />
                   </div>
                 </PopoverTrigger>
