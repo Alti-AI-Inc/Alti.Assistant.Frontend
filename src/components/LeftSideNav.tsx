@@ -71,7 +71,7 @@ const LeftSideNav = () => {
       <div className="pt-4 pb-2" style={{ backgroundColor: '#F2F3F5' }}>
         <div
           className={cn(
-            'sticky top-0 z-30 flex items-center justify-between px-4 pt-2',
+            'sticky top-0 z-30 flex items-center justify-between px-4 pt-2 pb-3 border-b border-black/10',
             hideSidebar && 'justify-center',
           )}
           style={{ backgroundColor: '#F2F3F5' }}
