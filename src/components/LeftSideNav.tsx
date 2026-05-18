@@ -114,8 +114,8 @@ const LeftSideNav = () => {
         {/* Enclosed Search & Actions Row */}
         <div
           className={cn(
-            'flex items-center gap-2 px-4 py-2 border-b border-black/10 transition-all duration-300',
-            hideSidebar ? 'flex-col px-2 py-3' : 'justify-between'
+            'flex items-center gap-2 px-4 py-4 border-b border-black/10 transition-all duration-300',
+            hideSidebar ? 'flex-col px-2 py-4' : 'justify-between'
           )}
         >
           {hideSidebar ? (
@@ -257,7 +257,7 @@ const LeftSideNav = () => {
 
       <div
         className={cn(
-          'sticky bottom-0 z-30 flex h-20 items-center justify-center p-4 py-1.5',
+          'sticky bottom-0 z-30 flex h-20 items-center justify-center p-4 py-1.5 border-t border-black/10',
           hideSidebar && 'hidden',
         )}
         style={{ backgroundColor: '#F2F3F5' }}
