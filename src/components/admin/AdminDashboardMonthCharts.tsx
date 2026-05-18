@@ -41,9 +41,7 @@ function enumerateMonthKeys(start: Date, end: Date): string[] {
   let cy = y;
   let cm = m;
   while (cy < endY || (cy === endY && cm <= endM)) {
-    keys.push(
-      `${cy}-${String(cm + 1).padStart(2, '0')}`,
-    );
+    keys.push(`${cy}-${String(cm + 1).padStart(2, '0')}`);
     cm++;
     if (cm > 11) {
       cm = 0;
@@ -89,12 +87,10 @@ function unwrapListAndMeta(payload: unknown): {
   }
 
   // Sometimes API nests again
-  const inner = root.data as { meta?: { total?: number }; data?: unknown } | undefined;
-  if (
-    inner &&
-    typeof inner === 'object' &&
-    Array.isArray(inner.data)
-  ) {
+  const inner = root.data as
+    | { meta?: { total?: number }; data?: unknown }
+    | undefined;
+  if (inner && typeof inner === 'object' && Array.isArray(inner.data)) {
     return {
       list: inner.data as Record<string, unknown>[],
       total: inner.meta?.total ?? root.meta?.total,
@@ -213,7 +209,23 @@ function buildMonthlyPaymentTotals(payments: Record<string, unknown>[]) {
     if (!d) continue;
 
     const k = monthKeyFromDate(d);
-    const cents = typeof p.price === 'number' ? p.price : 0;
+    // derive cents from multiple possible shapes
+    let cents = 0;
+    if (p == null) cents = 0;
+    else if (typeof p.price === 'number') {
+      // heuristic: if > 1000 assume it's already cents
+      cents = p.price > 1000 ? Math.round(p.price) : Math.round(p.price * 100);
+    } else if (typeof p.price === 'string') {
+      const parsed = parseFloat(p.price);
+      if (!Number.isNaN(parsed))
+        cents = parsed > 1000 ? Math.round(parsed) : Math.round(parsed * 100);
+    } else {
+      // check nested product objects for dollar amounts
+      const prod = (p as any).productId ?? (p as any).product ?? null;
+      if (prod && typeof prod.price === 'number') {
+        cents = Math.round(prod.price * 100);
+      }
+    }
     sums[k] = (sums[k] || 0) + cents;
 
     const monthStart = new Date(d.getFullYear(), d.getMonth(), 1);
@@ -265,25 +277,92 @@ export function AdminDashboardMonthCharts({ accessToken }: Props) {
         const u = buildMonthlyUserCounts(users);
         const pmt = buildMonthlyPaymentTotals(payments);
 
+        // If payments aggregation returned all zeros (e.g. payments list uses stripe price ids),
+        // try fallback: fetch subscription admin API and build sums from `productId.price`.
+        const totalPaymentCents = Object.values(pmt.sumsCents).reduce(
+          (a, b) => a + (b || 0),
+          0,
+        );
+        let fallbackPmt = pmt;
+        if (totalPaymentCents === 0) {
+          try {
+            const subsUrl = `${baseUrl}/subscription/admin/all?page=1&limit=${PAGE_LIMIT}`;
+            const subsRes = await fetch(subsUrl, { headers });
+            const subsBody = await subsRes.json().catch(() => ({}));
+            const subsPayload = subsBody.data ?? subsBody ?? {};
+            const subsList = Array.isArray(subsPayload)
+              ? subsPayload
+              : Array.isArray(subsPayload.subscriptions)
+                ? subsPayload.subscriptions
+                : Array.isArray(subsPayload.data)
+                  ? subsPayload.data
+                  : [];
+
+            // build sums from subscriptions
+            const sumsSubs: Record<string, number> = {};
+            let earliestSub: Date | null = null;
+            let latestSub: Date | null = null;
+            for (const s of subsList) {
+              const d =
+                parseRecordDate(s.createdAt) ||
+                parseRecordDate(s.currentPeriodStart) ||
+                null;
+              if (!d) continue;
+              const k = monthKeyFromDate(d);
+              const prod = s.productId ?? s.product ?? null;
+              let cents = 0;
+              if (prod && typeof prod.price === 'number')
+                cents = Math.round(prod.price * 100);
+              else if (typeof s.price === 'number')
+                cents =
+                  s.price > 1000
+                    ? Math.round(s.price)
+                    : Math.round(s.price * 100);
+              else if (typeof s.price === 'string') {
+                const parsed = parseFloat(s.price);
+                if (!Number.isNaN(parsed))
+                  cents =
+                    parsed > 1000
+                      ? Math.round(parsed)
+                      : Math.round(parsed * 100);
+              }
+              sumsSubs[k] = (sumsSubs[k] || 0) + cents;
+
+              const monthStart = new Date(d.getFullYear(), d.getMonth(), 1);
+              if (!earliestSub || monthStart < earliestSub)
+                earliestSub = monthStart;
+              if (!latestSub || monthStart > latestSub) latestSub = monthStart;
+            }
+
+            fallbackPmt = {
+              sumsCents: sumsSubs,
+              earliest: earliestSub,
+              latest: latestSub,
+            };
+          } catch (e) {
+            // ignore fallback errors and keep original pmt
+          }
+        }
+
+        const effectivePmt = fallbackPmt;
+
         let rangeStart: Date;
         let rangeEnd: Date;
 
-        if (!u.earliest && !pmt.earliest) {
+        if (!u.earliest && !effectivePmt.earliest) {
           const d = defaultYearRange(now);
           rangeStart = d.start;
           rangeEnd = d.end;
         } else {
-          const candidates = [u.earliest, pmt.earliest].filter(
+          const candidates = [u.earliest, effectivePmt.earliest].filter(
             Boolean,
           ) as Date[];
-          const floor = new Date(
-            Math.min(...candidates.map(d => d.getTime())),
-          );
+          const floor = new Date(Math.min(...candidates.map(d => d.getTime())));
           rangeStart = new Date(floor.getFullYear(), floor.getMonth(), 1);
 
           const endCandidates = [
             u.latest,
-            pmt.latest,
+            effectivePmt.latest,
             new Date(now.getFullYear(), now.getMonth(), 1),
           ].filter(Boolean) as Date[];
           const rangeEndTs = Math.max(...endCandidates.map(d => d.getTime()));
@@ -303,7 +382,7 @@ export function AdminDashboardMonthCharts({ accessToken }: Props) {
         setPaymentPoints(
           monthKeys.map(key => ({
             month: labelFromMonthKey(key),
-            value: Math.round((pmt.sumsCents[key] || 0) / 100),
+            value: Math.round((effectivePmt.sumsCents[key] || 0) / 100),
           })),
         );
       } catch (e: unknown) {
@@ -353,9 +432,7 @@ export function AdminDashboardMonthCharts({ accessToken }: Props) {
       <Card>
         <CardHeader>
           <CardTitle>Month-wise Bar Chart — Users</CardTitle>
-          <CardDescription>
-            New user registrations by monthly
-          </CardDescription>
+          <CardDescription>New user registrations by monthly</CardDescription>
         </CardHeader>
         <CardContent>
           <MetricBarChart data={userPoints} unit="count" />
@@ -365,9 +442,7 @@ export function AdminDashboardMonthCharts({ accessToken }: Props) {
       <Card>
         <CardHeader>
           <CardTitle>Month-wise Bar Chart — Payments</CardTitle>
-          <CardDescription>
-          Total payment revenue by monthly
-          </CardDescription>
+          <CardDescription>Total payment revenue by monthly</CardDescription>
         </CardHeader>
         <CardContent>
           <MetricBarChart data={paymentPoints} unit="currency" />

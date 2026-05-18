@@ -35,18 +35,13 @@ function formatValue(value: number, unit: MetricBarChartProps['unit']) {
   return value.toLocaleString();
 }
 
-function CustomTooltip({
-  active,
-  payload,
-  label,
-  unit,
-}: CustomTooltipProps) {
+function CustomTooltip({ active, payload, label, unit }: CustomTooltipProps) {
   if (!active || !payload?.length) return null;
 
   const rawValue = Number(payload[0]?.value ?? 0);
 
   return (
-    <div className="rounded-md border bg-background px-3 py-2 shadow-md">
+    <div className="bg-background rounded-md border px-3 py-2 shadow-md">
       <p className="text-foreground text-xs font-semibold">{label}</p>
       <p className="text-foreground text-sm font-medium">
         {formatValue(rawValue, unit)}
@@ -81,7 +76,8 @@ export function MetricBarChart({ data, unit }: MetricBarChartProps) {
           />
           <Bar
             dataKey="value"
-            fill="hsl(var(--primary))"
+            // Use CSS variable with a sensible fallback so bars remain visible
+            fill="var(--primary, #06b6d4)"
             barSize={42}
             maxBarSize={56}
             shape={<Rectangle radius={[8, 8, 0, 0]} />}
