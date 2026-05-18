@@ -150,6 +150,74 @@ export interface AllTenantsResponse {
   data: AdminTenantListItem[];
 }
 
+export interface SubscriptionRecord {
+  _id: string;
+  limits?: Record<string, unknown>;
+  userId?: { _id?: string; email?: string } | string | null;
+  price?: string | number;
+  plan_name?: string;
+  productId?: {
+    _id?: string;
+    plan?: string;
+    name?: string;
+    price?: number;
+  } | null;
+  duration?: string;
+  paymentStatus?: string;
+  tenantId?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface AllSubscriptionsResponse {
+  data: SubscriptionRecord[];
+}
+
+export async function getAllSubscriptions(
+  accessToken?: string,
+  query?: Record<string, string | number | undefined>,
+): Promise<ApiResponse<AllSubscriptionsResponse>> {
+  try {
+    const qs = query
+      ? '?' +
+        Object.entries(query)
+          .filter(([, v]) => v !== undefined && v !== null && v !== '')
+          .map(
+            ([k, v]) =>
+              `${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`,
+          )
+          .join('&')
+      : '';
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscription/admin/all${qs}`, {
+      method: 'GET',
+      headers: {
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      return {
+        success: false,
+        message: err.message || 'Failed to fetch subscriptions',
+        statusCode: res.status,
+      };
+    }
+
+    const data = await res.json();
+    return {
+      success: true,
+      message: data.message || 'Subscriptions fetched',
+      data: data.data,
+    };
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    return { success: false, message: 'Network error', debugMessage: msg };
+  }
+}
+
 export interface AdminTenantOwnerRef {
   _id: string;
   email: string;

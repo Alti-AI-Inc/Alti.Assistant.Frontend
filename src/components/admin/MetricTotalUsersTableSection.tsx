@@ -108,14 +108,7 @@ export function MetricTotalUsersTableSection() {
       <CardHeader className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <CardTitle>All Users</CardTitle>
-          <CardDescription>
-            Sorted and paginated via{' '}
-            <code className="text-xs">/admin/all-user</code> (
-            <code className="text-xs">sortBy</code>,{' '}
-            <code className="text-xs">sortOrder</code>,{' '}
-            <code className="text-xs">page</code>, <code className="text-xs">limit</code>
-            ).
-          </CardDescription>
+         
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative min-w-[200px] md:w-64">

@@ -1,3 +1,4 @@
+// PaymentsTable.tsx
 'use client';
 
 import { ArrowDown, ArrowUp } from 'lucide-react';
@@ -32,9 +33,7 @@ function SortHeaderPayments({
   sortable?: PaymentsTableSortable;
   align?: 'left' | 'right';
 }) {
-  if (!sortable) {
-    return <span>{label}</span>;
-  }
+  if (!sortable) return <span>{label}</span>;
 
   const active = sortable.sortBy === field;
   return (
@@ -121,10 +120,12 @@ export function PaymentsTable({ payments, sortable }: PaymentsTableProps) {
           {payments.map(p => (
             <TableRow key={p._id}>
               <TableCell className="font-mono text-xs">{p._id}</TableCell>
+              {/* userEmail is already resolved by the page-level mapping */}
               <TableCell className="text-sm">{p.userEmail || '—'}</TableCell>
               <TableCell className="text-sm">{p.planName || '—'}</TableCell>
+              {/* price arrives as cents from the page mapping (50 dollars → 5000) */}
               <TableCell className="text-right">
-                {formatCurrency(p.price || 0)}
+                {formatCurrency(p.price ?? 0)}
               </TableCell>
               <TableCell className="text-muted-foreground text-right text-sm">
                 {p.createdAt ? formatDate(new Date(p.createdAt)) : '—'}

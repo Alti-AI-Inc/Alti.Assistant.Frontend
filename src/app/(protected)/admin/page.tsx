@@ -11,7 +11,6 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { AdminDashboardMonthCharts } from '@/components/admin/AdminDashboardMonthCharts';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -20,15 +19,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 
 // KPI placeholders; will be replaced by server-side data below
 
@@ -87,6 +77,7 @@ export default function AdminDashboardPage() {
     freeUser: 0,
     monthlyRevenue: '0.00',
     unverifyUsers: 0,
+    activeOrganizations: 0,
   });
   const [apiError, setApiError] = useState<string | null>(null);
 
@@ -115,19 +106,17 @@ export default function AdminDashboardPage() {
         };
         if (token) headers['Authorization'] = `Bearer ${token}`;
 
-        const [usersRes, paymentsRes] = await Promise.all([
-          fetch(
-            `${process.env.NEXT_PUBLIC_API_URL || 'https://apiv2.asonai.com/api/v1'}/admin/all-user`,
-            { headers },
-          ),
-          fetch(
-            `${process.env.NEXT_PUBLIC_API_URL || 'https://apiv2.asonai.com/api/v1'}/admin/all-payment`,
-            { headers },
-          ),
+        const base =
+          process.env.NEXT_PUBLIC_API_URL || 'https://apiv2.asonai.com/api/v1';
+        const [usersRes, paymentsRes, subsRes] = await Promise.all([
+          fetch(`${base}/admin/all-user`, { headers }),
+          fetch(`${base}/admin/all-payment`, { headers }),
+          fetch(`${base}/subscription/admin/all`, { headers }),
         ]);
 
         const usersJson = await usersRes.json().catch(() => ({}));
         const paymentsJson = await paymentsRes.json().catch(() => ({}));
+        const subscriptionsJson = await subsRes.json().catch(() => ({}));
 
         if (!usersRes.ok)
           throw new Error(
@@ -153,10 +142,44 @@ export default function AdminDashboardPage() {
         const paymentsList = Array.isArray(paymentsPayload)
           ? paymentsPayload
           : (paymentsPayload?.data ?? []);
-        const totalRevenueCents = paymentsList.reduce(
+        const totalRevenueCentsFromPayments = paymentsList.reduce(
           (s: number, p: any) => s + (p.price || 0),
           0,
         );
+
+        // Subscriptions payload (preferred source for active orgs and product info)
+        const subsPayload = subsRes.ok
+          ? (subscriptionsJson.data ?? subscriptionsJson)
+          : [];
+        const subsList = Array.isArray(subsPayload)
+          ? subsPayload
+          : (subsPayload?.data ?? []);
+
+        // active organizations: count unique non-null tenantId from subscriptions
+        const tenantIds = new Set<string>();
+        subsList.forEach((s: any) => {
+          if (s.tenantId) tenantIds.add(String(s.tenantId));
+        });
+
+        // total revenue from subscriptions: try productId.price (assumed dollars) or fallback to payments
+        const totalRevenueCentsFromSubs = subsList.reduce(
+          (acc: number, s: any) => {
+            const product = s.productId ?? s.product ?? null;
+            const priceNumber =
+              product?.price ??
+              (typeof s.price === 'number' ? s.price : undefined);
+            if (priceNumber !== undefined && priceNumber !== null) {
+              return acc + Math.round(Number(priceNumber) * 100);
+            }
+            return acc;
+          },
+          0,
+        );
+
+        const totalRevenueCents =
+          totalRevenueCentsFromSubs > 0
+            ? totalRevenueCentsFromSubs
+            : totalRevenueCentsFromPayments;
 
         setKpis({
           totalUsers,
@@ -164,6 +187,7 @@ export default function AdminDashboardPage() {
           freeUser,
           monthlyRevenue: (totalRevenueCents / 100).toFixed(2),
           unverifyUsers,
+          activeOrganizations: tenantIds.size,
         });
         setApiError(null);
       } catch (err: any) {
@@ -185,9 +209,7 @@ export default function AdminDashboardPage() {
     },
     {
       title: 'Active Organizations',
-      value: String(
-        kpis.totalUsers ? Math.max(0, Math.floor(kpis.totalUsers / 30)) : 0,
-      ),
+      value: String(kpis.activeOrganizations ?? 0),
       delta: '+ realtime',
       icon: BriefcaseBusiness,
       href: '/admin/metrics/active-organizations',

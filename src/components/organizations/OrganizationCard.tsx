@@ -4,16 +4,22 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTenant } from '@/contexts/TenantContext';
 import { cn } from '@/lib/utils';
 import type { UserTenant } from '@/types/tenant';
-import { Building2, ExternalLink, MoreVertical, Settings, Users } from 'lucide-react';
+import {
+  Building2,
+  ExternalLink,
+  MoreVertical,
+  Settings,
+  Users,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -26,8 +32,7 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
   const { switchToTenantMode } = useTenant();
   const [isNavigating, setIsNavigating] = useState(false);
 
-  const userTotal =
-    organization.usersCount ?? organization.memberCount ?? 0;
+  const userTotal = organization.usersCount ?? organization.memberCount ?? 0;
   const userLabel = userTotal === 1 ? 'member' : 'members';
 
   const getRoleBadgeVariant = (role?: string) => {
@@ -43,13 +48,13 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
 
   const handleCardClick = async () => {
     if (isNavigating) return;
-    
+
     setIsNavigating(true);
     try {
       // First switch to tenant mode
       await switchToTenantMode(organization.id);
-      // Then navigate to the organization dashboard
-      router.push(`/organizations/${organization.id}`);
+      // Then navigate to the organization's Manage Members page
+      router.push(`/organizations/${organization.id}/members`);
     } catch (error) {
       console.error('Failed to navigate to organization:', error);
     } finally {
@@ -60,35 +65,35 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
   return (
     <Card
       className={cn(
-        'hover:border-primary/50 transition-all cursor-pointer group',
+        'hover:border-primary/50 group cursor-pointer transition-all',
         'hover:shadow-md',
-        isNavigating && 'opacity-50 pointer-events-none'
+        isNavigating && 'pointer-events-none opacity-50',
       )}
       onClick={handleCardClick}
     >
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-3">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Building2 className="size-6 text-primary" />
+          <div className="bg-primary/10 flex h-12 w-12 items-center justify-center rounded-lg">
+            <Building2 className="text-primary size-6" />
           </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold truncate group-hover:text-primary transition-colors">
+          <div className="min-w-0 flex-1">
+            <h3 className="group-hover:text-primary truncate font-semibold transition-colors">
               {organization.name}
             </h3>
-            <p className="text-sm text-muted-foreground truncate">
+            <p className="text-muted-foreground truncate text-sm">
               {organization.subdomain}.alti.ai
             </p>
           </div>
         </div>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+          <DropdownMenuTrigger asChild onClick={e => e.stopPropagation()}>
             <Button variant="ghost" size="icon" className="size-8">
               <MoreVertical className="size-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              onClick={async (e) => {
+              onClick={async e => {
                 e.stopPropagation();
                 setIsNavigating(true);
                 try {
@@ -101,11 +106,11 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
                 }
               }}
             >
-              <ExternalLink className="size-4 mr-2" />
+              <ExternalLink className="mr-2 size-4" />
               Open Dashboard
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={async (e) => {
+              onClick={async e => {
                 e.stopPropagation();
                 setIsNavigating(true);
                 try {
@@ -118,12 +123,12 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
                 }
               }}
             >
-              <Settings className="size-4 mr-2" />
+              <Settings className="mr-2 size-4" />
               Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={async (e) => {
+              onClick={async e => {
                 e.stopPropagation();
                 setIsNavigating(true);
                 try {
@@ -136,7 +141,7 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
                 }
               }}
             >
-              <Users className="size-4 mr-2" />
+              <Users className="mr-2 size-4" />
               Manage Members
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -144,14 +149,17 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex items-center gap-4 text-sm">
             <div className="flex items-center gap-1.5">
               <Users className="size-4" />
               <span>
                 {userTotal} {userLabel}
               </span>
             </div>
-            <Badge variant={getRoleBadgeVariant(organization.role)} className="capitalize">
+            <Badge
+              variant={getRoleBadgeVariant(organization.role)}
+              className="capitalize"
+            >
               {organization.role || 'member'}
             </Badge>
           </div>

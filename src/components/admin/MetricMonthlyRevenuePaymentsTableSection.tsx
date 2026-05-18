@@ -1,9 +1,12 @@
+// MetricMonthlyRevenuePaymentsTableSection.tsx
 'use client';
 
-import { getAllPayments, type PaymentRecord } from '@/actions/adminActions';
+import {
+  getAllSubscriptions,
+  type PaymentRecord,
+} from '@/actions/adminActions';
 import {
   paginationLabel,
-  parseAdminListPayload,
   type SortOrder,
 } from '@/components/admin/AdminPaginatedDatasetHelpers';
 import { PaymentsTable } from '@/components/admin/PaymentsTable';
@@ -36,8 +39,8 @@ export function MetricMonthlyRevenuePaymentsTableSection() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
-  const [sortBy, setSortBy] = useState('price');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [sortBy, setSortBy] = useState('createdAt');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
 
   useEffect(() => {
     setPage(1);
@@ -47,16 +50,60 @@ export function MetricMonthlyRevenuePaymentsTableSection() {
     if (!accessToken) return;
     setIsLoading(true);
     try {
-      const res = await getAllPayments(accessToken, {
+      const res = await getAllSubscriptions(accessToken, {
         page,
         limit: PAGE_SIZE,
         searchTerm: searchTerm.trim() || undefined,
         sortBy,
         sortOrder,
       });
+
       if (res.success && res.data !== undefined && res.data !== null) {
-        const { list, meta: m } =
-          parseAdminListPayload<PaymentRecord>(res.data);
+        const subs: any[] = Array.isArray(res.data)
+          ? res.data
+          : (res.data?.data ?? []);
+
+        const list: PaymentRecord[] = subs.map((s) => {
+          // userId is populated: { _id, email }
+          const userEmail =
+            typeof s.userId === 'object' && s.userId !== null
+              ? (s.userId.email ?? '—')
+              : '—';
+
+          // productId is populated: { _id, plan, name, price }
+          // s.price is a Stripe price ID string — NOT a number, ignore it for amount
+          const productObj =
+            typeof s.productId === 'object' && s.productId !== null
+              ? s.productId
+              : null;
+
+          const planName =
+            productObj?.name ??
+            productObj?.plan ??
+            s.plan_name ??
+            '—';
+
+          // productObj.price is in dollars (e.g. 50) → convert to cents
+          const priceCents =
+            productObj?.price != null && !isNaN(Number(productObj.price))
+              ? Math.round(Number(productObj.price) * 100)
+              : 0;
+
+          return {
+            _id: s._id,
+            price: priceCents,        // e.g. 5000  (= $50.00)
+            planName,                  // e.g. "Execute"
+            userEmail,                 // e.g. "anik561460@gmail.com"
+            createdAt: s.createdAt ?? s.currentPeriodStart,
+          };
+        });
+
+        const m = (res as any).data?.meta ?? {
+          total: list.length,
+          page,
+          limit: PAGE_SIZE,
+        };
+
         setPayments(list);
         setMeta(m);
       } else {
@@ -109,15 +156,6 @@ export function MetricMonthlyRevenuePaymentsTableSection() {
       <CardHeader className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <CardTitle>All Payments</CardTitle>
-          <CardDescription>
-            Sorted and paginated via{' '}
-            <code className="text-xs">/admin/all-payment</code> (
-            <code className="text-xs">searchTerm</code>,{' '}
-            <code className="text-xs">sortBy</code>,{' '}
-            <code className="text-xs">sortOrder</code>,{' '}
-            <code className="text-xs">page</code>, <code className="text-xs">limit</code>
-            ).
-          </CardDescription>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative min-w-[200px] md:w-64">
@@ -129,8 +167,14 @@ export function MetricMonthlyRevenuePaymentsTableSection() {
               className="pl-10"
             />
           </div>
-          <Button variant="outline" size="icon" onClick={() => void loadPayments()}>
-            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => void loadPayments()}
+          >
+            <RefreshCw
+              className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
+            />
           </Button>
         </div>
       </CardHeader>
@@ -169,9 +213,7 @@ export function MetricMonthlyRevenuePaymentsTableSection() {
                   variant="outline"
                   size="sm"
                   disabled={
-                    isLoading ||
-                    page >= totalPages ||
-                    pagination.total === 0
+                    isLoading || page >= totalPages || pagination.total === 0
                   }
                   onClick={() => setPage(p => p + 1)}
                 >
