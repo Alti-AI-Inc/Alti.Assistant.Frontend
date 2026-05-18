@@ -68,10 +68,10 @@ const LeftSideNav = () => {
 
   return (
     <>
-      <div className="pt-4 pb-2" style={{ backgroundColor: '#F2F3F5' }}>
+      <div className="pt-0 pb-2" style={{ backgroundColor: '#F2F3F5' }}>
         <div
           className={cn(
-            'sticky top-0 z-30 flex items-center justify-between px-4 pt-2 pb-3 border-b border-black/10',
+            'sticky top-0 z-30 flex items-center justify-between px-4 pt-4 pb-4 border-b border-black/10',
             hideSidebar && 'justify-center',
           )}
           style={{ backgroundColor: '#F2F3F5' }}
@@ -110,164 +110,162 @@ const LeftSideNav = () => {
             onClick={toggleLeftSidebar}
           />
         </div>
-        <div className={cn('space-y-0.5 px-1 pt-6', hideSidebar && 'px-0')}>
-          <Button
-            onClick={() => {
-              setActiveConversation(null);
-              setShowStartLastMessage(false);
-              setUserMessage('');
-              setSelectedOption(null);
-              close();
-              router.push('/');
-            }}
-            className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-          >
-            <SquarePen />
-            <span
-              className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-            >
-              New Chat
-            </span>
-          </Button>
-
-          <div className={cn('space-y-0.5', !isLoggedIn && 'hidden')}>
-            {/* <Button
-              disabled={pathname === '/workspaces'}
-              onClick={() => {
-                setActiveConversation(null);
-                setShowStartLastMessage(false);
-                setUserMessage('');
-                setSelectedOption(null);
-                if (pathname !== '/workspaces') router.push('/workspaces');
-                close();
-              }}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-vector-square-icon lucide-vector-square"
-              >
-                <path d="M19.5 7a24 24 0 0 1 0 10" />
-                <path d="M4.5 7a24 24 0 0 0 0 10" />
-                <path d="M7 19.5a24 24 0 0 0 10 0" />
-                <path d="M7 4.5a24 24 0 0 1 10 0" />
-                <rect x="17" y="17" width="5" height="5" rx="1" />
-                <rect x="17" y="2" width="5" height="5" rx="1" />
-                <rect x="2" y="17" width="5" height="5" rx="1" />
-                <rect x="2" y="2" width="5" height="5" rx="1" />
-              </svg>
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Spaces
-              </span>
-            </Button>
-
-            <Button
-              disabled={pathname === '/apps'}
-              onClick={() => {
-                setActiveConversation(null);
-                setShowStartLastMessage(false);
-                setUserMessage('');
-                setSelectedOption(null);
-                if (pathname !== '/apps') router.push('/apps');
-                close();
-              }}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-package"
-              >
-                <line x1="16.5" y1="9.4" x2="7.5" y2="4.21" />
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                <line x1="12" y1="22.08" x2="12" y2="12" />
-              </svg>
-              <span
-                className={cn('text-sm font-normal', hideSidebar && 'hidden')}
-              >
-                Apps
-              </span>
-            </Button> */}
-
-            <div
-              className={cn(
-                'mt-6 flex items-center space-x-4',
-                hideSidebar && 'hidden',
-              )}
-            >
-              <div className="flex items-center gap-2 pl-4 text-sm text-gray-500">
-                <span>Chat history</span>
-                {mode === UserMode.TENANT && currentTenant && (
-                  <Badge
-                    variant="outline"
-                    className="h-5 px-1.5 text-[10px] font-normal"
+        {/* Enclosed Search & Actions Row */}
+        <div
+          className={cn(
+            'flex items-center gap-2 px-4 py-2 border-b border-black/10 transition-all duration-300',
+            hideSidebar ? 'flex-col px-2 py-3' : 'justify-between'
+          )}
+        >
+          {hideSidebar ? (
+            // Collapsed Sidebar: Stacked action icons
+            <div className="flex flex-col items-center gap-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-8 hover:bg-black/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-black"
+                    onClick={() => {
+                      setActiveConversation(null);
+                      setShowStartLastMessage(false);
+                      setUserMessage('');
+                      setSelectedOption(null);
+                      close();
+                      router.push('/');
+                    }}
                   >
-                    <Building2 className="mr-1 size-2.5" />
-                    {currentTenant.name}
-                  </Badge>
-                )}
-                {mode === UserMode.PERSONAL && (
-                  <Badge
-                    variant="outline"
-                    className="h-5 px-1.5 text-[10px] font-normal"
+                    <SquarePen className="size-[18px]" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>New Chat</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-8 hover:bg-black/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-black"
+                    onClick={() => {
+                      router.push('/saved-chats');
+                      close();
+                    }}
                   >
-                    <User className="mr-1 size-2.5" />
-                    Personal
-                  </Badge>
-                )}
+                    <Bookmark className="size-[18px]" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>Saved Chats</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-8 hover:bg-black/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-black"
+                    onClick={() => onOpen({ type: 'search-chats' })}
+                  >
+                    <Search className="size-[18px]" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>Search Chats</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          ) : (
+            // Expanded Sidebar: Single horizontal row (Search Bar + Favorites + New Chat)
+            <>
+              {/* Search Bar Button */}
+              <div
+                onClick={() => onOpen({ type: 'search-chats' })}
+                className="flex flex-1 items-center gap-2 px-3 py-1.5 bg-black/5 hover:bg-black/10 rounded-lg cursor-pointer text-gray-500 border border-black/5 transition-all text-xs"
+              >
+                <Search className="size-3.5 flex-none" />
+                <span className="truncate">Search chats...</span>
               </div>
-              <div className="flex items-center space-x-3">
+
+              {/* Action Buttons to the right */}
+              <div className="flex items-center gap-1 flex-none">
+                {/* Favorites Button */}
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Bookmark
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="size-8 hover:bg-black/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-black"
                       onClick={() => {
                         router.push('/saved-chats');
                         close();
                       }}
-                      className="size-3.5 text-gray-500"
-                    />
+                    >
+                      <Bookmark className="size-4" />
+                    </Button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
                     <p>Saved Chats</p>
                   </TooltipContent>
                 </Tooltip>
+
+                {/* Plus for New Chat Button */}
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Search
-                      className="size-3.5 text-gray-500"
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="size-8 hover:bg-black/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-black"
                       onClick={() => {
-                        onOpen({
-                          type: 'search-chats',
-                        });
+                        setActiveConversation(null);
+                        setShowStartLastMessage(false);
+                        setUserMessage('');
+                        setSelectedOption(null);
+                        close();
+                        router.push('/');
                       }}
-                    />
+                    >
+                      <SquarePen className="size-4" />
+                    </Button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
-                    <p>Search Chats</p>
+                    <p>New Chat</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
+            </>
+          )}
+        </div>
+
+        {/* Chat History Header Section */}
+        {!hideSidebar && isLoggedIn && (
+          <div className="mt-4 flex items-center justify-between px-4 pb-2">
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <span>Chat history</span>
+              {mode === UserMode.TENANT && currentTenant && (
+                <Badge
+                  variant="outline"
+                  className="h-5 px-1.5 text-[10px] font-normal"
+                >
+                  <Building2 className="mr-1 size-2.5" />
+                  {currentTenant.name}
+                </Badge>
+              )}
+              {mode === UserMode.PERSONAL && (
+                <Badge
+                  variant="outline"
+                  className="h-5 px-1.5 text-[10px] font-normal"
+                >
+                  <User className="mr-1 size-2.5" />
+                  Personal
+                </Badge>
+              )}
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {isLoggedIn && (
