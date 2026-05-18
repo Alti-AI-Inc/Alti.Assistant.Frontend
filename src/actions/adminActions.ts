@@ -1,5 +1,8 @@
 'use server';
 
+import { extractAdminSubscriptionPackages } from '@/utils/adminSubscriptionPackages';
+import { extractAdminMembersList } from '@/utils/adminTenantMembers';
+
 export interface ApiResponse<T = unknown> {
   success: boolean;
   message: string;
@@ -9,6 +12,7 @@ export interface ApiResponse<T = unknown> {
 }
 
 const BASE_URL = 'https://apiv2.asonai.com/api/v1';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || BASE_URL;
 
 export interface FreePlanUsage {
   promptsUsed: number;
@@ -189,13 +193,16 @@ export async function getAllSubscriptions(
           .join('&')
       : '';
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscription/admin/all${qs}`, {
-      method: 'GET',
-      headers: {
-        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-        'Content-Type': 'application/json',
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subscription/admin/all${qs}`,
+      {
+        method: 'GET',
+        headers: {
+          ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
@@ -257,6 +264,35 @@ export interface AdminTenantDetail {
   subscription?: {
     stripeCustomerId?: string;
   };
+}
+
+export interface AdminSubscriptionPackage {
+  _id: string;
+  plan: string;
+  name: string;
+  displayName?: string;
+  price: number;
+  interval: string;
+  features?: {
+    dailyRequestLimit?: number;
+    ragType?: string;
+    storagePerUser?: number;
+    canInviteTeam?: boolean;
+  };
+}
+
+export interface AdminTenantMember {
+  _id: string;
+  userId: {
+    _id: string;
+    email: string;
+  };
+  tenantId: string;
+  role?: string;
+  tenantRole?: string;
+  status?: string;
+  joinedAt?: string;
+  createdAt?: string;
 }
 
 export async function getAllPayments(
@@ -412,6 +448,197 @@ export async function updateTenantStatus(
       success: true,
       message: data.message || 'Status updated',
       data: data.data,
+    };
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    return { success: false, message: 'Network error', debugMessage: msg };
+  }
+}
+
+async function fetchSubscriptionPackagesFromUrl(
+  url: string,
+  accessToken?: string,
+): Promise<{
+  packages: AdminSubscriptionPackage[];
+  message?: string;
+  statusCode?: number;
+}> {
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    return {
+      packages: [],
+      message:
+        (err as { message?: string }).message ||
+        'Failed to fetch subscription packages',
+      statusCode: res.status,
+    };
+  }
+
+  const data = await res.json();
+  return {
+    packages: extractAdminSubscriptionPackages(data),
+    message: (data as { message?: string }).message,
+  };
+}
+
+export async function getAdminSubscriptionPackages(
+  accessToken?: string,
+): Promise<ApiResponse<AdminSubscriptionPackage[]>> {
+  try {
+    const result = await fetchSubscriptionPackagesFromUrl(
+      `${API_BASE}/admin/subscription-packages`,
+      accessToken,
+    );
+
+    if (result.statusCode && result.statusCode >= 400) {
+      return {
+        success: false,
+        message: result.message || 'Failed to fetch subscription packages',
+        statusCode: result.statusCode,
+        data: [],
+      };
+    }
+
+    return {
+      success: true,
+      message: result.message || 'Subscription packages retrieved successfully',
+      data: result.packages,
+    };
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    return { success: false, message: 'Network error', debugMessage: msg };
+  }
+}
+
+async function fetchTenantMembersFromUrl(
+  url: string,
+  tenantId: string,
+  accessToken?: string,
+): Promise<{ members: AdminTenantMember[]; message?: string; statusCode?: number }> {
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    return {
+      members: [],
+      message:
+        (err as { message?: string }).message || 'Failed to fetch tenant members',
+      statusCode: res.status,
+    };
+  }
+
+  const data = await res.json();
+  return {
+    members: extractAdminMembersList(data, tenantId),
+    message: (data as { message?: string }).message,
+  };
+}
+
+export async function getAdminTenantMembers(
+  tenantId: string,
+  accessToken?: string,
+): Promise<ApiResponse<AdminTenantMember[]>> {
+  try {
+    const encodedTenantId = encodeURIComponent(tenantId);
+
+    const adminResult = await fetchTenantMembersFromUrl(
+      `${API_BASE}/admin/tenants/${encodedTenantId}/members?limit=100`,
+      tenantId,
+      accessToken,
+    );
+
+    if (adminResult.members.length > 0) {
+      return {
+        success: true,
+        message: adminResult.message || 'Tenant members fetched',
+        data: adminResult.members,
+      };
+    }
+
+    const tenantScopedResult = await fetchTenantMembersFromUrl(
+      `${API_BASE}/tenant/members/${encodedTenantId}`,
+      tenantId,
+      accessToken,
+    );
+
+    if (tenantScopedResult.members.length > 0) {
+      return {
+        success: true,
+        message: tenantScopedResult.message || 'Tenant members fetched',
+        data: tenantScopedResult.members,
+      };
+    }
+
+    if (adminResult.statusCode && adminResult.statusCode >= 400) {
+      return {
+        success: false,
+        message: adminResult.message || 'Failed to fetch tenant members',
+        statusCode: adminResult.statusCode,
+        data: [],
+      };
+    }
+
+    return {
+      success: true,
+      message: adminResult.message || 'Tenant members fetched',
+      data: [],
+    };
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    return { success: false, message: 'Network error', debugMessage: msg };
+  }
+}
+
+export async function assignUserSubscription(
+  userId: string,
+  payload: {
+    productId: string;
+    duration: string;
+  },
+  accessToken?: string,
+): Promise<ApiResponse<unknown>> {
+  try {
+    const res = await fetch(
+      `${API_BASE}/admin/users/${encodeURIComponent(userId)}/assign-subscription`,
+      {
+        method: 'POST',
+        headers: {
+          ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      },
+    );
+
+    const data = await res.json().catch(() => ({}));
+    const body = data as { success?: boolean; message?: string; data?: unknown };
+
+    if (!res.ok || body.success === false) {
+      return {
+        success: false,
+        message: body.message || 'Failed to assign subscription',
+        statusCode: res.status,
+      };
+    }
+
+    return {
+      success: true,
+      message: body.message || 'Subscription assigned successfully',
+      data: body.data,
     };
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : String(error);
