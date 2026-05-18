@@ -182,7 +182,7 @@ export default function StripeAdminDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Monthly Revenue
+              Total Revenue
             </CardTitle>
             <BarChart3 className="text-muted-foreground h-4 w-4" />
           </CardHeader>

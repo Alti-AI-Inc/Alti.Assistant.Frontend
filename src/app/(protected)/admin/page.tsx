@@ -142,8 +142,37 @@ export default function AdminDashboardPage() {
         const paymentsList = Array.isArray(paymentsPayload)
           ? paymentsPayload
           : (paymentsPayload?.data ?? []);
+        // compute totalRevenueCentsFromPayments robustly, handling string price ids
         const totalRevenueCentsFromPayments = paymentsList.reduce(
-          (s: number, p: any) => s + (p.price || 0),
+          (s: number, p: any) => {
+            // p.price may be cents (number), dollars (number), or a stripe price id string
+            if (p == null) return s;
+            if (typeof p.price === 'number') {
+              // Heuristic: if > 1000 assume cents, else treat as dollars
+              return (
+                s +
+                (p.price > 1000
+                  ? Math.round(p.price)
+                  : Math.round(p.price * 100))
+              );
+            }
+            if (typeof p.price === 'string') {
+              const parsed = parseFloat(p.price);
+              if (!Number.isNaN(parsed)) {
+                return (
+                  s +
+                  (parsed > 1000
+                    ? Math.round(parsed)
+                    : Math.round(parsed * 100))
+                );
+              }
+            }
+            // fallback: try productId.price in dollars
+            const prod = p.productId ?? p.product ?? null;
+            if (prod && typeof prod.price === 'number')
+              return s + Math.round(prod.price * 100);
+            return s;
+          },
           0,
         );
 
@@ -151,9 +180,20 @@ export default function AdminDashboardPage() {
         const subsPayload = subsRes.ok
           ? (subscriptionsJson.data ?? subscriptionsJson)
           : [];
+        // subsPayload may be { subscriptions: [...], totalRevenue, totalSubscriptions }
         const subsList = Array.isArray(subsPayload)
           ? subsPayload
-          : (subsPayload?.data ?? []);
+          : Array.isArray(subsPayload.subscriptions)
+            ? subsPayload.subscriptions
+            : Array.isArray(subsPayload.data)
+              ? subsPayload.data
+              : [];
+
+        // If API provides totalRevenue directly (in dollars), prefer it
+        const totalRevenueFromApi =
+          subsPayload && typeof subsPayload.totalRevenue === 'number'
+            ? Number(subsPayload.totalRevenue)
+            : undefined;
 
         // active organizations: count unique non-null tenantId from subscriptions
         const tenantIds = new Set<string>();
@@ -162,19 +202,36 @@ export default function AdminDashboardPage() {
         });
 
         // total revenue from subscriptions: try productId.price (assumed dollars) or fallback to payments
-        const totalRevenueCentsFromSubs = subsList.reduce(
-          (acc: number, s: any) => {
+        let totalRevenueCentsFromSubs = 0;
+        if (typeof totalRevenueFromApi === 'number') {
+          totalRevenueCentsFromSubs = Math.round(totalRevenueFromApi * 100);
+        } else {
+          totalRevenueCentsFromSubs = subsList.reduce((acc: number, s: any) => {
             const product = s.productId ?? s.product ?? null;
-            const priceNumber =
-              product?.price ??
-              (typeof s.price === 'number' ? s.price : undefined);
-            if (priceNumber !== undefined && priceNumber !== null) {
-              return acc + Math.round(Number(priceNumber) * 100);
+            if (product && typeof product.price === 'number')
+              return acc + Math.round(product.price * 100);
+            // try s.price if numeric
+            if (typeof s.price === 'number') {
+              return (
+                acc +
+                (s.price > 1000
+                  ? Math.round(s.price)
+                  : Math.round(s.price * 100))
+              );
+            }
+            if (typeof s.price === 'string') {
+              const parsed = parseFloat(s.price);
+              if (!Number.isNaN(parsed))
+                return (
+                  acc +
+                  (parsed > 1000
+                    ? Math.round(parsed)
+                    : Math.round(parsed * 100))
+                );
             }
             return acc;
-          },
-          0,
-        );
+          }, 0);
+        }
 
         const totalRevenueCents =
           totalRevenueCentsFromSubs > 0
@@ -216,7 +273,7 @@ export default function AdminDashboardPage() {
       linkLabel: 'View all of the Organizations',
     },
     {
-      title: 'Monthly Revenue',
+      title: 'Total Revenue',
       value: `$${kpis.monthlyRevenue}`,
       delta: `${kpis.unverifyUsers} unverified users`,
       icon: CreditCard,

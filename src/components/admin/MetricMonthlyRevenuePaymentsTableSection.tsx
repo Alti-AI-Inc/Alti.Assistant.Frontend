@@ -59,11 +59,20 @@ export function MetricMonthlyRevenuePaymentsTableSection() {
       });
 
       if (res.success && res.data !== undefined && res.data !== null) {
-        const subs: any[] = Array.isArray(res.data)
-          ? res.data
-          : (res.data?.data ?? []);
+        // support multiple API shapes:
+        // - res.data is an array of subscriptions
+        // - res.data = { subscriptions: [...], totalSubscriptions, totalRevenue }
+        // - res.data = { data: [...] }
+        const payload: any = res.data;
+        const subs: any[] = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload.subscriptions)
+            ? payload.subscriptions
+            : Array.isArray(payload.data)
+              ? payload.data
+              : [];
 
-        const list: PaymentRecord[] = subs.map((s) => {
+        const list: PaymentRecord[] = subs.map(s => {
           // userId is populated: { _id, email }
           const userEmail =
             typeof s.userId === 'object' && s.userId !== null
@@ -78,10 +87,7 @@ export function MetricMonthlyRevenuePaymentsTableSection() {
               : null;
 
           const planName =
-            productObj?.name ??
-            productObj?.plan ??
-            s.plan_name ??
-            '—';
+            productObj?.name ?? productObj?.plan ?? s.plan_name ?? '—';
 
           // productObj.price is in dollars (e.g. 50) → convert to cents
           const priceCents =
@@ -91,15 +97,19 @@ export function MetricMonthlyRevenuePaymentsTableSection() {
 
           return {
             _id: s._id,
-            price: priceCents,        // e.g. 5000  (= $50.00)
-            planName,                  // e.g. "Execute"
-            userEmail,                 // e.g. "anik561460@gmail.com"
+            price: priceCents, // e.g. 5000  (= $50.00)
+            planName, // e.g. "Execute"
+            userEmail, // e.g. "anik561460@gmail.com"
             createdAt: s.createdAt ?? s.currentPeriodStart,
           };
         });
 
-        const m = (res as any).data?.meta ?? {
-          total: list.length,
+        // compute total count from API if provided
+        const totalFromApi =
+          (res as any).data?.totalSubscriptions ??
+          (res as any).data?.meta?.total;
+        const m = {
+          total: typeof totalFromApi === 'number' ? totalFromApi : list.length,
           page,
           limit: PAGE_SIZE,
         };

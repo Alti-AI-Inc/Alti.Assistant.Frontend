@@ -1,19 +1,16 @@
-import { getAllPayments, getAllUsers } from '@/actions/adminActions';
+import {
+  getAllPayments,
+  getAllSubscriptions,
+  getAllUsers,
+} from '@/actions/adminActions';
 import { MetricMonthlyRevenuePaymentsTableSection } from '@/components/admin/MetricMonthlyRevenuePaymentsTableSection';
 import { MetricTenantsTableSection } from '@/components/admin/MetricTenantsTableSection';
 import { MetricTotalUsersTableSection } from '@/components/admin/MetricTotalUsersTableSection';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { MetricBarChart } from './MetricBarChart';
 
 type MetricKey = 'total-users' | 'active-organizations' | 'monthly-revenue';
 
@@ -114,12 +111,28 @@ export default async function MetricDetailsPage({
 
   let monthlyData = config.monthlyData;
 
+  let totalSubscriptionsFromApi = 0;
+  let totalRevenueFromApi = 0;
+
   if (metricKey === 'monthly-revenue') {
+    // fetch payments for monthly trend
     const paymentsRes = await getAllPayments();
     const paymentsPayload: any = paymentsRes?.data ?? paymentsRes ?? [];
     const paymentsList = Array.isArray(paymentsPayload)
       ? paymentsPayload
       : (paymentsPayload?.data ?? []);
+
+    // fetch subscription admin API to get totals (updated API shape)
+    try {
+      const subsRes = await getAllSubscriptions();
+      const subsPayload: any = subsRes?.data ?? subsRes ?? {};
+      // new API returns { totalRevenue, totalSubscriptions, subscriptions: [...] }
+      totalSubscriptionsFromApi = Number(subsPayload?.totalSubscriptions ?? 0);
+      totalRevenueFromApi = Number(subsPayload?.totalRevenue ?? 0);
+    } catch (e) {
+      totalSubscriptionsFromApi = 0;
+      totalRevenueFromApi = 0;
+    }
 
     const months = getLastNMonths(6);
     const monthKeys = months.map(
@@ -237,16 +250,28 @@ export default async function MetricDetailsPage({
           </Button>
         </div>
 
-        <section className="grid gap-4 sm:grid-cols-2">
+        <section className="grid gap-4 sm:grid-cols-3">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium">
-                Latest Value
+                Total Subscriptions
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {formatValue(latest, config.unit)}
+                {totalSubscriptionsFromApi}
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium">
+                Total Revenue
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {formatValue(totalRevenueFromApi, 'currency')}
               </div>
             </CardContent>
           </Card>
@@ -264,8 +289,6 @@ export default async function MetricDetailsPage({
             </CardContent>
           </Card>
         </section>
-
-        
 
         {metricKey === 'total-users' && <MetricTotalUsersTableSection />}
 
