@@ -180,7 +180,7 @@ export function TenantsTable({
                   className="text-right"
                   onClick={e => e.stopPropagation()}
                 >
-                  <DropdownMenu>
+                  <DropdownMenu modal={false}>
                     <DropdownMenuTrigger asChild>
                       <Button
                         type="button"

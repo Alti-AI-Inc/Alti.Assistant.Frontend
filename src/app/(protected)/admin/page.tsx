@@ -108,15 +108,17 @@ export default function AdminDashboardPage() {
 
         const base =
           process.env.NEXT_PUBLIC_API_URL || 'https://apiv2.asonai.com/api/v1';
-        const [usersRes, paymentsRes, subsRes] = await Promise.all([
+        const [usersRes, paymentsRes, subsRes, tenantsRes] = await Promise.all([
           fetch(`${base}/admin/all-user`, { headers }),
           fetch(`${base}/admin/all-payment`, { headers }),
           fetch(`${base}/subscription/admin/all`, { headers }),
+          fetch(`${base}/admin/tenants?page=1&limit=5000`, { headers }),
         ]);
 
         const usersJson = await usersRes.json().catch(() => ({}));
         const paymentsJson = await paymentsRes.json().catch(() => ({}));
         const subscriptionsJson = await subsRes.json().catch(() => ({}));
+        const tenantsJson = await tenantsRes.json().catch(() => ({}));
 
         if (!usersRes.ok)
           throw new Error(
@@ -195,11 +197,19 @@ export default function AdminDashboardPage() {
             ? Number(subsPayload.totalRevenue)
             : undefined;
 
-        // active organizations: count unique non-null tenantId from subscriptions
-        const tenantIds = new Set<string>();
-        subsList.forEach((s: any) => {
-          if (s.tenantId) tenantIds.add(String(s.tenantId));
-        });
+        // active organizations: tenants with status "active" (same as metrics page)
+        const tenantsPayload = tenantsRes.ok
+          ? (tenantsJson.data ?? tenantsJson)
+          : [];
+        const tenantsList = Array.isArray(tenantsPayload)
+          ? tenantsPayload
+          : Array.isArray(tenantsPayload?.data)
+            ? tenantsPayload.data
+            : [];
+        const activeOrganizations = tenantsList.filter(
+          (t: { status?: string }) =>
+            String(t.status ?? '').toLowerCase() === 'active',
+        ).length;
 
         // total revenue from subscriptions: try productId.price (assumed dollars) or fallback to payments
         let totalRevenueCentsFromSubs = 0;
@@ -244,7 +254,7 @@ export default function AdminDashboardPage() {
           freeUser,
           monthlyRevenue: (totalRevenueCents / 100).toFixed(2),
           unverifyUsers,
-          activeOrganizations: tenantIds.size,
+          activeOrganizations,
         });
         setApiError(null);
       } catch (err: any) {

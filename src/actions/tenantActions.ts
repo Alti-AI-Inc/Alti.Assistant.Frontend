@@ -334,18 +334,14 @@ export async function getUserTenants(): Promise<ApiResponse<UserTenant[]>> {
           (nested?.name as string | undefined) ??
           (item.name as string | undefined) ??
           '';
-              return {
-                success: true,
-                data: tenants,
-                message: 'User tenants fetched successfully',
-              };
+        const slug =
+          (nested?.slug as string | undefined) ??
+          (item.slug as string | undefined) ??
+          '';
+        const subdomain =
           (nested?.subdomain as string | undefined) ??
-              console.error('Error getting user tenants:', error);
-              return {
-                success: false,
-                data: [],
-                message: error?.message || 'Failed to get user tenants',
-              };
+          (item.subdomain as string | undefined) ??
+          '';
 
         const tenantRole =
           (typeof item.tenantRole === 'string' && item.tenantRole) ||

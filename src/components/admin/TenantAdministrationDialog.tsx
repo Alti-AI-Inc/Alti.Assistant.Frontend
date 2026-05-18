@@ -105,20 +105,20 @@ export function TenantAdministrationDialog({
     }
 
     let cancelled = false;
+    const softRefresh = refreshTick > 0 && detail !== null;
 
-    // FIX: Reset selections at the START of each fetch so they are never
-    // stale from a previous tenant while loading.
-    setSelectedUserId('');
-    setSelectedPackageId('');
-    setSelectedDuration('month');
-
-    setLoading(true);
-    setLoadError(null);
-    setMembersLoading(true);
-    setPackagesLoading(true);
-    setAssignmentError(null);
-    setMembersLoadError(null);
-    setPackagesLoadError(null);
+    if (!softRefresh) {
+      setSelectedUserId('');
+      setSelectedPackageId('');
+      setSelectedDuration('month');
+      setLoading(true);
+      setLoadError(null);
+      setMembersLoading(true);
+      setPackagesLoading(true);
+      setAssignmentError(null);
+      setMembersLoadError(null);
+      setPackagesLoadError(null);
+    }
 
     void (async () => {
       const [detailRes, membersRes, packagesRes] = await Promise.all([

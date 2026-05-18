@@ -36,7 +36,7 @@ import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import { RefreshCw, Search } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 const PAGE_SIZE = 10;
@@ -58,6 +58,8 @@ export function MetricTenantsTableSection() {
     limit?: number;
   }>();
   const [isLoading, setIsLoading] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const pendingTableRefreshRef = useRef(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState('name');
@@ -104,8 +106,17 @@ export function MetricTenantsTableSection() {
       setMeta(undefined);
     } finally {
       setIsLoading(false);
+      setHasLoaded(true);
     }
   }, [accessToken, page, searchTerm, sortBy, sortOrder]);
+
+  const scheduleTableRefresh = useCallback(() => {
+    if (adminOpen) {
+      pendingTableRefreshRef.current = true;
+      return;
+    }
+    void loadTenants();
+  }, [adminOpen, loadTenants]);
 
   useEffect(() => {
     loadTenants();
@@ -144,12 +155,12 @@ export function MetricTenantsTableSection() {
         toast.success(
           `Tenant status set to ${status.charAt(0).toUpperCase()}${status.slice(1)}.`,
         );
-        await loadTenants();
+        scheduleTableRefresh();
       } else {
         toast.error(res.message || 'Failed to update status');
       }
     },
-    [accessToken, loadTenants],
+    [accessToken, scheduleTableRefresh],
   );
 
   const handleTenantStatusIntent = useCallback(
@@ -204,11 +215,7 @@ export function MetricTenantsTableSection() {
         <CardHeader className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
             <CardTitle>All tenants</CardTitle>
-            <CardDescription>
-              From <code className="text-xs">/admin/tenants</code>. Click a row
-              for read-only details. Use the row menu → Administration for
-              status and trial, or use quick status shortcuts.
-            </CardDescription>
+          
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <div className="relative min-w-[200px] md:w-64">
@@ -226,12 +233,18 @@ export function MetricTenantsTableSection() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          {isLoading ? (
+          {!hasLoaded && isLoading ? (
             <div className="flex min-h-[40vh] items-center justify-center">
               <Spinner className="h-8 w-8" />
             </div>
           ) : (
-            <>
+            <div
+              className={
+                isLoading && hasLoaded
+                  ? 'pointer-events-none space-y-4 opacity-60'
+                  : 'space-y-4'
+              }
+            >
               <TenantsTable
                 tenants={tenants}
                 sortable={{
@@ -273,7 +286,7 @@ export function MetricTenantsTableSection() {
                   </Button>
                 </div>
               </div>
-            </>
+            </div>
           )}
         </CardContent>
       </Card>
@@ -295,12 +308,16 @@ export function MetricTenantsTableSection() {
           if (!open) {
             setAdminTenantId(null);
             setAdminTenantLabel('');
+            if (pendingTableRefreshRef.current) {
+              pendingTableRefreshRef.current = false;
+              void loadTenants();
+            }
           }
         }}
         tenantId={adminTenantId}
         tenantLabel={adminTenantLabel}
         accessToken={accessToken}
-        onSuccess={() => void loadTenants()}
+        onSuccess={scheduleTableRefresh}
       />
 
       <AlertDialog
