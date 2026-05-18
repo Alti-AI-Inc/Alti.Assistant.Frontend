@@ -11,34 +11,39 @@ import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {
-  EllipsisVertical,
-  LoaderCircle,
-  Pencil,
-  Share,
-  Trash2,
+    EllipsisVertical,
+    LoaderCircle,
+    Pencil,
+    Share,
+    Trash2,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import SaveConversation from './SaveConversation';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 
 export default function ConversationsList() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
   const { close } = useDrawerStore();
   const { onOpen } = useModalStore();
   const { setSelectedOption, setShowStartLastMessage, setUserMessage } =
     useConversationsStore();
 
+  const canFetchConversations =
+    sessionStatus === 'authenticated' &&
+    !!session?.accessToken &&
+    !session.isTokenExpired;
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-    useConversations(session?.accessToken);
+    useConversations(canFetchConversations ? session.accessToken : undefined);
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 
@@ -72,6 +77,10 @@ export default function ConversationsList() {
     setUserMessage('');
     router.push(`/c/${id}`);
   };
+
+  if (!canFetchConversations) {
+    return null;
+  }
 
   if (status === 'pending') {
     return (

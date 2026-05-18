@@ -75,7 +75,7 @@ export async function PostConversationWithFile(
 ): Promise<ApiResponse> {
   try {
     const response = await apiClient(
-      `${process.env.NEXT_PUBLIC_API_URL}/search/assistant`,
+      `${process.env.NEXT_PUBLIC_API_URL}/search/assistant_v2`,
       {
         method: 'POST',
         headers: {

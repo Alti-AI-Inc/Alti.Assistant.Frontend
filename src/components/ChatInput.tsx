@@ -41,7 +41,6 @@ import {
   Microscope,
   Plus,
   Presentation,
-  TrendingUp,
   X,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -426,7 +425,7 @@ const ChatInput = ({
       // case OPTIONS.Transcribe:
       //   return '/search/transcribe';
       default:
-        return '/search/assistant';
+        return '/search/assistant_v2';
     }
   };
 
@@ -445,45 +444,6 @@ const ChatInput = ({
     }) => {
       const isHomePage = pathname === '/';
       const accessToken = data?.accessToken;
-
-      if (selectedOption === OPTIONS.STOCK_INTELLIGENCE) {
-        try {
-          const headers: Record<string, string> = {
-            'Content-Type': 'application/json',
-          };
-
-          if (accessToken) {
-            headers.Authorization = `Bearer ${accessToken}`;
-          }
-
-          const res = await fetch(
-            'https://apiv2.asonai.com/api/v1/stock-intelligence/chat',
-            {
-              method: 'POST',
-              headers,
-              body: JSON.stringify({ prompt: userMessage }),
-            },
-          );
-          const resData = await res.json();
-          const answerText = extractAssistantText(resData);
-
-          return {
-            success: true,
-            message: 'Success',
-            data: {
-              conversationId:
-                conversationId === 'new-chat' ? undefined : conversationId,
-              responseMessage: { answer: answerText },
-            },
-          };
-        } catch (err: any) {
-          console.error('Stock Intelligence API failed', err);
-          return {
-            success: false,
-            message: 'Stock Intelligence API failed: ' + err.message,
-          };
-        }
-      }
 
       if (!accessToken) {
         if (!isHomePage) {
@@ -1141,7 +1101,6 @@ const ChatInput = ({
                       className={cn(
                         'size-5 flex-shrink-0 rounded-full border-2 p-[2px]',
                         selectedOption === OPTIONS.RESEARCH ||
-                          selectedOption === OPTIONS.STOCK_INTELLIGENCE ||
                           selectedFile
                           ? 'border-black bg-black text-white'
                           : 'border-gray-300 bg-white text-black',
@@ -1187,20 +1146,6 @@ const ChatInput = ({
                     >
                       <Microscope className="size-4" />
                       <span className="text-sm">Deep Research</span>
-                    </div>
-                    <div
-                      onClick={() => {
-                        handleSelectOption(OPTIONS.STOCK_INTELLIGENCE);
-                        setIsPopoverOpen(false);
-                      }}
-                      className={cn(
-                        'flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100',
-                        selectedOption === OPTIONS.STOCK_INTELLIGENCE &&
-                          'bg-black text-white hover:bg-black',
-                      )}
-                    >
-                      <TrendingUp className="size-4" />
-                      <span className="text-sm">Stock Intelligence</span>
                     </div>
                   </div>
                 </PopoverContent>

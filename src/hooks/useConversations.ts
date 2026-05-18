@@ -1,22 +1,22 @@
 import {
-  ConversationListResponse,
-  deleteConversation,
-  fetchConversationList,
-  fetchSavedConversationList,
-  loadSingleConversation,
-  loadSingleSharedConversation,
-  searchConversations,
+    ConversationListResponse,
+    deleteConversation,
+    fetchConversationList,
+    fetchSavedConversationList,
+    loadSingleConversation,
+    loadSingleSharedConversation,
+    searchConversations,
 } from '@/actions/conversationsAction';
 import {
-  ActiveConversation,
-  useConversationsStore,
+    ActiveConversation,
+    useConversationsStore,
 } from '@/stores/useConverstionsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
+    useInfiniteQuery,
+    useMutation,
+    useQuery,
+    useQueryClient,
 } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -47,19 +47,36 @@ export function useConversations(accessToken?: string) {
     queryKey: ['conversations', accessToken],
     initialPageParam: 1,
     queryFn: async ({ pageParam }) => {
+      if (!accessToken) {
+        return {
+          conversations: [],
+          pagination: {
+            page: 1,
+            limit: 20,
+            total: 0,
+            pages: 0,
+            hasNext: false,
+            hasPrev: false,
+          },
+        };
+      }
+
       try {
         const response = await fetchConversationList(
-          accessToken!,
+          accessToken,
           typeof pageParam === 'number'
             ? (pageParam as number)
             : Number(pageParam || 1),
         );
         if (!response.success) {
-          console.error(
-            'fetchConversationList failed:',
-            response.debugMessage,
-            response.message,
-          );
+          if (response.statusCode !== 401 && response.statusCode !== 403) {
+            console.error(
+              'fetchConversationList failed:',
+              response.debugMessage,
+              response.message,
+            );
+          }
+
           // Return empty list instead of throwing
           return {
             conversations: [],
@@ -92,6 +109,7 @@ export function useConversations(accessToken?: string) {
     getNextPageParam: lastPage =>
       lastPage.pagination.hasNext ? lastPage.pagination.page + 1 : undefined,
     enabled: !!accessToken,
+    retry: false,
     staleTime: 1000 * 60 * 10, // 10 min caching
   });
 }
@@ -99,14 +117,21 @@ export function useSavedConversations(accessToken?: string) {
   return useQuery({
     queryKey: ['saved-conversations', accessToken],
     queryFn: async () => {
+      if (!accessToken) {
+        return [];
+      }
+
       try {
-        const response = await fetchSavedConversationList(accessToken!);
+        const response = await fetchSavedConversationList(accessToken);
         if (!response.success) {
-          console.error(
-            'fetchSavedConversationList failed:',
-            response.debugMessage,
-            response.message,
-          );
+          if (response.statusCode !== 401 && response.statusCode !== 403) {
+            console.error(
+              'fetchSavedConversationList failed:',
+              response.debugMessage,
+              response.message,
+            );
+          }
+
           return [];
         }
         return response.data;
@@ -116,6 +141,7 @@ export function useSavedConversations(accessToken?: string) {
       }
     },
     enabled: !!accessToken, // only run if token exists
+    retry: false,
     // staleTime: 1000 * 60, // 1 min caching
     staleTime: Infinity,
   });

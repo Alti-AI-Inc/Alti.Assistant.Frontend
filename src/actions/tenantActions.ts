@@ -2,14 +2,14 @@
 
 import { auth } from '@/auth';
 import {
-  ApiResponse,
-  CheckSubdomainAvailability,
-  CreateTenantData,
-  SwitchTenantResponse,
-  Tenant,
-  TenantSettings,
-  TenantUsage,
-  UserTenant,
+    ApiResponse,
+    CheckSubdomainAvailability,
+    CreateTenantData,
+    SwitchTenantResponse,
+    Tenant,
+    TenantSettings,
+    TenantUsage,
+    UserTenant,
 } from '@/types/tenant';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -281,7 +281,11 @@ export async function getUserTenants(): Promise<ApiResponse<UserTenant[]>> {
   try {
     const session = await auth();
     if (!session?.accessToken) {
-      throw new Error('Unauthorized');
+      return {
+        success: false,
+        data: [],
+        message: 'Unauthorized',
+      };
     }
     console.log('Fetching user tenants with access token:', session.accessToken);
     const response = await fetch(`${API_URL}/tenant/all`, {
@@ -293,8 +297,17 @@ export async function getUserTenants(): Promise<ApiResponse<UserTenant[]>> {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Failed to get user tenants');
+      const error = await response.json().catch(() => null);
+      const message =
+        (error && typeof error === 'object' && 'message' in error
+          ? String(error.message)
+          : null) || 'Failed to get user tenants';
+
+      return {
+        success: false,
+        data: [],
+        message,
+      };
     }
     const result = (await response.json()) as Record<string, unknown>;
     console.log('User tenants response:', JSON.stringify(result));
@@ -321,14 +334,18 @@ export async function getUserTenants(): Promise<ApiResponse<UserTenant[]>> {
           (nested?.name as string | undefined) ??
           (item.name as string | undefined) ??
           '';
-        const slug =
-          (nested?.slug as string | undefined) ??
-          (item.slug as string | undefined) ??
-          '';
-        const subdomain =
+              return {
+                success: true,
+                data: tenants,
+                message: 'User tenants fetched successfully',
+              };
           (nested?.subdomain as string | undefined) ??
-          (item.subdomain as string | undefined) ??
-          '';
+              console.error('Error getting user tenants:', error);
+              return {
+                success: false,
+                data: [],
+                message: error?.message || 'Failed to get user tenants',
+              };
 
         const tenantRole =
           (typeof item.tenantRole === 'string' && item.tenantRole) ||
