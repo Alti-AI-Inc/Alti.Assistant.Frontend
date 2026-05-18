@@ -1,14 +1,14 @@
-import { auth } from '@/auth';
 import {
   AdminTenantListItem,
   AdminUser,
   getAllPayments,
   getAllSubscriptions,
-  getTenants,
   getAllUsers,
+  getTenants,
   PaymentRecord,
   SubscriptionRecord,
 } from '@/actions/adminActions';
+import { auth } from '@/auth';
 import { MetricMonthlyRevenuePaymentsTableSection } from '@/components/admin/MetricMonthlyRevenuePaymentsTableSection';
 import { MetricTenantsTableSection } from '@/components/admin/MetricTenantsTableSection';
 import { MetricTotalUsersTableSection } from '@/components/admin/MetricTotalUsersTableSection';
@@ -71,7 +71,11 @@ function normalizePaymentsPayload(payload: unknown): PaymentRecord[] {
     return payload as PaymentRecord[];
   }
 
-  if (payload && typeof payload === 'object' && Array.isArray((payload as { data?: unknown }).data)) {
+  if (
+    payload &&
+    typeof payload === 'object' &&
+    Array.isArray((payload as { data?: unknown }).data)
+  ) {
     return (payload as { data: PaymentRecord[] }).data;
   }
 
@@ -83,7 +87,11 @@ function normalizeUsersPayload(payload: unknown): AdminUser[] {
     return payload as AdminUser[];
   }
 
-  if (payload && typeof payload === 'object' && Array.isArray((payload as { data?: unknown }).data)) {
+  if (
+    payload &&
+    typeof payload === 'object' &&
+    Array.isArray((payload as { data?: unknown }).data)
+  ) {
     return (payload as { data: AdminUser[] }).data;
   }
 
@@ -230,9 +238,7 @@ export default async function MetricDetailsPage({
     monthKeys.forEach(k => (sums[k] = 0));
 
     paymentsList.forEach(p => {
-      const date = p.createdAt
-        ? new Date(p.createdAt)
-        : null;
+      const date = p.createdAt ? new Date(p.createdAt) : null;
       if (!date) return;
       const key = monthKeyFromDate(date);
       if (key in sums) {
@@ -269,7 +275,8 @@ export default async function MetricDetailsPage({
     monthKeys.forEach(k => (activeCounts[k] = 0));
 
     tenantsList.forEach(tenant => {
-      if (!tenant.createdAt || tenant.status?.toLowerCase() !== 'active') return;
+      if (!tenant.createdAt || tenant.status?.toLowerCase() !== 'active')
+        return;
       const date = new Date(tenant.createdAt);
       const key = monthKeyFromDate(date);
       if (!(key in activeCounts)) return;
@@ -343,13 +350,13 @@ export default async function MetricDetailsPage({
               isGrowth: true,
             },
           ]
-      : [
-          {
-            title: 'Month-over-Month Growth',
-            value: `+${growth}%`,
-            isGrowth: true,
-          },
-        ];
+        : [
+            {
+              title: 'Month-over-Month Growth',
+              value: `+${growth}%`,
+              isGrowth: true,
+            },
+          ];
 
   return (
     <div className="bg-background min-h-screen">
@@ -382,7 +389,9 @@ export default async function MetricDetailsPage({
                 </CardTitle>
               </CardHeader>
               <CardContent
-                className={card.isGrowth ? 'flex items-center gap-2' : undefined}
+                className={
+                  card.isGrowth ? 'flex items-center gap-2' : undefined
+                }
               >
                 {card.isGrowth && (
                   <TrendingUp className="h-4 w-4 text-emerald-600" />

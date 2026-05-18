@@ -1,35 +1,34 @@
 'use client';
 
 import type {
-  AdminTenantListItem,
-  TenantLifecycleStatus,
+    AdminTenantListItem,
+    TenantLifecycleStatus,
 } from '@/actions/adminActions';
 import { TenantStatusBadge } from '@/components/admin/TenantStatusBadge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from '@/components/ui/table';
 import { formatDate } from '@/utils/formatters';
 import {
-  ArrowDown,
-  ArrowUp,
-  Building2,
-  MoreHorizontal,
-  Shield,
+    ArrowDown,
+    ArrowUp,
+    Building2,
+    MoreHorizontal,
+    Shield,
 } from 'lucide-react';
 
 export type TenantsTableSortable = {
@@ -206,48 +205,6 @@ export function TenantsTable({
                           <Shield className="mr-2 h-4 w-4 opacity-70" />
                           Administration
                         </DropdownMenuItem>
-                      ) : null}
-                      {onOpenAdministration && onTenantStatusIntent ? (
-                        <DropdownMenuSeparator />
-                      ) : null}
-                      {onTenantStatusIntent ? (
-                        <>
-                          <DropdownMenuLabel>Quick status</DropdownMenuLabel>
-                          <DropdownMenuItem
-                            onClick={() =>
-                              onTenantStatusIntent({
-                                tenantId: t._id,
-                                tenantName: t.name || t.subdomain || t._id,
-                                status: 'active',
-                              })
-                            }
-                          >
-                            Set to Active
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() =>
-                              onTenantStatusIntent({
-                                tenantId: t._id,
-                                tenantName: t.name || t.subdomain || t._id,
-                                status: 'suspended',
-                              })
-                            }
-                          >
-                            Set to Suspended
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            className="text-rose-700 focus:text-rose-800 dark:text-rose-400 dark:focus:text-rose-300"
-                            onClick={() =>
-                              onTenantStatusIntent({
-                                tenantId: t._id,
-                                tenantName: t.name || t.subdomain || t._id,
-                                status: 'cancelled',
-                              })
-                            }
-                          >
-                            Set to Cancelled
-                          </DropdownMenuItem>
-                        </>
                       ) : null}
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => onRowClick(t._id)}>
