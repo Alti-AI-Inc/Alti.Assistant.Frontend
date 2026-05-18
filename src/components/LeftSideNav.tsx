@@ -21,6 +21,7 @@ import {
   LogOut,
   Orbit,
   PanelLeftClose,
+  Plus,
   ReceiptText,
   Scale,
   Search,
@@ -125,7 +126,7 @@ const LeftSideNav = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="size-8 hover:bg-black/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-black"
+                    className="h-8 w-8 bg-black/5 hover:bg-black/10 rounded-lg flex items-center justify-center text-gray-500 hover:text-black border border-black/5 transition-all"
                     onClick={() => {
                       setActiveConversation(null);
                       setShowStartLastMessage(false);
@@ -135,7 +136,7 @@ const LeftSideNav = () => {
                       router.push('/');
                     }}
                   >
-                    <SquarePen className="size-[18px]" />
+                    <Plus className="size-[18px]" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="right">
@@ -148,7 +149,7 @@ const LeftSideNav = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="size-8 hover:bg-black/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-black"
+                    className="h-8 w-8 bg-black/5 hover:bg-black/10 rounded-lg flex items-center justify-center text-gray-500 hover:text-black border border-black/5 transition-all"
                     onClick={() => {
                       router.push('/saved-chats');
                       close();
@@ -167,7 +168,7 @@ const LeftSideNav = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="size-8 hover:bg-black/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-black"
+                    className="h-8 w-8 bg-black/5 hover:bg-black/10 rounded-lg flex items-center justify-center text-gray-500 hover:text-black border border-black/5 transition-all"
                     onClick={() => onOpen({ type: 'search-chats' })}
                   >
                     <Search className="size-[18px]" />
@@ -184,21 +185,21 @@ const LeftSideNav = () => {
               {/* Search Bar Button */}
               <div
                 onClick={() => onOpen({ type: 'search-chats' })}
-                className="flex flex-1 items-center gap-2 px-3 py-1.5 bg-black/5 hover:bg-black/10 rounded-lg cursor-pointer text-gray-500 border border-black/5 transition-all text-xs"
+                className="flex flex-1 h-8 items-center gap-2 px-3 bg-black/5 hover:bg-black/10 rounded-lg cursor-pointer text-gray-500 border border-black/5 transition-all text-xs"
               >
                 <Search className="size-3.5 flex-none" />
                 <span className="truncate">Search chats...</span>
               </div>
 
               {/* Action Buttons to the right */}
-              <div className="flex items-center gap-1 flex-none">
+              <div className="flex items-center gap-1.5 flex-none">
                 {/* Favorites Button */}
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="size-8 hover:bg-black/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-black"
+                      className="h-8 w-8 bg-black/5 hover:bg-black/10 rounded-lg flex items-center justify-center text-gray-500 hover:text-black border border-black/5 transition-all"
                       onClick={() => {
                         router.push('/saved-chats');
                         close();
@@ -218,7 +219,7 @@ const LeftSideNav = () => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="size-8 hover:bg-black/5 rounded-lg flex items-center justify-center text-gray-500 hover:text-black"
+                      className="h-8 w-8 bg-black/5 hover:bg-black/10 rounded-lg flex items-center justify-center text-gray-500 hover:text-black border border-black/5 transition-all"
                       onClick={() => {
                         setActiveConversation(null);
                         setShowStartLastMessage(false);
@@ -228,7 +229,7 @@ const LeftSideNav = () => {
                         router.push('/');
                       }}
                     >
-                      <SquarePen className="size-4" />
+                      <Plus className="size-4" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
@@ -238,35 +239,7 @@ const LeftSideNav = () => {
               </div>
             </>
           )}
-        </div>
-
-        {/* Chat History Header Section */}
-        {!hideSidebar && isLoggedIn && (
-          <div className="mt-4 flex items-center justify-between px-4 pb-2">
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <span>Chat history</span>
-              {mode === UserMode.TENANT && currentTenant && (
-                <Badge
-                  variant="outline"
-                  className="h-5 px-1.5 text-[10px] font-normal"
-                >
-                  <Building2 className="mr-1 size-2.5" />
-                  {currentTenant.name}
-                </Badge>
-              )}
-              {mode === UserMode.PERSONAL && (
-                <Badge
-                  variant="outline"
-                  className="h-5 px-1.5 text-[10px] font-normal"
-                >
-                  <User className="mr-1 size-2.5" />
-                  Personal
-                </Badge>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
+        </div>      </div>
 
       {isLoggedIn && (
         <div
