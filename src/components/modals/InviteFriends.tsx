@@ -48,6 +48,7 @@ export function InviteFriends() {
                 onClose={onClose}
               />
             </div>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
