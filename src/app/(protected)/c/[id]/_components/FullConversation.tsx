@@ -447,6 +447,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     updateActiveConversation,
   ]);
 
+  const hasMessages = !!activeConversation?.messages?.length;
+
   return (
     <div
       className={cn(
@@ -681,8 +683,16 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
       {/* Sticky chat input at bottom */}
       {/* <div className="sticky bottom-0 bg-white px-4 pb-4"> */}
-      <div className="sticky bottom-0 z-10 w-full border-t border-black/10 p-4" style={{backgroundColor:"#FFFFFF"}}>
-        <div className="mx-auto max-w-[796px]">
+      <div
+        className={cn(
+          'sticky bottom-0 z-10 w-full transition-all duration-300',
+          hasMessages
+            ? 'flex h-20 items-center justify-center border-t border-black/10 px-4 py-1.5'
+            : 'p-4',
+        )}
+        style={{ backgroundColor: hasMessages ? '#FFFFFF' : '#FCFCFC' }}
+      >
+        <div className="mx-auto max-w-[796px] w-full">
           <ChatInput
             conversationId={conversationId}
             imageGenHook={imageGenHook}
