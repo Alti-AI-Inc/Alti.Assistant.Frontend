@@ -11,6 +11,10 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useSession } from 'next-auth/react';
+import { useState } from 'react';
 
 const formSchema = z.object({
   oldPassword: z.string().min(6, {
@@ -24,10 +28,6 @@ const formSchema = z.object({
   }),
 });
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useSession } from 'next-auth/react';
-import { useState } from 'react';
 
 export default function ChangePassword() {
   const { data } = useSession();
