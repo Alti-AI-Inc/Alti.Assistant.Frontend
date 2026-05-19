@@ -27,15 +27,16 @@ import {
   Trash2,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 const Page = () => {
   const { onOpen } = useModalStore();
   const { data: session } = useSession();
+  const router = useRouter();
   const {
     data: conversations,
     isLoading,
-    // error,
   } = useSavedConversations(session?.accessToken);
   const deleteMutation = useDeleteConversation();
 
@@ -47,125 +48,123 @@ const Page = () => {
     : [];
 
   return (
-    <>
+    <div className="flex-1 bg-white">
       {isLoading ? (
         <div className="flex h-svh w-full items-center justify-center">
           <LoaderCircle className="animate-spin text-gray-500" />
         </div>
       ) : (
-        <div className="mx-auto w-full max-w-[880px] px-4 py-8 sm:px-6 lg:px-8">
-          {/* Page Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-semibold tracking-tight text-gray-900">
+        <>
+          {/* Header Section */}
+          <div className="border-b border-black/10 px-6 py-4 sm:px-8">
+            <h1 className="text-lg font-semibold text-gray-900">
               Saved Chats
             </h1>
-            <p className="mt-2 text-sm text-gray-500">
-              Your curated list of bookmarked and pinned conversations.
-            </p>
           </div>
 
           {/* Conversations Rows */}
-          {sortedConversations.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-black/[0.04] bg-[#F8F9FA] py-16 text-center">
-              <Bookmark className="size-10 text-gray-400" />
-              <h3 className="mt-4 text-sm font-semibold text-gray-900">No saved chats</h3>
-              <p className="mt-1 text-sm text-gray-500">
-                Chats you save will appear here.
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {sortedConversations.map(chat => (
-                <div
-                  key={chat.conversationId}
-                  className="group relative flex items-center justify-between gap-4 rounded-xl border border-black/[0.04] bg-[#F8F9FA] p-4 transition-all duration-200 hover:bg-[#F2F3F5] hover:shadow-xs"
-                >
-                  <div className="flex flex-1 items-center gap-4 min-w-0">
-                    {/* Icon Box */}
-                    <div className="flex size-10 flex-shrink-0 items-center justify-center rounded-lg border border-black/[0.06] bg-white text-gray-600 shadow-2xs">
-                      <Bookmark className="size-5 text-gray-500 fill-gray-500" />
-                    </div>
-
-                    {/* Chat Text Details */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <Link
-                          href={`/c/${chat.conversationId}`}
-                          className="font-medium text-gray-900 hover:underline truncate"
-                        >
-                          {formatConversationTitle(chat.title!)}
-                        </Link>
-                        {chat.updatedAt && (
-                          <span className="flex-shrink-0 text-xs text-gray-400 font-medium">
-                            • {new Date(chat.updatedAt).toLocaleDateString(undefined, {
-                              month: 'short',
-                              day: 'numeric',
-                            })}
-                          </span>
-                        )}
+          <div className="mx-auto w-full max-w-[880px] px-4 py-8 sm:px-6 lg:px-8">
+            {sortedConversations.length === 0 ? (
+              <div className="flex flex-col items-center justify-center rounded-2xl border border-black/[0.04] bg-[#F8F9FA] py-16 text-center">
+                <Bookmark className="size-10 text-gray-400" />
+                <h3 className="mt-4 text-sm font-semibold text-gray-900">No saved chats</h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  Chats you save will appear here.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {sortedConversations.map(chat => (
+                  <div
+                    key={chat.conversationId}
+                    onClick={() => router.push(`/c/${chat.conversationId}`)}
+                    className="group relative flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-black/[0.04] bg-[#F8F9FA] p-4 transition-all duration-200 hover:bg-[#F2F3F5] hover:shadow-xs"
+                  >
+                    <div className="flex flex-1 items-center gap-4 min-w-0">
+                      {/* Chat Text Details */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <Link
+                            href={`/c/${chat.conversationId}`}
+                            className="font-medium text-gray-900 hover:underline truncate"
+                            onClick={e => e.stopPropagation()}
+                          >
+                            {formatConversationTitle(chat.title!)}
+                          </Link>
+                          {chat.updatedAt && (
+                            <span className="flex-shrink-0 text-xs text-gray-400 font-medium">
+                              • {new Date(chat.updatedAt).toLocaleDateString(undefined, {
+                                month: 'short',
+                                day: 'numeric',
+                              })}
+                            </span>
+                          )}
+                        </div>
+                        <p className="mt-1 text-sm text-gray-500 line-clamp-1">
+                          {chat.messages && chat.messages[1]
+                            ? chat.messages[1].content
+                            : chat.messages && chat.messages[0]
+                            ? chat.messages[0].content
+                            : 'No preview available'}
+                        </p>
                       </div>
-                      <p className="mt-1 text-sm text-gray-500 line-clamp-1">
-                        {chat.messages && chat.messages[1]
-                          ? chat.messages[1].content
-                          : chat.messages && chat.messages[0]
-                          ? chat.messages[0].content
-                          : 'No preview available'}
-                      </p>
+                    </div>
+
+                    {/* Actions Dropdown */}
+                    <div className="flex-shrink-0" onClick={e => e.stopPropagation()}>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger className="flex h-8 w-8 items-center justify-center rounded-lg border border-transparent text-gray-500 outline-none hover:bg-black/5 hover:text-gray-900">
+                          <EllipsisVertical className="size-4 rotate-90" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="mr-5 rounded-2xl">
+                          <DropdownMenuItem
+                            onClick={() =>
+                              onOpen({
+                                type: 'share-conversation',
+                                actionId: chat._id,
+                              })
+                            }
+                          >
+                            <Share className="size-4 mr-2 text-black" /> Share
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              onOpen({
+                                type: 'rename-chat',
+                                title: chat.title,
+                                actionId: chat.conversationId,
+                              })
+                            }
+                          >
+                            <Pencil className="size-4 mr-2 text-black" /> Rename
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() =>
+                              onOpen({
+                                type: 'delete-conversation',
+                                actionId: chat._id,
+                              })
+                            }
+                            disabled={deleteMutation.isPending}
+                          >
+                            <Trash2 className="size-4 mr-2 text-black" />{' '}
+                            <span className="text-black">Delete</span>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </div>
-
-                  {/* Actions Dropdown */}
-                  <div className="flex-shrink-0">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger className="flex h-8 w-8 items-center justify-center rounded-lg border border-transparent text-gray-500 outline-none hover:bg-black/5 hover:text-gray-900">
-                        <EllipsisVertical className="size-4 rotate-90" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="mr-5 rounded-2xl">
-                        <DropdownMenuItem
-                          onClick={() =>
-                            onOpen({
-                              type: 'share-conversation',
-                              actionId: chat._id,
-                            })
-                          }
-                        >
-                          <Share className="size-4 mr-2 text-black" /> Share
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() =>
-                            onOpen({
-                              type: 'rename-chat',
-                              title: chat.title,
-                              actionId: chat.conversationId,
-                            })
-                          }
-                        >
-                          <Pencil className="size-4 mr-2 text-black" /> Rename
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          onClick={() =>
-                            onOpen({
-                              type: 'delete-conversation',
-                              actionId: chat._id,
-                            })
-                          }
-                          disabled={deleteMutation.isPending}
-                        >
-                          <Trash2 className="size-4 mr-2 text-black" />{' '}
-                          <span className="text-black">Delete</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </>
       )}
-    </>
+    </div>
   );
 };
+
+export default Page;
 
 export default Page;
