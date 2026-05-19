@@ -514,13 +514,13 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         selectedOption === OPTIONS.REVIEW_CONTRACT ||
         selectedOption === OPTIONS.GENERATE_REPORT) && (
         <div
-          className="flex-1 overflow-y-auto"
+          className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8"
           ref={messagesContainerRef}
           style={{ backgroundColor: '#FFFFFF' }}
         >
           <div
             className={cn(
-              'mx-auto w-full max-w-[796px] space-y-6 px-4 py-6 sm:px-6 lg:px-8',
+              'mx-auto w-full max-w-[796px] space-y-6 py-6 px-0',
             )}
           >
             {activeConversation?.messages.length &&
