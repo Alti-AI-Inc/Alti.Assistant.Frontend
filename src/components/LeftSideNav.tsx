@@ -88,7 +88,7 @@ const LeftSideNav = () => {
             {logoHovered && hideSidebar ? (
               <PanelLeftClose
                 className={cn(
-                  'size-[21px] cursor-pointer text-black transition-transform duration-300',
+                  'size-[21px] cursor-pointer text-gray-600 transition-transform duration-300',
                 )}
                 onClick={toggleLeftSidebar}
               />
@@ -106,7 +106,7 @@ const LeftSideNav = () => {
 
           <PanelLeftClose
             className={cn(
-              'size-5 cursor-pointer text-black transition-transform duration-300',
+              'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
               hideSidebar && 'hidden',
             )}
             onClick={toggleLeftSidebar}
