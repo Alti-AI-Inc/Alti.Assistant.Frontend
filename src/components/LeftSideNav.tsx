@@ -117,9 +117,9 @@ const LeftSideNav = () => {
             {/* Search Bar Button */}
             <div
               onClick={() => onOpen({ type: 'search-chats' })}
-              className="flex h-8 flex-1 cursor-pointer items-center gap-2 rounded-lg border border-black/5 bg-black/5 px-3 text-xs text-gray-500 transition-all hover:bg-black/10"
+              className="flex h-8 flex-1 cursor-pointer items-center gap-2 rounded-lg border border-black/10 bg-white px-3 text-xs text-black shadow-xs transition-all hover:bg-black/[0.03] active:bg-black/[0.06]"
             >
-              <Search className="size-3.5 flex-none" />
+              <Search className="size-3.5 flex-none text-black" />
               <span className="truncate">Search chats...</span>
             </div>
 
@@ -129,15 +129,15 @@ const LeftSideNav = () => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="icon"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/5 bg-black/5 text-gray-500 transition-all hover:bg-black/10 hover:text-black"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black"
                     onClick={() => {
                       router.push('/saved-chats');
                       close();
                     }}
                   >
-                    <Bookmark className="size-4" />
+                    <Bookmark className="size-4 text-black" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
@@ -149,9 +149,9 @@ const LeftSideNav = () => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="icon"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/5 bg-black/5 text-gray-500 transition-all hover:bg-black/10 hover:text-black"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black"
                     onClick={() => {
                       setActiveConversation(null);
                       setShowStartLastMessage(false);
@@ -161,7 +161,7 @@ const LeftSideNav = () => {
                       router.push('/');
                     }}
                   >
-                    <Plus className="size-4" />
+                    <Plus className="size-4 text-black" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
