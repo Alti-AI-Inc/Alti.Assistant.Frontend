@@ -55,13 +55,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 export interface OrganizationTenantOverviewProps {
@@ -136,7 +130,7 @@ export function OrganizationTenantOverview({
       currentTenant &&
       organizations.some(o => o.id === currentTenant.id)
         ? currentTenant.id
-        : organizations[0]?.id ?? '';
+        : (organizations[0]?.id ?? '');
 
     setSelectedTenantId(prev => {
       if (prev && organizations.some(o => o.id === prev)) return prev;
@@ -183,7 +177,11 @@ export function OrganizationTenantOverview({
       let membersList: TenantMember[] = [];
       try {
         const membersRes = await getTenantMembers();
-        if (!isStale() && membersRes.success && Array.isArray(membersRes.data)) {
+        if (
+          !isStale() &&
+          membersRes.success &&
+          Array.isArray(membersRes.data)
+        ) {
           membersList = membersRes.data;
         }
       } catch (e) {
@@ -232,7 +230,9 @@ export function OrganizationTenantOverview({
         setMembers(membersList);
       }
 
-      const isMembersRoute = Boolean(fixedTenantId && fixedTenantId === tenantId);
+      const isMembersRoute = Boolean(
+        fixedTenantId && fixedTenantId === tenantId,
+      );
       if (isMembersRoute && !isStale()) {
         setIsLoadingDashboard(false);
       }
@@ -313,7 +313,11 @@ export function OrganizationTenantOverview({
   const hasAccessToken = Boolean(session?.accessToken);
 
   useEffect(() => {
-    if (sessionStatus !== 'authenticated' || !selectedTenantId || !hasAccessToken)
+    if (
+      sessionStatus !== 'authenticated' ||
+      !selectedTenantId ||
+      !hasAccessToken
+    )
       return;
     void loadTenantDashboardRef.current(selectedTenantId);
     // Omit raw accessToken: JWT rotates after switchTenant; `hasAccessToken` covers login.
@@ -321,9 +325,7 @@ export function OrganizationTenantOverview({
 
   const seatUsage = useMemo(() => {
     const maxSeats =
-      organization?.settings?.maxMembers ??
-      organization?.limits?.maxUsers ??
-      0;
+      organization?.settings?.maxMembers ?? organization?.limits?.maxUsers ?? 0;
     const usedSeats = members.length;
     const percentage =
       maxSeats > 0
@@ -334,9 +336,7 @@ export function OrganizationTenantOverview({
   }, [organization, members.length]);
 
   const planName =
-    organization?.subscription?.price?.displayName ||
-    organization?.plan ||
-    '—';
+    organization?.subscription?.price?.displayName || organization?.plan || '—';
   const status = organization?.status || '—';
 
   const displayTenantName = useMemo(() => {
@@ -355,8 +355,9 @@ export function OrganizationTenantOverview({
 
   const canInvite = useMemo(() => {
     if (!selectedTenantId) return false;
-    const role = session?.user?.tenants?.find(t => t.id === selectedTenantId)
-      ?.role;
+    const role = session?.user?.tenants?.find(
+      t => t.id === selectedTenantId,
+    )?.role;
     return role === 'owner';
   }, [session?.user?.tenants, selectedTenantId]);
 
@@ -440,7 +441,7 @@ export function OrganizationTenantOverview({
           <Card>
             <CardHeader>
               <Skeleton className="h-6 w-48 max-w-full" />
-              <Skeleton className="h-4 w-72 max-w-full mt-2" />
+              <Skeleton className="mt-2 h-4 w-72 max-w-full" />
             </CardHeader>
             <CardContent className="space-y-2">
               {[1, 2, 3, 4].map(i => (
@@ -480,7 +481,9 @@ export function OrganizationTenantOverview({
               <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
                 <div className="space-y-1">
                   <CardDescription>Plan</CardDescription>
-                  <CardTitle className="text-2xl capitalize">{planName}</CardTitle>
+                  <CardTitle className="text-2xl capitalize">
+                    {planName}
+                  </CardTitle>
                 </div>
                 <CreditCard className="text-muted-foreground size-5" />
               </CardHeader>
@@ -557,7 +560,7 @@ export function OrganizationTenantOverview({
               {canInvite &&
                 (canInviteTeam ? (
                   <Button type="button" onClick={handleInviteMember}>
-                    <UserPlus className="size-4 mr-2" />
+                    <UserPlus className="mr-2 size-4" />
                     Invite member
                   </Button>
                 ) : (
@@ -570,7 +573,7 @@ export function OrganizationTenantOverview({
                             disabled
                             className="pointer-events-none"
                           >
-                            <Lock className="size-4 mr-2" />
+                            <Lock className="mr-2 size-4" />
                             Invite member
                           </Button>
                         </span>
@@ -585,7 +588,7 @@ export function OrganizationTenantOverview({
                 <Button variant="outline" asChild>
                   <Link href={`/organizations/${selectedTenantId}/members`}>
                     Full members page
-                    <ArrowRight className="size-4 ml-2" />
+                    <ArrowRight className="ml-2 size-4" />
                   </Link>
                 </Button>
               )}

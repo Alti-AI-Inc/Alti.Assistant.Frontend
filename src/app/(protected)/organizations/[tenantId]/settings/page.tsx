@@ -2,7 +2,13 @@
 
 import { getTenantById, updateTenantSettings } from '@/actions/tenantActions';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -77,16 +83,16 @@ export default function OrganizationSettingsPage({
 
   const updateSetting = <K extends keyof ITenantSettings>(
     key: K,
-    value: ITenantSettings[K]
+    value: ITenantSettings[K],
   ) => {
-    setSettings((prev) => ({ ...prev, [key]: value }));
+    setSettings(prev => ({ ...prev, [key]: value }));
     setHasChanges(true);
   };
 
   if (isLoading) {
     return (
-      <div className="container max-w-4xl mx-auto py-8 px-4">
-        <Skeleton className="h-8 w-64 mb-8" />
+      <div className="container mx-auto max-w-4xl px-4 py-8">
+        <Skeleton className="mb-8 h-8 w-64" />
         <Skeleton className="h-96" />
       </div>
     );
@@ -94,23 +100,25 @@ export default function OrganizationSettingsPage({
 
   if (!organization) {
     return (
-      <div className="container max-w-4xl mx-auto py-8 px-4">
-        <p className="text-center text-muted-foreground">Organization not found</p>
+      <div className="container mx-auto max-w-4xl px-4 py-8">
+        <p className="text-muted-foreground text-center">
+          Organization not found
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="container max-w-4xl mx-auto py-8 px-4">
+    <div className="container mx-auto max-w-4xl px-4 py-8">
       <Link
         href={`/organizations/${tenantId}`}
-        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors"
+        className="text-muted-foreground hover:text-foreground mb-6 inline-flex items-center text-sm transition-colors"
       >
-        <ArrowLeft className="size-4 mr-2" />
+        <ArrowLeft className="mr-2 size-4" />
         Back to Dashboard
       </Link>
 
-      <div className="flex items-center justify-between mb-8">
+      <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Organization Settings</h1>
           <p className="text-muted-foreground mt-1">
@@ -119,8 +127,8 @@ export default function OrganizationSettingsPage({
         </div>
         {hasChanges && (
           <Button onClick={handleSave} disabled={isSaving}>
-            {isSaving && <Loader2 className="size-4 mr-2 animate-spin" />}
-            <Save className="size-4 mr-2" />
+            {isSaving && <Loader2 className="mr-2 size-4 animate-spin" />}
+            <Save className="mr-2 size-4" />
             Save Changes
           </Button>
         )}
@@ -139,18 +147,15 @@ export default function OrganizationSettingsPage({
             <div className="space-y-2">
               <Label>Organization Name</Label>
               <Input value={organization.name} disabled />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Contact support to change your organization name
               </p>
             </div>
 
             <div className="space-y-2">
               <Label>Subdomain</Label>
-              <Input
-                value={`${organization.subdomain}.alti.ai`}
-                disabled
-              />
-              <p className="text-xs text-muted-foreground">
+              <Input value={`${organization.subdomain}.alti.ai`} disabled />
+              <p className="text-muted-foreground text-xs">
                 Your organization subdomain cannot be changed
               </p>
             </div>
@@ -158,7 +163,7 @@ export default function OrganizationSettingsPage({
             <div className="space-y-2">
               <Label>Organization ID</Label>
               <Input value={organization.id} disabled />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Use this ID for API integrations
               </p>
             </div>
@@ -177,13 +182,13 @@ export default function OrganizationSettingsPage({
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label>Allow Member Invites</Label>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Let members invite other people to the organization
                 </p>
               </div>
               <Switch
                 checked={settings.allowMemberInvites || false}
-                onCheckedChange={(checked) =>
+                onCheckedChange={checked =>
                   updateSetting('allowMemberInvites', checked)
                 }
               />
@@ -196,11 +201,11 @@ export default function OrganizationSettingsPage({
                 type="number"
                 min={1}
                 value={settings.maxMembers}
-                onChange={(e) =>
+                onChange={e =>
                   updateSetting('maxMembers', parseInt(e.target.value) || 1)
                 }
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Maximum number of members allowed in this organization
               </p>
             </div>
@@ -219,7 +224,7 @@ export default function OrganizationSettingsPage({
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium">Delete Organization</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Permanently delete this organization and all associated data
                 </p>
               </div>
@@ -227,7 +232,7 @@ export default function OrganizationSettingsPage({
                 Delete Organization
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground mt-4">
+            <p className="text-muted-foreground mt-4 text-xs">
               Contact support to delete your organization
             </p>
           </CardContent>

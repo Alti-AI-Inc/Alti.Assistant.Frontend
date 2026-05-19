@@ -3,7 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Check, Sparkles, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -83,10 +90,12 @@ export function OrganizationPricingCards({
         if (response.success && response.data) {
           // Map API response to OrganizationPlan format
           // Cast response data to ApiProduct[] since the actual API returns different format than StripeProduct
-          const mappedPlans: OrganizationPlan[] = (response.data as unknown as ApiProduct[])
-            .filter((product) => product.isVisible && product.isActive)
+          const mappedPlans: OrganizationPlan[] = (
+            response.data as unknown as ApiProduct[]
+          )
+            .filter(product => product.isVisible && product.isActive)
             .sort((a, b) => (a.sortOrder || 999) - (b.sortOrder || 999))
-            .map((product) => ({
+            .map(product => ({
               id: product.plan,
               name: product.displayName || product.name,
               price: product.price,
@@ -94,7 +103,8 @@ export function OrganizationPricingCards({
               period: `/${product.interval || 'month'}`,
               description: product.description || '',
               features: product.featuresList || [],
-              limitations: product.plan === 'free' ? ['No Team Collaboration'] : undefined,
+              limitations:
+                product.plan === 'free' ? ['No Team Collaboration'] : undefined,
               requestLimit: product.features?.dailyWebSearchLimit,
               storagePerUser: 0,
               highlighted: product.plan === 'execute', // Highlight Execute plan
@@ -119,15 +129,17 @@ export function OrganizationPricingCards({
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        <span className="ml-3 text-muted-foreground">Loading pricing plans...</span>
+        <Loader2 className="text-primary h-8 w-8 animate-spin" />
+        <span className="text-muted-foreground ml-3">
+          Loading pricing plans...
+        </span>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center py-12">
+      <div className="py-12 text-center">
         <p className="text-destructive mb-4">{error}</p>
         <Button onClick={() => window.location.reload()} variant="outline">
           Retry
@@ -138,15 +150,17 @@ export function OrganizationPricingCards({
 
   if (plans.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-muted-foreground">No pricing plans available at the moment.</p>
+      <div className="py-12 text-center">
+        <p className="text-muted-foreground">
+          No pricing plans available at the moment.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {plans.map((plan) => {
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {plans.map(plan => {
         const isCurrentPlan = currentPlanId === plan.id;
 
         return (
@@ -154,14 +168,14 @@ export function OrganizationPricingCards({
             key={plan.id}
             className={cn(
               'relative flex flex-col transition-all hover:shadow-lg',
-              plan.highlighted && 'border-primary border-2 shadow-xl scale-105',
-              isCurrentPlan && 'border-green-500 border-2'
+              plan.highlighted && 'border-primary scale-105 border-2 shadow-xl',
+              isCurrentPlan && 'border-2 border-green-500',
             )}
           >
             {plan.popular && !isCurrentPlan && (
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                 <Badge className="bg-primary text-primary-foreground px-3 py-1">
-                  <Sparkles className="w-3 h-3 mr-1" />
+                  <Sparkles className="mr-1 h-3 w-3" />
                   Most Popular
                 </Badge>
               </div>
@@ -169,7 +183,7 @@ export function OrganizationPricingCards({
 
             {isCurrentPlan && (
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <Badge className="bg-green-500 text-white px-3 py-1">
+                <Badge className="bg-green-500 px-3 py-1 text-white">
                   Current Plan
                 </Badge>
               </div>
@@ -188,24 +202,24 @@ export function OrganizationPricingCards({
 
             <CardContent className="flex-1">
               <ul className="space-y-3">
-                {plan.features.map((feature) => {
+                {plan.features.map(feature => {
                   const isLimitation = plan.limitations?.includes(feature);
                   return (
                     <li
                       key={feature}
                       className={cn(
                         'flex items-start gap-2',
-                        isLimitation && 'text-muted-foreground line-through'
+                        isLimitation && 'text-muted-foreground line-through',
                       )}
                     >
                       <Check
                         className={cn(
-                          'w-5 h-5 mt-0.5 flex-shrink-0',
+                          'mt-0.5 h-5 w-5 flex-shrink-0',
                           isLimitation
                             ? 'text-muted-foreground/50'
                             : plan.highlighted
-                            ? 'text-primary'
-                            : 'text-green-600'
+                              ? 'text-primary'
+                              : 'text-green-600',
                         )}
                       />
                       <span className="text-sm">{feature}</span>
@@ -223,17 +237,17 @@ export function OrganizationPricingCards({
                   'w-full',
                   plan.highlighted &&
                     'bg-primary hover:bg-primary/90 text-primary-foreground',
-                  isCurrentPlan && 'opacity-50 cursor-not-allowed'
+                  isCurrentPlan && 'cursor-not-allowed opacity-50',
                 )}
                 variant={plan.highlighted ? 'default' : 'outline'}
               >
                 {isCurrentPlan
                   ? 'Current Plan'
                   : plan.id === 'command' && showContactSales
-                  ? 'Contact Sales'
-                  : plan.id === 'free'
-                  ? 'Start Free Trial'
-                  : 'Upgrade'}
+                    ? 'Contact Sales'
+                    : plan.id === 'free'
+                      ? 'Start Free Trial'
+                      : 'Upgrade'}
               </Button>
             </CardFooter>
           </Card>

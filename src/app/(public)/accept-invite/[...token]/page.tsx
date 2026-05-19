@@ -1,9 +1,18 @@
 'use client';
 
-import { verifyInvitationToken, acceptInvitation } from '@/actions/memberActions';
+import {
+  verifyInvitationToken,
+  acceptInvitation,
+} from '@/actions/memberActions';
 import { switchTenant } from '@/actions/tenantActions';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Building2, CheckCircle2, Loader2, XCircle } from 'lucide-react';
@@ -20,10 +29,14 @@ export default function AcceptInvitePage({
 }) {
   // [...token] catch-all route — param is an array of path segments
   const { token: tokenSegments } = use(params);
-  const token = Array.isArray(tokenSegments) ? tokenSegments.join('/') : tokenSegments;
+  const token = Array.isArray(tokenSegments)
+    ? tokenSegments.join('/')
+    : tokenSegments;
   const router = useRouter();
   const { data: session, status, update } = useSession();
-  const [invitation, setInvitation] = useState<VerifyInvitationResponse | null>(null);
+  const [invitation, setInvitation] = useState<VerifyInvitationResponse | null>(
+    null,
+  );
   const [isVerifying, setIsVerifying] = useState(true);
   const [isAccepting, setIsAccepting] = useState(false);
   const [isRejecting, setIsRejecting] = useState(false);
@@ -57,7 +70,8 @@ export default function AcceptInvitePage({
 
   // Step 2 — once both invitation and auth status are known, redirect unauthenticated users
   useEffect(() => {
-    if (!invitation || status === 'loading' || status === 'authenticated') return;
+    if (!invitation || status === 'loading' || status === 'authenticated')
+      return;
 
     // Unauthenticated — send to register or login based on whether account exists
     setIsRedirecting(true);
@@ -101,7 +115,10 @@ export default function AcceptInvitePage({
               await update({ accessToken: switchResponse.data.accessToken });
             }
           } catch (switchErr) {
-            console.warn('Failed to switch tenant context after accept:', switchErr);
+            console.warn(
+              'Failed to switch tenant context after accept:',
+              switchErr,
+            );
           }
         }
 
@@ -133,7 +150,7 @@ export default function AcceptInvitePage({
   // Loading/verifying state
   if (isVerifying || status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="flex min-h-screen items-center justify-center p-4">
         <div className="container max-w-md">
           <Skeleton className="h-[400px] rounded-lg" />
         </div>
@@ -144,13 +161,13 @@ export default function AcceptInvitePage({
   // Error state
   if (error || !invitation) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="flex min-h-screen items-center justify-center p-4">
         <div className="container max-w-md">
           <Card className="border-destructive">
             <CardHeader>
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center">
-                  <XCircle className="size-6 text-destructive" />
+                <div className="bg-destructive/10 flex h-12 w-12 items-center justify-center rounded-full">
+                  <XCircle className="text-destructive size-6" />
                 </div>
                 <div>
                   <CardTitle>Invalid Invitation</CardTitle>
@@ -161,9 +178,9 @@ export default function AcceptInvitePage({
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                The invitation may have expired or been cancelled. Please contact the
-                organization owner for a new invitation.
+              <p className="text-muted-foreground mb-4 text-sm">
+                The invitation may have expired or been cancelled. Please
+                contact the organization owner for a new invitation.
               </p>
               <Button onClick={() => router.push('/')} className="w-full">
                 Go to Home
@@ -182,22 +199,26 @@ export default function AcceptInvitePage({
       : 'Setting up your account...';
 
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="flex min-h-screen items-center justify-center p-4">
         <div className="container max-w-md">
           <Card>
             <CardContent className="pt-8 pb-8">
               <div className="flex flex-col items-center gap-4 text-center">
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Building2 className="size-6 text-primary" />
+                <div className="bg-primary/10 flex h-12 w-12 items-center justify-center rounded-lg">
+                  <Building2 className="text-primary size-6" />
                 </div>
                 <div>
-                  <p className="font-semibold text-lg">{invitation.tenantName}</p>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <p className="text-lg font-semibold">
+                    {invitation.tenantName}
+                  </p>
+                  <p className="text-muted-foreground mt-1 text-sm">
                     You&apos;ve been invited as{' '}
-                    <span className="font-medium capitalize">{invitation.role}</span>
+                    <span className="font-medium capitalize">
+                      {invitation.role}
+                    </span>
                   </p>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="text-muted-foreground flex items-center gap-2 text-sm">
                   <Loader2 className="size-4 animate-spin" />
                   {message}
                 </div>
@@ -211,13 +232,13 @@ export default function AcceptInvitePage({
 
   // Authenticated — show accept/decline card
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="flex min-h-screen items-center justify-center p-4">
       <div className="container max-w-md">
         <Card>
           <CardHeader>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Building2 className="size-6 text-primary" />
+            <div className="mb-4 flex items-center gap-3">
+              <div className="bg-primary/10 flex h-12 w-12 items-center justify-center rounded-lg">
+                <Building2 className="text-primary size-6" />
               </div>
               <div className="flex-1">
                 <CardTitle>Organization Invitation</CardTitle>
@@ -228,19 +249,25 @@ export default function AcceptInvitePage({
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="p-4 bg-muted rounded-lg space-y-3">
+            <div className="bg-muted space-y-3 rounded-lg p-4">
               <div>
-                <div className="text-sm text-muted-foreground mb-1">Organization</div>
-                <div className="font-semibold text-lg">{invitation.tenantName}</div>
+                <div className="text-muted-foreground mb-1 text-sm">
+                  Organization
+                </div>
+                <div className="text-lg font-semibold">
+                  {invitation.tenantName}
+                </div>
               </div>
 
               <div>
-                <div className="text-sm text-muted-foreground mb-1">Your Email</div>
+                <div className="text-muted-foreground mb-1 text-sm">
+                  Your Email
+                </div>
                 <div className="font-medium">{invitation.email}</div>
               </div>
 
               <div>
-                <div className="text-sm text-muted-foreground mb-1">Role</div>
+                <div className="text-muted-foreground mb-1 text-sm">Role</div>
                 <Badge variant="secondary" className="capitalize">
                   {invitation.role}
                 </Badge>
@@ -248,7 +275,9 @@ export default function AcceptInvitePage({
 
               {invitation.inviterName && (
                 <div>
-                  <div className="text-sm text-muted-foreground mb-1">Invited by</div>
+                  <div className="text-muted-foreground mb-1 text-sm">
+                    Invited by
+                  </div>
                   <div className="text-sm">{invitation.inviterName}</div>
                 </div>
               )}
@@ -260,9 +289,11 @@ export default function AcceptInvitePage({
                 disabled={isAccepting || isRejecting}
                 className="w-full"
               >
-                {isAccepting
-                  ? <Loader2 className="size-4 mr-2 animate-spin" />
-                  : <CheckCircle2 className="size-4 mr-2" />}
+                {isAccepting ? (
+                  <Loader2 className="mr-2 size-4 animate-spin" />
+                ) : (
+                  <CheckCircle2 className="mr-2 size-4" />
+                )}
                 {isAccepting ? 'Accepting...' : 'Accept Invitation'}
               </Button>
 
@@ -276,9 +307,10 @@ export default function AcceptInvitePage({
               </Button>
             </div>
 
-            <p className="text-xs text-center text-muted-foreground">
+            <p className="text-muted-foreground text-center text-xs">
               Accepting this invitation will give you access to{' '}
-              <span className="font-medium">{invitation.tenantName}</span> and its resources.
+              <span className="font-medium">{invitation.tenantName}</span> and
+              its resources.
             </p>
           </CardContent>
         </Card>

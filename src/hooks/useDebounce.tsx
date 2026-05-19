@@ -1,5 +1,5 @@
-'use client'
-import { useEffect, useState } from "react";
+'use client';
+import { useEffect, useState } from 'react';
 
 export function useDebounce<T>(value: T, delay = 500): T {
   const [debounced, setDebounced] = useState(value);

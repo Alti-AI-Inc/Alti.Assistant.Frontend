@@ -1,8 +1,5 @@
-
 const page = () => {
-  return (
-    <div>My chatbots page</div>
-  )
-}
+  return <div>My chatbots page</div>;
+};
 
-export default page
+export default page;

@@ -83,7 +83,6 @@ export const data: Person[] = [
   },
 ];
 
-
 export const columns: ColumnDef<Person>[] = [
   {
     accessorKey: 'firstName',

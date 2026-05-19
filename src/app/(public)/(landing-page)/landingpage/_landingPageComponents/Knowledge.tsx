@@ -21,7 +21,7 @@ const Knowledge = ({ className }: { className?: string }) => {
             box2Desc=" Private AI assistants trained on your company’s knowledge to deliver instant, context aware answers."
           />
         </div>
-        <div className="flex w-full lg:translate-x-10 justify-center lg:mt-0 lg:w-1/2 lg:justify-end">
+        <div className="flex w-full justify-center lg:mt-0 lg:w-1/2 lg:translate-x-10 lg:justify-end">
           <Image
             height={400}
             width={1200}

@@ -203,17 +203,20 @@ export async function evaluatePrompt(
       ? `Conversation History:\n${conversationHistory}\n\nCurrent Request: ${prompt}`
       : prompt;
 
-    const response = await apiClient(`${API_URL}/enhanced-image/evaluate-prompt`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
+    const response = await apiClient(
+      `${API_URL}/enhanced-image/evaluate-prompt`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: finalPrompt,
+          conversationId,
+        }),
       },
-      body: JSON.stringify({
-        prompt: finalPrompt,
-        conversationId,
-      }),
-    });
+    );
 
     const data = await response.json();
     console.log(
@@ -306,17 +309,20 @@ export async function finalizePrompt(
       ),
     );
 
-    const response = await apiClient(`${API_URL}/enhanced-image/finalize-prompt`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
+    const response = await apiClient(
+      `${API_URL}/enhanced-image/finalize-prompt`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          conversationId,
+          userId,
+        }),
       },
-      body: JSON.stringify({
-        conversationId,
-        userId,
-      }),
-    });
+    );
 
     const data = await response.json();
     console.log(

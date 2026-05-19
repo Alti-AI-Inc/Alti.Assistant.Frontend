@@ -15,7 +15,8 @@ export default function PricingPage() {
     {
       name: 'Midweight',
       price: '$99',
-      description: 'Access midweight models such as Llama 70B, Yi 34B, Qwen 72B, and more.',
+      description:
+        'Access midweight models such as Llama 70B, Yi 34B, Qwen 72B, and more.',
       apiTitle: 'Midweight',
       inputPrice: '$4',
       outputPrice: '$10',
@@ -45,13 +46,13 @@ export default function PricingPage() {
           {pricingTiers.map((tier, index) => (
             <Card key={index} className="border-2">
               <CardContent>
-                <div className='flex flex-col gap-4'>
+                <div className="flex flex-col gap-4">
                   <div className="text-center text-2xl font-bold">
                     {tier.price}
                   </div>
-                  <div className="flex flex-col justify-center items-center">
-                    <p className='text-2xl font-bold mb-2'>{tier.name}</p>
-                    <p className='text-sm'>{tier.description}</p>
+                  <div className="flex flex-col items-center justify-center">
+                    <p className="mb-2 text-2xl font-bold">{tier.name}</p>
+                    <p className="text-sm">{tier.description}</p>
                   </div>
                 </div>
               </CardContent>
@@ -64,7 +65,7 @@ export default function PricingPage() {
           {pricingTiers.map((tier, index) => (
             <Card key={index} className="border-2">
               <CardContent>
-                <div className="flex flex-col gap-4 items-center">
+                <div className="flex flex-col items-center gap-4">
                   <div className="text-center text-2xl font-bold">
                     {tier.apiTitle}
                   </div>

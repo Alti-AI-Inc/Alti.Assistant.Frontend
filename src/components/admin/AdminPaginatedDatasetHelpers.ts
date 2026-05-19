@@ -10,9 +10,10 @@ export type AdminListMeta = {
 };
 
 /** Normalize getAllUsers / getAllPayments success payload → rows + meta. */
-export function parseAdminListPayload<T>(
-  payload: unknown,
-): { list: T[]; meta?: AdminListMeta } {
+export function parseAdminListPayload<T>(payload: unknown): {
+  list: T[];
+  meta?: AdminListMeta;
+} {
   if (payload === null || payload === undefined) {
     return { list: [] };
   }
@@ -33,7 +34,11 @@ export function parseAdminListPayload<T>(
   return { list: [] };
 }
 
-export function paginationLabel(meta: AdminListMeta | undefined, listLen: number, pageSize: number) {
+export function paginationLabel(
+  meta: AdminListMeta | undefined,
+  listLen: number,
+  pageSize: number,
+) {
   const total = meta?.total ?? listLen;
   const page = meta?.page ?? 1;
   const limit = Math.max(1, meta?.limit ?? (listLen > 0 ? listLen : pageSize));

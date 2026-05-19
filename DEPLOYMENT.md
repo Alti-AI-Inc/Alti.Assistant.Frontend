@@ -1,6 +1,7 @@
 # Deployment Guide — GCP Cloud Run
 
-This guide covers everything needed to build, test, and deploy the Alti Assistant Frontend to Google Cloud Run.
+This guide covers everything needed to build, test, and deploy the Alti
+Assistant Frontend to Google Cloud Run.
 
 ---
 
@@ -8,13 +9,13 @@ This guide covers everything needed to build, test, and deploy the Alti Assistan
 
 ### Tools Required
 
-| Tool | Install |
-|---|---|
-| [Docker Desktop](https://www.docker.com/products/docker-desktop/) | Required for local build & test |
-| [Google Cloud SDK (gcloud)](https://cloud.google.com/sdk/docs/install) | Required for GCP operations |
-| [GitHub CLI (gh)](https://cli.github.com) | Required for setting GitHub secrets |
-| [Node.js 22+](https://nodejs.org) | Required for local dev |
-| [pnpm](https://pnpm.io/installation) | `npm install -g pnpm` |
+| Tool                                                                   | Install                             |
+| ---------------------------------------------------------------------- | ----------------------------------- |
+| [Docker Desktop](https://www.docker.com/products/docker-desktop/)      | Required for local build & test     |
+| [Google Cloud SDK (gcloud)](https://cloud.google.com/sdk/docs/install) | Required for GCP operations         |
+| [GitHub CLI (gh)](https://cli.github.com)                              | Required for setting GitHub secrets |
+| [Node.js 22+](https://nodejs.org)                                      | Required for local dev              |
+| [pnpm](https://pnpm.io/installation)                                   | `npm install -g pnpm`               |
 
 ### Authenticate
 
@@ -33,12 +34,12 @@ gh auth login
 
 ## Environment Variables
 
-| Variable | Where set | Notes |
-|---|---|---|
-| `AUTH_SECRET` | GCP Secret Manager | Session signing secret |
-| `AUTH_TRUST_HOST` | Cloud Run env var | Must be `true` |
-| `NEXT_PUBLIC_API_URL` | Build arg + Cloud Run env var | Baked in at build time |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | GCP Secret Manager | Stripe public key |
+| Variable                             | Where set                     | Notes                  |
+| ------------------------------------ | ----------------------------- | ---------------------- |
+| `AUTH_SECRET`                        | GCP Secret Manager            | Session signing secret |
+| `AUTH_TRUST_HOST`                    | Cloud Run env var             | Must be `true`         |
+| `NEXT_PUBLIC_API_URL`                | Build arg + Cloud Run env var | Baked in at build time |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | GCP Secret Manager            | Stripe public key      |
 
 ---
 
@@ -137,7 +138,8 @@ gcloud iam service-accounts add-iam-policy-binding \
 .\scripts\set-github-secrets.ps1
 ```
 
-This script auto-fetches the WIF provider name and prompts only for the Stripe key.
+This script auto-fetches the WIF provider name and prompts only for the Stripe
+key.
 
 ---
 
@@ -155,7 +157,8 @@ pnpm dev
 
 ### Build
 
-> `NEXT_PUBLIC_*` variables are **baked in at build time** — they cannot be overridden at runtime.
+> `NEXT_PUBLIC_*` variables are **baked in at build time** — they cannot be
+> overridden at runtime.
 
 ```powershell
 # For local testing against local backend
@@ -184,7 +187,8 @@ docker run --rm -p 3000:8080 `
 
 App available at **http://localhost:3000**
 
-> `AUTH_TRUST_HOST=true` is required when running in Docker locally. Cloud Run sets this automatically via env var.
+> `AUTH_TRUST_HOST=true` is required when running in Docker locally. Cloud Run
+> sets this automatically via env var.
 
 ---
 
@@ -230,13 +234,15 @@ gcloud run deploy alti-assistant-frontend `
 
 ## Automated Deploy (GitHub Actions)
 
-Any push to the **`prod`** branch automatically triggers `.github/workflows/deploy.yml` which:
+Any push to the **`prod`** branch automatically triggers
+`.github/workflows/deploy.yml` which:
 
 1. Builds the Docker image with production build args
 2. Pushes to Artifact Registry
 3. Deploys to Cloud Run
 
-**Service URL:** https://alti-assistant-frontend-366561755636.us-central1.run.app
+**Service URL:**
+https://alti-assistant-frontend-366561755636.us-central1.run.app
 
 ---
 

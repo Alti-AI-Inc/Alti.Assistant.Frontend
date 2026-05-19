@@ -95,8 +95,8 @@ export default function OrganizationsPage() {
   }, [pathname, session?.accessToken, setTenants, status]);
 
   return (
-    <div className="container max-w-6xl mx-auto py-8 px-4">
-      <div className="flex items-center justify-between mb-8">
+    <div className="container mx-auto max-w-6xl px-4 py-8">
+      <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Organizations</h1>
           <p className="text-muted-foreground mt-1">
@@ -108,35 +108,36 @@ export default function OrganizationsPage() {
             <TenantModeSwitcher />
           </div>
           <Button onClick={() => router.push('/organizations/create')}>
-            <Plus className="size-4 mr-2" />
+            <Plus className="mr-2 size-4" />
             Create Organization
           </Button>
         </div>
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3].map((i) => (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map(i => (
             <Skeleton key={i} className="h-[200px] rounded-lg" />
           ))}
         </div>
       ) : organizations.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {organizations.map((org) => (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {organizations.map(org => (
             <OrganizationCard key={org.id} organization={org} />
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-          <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
-            <Building2 className="size-8 text-muted-foreground" />
+        <div className="flex flex-col items-center justify-center px-4 py-16 text-center">
+          <div className="bg-muted mb-4 flex h-16 w-16 items-center justify-center rounded-full">
+            <Building2 className="text-muted-foreground size-8" />
           </div>
-          <h3 className="text-xl font-semibold mb-2">No organizations yet</h3>
+          <h3 className="mb-2 text-xl font-semibold">No organizations yet</h3>
           <p className="text-muted-foreground mb-6 max-w-sm">
-            Organizations help you collaborate with your team. Create one to get started.
+            Organizations help you collaborate with your team. Create one to get
+            started.
           </p>
           <Button onClick={() => router.push('/organizations/create')}>
-            <Plus className="size-4 mr-2" />
+            <Plus className="mr-2 size-4" />
             Create Your First Organization
           </Button>
         </div>

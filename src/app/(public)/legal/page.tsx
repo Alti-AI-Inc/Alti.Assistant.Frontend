@@ -196,13 +196,22 @@ export default function page() {
       {/* Sticky header with scrollable tab list */}
       <div className="sticky top-0 z-10 bg-white pt-6">
         <TabsList className="mx-auto mb-6 flex w-full max-w-full overflow-x-auto sm:grid sm:w-[600px] sm:grid-cols-3">
-          <TabsTrigger className="md:min-w-[150px] flex-1 cursor-pointer" value="privacyPolicy">
+          <TabsTrigger
+            className="flex-1 cursor-pointer md:min-w-[150px]"
+            value="privacyPolicy"
+          >
             Privacy Policy
           </TabsTrigger>
-          <TabsTrigger className="md:min-w-[150px] flex-1 cursor-pointer" value="termsOfUsage">
+          <TabsTrigger
+            className="flex-1 cursor-pointer md:min-w-[150px]"
+            value="termsOfUsage"
+          >
             Terms of Use
           </TabsTrigger>
-          <TabsTrigger className="md:min-w-[150px] flex-1 cursor-pointer" value="cookiesPolicy">
+          <TabsTrigger
+            className="flex-1 cursor-pointer md:min-w-[150px]"
+            value="cookiesPolicy"
+          >
             Cookies Policy
           </TabsTrigger>
         </TabsList>
@@ -214,9 +223,11 @@ export default function page() {
           <p className="mb-4">{privacyPolicy.intro}</p>
           {privacyPolicy.sections.map((section, index) => (
             <div key={index} className="mb-6">
-              <h2 className="mb-3 text-lg font-semibold sm:text-xl">{section.heading}</h2>
+              <h2 className="mb-3 text-lg font-semibold sm:text-xl">
+                {section.heading}
+              </h2>
               {Array.isArray(section.content) ? (
-                <ul className="mb-4 list-disc pl-6 space-y-2">
+                <ul className="mb-4 list-disc space-y-2 pl-6">
                   {section.content.map((item, idx) => (
                     <li key={idx}>
                       <strong>{item.text}</strong> {item.description}
@@ -238,7 +249,9 @@ export default function page() {
           <p className="mb-4">{terms?.intro}</p>
           {terms.sections.map((section, index) => (
             <div key={index} className="mb-5">
-              <h2 className="mb-2 text-lg font-semibold sm:text-xl">{section?.heading}</h2>
+              <h2 className="mb-2 text-lg font-semibold sm:text-xl">
+                {section?.heading}
+              </h2>
               <p>{section?.content}</p>
             </div>
           ))}
@@ -252,7 +265,9 @@ export default function page() {
           <p className="mb-4">{cookiesPolicy?.intro}</p>
           {cookiesPolicy.sections.map((section, index) => (
             <div key={index} className="mb-6">
-              <h2 className="mb-3 text-lg font-semibold sm:text-xl">{section?.heading}</h2>
+              <h2 className="mb-3 text-lg font-semibold sm:text-xl">
+                {section?.heading}
+              </h2>
               <div>{section?.content}</div>
             </div>
           ))}

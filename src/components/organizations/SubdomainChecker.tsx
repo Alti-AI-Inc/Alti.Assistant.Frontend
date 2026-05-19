@@ -50,7 +50,8 @@ export function SubdomainChecker({
       if (!subdomainRegex.test(debouncedValue)) {
         setAvailability({
           available: false,
-          message: 'Subdomain can only contain lowercase letters, numbers, and hyphens',
+          message:
+            'Subdomain can only contain lowercase letters, numbers, and hyphens',
         });
         onAvailabilityChange?.(false);
         return;
@@ -58,9 +59,7 @@ export function SubdomainChecker({
 
       setIsChecking(true);
       try {
-        const response = await checkSubdomainAvailability(
-          debouncedValue
-        );
+        const response = await checkSubdomainAvailability(debouncedValue);
 
         console.log('Subdomain availability response:', response);
 
@@ -104,23 +103,26 @@ export function SubdomainChecker({
         <Input
           id="subdomain"
           value={value}
-          onChange={(e) => onChange(e.target.value.toLowerCase())}
+          onChange={e => onChange(e.target.value.toLowerCase())}
           placeholder="my-organization"
           disabled={disabled}
           className={cn(
             'pr-10',
-            availability?.available && 'border-green-500 focus-visible:ring-green-500',
-            availability && !availability.available && 'border-destructive focus-visible:ring-destructive'
+            availability?.available &&
+              'border-green-500 focus-visible:ring-green-500',
+            availability &&
+              !availability.available &&
+              'border-destructive focus-visible:ring-destructive',
           )}
         />
         {showStatus && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          <div className="absolute top-1/2 right-3 -translate-y-1/2">
             {isChecking ? (
-              <Loader2 className="size-4 animate-spin text-muted-foreground" />
+              <Loader2 className="text-muted-foreground size-4 animate-spin" />
             ) : availability?.available ? (
               <Check className="size-4 text-green-500" />
             ) : (
-              <X className="size-4 text-destructive" />
+              <X className="text-destructive size-4" />
             )}
           </div>
         )}
@@ -129,14 +131,17 @@ export function SubdomainChecker({
         <p
           className={cn(
             'text-sm',
-            availability.available ? 'text-green-600 dark:text-green-500' : 'text-destructive'
+            availability.available
+              ? 'text-green-600 dark:text-green-500'
+              : 'text-destructive',
           )}
         >
           {availability.message}
         </p>
       )}
-      <p className="text-xs text-muted-foreground">
-        Your organization will be available at <span className="font-medium">{value || 'subdomain'}.alti.ai</span>
+      <p className="text-muted-foreground text-xs">
+        Your organization will be available at{' '}
+        <span className="font-medium">{value || 'subdomain'}.alti.ai</span>
       </p>
     </div>
   );

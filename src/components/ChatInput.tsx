@@ -1019,7 +1019,7 @@ const ChatInput = ({
         />
       )}
 
-      <div className="mx-auto w-full max-w-[796px] space-y-6 lg:px-0">
+      <div className="mx-auto w-full max-w-[796px] space-y-6 px-0">
         <div
           className={cn(
             'flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4',
@@ -1097,9 +1097,7 @@ const ChatInput = ({
               <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                 <PopoverTrigger asChild>
                   <div className="flex cursor-pointer items-center">
-                    <Plus
-                      className="size-6 flex-shrink-0 rounded-full border-2 border-gray-300 bg-black p-1 text-white hover:bg-gray-800 transition-colors"
-                    />
+                    <Plus className="size-6 flex-shrink-0 rounded-full border-2 border-gray-300 bg-black p-1 text-white transition-colors hover:bg-gray-800" />
                   </div>
                 </PopoverTrigger>
                 <PopoverContent side="top" align="start" className="w-48 p-2">

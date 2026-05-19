@@ -51,7 +51,9 @@ export async function RegisterUser({
   }
 }
 
-export async function confirmRegistration(token: string): Promise<ApiResponse<any>> {
+export async function confirmRegistration(
+  token: string,
+): Promise<ApiResponse<any>> {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/register/confirmation`,

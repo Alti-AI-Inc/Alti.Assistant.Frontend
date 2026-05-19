@@ -7,7 +7,7 @@ export default async function Page({
 }) {
   const { id } = await params;
   return (
-    <div className='p-8'>
+    <div className="p-8">
       <SharedConversation id={id} />
     </div>
   );

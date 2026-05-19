@@ -108,7 +108,6 @@ export function MetricTotalUsersTableSection() {
       <CardHeader className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <CardTitle>All Users</CardTitle>
-         
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative min-w-[200px] md:w-64">
@@ -120,8 +119,14 @@ export function MetricTotalUsersTableSection() {
               className="pl-10"
             />
           </div>
-          <Button variant="outline" size="icon" onClick={() => void loadUsers()}>
-            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => void loadUsers()}
+          >
+            <RefreshCw
+              className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
+            />
           </Button>
         </div>
       </CardHeader>
@@ -161,9 +166,7 @@ export function MetricTotalUsersTableSection() {
                   variant="outline"
                   size="sm"
                   disabled={
-                    isLoading ||
-                    page >= totalPages ||
-                    pagination.total === 0
+                    isLoading || page >= totalPages || pagination.total === 0
                   }
                   onClick={() => setPage(p => p + 1)}
                 >

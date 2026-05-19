@@ -29,7 +29,7 @@ export function StripeCardForm({
 }: StripeCardFormProps) {
   const stripe = useStripe();
   const elements = useElements();
-  
+
   const [cardError, setCardError] = useState<string>('');
   const [isCardComplete, setIsCardComplete] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -96,22 +96,22 @@ export function StripeCardForm({
     <div className={cn('space-y-4', className)}>
       {/* Card Input Section */}
       <div>
-        <Label htmlFor="card-element" className="flex items-center gap-2 mb-2">
-          <CreditCard className="w-4 h-4" />
+        <Label htmlFor="card-element" className="mb-2 flex items-center gap-2">
+          <CreditCard className="h-4 w-4" />
           Card Details
         </Label>
-        
+
         <div
           className={cn(
             'relative rounded-md border-2 transition-colors',
             isFocused
-              ? 'border-primary ring-2 ring-primary/20'
+              ? 'border-primary ring-primary/20 ring-2'
               : cardError
-              ? 'border-destructive'
-              : isCardComplete
-              ? 'border-green-500'
-              : 'border-input',
-            'bg-background px-3 py-3'
+                ? 'border-destructive'
+                : isCardComplete
+                  ? 'border-green-500'
+                  : 'border-input',
+            'bg-background px-3 py-3',
           )}
         >
           <CardElement
@@ -126,25 +126,25 @@ export function StripeCardForm({
 
         {/* Error Message */}
         {cardError && (
-          <div className="flex items-center gap-2 mt-2 text-sm text-destructive">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <div className="text-destructive mt-2 flex items-center gap-2 text-sm">
+            <AlertCircle className="h-4 w-4 flex-shrink-0" />
             <span>{cardError}</span>
           </div>
         )}
 
         {/* Helper Text */}
         {!cardError && (
-          <p className="text-xs text-muted-foreground mt-2">
+          <p className="text-muted-foreground mt-2 text-xs">
             Enter your card number, expiration date, and security code
           </p>
         )}
       </div>
 
       {/* Security Notice */}
-      <div className="flex items-start gap-2 p-3 rounded-md bg-muted/50 border border-border">
-        <Lock className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
-        <div className="text-xs text-muted-foreground">
-          <p className="font-medium mb-1">Secure Payment</p>
+      <div className="bg-muted/50 border-border flex items-start gap-2 rounded-md border p-3">
+        <Lock className="text-muted-foreground mt-0.5 h-4 w-4 flex-shrink-0" />
+        <div className="text-muted-foreground text-xs">
+          <p className="mb-1 font-medium">Secure Payment</p>
           <p>
             Your card information is encrypted and securely processed by Stripe.
             We never store your card details.
@@ -154,12 +154,12 @@ export function StripeCardForm({
 
       {/* Accepted Cards */}
       <div className="flex items-center justify-center gap-3 pt-2">
-        <span className="text-xs text-muted-foreground">We accept:</span>
+        <span className="text-muted-foreground text-xs">We accept:</span>
         <div className="flex items-center gap-2">
-          {['Visa', 'Mastercard', 'Amex', 'Discover'].map((brand) => (
+          {['Visa', 'Mastercard', 'Amex', 'Discover'].map(brand => (
             <div
               key={brand}
-              className="px-2 py-1 rounded border border-border bg-card text-xs font-medium text-muted-foreground"
+              className="border-border bg-card text-muted-foreground rounded border px-2 py-1 text-xs font-medium"
             >
               {brand}
             </div>

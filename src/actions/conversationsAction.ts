@@ -46,7 +46,9 @@ export async function PostConversation(
       });
       return {
         success: false,
-        message: JSON.parse(errorText)?.message || 'This is not you this is an error on our side, please try again later.',
+        message:
+          JSON.parse(errorText)?.message ||
+          'This is not you this is an error on our side, please try again later.',
         debugMessage: `HTTP Error ${response.status}: ${errorText}`,
         statusCode: response.status,
       };

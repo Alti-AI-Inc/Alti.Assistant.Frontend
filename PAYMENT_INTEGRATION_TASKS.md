@@ -1,13 +1,16 @@
 # Payment Integration Task List
 
 ## Overview
-Integrate Stripe payment functionality for organization plan upgrades with support for existing and new payment methods.
+
+Integrate Stripe payment functionality for organization plan upgrades with
+support for existing and new payment methods.
 
 ---
 
 ## Available Backend APIs
 
 ### Payment Methods
+
 - **GET** `/api/v1/stripe/my-payment-methods` - Get user's saved payment methods
 - **POST** `/api/v1/stripe/payment-method` - Add new payment method
   ```json
@@ -15,21 +18,27 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
   ```
 
 ### Payment Intent
-- **POST** `/api/v1/stripe/payment-intent` - Create payment intent for card verification
+
+- **POST** `/api/v1/stripe/payment-intent` - Create payment intent for card
+  verification
   ```json
   { "amount": 9900, "currency": "usd" }
   ```
 
 ### Products & Pricing
+
 - **GET** `/api/v1/stripe/products` - Get all Stripe products
-- **GET** `/api/v1/stripe/prices?productId=prod_xxxxx` - Get prices for a product
+- **GET** `/api/v1/stripe/prices?productId=prod_xxxxx` - Get prices for a
+  product
 
 ### Subscriptions
+
 - **POST** `/api/v1/stripe/subscription` - Create new subscription
   ```json
   { "priceId": "price_xxxxx" }
   ```
-- **GET** `/api/v1/stripe/subscription/:subscriptionId` - Get subscription details
+- **GET** `/api/v1/stripe/subscription/:subscriptionId` - Get subscription
+  details
 - **DELETE** `/api/v1/stripe/subscription/:subscriptionId` - Cancel subscription
 
 ---
@@ -37,13 +46,16 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 ## Phase 1: Setup & Dependencies ✅ (Complete)
 
 - [x] **Install Stripe dependencies**
+
   - [x] Run `npm install @stripe/stripe-js @stripe/react-stripe-js`
   - [x] Verify installation in package.json
-  - **Note**: Already installed - `@stripe/react-stripe-js@5.4.1` and `@stripe/stripe-js@8.6.4`
+  - **Note**: Already installed - `@stripe/react-stripe-js@5.4.1` and
+    `@stripe/stripe-js@8.6.4`
 
 - [x] **Environment configuration**
   - [x] Add `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` to `.env.local`
-  - [x] Add `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` to `.env.example` (without value)
+  - [x] Add `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` to `.env.example` (without
+        value)
   - [x] Verify environment variable loads correctly
   - **Note**: Already configured in `.env` file with test key
 
@@ -53,7 +65,7 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 
 - [x] **Create Stripe types** (`src/types/stripe.ts`)
   - [x] Define `PaymentMethod` interface
-  - [x] Define `PaymentIntent` interface  
+  - [x] Define `PaymentIntent` interface
   - [x] Define `PaymentFlowProps` interface
   - [x] Define `StripeProduct` interface
   - [x] Define `StripePrice` interface
@@ -68,49 +80,42 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 ## Phase 3: API Actions ✅ (Complete)
 
 - [x] **Update stripeActions.ts** (`src/actions/stripeActions.ts`)
-  
+
   - [x] Create `getMyPaymentMethods()` function
     - [x] GET /api/v1/stripe/my-payment-methods
     - [x] Handle success response
     - [x] Handle error cases
     - [x] Add TypeScript types
-  
   - [x] Create `createPaymentIntent()` function
     - [x] POST /api/v1/stripe/payment-intent
     - [x] Accept amount and currency parameters
     - [x] Return clientSecret for card confirmation
     - [x] Handle errors
-  
   - [x] Create `addPaymentMethod()` function
     - [x] POST /api/v1/stripe/payment-method
     - [x] Accept paymentMethodId parameter
     - [x] Attach payment method to customer
     - [x] Handle success/error responses
-  
   - [x] Create `getStripeProducts()` function
     - [x] GET /api/v1/stripe/products
     - [x] Return list of all products
     - [x] Handle errors
-  
   - [x] Create `getProductPrices()` function
     - [x] GET /api/v1/stripe/prices?productId=prod_xxx
     - [x] Accept productId parameter
     - [x] Return list of prices for product
     - [x] Handle errors
-  
   - [x] Create `createSubscription()` function
     - [x] POST /api/v1/stripe/subscription
     - [x] Accept priceId parameter
     - [x] Create subscription for tenant
     - [x] Return subscription details
     - [x] Handle errors
-  
   - [x] Create `getSubscription()` function
     - [x] GET /api/v1/stripe/subscription/:subscriptionId
     - [x] Accept subscriptionId parameter
     - [x] Return subscription details
     - [x] Handle errors
-  
   - [x] Create `cancelSubscription()` function
     - [x] DELETE /api/v1/stripe/subscription/:subscriptionId
     - [x] Accept subscriptionId parameter
@@ -121,7 +126,8 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 
 ## Phase 4: Stripe Provider Setup ✅ (Complete)
 
-- [x] **Create StripeProvider component** (`src/components/stripe/StripeProvider.tsx`)
+- [x] **Create StripeProvider component**
+      (`src/components/stripe/StripeProvider.tsx`)
   - [x] Import loadStripe from @stripe/stripe-js
   - [x] Initialize Stripe with publishable key
   - [x] Wrap children with Elements provider
@@ -132,7 +138,9 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 
 ## Phase 5: Payment Method Components ✅ (Complete)
 
-- [x] **Create PaymentMethodCard component** (`src/components/stripe/PaymentMethodCard.tsx`)
+- [x] **Create PaymentMethodCard component**
+      (`src/components/stripe/PaymentMethodCard.tsx`)
+
   - [x] Display card brand icon (Visa, Mastercard, etc.)
   - [x] Show last 4 digits
   - [x] Display expiry date
@@ -140,7 +148,8 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
   - [x] Support selection state (radio/checkbox)
   - [x] Add proper styling and hover states
 
-- [x] **Create PaymentMethodList component** (`src/components/stripe/PaymentMethodList.tsx`)
+- [x] **Create PaymentMethodList component**
+      (`src/components/stripe/PaymentMethodList.tsx`)
   - [x] Render list of PaymentMethodCard components
   - [x] Handle payment method selection
   - [x] Add "Add New Payment Method" option
@@ -152,7 +161,8 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 
 ## Phase 6: Card Input Component ✅ (Complete)
 
-- [x] **Create StripeCardForm component** (`src/components/stripe/StripeCardForm.tsx`)
+- [x] **Create StripeCardForm component**
+      (`src/components/stripe/StripeCardForm.tsx`)
   - [x] Import CardElement from @stripe/react-stripe-js
   - [x] Configure CardElement styling to match theme
   - [x] Add card input field with label
@@ -166,7 +176,8 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 
 ## Phase 7: Payment Confirmation Modal ✅ (Complete)
 
-- [x] **Create PaymentConfirmationModal component** (`src/components/stripe/PaymentConfirmationModal.tsx`)
+- [x] **Create PaymentConfirmationModal component**
+      (`src/components/stripe/PaymentConfirmationModal.tsx`)
   - [x] Create modal shell with dialog component
   - [x] Add modal header with plan details
   - [x] Display selected plan name and price
@@ -185,16 +196,17 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 ## Phase 8: Payment Flow Logic ✅ (Complete)
 
 - [x] **Modal payment processing logic**
-  - [x] Fetch payment methods on modal open (GET /api/v1/stripe/my-payment-methods)
+
+  - [x] Fetch payment methods on modal open (GET
+        /api/v1/stripe/my-payment-methods)
   - [x] Determine if user has existing payment methods
-  
   - [x] **Scenario A: Use existing payment method**
     - [x] User selects existing payment method
     - [x] Skip card input collection
-    - [x] Directly create subscription with priceId (POST /api/v1/stripe/subscription)
+    - [x] Directly create subscription with priceId (POST
+          /api/v1/stripe/subscription)
     - [x] Handle success → Update UI
     - [x] Handle errors → Show error message
-  
   - [x] **Scenario B: Add new payment method (no existing methods)**
     - [x] Show card input form
     - [x] Create payment intent (POST /api/v1/stripe/payment-intent)
@@ -205,28 +217,30 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
     - [x] Create subscription with priceId (POST /api/v1/stripe/subscription)
     - [x] Handle success → Update UI
     - [x] Handle errors at each step
-  
   - [x] **Scenario C: Add new payment method (has existing methods)**
     - [x] User chooses "Add New Card" option
     - [x] Follow same flow as Scenario B
     - [x] Allow switching back to existing methods
-  
   - [x] Process subscription upgrade/creation
   - [x] Handle success callback
   - [x] Handle error states with specific messages
   - [x] Add proper loading states for each step
-  
-  **Note**: All payment flow logic was implemented in `PaymentConfirmationModal.tsx`:
+
+  **Note**: All payment flow logic was implemented in
+  `PaymentConfirmationModal.tsx`:
+
   - `fetchPaymentMethods()` - Loads payment methods on mount
   - `handleConfirmWithExistingCard()` - Scenario A implementation
   - `handleConfirmWithNewCard()` - Scenarios B & C implementation
-  - State machine with 6 states: loading, select_method, add_card, processing, success, error
+  - State machine with 6 states: loading, select_method, add_card, processing,
+    success, error
 
 ---
 
 ## Phase 9: Billing Page Integration ✅ (Complete)
 
-- [x] **Update billing page** (`src/app/(protected)/organizations/[tenantId]/billing/page.tsx`)
+- [x] **Update billing page**
+      (`src/app/(protected)/organizations/[tenantId]/billing/page.tsx`)
   - [x] Add state for selected plan
   - [x] Add state for payment modal visibility
   - [x] Modify `onSelectPlan` handler in pricing modal
@@ -248,32 +262,41 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 
 ## Phase 10: Pricing Cards Update ⚠️ (Partially Complete)
 
-- [x] **Update OrganizationPricingCards** (`src/components/organizations/OrganizationPricingCards.tsx`)
+- [x] **Update OrganizationPricingCards**
+      (`src/components/organizations/OrganizationPricingCards.tsx`)
+
   - [x] Ensure plan priceId (Stripe priceId) is included in each plan
   - [x] Pass full plan object to onSelectPlan (not just ID)
   - [x] Include priceId, amount, interval in plan data
   - [x] Verify all plan metadata is available
-  - [x] Update callback signature: `onSelectPlan(plan: OrganizationPlan)` where Plan includes priceId
+  - [x] Update callback signature: `onSelectPlan(plan: OrganizationPlan)` where
+        Plan includes priceId
   - [x] Export OrganizationPlan interface for type safety
 
 - [ ] **Map organization plans to Stripe prices**
+
   - [ ] Fetch Stripe products on page load (optional)
   - [ ] Fetch prices for products (optional)
   - [ ] OR hardcode Stripe priceIds in organizationPlans constant
   - [ ] Ensure each plan has correct Stripe priceId:
     - [x] Free Trial: null (no subscription needed)
-    - [ ] Explore Plan: `price_xxxxx` (Replace 'price_explore' with actual Stripe price ID)
-    - [ ] Execute Plan: `price_xxxxx` (Replace 'price_execute' with actual Stripe price ID)
-    - [ ] Command Plan: `price_xxxxx` (Replace 'price_command' with actual Stripe price ID)
+    - [ ] Explore Plan: `price_xxxxx` (Replace 'price_explore' with actual
+          Stripe price ID)
+    - [ ] Execute Plan: `price_xxxxx` (Replace 'price_execute' with actual
+          Stripe price ID)
+    - [ ] Command Plan: `price_xxxxx` (Replace 'price_command' with actual
+          Stripe price ID)
 
-  **Note**: Placeholder priceIds are currently set ('price_explore', 'price_execute', 'price_command').
-  Replace these with actual Stripe price IDs from your Stripe Dashboard.
+  **Note**: Placeholder priceIds are currently set ('price_explore',
+  'price_execute', 'price_command'). Replace these with actual Stripe price IDs
+  from your Stripe Dashboard.
 
 ---
 
 ## Phase 10.5: Subscription Management Features
 
 - [ ] **Add subscription cancellation** (Billing page)
+
   - [ ] Add "Cancel Subscription" button for paid plans
   - [ ] Create confirmation dialog before cancellation
   - [ ] Call DELETE /api/v1/stripe/subscription/:subscriptionId
@@ -282,6 +305,7 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
   - [ ] Handle errors gracefully
 
 - [ ] **Add subscription upgrade/downgrade**
+
   - [ ] Allow upgrading from lower to higher tier
   - [ ] Allow downgrading from higher to lower tier
   - [ ] Show prorated amount information
@@ -289,7 +313,8 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
   - [ ] Update subscription with new priceId
 
 - [ ] **Display subscription details**
-  - [ ] Fetch subscription info (GET /api/v1/stripe/subscription/:subscriptionId)
+  - [ ] Fetch subscription info (GET
+        /api/v1/stripe/subscription/:subscriptionId)
   - [ ] Show current period start/end dates
   - [ ] Show next billing date
   - [ ] Show subscription status (active/canceled/past_due)
@@ -300,6 +325,7 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 ## Phase 11: Error Handling & Edge Cases
 
 - [ ] **Payment error handling**
+
   - [ ] Handle insufficient funds error
   - [ ] Handle card declined error
   - [ ] Handle expired card error
@@ -322,12 +348,14 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 ## Phase 12: Testing
 
 - [ ] **Component testing**
+
   - [ ] Test PaymentMethodCard rendering
   - [ ] Test PaymentMethodList selection
   - [ ] Test StripeCardForm validation
   - [ ] Test PaymentConfirmationModal states
 
 - [ ] **Flow testing**
+
   - [ ] Test upgrade with no payment method
     - [ ] Enter card details
     - [ ] Submit payment
@@ -358,6 +386,7 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 ## Phase 13: UI/UX Polish
 
 - [ ] **Visual improvements**
+
   - [ ] Add loading spinners for async operations
   - [ ] Add success animations/checkmarks
   - [ ] Add smooth transitions between states
@@ -366,6 +395,7 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
   - [ ] Add proper focus states for accessibility
 
 - [ ] **Responsive design**
+
   - [ ] Test on mobile viewport
   - [ ] Test on tablet viewport
   - [ ] Ensure modals are scrollable on small screens
@@ -384,12 +414,14 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 ## Phase 14: Documentation & Cleanup
 
 - [ ] **Code documentation**
+
   - [ ] Add JSDoc comments to components
   - [ ] Document payment flow in code comments
   - [ ] Add inline comments for complex logic
   - [ ] Update README if needed
 
 - [ ] **Code cleanup**
+
   - [ ] Remove console.logs
   - [ ] Remove commented code
   - [ ] Ensure consistent formatting
@@ -409,18 +441,23 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 ## Files Checklist
 
 ### New Files to Create:
+
 - [x] `src/types/stripe.ts` ✅
 - [x] `src/components/stripe/StripeProvider.tsx` ✅
 - [x] `src/components/stripe/PaymentMethodCard.tsx` ✅
 - [x] `src/components/stripe/PaymentMethodList.tsx` ✅
 - [x] `src/components/stripe/StripeCardForm.tsx` ✅
 - [x] `src/components/stripe/PaymentConfirmationModal.tsx` ✅
-- [ ] `src/components/organizations/SubscriptionManagement.tsx` (optional - for cancel/change plan)
+- [ ] `src/components/organizations/SubscriptionManagement.tsx` (optional - for
+      cancel/change plan)
 
 ### Files to Modify:
+
 - [x] `src/actions/stripeActions.ts` - Add all new API action functions ✅
-- [x] `src/app/(protected)/organizations/[tenantId]/billing/page.tsx` - Integrate payment flow ✅
-- [x] `src/components/organizations/OrganizationPricingCards.tsx` - Add Stripe priceIds ⚠️ (Placeholders added, need actual IDs)
+- [x] `src/app/(protected)/organizations/[tenantId]/billing/page.tsx` -
+      Integrate payment flow ✅
+- [x] `src/components/organizations/OrganizationPricingCards.tsx` - Add Stripe
+      priceIds ⚠️ (Placeholders added, need actual IDs)
 - [x] `.env` - Already has NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ✅
 - [x] `package.json` - Already has Stripe packages ✅
 
@@ -429,6 +466,7 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 ## Payment Flow Summary
 
 ### Flow A: New User (No Payment Method)
+
 1. User selects plan → Opens PaymentConfirmationModal
 2. Fetch payment methods → Empty array returned
 3. Show StripeCardForm (CardElement)
@@ -440,6 +478,7 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 9. Success → Update UI, show success message
 
 ### Flow B: Returning User (Has Payment Method)
+
 1. User selects plan → Opens PaymentConfirmationModal
 2. Fetch payment methods → Display existing cards
 3. User selects existing card (radio button)
@@ -447,6 +486,7 @@ Integrate Stripe payment functionality for organization plan upgrades with suppo
 5. Success → Update UI, show success message
 
 ### Flow C: User Wants New Card (Has Existing)
+
 1. User selects plan → Opens PaymentConfirmationModal
 2. Fetch payment methods → Display existing cards
 3. User selects "Add New Card" option
@@ -465,6 +505,7 @@ Use these test card numbers for different scenarios:
 - [ ] **Processing error**: `4000 0000 0000 0119`
 
 Always use:
+
 - Any future expiry date (e.g., 12/34)
 - Any 3-digit CVC
 - Any postal code
@@ -508,6 +549,6 @@ Always use:
 
 ---
 
-**Start Date**: _____  
-**Target Completion**: _____  
-**Actual Completion**: _____
+**Start Date**: **\_**  
+**Target Completion**: **\_**  
+**Actual Completion**: **\_**

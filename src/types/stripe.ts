@@ -8,7 +8,15 @@ export interface PaymentMethod {
   object: 'payment_method';
   type: 'card';
   card: {
-    brand: 'visa' | 'mastercard' | 'amex' | 'discover' | 'diners' | 'jcb' | 'unionpay' | 'unknown';
+    brand:
+      | 'visa'
+      | 'mastercard'
+      | 'amex'
+      | 'discover'
+      | 'diners'
+      | 'jcb'
+      | 'unionpay'
+      | 'unknown';
     last4: string;
     exp_month: number;
     exp_year: number;
@@ -42,7 +50,13 @@ export interface PaymentIntent {
   amount: number;
   currency: string;
   client_secret: string;
-  status: 'requires_payment_method' | 'requires_confirmation' | 'requires_action' | 'processing' | 'succeeded' | 'canceled';
+  status:
+    | 'requires_payment_method'
+    | 'requires_confirmation'
+    | 'requires_action'
+    | 'processing'
+    | 'succeeded'
+    | 'canceled';
   payment_method?: string;
   customer?: string;
   description?: string;
@@ -93,7 +107,14 @@ export interface StripePrice {
 export interface Subscription {
   id: string;
   object: 'subscription';
-  status: 'active' | 'past_due' | 'unpaid' | 'canceled' | 'incomplete' | 'incomplete_expired' | 'trialing';
+  status:
+    | 'active'
+    | 'past_due'
+    | 'unpaid'
+    | 'canceled'
+    | 'incomplete'
+    | 'incomplete_expired'
+    | 'trialing';
   customer: string;
   items: {
     data: Array<{

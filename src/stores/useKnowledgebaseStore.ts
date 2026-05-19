@@ -8,10 +8,12 @@ interface KnowledgeBaseStore {
   clearKnowledgeBaseData: () => void;
 }
 
-export const useKnowledgebaseStore = create<KnowledgeBaseStore>((set) => ({
+export const useKnowledgebaseStore = create<KnowledgeBaseStore>(set => ({
   knowledgeBaseId: '',
   knowledgeBaseName: '',
   setKnowledgeBaseId: (knowledgeBaseId: string) => set({ knowledgeBaseId }),
-  setKnowledgeBaseName: (knowledgeBaseName: string) => set({ knowledgeBaseName }),
-  clearKnowledgeBaseData: () => set({ knowledgeBaseId: '', knowledgeBaseName: '' }),
+  setKnowledgeBaseName: (knowledgeBaseName: string) =>
+    set({ knowledgeBaseName }),
+  clearKnowledgeBaseData: () =>
+    set({ knowledgeBaseId: '', knowledgeBaseName: '' }),
 }));

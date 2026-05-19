@@ -67,7 +67,7 @@ export const MattersList = ({
   return (
     <>
       {/* Search and Create Section */}
-      <div className="flex items-center gap-2 ">
+      <div className="flex items-center gap-2">
         <Input
           placeholder="Search..."
           value={searchQuery}
@@ -84,7 +84,7 @@ export const MattersList = ({
       </div>
 
       {/* Divider */}
-      <div className="mb-4 h-px bg-gray-200 dark:bg-gray-800 mt-4" />
+      <div className="mt-4 mb-4 h-px bg-gray-200 dark:bg-gray-800" />
 
       {/* Matters List */}
       <div className="space-y-2">

@@ -36,7 +36,8 @@ export function InviteMemberModal() {
   const [message, setMessage] = useState('');
   const [role, setRole] = useState<string>(TenantRole.MEMBER);
   const [isInviting, setIsInviting] = useState(false);
-  const [successInvitation, setSuccessInvitation] = useState<TenantInvitation | null>(null);
+  const [successInvitation, setSuccessInvitation] =
+    useState<TenantInvitation | null>(null);
 
   const tenantId = actionId;
   const isModalOpen = isOpen && type === 'invite-member';
@@ -116,25 +117,28 @@ export function InviteMemberModal() {
           <>
             <DialogHeader>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center shrink-0">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
                   <CheckCircle2 className="size-5 text-green-600 dark:text-green-400" />
                 </div>
                 <div>
                   <DialogTitle>Invitation Sent!</DialogTitle>
                   <DialogDescription>
                     An invitation has been sent to{' '}
-                    <span className="font-medium text-foreground">{successInvitation.email}</span>.
+                    <span className="text-foreground font-medium">
+                      {successInvitation.email}
+                    </span>
+                    .
                   </DialogDescription>
                 </div>
               </div>
             </DialogHeader>
 
-            <div className="py-4 space-y-3">
-              <p className="text-sm text-muted-foreground">
+            <div className="space-y-3 py-4">
+              <p className="text-muted-foreground text-sm">
                 Share this link directly if the email doesn&apos;t arrive:
               </p>
-              <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
-                <code className="text-xs flex-1 truncate text-muted-foreground">
+              <div className="bg-muted flex items-center gap-2 rounded-lg p-3">
+                <code className="text-muted-foreground flex-1 truncate text-xs">
                   {`${window.location.origin}/accept-invite/${successInvitation.token}`}
                 </code>
                 <Button
@@ -160,8 +164,8 @@ export function InviteMemberModal() {
             <DialogHeader>
               <DialogTitle>Invite Team Member</DialogTitle>
               <DialogDescription>
-                Send an invitation to join your organization. They&apos;ll receive an
-                email with a link to accept.
+                Send an invitation to join your organization. They&apos;ll
+                receive an email with a link to accept.
               </DialogDescription>
             </DialogHeader>
 
@@ -172,11 +176,11 @@ export function InviteMemberModal() {
                   id="email"
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
                   placeholder="colleague@example.com"
                   disabled={isInviting}
                   autoFocus
-                  onKeyDown={(e) => {
+                  onKeyDown={e => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
                       handleInvite();
@@ -200,23 +204,31 @@ export function InviteMemberModal() {
 
               <div className="space-y-2">
                 <Label htmlFor="role">Role *</Label>
-                <Select value={role} onValueChange={setRole} disabled={isInviting}>
+                <Select
+                  value={role}
+                  onValueChange={setRole}
+                  disabled={isInviting}
+                >
                   <SelectTrigger id="role">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value={TenantRole.MEMBER}>
                       <div>
-                        <div className="font-medium capitalize">{TenantRole.MEMBER}</div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="font-medium capitalize">
+                          {TenantRole.MEMBER}
+                        </div>
+                        <div className="text-muted-foreground text-xs">
                           Can use organization resources
                         </div>
                       </div>
                     </SelectItem>
                     <SelectItem value={TenantRole.OWNER}>
                       <div>
-                        <div className="font-medium capitalize">{TenantRole.OWNER}</div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="font-medium capitalize">
+                          {TenantRole.OWNER}
+                        </div>
+                        <div className="text-muted-foreground text-xs">
                           Full control of the organization
                         </div>
                       </div>
@@ -227,14 +239,18 @@ export function InviteMemberModal() {
             </div>
 
             <DialogFooter>
-              <Button variant="outline" onClick={handleClose} disabled={isInviting}>
+              <Button
+                variant="outline"
+                onClick={handleClose}
+                disabled={isInviting}
+              >
                 Cancel
               </Button>
               <Button
                 onClick={handleInvite}
                 disabled={isInviting || !email.trim()}
               >
-                {isInviting && <Loader2 className="size-4 mr-2 animate-spin" />}
+                {isInviting && <Loader2 className="mr-2 size-4 animate-spin" />}
                 {isInviting ? 'Sending...' : 'Send Invitation'}
               </Button>
             </DialogFooter>

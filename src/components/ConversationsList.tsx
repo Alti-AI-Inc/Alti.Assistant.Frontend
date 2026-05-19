@@ -11,22 +11,22 @@ import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {
-    EllipsisVertical,
-    LoaderCircle,
-    Pencil,
-    Share,
-    Trash2,
+  EllipsisVertical,
+  LoaderCircle,
+  Pencil,
+  Share,
+  Trash2,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import SaveConversation from './SaveConversation';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 
 export default function ConversationsList() {
@@ -92,7 +92,10 @@ export default function ConversationsList() {
   }
 
   return (
-    <div className="mt-2 h-[calc(100vh-60px)] overflow-y-auto" style={{backgroundColor:"#F2F3F5"}}>
+    <div
+      className="mt-2 h-[calc(100vh-60px)] overflow-y-auto"
+      style={{ backgroundColor: '#F2F3F5' }}
+    >
       {conversations.map(chat => (
         <div
           className="group flex h-9 w-full items-center justify-between rounded-md text-sm font-medium text-black hover:bg-black/5"

@@ -30,9 +30,7 @@ export default function AppIntegrationsGrid() {
     if (isLoading || !connections?.length) return new Set();
 
     return new Set(
-      connections
-        .filter(c => c.status === 'ACTIVE')
-        .map(c => c.toolkit?.slug),
+      connections.filter(c => c.status === 'ACTIVE').map(c => c.toolkit?.slug),
     );
   }, [connections, isLoading]);
 

@@ -522,7 +522,11 @@ async function fetchTenantMembersFromUrl(
   url: string,
   tenantId: string,
   accessToken?: string,
-): Promise<{ members: AdminTenantMember[]; message?: string; statusCode?: number }> {
+): Promise<{
+  members: AdminTenantMember[];
+  message?: string;
+  statusCode?: number;
+}> {
   const res = await fetch(url, {
     method: 'GET',
     headers: {
@@ -536,7 +540,8 @@ async function fetchTenantMembersFromUrl(
     return {
       members: [],
       message:
-        (err as { message?: string }).message || 'Failed to fetch tenant members',
+        (err as { message?: string }).message ||
+        'Failed to fetch tenant members',
       statusCode: res.status,
     };
   }
@@ -625,7 +630,11 @@ export async function assignUserSubscription(
     );
 
     const data = await res.json().catch(() => ({}));
-    const body = data as { success?: boolean; message?: string; data?: unknown };
+    const body = data as {
+      success?: boolean;
+      message?: string;
+      data?: unknown;
+    };
 
     if (!res.ok || body.success === false) {
       return {

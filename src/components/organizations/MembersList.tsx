@@ -40,9 +40,15 @@ interface MembersListProps {
   onUpdate: () => void | Promise<void>;
 }
 
-function MembersListComponent({ members, tenantId, onUpdate }: MembersListProps) {
+function MembersListComponent({
+  members,
+  tenantId,
+  onUpdate,
+}: MembersListProps) {
   const { data: session } = useSession();
-  const [memberToRemove, setMemberToRemove] = useState<TenantMember | null>(null);
+  const [memberToRemove, setMemberToRemove] = useState<TenantMember | null>(
+    null,
+  );
   const [isRemoving, setIsRemoving] = useState(false);
 
   const tenantMembership = session?.user?.tenants?.find(
@@ -89,7 +95,7 @@ function MembersListComponent({ members, tenantId, onUpdate }: MembersListProps)
 
   if (members.length === 0) {
     return (
-      <div className="text-center py-8 text-muted-foreground">
+      <div className="text-muted-foreground py-8 text-center">
         No members found
       </div>
     );
@@ -109,94 +115,107 @@ function MembersListComponent({ members, tenantId, onUpdate }: MembersListProps)
             </TableRow>
           </TableHeader>
           <TableBody>
-            {members.filter((member) => member?.userId?._id).map((member) => {
-              const userId = member.userId._id;
-              const email = member.userId.email;
-              const isCurrentUser = userId === session?.user?.id;
-              const memberRole = String(
-                member.tenantRole ?? member.role ?? 'member',
-              ).toLowerCase();
-              const canModify = isTenantOwner && !isCurrentUser;
+            {members
+              .filter(member => member?.userId?._id)
+              .map(member => {
+                const userId = member.userId._id;
+                const email = member.userId.email;
+                const isCurrentUser = userId === session?.user?.id;
+                const memberRole = String(
+                  member.tenantRole ?? member.role ?? 'member',
+                ).toLowerCase();
+                const canModify = isTenantOwner && !isCurrentUser;
 
-              return (
-                <TableRow key={member._id}>
-                  <TableCell className="font-medium">
-                    <div className="flex items-center gap-2">
-                      <div>
-                        <div className="font-medium">{email}</div>
-                        {isCurrentUser && (
-                          <span className="text-xs text-muted-foreground">(You)</span>
-                        )}
+                return (
+                  <TableRow key={member._id}>
+                    <TableCell className="font-medium">
+                      <div className="flex items-center gap-2">
+                        <div>
+                          <div className="font-medium">{email}</div>
+                          {isCurrentUser && (
+                            <span className="text-muted-foreground text-xs">
+                              (You)
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {member.joinedAt
-                      ? new Date(member.joinedAt).toLocaleDateString()
-                      : 'N/A'}
-                  </TableCell>
-                  <TableCell>
-                    {canModify ? (
-                      <MemberRoleSelector
-                        currentRole={memberRole}
-                        memberId={userId}
-                        viewerIsOwner
-                        onUpdate={onUpdate}
-                      />
-                    ) : (
-                      <Badge variant={getRoleBadgeVariant(memberRole)} className="capitalize">
-                        {memberRole}
-                      </Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
-                      member.status === 'active'
-                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                        : 'bg-muted text-muted-foreground'
-                    }`}>
-                      {member.status ?? 'active'}
-                    </span>
-                  </TableCell>
-                  {isTenantOwner && (
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {member.joinedAt
+                        ? new Date(member.joinedAt).toLocaleDateString()
+                        : 'N/A'}
+                    </TableCell>
                     <TableCell>
-                      {canModify && (
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="size-8">
-                              <MoreVertical className="size-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              className="text-destructive focus:text-destructive"
-                              onClick={() => setMemberToRemove(member)}
-                            >
-                              <Trash2 className="size-4 mr-2" />
-                              Remove Member
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      {canModify ? (
+                        <MemberRoleSelector
+                          currentRole={memberRole}
+                          memberId={userId}
+                          viewerIsOwner
+                          onUpdate={onUpdate}
+                        />
+                      ) : (
+                        <Badge
+                          variant={getRoleBadgeVariant(memberRole)}
+                          className="capitalize"
+                        >
+                          {memberRole}
+                        </Badge>
                       )}
                     </TableCell>
-                  )}
-                </TableRow>
-              );
-            })}
+                    <TableCell>
+                      <span
+                        className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                          member.status === 'active'
+                            ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                            : 'bg-muted text-muted-foreground'
+                        }`}
+                      >
+                        {member.status ?? 'active'}
+                      </span>
+                    </TableCell>
+                    {isTenantOwner && (
+                      <TableCell>
+                        {canModify && (
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="size-8"
+                              >
+                                <MoreVertical className="size-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                className="text-destructive focus:text-destructive"
+                                onClick={() => setMemberToRemove(member)}
+                              >
+                                <Trash2 className="mr-2 size-4" />
+                                Remove Member
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        )}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </div>
 
       <AlertDialog
         open={!!memberToRemove}
-        onOpenChange={(open) => !open && setMemberToRemove(null)}
+        onOpenChange={open => !open && setMemberToRemove(null)}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Remove Member</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to remove {memberToRemove?.userId.email} from this
-              organization? They will lose access immediately.
+              Are you sure you want to remove {memberToRemove?.userId.email}{' '}
+              from this organization? They will lose access immediately.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

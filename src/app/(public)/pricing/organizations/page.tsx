@@ -1,7 +1,14 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { OrganizationPricingCards } from '@/components/organizations/OrganizationPricingCards';
 import type { OrganizationPlan } from '@/components/organizations/OrganizationPricingCards';
 import Link from 'next/link';
@@ -16,15 +23,16 @@ export default function OrganizationPricingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      <div className="container mx-auto px-4 py-16 max-w-7xl">
+    <div className="from-background to-muted/20 min-h-screen bg-gradient-to-b">
+      <div className="container mx-auto max-w-7xl px-4 py-16">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+        <div className="mb-16 text-center">
+          <h1 className="mb-4 text-4xl font-bold md:text-5xl">
             Organization Pricing
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Choose the perfect plan for your team. Scale as you grow with our flexible pricing.
+          <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
+            Choose the perfect plan for your team. Scale as you grow with our
+            flexible pricing.
           </p>
         </div>
 
@@ -36,11 +44,12 @@ export default function OrganizationPricingPage() {
 
         {/* Additional Information */}
         <div className="mt-16 text-center">
-          <Card className="max-w-3xl mx-auto">
+          <Card className="mx-auto max-w-3xl">
             <CardHeader>
               <CardTitle>Need a custom solution?</CardTitle>
               <CardDescription>
-                Contact our sales team for enterprise pricing and custom features tailored to your organization&apos;s needs.
+                Contact our sales team for enterprise pricing and custom
+                features tailored to your organization&apos;s needs.
               </CardDescription>
             </CardHeader>
             <CardFooter className="justify-center">
@@ -52,40 +61,50 @@ export default function OrganizationPricingPage() {
         </div>
 
         {/* FAQ Section */}
-        <div className="mt-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-8">
+        <div className="mx-auto mt-16 max-w-3xl">
+          <h2 className="mb-8 text-center text-3xl font-bold">
             Frequently Asked Questions
           </h2>
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Can I change plans later?</CardTitle>
+                <CardTitle className="text-lg">
+                  Can I change plans later?
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Yes! You can upgrade or downgrade your plan at any time. Changes take effect at the start of your next billing cycle.
+                  Yes! You can upgrade or downgrade your plan at any time.
+                  Changes take effect at the start of your next billing cycle.
                 </p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">What happens if I exceed my daily request limit?</CardTitle>
+                <CardTitle className="text-lg">
+                  What happens if I exceed my daily request limit?
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Requests beyond your daily limit may be queued or require an upgrade to a higher plan. Contact support to discuss your needs.
+                  Requests beyond your daily limit may be queued or require an
+                  upgrade to a higher plan. Contact support to discuss your
+                  needs.
                 </p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Is there a discount for annual billing?</CardTitle>
+                <CardTitle className="text-lg">
+                  Is there a discount for annual billing?
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Yes! Save 20% when you choose annual billing. Contact our sales team for more details.
+                  Yes! Save 20% when you choose annual billing. Contact our
+                  sales team for more details.
                 </p>
               </CardContent>
             </Card>

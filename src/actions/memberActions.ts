@@ -18,7 +18,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
  */
 function membershipTenantRole(raw: Record<string, unknown>): string {
   const readRecord = (value: unknown): Record<string, unknown> | null =>
-    value && typeof value === 'object' ? (value as Record<string, unknown>) : null;
+    value && typeof value === 'object'
+      ? (value as Record<string, unknown>)
+      : null;
 
   const candidates = [
     raw,
@@ -29,7 +31,10 @@ function membershipTenantRole(raw: Record<string, unknown>): string {
   ].filter((value): value is Record<string, unknown> => value !== null);
 
   for (const candidate of candidates) {
-    if (typeof candidate.tenantRole === 'string' && candidate.tenantRole.trim()) {
+    if (
+      typeof candidate.tenantRole === 'string' &&
+      candidate.tenantRole.trim()
+    ) {
       return candidate.tenantRole.trim().toLowerCase();
     }
   }
@@ -154,7 +159,7 @@ export async function getTenantMembers(): Promise<ApiResponse<TenantMember[]>> {
 
     const rawList: unknown[] = Array.isArray(result.data)
       ? result.data
-      : result.data?.members ?? [];
+      : (result.data?.members ?? []);
 
     const data = rawList
       .map(normalizeTenantMember)
@@ -175,7 +180,7 @@ export async function getTenantMembers(): Promise<ApiResponse<TenantMember[]>> {
  * Get a single member of the current tenant by user id
  */
 export async function getTenantMember(
-  userId: string
+  userId: string,
 ): Promise<ApiResponse<TenantMember>> {
   try {
     const session = await auth();
@@ -203,7 +208,9 @@ export async function getTenantMember(
   }
 }
 
-export async function getTenantMemberByTenantId(tenantId: string): Promise<ApiResponse<TenantMember[]>> {
+export async function getTenantMemberByTenantId(
+  tenantId: string,
+): Promise<ApiResponse<TenantMember[]>> {
   try {
     const session = await auth();
     if (!session?.accessToken) {
@@ -227,7 +234,7 @@ export async function getTenantMemberByTenantId(tenantId: string): Promise<ApiRe
 
     const rawList: unknown[] = Array.isArray(result.data)
       ? result.data
-      : result.data?.members ?? [];
+      : (result.data?.members ?? []);
 
     const data = rawList
       .map(normalizeTenantMember)
@@ -248,7 +255,7 @@ export async function getTenantMemberByTenantId(tenantId: string): Promise<ApiRe
  * Invite a member to the current tenant
  */
 export async function inviteMember(
-  data: InviteMemberData
+  data: InviteMemberData,
 ): Promise<ApiResponse<TenantInvitation>> {
   const fail = (message: string): ApiResponse<TenantInvitation> => ({
     success: false,
@@ -350,7 +357,7 @@ export async function getPendingInvitations(): Promise<
       message: result.message,
       data: Array.isArray(result.data)
         ? result.data
-        : result.data?.invitations ?? [],
+        : (result.data?.invitations ?? []),
     };
   } catch (error: any) {
     console.error('Error getting pending invitations:', error);
@@ -363,7 +370,9 @@ function normalizeVerifyInvitationBody(
   pathToken: string,
 ): VerifyInvitationResponse {
   const asRecord = (value: unknown): Record<string, unknown> | null =>
-    value && typeof value === 'object' ? (value as Record<string, unknown>) : null;
+    value && typeof value === 'object'
+      ? (value as Record<string, unknown>)
+      : null;
 
   const data = asRecord(raw.data) ?? raw;
   const invitation = asRecord(data.invitation) ?? asRecord(raw.invitation);
@@ -392,19 +401,11 @@ function normalizeVerifyInvitationBody(
   )!;
 
   const tenantId =
-    firstString(
-      data.tenantId,
-      invitation?.tenantId,
-      tenant?._id,
-      tenant?.id,
-    ) ?? '';
+    firstString(data.tenantId, invitation?.tenantId, tenant?._id, tenant?.id) ??
+    '';
 
   const tenantName =
-    firstString(
-      data.tenantName,
-      invitation?.tenantName,
-      tenant?.name,
-    ) ?? '';
+    firstString(data.tenantName, invitation?.tenantName, tenant?.name) ?? '';
 
   return {
     id,
@@ -412,12 +413,20 @@ function normalizeVerifyInvitationBody(
     email: firstString(data.email, invitation?.email) ?? '',
     tenantName,
     tenantId,
-    role: firstString(data.tenantRole, invitation?.tenantRole, data.role, invitation?.role) ?? 'member',
+    role:
+      firstString(
+        data.tenantRole,
+        invitation?.tenantRole,
+        data.role,
+        invitation?.role,
+      ) ?? 'member',
     isUserExistWithEmail: Boolean(data.isUserExistWithEmail),
-    inviterName:
-      firstString(data.inviterName, invitation?.inviterName, invitedBy?.name),
-    expiresAt:
-      firstString(data.expiresAt, invitation?.expiresAt),
+    inviterName: firstString(
+      data.inviterName,
+      invitation?.inviterName,
+      invitedBy?.name,
+    ),
+    expiresAt: firstString(data.expiresAt, invitation?.expiresAt),
   };
 }
 
@@ -425,7 +434,7 @@ function normalizeVerifyInvitationBody(
  * Verify an invitation token (public - no auth required)
  */
 export async function verifyInvitationToken(
-  token: string
+  token: string,
 ): Promise<ApiResponse<VerifyInvitationResponse>> {
   try {
     const response = await fetch(
@@ -435,7 +444,7 @@ export async function verifyInvitationToken(
         headers: {
           'Content-Type': 'application/json',
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -470,7 +479,7 @@ export async function verifyInvitationToken(
  */
 export async function acceptInvitation(
   tenantId: string,
-  inviteId: string
+  inviteId: string,
 ): Promise<ApiResponse<{ tenantId: string; message: string }>> {
   try {
     const session = await auth();
@@ -491,7 +500,7 @@ export async function acceptInvitation(
           Authorization: `Bearer ${session.accessToken}`,
         },
         body: JSON.stringify({}),
-      }
+      },
     );
 
     if (!response.ok) {
@@ -522,7 +531,7 @@ export async function acceptInvitation(
  */
 export async function updateMemberRole(
   userId: string,
-  role: string
+  role: string,
 ): Promise<ApiResponse<TenantMember>> {
   try {
     const session = await auth();
@@ -530,17 +539,14 @@ export async function updateMemberRole(
       throw new Error('Unauthorized');
     }
 
-    const response = await fetch(
-      `${API_URL}/tenant/members/${userId}/role`,
-      {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.accessToken}`,
-        },
-        body: JSON.stringify({ role }),
-      }
-    );
+    const response = await fetch(`${API_URL}/tenant/members/${userId}/role`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.accessToken}`,
+      },
+      body: JSON.stringify({ role }),
+    });
 
     if (!response.ok) {
       let message = 'Failed to update member role';
@@ -580,8 +586,7 @@ export async function updateMemberRole(
     return {
       success: true,
       data,
-      message:
-        typeof result.message === 'string' ? result.message : undefined,
+      message: typeof result.message === 'string' ? result.message : undefined,
     };
   } catch (error: any) {
     console.error('Error updating member role:', error);
@@ -593,7 +598,7 @@ export async function updateMemberRole(
  * Remove a member from the tenant
  */
 export async function removeMember(
-  userId: string
+  userId: string,
 ): Promise<ApiResponse<{ message: string }>> {
   try {
     const session = await auth();
@@ -657,7 +662,7 @@ export async function getUserInvitations(): Promise<
  * Cancel a pending invitation
  */
 export async function cancelInvitation(
-  invitationId: string
+  invitationId: string,
 ): Promise<ApiResponse<{ message: string }>> {
   try {
     const session = await auth();
@@ -673,7 +678,7 @@ export async function cancelInvitation(
           'Content-Type': 'application/json',
           Authorization: `Bearer ${session.accessToken}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {

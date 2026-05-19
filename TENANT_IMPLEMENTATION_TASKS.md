@@ -1,14 +1,18 @@
 # Tenant/Organization Management Implementation Tasks
 
 ## 📋 Overview
-This document contains all tasks required to implement multi-tenant organization management with the ability to switch between personal and organization modes.
+
+This document contains all tasks required to implement multi-tenant organization
+management with the ability to switch between personal and organization modes.
 
 ---
 
 ## Phase 1: Authentication & Context Management
 
 ### 1.1 Update Auth System
+
 - [x] Extend NextAuth types in `src/auth.ts`:
+
   - [x] Add `tenantId` to User interface
   - [x] Add `tenants` array to User interface
   - [x] Add `tenantRole` to User interface
@@ -17,12 +21,14 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Update JWT interface with tenant fields
 
 - [x] Update JWT callback in `src/auth.ts`:
+
   - [x] Decode `tenantId` from backend token
   - [x] Decode `tenants` array from backend token
   - [x] Decode `role` from backend token
   - [x] Store tenant info in token state
 
 - [x] Update session callback in `src/auth.ts`:
+
   - [x] Map tenant data from token to session
   - [x] Add isTokenExpired check for tenant context
 
@@ -33,6 +39,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Provide helper hooks for accessing tenant context
 
 ### 1.2 Create User Mode Store
+
 - [x] Create `src/stores/useTenantStore.ts`:
   - [x] Define store interface
   - [x] Add `mode` state ('personal' | 'tenant')
@@ -47,6 +54,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Add hydration logic
 
 ### 1.3 Middleware Enhancement
+
 - [x] Update `src/middleware.ts`:
   - [x] Add tenant validation logic
   - [x] Check tenant membership before accessing tenant routes
@@ -59,6 +67,7 @@ This document contains all tasks required to implement multi-tenant organization
 ## Phase 2: API Integration Layer
 
 ### 2.1 Create Tenant Actions
+
 - [x] Create `src/actions/tenantActions.ts`:
   - [x] Implement `checkSubdomainAvailability(subdomain: string)`
   - [x] Implement `createTenant(data: CreateTenantData)`
@@ -72,6 +81,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Add TypeScript types for request/response
 
 ### 2.2 Create Member Actions
+
 - [x] Create `src/actions/memberActions.ts`:
   - [x] Implement `getTenantMembers()`
   - [x] Implement `inviteMember(email: string, role: string)`
@@ -86,19 +96,23 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Add TypeScript types
 
 ### 2.3 Update Subscription Actions
+
 - [x] Update `src/actions/stripeActions.ts`:
   - [x] Add tenant context to subscription calls
   - [x] Update `getMySubscription()` to be context-aware
   - [x] Update `upgradeSubscription()` to handle tenant subscriptions
   - [x] Add `getTenantSubscription(tenantId)` function
-  - [x] Add seat management functions (addSeatToSubscription, removeSeatFromSubscription)
-  - [x] Update usage limit checks to be context-aware (getUsageStats, checkUsageLimit)
+  - [x] Add seat management functions (addSeatToSubscription,
+        removeSeatFromSubscription)
+  - [x] Update usage limit checks to be context-aware (getUsageStats,
+        checkUsageLimit)
 
 ---
 
 ## Phase 3: Type Definitions
 
 ### 3.1 Create Tenant Types
+
 - [x] Create `src/types/tenant.ts`:
   - [x] Define `Tenant` interface
   - [x] Define `TenantMember` interface
@@ -109,8 +123,10 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Define `UpdateTenantSettingsData` interface
   - [x] Define `TenantRole` enum ('owner' | 'admin' | 'member')
   - [x] Define `UserMode` enum ('personal' | 'tenant')
-  - [x] Define `TenantStatus` enum ('trial' | 'active' | 'suspended' | 'cancelled')
-  - [x] Define `InvitationStatus` enum ('pending' | 'accepted' | 'rejected' | 'expired')
+  - [x] Define `TenantStatus` enum ('trial' | 'active' | 'suspended' |
+        'cancelled')
+  - [x] Define `InvitationStatus` enum ('pending' | 'accepted' | 'rejected' |
+        'expired')
   - [x] Export all types
 
 ---
@@ -118,6 +134,7 @@ This document contains all tasks required to implement multi-tenant organization
 ## Phase 4: UI Components
 
 ### 4.1 Mode Switcher Component
+
 - [x] Create `src/components/TenantModeSwitcher.tsx`:
   - [x] Design dropdown UI with mode options
   - [x] Add "Personal Mode" option
@@ -131,7 +148,9 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Make responsive for mobile
 
 ### 4.2 Tenant Management Dashboard
+
 - [x] Create `src/app/(protected)/organizations/page.tsx`:
+
   - [x] Design organizations list page
   - [x] Show all user's organizations
   - [x] Add "Create Organization" button
@@ -141,6 +160,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Add empty state for no organizations
 
 - [x] Create `src/app/(protected)/organizations/create/page.tsx`:
+
   - [x] Design create organization form
   - [x] Add form fields (name, slug, subdomain)
   - [x] Implement subdomain availability check
@@ -150,6 +170,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Redirect to new organization on success
 
 - [x] Create `src/app/(protected)/organizations/[tenantId]/page.tsx`:
+
   - [x] Design Manage Organization
   - [x] Show organization overview
   - [x] Display key metrics (members, usage, plan)
@@ -158,6 +179,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Add navigation to sub-pages
 
 - [x] Create `src/app/(protected)/organizations/[tenantId]/settings/page.tsx`:
+
   - [x] Design settings page
   - [x] Add organization name/subdomain display
   - [x] Add settings form (maxMembers, allowMemberInvites)
@@ -166,6 +188,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Add permission checks (owner/admin only)
 
 - [x] Create `src/app/(protected)/organizations/[tenantId]/members/page.tsx`:
+
   - [x] Design members management page
   - [x] Create members table/list
   - [x] Show member info (name, email, role, joined date)
@@ -186,7 +209,9 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Add permission checks (owner only)
 
 ### 4.3 Organization Components
+
 - [x] Create `src/components/organizations/OrganizationCard.tsx`:
+
   - [x] Design card component
   - [x] Display org name, subdomain, member count
   - [x] Show user's role badge
@@ -195,6 +220,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Style for light/dark theme
 
 - [x] Create `src/components/organizations/OrganizationList.tsx`:
+
   - [x] Design list container
   - [x] Map organization cards
   - [x] Add grid/list view toggle
@@ -203,6 +229,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Handle empty state
 
 - [x] Create `src/components/organizations/CreateOrganizationModal.tsx`:
+
   - [x] Design modal UI
   - [x] Add form fields
   - [x] Implement subdomain checking
@@ -212,6 +239,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Show success message
 
 - [x] Create `src/components/organizations/OrganizationSettings.tsx`:
+
   - [x] Design settings form
   - [x] Add all setting fields
   - [x] Implement form validation
@@ -220,6 +248,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Add success/error notifications
 
 - [x] Create `src/components/organizations/MembersList.tsx`:
+
   - [x] Design members table
   - [x] Add table columns (name, email, role, actions)
   - [x] Implement sorting
@@ -229,6 +258,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Add loading/empty states
 
 - [x] Create `src/components/organizations/InviteMemberModal.tsx`:
+
   - [x] Design invite modal
   - [x] Add email input field
   - [x] Add role selector
@@ -238,6 +268,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Handle errors (already member, invalid email)
 
 - [x] Create `src/components/organizations/PendingInvitations.tsx`:
+
   - [x] Design pending invites list
   - [x] Show invitation details
   - [x] Add resend invitation action
@@ -246,6 +277,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Add copy invitation link
 
 - [x] Create `src/components/organizations/MemberRoleSelector.tsx`:
+
   - [x] Design role dropdown
   - [x] Add role options (owner, admin, member)
   - [x] Disable owner change (special case)
@@ -262,6 +294,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Add loading indicator
 
 ### 4.4 Invitation Flow
+
 - [x] Create `src/app/(public)/accept-invite/[token]/page.tsx`:
   - [x] Design invitation acceptance page
   - [x] Verify invitation token on load
@@ -278,7 +311,9 @@ This document contains all tasks required to implement multi-tenant organization
 ## Phase 5: Navigation & Routing
 
 ### 5.1 Update Navigation Components
+
 - [x] Update `src/components/LeftSideNav.tsx`:
+
   - [x] Add current mode indicator
   - [x] Add "Organizations" menu item
   - [x] Add organization icon
@@ -288,6 +323,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Add organization submenu when in tenant mode
 
 - [x] Update `src/components/RightSideNav.tsx`:
+
   - [x] Add tenant mode switcher to header
   - [x] Show current organization info when in tenant mode
   - [x] Add organization quick actions
@@ -300,16 +336,20 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Ensure responsive design
 
 ### 5.2 Context-Aware Routing
+
 - [x] Update chat routes:
+
   - [x] Modify `src/app/(protected)/c/[id]/page.tsx` to use context
   - [x] Filter conversations by tenant ID
   - [x] Update conversation creation to include context
 
 - [x] Update saved chats:
+
   - [x] Modify saved chats page to filter by context
   - [x] Add context indicator on conversation cards
 
 - [x] Update knowledge base routes:
+
   - [x] Make knowledge bases tenant-specific
   - [x] Update KB creation to associate with context
   - [x] Filter KB list by active context
@@ -324,7 +364,9 @@ This document contains all tasks required to implement multi-tenant organization
 ## Phase 6: Data Isolation & Context
 
 ### 6.1 API Request Headers ✅
+
 - [x] Create API utility middleware:
+
   - [x] Create `src/lib/api-client.ts`
   - [x] Implement automatic tenant header injection
   - [x] Add `X-Tenant-Id` header when in tenant mode
@@ -336,26 +378,32 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Ensure tenant context is passed
 
 ### 6.2 Update Existing Features ✅
+
 - [x] Update conversations:
+
   - [x] Modify `src/actions/conversationsAction.ts`
   - [x] Add tenant filtering (11 fetch → apiClient replacements)
   - [x] Update conversation creation
 
 - [x] Update knowledge bases:
+
   - [x] Modify `src/actions/knowledgeBaseAction.ts`
   - [x] Modify `src/actions/knowledgeBankAction.ts`
   - [x] Add tenant context (19 fetch → apiClient replacements)
   - [x] Separate personal vs tenant KBs
 
 - [x] Update documents:
+
   - [x] Modify `src/actions/documentActions.ts`
   - [x] Scope documents to context (5 fetch → apiClient replacements)
 
 - [x] Update chat:
+
   - [x] Modify `src/actions/chat.ts`
   - [x] Add tenant context (1 fetch → apiClient replacement)
 
 - [x] Update image generation:
+
   - [x] Modify `src/actions/imageActions.ts`
   - [x] Scope images to context (6 fetch → apiClient replacements)
 
@@ -367,6 +415,7 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Add tenant filtering logic
 
 ### 6.3 Context Switch Handler ✅
+
 - [x] Create context switch hook:
   - [x] Create `src/hooks/useContextSwitch.ts`
   - [x] Listen to tenant mode changes
@@ -376,19 +425,23 @@ This document contains all tasks required to implement multi-tenant organization
   - [x] Handle both mode changes and tenant changes
 
 **Phase 6 Completion Summary:**
+
 - Created centralized API client with automatic X-Tenant-Id header injection
 - Updated 42 fetch calls across 7 action files to use apiClient
 - Added store clearing functions for data isolation
 - Implemented automatic context switch detection and data cleanup
 - All API calls now properly scoped to personal/tenant context
-- Files modified: 10 (api-client.ts, 7 action files, 2 store files, useContextSwitch.ts, Providers.tsx)
+- Files modified: 10 (api-client.ts, 7 action files, 2 store files,
+  useContextSwitch.ts, Providers.tsx)
 
 ---
 
 ## Phase 7: Onboarding Flow
 
 ### 7.1 Post-Login Decision Flow
+
 - [ ] Create mode selection modal:
+
   - [ ] Create `src/components/modals/ModeSelectionModal.tsx`
   - [ ] Design modal UI with two options
   - [ ] Show "Personal Mode" option with description
@@ -405,7 +458,9 @@ This document contains all tasks required to implement multi-tenant organization
   - [ ] Remember last used mode
 
 ### 7.2 First-Time Setup
+
 - [ ] Create welcome modal:
+
   - [ ] Create `src/components/modals/WelcomeModal.tsx`
   - [ ] Design onboarding UI
   - [ ] Explain personal vs organization mode
@@ -426,7 +481,9 @@ This document contains all tasks required to implement multi-tenant organization
 ## Phase 8: Edge Cases & Features
 
 ### 8.1 Owner-Specific Features
+
 - [ ] Implement ownership transfer:
+
   - [ ] Create transfer ownership modal
   - [ ] Add confirmation flow
   - [ ] Update backend call
@@ -440,7 +497,9 @@ This document contains all tasks required to implement multi-tenant organization
   - [ ] Redirect user after deletion
 
 ### 8.2 Role-Based Permissions
+
 - [ ] Create permission utility:
+
   - [ ] Create `src/lib/permissions.ts`
   - [ ] Implement `canInviteMembers()`
   - [ ] Implement `canRemoveMembers()`
@@ -455,7 +514,9 @@ This document contains all tasks required to implement multi-tenant organization
   - [ ] Show appropriate error messages
 
 ### 8.3 Subscription Handling
+
 - [ ] Update billing components:
+
   - [ ] Differentiate personal vs tenant subscriptions
   - [ ] Show subscription type indicator
   - [ ] Handle seat-based pricing for tenants
@@ -469,12 +530,15 @@ This document contains all tasks required to implement multi-tenant organization
   - [ ] Handle seat removal on member removal
 
 ### 8.4 Notification System
+
 - [ ] Create notification components:
+
   - [ ] Create `src/components/notifications/NotificationBell.tsx`
   - [ ] Create `src/components/notifications/NotificationList.tsx`
   - [ ] Design notification items
 
 - [ ] Implement notification types:
+
   - [ ] Organization invitation received
   - [ ] Role changed in organization
   - [ ] Removed from organization
@@ -492,13 +556,16 @@ This document contains all tasks required to implement multi-tenant organization
 ## Phase 9: State Management Updates
 
 ### 9.1 Update Existing Stores
+
 - [ ] Update `src/stores/useConversationsStore.ts`:
+
   - [ ] Add tenant filtering
   - [ ] Separate personal/tenant conversations
   - [ ] Clear on context switch
   - [ ] Add tenant-specific actions
 
 - [ ] Update `src/stores/useKnowledgebaseStore.ts`:
+
   - [ ] Add tenant context
   - [ ] Separate personal/tenant knowledge bases
   - [ ] Filter by active context
@@ -509,7 +576,9 @@ This document contains all tasks required to implement multi-tenant organization
   - [ ] Add invitation modals
 
 ### 9.2 Sync Strategy
+
 - [ ] Implement context switch handler:
+
   - [ ] Clear context-specific cache on switch
   - [ ] Reload data for new context
   - [ ] Update UI state
@@ -526,6 +595,7 @@ This document contains all tasks required to implement multi-tenant organization
 ## Phase 10: Testing & Polish
 
 ### 10.1 User Flow Testing
+
 - [ ] Test create organization flow
 - [ ] Test invite member flow
 - [ ] Test accept invitation flow
@@ -540,6 +610,7 @@ This document contains all tasks required to implement multi-tenant organization
 - [ ] Test edge cases (expired invites, etc.)
 
 ### 10.2 Permission Testing
+
 - [ ] Verify owner permissions
 - [ ] Verify admin permissions
 - [ ] Verify member permissions
@@ -548,6 +619,7 @@ This document contains all tasks required to implement multi-tenant organization
 - [ ] Verify data isolation between contexts
 
 ### 10.3 UI/UX Polish
+
 - [ ] Add loading states to all async operations
 - [ ] Add error states with proper messages
 - [ ] Add empty states for all lists
@@ -560,6 +632,7 @@ This document contains all tasks required to implement multi-tenant organization
 - [ ] Test accessibility (a11y)
 
 ### 10.4 Documentation
+
 - [ ] Document API action functions
 - [ ] Document component props
 - [ ] Create user guide for organizations
@@ -572,6 +645,7 @@ This document contains all tasks required to implement multi-tenant organization
 ## 🎯 Priority Levels
 
 ### P0 (Must Have - MVP)
+
 - Phase 1: Auth & Context (complete)
 - Phase 2: API Integration (complete)
 - Phase 3: Type Definitions (complete)
@@ -582,6 +656,7 @@ This document contains all tasks required to implement multi-tenant organization
 - Phase 6: Data isolation
 
 ### P1 (Important - Launch)
+
 - Phase 4.2: Complete tenant dashboard
 - Phase 4.3: All organization components
 - Phase 4.4: Invitation flow
@@ -590,6 +665,7 @@ This document contains all tasks required to implement multi-tenant organization
 - Phase 9: State management
 
 ### P2 (Nice to Have - Enhancement)
+
 - Phase 8.1: Owner features (transfer, delete)
 - Phase 8.3: Advanced subscription handling
 - Phase 8.4: Notification system
@@ -639,13 +715,20 @@ This document contains all tasks required to implement multi-tenant organization
 ## 🎉 Phase 4 Completion Summary
 
 ### Components Created:
-1. **TenantModeSwitcher.tsx** - Dropdown for switching between personal/organization modes
+
+1. **TenantModeSwitcher.tsx** - Dropdown for switching between
+   personal/organization modes
 2. **organizations/page.tsx** - Organizations list page with grid display
-3. **organizations/create/page.tsx** - Create organization form with subdomain validation
-4. **organizations/[tenantId]/page.tsx** - Organization dashboard with stats and quick actions
-5. **organizations/[tenantId]/settings/page.tsx** - Organization settings management
-6. **organizations/[tenantId]/members/page.tsx** - Members management with invitations
-7. **organizations/[tenantId]/billing/page.tsx** - Billing and subscription management
+3. **organizations/create/page.tsx** - Create organization form with subdomain
+   validation
+4. **organizations/[tenantId]/page.tsx** - Organization dashboard with stats and
+   quick actions
+5. **organizations/[tenantId]/settings/page.tsx** - Organization settings
+   management
+6. **organizations/[tenantId]/members/page.tsx** - Members management with
+   invitations
+7. **organizations/[tenantId]/billing/page.tsx** - Billing and subscription
+   management
 8. **OrganizationCard.tsx** - Organization card component with quick actions
 9. **OrganizationList.tsx** - Grid container with loading/empty states
 10. **SubdomainChecker.tsx** - Real-time subdomain availability validation
@@ -653,15 +736,18 @@ This document contains all tasks required to implement multi-tenant organization
 12. **MemberRoleSelector.tsx** - Role dropdown with confirmation dialog
 13. **PendingInvitations.tsx** - Invitations table with copy/cancel actions
 14. **InviteMemberModal.tsx** - Invite member modal with email/role form
-15. **CreateOrganizationModal.tsx** - Create organization modal (alternative to page)
+15. **CreateOrganizationModal.tsx** - Create organization modal (alternative to
+    page)
 16. **accept-invite/[token]/page.tsx** - Public invitation acceptance page
 17. **ui/progress.tsx** - Radix UI Progress component
 
 ### Dependencies Added:
+
 - `sonner` - Toast notification library
 - `@radix-ui/react-progress` - Progress bar component
 
 ### Key Features:
+
 - ✅ Complete CRUD operations for organizations
 - ✅ Member invitation & management system
 - ✅ Role-based access control UI
@@ -678,17 +764,25 @@ This document contains all tasks required to implement multi-tenant organization
 ## 🎉 Phase 5 Completion Summary
 
 ### Navigation Components Updated:
-1. **LeftSideNav.tsx** - Added Organizations menu, mode indicator, and tenant submenu
-2. **RightSideNav.tsx** - Integrated TenantModeSwitcher and organization info card
-3. **LeftSideNavMobile.tsx** - Added mode switcher and Organizations menu for mobile
+
+1. **LeftSideNav.tsx** - Added Organizations menu, mode indicator, and tenant
+   submenu
+2. **RightSideNav.tsx** - Integrated TenantModeSwitcher and organization info
+   card
+3. **LeftSideNavMobile.tsx** - Added mode switcher and Organizations menu for
+   mobile
 
 ### Context-Aware Pages:
-1. **settings/page.tsx** - Redirects to org settings in tenant mode, shows personal settings in personal mode
-2. **knowledge/page.tsx** - Shows tenant/personal context with appropriate messaging
+
+1. **settings/page.tsx** - Redirects to org settings in tenant mode, shows
+   personal settings in personal mode
+2. **knowledge/page.tsx** - Shows tenant/personal context with appropriate
+   messaging
 3. **ConversationsList.tsx** - Added Phase 6 note for backend filtering
 4. **saved-chats/page.tsx** - Added Phase 6 note for backend filtering
 
 ### Key Features:
+
 - ✅ Mode indicators throughout navigation (Personal/Organization badges)
 - ✅ Organizations menu item in all navigation components
 - ✅ TenantModeSwitcher integrated in RightSideNav and mobile nav
@@ -700,7 +794,9 @@ This document contains all tasks required to implement multi-tenant organization
 - ✅ Dark mode compatibility preserved
 
 ### Notes:
-- Actual API-level filtering for conversations and knowledge bases will be implemented in **Phase 6: Data Isolation & Context**
+
+- Actual API-level filtering for conversations and knowledge bases will be
+  implemented in **Phase 6: Data Isolation & Context**
 - Current implementation provides UI/UX foundation for context switching
 - Backend changes required for tenant-scoped data queries
 
@@ -709,21 +805,27 @@ This document contains all tasks required to implement multi-tenant organization
 ## 🎉 Phase 6 Completion Summary
 
 ### API Client Infrastructure:
+
 1. **api-client.ts** - Central API client with automatic tenant header injection
    - `getTenantContext()` - Reads localStorage to get current mode/tenant
    - `apiClient()` - Enhanced fetch with X-Tenant-Id header
    - `apiClientJson()` - JSON parsing wrapper with error handling
    - `isInTenantMode()`, `getActiveTenantId()` - Helper functions
-   - `skipTenantHeader` option for public resources (e.g., shared conversations, GCS URLs)
+   - `skipTenantHeader` option for public resources (e.g., shared conversations,
+     GCS URLs)
 
 ### Action Files Updated (42 total fetch → apiClient replacements):
+
 1. **conversationsAction.ts** - 11 replacements
+
    - PostConversation, fetchConversationList, fetchSavedConversationList
    - searchConversations, loadSingleConversation, loadSingleSharedConversation
-   - deleteConversation, shareConversation, renameConversationAction, saveConversationAction
+   - deleteConversation, shareConversation, renameConversationAction,
+     saveConversationAction
    - Special: Shared conversations use `skipTenantHeader: true`
 
 2. **knowledgeBaseAction.ts** - 10 replacements
+
    - uploadfileToKnowledgeBaseAction, fetchKnowledgeBaseList
    - fetchKnowledgeBaseConversations, createKnowledgeBaseAction
    - PostKnowledgeConversation, loadSingleBaseConversation
@@ -731,16 +833,20 @@ This document contains all tasks required to implement multi-tenant organization
    - deleteKnowledgeBaseFile, deleteKnowledgeBase
 
 3. **knowledgeBankAction.ts** - 9 replacements
+
    - fileUploadAction, fetchKnowledgeBankFolders
    - fetchKnowledgeBankFolderContent, createKnowledgeBankFolderAction
    - updateKnowledgeBankFolderAction, uploadfileToKnowledgeBankAction
-   - processKnowledgeBankFile, deleteKnowledgeBankFolderAction, deleteKnowledgeBankFile
+   - processKnowledgeBankFile, deleteKnowledgeBankFolderAction,
+     deleteKnowledgeBankFile
 
 4. **documentActions.ts** - 5 replacements
+
    - startDocumentConversation, continueDocumentConversation
    - generateDocument, uploadReviewDocumentAssistant, submitDirectReview
 
 5. **chat.ts** - 1 replacement
+
    - chatOpenAI
 
 6. **imageActions.ts** - 6 replacements
@@ -748,7 +854,9 @@ This document contains all tasks required to implement multi-tenant organization
    - finalizePrompt, generateImage, editImage
 
 ### Store Updates:
+
 1. **createConversationSlice.ts** - Added `clearConversationData()` function
+
    - Clears activeConversation, userMessage, loading states, errors
    - Called automatically on context switch
 
@@ -757,7 +865,9 @@ This document contains all tasks required to implement multi-tenant organization
    - Called automatically on context switch
 
 ### Context Switch Handler:
+
 1. **useContextSwitch.ts** - Created custom hook for automatic data cleanup
+
    - Listens to `useTenantStore` mode and activeTenantId changes
    - Detects mode changes (personal ↔ tenant) and tenant switches
    - Clears all stores: conversations, knowledge bases, documents, images
@@ -769,7 +879,9 @@ This document contains all tasks required to implement multi-tenant organization
    - Ensures data cleanup on every context change
 
 ### Key Features:
-- ✅ **Automatic tenant header injection** - All API calls get X-Tenant-Id when in tenant mode
+
+- ✅ **Automatic tenant header injection** - All API calls get X-Tenant-Id when
+  in tenant mode
 - ✅ **Data isolation** - Personal and organization data completely separated
 - ✅ **Context switching** - Stores automatically clear on mode/tenant change
 - ✅ **Error handling** - Comprehensive error handling in API client
@@ -779,6 +891,7 @@ This document contains all tasks required to implement multi-tenant organization
 - ✅ **Consistent pattern** - All action files follow same apiClient pattern
 
 ### Benefits:
+
 - **Security**: Backend can trust X-Tenant-Id header for authorization
 - **Simplicity**: No manual header management in action files
 - **Reliability**: Automatic cleanup prevents data leakage between contexts
@@ -786,6 +899,7 @@ This document contains all tasks required to implement multi-tenant organization
 - **Debuggability**: Clear logging of context switches and API calls
 
 ### Next Steps:
+
 - Phase 7: Onboarding Flow (mode selection, organization setup wizard)
 - Phase 8: Edge Cases & Features (leave organization, transfer ownership)
 - Phase 9: Usage & Billing (seat counting, tenant subscriptions)

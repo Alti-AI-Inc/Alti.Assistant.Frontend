@@ -18,7 +18,13 @@ import { Button } from './ui/button';
 
 function TenantModeSwitcherInner() {
   const router = useRouter();
-  const { mode, currentTenant, tenants, switchToPersonalMode, switchToTenantMode } = useTenant();
+  const {
+    mode,
+    currentTenant,
+    tenants,
+    switchToPersonalMode,
+    switchToTenantMode,
+  } = useTenant();
   const [isOpen, setIsOpen] = useState(false);
   const [isSwitching, setIsSwitching] = useState(false);
 
@@ -43,9 +49,10 @@ function TenantModeSwitcherInner() {
     router.push('/organizations/create');
   };
 
-  const currentModeLabel = mode === 'personal' 
-    ? 'Personal Mode' 
-    : currentTenant?.name || 'Organization';
+  const currentModeLabel =
+    mode === 'personal'
+      ? 'Personal Mode'
+      : currentTenant?.name || 'Organization';
 
   const CurrentModeIcon = mode === 'personal' ? User : Building2;
 
@@ -56,58 +63,63 @@ function TenantModeSwitcherInner() {
           variant="outline"
           className={cn(
             'w-full justify-between',
-            isSwitching && 'opacity-50 pointer-events-none'
+            isSwitching && 'pointer-events-none opacity-50',
           )}
         >
           <div className="flex items-center gap-2">
             <CurrentModeIcon className="size-4" />
-            <span className="truncate max-w-[150px]">{currentModeLabel}</span>
+            <span className="max-w-[150px] truncate">{currentModeLabel}</span>
           </div>
           <ChevronDown className="size-4 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-[240px]">
-        <DropdownMenuLabel className="text-xs text-muted-foreground">
+        <DropdownMenuLabel className="text-muted-foreground text-xs">
           Switch Mode
         </DropdownMenuLabel>
-        
+
         <DropdownMenuItem
           onClick={() => handleModeSwitch()}
-          className={cn(
-            'cursor-pointer',
-            mode === 'personal' && 'bg-accent'
-          )}
+          className={cn('cursor-pointer', mode === 'personal' && 'bg-accent')}
         >
-          <User className="size-4 mr-2" />
+          <User className="mr-2 size-4" />
           <span>Personal Mode</span>
           {mode === 'personal' && (
-            <span className="ml-auto text-xs text-muted-foreground">Active</span>
+            <span className="text-muted-foreground ml-auto text-xs">
+              Active
+            </span>
           )}
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel className="text-xs text-muted-foreground">
+        <DropdownMenuLabel className="text-muted-foreground text-xs">
           Organizations
         </DropdownMenuLabel>
 
         {tenants && tenants.length > 0 ? (
-          tenants.map((tenant) => (
+          tenants.map(tenant => (
             <DropdownMenuItem
               key={tenant.id}
               onClick={() => handleModeSwitch(tenant.id)}
               className={cn(
                 'cursor-pointer',
-                mode === 'tenant' && currentTenant?.id === tenant.id && 'bg-accent'
+                mode === 'tenant' &&
+                  currentTenant?.id === tenant.id &&
+                  'bg-accent',
               )}
             >
-              <Building2 className="size-4 mr-2" />
-              <div className="flex-1 min-w-0">
+              <Building2 className="mr-2 size-4" />
+              <div className="min-w-0 flex-1">
                 <div className="truncate">{tenant.name}</div>
-                <div className="text-xs text-muted-foreground capitalize">{tenant.role}</div>
+                <div className="text-muted-foreground text-xs capitalize">
+                  {tenant.role}
+                </div>
               </div>
               {mode === 'tenant' && currentTenant?.id === tenant.id && (
-                <span className="ml-auto text-xs text-muted-foreground">Active</span>
+                <span className="text-muted-foreground ml-auto text-xs">
+                  Active
+                </span>
               )}
             </DropdownMenuItem>
           ))
@@ -121,9 +133,9 @@ function TenantModeSwitcherInner() {
 
         <DropdownMenuItem
           onClick={handleCreateOrganization}
-          className="cursor-pointer text-primary"
+          className="text-primary cursor-pointer"
         >
-          <Plus className="size-4 mr-2" />
+          <Plus className="mr-2 size-4" />
           <span>Create Organization</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

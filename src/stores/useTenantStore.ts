@@ -74,7 +74,9 @@ const useTenantStore = create<TenantStore>()(
         // Refresh current tenant if we're in tenant mode
         const { mode, activeTenantId } = get();
         if (mode === 'tenant' && activeTenantId) {
-          const currentTenant = tenants.find((t: Tenant) => t.id === activeTenantId);
+          const currentTenant = tenants.find(
+            (t: Tenant) => t.id === activeTenantId,
+          );
           if (currentTenant) {
             set({ currentTenant });
           } else {
@@ -91,7 +93,9 @@ const useTenantStore = create<TenantStore>()(
       refreshCurrentTenant: () => {
         const { tenants, activeTenantId } = get();
         if (activeTenantId) {
-          const currentTenant = tenants.find((t: Tenant) => t.id === activeTenantId);
+          const currentTenant = tenants.find(
+            (t: Tenant) => t.id === activeTenantId,
+          );
           set({ currentTenant: currentTenant || null });
         }
       },
@@ -115,8 +119,8 @@ const useTenantStore = create<TenantStore>()(
         console.log('Rehydrated tenant store with state:', state);
         state?.setHydrated();
       },
-    }
-  )
+    },
+  ),
 );
 
 export default useTenantStore;

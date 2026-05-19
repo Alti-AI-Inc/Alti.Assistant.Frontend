@@ -22,7 +22,7 @@ const AiBuiltFor = ({ className }: { className?: string }) => {
             information into instant, actionable insight.
           </p>
         </div>
-        <div className="flex w-full  justify-end translate-y-7 lg:mt-0 lg:w-1/2 lg:justify-end">
+        <div className="flex w-full translate-y-7 justify-end lg:mt-0 lg:w-1/2 lg:justify-end">
           <Image
             height={400}
             width={1200}

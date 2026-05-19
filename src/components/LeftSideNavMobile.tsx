@@ -283,7 +283,7 @@ const LeftSideNavMobile = () => {
                 >
                   <Building2 className="text-black" /> Organizations
                 </DropdownMenuItem>
-               
+
                 <DropdownMenuItem
                   onClick={() => {
                     router.push(

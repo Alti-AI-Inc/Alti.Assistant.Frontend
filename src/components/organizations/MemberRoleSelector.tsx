@@ -59,7 +59,9 @@ export function MemberRoleSelector({
     } catch (error) {
       console.error('Failed to update role:', error);
       toast.error(
-        error instanceof Error ? error.message : 'An error occurred while updating the role',
+        error instanceof Error
+          ? error.message
+          : 'An error occurred while updating the role',
       );
     } finally {
       setIsChanging(false);
@@ -85,7 +87,10 @@ export function MemberRoleSelector({
   // Non-owners see a static badge for tenant owners (only an org owner may change roles)
   if (normalizedRole === 'owner' && !viewerIsOwner) {
     return (
-      <Badge variant={getRoleBadgeVariant(normalizedRole)} className="capitalize">
+      <Badge
+        variant={getRoleBadgeVariant(normalizedRole)}
+        className="capitalize"
+      >
         {normalizedRole}
       </Badge>
     );
@@ -105,7 +110,9 @@ export function MemberRoleSelector({
         <SelectTrigger className="h-7 w-[96px] text-xs">
           <SelectValue>
             <span className="capitalize">
-              {supportedTenantRoles.has(normalizedRole) ? normalizedRole : selectValue}
+              {supportedTenantRoles.has(normalizedRole)
+                ? normalizedRole
+                : selectValue}
             </span>
           </SelectValue>
         </SelectTrigger>
@@ -123,7 +130,7 @@ export function MemberRoleSelector({
 
       <AlertDialog
         open={!!pendingRole}
-        onOpenChange={(open) => !open && setPendingRole(null)}
+        onOpenChange={open => !open && setPendingRole(null)}
       >
         <AlertDialogContent>
           <AlertDialogHeader>

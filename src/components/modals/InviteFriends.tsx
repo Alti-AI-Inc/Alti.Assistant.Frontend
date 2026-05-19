@@ -26,7 +26,6 @@ export function InviteFriends() {
     setIsLoading(true);
 
     onClose();
-
   };
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -36,20 +35,23 @@ export function InviteFriends() {
         </DialogHeader>
         <div className="">
           <h1 className="">Invite a friend to join the alti assistant.</h1>
-          <div className='relative'>
+          <div className="relative">
             <Input
               type="text"
               placeholder="Enter email"
               className="mt-4"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
             />
-            <div className="absolute inset-y-0 right-0  flex items-center">
-              <SendInviteButton content={email} className="mr-1" onClose={onClose}/>
+            <div className="absolute inset-y-0 right-0 flex items-center">
+              <SendInviteButton
+                content={email}
+                className="mr-1"
+                onClose={onClose}
+              />
             </div>
           </div>
-          <div className='bg-gray-100 rounded-sm px-2 py-4 mt-6'>
-
+          <div className="mt-6 rounded-sm bg-gray-100 px-2 py-4">
             <div className="grid flex-1 gap-2">
               <Label htmlFor="link2" className="sr-only">
                 Copy link and share with others
@@ -57,12 +59,15 @@ export function InviteFriends() {
               <div className="relative">
                 <Input
                   id="link2"
-                  value='https://www.altiassistant.com/invite?inviteCode=e26b78ad-21c7-4558-af8d-6351f8e53a7f'
+                  value="https://www.altiassistant.com/invite?inviteCode=e26b78ad-21c7-4558-af8d-6351f8e53a7f"
                   readOnly
-                  className="pr-12 selection:bg-transparent selection:text-black truncate" // Add padding for the button
+                  className="truncate pr-12 selection:bg-transparent selection:text-black" // Add padding for the button
                 />
                 <div className="absolute inset-y-0 right-0 -mt-1 flex items-center">
-                  <CopyButton content='https://www.altiassistant.com/invite?inviteCode=e26b78ad-21c7-4558-af8d-6351f8e53a7f' className="mr-1" />
+                  <CopyButton
+                    content="https://www.altiassistant.com/invite?inviteCode=e26b78ad-21c7-4558-af8d-6351f8e53a7f"
+                    className="mr-1"
+                  />
                 </div>
               </div>
             </div>

@@ -1,10 +1,5 @@
-
 const page = () => {
-  return (
-    <div>
-      Agent store page
-    </div>
-  )
-}
+  return <div>Agent store page</div>;
+};
 
-export default page
+export default page;

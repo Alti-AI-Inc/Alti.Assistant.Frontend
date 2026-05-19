@@ -19,7 +19,9 @@ export default function KnowledgeChatPage({ params }: KnowledgeChatPageProps) {
     session?.accessToken,
   );
 
-  const activeKnowledgeBaseName = knowledgeBases?.find(kb => kb.id === id)?.name;
+  const activeKnowledgeBaseName = knowledgeBases?.find(
+    kb => kb.id === id,
+  )?.name;
 
   useEffect(() => {
     setActiveConversation({

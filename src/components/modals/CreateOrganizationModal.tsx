@@ -45,7 +45,7 @@ export function CreateOrganizationModal() {
   };
 
   const handleNameChange = (name: string) => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       name,
       slug: name
@@ -140,8 +140,8 @@ export function CreateOrganizationModal() {
       <DialogContent className="max-w-xl">
         <DialogHeader>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Building2 className="size-5 text-primary" />
+            <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
+              <Building2 className="text-primary size-5" />
             </div>
             <div>
               <DialogTitle>Create Organization</DialogTitle>
@@ -158,20 +158,20 @@ export function CreateOrganizationModal() {
             <Input
               id="org-name"
               value={formData.name}
-              onChange={(e) => handleNameChange(e.target.value)}
+              onChange={e => handleNameChange(e.target.value)}
               placeholder="Acme Inc."
               disabled={isCreating}
               autoFocus
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               This is the display name for your organization
             </p>
           </div>
 
           <SubdomainChecker
             value={formData.subdomain}
-            onChange={(subdomain) =>
-              setFormData((prev) => ({ ...prev, subdomain }))
+            onChange={subdomain =>
+              setFormData(prev => ({ ...prev, subdomain }))
             }
             onAvailabilityChange={setIsSubdomainAvailable}
             disabled={isCreating}
@@ -182,8 +182,8 @@ export function CreateOrganizationModal() {
             <Input
               id="org-slug"
               value={formData.slug}
-              onChange={(e) =>
-                setFormData((prev) => ({
+              onChange={e =>
+                setFormData(prev => ({
                   ...prev,
                   slug: e.target.value.toLowerCase(),
                 }))
@@ -191,7 +191,7 @@ export function CreateOrganizationModal() {
               placeholder="acme-inc"
               disabled={isCreating}
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               Used in URLs and for organization identification
             </p>
           </div>
@@ -202,7 +202,7 @@ export function CreateOrganizationModal() {
             Cancel
           </Button>
           <Button onClick={handleSubmit} disabled={!isFormValid}>
-            {isCreating && <Loader2 className="size-4 mr-2 animate-spin" />}
+            {isCreating && <Loader2 className="mr-2 size-4 animate-spin" />}
             {isCreating ? 'Creating...' : 'Create Organization'}
           </Button>
         </DialogFooter>

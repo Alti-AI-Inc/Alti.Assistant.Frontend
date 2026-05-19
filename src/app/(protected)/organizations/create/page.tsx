@@ -2,7 +2,13 @@
 
 import { createTenant } from '@/actions/tenantActions';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SubdomainChecker } from '@/components/organizations/SubdomainChecker';
@@ -21,7 +27,7 @@ export default function CreateOrganizationPage() {
   const { refreshTenants } = useTenant();
   const [isCreating, setIsCreating] = useState(false);
   const [isSubdomainAvailable, setIsSubdomainAvailable] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
@@ -29,7 +35,7 @@ export default function CreateOrganizationPage() {
   });
 
   const handleNameChange = (name: string) => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       name,
       slug: name
@@ -124,20 +130,20 @@ export default function CreateOrganizationPage() {
     !isCreating;
 
   return (
-    <div className="container max-w-2xl mx-auto py-8 px-4">
+    <div className="container mx-auto max-w-2xl px-4 py-8">
       <Link
         href="/organizations"
-        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors"
+        className="text-muted-foreground hover:text-foreground mb-6 inline-flex items-center text-sm transition-colors"
       >
-        <ArrowLeft className="size-4 mr-2" />
+        <ArrowLeft className="mr-2 size-4" />
         Back to Organizations
       </Link>
 
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Building2 className="size-6 text-primary" />
+            <div className="bg-primary/10 flex h-12 w-12 items-center justify-center rounded-lg">
+              <Building2 className="text-primary size-6" />
             </div>
             <div>
               <CardTitle>Create Organization</CardTitle>
@@ -154,21 +160,21 @@ export default function CreateOrganizationPage() {
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => handleNameChange(e.target.value)}
+                onChange={e => handleNameChange(e.target.value)}
                 placeholder="Acme Inc."
                 disabled={isCreating}
                 autoFocus
                 required
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 This is the display name for your organization
               </p>
             </div>
 
             <SubdomainChecker
               value={formData.subdomain}
-              onChange={(subdomain) =>
-                setFormData((prev) => ({ ...prev, subdomain }))
+              onChange={subdomain =>
+                setFormData(prev => ({ ...prev, subdomain }))
               }
               onAvailabilityChange={setIsSubdomainAvailable}
               disabled={isCreating}
@@ -179,14 +185,17 @@ export default function CreateOrganizationPage() {
               <Input
                 id="slug"
                 value={formData.slug}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, slug: e.target.value.toLowerCase() }))
+                onChange={e =>
+                  setFormData(prev => ({
+                    ...prev,
+                    slug: e.target.value.toLowerCase(),
+                  }))
                 }
                 placeholder="acme-inc"
                 disabled={isCreating}
                 required
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Used in URLs and for organization identification
               </p>
             </div>
@@ -201,12 +210,8 @@ export default function CreateOrganizationPage() {
               >
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                disabled={!isFormValid}
-                className="flex-1"
-              >
-                {isCreating && <Loader2 className="size-4 mr-2 animate-spin" />}
+              <Button type="submit" disabled={!isFormValid} className="flex-1">
+                {isCreating && <Loader2 className="mr-2 size-4 animate-spin" />}
                 {isCreating ? 'Creating...' : 'Create Organization'}
               </Button>
             </div>

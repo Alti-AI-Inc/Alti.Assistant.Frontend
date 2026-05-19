@@ -1,6 +1,6 @@
 /**
  * API Client Utility
- * 
+ *
  * Provides automatic tenant context injection via X-Tenant-Id header
  * when user is in organization mode. This ensures all API calls are
  * properly scoped to the active tenant for data isolation.
@@ -48,14 +48,14 @@ function getTenantContext(): { mode: UserMode; activeTenantId: string | null } {
 
 /**
  * Enhanced fetch with automatic tenant header injection
- * 
+ *
  * @param url - API endpoint URL
  * @param options - Fetch options including skipTenantHeader flag
  * @returns Promise<Response>
  */
 export async function apiClient(
   url: string,
-  options: ApiClientOptions = {}
+  options: ApiClientOptions = {},
 ): Promise<Response> {
   const { skipTenantHeader = false, headers = {}, ...restOptions } = options;
 
@@ -66,7 +66,8 @@ export async function apiClient(
   if (!skipTenantHeader) {
     const { mode, activeTenantId } = getTenantContext();
     if (mode === UserMode.TENANT && activeTenantId) {
-      (requestHeaders as Record<string, string>)['X-Tenant-Id'] = activeTenantId;
+      (requestHeaders as Record<string, string>)['X-Tenant-Id'] =
+        activeTenantId;
     }
   }
 
@@ -86,14 +87,14 @@ export async function apiClient(
 
 /**
  * API client with automatic JSON parsing and error handling
- * 
+ *
  * @param url - API endpoint URL
  * @param options - Fetch options
  * @returns Promise<ApiResponse<T>>
  */
 export async function apiClientJson<T = unknown>(
   url: string,
-  options: ApiClientOptions = {}
+  options: ApiClientOptions = {},
 ): Promise<ApiResponse<T>> {
   try {
     const response = await apiClient(url, options);

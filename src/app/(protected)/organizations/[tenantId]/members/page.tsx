@@ -13,7 +13,7 @@ export default function OrganizationMembersPage({
   const { tenantId } = use(params);
 
   return (
-    <div className="container mx-auto max-w-6xl py-8 px-4">
+    <div className="container mx-auto max-w-6xl px-4 py-8">
       <Link
         href="/organizations"
         className="text-muted-foreground hover:text-foreground mb-6 inline-flex items-center text-sm transition-colors"

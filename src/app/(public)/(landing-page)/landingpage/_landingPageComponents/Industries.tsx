@@ -53,9 +53,9 @@ const Industries = ({ className }: { className?: string }) => {
         {industries.map((item, index) => (
           <div
             key={index}
-            className="flex items-center rounded-2xl bg-gray-100 pl-4 md:px-8 py-4 md:text-xl"
+            className="flex items-center rounded-2xl bg-gray-100 py-4 pl-4 md:px-8 md:text-xl"
           >
-            <span className='flex-none'> {item.icon}</span>
+            <span className="flex-none"> {item.icon}</span>
             <span> {item.name}</span>
           </div>
         ))}

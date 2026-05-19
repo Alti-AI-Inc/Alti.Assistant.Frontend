@@ -209,7 +209,7 @@ export const DataQueryInterface = ({
           <ArrowRight
             onClick={handleSendQuery}
             // disabled={isLoading || !query.trim()}
-            className="size-7 flex-none rounded-full border-2 border-gray-300 bg-black p-1 text-white transition-opacity border-none px-2 pt-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+            className="size-7 flex-none rounded-full border-2 border-none border-gray-300 bg-black p-1 px-2 pt-3 text-white shadow-none transition-opacity outline-none placeholder:text-sm focus-visible:ring-0"
           />
         </div>
       </div>

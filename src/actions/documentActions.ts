@@ -118,14 +118,17 @@ export async function uploadReviewDocumentAssistant(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
   try {
-    const response = await apiClient(`${API_BASE_URL}/document-review/assistant`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        // Content-Type header is set automatically with FormData
+    const response = await apiClient(
+      `${API_BASE_URL}/document-review/assistant`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          // Content-Type header is set automatically with FormData
+        },
+        body: formData,
       },
-      body: formData,
-    });
+    );
 
     const data = await response.json();
     console.log(
@@ -149,14 +152,17 @@ export async function submitDirectReview(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
   try {
-    const response = await apiClient(`${API_BASE_URL}/document-review/assistant`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        // Content-Type header is set automatically with FormData
+    const response = await apiClient(
+      `${API_BASE_URL}/document-review/assistant`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          // Content-Type header is set automatically with FormData
+        },
+        body: formData,
       },
-      body: formData,
-    });
+    );
 
     const data = await response.json();
     console.log('[documentActions] submitDirectReview response:', data);

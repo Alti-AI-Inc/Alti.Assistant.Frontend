@@ -109,7 +109,7 @@ export interface TenantSettings {
 }
 
 export interface TenantMember {
-  _id: string;           // membership record ID
+  _id: string; // membership record ID
   userId: {
     _id: string;
     email: string;

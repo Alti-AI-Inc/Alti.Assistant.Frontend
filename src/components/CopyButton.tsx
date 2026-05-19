@@ -24,7 +24,7 @@ const CopyButton = ({
         new ClipboardItem({
           'text/html': htmlBlob,
           'text/plain': textBlob,
-        })
+        }),
       ]);
       setIsCopied(true);
 
@@ -41,7 +41,7 @@ const CopyButton = ({
     <Button
       onClick={handleCopy}
       variant="ghost"
-      className={`size-8 -ml-2 transition-all duration-200 hover:opacity-70 ${className}`}
+      className={`-ml-2 size-8 transition-all duration-200 hover:opacity-70 ${className}`}
       title={isCopied ? 'Copied!' : 'Copy to clipboard'}
     >
       {isCopied ? (

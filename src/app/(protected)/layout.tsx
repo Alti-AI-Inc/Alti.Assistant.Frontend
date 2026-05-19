@@ -83,7 +83,7 @@ export default function ProtectedLayout({
             setShowStartLastMessage(false);
             setUserMessage('');
             setSelectedOption(null);
-            router.push("/");
+            router.push('/');
             close();
           }}
           className="flex items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
@@ -97,16 +97,19 @@ export default function ProtectedLayout({
         {/* Left Sidebar - Desktop */}
         <div
           className={cn(
-            ' sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out sm:hidden md:flex',
+            'sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out sm:hidden md:flex',
             isLeftSidebarOpen ? 'w-68' : 'w-10',
           )}
-          style={{backgroundColor:"#F2F3F5"}}
+          style={{ backgroundColor: '#F2F3F5' }}
         >
           <LeftSideNav />
         </div>
 
         {/* Main content */}
-        <main className="bg-background w-full flex-1 overflow-y-auto" style={{backgroundColor:"#FFFFFF"}}>
+        <main
+          className="bg-background w-full flex-1 overflow-y-auto"
+          style={{ backgroundColor: '#FFFFFF' }}
+        >
           {children}
         </main>
       </div>

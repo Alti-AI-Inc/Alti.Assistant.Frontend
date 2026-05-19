@@ -94,12 +94,12 @@ export interface StripeSubscription {
   id: string; // sub_xxxx
   customer: string;
   status:
-  | 'active'
-  | 'canceled'
-  | 'incomplete'
-  | 'past_due'
-  | 'trialing'
-  | 'unpaid';
+    | 'active'
+    | 'canceled'
+    | 'incomplete'
+    | 'past_due'
+    | 'trialing'
+    | 'unpaid';
   current_period_start: number;
   current_period_end: number;
   items: {
@@ -114,7 +114,7 @@ export interface StripeSubscription {
 export interface StripePaymentIntent {
   id: string; // pi_xxxx
   client_secret: string;
-  clientSecret: string
+  clientSecret: string;
   amount: number;
   currency: string;
   status: string;
@@ -645,10 +645,7 @@ export async function getPaymentMethods(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] GET - getPaymentMethods response:',
-      data,
-    );
+    console.log('[stripeActions] GET - getPaymentMethods response:', data);
     return {
       success: true,
       message: 'Payment methods fetched successfully',
@@ -1122,13 +1119,22 @@ export async function getTenantSubscription(
     }
 
     const apiData = await response.json();
-    console.log('[stripeActions] GET - getTenantSubscription response:', apiData);
-    console.log('[stripeActions] Full API data structure:', JSON.stringify(apiData, null, 2));
+    console.log(
+      '[stripeActions] GET - getTenantSubscription response:',
+      apiData,
+    );
+    console.log(
+      '[stripeActions] Full API data structure:',
+      JSON.stringify(apiData, null, 2),
+    );
 
     // Extract subscription data from API response
     const subscriptions = apiData.data?.subscriptions || [];
     console.log('[stripeActions] Subscriptions array:', subscriptions);
-    console.log('[stripeActions] Number of subscriptions:', subscriptions.length);
+    console.log(
+      '[stripeActions] Number of subscriptions:',
+      subscriptions.length,
+    );
 
     // There will always be one subscription according to user
     if (subscriptions.length === 0) {
@@ -1148,15 +1154,26 @@ export async function getTenantSubscription(
     const transformedData = {
       id: subscription.id,
       status: subscription.status,
-      plan: subscription.plan?.metadata?.plan || subscription.items?.data?.[0]?.price?.metadata?.plan || 'free',
-      amount: subscription.plan?.amount || subscription.items?.data?.[0]?.price?.unit_amount,
-      interval: subscription.plan?.interval || subscription.items?.data?.[0]?.price?.recurring?.interval || 'month',
+      plan:
+        subscription.plan?.metadata?.plan ||
+        subscription.items?.data?.[0]?.price?.metadata?.plan ||
+        'free',
+      amount:
+        subscription.plan?.amount ||
+        subscription.items?.data?.[0]?.price?.unit_amount,
+      interval:
+        subscription.plan?.interval ||
+        subscription.items?.data?.[0]?.price?.recurring?.interval ||
+        'month',
       nextBillingDate: subscription.current_period_end
         ? new Date(subscription.current_period_end * 1000).toISOString()
         : undefined,
       seats: subscription.quantity || 1,
       usedSeats: 0, // This would need to come from another source
-      billingCycle: subscription.plan?.interval || subscription.items?.data?.[0]?.price?.recurring?.interval || 'month',
+      billingCycle:
+        subscription.plan?.interval ||
+        subscription.items?.data?.[0]?.price?.recurring?.interval ||
+        'month',
       customerId: apiData.data?.customerId,
     };
 
@@ -1211,7 +1228,10 @@ export async function createFreeSubscription(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] POST - createFreeSubscription response:', data);
+    console.log(
+      '[stripeActions] POST - createFreeSubscription response:',
+      data,
+    );
     return {
       success: true,
       message: 'Free subscription created successfully',
@@ -1219,7 +1239,10 @@ export async function createFreeSubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] POST - createFreeSubscription error:', error);
+    console.error(
+      '[stripeActions] POST - createFreeSubscription error:',
+      error,
+    );
     return {
       success: false,
       message: 'Failed to create free subscription',
@@ -1266,7 +1289,10 @@ export async function upgradeSubscription(
     }
 
     const responseData = await response.json();
-    console.log('[stripeActions] POST - upgradeSubscription response:', responseData);
+    console.log(
+      '[stripeActions] POST - upgradeSubscription response:',
+      responseData,
+    );
     return {
       success: true,
       message: 'Checkout session created successfully',
@@ -1389,7 +1415,10 @@ export async function addSeatToSubscription(
   userId: string,
   accessToken: string,
 ): Promise<ApiResponse<any>> {
-  console.log('[stripeActions] POST - addSeatToSubscription:', { subscriptionId, userId });
+  console.log('[stripeActions] POST - addSeatToSubscription:', {
+    subscriptionId,
+    userId,
+  });
 
   try {
     const response = await fetch(
@@ -1440,7 +1469,10 @@ export async function removeSeatFromSubscription(
   userId: string,
   accessToken: string,
 ): Promise<ApiResponse<any>> {
-  console.log('[stripeActions] POST - removeSeatFromSubscription:', { subscriptionId, userId });
+  console.log('[stripeActions] POST - removeSeatFromSubscription:', {
+    subscriptionId,
+    userId,
+  });
 
   try {
     const response = await fetch(
@@ -1465,7 +1497,10 @@ export async function removeSeatFromSubscription(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] POST - removeSeatFromSubscription response:', data);
+    console.log(
+      '[stripeActions] POST - removeSeatFromSubscription response:',
+      data,
+    );
     return {
       success: true,
       message: 'Seat removed successfully',
@@ -1473,7 +1508,10 @@ export async function removeSeatFromSubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] POST - removeSeatFromSubscription error:', error);
+    console.error(
+      '[stripeActions] POST - removeSeatFromSubscription error:',
+      error,
+    );
     return {
       success: false,
       message: 'Failed to remove seat',
@@ -1582,11 +1620,15 @@ export async function createTenantPaymentIntent(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] POST - createTenantPaymentIntent response:', data);
+    console.log(
+      '[stripeActions] POST - createTenantPaymentIntent response:',
+      data,
+    );
 
     // Extract paymentIntent from nested response structure
     // Backend returns: { data: { paymentIntent: { clientSecret: '...' } } }
-    const paymentIntentData = data.data?.paymentIntent || data.paymentIntent || data.data || data;
+    const paymentIntentData =
+      data.data?.paymentIntent || data.paymentIntent || data.data || data;
 
     return {
       success: true,
@@ -1595,7 +1637,10 @@ export async function createTenantPaymentIntent(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] POST - createTenantPaymentIntent error:', error);
+    console.error(
+      '[stripeActions] POST - createTenantPaymentIntent error:',
+      error,
+    );
     return {
       success: false,
       message: 'Failed to create payment intent',
@@ -1640,7 +1685,10 @@ export async function addPaymentMethodToTenant(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] POST - addPaymentMethodToTenant response:', data);
+    console.log(
+      '[stripeActions] POST - addPaymentMethodToTenant response:',
+      data,
+    );
 
     return {
       success: true,
@@ -1649,7 +1697,10 @@ export async function addPaymentMethodToTenant(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] POST - addPaymentMethodToTenant error:', error);
+    console.error(
+      '[stripeActions] POST - addPaymentMethodToTenant error:',
+      error,
+    );
     return {
       success: false,
       message: 'Failed to add payment method',
@@ -1692,7 +1743,10 @@ export async function createTenantSubscription(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] POST - createTenantSubscription response:', data);
+    console.log(
+      '[stripeActions] POST - createTenantSubscription response:',
+      data,
+    );
 
     return {
       success: true,
@@ -1701,7 +1755,10 @@ export async function createTenantSubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] POST - createTenantSubscription error:', error);
+    console.error(
+      '[stripeActions] POST - createTenantSubscription error:',
+      error,
+    );
     return {
       success: false,
       message: 'Failed to create subscription',
@@ -1751,25 +1808,25 @@ export async function getProductPrices(
  * Uses the new GET /stripe/my-subscription endpoint added in Phase 1.
  * Returns both the live Stripe subscription and the local SubscriptionModel DB record.
  */
-export async function getMyPersonalSubscription(
-  accessToken: string,
-): Promise<ApiResponse<{
-  context: string;
-  hasSubscription: boolean;
-  hasStripeCustomer: boolean;
-  subscription: StripeSubscription | null;
-  dbRecord: {
-    _id: string;
-    plan_name: string;
-    stripePriceId: string;
-    currentPeriodEnd?: string;
-    limits?: {
-      dailyRequestLimit: number;
-      ragType: string;
-      canInviteTeam: boolean;
-    };
-  } | null;
-}>> {
+export async function getMyPersonalSubscription(accessToken: string): Promise<
+  ApiResponse<{
+    context: string;
+    hasSubscription: boolean;
+    hasStripeCustomer: boolean;
+    subscription: StripeSubscription | null;
+    dbRecord: {
+      _id: string;
+      plan_name: string;
+      stripePriceId: string;
+      currentPeriodEnd?: string;
+      limits?: {
+        dailyRequestLimit: number;
+        ragType: string;
+        canInviteTeam: boolean;
+      };
+    } | null;
+  }>
+> {
   console.log('[stripeActions] GET - getMyPersonalSubscription');
 
   try {
@@ -1794,7 +1851,10 @@ export async function getMyPersonalSubscription(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] GET - getMyPersonalSubscription response:', data);
+    console.log(
+      '[stripeActions] GET - getMyPersonalSubscription response:',
+      data,
+    );
 
     return {
       success: true,
@@ -1803,7 +1863,10 @@ export async function getMyPersonalSubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - getMyPersonalSubscription error:', error);
+    console.error(
+      '[stripeActions] GET - getMyPersonalSubscription error:',
+      error,
+    );
     return {
       success: false,
       message: 'Failed to fetch personal subscription',

@@ -1,34 +1,34 @@
 'use client';
 
 import type {
-    AdminTenantListItem,
-    TenantLifecycleStatus,
+  AdminTenantListItem,
+  TenantLifecycleStatus,
 } from '@/actions/adminActions';
 import { TenantStatusBadge } from '@/components/admin/TenantStatusBadge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from '@/components/ui/table';
 import { formatDate } from '@/utils/formatters';
 import {
-    ArrowDown,
-    ArrowUp,
-    Building2,
-    MoreHorizontal,
-    Shield,
+  ArrowDown,
+  ArrowUp,
+  Building2,
+  MoreHorizontal,
+  Shield,
 } from 'lucide-react';
 
 export type TenantsTableSortable = {
@@ -117,7 +117,11 @@ export function TenantsTable({
         <TableHeader>
           <TableRow>
             <TableHead>
-              <SortHeaderTenants label="Name" field="name" sortable={sortable} />
+              <SortHeaderTenants
+                label="Name"
+                field="name"
+                sortable={sortable}
+              />
             </TableHead>
             <TableHead>
               <SortHeaderTenants
@@ -134,7 +138,11 @@ export function TenantsTable({
               />
             </TableHead>
             <TableHead>
-              <SortHeaderTenants label="Plan" field="plan" sortable={sortable} />
+              <SortHeaderTenants
+                label="Plan"
+                field="plan"
+                sortable={sortable}
+              />
             </TableHead>
             <TableHead className="text-right">
               <div className="flex justify-end">

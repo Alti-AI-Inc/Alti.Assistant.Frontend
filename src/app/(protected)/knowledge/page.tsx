@@ -9,7 +9,7 @@ const pageNow = () => {
   const { mode, currentTenant } = useTenant();
 
   return (
-    <div className='pt-6'>
+    <div className="pt-6">
       {/* Context Mode Indicator */}
       <div className="px-8 pb-4">
         <div className="flex items-center justify-between">
@@ -35,7 +35,7 @@ const pageNow = () => {
         </p>
         {/* Note: Actual tenant filtering will be implemented in Phase 6 with backend API changes */}
       </div>
-      
+
       <BanksList />
     </div>
   );

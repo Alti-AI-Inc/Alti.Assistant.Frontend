@@ -39,27 +39,39 @@ export function useContextSwitch() {
       });
 
       // Clear all conversation-related stores
-      const clearConversationData = useConversationsStore.getState().clearConversationData;
+      const clearConversationData =
+        useConversationsStore.getState().clearConversationData;
       if (clearConversationData) {
         clearConversationData();
       }
 
       // Clear knowledge base store
-      const clearKnowledgeBaseData = useKnowledgebaseStore.getState().clearKnowledgeBaseData;
+      const clearKnowledgeBaseData =
+        useKnowledgebaseStore.getState().clearKnowledgeBaseData;
       if (clearKnowledgeBaseData) {
         clearKnowledgeBaseData();
       }
 
       // Clear document store if it has a clear function
       const documentStore = useDocumentStore.getState();
-      if ('clearDocumentData' in documentStore && typeof documentStore.clearDocumentData === 'function') {
-        (documentStore as { clearDocumentData: () => void }).clearDocumentData();
+      if (
+        'clearDocumentData' in documentStore &&
+        typeof documentStore.clearDocumentData === 'function'
+      ) {
+        (
+          documentStore as { clearDocumentData: () => void }
+        ).clearDocumentData();
       }
 
       // Clear image generation store if it has a clear function
       const imageGenStore = useImageGenStore.getState();
-      if ('clearImageGenData' in imageGenStore && typeof imageGenStore.clearImageGenData === 'function') {
-        (imageGenStore as { clearImageGenData: () => void }).clearImageGenData();
+      if (
+        'clearImageGenData' in imageGenStore &&
+        typeof imageGenStore.clearImageGenData === 'function'
+      ) {
+        (
+          imageGenStore as { clearImageGenData: () => void }
+        ).clearImageGenData();
       }
 
       console.log('[useContextSwitch] All stores cleared for new context');

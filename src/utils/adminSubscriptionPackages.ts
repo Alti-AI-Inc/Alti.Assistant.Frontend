@@ -36,9 +36,7 @@ export function normalizeAdminSubscriptionPackage(
 
   const metadata = readRecord(record.metadata);
   const features = readRecord(record.features);
-  const plan = String(
-    record.plan ?? metadata?.plan ?? record.name ?? '',
-  )
+  const plan = String(record.plan ?? metadata?.plan ?? record.name ?? '')
     .trim()
     .toLowerCase();
 

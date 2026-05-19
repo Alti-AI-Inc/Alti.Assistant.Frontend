@@ -3,7 +3,7 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from '@/components/ui/dialog';
 import { useModalStore } from '@/stores/useModalStore';
 import { Input } from '../ui/input';

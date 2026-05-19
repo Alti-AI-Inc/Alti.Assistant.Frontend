@@ -2,14 +2,14 @@
 
 import { auth } from '@/auth';
 import {
-    ApiResponse,
-    CheckSubdomainAvailability,
-    CreateTenantData,
-    SwitchTenantResponse,
-    Tenant,
-    TenantSettings,
-    TenantUsage,
-    UserTenant,
+  ApiResponse,
+  CheckSubdomainAvailability,
+  CreateTenantData,
+  SwitchTenantResponse,
+  Tenant,
+  TenantSettings,
+  TenantUsage,
+  UserTenant,
 } from '@/types/tenant';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -23,7 +23,13 @@ function extractTenantRowsFromListResponse(
 ): unknown[] {
   const tryArray = (v: unknown) => (Array.isArray(v) ? v : null);
 
-  for (const key of ['tenants', 'organizations', 'items', 'data', 'list'] as const) {
+  for (const key of [
+    'tenants',
+    'organizations',
+    'items',
+    'data',
+    'list',
+  ] as const) {
     const v = tryArray(result[key]);
     if (v) return v;
   }
@@ -144,7 +150,7 @@ function getMemberCountFromUnknownPayload(
  * Check if a subdomain is available
  */
 export async function checkSubdomainAvailability(
-  subdomain: string
+  subdomain: string,
 ): Promise<ApiResponse<CheckSubdomainAvailability>> {
   try {
     const session = await auth();
@@ -164,12 +170,14 @@ export async function checkSubdomainAvailability(
           'Content-Type': 'application/json',
           Authorization: `Bearer ${session.accessToken}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.message || 'Failed to check subdomain availability');
+      throw new Error(
+        error.message || 'Failed to check subdomain availability',
+      );
     }
 
     return await response.json();
@@ -188,7 +196,7 @@ export async function checkSubdomainAvailability(
  * Returns new access token with tenant context
  */
 export async function createTenant(
-  data: CreateTenantData
+  data: CreateTenantData,
 ): Promise<ApiResponse<Tenant & { accessToken?: string }>> {
   try {
     const session = await auth();
@@ -217,7 +225,9 @@ export async function createTenant(
   }
 }
 
-export async function getTenantById(tenantId: string): Promise<ApiResponse<Tenant>> {
+export async function getTenantById(
+  tenantId: string,
+): Promise<ApiResponse<Tenant>> {
   try {
     const session = await auth();
     if (!session?.accessToken) {
@@ -287,7 +297,10 @@ export async function getUserTenants(): Promise<ApiResponse<UserTenant[]>> {
         message: 'Unauthorized',
       };
     }
-    console.log('Fetching user tenants with access token:', session.accessToken);
+    console.log(
+      'Fetching user tenants with access token:',
+      session.accessToken,
+    );
     const response = await fetch(`${API_URL}/tenant/all`, {
       method: 'GET',
       headers: {
@@ -323,11 +336,7 @@ export async function getUserTenants(): Promise<ApiResponse<UserTenant[]>> {
             : null;
 
         const id =
-          item.id ??
-          item._id ??
-          item.tenantId ??
-          nested?.id ??
-          nested?._id;
+          item.id ?? item._id ?? item.tenantId ?? nested?.id ?? nested?._id;
         if (id === undefined || id === null) return null;
 
         const name =
@@ -346,7 +355,8 @@ export async function getUserTenants(): Promise<ApiResponse<UserTenant[]>> {
         const tenantRole =
           (typeof item.tenantRole === 'string' && item.tenantRole) ||
           (nested &&
-            typeof (nested as Record<string, unknown>).tenantRole === 'string' &&
+            typeof (nested as Record<string, unknown>).tenantRole ===
+              'string' &&
             String((nested as Record<string, unknown>).tenantRole)) ||
           (typeof item.role === 'string' && item.role) ||
           (nested && typeof nested.role === 'string' && nested.role) ||
@@ -378,8 +388,7 @@ export async function getUserTenants(): Promise<ApiResponse<UserTenant[]>> {
     return {
       success: result.success !== false,
       data: tenants,
-      message:
-        typeof result.message === 'string' ? result.message : undefined,
+      message: typeof result.message === 'string' ? result.message : undefined,
     };
   } catch (error: any) {
     console.error('Error getting user tenants:', error);
@@ -397,7 +406,7 @@ function extractUsersCountFromTenantUserPayload(
  * GET /tenant/user/:tenantId — tenant user summary (e.g. total usersCount)
  */
 export async function getTenantUserCount(
-  tenantId: string
+  tenantId: string,
 ): Promise<ApiResponse<{ usersCount: number }>> {
   const fail = (message: string): ApiResponse<{ usersCount: number }> => ({
     success: false,
@@ -419,7 +428,7 @@ export async function getTenantUserCount(
           'Content-Type': 'application/json',
           Authorization: `Bearer ${session.accessToken}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -439,8 +448,7 @@ export async function getTenantUserCount(
     return {
       success: true,
       data: { usersCount },
-      message:
-        typeof json.message === 'string' ? json.message : undefined,
+      message: typeof json.message === 'string' ? json.message : undefined,
     };
   } catch (error: any) {
     console.error('Error getting tenant user count:', error);
@@ -452,7 +460,7 @@ export async function getTenantUserCount(
  * Update tenant settings
  */
 export async function updateTenantSettings(
-  settings: TenantSettings
+  settings: TenantSettings,
 ): Promise<ApiResponse<Tenant>> {
   try {
     const session = await auth();
@@ -517,7 +525,7 @@ export async function getTenantUsage(): Promise<ApiResponse<TenantUsage>> {
  * Returns a new JWT token with the appropriate context
  */
 export async function switchTenant(
-  tenantId: string | null
+  tenantId: string | null,
 ): Promise<ApiResponse<SwitchTenantResponse>> {
   try {
     const session = await auth();

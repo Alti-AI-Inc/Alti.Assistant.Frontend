@@ -49,7 +49,13 @@ interface PaymentConfirmationModalProps {
   plan: Plan;
 }
 
-type PaymentStep = 'loading' | 'select_method' | 'add_card' | 'processing' | 'success' | 'error';
+type PaymentStep =
+  | 'loading'
+  | 'select_method'
+  | 'add_card'
+  | 'processing'
+  | 'success'
+  | 'error';
 
 export function PaymentConfirmationModal({
   isOpen,
@@ -63,7 +69,9 @@ export function PaymentConfirmationModal({
 
   // State management
   const [step, setStep] = useState<PaymentStep>('loading');
-  const [paymentMethods, setPaymentMethods] = useState<StripePaymentMethod[]>([]);
+  const [paymentMethods, setPaymentMethods] = useState<StripePaymentMethod[]>(
+    [],
+  );
   const [selectedMethodId, setSelectedMethodId] = useState<string>('');
   const [isCardComplete, setIsCardComplete] = useState(false);
   const [isCardReady, setIsCardReady] = useState(false);
@@ -88,7 +96,7 @@ export function PaymentConfirmationModal({
 
       if (response.success && response.data) {
         setPaymentMethods(response.data);
-        
+
         // If we have payment methods, go to selection
         if (response.data.length > 0) {
           setStep('select_method');
@@ -104,7 +112,9 @@ export function PaymentConfirmationModal({
       }
     } catch (err) {
       console.error('Error fetching payment methods:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load payment methods');
+      setError(
+        err instanceof Error ? err.message : 'Failed to load payment methods',
+      );
       setStep('error');
     }
   }, [session?.accessToken]);
@@ -146,7 +156,7 @@ export function PaymentConfirmationModal({
       // Scenario A: Use existing payment method
       const response = await createTenantSubscription(
         plan.priceId,
-        accessToken
+        accessToken,
       );
 
       if (response.success) {
@@ -160,7 +170,11 @@ export function PaymentConfirmationModal({
       }
     } catch (err) {
       console.error('Error creating subscription:', err);
-      setError(err instanceof Error ? err.message : 'Payment failed. Please try again.');
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Payment failed. Please try again.',
+      );
       setStep('select_method');
     }
   };
@@ -189,7 +203,7 @@ export function PaymentConfirmationModal({
 
     // Get CardElement reference - it will stay mounted during processing
     const cardElement = elements.getElement(CardElement);
-    
+
     if (!cardElement) {
       setError('Card input not found. Please refresh and try again.');
       return;
@@ -204,10 +218,11 @@ export function PaymentConfirmationModal({
       // Step 1: Create payment method from card element
       setProcessingMessage('Validating card...');
       console.log('Creating payment method from CardElement...');
-      const { error: pmError, paymentMethod } = await stripe.createPaymentMethod({
-        type: 'card',
-        card: cardElement,
-      });
+      const { error: pmError, paymentMethod } =
+        await stripe.createPaymentMethod({
+          type: 'card',
+          card: cardElement,
+        });
 
       if (pmError) {
         console.error('Payment method creation error:', pmError);
@@ -225,13 +240,15 @@ export function PaymentConfirmationModal({
       console.log('Adding payment method to tenant with ID:', paymentMethod.id);
       const addMethodResponse = await addPaymentMethodToTenant(
         paymentMethod.id,
-        accessToken
+        accessToken,
       );
 
       console.log('Add payment method response:', addMethodResponse);
 
       if (!addMethodResponse.success) {
-        throw new Error(addMethodResponse.message || 'Failed to save payment method');
+        throw new Error(
+          addMethodResponse.message || 'Failed to save payment method',
+        );
       }
 
       // Step 3: Create payment intent for verification
@@ -239,21 +256,25 @@ export function PaymentConfirmationModal({
       const paymentIntentResponse = await createTenantPaymentIntent(
         100, // $1.00 verification amount (will not be charged)
         'usd',
-        accessToken
+        accessToken,
       );
 
       if (!paymentIntentResponse.success || !paymentIntentResponse.data) {
-        throw new Error(paymentIntentResponse.message || 'Failed to create payment intent');
+        throw new Error(
+          paymentIntentResponse.message || 'Failed to create payment intent',
+        );
       }
 
       // Handle both client_secret (Stripe standard) and clientSecret (camelCase)
-      const clientSecret = paymentIntentResponse.data.client_secret || paymentIntentResponse.data.clientSecret;
-      
+      const clientSecret =
+        paymentIntentResponse.data.client_secret ||
+        paymentIntentResponse.data.clientSecret;
+
       if (!clientSecret) {
         console.error('Payment intent response:', paymentIntentResponse);
         throw new Error('No client secret received from payment intent');
       }
-      
+
       console.log('Payment Intent created with client secret');
 
       // Step 4: Confirm payment with the saved payment method
@@ -267,7 +288,9 @@ export function PaymentConfirmationModal({
 
       if (confirmResult.error) {
         console.error('Payment confirmation error:', confirmResult.error);
-        throw new Error(confirmResult.error.message || 'Card verification failed');
+        throw new Error(
+          confirmResult.error.message || 'Card verification failed',
+        );
       }
 
       console.log('Payment confirmed successfully');
@@ -277,13 +300,15 @@ export function PaymentConfirmationModal({
       console.log('Creating subscription with plan price ID:', plan.priceId);
       const subscriptionResponse = await createTenantSubscription(
         plan.priceId,
-        accessToken
+        accessToken,
       );
 
       console.log('Create subscription response:', subscriptionResponse);
 
       if (!subscriptionResponse.success) {
-        throw new Error(subscriptionResponse.message || 'Failed to create subscription');
+        throw new Error(
+          subscriptionResponse.message || 'Failed to create subscription',
+        );
       }
 
       // Success!
@@ -294,7 +319,11 @@ export function PaymentConfirmationModal({
       }, 2000);
     } catch (err) {
       console.error('Error processing payment:', err);
-      setError(err instanceof Error ? err.message : 'Payment failed. Please try again.');
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Payment failed. Please try again.',
+      );
       setStep('add_card');
     }
   };
@@ -320,13 +349,13 @@ export function PaymentConfirmationModal({
     onClose();
   };
 
-  const canConfirm = 
+  const canConfirm =
     (step === 'select_method' && selectedMethodId) ||
     (step === 'add_card' && isCardComplete && isCardReady && !cardError);
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl">Confirm Payment</DialogTitle>
           <DialogDescription>
@@ -335,99 +364,109 @@ export function PaymentConfirmationModal({
         </DialogHeader>
 
         {/* Plan Summary */}
-        <div className="rounded-lg border-2 border-primary/20 bg-primary/5 p-4">
+        <div className="border-primary/20 bg-primary/5 rounded-lg border-2 p-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-semibold text-lg">{plan.name}</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="text-lg font-semibold">{plan.name}</h3>
+              <p className="text-muted-foreground text-sm">
                 Billed {plan.interval || 'monthly'}
               </p>
             </div>
             <div className="text-right">
               <div className="text-3xl font-bold">${plan.price}</div>
-              <div className="text-xs text-muted-foreground">/{plan.interval || 'month'}</div>
+              <div className="text-muted-foreground text-xs">
+                /{plan.interval || 'month'}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Main Content Wrapper - relative positioning for overlay */}
         <div className="relative min-h-[200px]">
-        {/* Loading State */}
-        {step === 'loading' && (
-          <div className="flex flex-col items-center justify-center py-12">
-            <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
-            <p className="text-sm text-muted-foreground">Loading payment methods...</p>
-          </div>
-        )}
-
-        {/* Payment Method Selection */}
-        {step === 'select_method' && (
-          <div className="space-y-4">
-            <PaymentMethodList
-              paymentMethods={paymentMethods as unknown as PaymentMethod[]}
-              selectedMethodId={selectedMethodId}
-              onSelectMethod={setSelectedMethodId}
-              onAddNew={handleAddNewCard}
-            />
-          </div>
-        )}
-
-        {/* Add New Card */}
-        {(step === 'add_card' || step === 'processing') && (
-          <div className="space-y-4 relative">
-            {paymentMethods.length > 0 && (
-              <Button
-                variant="ghost"
-                onClick={handleBackToSelection}
-                className="gap-2"
-                disabled={step === 'processing'}
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back to saved cards
-              </Button>
-            )}
-
-            <div className="flex items-center gap-2 mb-2">
-              <CreditCard className="w-5 h-5" />
-              <h3 className="font-semibold">Add Payment Method</h3>
+          {/* Loading State */}
+          {step === 'loading' && (
+            <div className="flex flex-col items-center justify-center py-12">
+              <Loader2 className="text-primary mb-4 h-10 w-10 animate-spin" />
+              <p className="text-muted-foreground text-sm">
+                Loading payment methods...
+              </p>
             </div>
+          )}
 
-            <StripeCardForm
-              onCardComplete={setIsCardComplete}
-              onError={setCardError}
-              onReady={() => setIsCardReady(true)}
-            />
-          </div>
-        )}
-
-        {/* Processing Overlay - shown on top of add_card step */}
-        {step === 'processing' && (
-          <div className="absolute inset-0 bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
-            <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
-            <p className="text-sm text-muted-foreground">{processingMessage}</p>
-            <p className="text-xs text-muted-foreground mt-2">Please wait...</p>
-          </div>
-        )}
-
-        {/* Success State */}
-        {step === 'success' && (
-          <div className="flex flex-col items-center justify-center py-12">
-            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
-              <CheckCircle2 className="w-10 h-10 text-green-600" />
+          {/* Payment Method Selection */}
+          {step === 'select_method' && (
+            <div className="space-y-4">
+              <PaymentMethodList
+                paymentMethods={paymentMethods as unknown as PaymentMethod[]}
+                selectedMethodId={selectedMethodId}
+                onSelectMethod={setSelectedMethodId}
+                onAddNew={handleAddNewCard}
+              />
             </div>
-            <h3 className="text-xl font-semibold mb-2">Payment Successful!</h3>
-            <p className="text-sm text-muted-foreground text-center">
-              Your subscription has been activated. Redirecting...
-            </p>
-          </div>
-        )}
+          )}
+
+          {/* Add New Card */}
+          {(step === 'add_card' || step === 'processing') && (
+            <div className="relative space-y-4">
+              {paymentMethods.length > 0 && (
+                <Button
+                  variant="ghost"
+                  onClick={handleBackToSelection}
+                  className="gap-2"
+                  disabled={step === 'processing'}
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to saved cards
+                </Button>
+              )}
+
+              <div className="mb-2 flex items-center gap-2">
+                <CreditCard className="h-5 w-5" />
+                <h3 className="font-semibold">Add Payment Method</h3>
+              </div>
+
+              <StripeCardForm
+                onCardComplete={setIsCardComplete}
+                onError={setCardError}
+                onReady={() => setIsCardReady(true)}
+              />
+            </div>
+          )}
+
+          {/* Processing Overlay - shown on top of add_card step */}
+          {step === 'processing' && (
+            <div className="bg-background/95 absolute inset-0 z-10 flex flex-col items-center justify-center rounded-lg backdrop-blur-sm">
+              <Loader2 className="text-primary mb-4 h-10 w-10 animate-spin" />
+              <p className="text-muted-foreground text-sm">
+                {processingMessage}
+              </p>
+              <p className="text-muted-foreground mt-2 text-xs">
+                Please wait...
+              </p>
+            </div>
+          )}
+
+          {/* Success State */}
+          {step === 'success' && (
+            <div className="flex flex-col items-center justify-center py-12">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+                <CheckCircle2 className="h-10 w-10 text-green-600" />
+              </div>
+              <h3 className="mb-2 text-xl font-semibold">
+                Payment Successful!
+              </h3>
+              <p className="text-muted-foreground text-center text-sm">
+                Your subscription has been activated. Redirecting...
+              </p>
+            </div>
+          )}
         </div>
         {/* End of Main Content Wrapper */}
 
         {/* Error State */}
         {step === 'error' && (
           <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/50 dark:text-red-200">
-            <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <p>{error}</p>
           </div>
         )}
@@ -435,7 +474,7 @@ export function PaymentConfirmationModal({
         {/* Error Message (inline) */}
         {error && step !== 'error' && (
           <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/50 dark:text-red-200">
-            <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <p>{error}</p>
           </div>
         )}
@@ -443,11 +482,7 @@ export function PaymentConfirmationModal({
         {/* Action Buttons */}
         {step !== 'loading' && step !== 'processing' && step !== 'success' && (
           <div className="flex gap-3 pt-4">
-            <Button
-              variant="outline"
-              onClick={handleClose}
-              className="flex-1"
-            >
+            <Button variant="outline" onClick={handleClose} className="flex-1">
               Cancel
             </Button>
             <Button

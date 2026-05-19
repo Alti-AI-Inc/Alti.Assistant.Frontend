@@ -46,13 +46,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/register",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "register"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
             }
           },
           "response": []
@@ -91,13 +86,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "login"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
             }
           },
           "response": []
@@ -136,13 +126,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/tenant/check-subdomain?subdomain=test-workspace",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tenant",
-                "check-subdomain"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["tenant", "check-subdomain"],
               "query": [
                 {
                   "key": "subdomain",
@@ -209,13 +194,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/tenant/create",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tenant",
-                "create"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tenant", "create"]
             }
           },
           "response": []
@@ -249,13 +229,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/tenant/check-subdomain?subdomain=test-workspace",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tenant",
-                "check-subdomain"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["tenant", "check-subdomain"],
               "query": [
                 {
                   "key": "subdomain",
@@ -293,13 +268,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/tenant/current",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tenant",
-                "current"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tenant", "current"]
             }
           },
           "response": []
@@ -338,13 +308,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/tenant/create",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tenant",
-                "create"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tenant", "create"]
             }
           },
           "response": []
@@ -384,13 +349,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/tenant/create",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tenant",
-                "create"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tenant", "create"]
             }
           },
           "response": []
@@ -429,13 +389,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/tenant/settings",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tenant",
-                "settings"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tenant", "settings"]
             }
           },
           "response": []
@@ -474,13 +429,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/tenant/settings",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tenant",
-                "settings"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tenant", "settings"]
             }
           },
           "response": []
@@ -515,13 +465,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/tenant/usage",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tenant",
-                "usage"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tenant", "usage"]
             }
           },
           "response": []
@@ -556,13 +501,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/tenant/members",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tenant",
-                "members"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tenant", "members"]
             }
           },
           "response": []
@@ -603,14 +543,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/tenant/members/invite",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tenant",
-                "members",
-                "invite"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tenant", "members", "invite"]
             }
           },
           "response": []
@@ -640,14 +574,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/tenant/members/invitations",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tenant",
-                "members",
-                "invitations"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tenant", "members", "invitations"]
             }
           },
           "response": []
@@ -680,9 +608,7 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/tenant/members/invitations/{{invitationToken}}/verify",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "tenant",
                 "members",
@@ -730,9 +656,7 @@
             },
             "url": {
               "raw": "{{baseUrl}}/tenant/members/invitations/{{invitationToken}}/accept",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "tenant",
                 "members",
@@ -778,15 +702,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/tenant/members/{{userId}}/role",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tenant",
-                "members",
-                "{{userId}}",
-                "role"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tenant", "members", "{{userId}}", "role"]
             }
           },
           "response": []
@@ -816,14 +733,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/tenant/members/{{userId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tenant",
-                "members",
-                "{{userId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tenant", "members", "{{userId}}"]
             }
           },
           "response": []
@@ -920,14 +831,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/admin/tenants/{{tenantId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "admin",
-                "tenants",
-                "{{tenantId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "tenants", "{{tenantId}}"]
             }
           },
           "response": []
@@ -976,15 +881,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/admin/tenants/{{tenantId}}/status",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "admin",
-                "tenants",
-                "{{tenantId}}",
-                "status"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "tenants", "{{tenantId}}", "status"]
             }
           },
           "response": []
@@ -1025,15 +923,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/admin/tenants/{{tenantId}}/usage",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "admin",
-                "tenants",
-                "{{tenantId}}",
-                "usage"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "tenants", "{{tenantId}}", "usage"]
             }
           },
           "response": []
@@ -1082,15 +973,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/admin/tenants/{{tenantId}}/extend-trial",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "admin",
-                "tenants",
-                "{{tenantId}}",
-                "extend-trial"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "tenants", "{{tenantId}}", "extend-trial"]
             }
           },
           "response": []
@@ -1129,13 +1013,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/subscriptions/plans",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "plans"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "plans"]
             }
           },
           "response": []
@@ -1167,13 +1046,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/subscriptions/my-subscription",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "my-subscription"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "my-subscription"]
             }
           },
           "response": []
@@ -1204,14 +1078,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/subscriptions/tenant/{{tenantId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "tenant",
-                "{{tenantId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "tenant", "{{tenantId}}"]
             }
           },
           "response": []
@@ -1251,13 +1119,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/subscriptions/create-free",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "create-free"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "create-free"]
             }
           },
           "response": []
@@ -1299,13 +1162,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/subscriptions/upgrade",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "upgrade"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "upgrade"]
             }
           },
           "response": []
@@ -1346,13 +1204,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/subscriptions/upgrade",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "upgrade"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "upgrade"]
             }
           },
           "response": []
@@ -1392,13 +1245,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/subscriptions/process-checkout",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "process-checkout"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "process-checkout"]
             }
           },
           "response": []
@@ -1429,13 +1277,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/subscriptions/usage-stats",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "usage-stats"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "usage-stats"]
             }
           },
           "response": []
@@ -1467,14 +1310,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/subscriptions/usage-limit/webSearch",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "usage-limit",
-                "webSearch"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "usage-limit", "webSearch"]
             }
           },
           "response": []
@@ -1505,14 +1342,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/subscriptions/usage-limit/deepResearch",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "usage-limit",
-                "deepResearch"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "usage-limit", "deepResearch"]
             }
           },
           "response": []
@@ -1551,13 +1382,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/subscriptions/increment-usage",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "increment-usage"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "increment-usage"]
             }
           },
           "response": []
@@ -1596,13 +1422,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/subscriptions/add-seat",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "add-seat"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "add-seat"]
             }
           },
           "response": []
@@ -1641,13 +1462,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/subscriptions/remove-seat",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "remove-seat"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "remove-seat"]
             }
           },
           "response": []
@@ -1686,13 +1502,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/subscriptions/cancel",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "cancel"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "cancel"]
             }
           },
           "response": []
@@ -1731,13 +1542,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/subscriptions/cancel",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subscriptions",
-                "cancel"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["subscriptions", "cancel"]
             }
           },
           "response": []

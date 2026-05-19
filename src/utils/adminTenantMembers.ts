@@ -145,7 +145,8 @@ export function normalizeAdminTenantMember(
     userId: userIdObj,
     tenantId,
     role,
-    tenantRole: typeof record.tenantRole === 'string' ? record.tenantRole : role,
+    tenantRole:
+      typeof record.tenantRole === 'string' ? record.tenantRole : role,
     status: typeof record.status === 'string' ? record.status : undefined,
     joinedAt: typeof record.joinedAt === 'string' ? record.joinedAt : undefined,
     createdAt:

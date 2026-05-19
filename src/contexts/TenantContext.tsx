@@ -69,64 +69,77 @@ export function TenantProvider({ children }: { children: ReactNode }) {
     try {
       // Call API to switch to personal mode (tenantId: null)
       const response = await switchTenant(null);
-      
+
       if (response.success && response.data) {
         // Update session with new access token
         if (update) {
           await update({ accessToken: response.data.accessToken });
         }
-        
+
         // Update local store state
         storeSwitchToPersonalMode();
       } else {
         toast.error(response.message || 'Failed to switch to personal mode');
-        throw new Error(response.message || 'Failed to switch to personal mode');
+        throw new Error(
+          response.message || 'Failed to switch to personal mode',
+        );
       }
     } catch (error: unknown) {
       console.error('Failed to switch to personal mode:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to switch to personal mode');
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : 'Failed to switch to personal mode',
+      );
       throw error;
     }
   }, [mode, activeTenantId, update, storeSwitchToPersonalMode]);
 
   // Wrapper for switchToTenantMode with API call and token refresh
-  const switchToTenantMode = useCallback(async (tenantId: string) => {
-    // Check if already in the target tenant mode
-    if (mode === 'tenant' && activeTenantId === tenantId) {
-      return; // Already in this tenant mode, no need to switch
-    }
-
-    try {
-      // Call API to switch tenant and get new token
-      const response = await switchTenant(tenantId);
-      
-      if (response.success && response.data) {
-        // Update session with new access token
-        if (update) {
-          await update({ accessToken: response.data.accessToken });
-        }
-
-        // Enter tenant mode immediately; do not block on full /tenant/all refetch
-        storeSwitchToTenantMode(tenantId);
-        void refreshTenants().catch(err =>
-          console.error('refreshTenants after switch:', err),
-        );
-      } else {
-        toast.error(response.message || 'Failed to switch organization');
-        throw new Error(response.message || 'Failed to switch tenant');
+  const switchToTenantMode = useCallback(
+    async (tenantId: string) => {
+      // Check if already in the target tenant mode
+      if (mode === 'tenant' && activeTenantId === tenantId) {
+        return; // Already in this tenant mode, no need to switch
       }
-    } catch (error: unknown) {
-      console.error('Failed to switch tenant:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to switch organization');
-      throw error;
-    }
-  }, [mode, activeTenantId, update, storeSwitchToTenantMode, refreshTenants]);
+
+      try {
+        // Call API to switch tenant and get new token
+        const response = await switchTenant(tenantId);
+
+        if (response.success && response.data) {
+          // Update session with new access token
+          if (update) {
+            await update({ accessToken: response.data.accessToken });
+          }
+
+          // Enter tenant mode immediately; do not block on full /tenant/all refetch
+          storeSwitchToTenantMode(tenantId);
+          void refreshTenants().catch(err =>
+            console.error('refreshTenants after switch:', err),
+          );
+        } else {
+          toast.error(response.message || 'Failed to switch organization');
+          throw new Error(response.message || 'Failed to switch tenant');
+        }
+      } catch (error: unknown) {
+        console.error('Failed to switch tenant:', error);
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : 'Failed to switch organization',
+        );
+        throw error;
+      }
+    },
+    [mode, activeTenantId, update, storeSwitchToTenantMode, refreshTenants],
+  );
 
   // Fetch full tenant details from API when session is available
   useEffect(() => {
     const fetchTenantDetails = async () => {
       if (!session?.accessToken || !isHydrated) return;
-      
+
       try {
         const response = await getUserTenants();
         if (response.success && response.data) {
@@ -138,9 +151,10 @@ export function TenantProvider({ children }: { children: ReactNode }) {
             subdomain: t.subdomain,
             slug: t.slug,
           }));
-          
+
           // Only update if the data has changed to prevent unnecessary re-renders
-          const hasChanged = JSON.stringify(storeTenants) !== JSON.stringify(tenants);
+          const hasChanged =
+            JSON.stringify(storeTenants) !== JSON.stringify(tenants);
           if (hasChanged) {
             setTenants(storeTenants);
           }

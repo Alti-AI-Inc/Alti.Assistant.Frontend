@@ -29,9 +29,9 @@ function App() {
   return (
     <div
       className={cn(
-        'flex h-[calc(100vh-70px)] flex-col items-center justify-center lg:h-screen',
+        'flex h-full w-full flex-1 flex-col items-center justify-center',
       )}
-      style={{backgroundColor:"#FCFCFC"}}
+      style={{ backgroundColor: '#FCFCFC' }}
     >
       {activeConversation?.knowledgebaseId && (
         <h1 className="mb-8 text-4xl font-medium">

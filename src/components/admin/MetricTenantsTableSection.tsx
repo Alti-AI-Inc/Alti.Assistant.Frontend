@@ -92,8 +92,9 @@ export function MetricTenantsTableSection() {
         sortOrder,
       });
       if (res.success && res.data !== undefined && res.data !== null) {
-        const { list, meta: m } =
-          parseAdminListPayload<AdminTenantListItem>(res.data);
+        const { list, meta: m } = parseAdminListPayload<AdminTenantListItem>(
+          res.data,
+        );
         setTenants(list);
         setMeta(m);
       } else {
@@ -215,7 +216,6 @@ export function MetricTenantsTableSection() {
         <CardHeader className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
             <CardTitle>All tenants</CardTitle>
-          
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <div className="relative min-w-[200px] md:w-64">
@@ -227,8 +227,14 @@ export function MetricTenantsTableSection() {
                 className="pl-10"
               />
             </div>
-            <Button variant="outline" size="icon" onClick={() => void loadTenants()}>
-              <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => void loadTenants()}
+            >
+              <RefreshCw
+                className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
+              />
             </Button>
           </div>
         </CardHeader>
@@ -276,9 +282,7 @@ export function MetricTenantsTableSection() {
                     variant="outline"
                     size="sm"
                     disabled={
-                      isLoading ||
-                      page >= totalPages ||
-                      pagination.total === 0
+                      isLoading || page >= totalPages || pagination.total === 0
                     }
                     onClick={() => setPage(p => p + 1)}
                   >

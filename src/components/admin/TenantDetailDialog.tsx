@@ -38,22 +38,18 @@ function DetailRow({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] gap-x-3 gap-y-1 text-sm sm:grid-cols-[140px_1fr]">
       <dt className="text-muted-foreground">{label}</dt>
-      <dd className="min-w-0 break-words font-medium">{value}</dd>
+      <dd className="min-w-0 font-medium break-words">{value}</dd>
     </div>
   );
 }
 
-function Section({
-  title,
-  children,
-}: {
-  title: string;
-  children: ReactNode;
-}) {
+function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="space-y-2">
       <h4 className="text-sm font-semibold tracking-tight">{title}</h4>
-      <dl className="bg-muted/40 space-y-2 rounded-md border p-3">{children}</dl>
+      <dl className="bg-muted/40 space-y-2 rounded-md border p-3">
+        {children}
+      </dl>
     </div>
   );
 }
@@ -113,7 +109,7 @@ export function TenantDetailDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="flex max-h-[min(85vh,800px)] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-2xl">
-        <DialogHeader className="shrink-0 border-b px-6 pt-6 pb-4 pr-12">
+        <DialogHeader className="shrink-0 border-b px-6 pt-6 pr-12 pb-4">
           <DialogTitle>Tenant details</DialogTitle>
           <DialogDescription>
             {detail?.name ?? (loading ? 'Loading…' : 'Workspace and usage')}
@@ -246,7 +242,11 @@ export function TenantDetailDialog({
         </div>
 
         <DialogFooter className="shrink-0 border-t px-6 py-4">
-          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+          >
             Close
           </Button>
         </DialogFooter>

@@ -7,7 +7,7 @@ const LoginRegisterButtons = () => {
       <Button
         variant="outline"
         asChild
-        className="relative rounded-full max-md:hover:bg-black max-md:hover:text-white max-md:bg-black max-md:text-white text-black "
+        className="relative rounded-full text-black max-md:bg-black max-md:text-white max-md:hover:bg-black max-md:hover:text-white"
       >
         <Link href="/login" className="absolute inset-0">
           Sign In

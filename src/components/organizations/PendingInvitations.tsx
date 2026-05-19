@@ -75,7 +75,7 @@ export function PendingInvitations({
 
   if (invitations.length === 0) {
     return (
-      <div className="text-center py-6 text-muted-foreground text-sm">
+      <div className="text-muted-foreground py-6 text-center text-sm">
         No pending invitations
       </div>
     );
@@ -94,12 +94,14 @@ export function PendingInvitations({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invitations.map((invitation) => {
+          {invitations.map(invitation => {
             const expired = isExpired(invitation.expiresAt);
 
             return (
               <TableRow key={invitation.id}>
-                <TableCell className="font-medium">{invitation.email}</TableCell>
+                <TableCell className="font-medium">
+                  {invitation.email}
+                </TableCell>
                 <TableCell>
                   <Badge variant="outline" className="capitalize">
                     {invitation.role}
@@ -118,7 +120,7 @@ export function PendingInvitations({
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                  <div className="text-muted-foreground flex items-center gap-1.5 text-sm">
                     <Clock className="size-3.5" />
                     {invitation.expiresAt
                       ? new Date(invitation.expiresAt).toLocaleDateString()
@@ -136,14 +138,14 @@ export function PendingInvitations({
                       <DropdownMenuItem
                         onClick={() => handleCopyLink(invitation.token)}
                       >
-                        <Copy className="size-4 mr-2" />
+                        <Copy className="mr-2 size-4" />
                         Copy Invite Link
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className="text-destructive focus:text-destructive"
                         onClick={() => handleCancelInvitation(invitation.id)}
                       >
-                        <Trash2 className="size-4 mr-2" />
+                        <Trash2 className="mr-2 size-4" />
                         Cancel Invitation
                       </DropdownMenuItem>
                     </DropdownMenuContent>

@@ -47,15 +47,15 @@ steps:
       - managed
       - --allow-unauthenticated
       - --port
-      - "8080"
+      - '8080'
       - --min-instances
-      - "1"
+      - '1'
       - --max-instances
-      - "10"
+      - '10'
       - --memory
-      - "1Gi"
+      - '1Gi'
       - --cpu
-      - "1"
+      - '1'
       # Runtime env vars — secrets are injected via Secret Manager bindings below.
       # Non-secret vars can be added with --set-env-vars.
       - --set-env-vars

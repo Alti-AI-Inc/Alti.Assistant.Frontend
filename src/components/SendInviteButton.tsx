@@ -17,7 +17,6 @@ const SendInviteButton = ({
 
   const handleCopy = async () => {
     try {
-
       setIsCopied(true);
 
       // Reset back to copy icon after 2 seconds
@@ -34,10 +33,12 @@ const SendInviteButton = ({
     <Button
       onClick={handleCopy}
       variant="ghost"
-      className={cn('size-8 -ml-2 bg-gray-300 flex items-center justify-center transition-all duration-200 hover:bg-gray-400',
+      className={cn(
+        '-ml-2 flex size-8 items-center justify-center bg-gray-300 transition-all duration-200 hover:bg-gray-400',
         content && 'bg-black hover:bg-black',
-        className)}
-    // title={isCopied ? 'Copied!' : 'Copy to clipboard'}
+        className,
+      )}
+      // title={isCopied ? 'Copied!' : 'Copy to clipboard'}
     >
       {isCopied ? (
         <Check className="size-4 text-green-600 transition-all duration-200" />

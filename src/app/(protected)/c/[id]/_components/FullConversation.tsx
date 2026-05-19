@@ -513,10 +513,14 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         selectedOption === OPTIONS.GENERATE_PLAN ||
         selectedOption === OPTIONS.REVIEW_CONTRACT ||
         selectedOption === OPTIONS.GENERATE_REPORT) && (
-        <div className="flex-1 overflow-y-auto" ref={messagesContainerRef} style={{backgroundColor:"#FFFFFF"}}>
+        <div
+          className="flex-1 overflow-y-auto"
+          ref={messagesContainerRef}
+          style={{ backgroundColor: '#FFFFFF' }}
+        >
           <div
             className={cn(
-              'mx-auto w-full max-w-[796px] space-y-6 px-4 py-6 lg:px-2 lg:pr-1',
+              'mx-auto w-full max-w-[796px] space-y-6 px-4 py-6 sm:px-6 lg:px-8',
             )}
           >
             {activeConversation?.messages.length &&
@@ -685,14 +689,14 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       {/* <div className="sticky bottom-0 bg-white px-4 pb-4"> */}
       <div
         className={cn(
-          'sticky bottom-0 z-10 w-full transition-all duration-300',
+          'sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8',
           hasMessages
-            ? 'flex h-20 items-center justify-center border-t border-black/10 px-4 py-1.5'
-            : 'p-4',
+            ? 'flex h-20 items-center justify-center border-t border-black/10 py-1.5'
+            : 'py-4',
         )}
         style={{ backgroundColor: hasMessages ? '#FFFFFF' : '#FCFCFC' }}
       >
-        <div className="mx-auto max-w-[796px] w-full">
+        <div className="mx-auto w-full max-w-[796px]">
           <ChatInput
             conversationId={conversationId}
             imageGenHook={imageGenHook}

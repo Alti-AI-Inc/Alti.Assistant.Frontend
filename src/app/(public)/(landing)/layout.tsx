@@ -67,7 +67,7 @@ export default function PublicLayout({
             'bg-secondary sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out md:flex',
             !isLeftSidebarOpen ? 'w-10' : 'w-68',
           )}
-         style={{backgroundColor:"#F2F3F5"}}
+          style={{ backgroundColor: '#F2F3F5' }}
         >
           <LeftSideNav />
         </div>

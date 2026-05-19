@@ -56,8 +56,12 @@ function BillingPageContent() {
   const { data: session } = useSession();
   const router = useRouter();
 
-  const [subscription, setSubscription] = useState<PersonalSubscription | null>(null);
-  const [paymentMethods, setPaymentMethods] = useState<StripePaymentMethod[]>([]);
+  const [subscription, setSubscription] = useState<PersonalSubscription | null>(
+    null,
+  );
+  const [paymentMethods, setPaymentMethods] = useState<StripePaymentMethod[]>(
+    [],
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [isCancelling, setIsCancelling] = useState(false);
 
@@ -74,7 +78,11 @@ function BillingPageContent() {
           getMyPaymentMethods(accessToken),
         ]);
 
-        if (subRes.success && subRes.data?.hasSubscription && subRes.data.subscription) {
+        if (
+          subRes.success &&
+          subRes.data?.hasSubscription &&
+          subRes.data.subscription
+        ) {
           const stripeObj = subRes.data.subscription;
           const dbRecord = subRes.data.dbRecord;
           const priceItem = stripeObj.items.data[0]?.price;
@@ -85,7 +93,9 @@ function BillingPageContent() {
             price: priceItem?.unit_amount ? priceItem.unit_amount / 100 : 0,
             interval: priceItem?.recurring?.interval || 'month',
             nextBillingDate: stripeObj.current_period_end
-              ? new Date(stripeObj.current_period_end * 1000).toLocaleDateString()
+              ? new Date(
+                  stripeObj.current_period_end * 1000,
+                ).toLocaleDateString()
               : null,
             status: stripeObj.status,
             stripePriceId: dbRecord?.stripePriceId || '',
@@ -133,8 +143,8 @@ function BillingPageContent() {
 
   if (isLoading) {
     return (
-      <div className="container max-w-3xl mx-auto py-12 px-4">
-        <Skeleton className="h-8 w-48 mb-8" />
+      <div className="container mx-auto max-w-3xl px-4 py-12">
+        <Skeleton className="mb-8 h-8 w-48" />
         <div className="space-y-6">
           <Skeleton className="h-48 rounded-xl" />
           <Skeleton className="h-48 rounded-xl" />
@@ -144,7 +154,7 @@ function BillingPageContent() {
   }
 
   return (
-    <div className="container max-w-3xl mx-auto py-12 px-4">
+    <div className="container mx-auto max-w-3xl px-4 py-12">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Billing</h1>
         <p className="text-muted-foreground mt-1">
@@ -157,7 +167,7 @@ function BillingPageContent() {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span>Current Plan</span>
-            <CreditCard className="size-5 text-muted-foreground" />
+            <CreditCard className="text-muted-foreground size-5" />
           </CardTitle>
           <CardDescription>Your active personal subscription</CardDescription>
         </CardHeader>
@@ -172,7 +182,9 @@ function BillingPageContent() {
                     </span>
                     <Badge
                       variant={
-                        subscription.status === 'active' ? 'default' : 'secondary'
+                        subscription.status === 'active'
+                          ? 'default'
+                          : 'secondary'
                       }
                       className="capitalize"
                     >
@@ -180,12 +192,12 @@ function BillingPageContent() {
                     </Badge>
                   </div>
                   {subscription.price > 0 && (
-                    <div className="text-sm text-muted-foreground mt-1">
+                    <div className="text-muted-foreground mt-1 text-sm">
                       ${subscription.price} / {subscription.interval}
                     </div>
                   )}
                   {subscription.nextBillingDate && (
-                    <div className="flex items-center gap-1.5 mt-2 text-sm text-muted-foreground">
+                    <div className="text-muted-foreground mt-2 flex items-center gap-1.5 text-sm">
                       <Calendar className="size-4" />
                       Next billing: {subscription.nextBillingDate}
                     </div>
@@ -198,20 +210,23 @@ function BillingPageContent() {
                   variant="outline"
                   onClick={() => router.push('/upgrade')}
                 >
-                  <Zap className="size-4 mr-2" />
+                  <Zap className="mr-2 size-4" />
                   Change Plan
                 </Button>
 
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="ghost" className="text-destructive hover:text-destructive">
+                    <Button
+                      variant="ghost"
+                      className="text-destructive hover:text-destructive"
+                    >
                       Cancel Subscription
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle className="flex items-center gap-2">
-                        <AlertTriangle className="size-5 text-destructive" />
+                        <AlertTriangle className="text-destructive size-5" />
                         Cancel Subscription?
                       </AlertDialogTitle>
                       <AlertDialogDescription>
@@ -219,9 +234,9 @@ function BillingPageContent() {
                         <span className="font-medium capitalize">
                           {subscription.planName}
                         </span>{' '}
-                        plan will remain active until the end of the current billing
-                        period. After that, you will be downgraded to the free plan.
-                        This action cannot be undone.
+                        plan will remain active until the end of the current
+                        billing period. After that, you will be downgraded to
+                        the free plan. This action cannot be undone.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -232,7 +247,7 @@ function BillingPageContent() {
                         className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                       >
                         {isCancelling && (
-                          <Loader2 className="size-4 mr-2 animate-spin" />
+                          <Loader2 className="mr-2 size-4 animate-spin" />
                         )}
                         Yes, Cancel
                       </AlertDialogAction>
@@ -245,12 +260,12 @@ function BillingPageContent() {
             <div className="space-y-4">
               <div>
                 <div className="text-2xl font-bold">Free Plan</div>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-muted-foreground mt-1 text-sm">
                   You are currently on the free plan.
                 </p>
               </div>
               <Button onClick={() => router.push('/upgrade')}>
-                <Zap className="size-4 mr-2" />
+                <Zap className="mr-2 size-4" />
                 Upgrade Plan
               </Button>
             </div>
@@ -265,7 +280,7 @@ function BillingPageContent() {
             <span>Payment Methods</span>
             <Link href="/upgrade">
               <Button variant="outline" size="sm">
-                <CreditCard className="size-4 mr-2" />
+                <CreditCard className="mr-2 size-4" />
                 Add via Upgrade
               </Button>
             </Link>
@@ -274,10 +289,10 @@ function BillingPageContent() {
         </CardHeader>
         <CardContent>
           {paymentMethods.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <CreditCard className="size-12 mx-auto mb-3 opacity-40" />
+            <div className="text-muted-foreground py-8 text-center">
+              <CreditCard className="mx-auto mb-3 size-12 opacity-40" />
               <p className="font-medium">No payment methods saved</p>
-              <p className="text-sm mt-1">
+              <p className="mt-1 text-sm">
                 Add a payment method when you upgrade your plan.
               </p>
             </div>
@@ -286,16 +301,16 @@ function BillingPageContent() {
               {paymentMethods.map(method => (
                 <div
                   key={method.id}
-                  className="flex items-center gap-4 p-4 border rounded-lg"
+                  className="flex items-center gap-4 rounded-lg border p-4"
                 >
-                  <div className="w-12 h-8 rounded bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs uppercase shrink-0">
+                  <div className="flex h-8 w-12 shrink-0 items-center justify-center rounded bg-gradient-to-br from-blue-500 to-purple-600 text-xs font-bold text-white uppercase">
                     {method.card?.brand?.slice(0, 4) || 'card'}
                   </div>
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0 flex-1">
                     <div className="font-medium">
                       •••• •••• •••• {method.card?.last4}
                     </div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-muted-foreground text-sm">
                       Expires {method.card?.exp_month}/{method.card?.exp_year}
                     </div>
                   </div>

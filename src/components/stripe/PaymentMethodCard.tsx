@@ -3,10 +3,7 @@
 import { PaymentMethod } from '@/types/stripe';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { 
-  CreditCard, 
-  CheckCircle2,
-} from 'lucide-react';
+import { CreditCard, CheckCircle2 } from 'lucide-react';
 
 /**
  * Payment Method Card Component
@@ -22,7 +19,10 @@ interface PaymentMethodCardProps {
 }
 
 // Card brand colors and icons
-const CARD_BRAND_CONFIG: Record<string, { color: string; displayName: string }> = {
+const CARD_BRAND_CONFIG: Record<
+  string,
+  { color: string; displayName: string }
+> = {
   visa: { color: 'text-blue-600', displayName: 'Visa' },
   mastercard: { color: 'text-orange-600', displayName: 'Mastercard' },
   amex: { color: 'text-blue-700', displayName: 'American Express' },
@@ -41,12 +41,13 @@ export function PaymentMethodCard({
   className,
 }: PaymentMethodCardProps) {
   const { card } = paymentMethod;
-  
+
   if (!card) {
     return null;
   }
 
-  const brandConfig = CARD_BRAND_CONFIG[card.brand] || CARD_BRAND_CONFIG.unknown;
+  const brandConfig =
+    CARD_BRAND_CONFIG[card.brand] || CARD_BRAND_CONFIG.unknown;
   const isClickable = !!onSelect;
 
   const handleClick = () => {
@@ -69,12 +70,12 @@ export function PaymentMethodCard({
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       className={cn(
-        'relative flex items-center gap-4 p-4 rounded-lg border-2 transition-all',
+        'relative flex items-center gap-4 rounded-lg border-2 p-4 transition-all',
         isSelected
           ? 'border-primary bg-primary/5 shadow-sm'
           : 'border-border bg-card hover:border-muted-foreground/30',
         isClickable && 'cursor-pointer',
-        className
+        className,
       )}
     >
       {/* Selection Indicator */}
@@ -82,14 +83,14 @@ export function PaymentMethodCard({
         <div className="flex items-center">
           <div
             className={cn(
-              'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors',
+              'flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors',
               isSelected
                 ? 'border-primary bg-primary'
-                : 'border-muted-foreground/50'
+                : 'border-muted-foreground/50',
             )}
           >
             {isSelected && (
-              <CheckCircle2 className="w-4 h-4 text-primary-foreground" />
+              <CheckCircle2 className="text-primary-foreground h-4 w-4" />
             )}
           </div>
         </div>
@@ -97,15 +98,13 @@ export function PaymentMethodCard({
 
       {/* Card Icon */}
       <div className={cn('flex-shrink-0', brandConfig.color)}>
-        <CreditCard className="w-8 h-8" />
+        <CreditCard className="h-8 w-8" />
       </div>
 
       {/* Card Details */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="font-medium text-sm">
-            {brandConfig.displayName}
-          </span>
+      <div className="min-w-0 flex-1">
+        <div className="mb-1 flex items-center gap-2">
+          <span className="text-sm font-medium">{brandConfig.displayName}</span>
           <span className="text-muted-foreground">••••</span>
           <span className="font-semibold">{card.last4}</span>
           {isDefault && (
@@ -114,11 +113,11 @@ export function PaymentMethodCard({
             </Badge>
           )}
         </div>
-        <div className="text-xs text-muted-foreground">
+        <div className="text-muted-foreground text-xs">
           Expires {String(card.exp_month).padStart(2, '0')}/{card.exp_year}
         </div>
         {card.funding && (
-          <div className="text-xs text-muted-foreground capitalize mt-0.5">
+          <div className="text-muted-foreground mt-0.5 text-xs capitalize">
             {card.funding}
           </div>
         )}
@@ -127,7 +126,7 @@ export function PaymentMethodCard({
       {/* Selection Checkmark (Alternative position) */}
       {isSelected && !isClickable && (
         <div className="absolute top-3 right-3">
-          <CheckCircle2 className="w-5 h-5 text-primary" />
+          <CheckCircle2 className="text-primary h-5 w-5" />
         </div>
       )}
     </div>

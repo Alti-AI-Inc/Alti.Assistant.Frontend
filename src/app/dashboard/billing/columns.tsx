@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { ColumnDef } from '@tanstack/react-table';
+import { MoreHorizontal } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +11,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 
 type Bill = {
   date: string;
@@ -19,7 +19,7 @@ type Bill = {
   receipt: string;
 };
 export const data: Bill[] = [
-{
+  {
     date: 'January 5, 2025',
     type: 'Utilities',
     receipt: 'R-1001',
@@ -73,20 +73,20 @@ export const data: Bill[] = [
 
 export const columns: ColumnDef<Bill>[] = [
   {
-    accessorKey: "date",
-    header: "Date",
+    accessorKey: 'date',
+    header: 'Date',
   },
   {
-    accessorKey: "type",
-    header: "Type",
+    accessorKey: 'type',
+    header: 'Type',
   },
   {
-    accessorKey: "receipt",
+    accessorKey: 'receipt',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Receipt
           {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
@@ -94,9 +94,9 @@ export const columns: ColumnDef<Bill>[] = [
       );
     },
   },
-  
+
   {
-    id: "actions",
+    id: 'actions',
     cell: ({ row }) => {
       const client = row.original;
 
@@ -123,4 +123,3 @@ export const columns: ColumnDef<Bill>[] = [
     },
   },
 ];
-

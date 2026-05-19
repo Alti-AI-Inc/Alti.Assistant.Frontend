@@ -64,7 +64,7 @@ export const CreateMatterModal = ({
               }
             }}
             disabled={isLoading}
-            className="w-full rounded-lg border border-gray-600 bg-white px-4 py-3 text-black placeholder-gray-500 transition-all duration-200 focus:border-gray-400 focus:ring-2 focus:ring-gray-200 focus:outline-none h-12"
+            className="h-12 w-full rounded-lg border border-gray-600 bg-white px-4 py-3 text-black placeholder-gray-500 transition-all duration-200 focus:border-gray-400 focus:ring-2 focus:ring-gray-200 focus:outline-none"
             autoFocus
           />
         </div>
@@ -73,7 +73,7 @@ export const CreateMatterModal = ({
           <Button
             onClick={handleCreate}
             disabled={!matterName.trim() || isLoading}
-            className="w-full rounded-lg bg-gray-700 py-3 font-semibold text-white transition-all duration-200 hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50 "
+            className="w-full rounded-lg bg-gray-700 py-3 font-semibold text-white transition-all duration-200 hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? (
               <span className="flex items-center justify-center gap-2">

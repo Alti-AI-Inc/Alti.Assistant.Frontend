@@ -1,6 +1,3 @@
-
-
-
 'use client';
 
 import {
@@ -79,7 +76,9 @@ export function TenantAdministrationDialog({
   const [assignSaving, setAssignSaving] = useState(false);
   const [assignmentError, setAssignmentError] = useState<string | null>(null);
   const [membersLoadError, setMembersLoadError] = useState<string | null>(null);
-  const [packagesLoadError, setPackagesLoadError] = useState<string | null>(null);
+  const [packagesLoadError, setPackagesLoadError] = useState<string | null>(
+    null,
+  );
 
   // FIX: Reset only non-loading-dependent fields when tenantId changes.
   // Do NOT reset selectedUserId/selectedPackageId here — they are set
@@ -177,7 +176,9 @@ export function TenantAdministrationDialog({
 
       const orderedPackages =
         packagesRes.success && Array.isArray(packagesRes.data)
-          ? [...packagesRes.data].sort((left, right) => left.price - right.price)
+          ? [...packagesRes.data].sort(
+              (left, right) => left.price - right.price,
+            )
           : [];
 
       setPackages(orderedPackages);
@@ -265,7 +266,9 @@ export function TenantAdministrationDialog({
 
       if (res.success) {
         const planLabel =
-          selectedPackage?.displayName || selectedPackage?.name || 'subscription';
+          selectedPackage?.displayName ||
+          selectedPackage?.name ||
+          'subscription';
         toast.success(
           selectedPackage?.plan === 'free' || selectedPackage?.price === 0
             ? `Free plan (${planLabel}) assigned successfully.`
@@ -318,7 +321,7 @@ export function TenantAdministrationDialog({
             <div className="space-y-4">
               <div className="flex flex-wrap items-center gap-2">
                 <TenantStatusBadge status={detail.status} />
-                <Badge variant="secondary" className="capitalize text-xs">
+                <Badge variant="secondary" className="text-xs capitalize">
                   {detail.plan}
                 </Badge>
               </div>
@@ -326,36 +329,35 @@ export function TenantAdministrationDialog({
               <div className="space-y-4">
                 <AdminBlock title="Lifecycle status">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-                      <Select
-                        value={selectedStatus}
-                        onValueChange={v =>
-                          setSelectedStatus(v as TenantLifecycleStatus)
-                        }
+                    <Select
+                      value={selectedStatus}
+                      onValueChange={v =>
+                        setSelectedStatus(v as TenantLifecycleStatus)
+                      }
+                    >
+                      <SelectTrigger
+                        id="admin-tenant-status"
+                        className="h-9 w-full sm:flex-1"
                       >
-                        <SelectTrigger
-                          id="admin-tenant-status"
-                          className="h-9 w-full sm:flex-1"
-                        >
-                          <SelectValue placeholder="Status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="active">Active</SelectItem>
-                          <SelectItem value="suspended">Suspended</SelectItem>
-                          <SelectItem value="cancelled">Cancelled</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <Button
-                        type="button"
-                        size="sm"
-                        className="h-9 shrink-0 sm:px-4"
-                        disabled={statusSaving || !statusDirty || !accessToken}
-                        onClick={() => void handleSaveStatus()}
-                      >
-                        {statusSaving ? 'Saving…' : 'Save'}
-                      </Button>
-                    </div>
-                  </AdminBlock>
-
+                        <SelectValue placeholder="Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="suspended">Suspended</SelectItem>
+                        <SelectItem value="cancelled">Cancelled</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      type="button"
+                      size="sm"
+                      className="h-9 shrink-0 sm:px-4"
+                      disabled={statusSaving || !statusDirty || !accessToken}
+                      onClick={() => void handleSaveStatus()}
+                    >
+                      {statusSaving ? 'Saving…' : 'Save'}
+                    </Button>
+                  </div>
+                </AdminBlock>
 
                 <AdminBlock title="Subscription assignment">
                   <div className="space-y-3">
@@ -368,7 +370,7 @@ export function TenantAdministrationDialog({
                           Member
                         </Label>
                         {membersLoading ? (
-                          <div className="flex h-9 items-center gap-2 text-sm text-muted-foreground">
+                          <div className="text-muted-foreground flex h-9 items-center gap-2 text-sm">
                             <Spinner className="h-4 w-4" />
                             Loading members…
                           </div>
@@ -425,7 +427,7 @@ export function TenantAdministrationDialog({
                     </div>
 
                     {!membersLoading && members.length === 0 && (
-                      <div className="text-muted-foreground rounded-md border border-dashed bg-muted/30 px-3 py-2.5 text-xs">
+                      <div className="text-muted-foreground bg-muted/30 rounded-md border border-dashed px-3 py-2.5 text-xs">
                         {membersLoadError ||
                           'No tenant users available for subscription assignment.'}
                       </div>
@@ -438,7 +440,7 @@ export function TenantAdministrationDialog({
                           <Spinner className="h-5 w-5" />
                         </div>
                       ) : packages.length === 0 ? (
-                        <p className="text-muted-foreground rounded-md border border-dashed bg-muted/30 px-3 py-2.5 text-xs">
+                        <p className="text-muted-foreground bg-muted/30 rounded-md border border-dashed px-3 py-2.5 text-xs">
                           {packagesLoadError ||
                             'No subscription packages available.'}
                         </p>
@@ -458,7 +460,7 @@ export function TenantAdministrationDialog({
                                 }}
                                 className={`flex w-full items-center gap-3 rounded-md border px-3 py-2.5 text-left transition-colors ${
                                   selected
-                                    ? 'border-primary bg-primary/5 ring-1 ring-primary'
+                                    ? 'border-primary bg-primary/5 ring-primary ring-1'
                                     : 'border-border hover:bg-muted/50'
                                 }`}
                               >
@@ -489,8 +491,11 @@ export function TenantAdministrationDialog({
                                     )}
                                   </span>
                                   <span className="text-muted-foreground mt-0.5 block truncate text-xs">
-                                    {pkg.features?.dailyRequestLimit ?? 0} req/day ·{' '}
-                                    {formatStorage(pkg.features?.storagePerUser)}
+                                    {pkg.features?.dailyRequestLimit ?? 0}{' '}
+                                    req/day ·{' '}
+                                    {formatStorage(
+                                      pkg.features?.storagePerUser,
+                                    )}
                                   </span>
                                 </span>
                                 <span className="shrink-0 text-right text-sm font-medium tabular-nums">
@@ -507,9 +512,10 @@ export function TenantAdministrationDialog({
                     </div>
 
                     {assignmentError && (
-                      <p className="text-destructive text-xs">{assignmentError}</p>
+                      <p className="text-destructive text-xs">
+                        {assignmentError}
+                      </p>
                     )}
-
                   </div>
                 </AdminBlock>
               </div>

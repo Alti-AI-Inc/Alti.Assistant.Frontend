@@ -72,7 +72,7 @@ const LeftSideNav = () => {
       <div className="pt-0 pb-2" style={{ backgroundColor: '#F2F3F5' }}>
         <div
           className={cn(
-            'sticky top-0 z-30 flex items-center justify-between px-4 pt-4 pb-4 border-b border-black/10',
+            'sticky top-0 z-30 flex items-center justify-between border-b border-black/10 px-4 pt-4 pb-4',
             hideSidebar && 'justify-center',
           )}
           style={{ backgroundColor: '#F2F3F5' }}
@@ -113,25 +113,25 @@ const LeftSideNav = () => {
         </div>
         {/* Enclosed Search & Actions Row */}
         {!hideSidebar && (
-          <div className="flex items-center gap-2 px-4 py-4 border-b border-black/10 transition-all duration-300 justify-between">
+          <div className="flex items-center justify-between gap-2 border-b border-black/10 px-4 py-4 transition-all duration-300">
             {/* Search Bar Button */}
             <div
               onClick={() => onOpen({ type: 'search-chats' })}
-              className="flex flex-1 h-8 items-center gap-2 px-3 bg-black/5 hover:bg-black/10 rounded-lg cursor-pointer text-gray-500 border border-black/5 transition-all text-xs"
+              className="flex h-8 flex-1 cursor-pointer items-center gap-2 rounded-lg border border-black/5 bg-black/5 px-3 text-xs text-gray-500 transition-all hover:bg-black/10"
             >
               <Search className="size-3.5 flex-none" />
               <span className="truncate">Search chats...</span>
             </div>
 
             {/* Action Buttons to the right */}
-            <div className="flex items-center gap-1.5 flex-none">
+            <div className="flex flex-none items-center gap-1.5">
               {/* Favorites Button */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 bg-black/5 hover:bg-black/10 rounded-lg flex items-center justify-center text-gray-500 hover:text-black border border-black/5 transition-all"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/5 bg-black/5 text-gray-500 transition-all hover:bg-black/10 hover:text-black"
                     onClick={() => {
                       router.push('/saved-chats');
                       close();
@@ -151,7 +151,7 @@ const LeftSideNav = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 bg-black/5 hover:bg-black/10 rounded-lg flex items-center justify-center text-gray-500 hover:text-black border border-black/5 transition-all"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/5 bg-black/5 text-gray-500 transition-all hover:bg-black/10 hover:text-black"
                     onClick={() => {
                       setActiveConversation(null);
                       setShowStartLastMessage(false);
@@ -170,7 +170,8 @@ const LeftSideNav = () => {
               </Tooltip>
             </div>
           </div>
-        )}      </div>
+        )}{' '}
+      </div>
 
       {isLoggedIn && (
         <div
@@ -188,7 +189,7 @@ const LeftSideNav = () => {
 
       <div
         className={cn(
-          'sticky bottom-0 z-30 flex h-20 items-center justify-center p-4 py-1.5 border-t border-black/10',
+          'sticky bottom-0 z-30 flex h-20 items-center justify-center border-t border-black/10 p-4 py-1.5',
           hideSidebar && 'hidden',
         )}
         style={{ backgroundColor: '#F2F3F5' }}
@@ -235,7 +236,7 @@ const LeftSideNav = () => {
                 <DropdownMenuItem onClick={() => router.push('/organizations')}>
                   <Building2 className="text-black" /> Organizations
                 </DropdownMenuItem>
-              
+
                 <DropdownMenuItem
                   onClick={() =>
                     router.push(

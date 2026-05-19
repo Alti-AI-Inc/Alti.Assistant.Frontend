@@ -17,7 +17,7 @@ import {
   NotepadText,
   PencilLine,
   PencilRuler,
-  Waypoints
+  Waypoints,
 } from 'lucide-react';
 
 export const ALLOWED_DOC_EXTENSIONS = [

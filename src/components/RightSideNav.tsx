@@ -30,77 +30,77 @@ const previousChatHistory = [
   {
     id: 1,
     title: 'lorem ipsum dolor sit',
-    url: "/",
+    url: '/',
   },
   {
     id: 2,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: "/",
+    url: '/',
   },
   {
     id: 3,
     title: 'lorem ipsum  elit',
-    url: "/",
+    url: '/',
   },
   {
     id: 4,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: "/",
+    url: '/',
   },
   {
     id: 5,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: "/",
+    url: '/',
   },
   {
     id: 6,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: "/",
+    url: '/',
   },
   {
     id: 7,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: "/",
+    url: '/',
   },
   {
     id: 8,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: "/",
+    url: '/',
   },
   {
     id: 9,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: "/",
+    url: '/',
   },
   {
     id: 10,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: "/",
+    url: '/',
   },
   {
     id: 11,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: "/",
+    url: '/',
   },
   {
     id: 12,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: "/",
+    url: '/',
   },
   {
     id: 13,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: "/",
+    url: '/',
   },
   {
     id: 14,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: "/",
+    url: '/',
   },
   {
     id: 15,
     title: 'lorem ipsum dolor sit amet consectetur adipiscing elit',
-    url: "/",
+    url: '/',
   },
 ];
 
@@ -113,7 +113,7 @@ export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
     // Collapsed → only icons
     return (
       <nav className="flex flex-col items-center gap-6 px-2 pt-8">
-        <button onClick={() => router.push("/")}>
+        <button onClick={() => router.push('/')}>
           <SquarePen className="h-5 w-5" />
         </button>
         <button onClick={() => onOpen({ type: 'search-chats' })}>
@@ -125,7 +125,7 @@ export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
 
   // Expanded → full view
   return (
-    <nav className="h-full overflow-y-auto px-2 pt-8 ">
+    <nav className="h-full overflow-y-auto px-2 pt-8">
       {/* TenantModeSwitcher at the top */}
       <div className="mb-4 px-1">
         <TenantModeSwitcher />
@@ -138,7 +138,7 @@ export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <Building2 className="size-4 text-gray-600" />
-                <h3 className="font-medium text-sm">{currentTenant.name}</h3>
+                <h3 className="text-sm font-medium">{currentTenant.name}</h3>
               </div>
               <p className="mt-1 text-xs text-gray-500">
                 {currentTenant.subdomain}.alti.app
@@ -146,7 +146,10 @@ export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
               {currentTenant.memberCount !== undefined && (
                 <div className="mt-2 flex items-center gap-1 text-xs text-gray-500">
                   <Users className="size-3" />
-                  <span>{currentTenant.memberCount} member{currentTenant.memberCount !== 1 ? 's' : ''}</span>
+                  <span>
+                    {currentTenant.memberCount} member
+                    {currentTenant.memberCount !== 1 ? 's' : ''}
+                  </span>
                 </div>
               )}
             </div>
@@ -163,7 +166,9 @@ export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
             <Button
               size="sm"
               variant="outline"
-              onClick={() => router.push(`/organizations/${currentTenant.id}/settings`)}
+              onClick={() =>
+                router.push(`/organizations/${currentTenant.id}/settings`)
+              }
               className="h-8 text-xs"
             >
               <SettingsIcon className="mr-1 size-3" />
@@ -175,9 +180,9 @@ export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
 
       {/* Header actions */}
       <div className="bg-secondary sticky top-0 z-30 pb-2">
-        <div className="space-y-2 ">
+        <div className="space-y-2">
           <Button
-            onClick={() => router.push("/")}
+            onClick={() => router.push('/')}
             className="-ml-3 flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
           >
             <SquarePen className="h-5 w-5" />
