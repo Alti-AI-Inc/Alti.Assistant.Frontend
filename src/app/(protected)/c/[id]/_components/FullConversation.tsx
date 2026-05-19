@@ -653,12 +653,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             )}
             <div
               className={cn(
-                // idx === activeConversation.messages.length - 1 &&
-                // activeConversation?.messages[
-                //   activeConversation?.messages.length - 1
-                // ]?.role === 'user' &&
                 showStartLastMessage &&
-                  // lastMessageRole === 'user' &&
+                  isLoadingResponse &&
                   'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
               )}
             ></div>

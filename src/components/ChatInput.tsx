@@ -550,7 +550,7 @@ const ChatInput = ({
         return;
       }
       if (!response?.data) return;
-      // setShowStartLastMessage(false);
+      setShowStartLastMessage(false);
       const newId =
         conversationId === 'new-chat'
           ? response.data.conversationId
