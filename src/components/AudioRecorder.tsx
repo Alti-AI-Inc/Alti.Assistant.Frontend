@@ -91,7 +91,7 @@ export default function AudioRecorder({
   return (
     <div className="flex items-center gap-2">
       {recording && (
-        <div className="flex h-8 w-20 items-end gap-1">
+        <div className="flex h-7 w-20 items-end gap-1">
           {[...Array(10)].map((_, i) => (
             <motion.div
               key={i}
@@ -110,13 +110,13 @@ export default function AudioRecorder({
         </div>
       )}
       {loadingText && !recording ? (
-        <LoaderCircle className="size-8 flex-none animate-spin cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white" />
+        <LoaderCircle className="size-7 flex-none animate-spin cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-1 text-white" />
       ) : !recording && !loadingText ? (
         <Tooltip>
           <TooltipTrigger asChild>
             <Mic
               onClick={startRecording}
-              className="size-8 flex-none cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white"
+              className="size-7 flex-none cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-1 text-white"
             />
           </TooltipTrigger>
           <TooltipContent side="bottom">
@@ -127,11 +127,11 @@ export default function AudioRecorder({
         <div className="flex space-x-2">
           <X
             onClick={handleCancelRecording}
-            className="size-8 flex-none cursor-pointer rounded-lg p-1.5 text-neutral-600"
+            className="size-7 flex-none cursor-pointer rounded-lg p-1 text-neutral-600"
           />
           <ArrowUp
             onClick={stopRecording}
-            className="size-8 flex-none cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white"
+            className="size-7 flex-none cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-1 text-white"
           />
         </div>
       )}
