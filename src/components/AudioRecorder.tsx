@@ -109,13 +109,13 @@ export default function AudioRecorder({
           ))}
       </div>
       {loadingText && !recording ? (
-        <LoaderCircle className="size-6 flex-none animate-spin cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white" />
+        <LoaderCircle className="size-6 flex-none animate-spin cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-0.5 text-white" />
       ) : !recording && !loadingText ? (
         <Tooltip>
           <TooltipTrigger>
             <Mic
               onClick={startRecording}
-              className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
+              className="size-6 flex-none cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-0.5 text-white"
             />
           </TooltipTrigger>
           <TooltipContent side="bottom">
@@ -126,11 +126,11 @@ export default function AudioRecorder({
         <div className="flex space-x-2">
           <X
             onClick={handleCancelRecording}
-            className="size-6 flex-none cursor-pointer rounded-full p-0.5 text-neutral-600"
+            className="size-6 flex-none cursor-pointer rounded-lg p-0.5 text-neutral-600"
           />
           <ArrowUp
             onClick={stopRecording}
-            className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
+            className="size-6 flex-none cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-0.5 text-white"
           />
         </div>
       )}
