@@ -681,7 +681,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
       {/* Sticky chat input at bottom */}
       {/* <div className="sticky bottom-0 bg-white px-4 pb-4"> */}
-      <div className="sticky bottom-0 z-10 w-full  p-4" style={{backgroundColor:"#FCFCFC"}}>
+      <div className="sticky bottom-0 z-10 w-full  p-4" style={{backgroundColor:"#FFFFFF"}}>
         <div className="mx-auto max-w-[796px]">
           <ChatInput
             conversationId={conversationId}
