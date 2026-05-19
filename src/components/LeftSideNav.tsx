@@ -112,15 +112,40 @@ const LeftSideNav = () => {
           />
         </div>
         {/* Enclosed Search & Actions Row */}
-        <div
-          className={cn(
-            'flex items-center gap-2 px-4 py-4 border-b border-black/10 transition-all duration-300',
-            hideSidebar ? 'flex-col px-2 py-4' : 'justify-between'
-          )}
-        >
-          {hideSidebar ? (
-            // Collapsed Sidebar: Stacked action icons
-            <div className="flex flex-col items-center gap-2">
+        {!hideSidebar && (
+          <div className="flex items-center gap-2 px-4 py-4 border-b border-black/10 transition-all duration-300 justify-between">
+            {/* Search Bar Button */}
+            <div
+              onClick={() => onOpen({ type: 'search-chats' })}
+              className="flex flex-1 h-8 items-center gap-2 px-3 bg-black/5 hover:bg-black/10 rounded-lg cursor-pointer text-gray-500 border border-black/5 transition-all text-xs"
+            >
+              <Search className="size-3.5 flex-none" />
+              <span className="truncate">Search chats...</span>
+            </div>
+
+            {/* Action Buttons to the right */}
+            <div className="flex items-center gap-1.5 flex-none">
+              {/* Favorites Button */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 bg-black/5 hover:bg-black/10 rounded-lg flex items-center justify-center text-gray-500 hover:text-black border border-black/5 transition-all"
+                    onClick={() => {
+                      router.push('/saved-chats');
+                      close();
+                    }}
+                  >
+                    <Bookmark className="size-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Saved Chats</p>
+                </TooltipContent>
+              </Tooltip>
+
+              {/* Plus for New Chat Button */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -136,110 +161,16 @@ const LeftSideNav = () => {
                       router.push('/');
                     }}
                   >
-                    <Plus className="size-[18px]" />
+                    <Plus className="size-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent side="right">
+                <TooltipContent side="bottom">
                   <p>New Chat</p>
                 </TooltipContent>
               </Tooltip>
-
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 bg-black/5 hover:bg-black/10 rounded-lg flex items-center justify-center text-gray-500 hover:text-black border border-black/5 transition-all"
-                    onClick={() => {
-                      router.push('/saved-chats');
-                      close();
-                    }}
-                  >
-                    <Bookmark className="size-[18px]" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  <p>Saved Chats</p>
-                </TooltipContent>
-              </Tooltip>
-
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 bg-black/5 hover:bg-black/10 rounded-lg flex items-center justify-center text-gray-500 hover:text-black border border-black/5 transition-all"
-                    onClick={() => onOpen({ type: 'search-chats' })}
-                  >
-                    <Search className="size-[18px]" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  <p>Search Chats</p>
-                </TooltipContent>
-              </Tooltip>
             </div>
-          ) : (
-            // Expanded Sidebar: Single horizontal row (Search Bar + Favorites + New Chat)
-            <>
-              {/* Search Bar Button */}
-              <div
-                onClick={() => onOpen({ type: 'search-chats' })}
-                className="flex flex-1 h-8 items-center gap-2 px-3 bg-black/5 hover:bg-black/10 rounded-lg cursor-pointer text-gray-500 border border-black/5 transition-all text-xs"
-              >
-                <Search className="size-3.5 flex-none" />
-                <span className="truncate">Search chats...</span>
-              </div>
-
-              {/* Action Buttons to the right */}
-              <div className="flex items-center gap-1.5 flex-none">
-                {/* Favorites Button */}
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 bg-black/5 hover:bg-black/10 rounded-lg flex items-center justify-center text-gray-500 hover:text-black border border-black/5 transition-all"
-                      onClick={() => {
-                        router.push('/saved-chats');
-                        close();
-                      }}
-                    >
-                      <Bookmark className="size-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>Saved Chats</p>
-                  </TooltipContent>
-                </Tooltip>
-
-                {/* Plus for New Chat Button */}
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 bg-black/5 hover:bg-black/10 rounded-lg flex items-center justify-center text-gray-500 hover:text-black border border-black/5 transition-all"
-                      onClick={() => {
-                        setActiveConversation(null);
-                        setShowStartLastMessage(false);
-                        setUserMessage('');
-                        setSelectedOption(null);
-                        close();
-                        router.push('/');
-                      }}
-                    >
-                      <Plus className="size-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>New Chat</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-            </>
-          )}
-        </div>      </div>
+          </div>
+        )}      </div>
 
       {isLoggedIn && (
         <div
