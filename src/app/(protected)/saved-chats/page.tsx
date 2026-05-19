@@ -56,7 +56,7 @@ const Page = () => {
       ) : (
         <>
           {/* Header Section */}
-          <div className="border-b border-black/10 px-6 py-4 sm:px-8">
+          <div className="flex h-[57px] items-center border-b border-black/10 px-6 sm:px-8">
             <h1 className="text-lg font-semibold text-gray-900">
               Saved Chats
             </h1>
