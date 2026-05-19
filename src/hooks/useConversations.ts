@@ -369,7 +369,7 @@ export function useDeleteConversation() {
       }
 
       // Manually remove from infinite query cache ('conversations')
-      queryClient.setQueriesData<any>({ queryKey: ['conversations'] }, oldData => {
+      queryClient.setQueriesData<any>({ queryKey: ['conversations'] }, (oldData: any) => {
         if (!oldData) return oldData;
         return {
           ...oldData,
@@ -383,7 +383,7 @@ export function useDeleteConversation() {
       });
 
       // Manually remove from saved conversations cache ('saved-conversations')
-      queryClient.setQueriesData<any>({ queryKey: ['saved-conversations'] }, oldData => {
+      queryClient.setQueriesData<any>({ queryKey: ['saved-conversations'] }, (oldData: any) => {
         if (!oldData) return oldData;
         return oldData.filter(
           (chat: any) => chat._id !== deletedId && chat.conversationId !== targetConvId
