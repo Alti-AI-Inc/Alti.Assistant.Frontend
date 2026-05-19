@@ -1,6 +1,7 @@
 'use server';
 
 import { apiClient } from '@/lib/api-client';
+import { ConversationMessage } from '@/types/conversation';
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -111,8 +112,6 @@ export async function PostConversationWithFile(
     };
   }
 }
-
-import { ConversationMessage } from '@/types/conversation';
 
 export interface Conversation {
   _id: string;
