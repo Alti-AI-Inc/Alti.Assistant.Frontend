@@ -340,14 +340,55 @@ export function useDeleteConversation() {
     onSuccess: (resp, deletedId) => {
       if (!resp) return;
       console.log('Deleted conversation: resp', resp);
-      // navigate home if currently viewing deleted chat
+
+      // Find the conversationId associated with this deletedId in cache to handle navigation
+      let targetConvId = deletedId;
+      const conversationListQueries = queryClient.getQueriesData<any>({ queryKey: ['conversations'] });
+      for (const [, queryData] of conversationListQueries) {
+        if (queryData?.pages) {
+          for (const page of queryData.pages) {
+            const found = page.conversations?.find((c: any) => c._id === deletedId);
+            if (found) {
+              targetConvId = found.conversationId;
+              break;
+            }
+          }
+        }
+      }
+
+      // navigate home if currently viewing deleted chat (checking both _id and conversationId)
       if (
         pathname.endsWith(deletedId) ||
-        activeConversation?._id === deletedId
+        pathname.endsWith(targetConvId) ||
+        activeConversation?._id === deletedId ||
+        activeConversation?.conversationId === targetConvId ||
+        activeConversation?.conversationId === deletedId
       ) {
         router.push('/');
         setActiveConversation(null);
       }
+
+      // Manually remove from infinite query cache ('conversations')
+      queryClient.setQueriesData<any>({ queryKey: ['conversations'] }, oldData => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page: any) => ({
+            ...page,
+            conversations: (page.conversations || []).filter(
+              (chat: any) => chat._id !== deletedId && chat.conversationId !== targetConvId
+            ),
+          })),
+        };
+      });
+
+      // Manually remove from saved conversations cache ('saved-conversations')
+      queryClient.setQueriesData<any>({ queryKey: ['saved-conversations'] }, oldData => {
+        if (!oldData) return oldData;
+        return oldData.filter(
+          (chat: any) => chat._id !== deletedId && chat.conversationId !== targetConvId
+        );
+      });
 
       queryClient.invalidateQueries({
         predicate: q =>

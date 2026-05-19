@@ -495,7 +495,16 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 />
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                if (queryConversation?._id) {
+                  onOpen({
+                    type: 'delete-conversation',
+                    actionId: queryConversation._id,
+                  });
+                }
+              }}
+            >
               <Trash2 className="text-black" />{' '}
               <span className="text-black">Delete</span>
             </DropdownMenuItem>
