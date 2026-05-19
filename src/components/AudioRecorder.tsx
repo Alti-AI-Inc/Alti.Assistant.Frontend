@@ -89,15 +89,15 @@ export default function AudioRecorder({
   };
 
   return (
-    <div className="flex gap-4">
-      <div className={cn('flex h-6 w-20 items-end gap-1', recording && 'w-10')}>
-        {recording &&
-          [...Array(10)].map((_, i) => (
+    <div className="flex items-center gap-2">
+      {recording && (
+        <div className="flex h-8 w-20 items-end gap-1">
+          {[...Array(10)].map((_, i) => (
             <motion.div
               key={i}
               className="w-1 rounded bg-neutral-800"
               animate={{
-                height: recording ? [8, Math.random() * 6 + 16, 12] : 2,
+                height: [8, Math.random() * 6 + 16, 12],
               }}
               transition={{
                 repeat: Infinity,
@@ -107,15 +107,16 @@ export default function AudioRecorder({
               }}
             />
           ))}
-      </div>
+        </div>
+      )}
       {loadingText && !recording ? (
-        <LoaderCircle className="size-6 flex-none animate-spin cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-0.5 text-white" />
+        <LoaderCircle className="size-8 flex-none animate-spin cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white" />
       ) : !recording && !loadingText ? (
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Mic
               onClick={startRecording}
-              className="size-6 flex-none cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-0.5 text-white"
+              className="size-8 flex-none cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white"
             />
           </TooltipTrigger>
           <TooltipContent side="bottom">
@@ -126,11 +127,11 @@ export default function AudioRecorder({
         <div className="flex space-x-2">
           <X
             onClick={handleCancelRecording}
-            className="size-6 flex-none cursor-pointer rounded-lg p-0.5 text-neutral-600"
+            className="size-8 flex-none cursor-pointer rounded-lg p-1.5 text-neutral-600"
           />
           <ArrowUp
             onClick={stopRecording}
-            className="size-6 flex-none cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-0.5 text-white"
+            className="size-8 flex-none cursor-pointer rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white"
           />
         </div>
       )}

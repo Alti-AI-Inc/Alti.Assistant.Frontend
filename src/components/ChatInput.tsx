@@ -1097,7 +1097,7 @@ const ChatInput = ({
               <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                 <PopoverTrigger asChild>
                   <div className="flex cursor-pointer items-center">
-                    <Plus className="size-6 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1 text-white transition-colors hover:bg-gray-800" />
+                    <Plus className="size-8 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
                   </div>
                 </PopoverTrigger>
                 <PopoverContent side="top" align="start" className="w-48 p-2">
@@ -1173,7 +1173,7 @@ const ChatInput = ({
               <ArrowUp
                 onClick={handleSubmit}
                 className={cn(
-                  'size-6 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1 text-white transition-opacity',
+                  'size-8 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-opacity',
                   isLoadingResponse
                     ? 'cursor-not-allowed opacity-50'
                     : 'cursor-pointer',
