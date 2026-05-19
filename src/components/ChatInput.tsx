@@ -425,7 +425,7 @@ const ChatInput = ({
       // case OPTIONS.Transcribe:
       //   return '/search/transcribe';
       default:
-        return '/search/assistant_v2';
+        return '/orchestrator/route-prompt'; // Master Intelligence Router
     }
   };
 

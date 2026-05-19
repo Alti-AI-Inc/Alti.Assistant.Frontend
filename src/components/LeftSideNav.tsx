@@ -59,6 +59,7 @@ const LeftSideNav = () => {
   const isLoggedIn = data?.accessToken;
 
   const [logoHovered, setLogoHovered] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const { close } = useDrawerStore();
 
   const handleLogoMouseEnter = () => {
@@ -114,13 +115,16 @@ const LeftSideNav = () => {
         {/* Enclosed Search & Actions Row */}
         {!hideSidebar && (
           <div className="flex items-center justify-between gap-2 border-b border-black/10 px-4 py-4 transition-all duration-300">
-            {/* Search Bar Button */}
-            <div
-              onClick={() => onOpen({ type: 'search-chats' })}
-              className="flex h-8 flex-1 cursor-pointer items-center gap-2 rounded-lg border border-black/10 bg-white px-3 text-xs text-black shadow-xs transition-all hover:bg-black/[0.03] active:bg-black/[0.06]"
-            >
+            {/* Search Bar Input */}
+            <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-white px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">
               <Search className="size-3.5 flex-none text-black" />
-              <span className="truncate">Search chats...</span>
+              <input
+                type="text"
+                placeholder="Search chats..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-transparent text-xs text-black outline-none placeholder:text-gray-500"
+              />
             </div>
 
             {/* Action Buttons to the right */}
@@ -181,7 +185,7 @@ const LeftSideNav = () => {
           )}
           style={{ backgroundColor: '#F2F3F5' }}
         >
-          <ConversationsList />
+          <ConversationsList searchQuery={searchQuery} />
         </div>
       )}
 

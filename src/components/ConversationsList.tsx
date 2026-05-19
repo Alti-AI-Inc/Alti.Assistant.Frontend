@@ -29,7 +29,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 
-export default function ConversationsList() {
+export default function ConversationsList({ searchQuery = '' }: { searchQuery?: string }) {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
   const { close } = useDrawerStore();
@@ -52,6 +52,10 @@ export default function ConversationsList() {
   const conversations = Array.from(
     new Map(rawConversations.map(chat => [chat._id, chat])).values(),
   );
+
+  const filteredConversations = searchQuery
+    ? conversations.filter(chat => chat.title?.toLowerCase().includes(searchQuery.toLowerCase()))
+    : conversations;
 
   useEffect(() => {
     if (!hasNextPage || isFetchingNextPage) return;
@@ -96,7 +100,7 @@ export default function ConversationsList() {
       className="mt-2 h-[calc(100vh-60px)] overflow-y-auto"
       style={{ backgroundColor: '#F2F3F5' }}
     >
-      {conversations.map(chat => (
+      {filteredConversations.map(chat => (
         <div
           className="group flex h-9 w-full items-center justify-between rounded-md text-sm font-medium text-black hover:bg-black/5"
           key={chat._id}
