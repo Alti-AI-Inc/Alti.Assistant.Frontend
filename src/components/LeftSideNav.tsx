@@ -261,7 +261,7 @@ const LeftSideNav = () => {
                 >
                   <SquareUserRound className="text-black" /> Invite
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => (window.location.href = '/legal')}>
+                <DropdownMenuItem onClick={() => router.push('/legal')}>
                   <Scale className="text-black" /> Legal
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/settings')}>

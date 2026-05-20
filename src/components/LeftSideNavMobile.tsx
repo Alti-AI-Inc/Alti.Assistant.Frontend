@@ -306,7 +306,7 @@ const LeftSideNavMobile = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
-                    window.location.href = '/legal';
+                    router.push('/legal');
                     close();
                   }}
                 >
