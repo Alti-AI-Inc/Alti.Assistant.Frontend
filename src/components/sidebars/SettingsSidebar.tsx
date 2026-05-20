@@ -3,7 +3,14 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useSidebarStore } from '@/stores/useSidebarStore';
-import { Brain, ChevronRight, CreditCard, KeyRound, User } from 'lucide-react';
+import {
+  Brain,
+  ChevronRight,
+  KeyRound,
+  SlidersHorizontal,
+  ShieldCheck,
+  PanelLeftClose,
+} from 'lucide-react';
 
 export interface SettingsOption {
   id: string;
@@ -20,21 +27,21 @@ interface SettingsSidebarProps {
 const settingsOptions: SettingsOption[] = [
   {
     id: '1',
-    title: 'Personal Settings',
-    value: 'personal',
-    icon: <User className="h-5 w-5" />,
-  },
-  {
-    id: '2',
-    title: 'Subscription',
-    value: 'subscription',
-    icon: <CreditCard className="h-5 w-5" />,
-  },
-  {
-    id: '3',
     title: 'Memory',
     value: 'memory',
     icon: <Brain className="h-5 w-5" />,
+  },
+  {
+    id: '2',
+    title: 'Instructions',
+    value: 'instructions',
+    icon: <SlidersHorizontal className="h-5 w-5" />,
+  },
+  {
+    id: '3',
+    title: 'Guardrails',
+    value: 'guardrails',
+    icon: <ShieldCheck className="h-5 w-5" />,
   },
   {
     id: '4',
@@ -49,103 +56,75 @@ export const SettingsSidebar = ({
   onSelectOption,
 }: SettingsSidebarProps) => {
   const { isSettingsSidebarOpen, toggleSettingsSidebar } = useSidebarStore();
+  const hideSidebar = !isSettingsSidebarOpen;
 
   return (
     <div
       className={cn(
-        'flex h-full flex-col border-r border-gray-200 transition-all duration-300 ease-in-out dark:border-gray-800',
+        'flex h-full flex-col border-r border-black/10 transition-all duration-300 ease-in-out',
         isSettingsSidebarOpen
           ? 'w-64 bg-white dark:bg-gray-950'
-          : 'w-20 items-center bg-gray-50 dark:bg-gray-900',
+          : 'w-20 items-center bg-[#F2F3F5] dark:bg-gray-900',
       )}
     >
-      {/* Sidebar Header - Only shown when expanded */}
-      {isSettingsSidebarOpen && (
-        <div className="flex w-full items-center justify-between border-b border-gray-200 px-4 py-4 dark:border-gray-800">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+      {/* Unified Sidebar Header */}
+      <div
+        className={cn(
+          'sticky top-0 z-30 flex h-[53px] items-center justify-between border-b border-black/10 px-4 py-3',
+          hideSidebar && 'justify-center',
+        )}
+        style={{ backgroundColor: '#F2F3F5' }}
+      >
+        {!hideSidebar ? (
+          <>
+            <span className="text-[12px] font-bold text-gray-700 dark:text-gray-300 tracking-wider uppercase">
               Settings
-            </h2>
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-              Manage your account settings
-            </p>
-          </div>
-          <Button
-            variant="ghost"
-            size="sm"
+            </span>
+            <PanelLeftClose
+              className="size-5 cursor-pointer text-gray-600 transition-transform duration-300"
+              onClick={toggleSettingsSidebar}
+            />
+          </>
+        ) : (
+          <PanelLeftClose
+            className="size-5 cursor-pointer text-gray-600 rotate-180 transition-transform duration-300"
             onClick={toggleSettingsSidebar}
-            className="h-8 w-8 flex-shrink-0 rounded-md p-0 hover:bg-gray-200 dark:hover:bg-gray-700"
-            title="Collapse"
-          >
-            <ChevronRight className="h-4 w-4 rotate-180 transition-transform duration-300" />
-          </Button>
-        </div>
-      )}
-
-      {/* Collapsed state - icons only */}
-      {!isSettingsSidebarOpen && (
-        <>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleSettingsSidebar}
-            className="mt-4 h-8 w-8 flex-shrink-0 rounded-md p-0 hover:bg-gray-200 dark:hover:bg-gray-700"
-            title="Expand"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-          <div className="my-2 h-px w-8 bg-gray-200 dark:bg-gray-700" />
-        </>
-      )}
+          />
+        )}
+      </div>
 
       {/* Sidebar Content */}
       <div
         className={cn(
           'flex-1 overflow-y-auto',
           isSettingsSidebarOpen
-            ? 'w-full p-4'
-            : 'flex flex-col items-center gap-2 p-2',
+            ? 'w-full p-4 space-y-1'
+            : 'flex flex-col items-center gap-2 p-2 pt-4',
         )}
       >
-        <div
-          className={
-            isSettingsSidebarOpen ? 'space-y-1' : 'flex flex-col gap-2'
-          }
-        >
-          {settingsOptions.map(option => (
-            <Button
-              key={option.id}
-              variant={selectedOption === option.value ? 'secondary' : 'ghost'}
-              onClick={() => onSelectOption(option.value)}
-              className={cn(
-                isSettingsSidebarOpen
-                  ? 'w-full justify-start gap-3 text-left'
-                  : 'h-8 w-8 rounded-md p-0',
-                selectedOption === option.value
-                  ? 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100'
-                  : isSettingsSidebarOpen
-                    ? 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-900'
-                    : 'hover:bg-gray-200 dark:hover:bg-gray-700',
-              )}
-              title={
-                !isSettingsSidebarOpen
-                  ? settingsOptions.find(opt => opt.value === option.value)
-                      ?.title
-                  : undefined
-              }
-            >
-              {option.icon}
-              {isSettingsSidebarOpen && (
-                <span className="text-sm font-medium">
-                  {
-                    settingsOptions.find(opt => opt.value === option.value)
-                      ?.title
-                  }
-                </span>
-              )}
-            </Button>
-          ))}
-        </div>
+        {settingsOptions.map(option => (
+          <Button
+            key={option.id}
+            variant={selectedOption === option.value ? 'secondary' : 'ghost'}
+            onClick={() => onSelectOption(option.value)}
+            className={cn(
+              isSettingsSidebarOpen
+                ? 'w-full justify-start gap-3 text-left'
+                : 'h-10 w-10 rounded-md p-0 flex items-center justify-center',
+              selectedOption === option.value
+                ? 'bg-gray-150 text-gray-900 dark:bg-gray-800 dark:text-gray-100 shadow-sm'
+                : isSettingsSidebarOpen
+                  ? 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-900'
+                  : 'hover:bg-gray-200 dark:hover:bg-gray-700',
+            )}
+            title={!isSettingsSidebarOpen ? option.title : undefined}
+          >
+            {option.icon}
+            {isSettingsSidebarOpen && (
+              <span className="text-sm font-medium">{option.title}</span>
+            )}
+          </Button>
+        ))}
       </div>
     </div>
   );
