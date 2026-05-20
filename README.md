@@ -40,4 +40,14 @@ from the creators of Next.js.
 
 Check out our
 [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying)
-for more details..
+for more details.
+
+## Production VM Deployment Notes
+
+For deploying this frontend directly to the GCP VM running Nginx, ensure the following configuration standards are maintained:
+1. **Nginx Reverse Proxy**: Set Nginx location to `/api/v1` for proxying the backend API, allowing NextAuth's `/api/auth/*` routes to pass cleanly to Next.js on port 3000.
+2. **Environment Variables**: The Next.js PM2 process requires the following production `.env` settings:
+   - `AUTH_TRUST_HOST=true` (crucial for Cloud Run or Nginx reverse-proxy SSL setup)
+   - `AUTH_URL=https://altihq.com` (forces absolute auth callback URLs)
+   - `NEXT_PUBLIC_API_URL=https://altihq.com/api/v1`
+
