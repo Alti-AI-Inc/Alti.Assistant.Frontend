@@ -1,22 +1,45 @@
 import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/components/ui/tabs';
 
+const LAST_UPDATED = 'May 20, 2025';
+
 export default function page() {
   const privacyPolicy = {
     title: 'Privacy Policy',
-    intro: '',
+    intro:
+      'This Privacy Policy describes how Alti ("Alti," "we," "us," or "our") collects, uses, stores, shares, and protects information when you access or use our website at altihq.com, our mobile applications, and any related services (collectively, the "Platform"). By using the Platform, you agree to the collection and use of information in accordance with this policy. If you do not agree with this Privacy Policy, please do not use the Platform.',
     sections: [
       {
         heading: '1. Information We Collect',
         content: [
           {
-            text: 'Registration Information:',
+            text: '1.1 Account Registration Information.',
             description:
-              'When you create an account with inso, we collect your email address and a password of your choice.',
+              'When you create an account, we collect your email address and a password that you choose. Passwords are cryptographically hashed and are never stored in plaintext.',
           },
           {
-            text: 'User Interactions:',
+            text: '1.2 Social Login Information.',
             description:
-              'We may store the conversations you have with our AI to improve our services and provide a better user experience. However, all conversations are encrypted end-to-end, and only you have access to the content. We cannot read your messages.',
+              'If you choose to register or log in through a third-party authentication provider (Google, Facebook, Apple, Microsoft, GitHub, Discord, or Twitter/X), we receive your name, email address, profile picture, and a unique provider identifier from that service. We do not receive or store your password from these third-party providers.',
+          },
+          {
+            text: '1.3 User-Generated Content.',
+            description:
+              'We collect and store the conversations, prompts, and messages you exchange with our AI assistants. Conversation data is encrypted at rest using AES-256-CBC encryption. We also collect any files you upload to the Platform, images you generate, knowledge bases you create, and any other content you produce while using the Platform.',
+          },
+          {
+            text: '1.4 Organization and Team Data.',
+            description:
+              'If you create or join an Organization on the Platform, we collect the organization name, member email addresses, roles, permissions, and invitation data.',
+          },
+          {
+            text: '1.5 Payment Information.',
+            description:
+              'We use Stripe, Inc. as our payment processor. Your payment card details are collected and processed directly by Stripe. We do not receive, store, or have access to your full credit or debit card numbers.',
+          },
+          {
+            text: '1.6 Usage and Technical Data.',
+            description:
+              'We automatically collect information about how you use the Platform, including usage metrics, IP address, browser type, device information, and operating system.',
           },
         ],
       },
@@ -24,14 +47,24 @@ export default function page() {
         heading: '2. How We Use Your Information',
         content: [
           {
-            text: 'Account Creation:',
+            text: '2.1 Providing the Platform.',
             description:
-              'We use your email address and password to create and maintain your inso account, allowing you to securely access our services.',
+              'We use your information to create and maintain your account, deliver AI-powered features, process your prompts and queries, and provide customer support.',
           },
           {
-            text: 'Communication:',
+            text: '2.2 AI Processing.',
             description:
-              'We may use your email address to send you important updates, notifications, and promotional messages related to inso. You can opt-out of receiving promotional emails at any time.',
+              'To deliver our AI features, your prompts and relevant context are transmitted to third-party AI model providers (including OpenAI, Anthropic, Google, Groq, Together AI, and DeepSeek) solely for the purpose of generating AI responses. We do not use your data to train AI models.',
+          },
+          {
+            text: '2.3 Communications.',
+            description:
+              'We use your email address to send essential communications including account verification, password resets, billing receipts, and important service updates.',
+          },
+          {
+            text: '2.4 Security.',
+            description:
+              'We use your information to protect the Platform against unauthorized access, detect and prevent fraud, and comply with legal obligations.',
           },
         ],
       },
@@ -39,105 +72,150 @@ export default function page() {
         heading: '3. Data Security',
         content: [
           {
-            text: 'Encryption:',
+            text: '3.1 Encryption.',
             description:
-              'All data transmitted between your device and our servers is encrypted end-to-end using industry-standard encryption protocols.',
+              'Your conversation data is encrypted at rest using AES-256-CBC. All data in transit is protected using TLS/SSL encryption.',
           },
           {
-            text: 'Secure Storage:',
+            text: '3.2 Infrastructure.',
             description:
-              'We store your personal information on private and secure servers and implement strict access controls to prevent unauthorized access.',
+              'Your data is stored on Google Cloud Platform infrastructure with strict access controls.',
           },
           {
-            text: 'No Third-Party Access:',
+            text: '3.3 Important Clarification.',
             description:
-              'We do not share your personal information with any third parties, except when required by law or to comply with legal processes.',
+              'Conversations are decrypted server-side when transmitted to AI providers for processing. This encryption is not end-to-end in the cryptographic sense.',
           },
         ],
       },
       {
-        heading: '4. Your Rights',
+        heading: '4. Third-Party Service Providers',
+        content:
+          'We share information with third-party providers solely to operate the Platform: AI model providers (OpenAI, Anthropic, Google, Groq, Together AI, DeepSeek), payment processing (Stripe), email delivery (Mailgun, Google SMTP), authentication providers (when using social login), cloud infrastructure (Google Cloud Platform, MongoDB Atlas), and search services (Tavily, Serper, Linkup, Google Custom Search). We do not sell your personal information.',
+      },
+      {
+        heading: '5. Your Rights',
         content: [
           {
-            text: 'Access and Rectification:',
+            text: 'Access and Correction.',
             description:
-              'You have the right to access and update your personal information at any time by logging into your inso account.',
+              'You have the right to access and update your personal information through your account settings.',
           },
           {
-            text: 'Data Deletion:',
+            text: 'Deletion.',
             description:
-              'You may request the deletion of your personal information and account by contacting our support team.',
+              'You may request deletion of your account and personal data by contacting us at legal@altihq.com. Deletion requests are processed within thirty (30) days.',
+          },
+          {
+            text: 'Jurisdiction-Specific Rights.',
+            description:
+              'You may have additional rights under CCPA, GDPR, or other applicable laws. Contact us at legal@altihq.com to exercise these rights.',
           },
         ],
       },
       {
-        heading: '5. Changes to the Privacy Policy',
+        heading: '6. Children\'s Privacy',
         content:
-          'We may update this Privacy Policy from time to time. We will notify you of any significant changes via email or through our website and mobile app.',
+          'The Platform is not intended for individuals under the age of eighteen (18). We do not knowingly collect personal information from children.',
+      },
+      {
+        heading: '7. Changes to This Policy',
+        content:
+          'We may update this Privacy Policy from time to time. Material changes will be communicated via the Platform or by email.',
+      },
+      {
+        heading: '8. Contact Us',
+        content:
+          'If you have questions about this Privacy Policy, contact us at: legal@altihq.com, or by mail at: Alti, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
-    conclusion:
-      'By using inso, you consent to the collection and use of your personal information as described in this Privacy Policy.',
+    conclusion: '',
   };
 
   const termsOfUse = {
     title: 'Terms of Use',
-    intro: '',
+    intro:
+      'These Terms of Use ("Terms") govern your access to and use of the Alti platform at altihq.com and all related services. By using the Platform, you agree to be bound by these Terms.',
     sections: [
       {
         heading: '1. Acceptance of Terms',
         content:
-          'By accessing or using the inso website or mobile app, you agree to be bound by these Terms of Use and our Privacy Policy.',
+          'By accessing or using the Platform, you agree to be bound by these Terms, our Privacy Policy, and our Cookies Policy. We may modify these Terms at any time; continued use constitutes acceptance.',
       },
       {
-        heading: '2. User Conduct',
+        heading: '2. Eligibility',
         content:
-          'You agree to use inso only for lawful purposes and in compliance with all applicable laws and regulations. You must not use our services to create, store, or share any content that is illegal, harmful, or infringes upon the rights of others.',
+          'You must be at least eighteen (18) years of age to use the Platform. If using on behalf of an organization, you represent that you have authority to bind that organization.',
       },
       {
-        heading: '3. Intellectual Property',
+        heading: '3. Account Security',
         content:
-          'inso and its original content, features, and functionality are owned by us and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.',
+          'You are responsible for maintaining the confidentiality of your account credentials and for all activities under your account. Notify us immediately at legal@altihq.com if you suspect unauthorized access.',
       },
       {
-        heading: '4. Disclaimer of Warranties',
+        heading: '4. User Conduct',
         content:
-          'inso is provided on an "as is" and "as available" basis. We do not guarantee that our services will be uninterrupted, error-free, or completely secure.',
+          'You agree to use the Platform only for lawful purposes. You must not use the Platform to generate illegal or harmful content, reverse engineer the Platform, infringe on third-party rights, circumvent security features, or resell access without written consent.',
       },
       {
-        heading: '5. Limitation of Liability',
+        heading: '5. Intellectual Property',
         content:
-          'To the fullest extent permitted by law, inso shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or relating to your use of our services.',
+          'You retain ownership of your content. You own AI-generated outputs subject to these Terms. The Platform and its underlying technology remain the exclusive property of Alti, protected by intellectual property laws. We do not use your content to train AI models.',
       },
       {
-        heading: '6. Termination',
+        heading: '6. Subscriptions and Payments',
         content:
-          'We reserve the right to terminate or suspend your access to inso at any time and without prior notice if we believe you have violated these Terms of Use.',
+          'Paid subscriptions are billed monthly through Stripe on a per-user basis. You may cancel anytime; access continues through the end of the billing period. No refunds for partial periods except where required by law.',
       },
       {
-        heading: '7. Governing Law',
+        heading: '7. Disclaimer of Warranties',
         content:
-          'These Terms of Use shall be governed by and construed in accordance with the laws of Oakland County, Michigan.',
+          'THE PLATFORM IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND. WE DO NOT WARRANT THAT AI OUTPUTS WILL BE ACCURATE, COMPLETE, OR SUITABLE FOR ANY PURPOSE. YOU ASSUME ALL RESPONSIBILITY FOR EVALUATING AI-GENERATED CONTENT.',
+      },
+      {
+        heading: '8. Limitation of Liability',
+        content:
+          'TO THE MAXIMUM EXTENT PERMITTED BY LAW, ALTI SHALL NOT BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES. OUR TOTAL LIABILITY SHALL NOT EXCEED THE GREATER OF THE AMOUNT YOU PAID IN THE PRECEDING TWELVE (12) MONTHS OR ONE HUNDRED DOLLARS ($100).',
+      },
+      {
+        heading: '9. Termination',
+        content:
+          'We may suspend or terminate your access at any time for violation of these Terms. You may delete your account at any time through your settings.',
+      },
+      {
+        heading: '10. Governing Law',
+        content:
+          'These Terms are governed by the laws of the State of Michigan. Disputes shall be resolved through binding arbitration in Oakland County, Michigan.',
+      },
+      {
+        heading: '11. Contact',
+        content:
+          'Questions about these Terms may be directed to: legal@altihq.com, or by mail at: Alti, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
-    conclusion:
-      'By using inso, you acknowledge that you have read, understood, and agree to be bound by these Terms of Use.',
+    conclusion: '',
   };
 
   return (
-    <div className="mx-auto mt-4 mb-10 w-4xl p-4">
+    <div className="mx-auto mt-4 mb-10 max-w-4xl p-4">
       <Tabs defaultValue="privacyPolicy">
         <TabsList className="mx-auto mb-10 w-[400px]">
           <TabsTrigger className="cursor-pointer" value="privacyPolicy">
             Privacy Policy
           </TabsTrigger>
           <TabsTrigger className="cursor-pointer" value="termsPolicy">
-            Terms Policy
+            Terms of Use
           </TabsTrigger>
         </TabsList>
         <TabsContent value="privacyPolicy">
-          <h1 className="mb-8 text-center text-6xl">Privacy Policy</h1>
-          <div className="mx-auto w-4xl p-5 sm:p-2 md:p-3">
+          <h1 className="mb-8 text-center text-4xl font-bold sm:text-5xl">
+            Privacy Policy
+          </h1>
+          <div className="mx-auto max-w-4xl p-5 sm:p-2 md:p-3">
+            <p className="mb-2 text-xs text-gray-500">
+              Last Updated: {LAST_UPDATED}
+            </p>
+            <p className="mb-6 text-lg">{privacyPolicy.intro}</p>
             {privacyPolicy.sections.map((section, index) => (
               <div key={index} className="mb-6">
                 <h2 className="dark:text-n-9 mb-4 text-xl font-semibold">
@@ -158,14 +236,17 @@ export default function page() {
                 )}
               </div>
             ))}
-            <p className="dark:text-n-9 mt-6 text-left text-lg">
-              {privacyPolicy?.conclusion}
-            </p>
           </div>
         </TabsContent>
         <TabsContent value="termsPolicy">
-          <h1 className="mb-8 text-center text-6xl">Terms Policy</h1>
+          <h1 className="mb-8 text-center text-4xl font-bold sm:text-5xl">
+            Terms of Use
+          </h1>
           <div className="p-5 sm:p-2 md:p-3">
+            <p className="mb-2 text-xs text-gray-500">
+              Last Updated: {LAST_UPDATED}
+            </p>
+            <p className="mb-6 text-lg">{termsOfUse.intro}</p>
             {termsOfUse.sections.map((section, index) => (
               <div key={index} className="mb-6">
                 <h2 className="dark:text-n-9 mb-4 text-xl font-semibold">
@@ -174,9 +255,6 @@ export default function page() {
                 <p className="dark:text-n-9 mb-4 text-lg">{section.content}</p>
               </div>
             ))}
-            <p className="dark:text-n-9 mt-6 text-left text-lg">
-              {termsOfUse?.conclusion}
-            </p>
           </div>
         </TabsContent>
       </Tabs>
