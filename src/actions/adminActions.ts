@@ -11,7 +11,7 @@ export interface ApiResponse<T = unknown> {
   debugMessage?: string;
 }
 
-const BASE_URL = 'https://apiv2.asonai.com/api/v1';
+const BASE_URL = 'https://altihq.com/api/v1';
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || BASE_URL;
 
 export interface FreePlanUsage {

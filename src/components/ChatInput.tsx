@@ -475,8 +475,9 @@ const ChatInput = ({
         }
 
         try {
+          const base = process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
           const res = await fetch(
-            'https://apiv2.asonai.com/api/v1/openai/anonymous-response',
+            `${base}/openai/anonymous-response`,
             {
               method: 'POST',
               headers: {
