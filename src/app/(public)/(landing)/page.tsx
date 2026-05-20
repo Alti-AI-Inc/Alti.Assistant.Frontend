@@ -4,12 +4,12 @@ import { useEffect } from 'react';
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import { cn } from '@/lib/utils';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useConversationsStore, OPTIONS } from '@/stores/useConverstionsStore';
 import { useSession } from 'next-auth/react';
 
 function App() {
   const { data } = useSession();
-  const { activeConversation, setActiveConversation } = useConversationsStore();
+  const { activeConversation, setActiveConversation, selectedOption } = useConversationsStore();
   // const { data } = useSession();
   // console.log(data?.accessToken);
   useEffect(() => {
@@ -40,7 +40,9 @@ function App() {
       )}
       {!activeConversation?.knowledgebaseId &&
         !activeConversation?.messages.length && (
-          <h1 className="mb-8 text-4xl font-medium">Real-Time Intelligence</h1>
+          <h1 className="mb-8 text-4xl font-medium">
+            {selectedOption === OPTIONS.RESEARCH ? 'Deep Research' : 'Real-Time Intelligence'}
+          </h1>
         )}
 
       <FullConversation conversationId="new-chat" />
