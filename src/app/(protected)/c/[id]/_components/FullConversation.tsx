@@ -32,6 +32,7 @@ import ReferencesList from './ReferenceList';
 import FileDownloadCard from './FileDownloadCard';
 import VideoComponent from './VideoComponent';
 import VideoComponentForContent from './YoutubePlayer';
+import FinancialWidget from './FinancialWidget';
 
 import { BrainstormData } from './BrainstormData';
 import { PlanDataComponent } from './PlanData';
@@ -599,12 +600,20 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       operationId={message.metadata?.video?.name}
                     />
                   )}
+
                   {message.metadata?.document && (
                     <FileDownloadCard document={message.metadata.document} />
                   )}
                   {!!message.metadata?.reference?.length && (
                     <ReferencesList references={message.metadata.reference} />
                   )}
+                  {message.metadata?.financialTicker && (
+                    <FinancialWidget 
+                      ticker={message.metadata.financialTicker} 
+                      liveData={message.metadata} 
+                    />
+                  )}
+
                   {message.metadata?.brainstormData && (
                     <BrainstormData
                       data={message.metadata.brainstormData}
