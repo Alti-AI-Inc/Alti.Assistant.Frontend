@@ -326,7 +326,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
   const shouldShowConfigForm = () => {
     // Special case: hide if file selected in rewrite mode
-    if (selectedOption === OPTIONS.REWRITE && selectedFile) return false;
+    if (selectedOption === OPTIONS.REWRITE && selectedFiles.length > 0) return false;
 
     if (drafting.isActive) {
       return drafting.mode === 'direct';
