@@ -235,7 +235,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
   // console.log('activeConversation?.messages', activeConversation?.messages);
   // const lastMessageRole = activeConversation?.messages.at(-1)?.role;
-  const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   // Helper functions for ModeSelector
   const getCurrentMode = (): 'assistant' | 'direct' | null => {
@@ -709,8 +709,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
           <ChatInput
             conversationId={conversationId}
             imageGenHook={imageGenHook}
-            selectedFile={selectedFile}
-            onFileSelect={setSelectedFile}
+            selectedFiles={selectedFiles}
+            onFilesChange={setSelectedFiles}
           />
         </div>
       </div>

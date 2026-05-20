@@ -54,8 +54,8 @@ import { WarningMessageModal } from './WarningMessageModal';
 interface ChatInputProps {
   conversationId?: string;
   imageGenHook?: ReturnType<typeof useImageGeneration>;
-  selectedFile?: File | undefined;
-  onFileSelect?: (file: File | undefined) => void;
+  selectedFiles?: File[];
+  onFilesChange?: (files: File[]) => void;
 }
 
 // Helper function to get file icon based on extension
@@ -120,8 +120,8 @@ const extractAssistantText = (payload: any): string => {
 const ChatInput = ({
   conversationId,
   imageGenHook: externalImageGenHook,
-  selectedFile: externalSelectedFile,
-  onFileSelect,
+  selectedFiles: externalSelectedFiles,
+  onFilesChange,
 }: ChatInputProps) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -141,20 +141,27 @@ const ChatInput = ({
     setShowStartLastMessage,
   } = useConversationsStore();
 
-  // Custom file state for docs (controlled or uncontrolled)
-  const [internalSelectedFile, setInternalSelectedFile] = useState<
-    File | undefined
-  >(undefined);
+  // Custom files state for docs (controlled or uncontrolled)
+  const [internalSelectedFiles, setInternalSelectedFiles] = useState<File[]>([]);
 
-  const selectedFile =
-    externalSelectedFile !== undefined
-      ? externalSelectedFile
-      : internalSelectedFile;
-  const setSelectedFile = (file: File | undefined) => {
-    if (onFileSelect) {
-      onFileSelect(file);
+  const selectedFiles =
+    externalSelectedFiles !== undefined
+      ? externalSelectedFiles
+      : internalSelectedFiles;
+  const setSelectedFiles = (files: File[]) => {
+    if (onFilesChange) {
+      onFilesChange(files);
     } else {
-      setInternalSelectedFile(file);
+      setInternalSelectedFiles(files);
+    }
+  };
+
+  const selectedFile = selectedFiles[0] || undefined;
+  const setSelectedFile = (file: File | undefined) => {
+    if (file === undefined) {
+      setSelectedFiles([]);
+    } else {
+      setSelectedFiles([file]);
     }
   };
 
@@ -438,9 +445,11 @@ const ChatInput = ({
     mutationFn: async ({
       message: userMessage,
       file,
+      files,
     }: {
       message: string;
       file?: File;
+      files?: File[];
     }) => {
       const isHomePage = pathname === '/';
       const accessToken = data?.accessToken;
@@ -502,10 +511,16 @@ const ChatInput = ({
         }
       }
 
-      if (file) {
+      if ((files && files.length > 0) || file) {
         const formData = new FormData();
         formData.append('message', userMessage);
-        formData.append('file', file);
+        if (files && files.length > 0) {
+          files.forEach(f => {
+            formData.append('file', f);
+          });
+        } else if (file) {
+          formData.append('file', file);
+        }
         const convId =
           conversationId === 'new-chat'
             ? activeConversation?.conversationId || undefined
@@ -910,8 +925,12 @@ const ChatInput = ({
       default:
         // Use regular mutation for options that just need a standardized API call
         // The specific URL is already determined by getApiEndpoint()
-        mutation.mutate({ message, file: selectedFile || undefined });
-        if (selectedFile) setSelectedFile(undefined);
+        mutation.mutate({
+          message,
+          file: selectedFile || undefined,
+          files: selectedFiles,
+        });
+        setSelectedFiles([]);
     }
 
     setMessage('');
@@ -933,7 +952,8 @@ const ChatInput = ({
   const handleFileChange = createFileChangeHandler({
     selectedOption,
     fileInputRef,
-    setSelectedFile,
+    selectedFiles,
+    setSelectedFiles,
     setImageBase64,
     setSelectedOption,
     allowedDocExtensions: ALLOWED_DOC_EXTENSIONS,
@@ -1049,6 +1069,7 @@ const ChatInput = ({
           <input
             ref={fileInputRef}
             type="file"
+            multiple
             accept={(() => {
               switch (selectedOption) {
                 case OPTIONS.IMAGE:
@@ -1062,30 +1083,39 @@ const ChatInput = ({
             className="hidden"
           />
 
-          {/* File Card Preview - Shows above input field */}
-          {selectedFile && (
-            <div 
-              className="mt-2 inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs"
-              style={{ backgroundColor: '#F2F3F5' }}
-            >
-              {/* File Type Icon */}
-              <FileText className="size-4 flex-shrink-0 text-gray-500" />
+          {/* File Cards Preview - Shows above input field next to each other */}
+          {selectedFiles && selectedFiles.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {selectedFiles.map((file, index) => (
+                <div 
+                  key={index}
+                  className="inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs animate-in fade-in duration-200"
+                  style={{ backgroundColor: '#F2F3F5' }}
+                >
+                  {/* File Type Icon */}
+                  <FileText className="size-4 flex-shrink-0 text-gray-500" />
 
-              {/* File Info */}
-              <div className="flex min-w-0 flex-1 flex-col">
-                <span className="truncate text-xs font-semibold text-gray-700">
-                  {selectedFile.name}
-                </span>
-              </div>
+                  {/* File Info */}
+                  <div className="flex min-w-0 flex-1 flex-col">
+                    <span className="truncate text-xs font-semibold text-gray-700" title={file.name}>
+                      {file.name}
+                    </span>
+                  </div>
 
-              {/* Remove Button */}
-              <button
-                onClick={() => setSelectedFile(undefined)}
-                className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
-                title="Remove file"
-              >
-                <X className="size-3.5" />
-              </button>
+                  {/* Remove Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const updated = selectedFiles.filter((_, i) => i !== index);
+                      setSelectedFiles(updated);
+                    }}
+                    className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
+                    title="Remove file"
+                  >
+                    <X className="size-3.5" />
+                  </button>
+                </div>
+              ))}
             </div>
           )}
 

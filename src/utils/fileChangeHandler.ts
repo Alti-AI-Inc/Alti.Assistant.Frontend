@@ -17,7 +17,8 @@ import { RefObject } from 'react';
 interface UseFileChangeHandlerParams {
   selectedOption: OPTIONS | null;
   fileInputRef: RefObject<HTMLInputElement | null>;
-  setSelectedFile: (file: File | undefined) => void;
+  selectedFiles: File[];
+  setSelectedFiles: (files: File[]) => void;
   setImageBase64: (base64: string | null) => void;
   setSelectedOption: (option: OPTIONS | null) => void;
   allowedDocExtensions: string[];
@@ -29,14 +30,15 @@ interface UseFileChangeHandlerParams {
 export const createFileChangeHandler = ({
   selectedOption,
   fileInputRef,
-  setSelectedFile,
+  selectedFiles,
+  setSelectedFiles,
   setImageBase64,
   setSelectedOption,
   allowedDocExtensions,
 }: UseFileChangeHandlerParams) => {
   return async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
 
     // Check if upload is allowed for current option
     if (!isFileUploadAllowed(selectedOption)) {
@@ -47,21 +49,29 @@ export const createFileChangeHandler = ({
     try {
       // Handle document files (Review, Rewrite, Translate, Plan, Contract, Report)
       if (isDocumentOption(selectedOption)) {
-        if (!isValidFileExtension(file.name, allowedDocExtensions)) {
-          showInvalidFileAlert(allowedDocExtensions);
-          resetFileInput(fileInputRef);
-          return;
+        const validFiles: File[] = [];
+        for (const file of files) {
+          if (isValidFileExtension(file.name, allowedDocExtensions)) {
+            validFiles.push(file);
+          } else {
+            showInvalidFileAlert(allowedDocExtensions);
+          }
         }
-        setSelectedFile(file);
+        if (validFiles.length > 0) {
+          setSelectedFiles([...selectedFiles, ...validFiles]);
+        }
       }
       // Handle image files (Image Generation & Edit)
-      else if (file.type.startsWith('image/')) {
-        const compressedDataUrl = await compressImage(file);
-        setImageBase64(compressedDataUrl);
+      else {
+        const file = files[0];
+        if (file.type.startsWith('image/')) {
+          const compressedDataUrl = await compressImage(file);
+          setImageBase64(compressedDataUrl);
 
-        // Auto-switch to EDIT_IMAGE mode if currently in IMAGE mode
-        if (selectedOption !== OPTIONS.EDIT_IMAGE) {
-          setSelectedOption(OPTIONS.EDIT_IMAGE);
+          // Auto-switch to EDIT_IMAGE mode if currently in IMAGE mode
+          if (selectedOption !== OPTIONS.EDIT_IMAGE) {
+            setSelectedOption(OPTIONS.EDIT_IMAGE);
+          }
         }
       }
     } catch (error) {
