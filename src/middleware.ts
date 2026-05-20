@@ -35,8 +35,8 @@ export default auth(async function middleware(req) {
     }
 
     // Validate tenant membership
-    const userTenants = session.user.tenants || [];
-    const isMember = userTenants.some(t => t.id === tenantId);
+    const userTenants: Array<{ id: string; name: string; role: string }> = session.user.tenants || [];
+    const isMember = userTenants.some((t: { id: string }) => t.id === tenantId);
 
     if (!isMember) {
       // User is not a member of this tenant, redirect to organizations list
