@@ -1064,29 +1064,27 @@ const ChatInput = ({
 
           {/* File Card Preview - Shows above input field */}
           {selectedFile && (
-            <div className="mt-2 inline-flex w-fit items-center gap-3 rounded-xl bg-gray-800 px-3 py-2.5">
-              {/* File Type Icon with background */}
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-red-500">
-                <FileText className="size-5 text-white" />
-              </div>
+            <div 
+              className="mt-2 inline-flex max-w-[280px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs"
+              style={{ backgroundColor: '#F2F3F5' }}
+            >
+              {/* File Type Icon */}
+              <FileText className="size-4 flex-shrink-0 text-gray-500" />
 
               {/* File Info */}
-              <div className="flex min-w-0 flex-col gap-0.5">
-                <span className="truncate text-sm font-medium text-white">
+              <div className="flex min-w-0 flex-1 flex-col">
+                <span className="truncate text-xs font-semibold text-gray-700">
                   {selectedFile.name}
-                </span>
-                <span className="text-xs text-gray-400 uppercase">
-                  {getFileExtension(selectedFile.name)}
                 </span>
               </div>
 
               {/* Remove Button */}
               <button
                 onClick={() => setSelectedFile(undefined)}
-                className="flex-shrink-0 rounded-full bg-gray-700 p-1 transition-colors hover:bg-gray-600"
+                className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
                 title="Remove file"
               >
-                <X className="size-4 text-white" />
+                <X className="size-3.5" />
               </button>
             </div>
           )}
