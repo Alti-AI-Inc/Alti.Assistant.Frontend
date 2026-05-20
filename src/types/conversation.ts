@@ -108,6 +108,10 @@ export type ConversationMessage = {
     reportSections?: import('./report-generation').ReportSection[];
     needsMoreInfo?: boolean;
     missingParams?: string[];
+    financialTicker?: {
+      symbol: string;
+      type: 'stock' | 'crypto' | 'forex';
+    };
   };
 };
 
