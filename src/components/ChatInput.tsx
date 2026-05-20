@@ -1104,19 +1104,6 @@ const ChatInput = ({
                   <div className="flex flex-col gap-1">
                     <div
                       onClick={() => {
-                        if (isFreeUser) {
-                          toast.error(
-                            'File upload is not available on the free plan',
-                            {
-                              action: {
-                                label: 'Upgrade Plan',
-                                onClick: () => router.push('/upgrade'),
-                              },
-                            },
-                          );
-                          setIsPopoverOpen(false);
-                          return;
-                        }
                         fileInputRef.current?.click();
                         setIsPopoverOpen(false);
                       }}

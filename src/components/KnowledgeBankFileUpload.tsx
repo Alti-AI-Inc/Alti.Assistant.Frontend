@@ -22,17 +22,6 @@ const KnowledgeBankFileUpload = ({ folderId }: { folderId: string }) => {
   const queryClient = useQueryClient();
 
   const handleFileFocus = () => {
-    if (isFreeUser) {
-      toast.error('File upload is not available on the free plan', {
-        description:
-          'Upgrade to a paid plan to upload files to knowledge banks.',
-        action: {
-          label: 'Upgrade Plan',
-          onClick: () => router.push('/upgrade'),
-        },
-      });
-      return;
-    }
     inputRef.current?.click();
   };
 
