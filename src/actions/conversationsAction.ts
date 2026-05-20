@@ -35,6 +35,9 @@ export async function PostConversation(
         message,
         ...(conversationId && { conversationId }),
         ...(knowledgebaseId && { knowledgebaseId }),
+        timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
+        localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+        localTime: new Date().toLocaleTimeString('en-US'),
       }),
     });
 
@@ -77,6 +80,14 @@ export async function PostConversationWithFile(
   accessToken: string,
 ): Promise<ApiResponse> {
   try {
+    const timezone = typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York';
+    const localDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const localTime = new Date().toLocaleTimeString('en-US');
+
+    formData.append('timezone', timezone);
+    formData.append('localDate', localDate);
+    formData.append('localTime', localTime);
+
     const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/search/assistant_v2`,
       {
