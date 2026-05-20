@@ -1065,7 +1065,7 @@ const ChatInput = ({
           {/* File Card Preview - Shows above input field */}
           {selectedFile && (
             <div 
-              className="mt-2 inline-flex max-w-[280px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs"
+              className="mt-2 inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs"
               style={{ backgroundColor: '#F2F3F5' }}
             >
               {/* File Type Icon */}
