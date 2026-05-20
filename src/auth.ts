@@ -30,6 +30,7 @@ declare module 'next-auth' {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
   providers: [
     Credentials({
       name: 'credentials',
@@ -52,7 +53,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (credentials.invitationToken) {
             body.invitationToken = credentials.invitationToken as string;
           }
-          const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
+          const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
           console.log('Attempting login with:', body);
           console.log('API URL:', apiUrl);
           const response = await fetch(`${apiUrl}/auth/login`, {

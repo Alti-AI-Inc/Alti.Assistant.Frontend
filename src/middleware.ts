@@ -1,10 +1,9 @@
 import { auth } from '@/auth';
-import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-export default auth(async function middleware(req: NextRequest) {
+export default auth(async function middleware(req) {
   const { nextUrl } = req;
-  const session = await auth();
+  const session = (req as any).auth;
 
   // Public routes that don't require authentication
   const publicRoutes = ['/accept-invite', '/'];
