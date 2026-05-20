@@ -80,8 +80,11 @@ function UpgradePage() {
     <div className="flex min-h-screen flex-col px-6 py-12">
       <div className="container mx-auto max-w-7xl">
         <h1 className="mt-10 text-center text-5xl font-semibold tracking-tighter">
-          Upgrade Plan
+          Plans
         </h1>
+        <p className="text-muted-foreground mt-4 text-center text-lg">
+          Choose the perfect plan for your needs. Scale seamlessly as your team grows.
+        </p>
 
         {loading ? (
           <div className="text-muted-foreground mt-20 flex items-center justify-center gap-2">

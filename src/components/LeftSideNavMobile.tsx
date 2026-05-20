@@ -263,7 +263,7 @@ const LeftSideNavMobile = () => {
                     close();
                   }}
                 >
-                  <Orbit className="text-black" /> Upgrade
+                  <Orbit className="text-black" /> Plans
                 </DropdownMenuItem>
                 {data?.user?.role === 'super_admin' && (
                   <DropdownMenuItem

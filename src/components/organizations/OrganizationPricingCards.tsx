@@ -64,21 +64,63 @@ interface OrganizationPricingCardsProps {
   showContactSales?: boolean;
 }
 
+const DEFAULT_PLANS: OrganizationPlan[] = [
+  {
+    id: 'explore',
+    name: 'Individual',
+    price: 20,
+    priceId: 'price_1SvD4aKunQzDWl59VdfdTeqZ',
+    period: '/month',
+    description: 'Perfect for individual developers and researchers looking to supercharge their workflow.',
+    features: [
+      'Single user workspace',
+      '1,000 AI requests per day',
+      'Basic Text Document RAG',
+      '10GB secure cloud storage',
+      'Web search & deep research tools',
+      'Standard email support',
+    ],
+    highlighted: false,
+    popular: false,
+  },
+  {
+    id: 'execute',
+    name: 'Team',
+    price: 25,
+    priceId: 'price_1SvD4bKunQzDWl59UQwqGLMD',
+    period: '/user/month',
+    description: 'Collaborate with your team with shared knowledge bases, higher limits, and advanced AI capabilities.',
+    features: [
+      'Collaborative team workspace',
+      '5,000 AI requests per day',
+      'Advanced Multi-Modal RAG',
+      '50GB shared storage per user',
+      'Invite and manage team members',
+      'Web search & deep research tools',
+      'Priority 24/7 email support',
+      'Advanced usage analytics',
+    ],
+    highlighted: true,
+    popular: true,
+  },
+];
+
 export function OrganizationPricingCards({
   onSelectPlan,
   currentPlanId,
   showContactSales = true,
 }: OrganizationPricingCardsProps) {
   const { data: session } = useSession();
-  const [plans, setPlans] = useState<OrganizationPlan[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [plans, setPlans] = useState<OrganizationPlan[]>(DEFAULT_PLANS);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPlans() {
       const accessToken = session?.accessToken;
       if (!accessToken) {
-        setLoading(false);
+        // Fall back to default plans statically when logged out
+        setPlans(DEFAULT_PLANS);
         return;
       }
 
@@ -88,36 +130,29 @@ export function OrganizationPricingCards({
         const response = await getStripeProducts(accessToken);
 
         if (response.success && response.data) {
-          // Map API response to OrganizationPlan format
-          // Cast response data to ApiProduct[] since the actual API returns different format than StripeProduct
-          const mappedPlans: OrganizationPlan[] = (
-            response.data as unknown as ApiProduct[]
-          )
-            .filter(product => product.isVisible && product.isActive)
-            .sort((a, b) => (a.sortOrder || 999) - (b.sortOrder || 999))
-            .map(product => ({
-              id: product.plan,
-              name: product.displayName || product.name,
-              price: product.price,
-              priceId: product.stripePriceId,
-              period: `/${product.interval || 'month'}`,
-              description: product.description || '',
-              features: product.featuresList || [],
-              limitations:
-                product.plan === 'free' ? ['No Team Collaboration'] : undefined,
-              requestLimit: product.features?.dailyWebSearchLimit,
-              storagePerUser: 0,
-              highlighted: product.plan === 'execute', // Highlight Execute plan
-              popular: product.plan === 'explore', // Mark Explore as popular
-            }));
+          const apiProducts = response.data as unknown as ApiProduct[];
+          
+          // Map backend products but keep our requested pricing/branding perfectly aligned
+          const mappedPlans = DEFAULT_PLANS.map(defaultPlan => {
+            const matchedApiProduct = apiProducts.find(
+              p => p.plan === defaultPlan.id
+            );
+
+            if (matchedApiProduct) {
+              return {
+                ...defaultPlan,
+                priceId: matchedApiProduct.stripePriceId || defaultPlan.priceId,
+              };
+            }
+            return defaultPlan;
+          });
 
           setPlans(mappedPlans);
-        } else {
-          setError(response.message || 'Failed to load plans');
         }
       } catch (err) {
-        console.error('Error fetching plans:', err);
-        setError('Failed to load pricing plans');
+        console.error('Error fetching dynamic plans, using defaults:', err);
+        // Silently fall back to default plans so the UI never breaks
+        setPlans(DEFAULT_PLANS);
       } finally {
         setLoading(false);
       }
@@ -128,10 +163,10 @@ export function OrganizationPricingCards({
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
+      <div className="flex items-center justify-center py-20">
         <Loader2 className="text-primary h-8 w-8 animate-spin" />
-        <span className="text-muted-foreground ml-3">
-          Loading pricing plans...
+        <span className="text-muted-foreground ml-3 font-medium">
+          Loading plans...
         </span>
       </div>
     );
@@ -148,18 +183,8 @@ export function OrganizationPricingCards({
     );
   }
 
-  if (plans.length === 0) {
-    return (
-      <div className="py-12 text-center">
-        <p className="text-muted-foreground">
-          No pricing plans available at the moment.
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-2">
       {plans.map(plan => {
         const isCurrentPlan = currentPlanId === plan.id;
 
@@ -167,87 +192,84 @@ export function OrganizationPricingCards({
           <Card
             key={plan.id}
             className={cn(
-              'relative flex flex-col transition-all hover:shadow-lg',
-              plan.highlighted && 'border-primary scale-105 border-2 shadow-xl',
-              isCurrentPlan && 'border-2 border-green-500',
+              'relative flex flex-col transition-all duration-300 hover:-translate-y-1',
+              plan.highlighted 
+                ? 'border-violet-500/50 bg-gradient-to-b from-violet-50/50 to-white dark:from-violet-950/20 dark:to-zinc-950/40 shadow-xl border-2 ring-1 ring-violet-500/30' 
+                : 'border-zinc-200 bg-white/80 dark:border-zinc-800 dark:bg-zinc-950/50 shadow-md hover:shadow-xl',
+              isCurrentPlan && 'border-green-500 ring-1 ring-green-500/30 shadow-lg',
             )}
           >
             {plan.popular && !isCurrentPlan && (
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <Badge className="bg-primary text-primary-foreground px-3 py-1">
-                  <Sparkles className="mr-1 h-3 w-3" />
-                  Most Popular
+                <Badge className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white border-none shadow-md px-3 py-1 font-semibold tracking-wide">
+                  <Sparkles className="mr-1 h-3.5 w-3.5" />
+                  Recommended
                 </Badge>
               </div>
             )}
 
             {isCurrentPlan && (
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <Badge className="bg-green-500 px-3 py-1 text-white">
+                <Badge className="bg-green-500 hover:bg-green-600 px-3 py-1 text-white shadow-md border-none font-semibold tracking-wide">
                   Current Plan
                 </Badge>
               </div>
             )}
 
-            <CardHeader>
-              <CardTitle className="text-2xl">{plan.name}</CardTitle>
-              <CardDescription className="min-h-[3rem]">
+            <CardHeader className="pt-8">
+              <CardTitle className="text-3xl font-bold tracking-tight">{plan.name}</CardTitle>
+              <CardDescription className="min-h-[3rem] mt-2 text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
                 {plan.description}
               </CardDescription>
-              <div className="mt-4">
-                <span className="text-4xl font-bold">${plan.price}</span>
-                <span className="text-muted-foreground">{plan.period}</span>
+              <div className="mt-6 flex items-baseline gap-1">
+                <span className="text-5xl font-extrabold tracking-tight">${plan.price}</span>
+                <span className="text-zinc-500 dark:text-zinc-400 font-medium text-base">{plan.period}</span>
               </div>
             </CardHeader>
 
-            <CardContent className="flex-1">
-              <ul className="space-y-3">
+            <CardContent className="flex-1 pt-4 pb-8">
+              <ul className="space-y-4">
                 {plan.features.map(feature => {
                   const isLimitation = plan.limitations?.includes(feature);
                   return (
                     <li
                       key={feature}
                       className={cn(
-                        'flex items-start gap-2',
+                        'flex items-start gap-3',
                         isLimitation && 'text-muted-foreground line-through',
                       )}
                     >
-                      <Check
-                        className={cn(
-                          'mt-0.5 h-5 w-5 flex-shrink-0',
-                          isLimitation
-                            ? 'text-muted-foreground/50'
-                            : plan.highlighted
-                              ? 'text-primary'
-                              : 'text-green-600',
-                        )}
-                      />
-                      <span className="text-sm">{feature}</span>
+                      <span className={cn(
+                        'flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-0.5',
+                        plan.highlighted 
+                          ? 'bg-violet-100 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400' 
+                          : 'bg-green-50 text-green-600 dark:bg-green-950/30 dark:text-green-400'
+                      )}>
+                        <Check className="h-3.5 w-3.5 stroke-[3]" />
+                      </span>
+                      <span className="text-zinc-600 dark:text-zinc-300 text-sm font-medium">{feature}</span>
                     </li>
                   );
                 })}
               </ul>
             </CardContent>
 
-            <CardFooter>
+            <CardFooter className="pb-8">
               <Button
                 onClick={() => onSelectPlan?.(plan)}
                 disabled={isCurrentPlan}
                 className={cn(
-                  'w-full',
-                  plan.highlighted &&
-                    'bg-primary hover:bg-primary/90 text-primary-foreground',
-                  isCurrentPlan && 'cursor-not-allowed opacity-50',
+                  'w-full py-6 text-sm font-bold tracking-wide transition-all shadow-md',
+                  plan.highlighted
+                    ? 'bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white border-none'
+                    : 'bg-white hover:bg-zinc-50 text-zinc-900 border border-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white dark:border-zinc-800',
+                  isCurrentPlan && 'bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-600 shadow-none',
                 )}
                 variant={plan.highlighted ? 'default' : 'outline'}
               >
                 {isCurrentPlan
-                  ? 'Current Plan'
-                  : plan.id === 'command' && showContactSales
-                    ? 'Contact Sales'
-                    : plan.id === 'free'
-                      ? 'Start Free Trial'
-                      : 'Upgrade'}
+                  ? 'Active Plan'
+                  : 'Upgrade Now'}
               </Button>
             </CardFooter>
           </Card>

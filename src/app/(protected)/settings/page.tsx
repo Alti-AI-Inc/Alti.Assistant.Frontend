@@ -81,7 +81,7 @@ const Page = () => {
   }
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-gray-50 dark:bg-gray-900">
+    <div className="flex h-screen w-full overflow-hidden bg-white dark:bg-gray-900">
       {/* Settings Sidebar */}
       <div className="relative">
         <SettingsSidebar

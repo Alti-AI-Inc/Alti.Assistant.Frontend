@@ -67,17 +67,15 @@ export const SettingsSidebar = ({
           : 'w-20 items-center bg-[#F2F3F5] dark:bg-gray-900',
       )}
     >
-      {/* Unified Sidebar Header */}
       <div
         className={cn(
-          'sticky top-0 z-30 flex h-[53px] items-center justify-between border-b border-black/10 px-4 py-3',
-          hideSidebar && 'justify-center',
+          'sticky top-0 z-30 flex h-[53px] items-center justify-between border-b border-black/10 px-4 py-3 transition-colors duration-300',
+          hideSidebar ? 'justify-center bg-[#F2F3F5] dark:bg-gray-900' : 'bg-white dark:bg-gray-950',
         )}
-        style={{ backgroundColor: '#F2F3F5' }}
       >
         {!hideSidebar ? (
           <>
-            <span className="text-[12px] font-bold text-gray-700 dark:text-gray-300 tracking-wider uppercase">
+            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
               Settings
             </span>
             <PanelLeftClose
