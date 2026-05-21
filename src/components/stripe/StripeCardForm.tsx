@@ -98,7 +98,7 @@ export function StripeCardForm({
       <div>
         <Label htmlFor="card-element" className="mb-2 flex items-center gap-2">
           <CreditCard className="h-4 w-4" />
-          Card Details
+          Card number, expiration date, and security code, all in one line
         </Label>
 
         <div
@@ -130,13 +130,6 @@ export function StripeCardForm({
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
             <span>{cardError}</span>
           </div>
-        )}
-
-        {/* Helper Text */}
-        {!cardError && (
-          <p className="text-muted-foreground mt-2 text-xs">
-            Enter your card number, expiration date, and security code
-          </p>
         )}
       </div>
     </div>
