@@ -254,15 +254,17 @@ const LeftSideNav = () => {
                 >
                   <ReceiptText className="text-black" /> Billing
                 </DropdownMenuItem>
-                {mode === UserMode.TENANT && currentTenant && (
-                  <DropdownMenuItem
-                    onClick={() =>
-                      router.push(`/organizations/${currentTenant.id}/members`)
-                    }
-                  >
-                    <Users className="text-black" /> Members
-                  </DropdownMenuItem>
-                )}
+                <DropdownMenuItem
+                  onClick={() =>
+                    router.push(
+                      mode === UserMode.TENANT && currentTenant
+                        ? `/organizations/${currentTenant.id}/members`
+                        : '/organizations',
+                    )
+                  }
+                >
+                  <Users className="text-black" /> Members
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() =>
                     onOpen({
