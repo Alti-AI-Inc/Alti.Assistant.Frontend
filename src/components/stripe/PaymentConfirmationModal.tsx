@@ -383,7 +383,7 @@ export function PaymentConfirmationModal({
         </div>
 
         {/* Main Content Wrapper - relative positioning for overlay */}
-        <div className="relative min-h-[100px]">
+        <div className="relative">
           {/* Loading State */}
           {step === 'loading' && (
             <div className="flex flex-col items-center justify-center py-12">
@@ -477,7 +477,7 @@ export function PaymentConfirmationModal({
 
         {/* Action Buttons */}
         {step !== 'loading' && step !== 'processing' && step !== 'success' && (
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-3 pt-2">
             <Button variant="outline" onClick={handleClose} className="flex-1">
               Cancel
             </Button>

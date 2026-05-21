@@ -106,7 +106,7 @@ export function StripeCardForm({
                 : isCardComplete
                   ? 'border-green-500'
                   : 'border-input',
-            'bg-background px-3 py-3',
+            'bg-background pl-1 pr-3 py-3',
           )}
         >
           <CardElement
