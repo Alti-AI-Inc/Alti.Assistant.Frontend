@@ -20,6 +20,54 @@ const ReactQueryDevtools = dynamic(
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // Graceful recovery for Next.js Server Action / chunk loading mismatches during deployment
+    const handleGlobalError = (event: ErrorEvent) => {
+      const message = event.message || '';
+      const isChunkLoadError =
+        message.includes('Failed to fetch dynamically imported module') ||
+        message.includes('Loading chunk') ||
+        message.includes('Failed to find Server Action');
+
+      if (isChunkLoadError) {
+        console.warn(
+          'Alti Shield: Detected chunk loading or Server Action mismatch. Performing automatic recovery refresh...',
+        );
+        window.location.reload();
+      }
+    };
+
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      const reason = event.reason || '';
+      const reasonStr =
+        typeof reason === 'string'
+          ? reason
+          : reason.message || String(reason);
+
+      const isChunkLoadError =
+        reasonStr.includes('Failed to fetch dynamically imported module') ||
+        reasonStr.includes('Loading chunk') ||
+        reasonStr.includes('Failed to find Server Action');
+
+      if (isChunkLoadError) {
+        console.warn(
+          'Alti Shield: Detected unhandled chunk/Server Action rejection. Performing automatic recovery refresh...',
+        );
+        window.location.reload();
+      }
+    };
+
+    window.addEventListener('error', handleGlobalError);
+    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+
+    return () => {
+      window.removeEventListener('error', handleGlobalError);
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+    };
+  }, []);
+
   return (
     <ThemeProvider
       attribute="class"
