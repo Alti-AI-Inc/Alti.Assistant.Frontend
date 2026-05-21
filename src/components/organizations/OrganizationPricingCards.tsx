@@ -165,16 +165,7 @@ export function OrganizationPricingCards({
     fetchPlans();
   }, [session?.accessToken]);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <Loader2 className="text-primary h-8 w-8 animate-spin" />
-        <span className="text-muted-foreground ml-3 font-medium">
-          Loading plans...
-        </span>
-      </div>
-    );
-  }
+
 
   if (error) {
     return (

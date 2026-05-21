@@ -91,20 +91,13 @@ function UpgradePage() {
           Choose the perfect plan for your needs.
         </p>
 
-        {loading ? (
-          <div className="text-muted-foreground mt-20 flex items-center justify-center gap-2">
-            <Loader2 className="h-5 w-5 animate-spin" />
-            <span>Loading plans...</span>
-          </div>
-        ) : (
-          <div className="mt-20">
-            <OrganizationPricingCards
-              onSelectPlan={handleSelectPlan}
-              currentPlanId={currentPlanId}
-              showContactSales={true}
-            />
-          </div>
-        )}
+        <div className="mt-20">
+          <OrganizationPricingCards
+            onSelectPlan={handleSelectPlan}
+            currentPlanId={currentPlanId}
+            showContactSales={true}
+          />
+        </div>
       </div>
 
       {selectedPlan && (
