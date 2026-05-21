@@ -3,8 +3,7 @@
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useState, useEffect } from 'react';
 import type { StripeCardElementChangeEvent } from '@stripe/stripe-js';
-import { Label } from '@/components/ui/label';
-import { AlertCircle, CreditCard } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 /**
