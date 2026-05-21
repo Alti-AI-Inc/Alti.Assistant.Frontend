@@ -234,6 +234,7 @@ const LeftSideNav = () => {
                     <LayoutDashboard className="text-black" /> Dashboard
                   </DropdownMenuItem>
                 )}
+                {/* Plans dropdown menu item */}
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Plans
                 </DropdownMenuItem>

@@ -257,6 +257,7 @@ const LeftSideNavMobile = () => {
                 >
                   <LayoutGrid className="text-black" /> Apps
                 </DropdownMenuItem> */}
+                {/* Plans dropdown menu item */}
                 <DropdownMenuItem
                   onClick={() => {
                     router.push('/upgrade');
