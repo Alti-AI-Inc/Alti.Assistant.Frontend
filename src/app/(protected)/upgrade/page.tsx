@@ -83,7 +83,7 @@ function UpgradePage() {
           Plans
         </h1>
         <p className="text-muted-foreground mt-4 text-center text-lg">
-          Choose the perfect plan for your needs. Scale seamlessly as your team grows.
+          Choose the perfect plan for your needs.
         </p>
 
         {loading ? (

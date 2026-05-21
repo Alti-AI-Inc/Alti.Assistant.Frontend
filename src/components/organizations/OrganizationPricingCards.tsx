@@ -193,21 +193,11 @@ export function OrganizationPricingCards({
             key={plan.id}
             className={cn(
               'relative flex flex-col transition-all duration-300 hover:-translate-y-1',
-              plan.highlighted 
-                ? 'border-violet-500/50 bg-gradient-to-b from-violet-50/50 to-white dark:from-violet-950/20 dark:to-zinc-950/40 shadow-xl border-2 ring-1 ring-violet-500/30' 
-                : 'border-zinc-200 bg-white/80 dark:border-zinc-800 dark:bg-zinc-950/50 shadow-md hover:shadow-xl',
+              'border-zinc-200 bg-white/80 dark:border-zinc-800 dark:bg-zinc-950/50 shadow-md hover:shadow-xl',
+              plan.id === 'execute' && 'border-blue-500 border-2 shadow-xl ring-1 ring-blue-500/30 dark:border-blue-500',
               isCurrentPlan && 'border-green-500 ring-1 ring-green-500/30 shadow-lg',
             )}
           >
-            {plan.popular && !isCurrentPlan && (
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <Badge className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white border-none shadow-md px-3 py-1 font-semibold tracking-wide">
-                  <Sparkles className="mr-1 h-3.5 w-3.5" />
-                  Recommended
-                </Badge>
-              </div>
-            )}
-
             {isCurrentPlan && (
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                 <Badge className="bg-green-500 hover:bg-green-600 px-3 py-1 text-white shadow-md border-none font-semibold tracking-wide">
@@ -217,37 +207,29 @@ export function OrganizationPricingCards({
             )}
 
             <CardHeader className="pt-8">
-              <CardTitle className="text-3xl font-bold tracking-tight">{plan.name}</CardTitle>
-              <CardDescription className="min-h-[3rem] mt-2 text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
+              <CardTitle className="text-3xl font-bold tracking-tight text-center">{plan.name}</CardTitle>
+              <CardDescription className="min-h-[3rem] mt-2 text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm text-center">
                 {plan.description}
               </CardDescription>
-              <div className="mt-6 flex items-baseline gap-1">
+              <div className="mt-6 flex items-baseline justify-center gap-1">
                 <span className="text-5xl font-extrabold tracking-tight">${plan.price}</span>
                 <span className="text-zinc-500 dark:text-zinc-400 font-medium text-base">{plan.period}</span>
               </div>
             </CardHeader>
 
             <CardContent className="flex-1 pt-4 pb-8">
-              <ul className="space-y-4">
+              <ul className="space-y-4 text-center">
                 {plan.features.map(feature => {
                   const isLimitation = plan.limitations?.includes(feature);
                   return (
                     <li
                       key={feature}
                       className={cn(
-                        'flex items-start gap-3',
+                        'text-zinc-600 dark:text-zinc-300 text-sm font-medium',
                         isLimitation && 'text-muted-foreground line-through',
                       )}
                     >
-                      <span className={cn(
-                        'flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-0.5',
-                        plan.highlighted 
-                          ? 'bg-violet-100 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400' 
-                          : 'bg-green-50 text-green-600 dark:bg-green-950/30 dark:text-green-400'
-                      )}>
-                        <Check className="h-3.5 w-3.5 stroke-[3]" />
-                      </span>
-                      <span className="text-zinc-600 dark:text-zinc-300 text-sm font-medium">{feature}</span>
+                      {feature}
                     </li>
                   );
                 })}
@@ -260,12 +242,12 @@ export function OrganizationPricingCards({
                 disabled={isCurrentPlan}
                 className={cn(
                   'w-full py-6 text-sm font-bold tracking-wide transition-all shadow-md',
-                  plan.highlighted
-                    ? 'bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white border-none'
+                  plan.id === 'execute'
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white border-none'
                     : 'bg-white hover:bg-zinc-50 text-zinc-900 border border-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white dark:border-zinc-800',
                   isCurrentPlan && 'bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-600 shadow-none',
                 )}
-                variant={plan.highlighted ? 'default' : 'outline'}
+                variant={plan.id === 'execute' ? 'default' : 'outline'}
               >
                 {isCurrentPlan
                   ? 'Active Plan'
