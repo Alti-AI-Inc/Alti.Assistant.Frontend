@@ -192,8 +192,7 @@ export function OrganizationPricingCards({
             key={plan.id}
             className={cn(
               'relative flex flex-col transition-all duration-300 hover:-translate-y-1',
-              'border-zinc-200 bg-white/80 dark:border-zinc-800 dark:bg-zinc-950/50 shadow-md hover:shadow-xl',
-              plan.id === 'execute' && 'border-blue-500 border-2 shadow-xl ring-1 ring-blue-500/30 dark:border-blue-500',
+              'bg-white/80 dark:bg-zinc-950/50 shadow-xl border-blue-500 border-2 ring-1 ring-blue-500/30 dark:border-blue-500',
               isCurrentPlan && 'border-green-500 ring-1 ring-green-500/30 shadow-lg',
             )}
           >
