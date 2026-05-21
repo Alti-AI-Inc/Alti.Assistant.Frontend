@@ -1,5 +1,3 @@
-'use server';
-
 import { apiClient } from '@/lib/api-client';
 
 enum FileStatus {
@@ -92,6 +90,15 @@ export const fileUploadAction = async (
         body: formData,
       },
     );
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to upload file.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
@@ -120,6 +127,16 @@ export async function fetchKnowledgeBankFolders(
         cache: 'no-store',
       },
     );
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to fetch folders.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+        data: [],
+      };
+    }
     const data = await response.json();
     return {
       success: true,
@@ -153,6 +170,15 @@ export async function fetchKnowledgeBankFolderContent(
         cache: 'no-store',
       },
     );
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to fetch folder content.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data?.data };
   } catch (error: any) {
@@ -186,6 +212,15 @@ export async function createKnowledgeBankFolderAction(
         }),
       },
     );
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to create folder.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
@@ -220,6 +255,15 @@ export async function updateKnowledgeBankFolderAction(
         }),
       },
     );
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to update folder.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
@@ -248,6 +292,15 @@ export const uploadfileToKnowledgeBankAction = async (
         body: formData,
       },
     );
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to upload file to knowledge bank.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
@@ -275,6 +328,15 @@ export const processKnowledgeBankFile = async (
         },
       },
     );
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to process file.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
@@ -301,6 +363,15 @@ export const deleteKnowledgeBankFolderAction = async (
         'Content-Type': 'application/json',
       },
     });
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to delete folder.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
@@ -327,6 +398,15 @@ export const deleteKnowledgeBankFile = async (
         'Content-Type': 'application/json',
       },
     });
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to delete file.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {

@@ -1,5 +1,3 @@
-'use server';
-
 import { apiClient } from '@/lib/api-client';
 import { KnowledgeBankFile } from './knowledgeBankAction';
 
@@ -26,6 +24,15 @@ export const uploadfileToKnowledgeBaseAction = async (
         body: formData,
       },
     );
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to upload file.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
@@ -54,6 +61,16 @@ export async function fetchKnowledgeBaseList(
         cache: 'no-store',
       },
     );
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to fetch knowledge base list.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+        data: [],
+      };
+    }
     const data = await response.json();
     return {
       success: true,
@@ -87,6 +104,15 @@ export async function fetchKnowledgeBaseConversations(
         cache: 'no-store',
       },
     );
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to fetch conversations.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
@@ -118,6 +144,15 @@ export async function createKnowledgeBaseAction(
         }),
       },
     );
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to create knowledge base.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
@@ -151,6 +186,15 @@ export async function PostKnowledgeConversation(
         ...(conversationId && { conversationId }),
       }),
     });
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to post message.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
@@ -179,6 +223,15 @@ export async function loadSingleBaseConversation(
         },
       },
     );
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to load conversation.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
@@ -228,6 +281,15 @@ export async function getKnowledgeBaseFiles(
         },
       },
     );
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to fetch files.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data?.data };
   } catch (error: any) {
@@ -264,6 +326,15 @@ export const deleteKnowledgeBaseFile = async (
         'Content-Type': 'application/json',
       },
     });
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to delete file.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
@@ -289,6 +360,15 @@ export const deleteKnowledgeBase = async (
         'Content-Type': 'application/json',
       },
     });
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        message: 'Failed to delete knowledge base.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
