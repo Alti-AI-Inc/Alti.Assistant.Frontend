@@ -29,6 +29,7 @@ import {
   SquarePen,
   SquareUserRound,
   User,
+  Users,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -253,6 +254,15 @@ const LeftSideNav = () => {
                 >
                   <ReceiptText className="text-black" /> Billing
                 </DropdownMenuItem>
+                {mode === UserMode.TENANT && currentTenant && (
+                  <DropdownMenuItem
+                    onClick={() =>
+                      router.push(`/organizations/${currentTenant.id}/members`)
+                    }
+                  >
+                    <Users className="text-black" /> Members
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem
                   onClick={() =>
                     onOpen({

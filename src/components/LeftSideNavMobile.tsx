@@ -25,6 +25,7 @@ import {
   Settings,
   SquarePen,
   User,
+  Users,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -297,6 +298,16 @@ const LeftSideNavMobile = () => {
                 >
                   <ReceiptText className="text-black" /> Billing
                 </DropdownMenuItem>
+                {mode === UserMode.TENANT && currentTenant && (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      router.push(`/organizations/${currentTenant.id}/members`);
+                      close();
+                    }}
+                  >
+                    <Users className="text-black" /> Members
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem
                   onClick={() => {
                     router.push('/settings');

@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
 import type { TenantSettings as ITenantSettings, Tenant } from '@/types/tenant';
-import { ArrowLeft, Loader2, Save } from 'lucide-react';
+import { ArrowLeft, Loader2, Save, Users } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { use, useEffect, useState } from 'react';
@@ -208,6 +208,23 @@ export default function OrganizationSettingsPage({
               <p className="text-muted-foreground text-xs">
                 Maximum number of members allowed in this organization
               </p>
+            </div>
+
+            <div className="pt-6 border-t border-black/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="space-y-0.5">
+                <Label className="font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                  <Users className="size-4 text-indigo-650" />
+                  Manage Team Members
+                </Label>
+                <p className="text-muted-foreground text-sm">
+                  Invite new members, update roles, and manage permissions.
+                </p>
+              </div>
+              <Button variant="outline" className="border-indigo-100 text-indigo-650 hover:bg-indigo-50/50 dark:border-indigo-900/50 dark:text-indigo-400 dark:hover:bg-indigo-950/20" asChild>
+                <Link href={`/organizations/${tenantId}/members`}>
+                  Manage Members
+                </Link>
+              </Button>
             </div>
           </CardContent>
         </Card>
