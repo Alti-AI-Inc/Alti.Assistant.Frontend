@@ -46,10 +46,15 @@ function UpgradePage() {
         if (subRes.success && subRes.data?.dbRecord?.stripePriceId) {
           const currentPriceId = subRes.data.dbRecord.stripePriceId;
           if (productsRes.success && productsRes.data) {
-            const products = productsRes.data as unknown as {
-              stripePriceId: string;
-              plan: string;
-            }[];
+            const rawProducts = productsRes.data;
+            const products = (Array.isArray(rawProducts)
+              ? rawProducts
+              : (rawProducts && typeof rawProducts === 'object' && 'products' in rawProducts && Array.isArray((rawProducts as any).products)
+                ? (rawProducts as any).products
+                : [])) as unknown as {
+                stripePriceId: string;
+                plan: string;
+              }[];
             const currentProduct = products.find(
               p => p.stripePriceId === currentPriceId,
             );

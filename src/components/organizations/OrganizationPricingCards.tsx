@@ -129,7 +129,12 @@ export function OrganizationPricingCards({
         const response = await getStripeProducts(accessToken);
 
         if (response.success && response.data) {
-          const apiProducts = response.data as unknown as ApiProduct[];
+          const rawProducts = response.data;
+          const apiProducts = (Array.isArray(rawProducts)
+            ? rawProducts
+            : (rawProducts && typeof rawProducts === 'object' && 'products' in rawProducts && Array.isArray((rawProducts as any).products)
+              ? (rawProducts as any).products
+              : [])) as ApiProduct[];
           
           // Map backend products but keep our requested pricing/branding perfectly aligned
           const mappedPlans = DEFAULT_PLANS.map(defaultPlan => {

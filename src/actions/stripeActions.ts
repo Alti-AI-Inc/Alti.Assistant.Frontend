@@ -1831,7 +1831,7 @@ export async function getMyPersonalSubscription(accessToken: string): Promise<
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/stripe/my-subscription`,
+      `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/my-subscription`,
       {
         method: 'GET',
         headers: {
