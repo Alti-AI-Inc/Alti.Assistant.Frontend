@@ -108,14 +108,16 @@ export function PaymentConfirmationModal({
           setIsCardReady(false);
         }
       } else {
-        throw new Error(response.message || 'Failed to fetch payment methods');
+        console.warn('Stripe payment methods fetch returned unsuccessful response, falling back to add card form:', response.message);
+        setPaymentMethods([]);
+        setStep('add_card');
+        setIsCardReady(false);
       }
     } catch (err) {
-      console.error('Error fetching payment methods:', err);
-      setError(
-        err instanceof Error ? err.message : 'Failed to load payment methods',
-      );
-      setStep('error');
+      console.warn('Error fetching payment methods, falling back to add card form:', err);
+      setPaymentMethods([]);
+      setStep('add_card');
+      setIsCardReady(false);
     }
   }, [session?.accessToken]);
 
