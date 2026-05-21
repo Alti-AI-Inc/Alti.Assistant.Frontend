@@ -26,7 +26,6 @@ import {
   Loader2,
   AlertCircle,
   ArrowLeft,
-  CreditCard,
 } from 'lucide-react';
 
 /**
@@ -421,11 +420,6 @@ export function PaymentConfirmationModal({
                   Back to saved cards
                 </Button>
               )}
-
-              <div className="mb-2 flex items-center gap-2">
-                <CreditCard className="h-5 w-5" />
-                <h3 className="font-semibold">Add Payment Method</h3>
-              </div>
 
               <StripeCardForm
                 onCardComplete={setIsCardComplete}

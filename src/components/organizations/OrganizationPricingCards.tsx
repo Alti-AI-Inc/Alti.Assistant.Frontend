@@ -87,7 +87,7 @@ const DEFAULT_PLANS: OrganizationPlan[] = [
     name: 'Team',
     price: 25,
     priceId: 'price_1SvD4bKunQzDWl59UQwqGLMD',
-    period: '/user/month',
+    period: '/month',
     description: 'Collaborate with your team with shared knowledge bases, higher limits, and advanced AI capabilities.',
     features: [
       'Collaborative team workspace',

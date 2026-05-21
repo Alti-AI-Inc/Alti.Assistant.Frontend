@@ -4,7 +4,7 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useState, useEffect } from 'react';
 import type { StripeCardElementChangeEvent } from '@stripe/stripe-js';
 import { Label } from '@/components/ui/label';
-import { AlertCircle, CreditCard, Lock } from 'lucide-react';
+import { AlertCircle, CreditCard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 /**
@@ -138,33 +138,6 @@ export function StripeCardForm({
             Enter your card number, expiration date, and security code
           </p>
         )}
-      </div>
-
-      {/* Security Notice */}
-      <div className="bg-muted/50 border-border flex items-start gap-2 rounded-md border p-3">
-        <Lock className="text-muted-foreground mt-0.5 h-4 w-4 flex-shrink-0" />
-        <div className="text-muted-foreground text-xs">
-          <p className="mb-1 font-medium">Secure Payment</p>
-          <p>
-            Your card information is encrypted and securely processed by Stripe.
-            We never store your card details.
-          </p>
-        </div>
-      </div>
-
-      {/* Accepted Cards */}
-      <div className="flex items-center justify-center gap-3 pt-2">
-        <span className="text-muted-foreground text-xs">We accept:</span>
-        <div className="flex items-center gap-2">
-          {['Visa', 'Mastercard', 'Amex', 'Discover'].map(brand => (
-            <div
-              key={brand}
-              className="border-border bg-card text-muted-foreground rounded border px-2 py-1 text-xs font-medium"
-            >
-              {brand}
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
