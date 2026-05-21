@@ -5,14 +5,13 @@ import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Check, Sparkles, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getStripeProducts } from '@/actions/stripeActions';
 
@@ -217,41 +216,20 @@ export function OrganizationPricingCards({
               </div>
             </CardHeader>
 
-            <CardContent className="flex-1 pt-4 pb-8">
-              <ul className="space-y-4 text-center">
-                {plan.features.map(feature => {
-                  const isLimitation = plan.limitations?.includes(feature);
-                  return (
-                    <li
-                      key={feature}
-                      className={cn(
-                        'text-zinc-600 dark:text-zinc-300 text-sm font-medium',
-                        isLimitation && 'text-muted-foreground line-through',
-                      )}
-                    >
-                      {feature}
-                    </li>
-                  );
-                })}
-              </ul>
-            </CardContent>
-
-            <CardFooter className="pb-8">
+            <CardFooter className="pb-8 pt-4">
               <Button
                 onClick={() => onSelectPlan?.(plan)}
                 disabled={isCurrentPlan}
                 className={cn(
                   'w-full py-6 text-sm font-bold tracking-wide transition-all shadow-md',
-                  plan.id === 'execute'
-                    ? 'bg-blue-600 hover:bg-blue-700 text-white border-none'
-                    : 'bg-white hover:bg-zinc-50 text-zinc-900 border border-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white dark:border-zinc-800',
+                  'bg-blue-600 hover:bg-blue-700 text-white border-none',
                   isCurrentPlan && 'bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-600 shadow-none',
                 )}
-                variant={plan.id === 'execute' ? 'default' : 'outline'}
+                variant="default"
               >
                 {isCurrentPlan
                   ? 'Active Plan'
-                  : 'Upgrade Now'}
+                  : 'Select Plan'}
               </Button>
             </CardFooter>
           </Card>
