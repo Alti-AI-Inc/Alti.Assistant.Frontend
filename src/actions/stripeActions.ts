@@ -1429,7 +1429,7 @@ export async function addSeatToSubscription(
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ subscriptionId, userId }),
+        body: JSON.stringify({ subscriptionId, newUserId: userId }),
       },
     );
 
@@ -1483,7 +1483,7 @@ export async function removeSeatFromSubscription(
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ subscriptionId, userId }),
+        body: JSON.stringify({ subscriptionId, removeUserId: userId }),
       },
     );
 
@@ -1515,6 +1515,59 @@ export async function removeSeatFromSubscription(
     return {
       success: false,
       message: 'Failed to remove seat',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+/**
+ * Cancel subscription (tenant-aware)
+ * POST /api/v1/subscriptions/cancel
+ */
+export async function cancelAppSubscription(
+  immediate: boolean,
+  accessToken: string,
+): Promise<ApiResponse<any>> {
+  console.log('[stripeActions] POST - cancelAppSubscription:', { immediate });
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/cancel`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ immediate }),
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to cancel subscription',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log('[stripeActions] POST - cancelAppSubscription response:', data);
+    return {
+      success: true,
+      message: immediate
+        ? 'Subscription cancelled immediately'
+        : 'Subscription set to cancel at period end',
+      data: data.data || data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[stripeActions] POST - cancelAppSubscription error:', error);
+    return {
+      success: false,
+      message: 'Failed to cancel subscription',
       debugMessage: errorMessage,
       statusCode: 500,
     };
@@ -1870,6 +1923,60 @@ export async function getMyPersonalSubscription(accessToken: string): Promise<
     return {
       success: false,
       message: 'Failed to fetch personal subscription',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+export async function createBillingPortalSessionAction(
+  tenantId: string | null,
+  accessToken: string,
+): Promise<ApiResponse<{ url: string }>> {
+  console.log('[stripeActions] POST - createBillingPortalSessionAction payload:', { tenantId });
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/billing-portal`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ tenantId }),
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to create billing portal session',
+        statusCode: response.status,
+      };
+    }
+
+    const data = await response.json();
+    console.log(
+      '[stripeActions] POST - createBillingPortalSessionAction response:',
+      data,
+    );
+
+    return {
+      success: true,
+      message: 'Billing portal session created successfully',
+      data: data.data,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(
+      '[stripeActions] POST - createBillingPortalSessionAction error:',
+      error,
+    );
+    return {
+      success: false,
+      message: 'Failed to create billing portal session',
       debugMessage: errorMessage,
       statusCode: 500,
     };

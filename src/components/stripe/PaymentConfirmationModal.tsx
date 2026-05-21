@@ -383,7 +383,7 @@ export function PaymentConfirmationModal({
         </div>
 
         {/* Main Content Wrapper - relative positioning for overlay */}
-        <div className="relative min-h-[200px]">
+        <div className="relative min-h-[100px]">
           {/* Loading State */}
           {step === 'loading' && (
             <div className="flex flex-col items-center justify-center py-12">

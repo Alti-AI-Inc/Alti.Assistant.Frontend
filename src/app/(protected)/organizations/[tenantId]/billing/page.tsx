@@ -3,6 +3,10 @@
 import {
   getPaymentMethods,
   type StripePaymentMethod,
+  cancelAppSubscription,
+  addSeatToSubscription,
+  removeSeatFromSubscription,
+  createBillingPortalSessionAction,
 } from '@/actions/stripeActions';
 import { getCurrentTenant, getTenantUsage } from '@/actions/tenantActions';
 import {
@@ -25,6 +29,9 @@ import type { TenantUsage } from '@/types/tenant';
 import {
   ArrowLeft,
   CreditCard,
+  Plus,
+  Minus,
+  Loader2,
   Trash2,
   TrendingUp,
   Users,
@@ -65,70 +72,94 @@ export default function OrganizationBillingPage({
   const [paymentMethods, setPaymentMethods] = useState<StripePaymentMethod[]>(
     [],
   );
+  const [isUpdatingSeats, setIsUpdatingSeats] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [cancelImmediate, setCancelImmediate] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [isLaunchingPortal, setIsLaunchingPortal] = useState(false);
+
+  const handleManageBillingOnStripe = async () => {
+    if (!session?.accessToken) return;
+
+    setIsLaunchingPortal(true);
+    try {
+      const result = await createBillingPortalSessionAction(tenantId, session.accessToken);
+      if (result.success && result.data?.url) {
+        window.location.href = result.data.url;
+      } else {
+        toast.error(result.message || 'Failed to open Stripe Customer Portal');
+      }
+    } catch (err) {
+      console.error('[BillingPage] Failed to launch portal:', err);
+      toast.error('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLaunchingPortal(false);
+    }
+  };
+
+  const fetchBillingData = async (showLoading = true) => {
+    if (!session?.accessToken) return;
+
+    if (showLoading) setIsLoading(true);
+    try {
+      const [tenantResponse, usageResponse, paymentMethodsResponse] =
+        await Promise.all([
+          getCurrentTenant(),
+          getTenantUsage(),
+          getPaymentMethods(session.accessToken),
+        ]);
+
+      console.log('[Billing Page] Tenant Response:', tenantResponse);
+      console.log('[Billing Page] Tenant Data:', tenantResponse.data);
+      console.log(
+        '[Billing Page] Payment Methods:',
+        paymentMethodsResponse.data,
+      );
+
+      if (tenantResponse.success && tenantResponse.data) {
+        const tenant = tenantResponse.data;
+
+        // Extract subscription data from tenant response
+        const unlimitedSeats =
+          tenant.subscription?.price?.features?.unlimitedSeats || false;
+        const subscriptionData = {
+          id: tenant.subscription?._id || '',
+          status: tenant.status || 'trial',
+          plan: tenant.subscription?.price?.plan || tenant.plan || 'free',
+          amount: tenant.subscription?.price?.price || 0,
+          interval: tenant.subscription?.price?.interval || 'month',
+          nextBillingDate: undefined, // Not available in this response
+          seats: unlimitedSeats
+            ? 999999
+            : tenant.settings?.maxMembers || tenant.limits?.maxUsers || 1,
+          usedSeats: tenant.usage?.usersCount || 0,
+          billingCycle: tenant.subscription?.price?.interval || 'month',
+          unlimitedSeats: unlimitedSeats,
+        };
+
+        console.log(
+          '[Billing Page] Transformed subscription data:',
+          subscriptionData,
+        );
+        setSubscription(subscriptionData);
+      }
+
+      if (usageResponse.success && usageResponse.data) {
+        setUsage(usageResponse.data);
+      }
+      console.log('[Payment Methods] Response:', paymentMethodsResponse);
+      if (paymentMethodsResponse.success && paymentMethodsResponse.data) {
+        setPaymentMethods(paymentMethodsResponse.data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch billing data:', error);
+    } finally {
+      if (showLoading) setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!session?.accessToken) return;
-
-      setIsLoading(true);
-      try {
-        const [tenantResponse, usageResponse, paymentMethodsResponse] =
-          await Promise.all([
-            getCurrentTenant(),
-            getTenantUsage(),
-            getPaymentMethods(session.accessToken),
-          ]);
-
-        console.log('[Billing Page] Tenant Response:', tenantResponse);
-        console.log('[Billing Page] Tenant Data:', tenantResponse.data);
-        console.log(
-          '[Billing Page] Payment Methods:',
-          paymentMethodsResponse.data,
-        );
-
-        if (tenantResponse.success && tenantResponse.data) {
-          const tenant = tenantResponse.data;
-
-          // Extract subscription data from tenant response
-          const unlimitedSeats =
-            tenant.subscription?.price?.features?.unlimitedSeats || false;
-          const subscriptionData = {
-            id: tenant.subscription?._id || '',
-            status: tenant.status || 'trial',
-            plan: tenant.subscription?.price?.plan || tenant.plan || 'free',
-            amount: tenant.subscription?.price?.price || 0,
-            interval: tenant.subscription?.price?.interval || 'month',
-            nextBillingDate: undefined, // Not available in this response
-            seats: unlimitedSeats
-              ? 999999
-              : tenant.settings?.maxMembers || tenant.limits?.maxUsers || 1,
-            usedSeats: tenant.usage?.usersCount || 0,
-            billingCycle: tenant.subscription?.price?.interval || 'month',
-            unlimitedSeats: unlimitedSeats,
-          };
-
-          console.log(
-            '[Billing Page] Transformed subscription data:',
-            subscriptionData,
-          );
-          setSubscription(subscriptionData);
-        }
-
-        if (usageResponse.success && usageResponse.data) {
-          setUsage(usageResponse.data);
-        }
-        console.log('[Payment Methods] Response:', paymentMethodsResponse);
-        if (paymentMethodsResponse.success && paymentMethodsResponse.data) {
-          setPaymentMethods(paymentMethodsResponse.data);
-        }
-      } catch (error) {
-        console.error('Failed to fetch billing data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
+    fetchBillingData();
   }, [tenantId, session?.accessToken]);
 
   if (isLoading) {
@@ -169,46 +200,65 @@ export default function OrganizationBillingPage({
     toast.success('Payment successful! Your subscription has been updated.');
 
     // Refresh subscription and payment methods data
-    if (session?.accessToken) {
-      try {
-        const [tenantResponse, paymentMethodsResponse] = await Promise.all([
-          getCurrentTenant(),
-          getPaymentMethods(session.accessToken),
-        ]);
-
-        if (tenantResponse.success && tenantResponse.data) {
-          const tenant = tenantResponse.data;
-          const unlimitedSeats =
-            tenant.subscription?.price?.features?.unlimitedSeats || false;
-          const subscriptionData = {
-            id: tenant.subscription?._id || '',
-            status: tenant.status || 'trial',
-            plan: tenant.subscription?.price?.plan || tenant.plan || 'free',
-            amount: tenant.subscription?.price?.price || 0,
-            interval: tenant.subscription?.price?.interval || 'month',
-            nextBillingDate: undefined,
-            seats: unlimitedSeats
-              ? 999999
-              : tenant.settings?.maxMembers || tenant.limits?.maxUsers || 1,
-            usedSeats: tenant.usage?.usersCount || 0,
-            billingCycle: tenant.subscription?.price?.interval || 'month',
-            unlimitedSeats: unlimitedSeats,
-          };
-          setSubscription(subscriptionData);
-        }
-
-        if (paymentMethodsResponse.success && paymentMethodsResponse.data) {
-          setPaymentMethods(paymentMethodsResponse.data);
-        }
-      } catch (error) {
-        console.error('Failed to refresh data:', error);
-      }
-    }
+    await fetchBillingData(false);
   };
 
   const handlePaymentCancel = () => {
     setShowPaymentModal(false);
     setSelectedPlan(null);
+  };
+
+  const handleUpdateSeats = async (action: 'add' | 'remove') => {
+    if (!subscription || !session?.accessToken) return;
+
+    setIsUpdatingSeats(true);
+    const userId = session.user?.id || '';
+
+    try {
+      let response;
+      if (action === 'add') {
+        response = await addSeatToSubscription(subscription.id, userId, session.accessToken);
+      } else {
+        response = await removeSeatFromSubscription(subscription.id, userId, session.accessToken);
+      }
+
+      if (response.success) {
+        toast.success(`Seat ${action === 'add' ? 'added' : 'removed'} successfully!`);
+        await fetchBillingData(false);
+      } else {
+        toast.error(response.message || `Failed to ${action} seat`);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(`An unexpected error occurred while ${action}ing seat`);
+    } finally {
+      setIsUpdatingSeats(false);
+    }
+  };
+
+  const handleCancelSubscription = async () => {
+    if (!subscription || !session?.accessToken) return;
+
+    setIsCancelling(true);
+    try {
+      const response = await cancelAppSubscription(cancelImmediate, session.accessToken);
+      if (response.success) {
+        toast.success(
+          cancelImmediate
+            ? 'Subscription cancelled immediately'
+            : 'Subscription scheduled for cancellation at the end of the period.',
+        );
+        setShowCancelModal(false);
+        await fetchBillingData(false);
+      } else {
+        toast.error(response.message || 'Failed to cancel subscription');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('An unexpected error occurred during cancellation');
+    } finally {
+      setIsCancelling(false);
+    }
   };
 
   return (
@@ -272,6 +322,32 @@ export default function OrganizationBillingPage({
                     >
                       Change Plan
                     </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full border-neutral-700 bg-neutral-900/50 backdrop-blur-md hover:bg-neutral-800"
+                      onClick={handleManageBillingOnStripe}
+                      disabled={isLaunchingPortal}
+                    >
+                      {isLaunchingPortal ? (
+                        <Loader2 className="mr-2 size-4 animate-spin" />
+                      ) : (
+                        <CreditCard className="mr-2 size-4" />
+                      )}
+                      Manage Billing on Stripe
+                    </Button>
+                    {subscription?.status !== 'cancelled' ? (
+                      <Button
+                        variant="ghost"
+                        className="w-full text-zinc-500 hover:text-red-500 hover:bg-red-500/10 transition-colors duration-200"
+                        onClick={() => setShowCancelModal(true)}
+                      >
+                        Cancel Subscription
+                      </Button>
+                    ) : (
+                      <p className="text-red-500 text-center text-xs font-semibold">
+                        Subscription scheduled for cancellation
+                      </p>
+                    )}
                     {subscription?.nextBillingDate && (
                       <p className="text-muted-foreground text-center text-xs">
                         Next billing:{' '}
@@ -337,18 +413,64 @@ export default function OrganizationBillingPage({
                     </div>
                   )}
                 {subscription?.unlimitedSeats ? (
-                  <Button variant="outline" className="w-full">
-                    <Users className="mr-2 size-4" />
-                    Invite Team Members
+                  <Button variant="outline" className="w-full" asChild>
+                    <Link href={`/organizations/${tenantId}/members`}>
+                      <Users className="mr-2 size-4" />
+                      Invite Team Members
+                    </Link>
                   </Button>
                 ) : (
                   subscription?.seats &&
                   memberCount < subscription.seats && (
-                    <Button variant="outline" className="w-full">
-                      <Users className="mr-2 size-4" />
-                      Manage Seats
+                    <Button variant="outline" className="w-full" asChild>
+                      <Link href={`/organizations/${tenantId}/members`}>
+                        <Users className="mr-2 size-4" />
+                        Invite Team Members
+                      </Link>
                     </Button>
                   )
+                )}
+                {subscription && subscription.plan !== 'free' && !subscription.unlimitedSeats && (
+                  <div className="flex flex-col gap-2 rounded-lg border p-4 bg-zinc-500/5 backdrop-blur-md border-zinc-500/20 mt-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Subscription Seats</span>
+                      <span className="text-xs text-muted-foreground">${subscription.amount || 25}/seat/mo</span>
+                    </div>
+                    <div className="flex items-center justify-between gap-4 mt-2">
+                      <div className="flex items-center gap-3">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          disabled={isUpdatingSeats || subscription.seats <= 1 || subscription.seats <= memberCount}
+                          onClick={() => handleUpdateSeats('remove')}
+                          className="size-8"
+                        >
+                          <Minus className="size-4" />
+                        </Button>
+                        <span className="text-lg font-semibold w-8 text-center">{subscription.seats}</span>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          disabled={isUpdatingSeats}
+                          onClick={() => handleUpdateSeats('add')}
+                          className="size-8"
+                        >
+                          <Plus className="size-4" />
+                        </Button>
+                      </div>
+                      {isUpdatingSeats && (
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground animate-pulse">
+                          <Loader2 className="size-3.5 animate-spin" />
+                          Updating...
+                        </div>
+                      )}
+                    </div>
+                    {subscription.seats <= memberCount && (
+                      <p className="text-[10px] text-zinc-500 mt-1">
+                        Cannot decrease seats below active member count ({memberCount}).
+                      </p>
+                    )}
+                  </div>
                 )}
               </div>
             </CardContent>
@@ -536,6 +658,115 @@ export default function OrganizationBillingPage({
               interval: 'month',
             }}
           />
+        )}
+
+        {/* Cancellation Confirmation Modal */}
+        {showCancelModal && (
+          <div className="bg-black/60 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md transition-all duration-300">
+            <div className="bg-zinc-950/80 border border-zinc-800 relative w-full max-w-md overflow-hidden rounded-xl shadow-2xl p-6 text-zinc-100">
+              <div className="absolute top-4 right-4">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowCancelModal(false)}
+                  className="text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 size-8 rounded-full"
+                >
+                  <X className="size-4" />
+                </Button>
+              </div>
+              
+              <div className="mb-6 flex flex-col items-center text-center">
+                <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-red-500/10 border border-red-500/20 text-red-500">
+                  <X className="size-6" />
+                </div>
+                <h3 className="text-xl font-bold">Cancel Subscription</h3>
+                <p className="text-zinc-400 mt-2 text-sm">
+                  We are sorry to see you go. Please choose how you would like to cancel your subscription.
+                </p>
+              </div>
+
+              <div className="space-y-3 mb-6">
+                {/* Cancel at End of Period option */}
+                <div
+                  onClick={() => setCancelImmediate(false)}
+                  className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-all duration-200 ${
+                    !cancelImmediate
+                      ? 'bg-zinc-800/40 border-zinc-700 text-zinc-100 shadow-md shadow-zinc-950/50'
+                      : 'bg-zinc-900/20 border-zinc-800/80 text-zinc-400 hover:border-zinc-800 hover:bg-zinc-900/40'
+                  }`}
+                >
+                  <div className="flex h-5 items-center">
+                    <input
+                      type="radio"
+                      checked={!cancelImmediate}
+                      onChange={() => setCancelImmediate(false)}
+                      className="accent-zinc-100"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">Cancel at billing cycle end</p>
+                    <p className="text-xs text-zinc-500 mt-0.5">
+                      Keep your active subscription benefits until the end of your current billing period.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Cancel Immediately option */}
+                <div
+                  onClick={() => setCancelImmediate(true)}
+                  className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-all duration-200 ${
+                    cancelImmediate
+                      ? 'bg-red-950/15 border-red-900/50 text-zinc-100 shadow-md shadow-red-950/10'
+                      : 'bg-zinc-900/20 border-zinc-800/80 text-zinc-400 hover:border-zinc-800 hover:bg-zinc-900/40'
+                  }`}
+                >
+                  <div className="flex h-5 items-center">
+                    <input
+                      type="radio"
+                      checked={cancelImmediate}
+                      onChange={() => setCancelImmediate(true)}
+                      className="accent-red-500"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">Cancel immediately</p>
+                    <p className="text-xs text-zinc-500 mt-0.5">
+                      Your subscription ends immediately. Access to paid features will be revoked instantly. No refunds for unused time.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  className="w-full bg-zinc-900/50 border-zinc-800 hover:bg-zinc-800 hover:text-zinc-100"
+                  onClick={() => setShowCancelModal(false)}
+                  disabled={isCancelling}
+                >
+                  Keep Subscription
+                </Button>
+                <Button
+                  className={`w-full ${
+                    cancelImmediate
+                      ? 'bg-red-600 hover:bg-red-500 text-white'
+                      : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-950'
+                  }`}
+                  onClick={handleCancelSubscription}
+                  disabled={isCancelling}
+                >
+                  {isCancelling ? (
+                    <>
+                      <Loader2 className="mr-2 size-4 animate-spin" />
+                      Cancelling...
+                    </>
+                  ) : (
+                    'Confirm Cancellation'
+                  )}
+                </Button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </StripeProviderWithErrorBoundary>

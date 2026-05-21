@@ -57,6 +57,7 @@ export function StripeCardForm({
       },
     },
     hidePostalCode: !showPostalCode,
+    disableLink: true,
   };
 
   // Handle card element changes
@@ -96,11 +97,6 @@ export function StripeCardForm({
     <div className={cn('space-y-4', className)}>
       {/* Card Input Section */}
       <div>
-        <Label htmlFor="card-element" className="mb-2 flex items-center gap-2">
-          <CreditCard className="h-4 w-4" />
-          Card number, expiration date, and security code, all in one line
-        </Label>
-
         <div
           className={cn(
             'relative rounded-md border-2 transition-colors',

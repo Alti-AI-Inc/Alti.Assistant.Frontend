@@ -39,6 +39,7 @@ import {
   getMyPersonalSubscription,
   getMyPaymentMethods,
   cancelTenantSubscription,
+  createBillingPortalSessionAction,
   type StripePaymentMethod,
 } from '@/actions/stripeActions';
 
@@ -64,8 +65,28 @@ function BillingPageContent() {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [isLaunchingPortal, setIsLaunchingPortal] = useState(false);
 
   const accessToken = session?.accessToken as string | undefined;
+
+  const handleManageBillingOnStripe = async () => {
+    if (!accessToken) return;
+
+    setIsLaunchingPortal(true);
+    try {
+      const result = await createBillingPortalSessionAction(null, accessToken);
+      if (result.success && result.data?.url) {
+        window.location.href = result.data.url;
+      } else {
+        toast.error(result.message || 'Failed to open Stripe Customer Portal');
+      }
+    } catch (err) {
+      console.error('[BillingPage] Failed to launch portal:', err);
+      toast.error('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLaunchingPortal(false);
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -212,6 +233,20 @@ function BillingPageContent() {
                 >
                   <Zap className="mr-2 size-4" />
                   Change Plan
+                </Button>
+
+                <Button
+                  variant="outline"
+                  onClick={handleManageBillingOnStripe}
+                  disabled={isLaunchingPortal}
+                  className="border-neutral-700 bg-neutral-900/50 backdrop-blur-md hover:bg-neutral-800"
+                >
+                  {isLaunchingPortal ? (
+                    <Loader2 className="mr-2 size-4 animate-spin" />
+                  ) : (
+                    <CreditCard className="mr-2 size-4" />
+                  )}
+                  Manage Billing
                 </Button>
 
                 <AlertDialog>
