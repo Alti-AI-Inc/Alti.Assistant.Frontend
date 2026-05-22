@@ -1099,7 +1099,7 @@ export async function getTenantSubscription(
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/stripe/my-subscriptions`,
+      `${process.env.NEXT_PUBLIC_API_URL}/stripe/my-subscriptions`,
       {
         method: 'GET',
         headers: {
