@@ -9,10 +9,10 @@ import {
   PostConversationWithFile,
 } from '@/actions/conversationsAction';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useBrainstorm } from '@/hooks/useBrainstorm';
 import { useContractReview } from '@/hooks/useContractReview';
 import { useDocument } from '@/hooks/useDocument';
@@ -38,7 +38,7 @@ import {
   FileText,
   FileType,
   Image as ImageIcon,
-  Microscope,
+  Paperclip,
   Plus,
   Presentation,
   X,
@@ -254,7 +254,6 @@ const ChatInput = ({
   const { onOpen } = useModalStore();
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   // const [message, setMessage] = useState('');
 
@@ -1123,41 +1122,21 @@ const ChatInput = ({
           {/* Input container with Plus icon inside */}
           <div className="relative flex items-center gap-2 py-2">
             {!activeConversation?.knowledgebaseId && (
-              <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-                <PopoverTrigger asChild>
-                  <div className="flex cursor-pointer items-center">
-                    <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1 text-white transition-colors hover:bg-gray-800" />
-                  </div>
-                </PopoverTrigger>
-                <PopoverContent side="top" align="start" className="w-48 p-2">
-                  <div className="flex flex-col gap-1">
-                    <div
-                      onClick={() => {
-                        fileInputRef.current?.click();
-                        setIsPopoverOpen(false);
-                      }}
-                      className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100"
-                    >
-                      <FileText className="size-4" />
-                      <span className="text-sm">Add File</span>
-                    </div>
-                    <div
-                      onClick={() => {
-                        handleSelectOption(OPTIONS.RESEARCH);
-                        setIsPopoverOpen(false);
-                      }}
-                      className={cn(
-                        'flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 hover:bg-gray-100',
-                        selectedOption === OPTIONS.RESEARCH &&
-                          'bg-black text-white hover:bg-black',
-                      )}
-                    >
-                      <Microscope className="size-4" />
-                      <span className="text-sm">Deep Research</span>
-                    </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex cursor-pointer items-center"
+                    aria-label="Attach Files"
+                  >
+                    <Paperclip className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  <p>Attach Files</p>
+                </TooltipContent>
+              </Tooltip>
             )}
 
             <Textarea
