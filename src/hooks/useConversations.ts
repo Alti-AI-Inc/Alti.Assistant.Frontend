@@ -42,9 +42,10 @@ export type ConversationDetails = {
   updatedAt: string;
 };
 
-export function useConversations(accessToken?: string) {
+export function useConversations(accessToken?: string, isDeepSearch?: boolean) {
   return useInfiniteQuery<ConversationListResponse>({
-    queryKey: ['conversations', accessToken],
+    // isDeepSearch in queryKey keeps Chat and Research caches independent
+    queryKey: ['conversations', accessToken, isDeepSearch],
     initialPageParam: 1,
     queryFn: async ({ pageParam }) => {
       if (!accessToken) {
@@ -67,6 +68,7 @@ export function useConversations(accessToken?: string) {
           typeof pageParam === 'number'
             ? (pageParam as number)
             : Number(pageParam || 1),
+          isDeepSearch,
         );
         if (!response.success) {
           if (response.statusCode !== 401 && response.statusCode !== 403) {

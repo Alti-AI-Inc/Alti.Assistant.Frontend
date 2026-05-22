@@ -48,8 +48,14 @@ export default function ConversationsList({
     !!session?.accessToken &&
     !session.isTokenExpired;
 
+  // isDeepSearch drives server-side filtering: each tab hits its own API query
+  const isDeepSearch = activeTab === 'research';
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-    useConversations(canFetchConversations ? session.accessToken : undefined);
+    useConversations(
+      canFetchConversations ? session.accessToken : undefined,
+      isDeepSearch,
+    );
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 
@@ -59,14 +65,10 @@ export default function ConversationsList({
     new Map(rawConversations.map(chat => [chat._id, chat])).values(),
   );
 
-  // Filter by tab: Research tab shows deep-search conversations, Chat shows normal ones
-  const tabFiltered = conversations.filter(chat =>
-    activeTab === 'research' ? chat.is_deep_search : !chat.is_deep_search,
-  );
-
+  // Search filter only — tab filtering is done server-side via isDeepSearch
   const filteredConversations = searchQuery
-    ? tabFiltered.filter(chat => chat.title?.toLowerCase().includes(searchQuery.toLowerCase()))
-    : tabFiltered;
+    ? conversations.filter(chat => chat.title?.toLowerCase().includes(searchQuery.toLowerCase()))
+    : conversations;
 
   useEffect(() => {
     if (!hasNextPage || isFetchingNextPage) return;

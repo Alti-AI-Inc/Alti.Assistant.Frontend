@@ -150,10 +150,18 @@ export interface ConversationListResponse {
 export async function fetchConversationList(
   accessToken: string,
   page = 1,
+  isDeepSearch?: boolean,
 ): Promise<ApiResponse<ConversationListResponse>> {
   try {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: '20',
+    });
+    if (isDeepSearch !== undefined) {
+      params.set('is_deep_search', String(isDeepSearch));
+    }
     const res = await apiClient(
-      `${process.env.NEXT_PUBLIC_API_URL}/conversations?page=${page}&limit=20`,
+      `${process.env.NEXT_PUBLIC_API_URL}/conversations?${params.toString()}`,
       {
         method: 'GET',
         headers: {
