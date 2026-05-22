@@ -127,6 +127,7 @@ export interface Conversation {
   conversationId: string;
   title: string;
   is_saved?: boolean;
+  is_deep_search?: boolean;
   updatedAt: string;
   createdAt: string;
   messages?: ConversationMessage[];
