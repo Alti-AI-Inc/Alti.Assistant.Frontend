@@ -356,26 +356,31 @@ export function PaymentConfirmationModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl">Confirm Payment</DialogTitle>
-          <DialogDescription>
+      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto backdrop-blur-2xl bg-white/70 dark:bg-zinc-950/80 border border-white/30 dark:border-zinc-800/80 shadow-2xl rounded-2xl">
+        <DialogHeader className="pb-2">
+          <DialogTitle className="text-2xl font-extrabold bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
+            Confirm Payment
+          </DialogTitle>
+          <DialogDescription className="text-zinc-500 dark:text-zinc-400 text-sm">
             Complete your subscription to {plan.name}
           </DialogDescription>
         </DialogHeader>
 
         {/* Plan Summary */}
-        <div className="border-primary/20 bg-primary/5 rounded-lg border-2 p-4">
+        <div className="backdrop-blur-md bg-white/40 dark:bg-zinc-900/30 border border-white/50 dark:border-zinc-800/50 rounded-xl p-5 shadow-lg relative overflow-hidden">
+          <div className="absolute top-0 right-0 h-32 w-32 bg-indigo-500/5 rounded-full blur-2xl -z-10" />
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold">{plan.name}</h3>
-              <p className="text-muted-foreground text-sm">
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-white">{plan.name} Plan</h3>
+              <p className="text-zinc-500 dark:text-zinc-400 text-xs mt-0.5">
                 Billed {plan.interval || 'monthly'}
               </p>
             </div>
             <div className="text-right">
-              <div className="text-3xl font-bold">${plan.price}</div>
-              <div className="text-muted-foreground text-xs">
+              <div className="text-3xl font-black bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400 bg-clip-text text-transparent">
+                ${plan.price}
+              </div>
+              <div className="text-zinc-400 dark:text-zinc-500 text-xs font-semibold">
                 /{plan.interval || 'month'}
               </div>
             </div>
@@ -383,12 +388,15 @@ export function PaymentConfirmationModal({
         </div>
 
         {/* Main Content Wrapper - relative positioning for overlay */}
-        <div className="relative">
+        <div className="relative mt-2">
           {/* Loading State */}
           {step === 'loading' && (
-            <div className="flex flex-col items-center justify-center py-12">
-              <Loader2 className="text-primary mb-4 h-10 w-10 animate-spin" />
-              <p className="text-muted-foreground text-sm">
+            <div className="flex flex-col items-center justify-center py-16">
+              <div className="relative flex items-center justify-center">
+                <div className="h-12 w-12 rounded-full border-4 border-indigo-500/10 border-t-indigo-500 animate-spin" />
+                <div className="absolute h-6 w-6 rounded-full bg-indigo-500/5 blur-xs" />
+              </div>
+              <p className="text-zinc-600 dark:text-zinc-400 text-sm mt-4 font-medium">
                 Loading payment methods...
               </p>
             </div>
@@ -413,10 +421,10 @@ export function PaymentConfirmationModal({
                 <Button
                   variant="ghost"
                   onClick={handleBackToSelection}
-                  className="gap-2"
+                  className="gap-2 text-zinc-600 dark:text-zinc-400 hover:bg-black/5 dark:hover:bg-white/5 transition-all text-xs font-semibold"
                   disabled={step === 'processing'}
                 >
-                  <ArrowLeft className="h-4 w-4" />
+                  <ArrowLeft className="h-3.5 w-3.5" />
                   Back to saved cards
                 </Button>
               )}
@@ -431,13 +439,16 @@ export function PaymentConfirmationModal({
 
           {/* Processing Overlay - shown on top of add_card step */}
           {step === 'processing' && (
-            <div className="bg-background/95 absolute inset-0 z-10 flex flex-col items-center justify-center rounded-lg backdrop-blur-sm">
-              <Loader2 className="text-primary mb-4 h-10 w-10 animate-spin" />
-              <p className="text-muted-foreground text-sm">
+            <div className="bg-white/80 dark:bg-zinc-950/80 absolute inset-0 z-10 flex flex-col items-center justify-center rounded-xl backdrop-blur-md">
+              <div className="relative flex items-center justify-center">
+                <div className="h-12 w-12 rounded-full border-4 border-indigo-500/10 border-t-indigo-500 animate-spin" />
+                <div className="absolute h-8 w-8 rounded-full bg-indigo-500/10 animate-ping" />
+              </div>
+              <p className="text-zinc-800 dark:text-zinc-200 font-semibold text-sm mt-5">
                 {processingMessage}
               </p>
-              <p className="text-muted-foreground mt-2 text-xs">
-                Please wait...
+              <p className="text-zinc-500 dark:text-zinc-400 mt-1.5 text-xs">
+                Please wait, do not close or refresh this page...
               </p>
             </div>
           )}
@@ -445,13 +456,13 @@ export function PaymentConfirmationModal({
           {/* Success State */}
           {step === 'success' && (
             <div className="flex flex-col items-center justify-center py-12">
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-                <CheckCircle2 className="h-10 w-10 text-green-600" />
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500 dark:bg-emerald-500/20 dark:text-emerald-400 border border-emerald-500/20 animate-bounce">
+                <CheckCircle2 className="h-9 w-9" />
               </div>
-              <h3 className="mb-2 text-xl font-semibold">
+              <h3 className="mb-1 text-xl font-bold text-zinc-900 dark:text-white">
                 Payment Successful!
               </h3>
-              <p className="text-muted-foreground text-center text-sm">
+              <p className="text-zinc-500 dark:text-zinc-400 text-center text-sm">
                 Your subscription has been activated. Redirecting...
               </p>
             </div>
@@ -461,32 +472,36 @@ export function PaymentConfirmationModal({
 
         {/* Error State */}
         {step === 'error' && (
-          <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/50 dark:text-red-200">
+          <div className="flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/5 p-4 text-sm text-red-600 dark:text-red-400">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-            <p>{error}</p>
+            <p className="font-medium leading-relaxed">{error}</p>
           </div>
         )}
 
         {/* Error Message (inline) */}
         {error && step !== 'error' && (
-          <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/50 dark:text-red-200">
+          <div className="flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/5 p-4 text-sm text-red-600 dark:text-red-400 mt-2">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-            <p>{error}</p>
+            <p className="font-medium leading-relaxed">{error}</p>
           </div>
         )}
 
         {/* Action Buttons */}
         {step !== 'loading' && step !== 'processing' && step !== 'success' && (
-          <div className="flex gap-3 pt-2">
-            <Button variant="outline" onClick={handleClose} className="flex-1">
+          <div className="flex gap-3 pt-4 border-t border-black/5 dark:border-white/5 mt-4">
+            <Button
+              variant="outline"
+              onClick={handleClose}
+              className="flex-1 py-6 rounded-xl border border-black/10 dark:border-white/10 bg-transparent text-zinc-700 dark:text-zinc-300 hover:bg-black/5 dark:hover:bg-white/5 font-semibold text-sm transition-all"
+            >
               Cancel
             </Button>
             <Button
               onClick={handleConfirm}
-              className="flex-1"
+              className="flex-1 py-6 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-lg hover:shadow-indigo-500/25 transition-all border-none disabled:bg-zinc-100 disabled:text-zinc-400 dark:disabled:bg-zinc-800/50 dark:disabled:text-zinc-600"
               disabled={!canConfirm}
             >
-              Confirm Payment - ${plan.price}
+              Confirm & Pay ${plan.price}
             </Button>
           </div>
         )}

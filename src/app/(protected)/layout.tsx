@@ -20,6 +20,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import { motion } from 'framer-motion';
+
 export default function ProtectedLayout({
   children,
 }: Readonly<{
@@ -95,20 +97,23 @@ export default function ProtectedLayout({
       {/* Body */}
       <div className="relative flex flex-1">
         {/* Left Sidebar - Desktop */}
-        <div
-          className={cn(
-            'sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out sm:hidden md:flex',
-            isLeftSidebarOpen ? 'w-68' : 'w-10',
-          )}
-          style={{ backgroundColor: '#F2F3F5' }}
+        <motion.div
+          animate={{
+            width: isLeftSidebarOpen ? '272px' : '40px',
+          }}
+          transition={{
+            type: 'spring',
+            stiffness: 280,
+            damping: 30,
+          }}
+          className="sticky top-0 left-0 hidden h-screen flex-col overflow-hidden sm:hidden md:flex bg-[#F2F3F5] dark:bg-zinc-900 border-r border-black/5 dark:border-zinc-800 transition-colors duration-300"
         >
           <LeftSideNav />
-        </div>
+        </motion.div>
 
         {/* Main content */}
         <main
-          className="bg-background w-full flex-1 overflow-y-auto"
-          style={{ backgroundColor: '#FFFFFF' }}
+          className="bg-background w-full flex-1 overflow-y-auto dark:bg-zinc-950 transition-colors duration-300"
         >
           {children}
         </main>
