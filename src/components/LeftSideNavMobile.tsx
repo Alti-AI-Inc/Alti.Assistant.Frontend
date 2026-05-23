@@ -27,15 +27,18 @@ import {
   SquarePen,
   User,
   Users,
+  ChevronRight,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import ConversationsList from './ConversationsList';
 import { TenantModeSwitcher } from './TenantModeSwitcher';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { allApps } from '@/lib/all-apps';
+import { apiClientJson, buildApiUrl } from '@/lib/api-client';
 
 type SidebarTab = 'chat' | 'research' | 'apps';
 
@@ -56,6 +59,42 @@ const LeftSideNavMobile = () => {
 
   const isLoggedIn = data?.accessToken;
   const [activeTab, setActiveTab] = useState<SidebarTab>('chat');
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchParams = useSearchParams();
+  const activeAppSlug = searchParams?.get('app');
+
+  const [connectedAppSlugs, setConnectedAppSlugs] = useState<Set<string>>(new Set());
+  const [isFetchingStatus, setIsFetchingStatus] = useState(false);
+
+  const fetchConnectionStatus = async () => {
+    setIsFetchingStatus(true);
+    const response = await apiClientJson<{ connectedAccountId: string; toolkit: { slug: string } }[]>(
+      buildApiUrl('/composio-simple/connected-accounts')
+    );
+    
+    if (response.success && Array.isArray(response.data)) {
+      const activeSlugs = new Set(
+        response.data.map(account => account.toolkit?.slug?.toLowerCase()).filter(Boolean)
+      );
+      setConnectedAppSlugs(activeSlugs);
+    }
+    setIsFetchingStatus(false);
+  };
+
+  useEffect(() => {
+    if (activeTab === 'apps') {
+      fetchConnectionStatus();
+    }
+  }, [activeTab]);
+
+  const availableComposioApps = allApps
+    .filter(app => app.isAvailable && app.app_name)
+    .sort((a, b) => a.title.localeCompare(b.title));
+
+  const filteredApps = availableComposioApps.filter(app =>
+    app.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    app.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     if (pathname === '/apps') {
@@ -240,9 +279,9 @@ const LeftSideNavMobile = () => {
           <div className="mt-3 mb-2 flex items-center justify-between px-1">
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
               <span>
-                {activeTab === 'research' ? 'Research History' : 'Chat History'}
+                {activeTab === 'research' ? 'Research History' : activeTab === 'apps' ? 'Composio Apps' : 'Chat History'}
               </span>
-              {mode === UserMode.TENANT && currentTenant && (
+              {activeTab !== 'apps' && mode === UserMode.TENANT && currentTenant && (
                 <Badge
                   variant="outline"
                   className="h-4 px-1.5 text-[9px] font-normal border-gray-400 text-gray-500 bg-transparent"
@@ -251,7 +290,7 @@ const LeftSideNavMobile = () => {
                   {currentTenant.name}
                 </Badge>
               )}
-              {mode === UserMode.PERSONAL && (
+              {activeTab !== 'apps' && mode === UserMode.PERSONAL && (
                 <Badge
                   variant="outline"
                   className="h-4 px-1.5 text-[9px] font-normal border-gray-400 text-gray-500 bg-transparent"
@@ -261,26 +300,110 @@ const LeftSideNavMobile = () => {
                 </Badge>
               )}
             </div>
-            <div className="flex items-center space-x-2.5">
-              <Bookmark
-                onClick={() => {
-                  router.push('/saved-chats');
-                  close();
-                }}
-                className="size-3.5 cursor-pointer text-gray-500 hover:text-black transition-colors"
-              />
-              <Search
-                onClick={() => {
-                  onOpen({
-                    type: 'search-chats',
-                  });
-                  close();
-                }}
-                className="size-3.5 cursor-pointer text-gray-500 hover:text-black transition-colors"
-              />
-            </div>
+            {activeTab === 'apps' ? (
+              <div className="flex h-7 flex-1 items-center gap-1.5 rounded-lg border border-black/10 bg-white px-2 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 ml-4 max-w-[150px]">
+                <Search className="size-3 text-black" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-transparent text-[11px] text-black outline-none placeholder:text-gray-500"
+                />
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2.5">
+                <Bookmark
+                  onClick={() => {
+                    router.push('/saved-chats');
+                    close();
+                  }}
+                  className="size-3.5 cursor-pointer text-gray-500 hover:text-black transition-colors"
+                />
+                <Search
+                  onClick={() => {
+                    onOpen({
+                      type: 'search-chats',
+                    });
+                    close();
+                  }}
+                  className="size-3.5 cursor-pointer text-gray-500 hover:text-black transition-colors"
+                />
+              </div>
+            )}
           </div>
-          <ConversationsList activeTab={activeTab === 'apps' ? 'chat' : activeTab} />
+          {activeTab === 'apps' ? (
+            <div className="space-y-1 py-1 pb-4">
+              {filteredApps.length === 0 ? (
+                <div className="py-4 text-center text-xs text-gray-500">
+                  No integrations found.
+                </div>
+              ) : (
+                filteredApps.map(app => {
+                  const isConnected = connectedAppSlugs.has(app.app_name.toLowerCase());
+                  const isSelected = activeAppSlug === app.app_name;
+                  
+                  return (
+                    <button
+                      key={app.app_name}
+                      onClick={() => {
+                        router.push(`/apps?app=${app.app_name}`);
+                        close();
+                      }}
+                      className={cn(
+                        "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
+                        isSelected 
+                          ? "bg-black/[0.06] border border-black/10 shadow-xs" 
+                          : "hover:bg-black/[0.03] border border-transparent"
+                      )}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        {/* App Logo with Fallback */}
+                        <div className="relative flex-none h-7 w-7 rounded-md overflow-hidden border border-black/10 bg-white p-1 flex items-center justify-center">
+                          {app.image ? (
+                            <img 
+                              src={app.image} 
+                              alt={app.title} 
+                              className="h-full w-full object-contain"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                e.currentTarget.parentElement!.innerHTML = `<span class="text-xs font-semibold text-blue-600">${app.title.charAt(0)}</span>`;
+                              }}
+                            />
+                          ) : (
+                            <span className="text-xs font-semibold text-blue-600">{app.title.charAt(0)}</span>
+                          )}
+                        </div>
+
+                        <div className="min-w-0">
+                          <h4 className={cn(
+                            "text-xs font-semibold truncate",
+                            isSelected ? "text-blue-600 font-bold" : "text-gray-950"
+                          )}>
+                            {app.title}
+                          </h4>
+                          <p className="text-[10px] text-gray-500 truncate max-w-[130px]">
+                            {app.description}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Right hand Status dot indicators */}
+                      <div className="flex items-center gap-1">
+                        {isConnected ? (
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Connected" />
+                        ) : (
+                          <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:translate-x-0.5 transition-transform" />
+                        )}
+                      </div>
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          ) : (
+            <ConversationsList activeTab={activeTab === 'apps' ? 'chat' : activeTab} />
+          )}
         </div>
       )}
 

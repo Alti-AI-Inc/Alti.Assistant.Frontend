@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { allApps, APP } from '@/lib/all-apps';
 import { apiClientJson, buildApiUrl } from '@/lib/api-client';
 import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { 
   Search, MessageSquare, Shield, CheckCircle, AlertTriangle, 
   ArrowRight, Key, ExternalLink, RefreshCw, Send, Sparkles, 
@@ -22,8 +23,10 @@ interface ChatMessage {
 
 export const AppsPanelsContainer = () => {
   // --- States ---
+  const searchParams = useSearchParams();
+  const activeAppSlug = searchParams?.get('app');
+
   const [selectedApp, setSelectedApp] = useState<APP | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const [connectedAppSlugs, setConnectedAppSlugs] = useState<Set<string>>(new Set());
   const [isFetchingStatus, setIsFetchingStatus] = useState(true);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -37,16 +40,18 @@ export const AppsPanelsContainer = () => {
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // --- Filter and Sort Apps ---
-  // Get all apps that are available in Composio and sort them in perfect alphabetical order
-  const availableComposioApps = allApps
-    .filter(app => app.isAvailable && app.app_name)
-    .sort((a, b) => a.title.localeCompare(b.title));
-
-  const filteredApps = availableComposioApps.filter(app =>
-    app.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    app.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    if (activeAppSlug) {
+      const match = allApps.find(app => app.app_name.toLowerCase() === activeAppSlug.toLowerCase() && app.isAvailable);
+      if (match) {
+        setSelectedApp(match);
+      } else {
+        setSelectedApp(null);
+      }
+    } else {
+      setSelectedApp(null);
+    }
+  }, [activeAppSlug]);
 
   // --- Fetch Connected Status ---
   const fetchConnectionStatus = async () => {
@@ -258,111 +263,6 @@ export const AppsPanelsContainer = () => {
   return (
     <div className="flex h-full w-full flex-row overflow-hidden bg-gray-50 dark:bg-gray-950">
       
-      {/* =========================================================
-          LEFT PANEL - CURATED ALPHABETICAL APP SELECTOR (320px)
-          ========================================================= */}
-      <aside className="flex w-80 flex-none flex-col border-r border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-        
-        {/* Header Title & Search Sticky Area */}
-        <div className="p-4 border-b border-gray-150 dark:border-gray-800">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-50 flex items-center gap-2">
-              <Activity className="h-4 w-4 text-blue-500 animate-pulse" />
-              Composio Apps
-            </h2>
-            <Button
-              onClick={fetchConnectionStatus}
-              size="icon"
-              variant="ghost"
-              className="h-8 w-8 hover:bg-gray-100 dark:hover:bg-gray-800"
-              title="Refresh status"
-              disabled={isFetchingStatus}
-            >
-              <RefreshCw className={`h-3.5 w-3.5 ${isFetchingStatus ? 'animate-spin' : ''}`} />
-            </Button>
-          </div>
-          
-          <div className="relative">
-            <Search className="absolute top-2.5 left-3 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Search all 70+ apps..."
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              className="pl-9 h-9 text-sm rounded-lg bg-gray-50 border-gray-200 dark:border-gray-800 dark:bg-gray-950"
-            />
-          </div>
-        </div>
-
-        {/* Scrollable list of apps sorted alphabetically */}
-        <div className="flex-1 overflow-y-auto p-2 space-y-1">
-          {filteredApps.length === 0 ? (
-            <div className="py-8 text-center text-sm text-gray-500 dark:text-gray-400">
-              No integrations found matching query.
-            </div>
-          ) : (
-            filteredApps.map(app => {
-              const isConnected = connectedAppSlugs.has(app.app_name.toLowerCase());
-              const isSelected = selectedApp?.app_name === app.app_name;
-              
-              return (
-                <button
-                  key={app.app_name}
-                  onClick={() => {
-                    setSelectedApp(app);
-                    setConnectionError(null);
-                  }}
-                  className={`w-full flex items-center justify-between rounded-lg p-2.5 transition-all text-left group ${
-                    isSelected 
-                      ? 'bg-blue-50/70 border border-blue-200 dark:bg-blue-950/20 dark:border-blue-900' 
-                      : 'hover:bg-gray-100/50 dark:hover:bg-gray-800/40 border border-transparent'
-                  }`}
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    {/* App Logo with Fallback */}
-                    <div className="relative flex-none h-9 w-9 rounded-lg overflow-hidden border border-gray-150 bg-white p-1.5 flex items-center justify-center dark:border-gray-800">
-                      {app.image ? (
-                        <img 
-                          src={app.image} 
-                          alt={app.title} 
-                          className="h-full w-full object-contain"
-                          onError={(e) => {
-                            // Replace with visual placeholder letter
-                            e.currentTarget.style.display = 'none';
-                            e.currentTarget.parentElement!.innerHTML = `<span class="text-sm font-semibold text-blue-600">${app.title.charAt(0)}</span>`;
-                          }}
-                        />
-                      ) : (
-                        <span className="text-sm font-semibold text-blue-600">{app.title.charAt(0)}</span>
-                      )}
-                    </div>
-
-                    <div className="min-w-0">
-                      <h4 className={`text-sm font-semibold truncate ${
-                        isSelected ? 'text-blue-600 dark:text-blue-400' : 'text-gray-900 dark:text-gray-100'
-                      }`}>
-                        {app.title}
-                      </h4>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[140px]">
-                        {app.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Right hand Status dot indicators */}
-                  <div className="flex items-center gap-1">
-                    {isConnected ? (
-                      <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" title="Connected" />
-                    ) : (
-                      <ChevronRight className="h-4 w-4 text-gray-400 group-hover:translate-x-0.5 transition-transform" />
-                    )}
-                  </div>
-                </button>
-              );
-            })
-          )}
-        </div>
-      </aside>
-
       {/* =========================================================
           RIGHT WORKSPACE - ACTIVE DETAIL OR CHATVIEW CONSOLE
           ========================================================= */}
