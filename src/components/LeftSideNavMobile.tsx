@@ -582,19 +582,7 @@ const LeftSideNavMobile = () => {
                   className="w-full bg-transparent text-[11px] text-black outline-none placeholder:text-gray-500"
                 />
               </div>
-            ) : activeTab === 'bots' ? (
-              <button
-                type="button"
-                onClick={() => {
-                  onOpen({ type: 'add-chatbot' });
-                  close();
-                }}
-                className="flex h-5 w-5 items-center justify-center rounded-md bg-black/5 hover:bg-black/10 text-black transition-colors"
-                title="New Agent"
-              >
-                <Plus className="size-3.5" />
-              </button>
-            ) : (
+            ) : activeTab === 'bots' ? null : (
               <Search
                 onClick={() => {
                   onOpen({
