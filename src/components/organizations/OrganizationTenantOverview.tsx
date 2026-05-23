@@ -356,6 +356,7 @@ export function OrganizationTenantOverview({
         _id: `invite-${inv.id}`,
         email: inv.email,
       },
+      tenantId: inv.tenantId || selectedTenantId,
       role: inv.role,
       tenantRole: inv.role,
       status: 'pending',

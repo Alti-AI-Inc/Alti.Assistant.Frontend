@@ -293,7 +293,7 @@ const LeftSideNavMobile = () => {
       {/* Scrollable conversation list */}
       {isLoggedIn && (
         <div className="flex-1 overflow-y-auto px-4 pb-4">
-          <ConversationsList activeTab={activeTab} />
+          <ConversationsList activeTab={activeTab === 'apps' ? 'chat' : activeTab} />
         </div>
       )}
 

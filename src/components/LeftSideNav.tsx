@@ -262,7 +262,7 @@ const LeftSideNav = () => {
           )}
           style={{ backgroundColor: '#F2F3F5' }}
         >
-          <ConversationsList searchQuery={searchQuery} activeTab={activeTab} />
+          <ConversationsList searchQuery={searchQuery} activeTab={activeTab === 'apps' ? 'chat' : activeTab} />
         </div>
       )}
 
