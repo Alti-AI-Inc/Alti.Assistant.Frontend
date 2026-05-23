@@ -26,7 +26,6 @@ import {
   Search,
   Settings,
   SquarePen,
-  SquareUserRound,
   User,
   Users,
   ChevronRight,
@@ -521,15 +520,6 @@ const LeftSideNav = () => {
                   }
                 >
                   <Users className="text-black" /> Members
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() =>
-                    onOpen({
-                      type: 'invite',
-                    })
-                  }
-                >
-                  <SquareUserRound className="text-black" /> Invite
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/legal')}>
                   <Scale className="text-black" /> Legal

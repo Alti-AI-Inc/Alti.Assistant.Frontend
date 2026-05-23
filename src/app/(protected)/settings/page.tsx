@@ -1,84 +1,30 @@
 'use client';
 
 import ChangePassword from '@/components/ChangePassword';
+import SendInviteButton from '@/components/SendInviteButton';
 import { SettingsSidebar } from '@/components/sidebars/SettingsSidebar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useTenant } from '@/contexts/TenantContext';
-import { UserMode } from '@/types/tenant';
 import {
-  Building2,
   Brain,
   SlidersHorizontal,
   ShieldCheck,
   Sparkles,
   AlertCircle,
   Settings,
+  UserPlus,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 const Page = () => {
   const [selectedOption, setSelectedOption] = useState('memory');
-  const { mode, currentTenant } = useTenant();
-  const router = useRouter();
-
-  // Redirect to organization settings if in tenant mode
-  useEffect(() => {
-    if (mode === UserMode.TENANT && currentTenant) {
-      router.push(`/organizations/${currentTenant.id}/settings`);
-    }
-  }, [mode, currentTenant, router]);
-
-  // Show organization settings redirect message if in tenant mode
-  if (mode === UserMode.TENANT && currentTenant) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center p-6">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building2 className="size-5" />
-              Organization Mode Active
-            </CardTitle>
-            <CardDescription>
-              You&apos;re currently in {currentTenant.name} organization mode.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-gray-600">
-              To configure organization settings, visit the organization
-              settings page.
-            </p>
-            <div className="flex flex-col gap-2">
-              <Button
-                onClick={() =>
-                  router.push(`/organizations/${currentTenant.id}/settings`)
-                }
-              >
-                Go to Organization Settings
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => router.push('/organizations')}
-              >
-                View All Organizations
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-white dark:bg-gray-900">
@@ -107,6 +53,7 @@ const Page = () => {
             {selectedOption === 'instructions' && <Instructions />}
             {selectedOption === 'guardrails' && <Guardrails />}
             {selectedOption === 'password' && <ChangePassword />}
+            {selectedOption === 'invite' && <Invite />}
           </div>
         </div>
       </div>
@@ -300,6 +247,51 @@ const Guardrails = () => {
                 'Save Guardrails'
               )}
             </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+const Invite = () => {
+  const [email, setEmail] = useState('');
+
+  return (
+    <div className="max-w-2xl space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2">
+          <UserPlus className="size-6 text-indigo-600" />
+          Invite Friends
+        </h1>
+        <p className="text-muted-foreground mt-2 text-sm">
+          Invite your friends or team members to join Alti and collaborate seamlessly on tasks, research, and workflows.
+        </p>
+      </div>
+
+      <Card className="border border-black/10 shadow-xs bg-white dark:bg-gray-800">
+        <CardContent className="pt-6 space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="friend-email" className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+              Email Address
+            </Label>
+            <div className="relative flex items-center">
+              <input
+                id="friend-email"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="Enter email address"
+                className="w-full h-10 rounded-lg border border-black/10 bg-gray-50/50 px-4 pr-32 text-sm text-gray-800 placeholder-gray-400 shadow-inner focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 outline-none transition-all"
+              />
+              <div className="absolute right-1">
+                <SendInviteButton
+                  content={email}
+                  className="h-8 px-4 text-xs font-semibold bg-indigo-650 hover:bg-indigo-700 text-white rounded-md shadow-sm transition-all"
+                  onClose={() => setEmail('')}
+                />
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
