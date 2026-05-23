@@ -168,12 +168,7 @@ export function AuthModal() {
         {view === 'login' && !showVerification && (
           <div className="flex flex-col gap-4 p-4">
             <p className="pb-4 text-center text-3xl font-semibold">Login</p>
-<<<<<<< Updated upstream
-=======
 
-
-
->>>>>>> Stashed changes
             <Form {...loginForm}>
               <form
                 onSubmit={loginForm.handleSubmit(onLoginSubmit)}
