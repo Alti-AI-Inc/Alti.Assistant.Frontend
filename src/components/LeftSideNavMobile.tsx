@@ -314,7 +314,7 @@ const LeftSideNavMobile = () => {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Deep Research</p>
+                <p>Research</p>
               </TooltipContent>
             </Tooltip>
 
@@ -354,7 +354,7 @@ const LeftSideNavMobile = () => {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Data & RAG</p>
+                <p>Data</p>
               </TooltipContent>
             </Tooltip>
 
@@ -374,7 +374,7 @@ const LeftSideNavMobile = () => {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>App Integrations</p>
+                <p>Apps</p>
               </TooltipContent>
             </Tooltip>
           </div>
