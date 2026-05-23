@@ -4,6 +4,7 @@ substitutions:
   _ARTIFACT_REPO: alti-assistant
   # Override these when triggering the build, or set in trigger config
   _NEXT_PUBLIC_API_URL: https://your-api-url/api/v1
+  _NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_placeholder
 
 steps:
   # Build the container image
