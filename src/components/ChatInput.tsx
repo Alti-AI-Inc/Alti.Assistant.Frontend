@@ -1128,13 +1128,13 @@ const ChatInput = ({
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
                     className="flex cursor-pointer items-center"
-                    aria-label="Attach Files"
+                    aria-label="Attach File"
                   >
                     <Paperclip className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="top">
-                  <p>Attach Files</p>
+                  <p>Attach File</p>
                 </TooltipContent>
               </Tooltip>
             )}

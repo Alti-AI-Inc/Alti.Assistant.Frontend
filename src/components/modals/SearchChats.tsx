@@ -38,7 +38,7 @@ const SearchChats = () => {
             <Input
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              placeholder="Search chats..."
+              placeholder="Search..."
               className="w-full border-0 px-3 py-2 shadow-none focus:ring-0 focus-visible:ring-0"
             />
             {/* <Separator className="mt-4 w-full" /> */}
