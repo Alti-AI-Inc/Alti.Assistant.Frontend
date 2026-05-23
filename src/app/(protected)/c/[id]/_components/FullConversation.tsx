@@ -181,19 +181,27 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
   // Auto-scroll to bottom function
   const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
-    if (behavior === 'auto' && messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop =
-        messagesContainerRef.current.scrollHeight;
-      return;
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior,
+      });
     }
-    messagesEndRef.current?.scrollIntoView({ behavior });
   };
 
   const scrollToLastUserMessage = () => {
-    lastMessageRef.current?.scrollIntoView({
-      block: 'start',
-      behavior: 'smooth',
-    });
+    if (messagesContainerRef.current && lastMessageRef.current) {
+      const container = messagesContainerRef.current;
+      const element = lastMessageRef.current;
+      const containerRect = container.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+      const relativeTop = elementRect.top - containerRect.top + container.scrollTop;
+
+      container.scrollTo({
+        top: relativeTop,
+        behavior: 'smooth',
+      });
+    }
   };
 
   // Auto-scroll when messages change or loading state changes
@@ -456,12 +464,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     <div
       className={cn(
         'flex w-full flex-col',
-        // (activeConversation?.messages.length || drafting.isActive) &&
-        activeConversation?.messages.length &&
+        (activeConversation?.messages.length || isLoadingResponse) &&
           'h-[calc(100vh-70px)] lg:h-screen',
         isLoading && 'h-[calc(100vh-70px)] lg:h-screen',
-        // conversationId !== 'new-chat' && 'pb-24',
-        // pathname === '/' && !activeConversation?.messages.length && 'pb-24',
       )}
     >
       <div
