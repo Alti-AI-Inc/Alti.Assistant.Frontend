@@ -1,6 +1,6 @@
 'use client';
 
-import { getTenantUserCount, getUserTenants } from '@/actions/tenantActions';
+import { getTenantUserCount, getUserTenants, createTenant } from '@/actions/tenantActions';
 import { TenantModeSwitcher } from '@/components/TenantModeSwitcher';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -47,6 +47,22 @@ export default function OrganizationsPage() {
           if (list.length > 0) {
             router.replace(`/organizations/${list[0].id}/members`);
             return;
+          }
+
+          // If no team exists, automatically create one in the background
+          try {
+            const uniqueSlug = `team-${Math.random().toString(36).substring(2, 8)}`;
+            const createRes = await createTenant({
+              name: 'My Workspace',
+              slug: uniqueSlug,
+              subdomain: uniqueSlug,
+            });
+            if (!cancelled && createRes.success && createRes.data) {
+              router.replace(`/organizations/${createRes.data.id}/members`);
+              return;
+            }
+          } catch (err) {
+            console.error('Failed to auto-create default team:', err);
           }
 
           setOrganizations([]);

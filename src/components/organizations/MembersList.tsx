@@ -1,6 +1,6 @@
 'use client';
 
-import { removeMember } from '@/actions/memberActions';
+import { removeMember, cancelInvitation } from '@/actions/memberActions';
 import {
   Table,
   TableBody,
@@ -35,10 +35,27 @@ import { MemberRoleSelector } from './MemberRoleSelector';
 import type { TenantMember } from '@/types/tenant';
 
 interface MembersListProps {
-  members: TenantMember[];
+  members: (TenantMember & { isInvitation?: boolean; firstName?: string; lastName?: string })[];
   tenantId: string;
   onUpdate: () => void | Promise<void>;
 }
+
+// LocalStorage helper for display names
+const getInvitedName = (email: string) => {
+  if (typeof window === 'undefined') return { firstName: '', lastName: '' };
+  try {
+    const saved = localStorage.getItem('alti_invited_names');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed[email.toLowerCase()]) {
+        return parsed[email.toLowerCase()];
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  return { firstName: '', lastName: '' };
+};
 
 function MembersListComponent({
   members,
@@ -46,9 +63,7 @@ function MembersListComponent({
   onUpdate,
 }: MembersListProps) {
   const { data: session } = useSession();
-  const [memberToRemove, setMemberToRemove] = useState<TenantMember | null>(
-    null,
-  );
+  const [memberToRemove, setMemberToRemove] = useState<any | null>(null);
   const [isRemoving, setIsRemoving] = useState(false);
 
   const tenantMembership = session?.user?.tenants?.find(
@@ -67,18 +82,23 @@ function MembersListComponent({
 
     setIsRemoving(true);
     try {
-      const response = await removeMember(memberToRemove.userId._id);
+      let response;
+      if (memberToRemove.isInvitation) {
+        response = await cancelInvitation(memberToRemove._id);
+      } else {
+        response = await removeMember(memberToRemove.userId._id);
+      }
 
       if (response.success) {
-        toast.success('Member removed successfully');
+        toast.success(memberToRemove.isInvitation ? 'Invitation canceled successfully' : 'Member removed successfully');
         setMemberToRemove(null);
         onUpdate();
       } else {
-        toast.error(response.message || 'Failed to remove member');
+        toast.error(response.message || 'Failed to remove');
       }
     } catch (error) {
       console.error('Failed to remove member:', error);
-      toast.error('An error occurred while removing the member');
+      toast.error('An error occurred while removing');
     } finally {
       setIsRemoving(false);
     }
@@ -97,7 +117,7 @@ function MembersListComponent({
 
   if (members.length === 0) {
     return (
-      <div className="text-muted-foreground py-8 text-center">
+      <div className="text-muted-foreground py-8 text-center text-xs">
         No members found
       </div>
     );
@@ -105,15 +125,15 @@ function MembersListComponent({
 
   return (
     <>
-      <div className="rounded-md border">
+      <div className="rounded-lg border border-black/10 bg-white overflow-hidden">
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Email</TableHead>
-              <TableHead>Joined</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Status</TableHead>
-              {isTenantOwner && <TableHead className="w-[50px]"></TableHead>}
+          <TableHeader className="bg-black/[0.02]">
+            <TableRow className="border-black/5">
+              <TableHead className="text-black font-semibold text-xs py-3">First Name</TableHead>
+              <TableHead className="text-black font-semibold text-xs py-3">Last Name</TableHead>
+              <TableHead className="text-black font-semibold text-xs py-3">Email Address</TableHead>
+              <TableHead className="text-black font-semibold text-xs py-3">User Role</TableHead>
+              {isTenantOwner && <TableHead className="w-[50px] py-3"></TableHead>}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -123,31 +143,42 @@ function MembersListComponent({
                 const userId = member.userId._id;
                 const email = member.userId.email;
                 const isCurrentUser = userId === session?.user?.id;
+                const isInvitation = member.isInvitation || member.status === 'pending';
                 const memberRole = String(
                   member.tenantRole ?? member.role ?? 'member',
                 ).toLowerCase();
-                const canModify = isTenantOwner && !isCurrentUser;
+                
+                // Retrieve names with lookups
+                const nameInfo = getInvitedName(email);
+                const firstName = member.firstName || nameInfo.firstName || (isCurrentUser ? session?.user?.name?.split(' ')[0] : '') || '—';
+                const lastName = member.lastName || nameInfo.lastName || (isCurrentUser ? session?.user?.name?.split(' ').slice(1).join(' ') : '') || '—';
+                
+                const canModify = isTenantOwner && !isCurrentUser && !isInvitation;
 
                 return (
-                  <TableRow key={member._id}>
-                    <TableCell className="font-medium">
+                  <TableRow key={member._id} className="border-black/5 hover:bg-black/[0.01] transition-colors">
+                    <TableCell className="font-medium text-xs text-black py-3">
+                      {firstName}
+                    </TableCell>
+                    <TableCell className="font-medium text-xs text-black py-3">
+                      {lastName}
+                    </TableCell>
+                    <TableCell className="text-xs text-gray-500 py-3">
                       <div className="flex items-center gap-2">
-                        <div>
-                          <div className="font-medium">{email}</div>
-                          {isCurrentUser && (
-                            <span className="text-muted-foreground text-xs">
-                              (You)
-                            </span>
-                          )}
-                        </div>
+                        <span>{email}</span>
+                        {isCurrentUser && (
+                          <span className="text-[10px] bg-black/5 text-black px-1.5 py-0.5 rounded-full font-medium shrink-0">
+                            You
+                          </span>
+                        )}
+                        {isInvitation && (
+                          <span className="text-[10px] bg-amber-50 text-amber-600 border border-amber-200/50 px-1.5 py-0.5 rounded-full font-medium shrink-0">
+                            Pending
+                          </span>
+                        )}
                       </div>
                     </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {member.joinedAt
-                        ? new Date(member.joinedAt).toLocaleDateString()
-                        : 'N/A'}
-                    </TableCell>
-                    <TableCell>
+                    <TableCell className="py-3">
                       {canModify ? (
                         <MemberRoleSelector
                           currentRole={memberRole}
@@ -158,43 +189,32 @@ function MembersListComponent({
                       ) : (
                         <Badge
                           variant={getRoleBadgeVariant(memberRole)}
-                          className="capitalize"
+                          className="capitalize text-[10px] px-2 py-0.5"
                         >
                           {memberRole === 'member' ? 'user' : memberRole}
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell>
-                      <span
-                        className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
-                          member.status === 'active'
-                            ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                            : 'bg-muted text-muted-foreground'
-                        }`}
-                      >
-                        {member.status ?? 'active'}
-                      </span>
-                    </TableCell>
                     {isTenantOwner && (
-                      <TableCell>
-                        {canModify && (
+                      <TableCell className="py-3">
+                        {!isCurrentUser && (
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="size-8"
+                                className="size-8 hover:bg-black/5 rounded-md"
                               >
-                                <MoreVertical className="size-4" />
+                                <MoreVertical className="size-4 text-gray-400" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
+                            <DropdownMenuContent align="end" className="border-black/10">
                               <DropdownMenuItem
-                                className="text-destructive focus:text-destructive"
+                                className="text-red-600 focus:text-red-600 focus:bg-red-50 text-xs cursor-pointer"
                                 onClick={() => setMemberToRemove(member)}
                               >
                                 <Trash2 className="mr-2 size-4" />
-                                Remove Member
+                                {isInvitation ? 'Cancel Invitation' : 'Remove Member'}
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -212,22 +232,24 @@ function MembersListComponent({
         open={!!memberToRemove}
         onOpenChange={open => !open && setMemberToRemove(null)}
       >
-        <AlertDialogContent>
+        <AlertDialogContent className="border-black/10">
           <AlertDialogHeader>
-            <AlertDialogTitle>Remove Member</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to remove {memberToRemove?.userId.email}{' '}
-              from this organization? They will lose access immediately.
+            <AlertDialogTitle className="text-black font-semibold">
+              {memberToRemove?.isInvitation ? 'Cancel Invitation' : 'Remove Member'}
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-500 text-xs">
+              Are you sure you want to {memberToRemove?.isInvitation ? 'cancel the invitation for' : 'remove'} {memberToRemove?.userId.email}?
+              {!memberToRemove?.isInvitation && ' They will lose access to this organization immediately.'}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isRemoving}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isRemoving} className="text-xs">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleRemoveMember}
               disabled={isRemoving}
-              className="bg-destructive hover:bg-destructive/90"
+              className="bg-red-600 hover:bg-red-700 text-white text-xs font-medium"
             >
-              {isRemoving ? 'Removing...' : 'Remove Member'}
+              {isRemoving ? 'Processing...' : (memberToRemove?.isInvitation ? 'Cancel Invitation' : 'Remove Member')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
