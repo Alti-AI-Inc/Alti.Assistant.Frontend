@@ -28,6 +28,11 @@ import {
   Users,
   ChevronRight,
   Plus,
+  MessageSquare,
+  Globe,
+  Bot,
+  Database,
+  Puzzle,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -40,8 +45,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { allApps } from '@/lib/all-apps';
 import { apiClientJson, buildApiUrl } from '@/lib/api-client';
 import { useBotsStore } from '@/stores/useBotsStore';
+import { useKnowledgeBankGetFoldersQuery } from '@/hooks/useKnowledgeBank';
 
-type SidebarTab = 'chat' | 'research' | 'bots' | 'apps';
+type SidebarTab = 'chat' | 'research' | 'bots' | 'apps' | 'data';
 
 const LeftSideNavMobile = () => {
   const { data } = useSession();
@@ -62,6 +68,7 @@ const LeftSideNavMobile = () => {
 
   const isLoggedIn = data?.accessToken;
   const { bots, activeBotId, setActiveBotId } = useBotsStore();
+  const { data: knowledgeBankFolders, isLoading: isKnowledgeLoading } = useKnowledgeBankGetFoldersQuery();
   const [activeTab, setActiveTab] = useState<SidebarTab>('chat');
   const [searchQuery, setSearchQuery] = useState('');
   const searchParams = useSearchParams();
@@ -105,6 +112,8 @@ const LeftSideNavMobile = () => {
       setActiveTab('apps');
     } else if (pathname === '/my-chatbots' || pathname.startsWith('/my-chatbots')) {
       setActiveTab('bots');
+    } else if (pathname === '/knowledge' || pathname.startsWith('/knowledge')) {
+      setActiveTab('data');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       const isResearch = useConversationsStore.getState().selectedOption === OPTIONS.RESEARCH;
       setActiveTab(isResearch ? 'research' : 'chat');
@@ -121,8 +130,14 @@ const LeftSideNavMobile = () => {
           setSelectedOption(OPTIONS.RESEARCH);
         }
       } else {
-        // Only set to chat if not on the bots page or apps page
-        if (pathname !== '/my-chatbots' && !pathname.startsWith('/my-chatbots') && pathname !== '/apps') {
+        // Only set to chat if not on the bots page or apps page or data page
+        if (
+          pathname !== '/my-chatbots' &&
+          !pathname.startsWith('/my-chatbots') &&
+          pathname !== '/apps' &&
+          pathname !== '/knowledge' &&
+          !pathname.startsWith('/knowledge')
+        ) {
           setActiveTab('chat');
           if (selectedOption === OPTIONS.RESEARCH) {
             setSelectedOption(null);
@@ -139,6 +154,9 @@ const LeftSideNavMobile = () => {
       close();
     } else if (tab === 'bots') {
       router.push('/my-chatbots');
+      close();
+    } else if (tab === 'data') {
+      router.push('/knowledge');
       close();
     } else if (tab === 'research') {
       setSelectedOption(OPTIONS.RESEARCH);
@@ -256,57 +274,109 @@ const LeftSideNavMobile = () => {
         </div>
       </div>
 
+      {/* Chat / Research / Agents / Data / Apps icon row toggle */}
       {isLoggedIn && (
         <div className="border-b border-black/5 px-4 py-2 bg-secondary">
-          <div className="flex bg-black/[0.06] p-1 rounded-xl w-full gap-1">
-            <button
-              type="button"
-              onClick={() => handleTabChange('chat')}
-              className={cn(
-                'flex-1 rounded-lg py-1.5 text-[11px] font-bold transition-all duration-200 text-center border border-transparent focus:outline-none select-none',
-                activeTab === 'chat'
-                  ? 'bg-white text-gray-950 shadow-sm border-black/[0.02]'
-                  : 'bg-transparent text-gray-500 hover:text-gray-800',
-              )}
-            >
-              Chat
-            </button>
-            <button
-              type="button"
-              onClick={() => handleTabChange('research')}
-              className={cn(
-                'flex-1 rounded-lg py-1.5 text-[11px] font-bold transition-all duration-200 text-center border border-transparent focus:outline-none select-none',
-                activeTab === 'research'
-                  ? 'bg-white text-gray-950 shadow-sm border-black/[0.02]'
-                  : 'bg-transparent text-gray-500 hover:text-gray-800',
-              )}
-            >
-              Research
-            </button>
-            <button
-              type="button"
-              onClick={() => handleTabChange('bots')}
-              className={cn(
-                'flex-1 rounded-lg py-1.5 text-[11px] font-bold transition-all duration-200 text-center border border-transparent focus:outline-none select-none',
-                activeTab === 'bots'
-                  ? 'bg-white text-gray-950 shadow-sm border-black/[0.02]'
-                  : 'bg-transparent text-gray-500 hover:text-gray-800',
-              )}
-            >
-              Agents
-            </button>
-            <button
-              type="button"
-              onClick={() => handleTabChange('apps')}
-              className={cn(
-                'flex-1 rounded-lg py-1.5 text-[11px] font-bold transition-all duration-200 text-center border border-transparent focus:outline-none select-none',
-                activeTab === 'apps'
-                  ? 'bg-white text-gray-950 shadow-sm border-black/[0.02]'
-                  : 'bg-transparent text-gray-500 hover:text-gray-800',
-              )}
-            >
-              Apps
-            </button>
+          <div className="flex bg-black/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03]">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('chat')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'chat'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <MessageSquare className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Chat</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('research')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'research'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Globe className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Deep Research</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('bots')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'bots'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Bot className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Agents</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('data')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'data'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Database className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Data & RAG</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('apps')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'apps'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Puzzle className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>App Integrations</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       )}
@@ -317,9 +387,9 @@ const LeftSideNavMobile = () => {
           <div className="mt-3 mb-2 flex items-center justify-between px-1">
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
               <span>
-                {activeTab === 'bots' ? 'My Agents' : activeTab === 'research' ? 'Research History' : activeTab === 'apps' ? 'Composio Apps' : 'Chat History'}
+                {activeTab === 'bots' ? 'My Agents' : activeTab === 'research' ? 'Research History' : activeTab === 'apps' ? 'Composio Apps' : activeTab === 'data' ? 'Knowledge Bases' : 'Chat History'}
               </span>
-              {activeTab !== 'apps' && activeTab !== 'bots' && mode === UserMode.TENANT && currentTenant && (
+              {activeTab !== 'apps' && activeTab !== 'bots' && activeTab !== 'data' && mode === UserMode.TENANT && currentTenant && (
                 <Badge
                   variant="outline"
                   className="h-4 px-1.5 text-[9px] font-normal border-gray-400 text-gray-500 bg-transparent"
@@ -328,7 +398,7 @@ const LeftSideNavMobile = () => {
                   {currentTenant.name}
                 </Badge>
               )}
-              {activeTab !== 'apps' && activeTab !== 'bots' && mode === UserMode.PERSONAL && (
+              {activeTab !== 'apps' && activeTab !== 'bots' && activeTab !== 'data' && mode === UserMode.PERSONAL && (
                 <Badge
                   variant="outline"
                   className="h-4 px-1.5 text-[9px] font-normal border-gray-400 text-gray-500 bg-transparent"
@@ -358,6 +428,18 @@ const LeftSideNavMobile = () => {
                 }}
                 className="flex h-5 w-5 items-center justify-center rounded-md bg-black/5 hover:bg-black/10 text-black transition-colors"
                 title="Create Custom Agent"
+              >
+                <Plus className="size-3.5" />
+              </button>
+            ) : activeTab === 'data' ? (
+              <button
+                type="button"
+                onClick={() => {
+                  onOpen({ type: 'create-knowledge-bank-folder' });
+                  close();
+                }}
+                className="flex h-5 w-5 items-center justify-center rounded-md bg-black/5 hover:bg-black/10 text-black transition-colors"
+                title="Create Knowledge Base"
               >
                 <Plus className="size-3.5" />
               </button>
@@ -494,6 +576,58 @@ const LeftSideNavMobile = () => {
                     </button>
                   );
                 })
+              )}
+            </div>
+          ) : activeTab === 'data' ? (
+            <div className="space-y-1 py-1 pb-4">
+              {knowledgeBankFolders
+                ?.filter(folder =>
+                  folder.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  folder.description.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map(folder => {
+                  const isSelected = pathname.startsWith(`/knowledge/${folder.id}`) || (pathname === '/knowledge' && searchParams?.get('folder') === folder.id);
+                  return (
+                    <button
+                      key={folder.id}
+                      onClick={() => {
+                        router.push(`/knowledge`);
+                        close();
+                      }}
+                      className={cn(
+                        "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
+                        isSelected 
+                          ? "bg-black/[0.06] border border-black/10 shadow-xs" 
+                          : "hover:bg-black/[0.03] border border-transparent"
+                      )}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="flex-none h-7 w-7 rounded-md bg-white border border-black/10 flex items-center justify-center text-sm shadow-sm">
+                          📁
+                        </div>
+                        <div className="min-w-0">
+                          <h4 className={cn(
+                            "text-xs font-semibold truncate",
+                            isSelected ? "text-blue-600 font-bold" : "text-gray-950"
+                          )}>
+                            {folder.name}
+                          </h4>
+                          <p className="text-[10px] text-gray-500 truncate max-w-[130px]">
+                            {folder.description || 'No description'}
+                          </p>
+                        </div>
+                      </div>
+                      <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+                  );
+                })}
+              {(!knowledgeBankFolders || knowledgeBankFolders.filter(folder =>
+                folder.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                folder.description.toLowerCase().includes(searchQuery.toLowerCase())
+              ).length === 0) && (
+                <div className="py-4 text-center text-xs text-gray-500">
+                  {isKnowledgeLoading ? 'Loading knowledge bases...' : 'No knowledge bases found.'}
+                </div>
               )}
             </div>
           ) : (
