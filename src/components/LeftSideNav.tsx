@@ -556,7 +556,7 @@ const LeftSideNav = () => {
                 type="button"
                 onClick={() => onOpen({ type: 'add-chatbot' })}
                 className="flex h-5 w-5 items-center justify-center rounded-md bg-black/5 hover:bg-black/10 text-black transition-colors"
-                title="Create Custom Agent"
+                title="New Agent"
               >
                 <Plus className="size-3.5" />
               </button>
