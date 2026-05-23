@@ -51,7 +51,7 @@ export function EditChatbotModal() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      setError('Please provide a name for your bot.');
+      setError('Please provide a name for your agent.');
       return;
     }
     if (!instructions.trim()) {
@@ -61,7 +61,7 @@ export function EditChatbotModal() {
 
     editBot(bot.id, {
       name,
-      description: description || 'Custom Chatbot Assistant',
+      description: description || 'Custom Agent Assistant',
       instructions,
       model,
       avatar,
@@ -76,7 +76,7 @@ export function EditChatbotModal() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-900 dark:text-gray-50 flex items-center gap-2">
-              <span className="text-2xl">{avatar}</span> Edit Bot Settings
+              <span className="text-2xl">{avatar}</span> Edit Agent Settings
             </DialogTitle>
             <DialogDescription className="text-sm text-gray-500 dark:text-gray-400">
               Update instructions, description, model type, or avatar details for this custom assistant.
@@ -106,7 +106,7 @@ export function EditChatbotModal() {
                 id="edit-description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="What does this bot do?"
+                placeholder="What does this agent do?"
                 className="rounded-xl border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-gray-900 dark:border-gray-800"
               />
             </div>
@@ -120,7 +120,7 @@ export function EditChatbotModal() {
                   setInstructions(e.target.value);
                   setError('');
                 }}
-                placeholder="Define your chatbot's role, rules, tone, and specific knowledge base constraints..."
+                placeholder="Define your agent's role, rules, tone, and specific knowledge base constraints..."
                 className="min-h-[100px] rounded-xl border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-gray-900 dark:border-gray-800 text-xs leading-relaxed"
               />
             </div>

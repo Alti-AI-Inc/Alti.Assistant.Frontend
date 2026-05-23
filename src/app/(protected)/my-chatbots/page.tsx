@@ -131,7 +131,7 @@ function MyChatbotsContent() {
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-xs">
               <Sparkles className="h-3 w-3" /> Custom Personas
             </span>
-            <h1 className="text-3xl font-extrabold tracking-tight">Meet Your Specialized Chatbots</h1>
+            <h1 className="text-3xl font-extrabold tracking-tight">Meet Your Specialized Agents</h1>
             <p className="text-sm text-blue-100 leading-relaxed">
               Create and talk to custom assistants pre-loaded with specialized rules, guidelines, system prompts, and AI personalities.
             </p>
@@ -144,14 +144,14 @@ function MyChatbotsContent() {
         {/* Section Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50">Active Bots</h2>
-            <p className="text-xs text-gray-500">Pick a bot to begin chatting or build your own custom assistant.</p>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50">Active Agents</h2>
+            <p className="text-xs text-gray-500">Pick an agent to begin chatting or build your own custom assistant.</p>
           </div>
           <Button
             onClick={() => onOpen({ type: 'add-chatbot' })}
             className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold px-4 py-2 flex items-center gap-1.5 shadow-sm text-xs"
           >
-            <Plus className="h-4 w-4" /> Create Custom Bot
+            <Plus className="h-4 w-4" /> Create Custom Agent
           </Button>
         </div>
 
@@ -203,7 +203,7 @@ function MyChatbotsContent() {
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-500 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
               <Plus className="h-6 w-6" />
             </div>
-            <h3 className="mt-4 font-bold text-gray-900 dark:text-gray-50 text-sm">Create New Bot</h3>
+            <h3 className="mt-4 font-bold text-gray-900 dark:text-gray-50 text-sm">Create New Agent</h3>
             <p className="mt-1 text-xs text-gray-500 max-w-[200px]">
               Set custom instructions, models, and pick a custom icon.
             </p>

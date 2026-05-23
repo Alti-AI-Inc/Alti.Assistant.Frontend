@@ -39,7 +39,7 @@ export function AddChatbotModal() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      setError('Please provide a name for your bot.');
+      setError('Please provide a name for your agent.');
       return;
     }
     if (!instructions.trim()) {
@@ -49,7 +49,7 @@ export function AddChatbotModal() {
 
     const newBot = addBot({
       name,
-      description: description || 'Custom Chatbot Assistant',
+      description: description || 'Custom Agent Assistant',
       instructions,
       model,
       avatar,
@@ -66,7 +66,7 @@ export function AddChatbotModal() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-900 dark:text-gray-50 flex items-center gap-2">
-              <span className="text-2xl">{avatar}</span> Create Custom Bot
+              <span className="text-2xl">{avatar}</span> Create Custom Agent
             </DialogTitle>
             <DialogDescription className="text-sm text-gray-500 dark:text-gray-400">
               Define custom prompts, system instructions, and specialized personalities for your AI assistant.
@@ -96,7 +96,7 @@ export function AddChatbotModal() {
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="What does this bot do?"
+                placeholder="What does this agent do?"
                 className="rounded-xl border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-gray-900 dark:border-gray-800"
               />
             </div>
@@ -110,7 +110,7 @@ export function AddChatbotModal() {
                   setInstructions(e.target.value);
                   setError('');
                 }}
-                placeholder="Define your chatbot's role, rules, tone, and specific knowledge base constraints..."
+                placeholder="Define your agent's role, rules, tone, and specific knowledge base constraints..."
                 className="min-h-[100px] rounded-xl border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-gray-900 dark:border-gray-800 text-xs leading-relaxed"
               />
             </div>
@@ -183,7 +183,7 @@ export function AddChatbotModal() {
               </Button>
             </DialogClose>
             <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-5 text-xs font-semibold">
-              Create Bot
+              Create Agent
             </Button>
           </DialogFooter>
         </form>

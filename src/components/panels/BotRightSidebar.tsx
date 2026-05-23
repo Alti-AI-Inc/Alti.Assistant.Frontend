@@ -53,7 +53,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
       <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between bg-white dark:bg-gray-950">
         <div className="flex items-center gap-2">
           <Settings2 className="h-4 w-4 text-blue-600" />
-          <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 uppercase tracking-wider">Bot Hub</h3>
+          <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 uppercase tracking-wider">Agent Hub</h3>
         </div>
         <Button
           variant="outline"

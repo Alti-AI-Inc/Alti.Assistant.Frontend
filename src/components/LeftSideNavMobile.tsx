@@ -293,7 +293,7 @@ const LeftSideNavMobile = () => {
                   : 'bg-transparent text-gray-500 hover:text-gray-800',
               )}
             >
-              Bots
+              Agents
             </button>
             <button
               type="button"
@@ -317,7 +317,7 @@ const LeftSideNavMobile = () => {
           <div className="mt-3 mb-2 flex items-center justify-between px-1">
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
               <span>
-                {activeTab === 'bots' ? 'My Bots' : activeTab === 'research' ? 'Research History' : activeTab === 'apps' ? 'Composio Apps' : 'Chat History'}
+                {activeTab === 'bots' ? 'My Agents' : activeTab === 'research' ? 'Research History' : activeTab === 'apps' ? 'Composio Apps' : 'Chat History'}
               </span>
               {activeTab !== 'apps' && activeTab !== 'bots' && mode === UserMode.TENANT && currentTenant && (
                 <Badge
@@ -357,7 +357,7 @@ const LeftSideNavMobile = () => {
                   close();
                 }}
                 className="flex h-5 w-5 items-center justify-center rounded-md bg-black/5 hover:bg-black/10 text-black transition-colors"
-                title="Create Custom Bot"
+                title="Create Custom Agent"
               >
                 <Plus className="size-3.5" />
               </button>
@@ -423,7 +423,7 @@ const LeftSideNavMobile = () => {
                 bot.description.toLowerCase().includes(searchQuery.toLowerCase())
               ).length === 0 && (
                 <div className="py-4 text-center text-xs text-gray-500">
-                  No bots found.
+                  No agents found.
                 </div>
               )}
             </div>

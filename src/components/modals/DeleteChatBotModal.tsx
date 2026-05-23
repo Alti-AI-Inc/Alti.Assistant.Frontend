@@ -34,7 +34,7 @@ export function DeleteChatbotModal() {
       <DialogContent className="sm:max-w-[400px] border-none bg-white dark:bg-gray-950 p-6 rounded-2xl shadow-2xl">
         <DialogHeader>
           <DialogTitle className="text-lg font-bold text-gray-950 dark:text-gray-50 flex items-center gap-2">
-            Delete Chatbot
+            Delete Agent
           </DialogTitle>
           <DialogDescription className="text-sm text-gray-500 dark:text-gray-400">
             This action is permanent and cannot be undone.
@@ -43,7 +43,7 @@ export function DeleteChatbotModal() {
 
         <div className="py-2">
           <p className="text-sm text-gray-700 dark:text-gray-300">
-            Are you sure you want to delete the chatbot <strong className="text-black dark:text-white">"{bot.name}"</strong>? All conversation threads associated with this bot will be permanently deleted as well.
+            Are you sure you want to delete the agent <strong className="text-black dark:text-white">"{bot.name}"</strong>? All conversation threads associated with this agent will be permanently deleted as well.
           </p>
         </div>
 
@@ -60,7 +60,7 @@ export function DeleteChatbotModal() {
             onClick={handleDelete}
             className="bg-red-600 hover:bg-red-700 text-white rounded-xl px-5 text-xs font-semibold"
           >
-            Delete Bot
+            Delete Agent
           </Button>
         </DialogFooter>
       </DialogContent>
