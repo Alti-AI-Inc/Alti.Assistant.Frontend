@@ -204,43 +204,6 @@ function MyChatbotsContent() {
     <div className="flex h-screen w-full bg-white dark:bg-gray-950 overflow-hidden">
       {/* Center Panel (Conversation / Interface) */}
       <div className="flex-1 flex flex-col min-w-0 h-full relative">
-        {/* Workspace Top Header */}
-        <header className="h-14 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 flex items-center justify-between px-6 flex-none">
-          <div className="flex items-center gap-3 min-w-0">
-            <button
-              onClick={() => router.push('/my-chatbots')}
-              className="md:hidden p-1 rounded-md hover:bg-gray-100 text-gray-500"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </button>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900/10 text-xl border border-black/5">
-              {activeBot.avatar || '🤖'}
-            </div>
-            <div className="min-w-0">
-              <h2 className="text-sm font-bold text-gray-900 dark:text-gray-100 truncate flex items-center gap-1.5">
-                {activeBot.name}
-                <span className="text-[9px] font-bold text-gray-400 bg-gray-50 border border-gray-200/50 px-1.5 py-0.5 rounded-sm">
-                  {activeBot.model}
-                </span>
-              </h2>
-              <p className="text-[10px] text-gray-500 truncate max-w-sm">
-                {activeBot.description}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onOpen({ type: 'delete-chatbot', actionId: activeBot.id })}
-              className="rounded-lg h-8 px-2 text-xs font-semibold text-gray-500 hover:text-red-500 hover:bg-red-500/5"
-            >
-              Delete
-            </Button>
-          </div>
-        </header>
-
         {/* Content Body */}
         <div className="flex-1 overflow-hidden relative">
           {activeBotThreadId ? (
