@@ -6,36 +6,63 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
 } from '@/components/ui/dialog';
 import { useModalStore } from '@/stores/useModalStore';
+import { useBotsStore } from '@/stores/useBotsStore';
+import { useRouter } from 'next/navigation';
 
 export function DeleteChatbotModal() {
-  const { onClose, isOpen } = useModalStore();
+  const { onClose, isOpen, type, actionId } = useModalStore();
+  const { bots, deleteBot } = useBotsStore();
+  const router = useRouter();
+
+  const bot = bots.find((b) => b.id === actionId);
+
+  if (type !== 'delete-chatbot' || !bot) return null;
+
+  const handleDelete = () => {
+    deleteBot(bot.id);
+    router.push('/my-chatbots');
+    onClose();
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="border-none ring-0 outline-none sm:max-w-[380px]">
+      <DialogContent className="sm:max-w-[400px] border-none bg-white dark:bg-gray-950 p-6 rounded-2xl shadow-2xl">
         <DialogHeader>
-          <DialogTitle>Delete Chatbot</DialogTitle>
+          <DialogTitle className="text-lg font-bold text-gray-950 dark:text-gray-50 flex items-center gap-2">
+            Delete Agent
+          </DialogTitle>
+          <DialogDescription className="text-sm text-gray-500 dark:text-gray-400">
+            This action is permanent and cannot be undone.
+          </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 pt-4">
-          <h1 className="">Are you sure you want to delete this chatbot?</h1>
-          <div className="mt-4 flex w-full justify-end gap-4">
+
+        <div className="py-2">
+          <p className="text-sm text-gray-700 dark:text-gray-300">
+            Are you sure you want to delete the agent <strong className="text-black dark:text-white">"{bot.name}"</strong>? All conversation threads associated with this agent will be permanently deleted as well.
+          </p>
+        </div>
+
+        <DialogFooter className="mt-4 gap-2">
+          <DialogClose asChild>
             <Button
               variant="outline"
-              className="focus-visible:ring-0"
-              onClick={onClose}
+              className="rounded-xl px-5 text-xs font-semibold"
             >
               Cancel
             </Button>
-            <Button onClick={onClose}>
-              {false && (
-                <span className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></span>
-              )}
-              Delete
-            </Button>
-          </div>
-        </div>
+          </DialogClose>
+          <Button
+            onClick={handleDelete}
+            className="bg-red-600 hover:bg-red-700 text-white rounded-xl px-5 text-xs font-semibold"
+          >
+            Delete Agent
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

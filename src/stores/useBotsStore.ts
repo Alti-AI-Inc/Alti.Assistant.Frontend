@@ -1,0 +1,162 @@
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+export interface Chatbot {
+  id: string;
+  name: string;
+  description: string;
+  instructions: string;
+  model: string;
+  avatar: string; // Emoji
+  createdAt: string;
+}
+
+export interface BotThread {
+  id: string; // conversationId
+  botId: string;
+  title: string;
+  createdAt: string;
+}
+
+interface BotsState {
+  bots: Chatbot[];
+  threads: BotThread[];
+  activeBotId: string | null;
+  activeBotThreadId: string | null;
+  
+  // Actions
+  addBot: (bot: Omit<Chatbot, 'id' | 'createdAt'>) => Chatbot;
+  editBot: (id: string, updated: Partial<Omit<Chatbot, 'id' | 'createdAt'>>) => void;
+  deleteBot: (id: string) => void;
+  setActiveBotId: (id: string | null) => void;
+  
+  addThread: (botId: string, threadId: string, title: string) => void;
+  deleteThread: (threadId: string) => void;
+  setActiveBotThreadId: (threadId: string | null) => void;
+}
+
+const PRELOADED_BOTS: Chatbot[] = [
+  {
+    id: 'python-expert',
+    name: 'Python Expert',
+    description: 'Specialist in clean code, refactoring, docstrings, and algorithm optimization.',
+    instructions: 'You are an expert Python developer and architect. You write highly pythonic, clean, efficient, and readable code adhering strictly to PEP 8 standards. Always include thorough docstrings, explain design decisions, and suggest performance optimizations where applicable.',
+    model: 'Gemini 1.5 Pro',
+    avatar: '🐍',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'ui-design-guru',
+    name: 'UI Design Guru',
+    description: 'Expert in modern UI/UX design, tailwind, vanilla CSS styling, and premium color palettes.',
+    instructions: 'You are a master UI/UX designer and frontend architect. You specialize in creating stunning, responsive, and visually wowing web interfaces using Tailwind CSS, vanilla CSS, and modern design principles like glassmorphism, smooth animations, and tailored HSL color palettes. Always prioritize design aesthetics and visual excellence.',
+    model: 'Gemini 1.5 Pro',
+    avatar: '🎨',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'copywriter',
+    name: 'AI Copywriter',
+    description: 'Creative assistant for drafting emails, blog posts, sales copies, and high-impact headlines.',
+    instructions: 'You are a professional copywriter and conversion rates marketing expert. You write high-converting, engaging, and compelling copy for newsletters, social media posts, headlines, articles, and marketing emails. Adapt your tone perfectly to the target audience.',
+    model: 'Gemini 1.5 Flash',
+    avatar: '✍️',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'general-assistant',
+    name: 'General Assistant',
+    description: 'Standard conversational assistant for everyday inquiries and brainstorming.',
+    instructions: 'You are Alti Assistant, a highly helpful, intelligent, and friendly general-purpose AI chatbot. You assist with general tasks, brainstorming, writing, analysis, and problem-solving.',
+    model: 'Gemini 1.5 Flash',
+    avatar: '🤖',
+    createdAt: new Date().toISOString(),
+  },
+];
+
+export const useBotsStore = create<BotsState>()(
+  persist(
+    (set, get) => ({
+      bots: PRELOADED_BOTS,
+      threads: [],
+      activeBotId: null,
+      activeBotThreadId: null,
+
+      addBot: (newBotData) => {
+        const id = `bot_${Date.now()}`;
+        const newBot: Chatbot = {
+          ...newBotData,
+          id,
+          createdAt: new Date().toISOString(),
+        };
+        set((state) => ({
+          bots: [...state.bots, newBot],
+        }));
+        return newBot;
+      },
+
+      editBot: (id, updatedData) => {
+        set((state) => ({
+          bots: state.bots.map((bot) =>
+            bot.id === id ? { ...bot, ...updatedData } : bot
+          ),
+        }));
+      },
+
+      deleteBot: (id) => {
+        set((state) => ({
+          bots: state.bots.filter((bot) => bot.id !== id),
+          // Clear active bot if it was deleted
+          activeBotId: state.activeBotId === id ? null : state.activeBotId,
+          activeBotThreadId:
+            state.activeBotId === id ? null : state.activeBotThreadId,
+          // Clean up threads associated with the deleted bot
+          threads: state.threads.filter((t) => t.botId !== id),
+        }));
+      },
+
+      setActiveBotId: (id) => {
+        set({
+          activeBotId: id,
+          activeBotThreadId: null, // Reset thread when changing bot
+        });
+      },
+
+      addThread: (botId, threadId, title) => {
+        const newThread: BotThread = {
+          id: threadId,
+          botId,
+          title,
+          createdAt: new Date().toISOString(),
+        };
+        set((state) => ({
+          threads: [...state.threads, newThread],
+          activeBotThreadId: threadId,
+        }));
+      },
+
+      deleteThread: (threadId) => {
+        set((state) => ({
+          threads: state.threads.filter((t) => t.id !== threadId),
+          activeBotThreadId:
+            state.activeBotThreadId === threadId
+              ? null
+              : state.activeBotThreadId,
+        }));
+      },
+
+      setActiveBotThreadId: (threadId) => {
+        set({ activeBotThreadId: threadId });
+      },
+    }),
+    {
+      name: 'alti-custom-bots',
+      partialize: (state) => ({
+        bots: state.bots,
+        threads: state.threads,
+        activeBotId: state.activeBotId,
+        activeBotThreadId: state.activeBotThreadId,
+      }),
+    }
+  )
+);

@@ -53,6 +53,7 @@ export interface Reference {
   snippet: string;
   relevanceScore: number;
   searchQuery: string;
+  domain?: string;
 }
 
 export interface GeneratedDocument {

@@ -72,20 +72,22 @@ export function MemberRoleSelector({
     switch (role.toLowerCase()) {
       case 'owner':
         return 'default';
+      case 'admin':
+        return 'secondary';
       default:
         return 'outline';
     }
   };
 
   const normalizedRole = String(currentRole ?? 'member').toLowerCase();
-  /** Tenant only supports owner + member; legacy values map to member for the control. */
-  const supportedTenantRoles = new Set(['owner', 'member']);
+  /** Tenant supports owner + admin + member; legacy values map to member for the control. */
+  const supportedTenantRoles = new Set(['owner', 'admin', 'member']);
   const selectValue = supportedTenantRoles.has(normalizedRole)
     ? normalizedRole
     : 'member';
 
-  // Non-owners see a static badge for tenant owners (only an org owner may change roles)
-  if (normalizedRole === 'owner' && !viewerIsOwner) {
+  // Non-owners see a static badge for tenant owners/admins (only an org owner may change roles)
+  if ((normalizedRole === 'owner' || normalizedRole === 'admin') && !viewerIsOwner) {
     return (
       <Badge
         variant={getRoleBadgeVariant(normalizedRole)}
@@ -95,6 +97,11 @@ export function MemberRoleSelector({
       </Badge>
     );
   }
+
+  const formatRoleLabel = (role: string) => {
+    if (role.toLowerCase() === 'member') return 'user';
+    return role;
+  };
 
   return (
     <>
@@ -110,20 +117,27 @@ export function MemberRoleSelector({
         <SelectTrigger className="h-7 w-[96px] text-xs">
           <SelectValue>
             <span className="capitalize">
-              {supportedTenantRoles.has(normalizedRole)
-                ? normalizedRole
-                : selectValue}
+              {formatRoleLabel(
+                supportedTenantRoles.has(normalizedRole)
+                  ? normalizedRole
+                  : selectValue
+              )}
             </span>
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
           <SelectItem value={TenantRole.MEMBER}>
-            <span className="capitalize">{TenantRole.MEMBER}</span>
+            <span className="capitalize">User</span>
           </SelectItem>
           {viewerIsOwner && (
-            <SelectItem value={TenantRole.OWNER}>
-              <span className="capitalize">{TenantRole.OWNER}</span>
-            </SelectItem>
+            <>
+              <SelectItem value={TenantRole.ADMIN}>
+                <span className="capitalize">Admin</span>
+              </SelectItem>
+              <SelectItem value={TenantRole.OWNER}>
+                <span className="capitalize">Owner</span>
+              </SelectItem>
+            </>
           )}
         </SelectContent>
       </Select>

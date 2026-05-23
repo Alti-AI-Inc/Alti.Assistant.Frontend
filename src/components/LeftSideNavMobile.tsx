@@ -9,12 +9,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTenant } from '@/contexts/TenantContext';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { cn } from '@/lib/utils';
+import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { UserMode } from '@/types/tenant';
 import {
-  Bookmark,
   Building2,
   LayoutDashboard,
   LogOut,
@@ -26,14 +26,102 @@ import {
   SquarePen,
   User,
   Users,
+  ChevronRight,
+  Plus,
+  MessageSquare,
+  Globe,
+  Bot,
+  Database,
+  Puzzle,
+  Zap,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import ConversationsList from './ConversationsList';
 import { TenantModeSwitcher } from './TenantModeSwitcher';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { allApps } from '@/lib/all-apps';
+import { apiClientJson, buildApiUrl } from '@/lib/api-client';
+import { useBotsStore } from '@/stores/useBotsStore';
+
+interface DataConnector {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
+  status: 'active' | 'soon';
+}
+
+const DATA_CONNECTORS: DataConnector[] = [
+  {
+    id: 'file',
+    name: 'File Upload',
+    icon: '📁',
+    description: 'Upload PDF, TXT, Word up to 1MB',
+    status: 'active',
+  },
+  {
+    id: 'google-drive',
+    name: 'Google Drive',
+    icon: '🤖',
+    description: 'Sync Google Drive folders',
+    status: 'soon',
+  },
+  {
+    id: 'notion',
+    name: 'Notion Workspace',
+    icon: '📓',
+    description: 'Index Notion pages & databases',
+    status: 'soon',
+  },
+  {
+    id: 'sharepoint',
+    name: 'SharePoint',
+    icon: '📦',
+    description: 'Ingest enterprise documents',
+    status: 'soon',
+  },
+  {
+    id: 'slack',
+    name: 'Slack Channel',
+    icon: '💬',
+    description: 'Index conversation histories',
+    status: 'soon',
+  },
+  {
+    id: 'github',
+    name: 'GitHub Repo',
+    icon: '🐙',
+    description: 'Parse codebase markdown files',
+    status: 'soon',
+  },
+  {
+    id: 'confluence',
+    name: 'Confluence',
+    icon: '📄',
+    description: 'Sync Confluence wiki pages',
+    status: 'soon',
+  },
+  {
+    id: 'dropbox',
+    name: 'Dropbox Folder',
+    icon: '📦',
+    description: 'Import Dropbox directories',
+    status: 'soon',
+  },
+  {
+    id: 's3',
+    name: 'AWS S3 Bucket',
+    icon: '☁️',
+    description: 'Index S3 storage buckets',
+    status: 'soon',
+  },
+];
+
+type SidebarTab = 'chat' | 'research' | 'bots' | 'apps' | 'data' | 'workflows';
 
 const LeftSideNavMobile = () => {
   const { data } = useSession();
@@ -44,6 +132,8 @@ const LeftSideNavMobile = () => {
 
   const { onOpen } = useModalStore();
   const {
+    activeConversation,
+    selectedOption,
     setActiveConversation,
     setSelectedOption,
     setShowStartLastMessage,
@@ -51,6 +141,175 @@ const LeftSideNavMobile = () => {
   } = useConversationsStore();
 
   const isLoggedIn = data?.accessToken;
+  const { bots, activeBotId, setActiveBotId } = useBotsStore();
+  const [activeTab, setActiveTab] = useState<SidebarTab>('chat');
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchParams = useSearchParams();
+  const activeAppSlug = searchParams?.get('app');
+  const activeConnectorId = searchParams?.get('connector') || 'file';
+
+  const [connectedAppSlugs, setConnectedAppSlugs] = useState<Set<string>>(new Set());
+  const [isFetchingStatus, setIsFetchingStatus] = useState(false);
+
+  const fetchConnectionStatus = async () => {
+    setIsFetchingStatus(true);
+    const response = await apiClientJson<{ connectedAccountId: string; toolkit: { slug: string } }[]>(
+      buildApiUrl('/composio-simple/connected-accounts')
+    );
+    
+    if (response.success && Array.isArray(response.data)) {
+      const activeSlugs = new Set(
+        response.data.map(account => account.toolkit?.slug?.toLowerCase()).filter(Boolean)
+      );
+      setConnectedAppSlugs(activeSlugs);
+    }
+    setIsFetchingStatus(false);
+  };
+
+  useEffect(() => {
+    if (activeTab === 'apps') {
+      fetchConnectionStatus();
+    }
+  }, [activeTab]);
+
+  const availableComposioApps = allApps
+    .filter(app => app.isAvailable && app.app_name)
+    .sort((a, b) => a.title.localeCompare(b.title));
+
+  const filteredApps = availableComposioApps.filter(app =>
+    app.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    app.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  useEffect(() => {
+    if (pathname === '/apps') {
+      setActiveTab('apps');
+    } else if (pathname === '/my-chatbots' || pathname.startsWith('/my-chatbots')) {
+      setActiveTab('bots');
+    } else if (pathname === '/knowledge' || pathname.startsWith('/knowledge')) {
+      setActiveTab('data');
+    } else if (pathname === '/workflows' || pathname.startsWith('/workflows')) {
+      setActiveTab('workflows');
+    } else if (pathname === '/' || pathname.startsWith('/c/')) {
+      const isResearch = useConversationsStore.getState().selectedOption === OPTIONS.RESEARCH;
+      setActiveTab(isResearch ? 'research' : 'chat');
+    }
+  }, [pathname]);
+
+  // Synchronize tab and option selection with activeConversation.is_deep_search
+  useEffect(() => {
+    if (activeConversation) {
+      const isDeepSearch = !!((activeConversation as any).is_deep_search);
+      if (isDeepSearch) {
+        setActiveTab('research');
+        if (selectedOption !== OPTIONS.RESEARCH) {
+          setSelectedOption(OPTIONS.RESEARCH);
+        }
+      } else {
+        // Only set to chat if not on the bots page or apps page or data page
+        if (
+          pathname !== '/my-chatbots' &&
+          !pathname.startsWith('/my-chatbots') &&
+          pathname !== '/apps' &&
+          pathname !== '/knowledge' &&
+          !pathname.startsWith('/knowledge')
+        ) {
+          setActiveTab('chat');
+          if (selectedOption === OPTIONS.RESEARCH) {
+            setSelectedOption(null);
+          }
+        }
+      }
+    }
+  }, [activeConversation, selectedOption, setSelectedOption, pathname]);
+
+  const handleTabChange = (tab: SidebarTab) => {
+    setActiveTab(tab);
+    if (tab === 'apps') {
+      router.push('/apps');
+      close();
+    } else if (tab === 'bots') {
+      router.push('/my-chatbots');
+      close();
+    } else if (tab === 'data') {
+      router.push('/knowledge?connector=file');
+      close();
+    } else if (tab === 'workflows') {
+      router.push('/workflows');
+      close();
+    } else if (tab === 'research') {
+      setSelectedOption(OPTIONS.RESEARCH);
+      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+        router.push('/');
+      }
+      close();
+    } else {
+      setSelectedOption(null);
+      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+        router.push('/');
+      }
+      close();
+    }
+  };
+
+  const getPlusButtonProps = () => {
+    switch (activeTab) {
+      case 'chat':
+        return {
+          visible: true,
+          label: 'New Chat',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(null);
+            router.push('/');
+            close();
+          },
+        };
+      case 'research':
+        return {
+          visible: true,
+          label: 'New Research',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.RESEARCH);
+            router.push('/');
+            close();
+          },
+        };
+      case 'bots':
+        return {
+          visible: true,
+          label: 'New Agent',
+          onClick: () => {
+            onOpen({ type: 'add-chatbot' });
+            close();
+          },
+        };
+      case 'workflows':
+        return {
+          visible: true,
+          label: 'New Workflow',
+          onClick: () => {
+            alert('Define Cron or Webhook triggers to chain your custom agents and RAG indexes in a new workflow!');
+            close();
+          },
+        };
+      case 'data':
+      case 'apps':
+      default:
+        return {
+          visible: false,
+          label: '',
+          onClick: () => {},
+        };
+    }
+  };
+
+  const plusProps = getPlusButtonProps();
 
   return (
     <div className="bg-secondary flex h-full flex-col">
@@ -64,20 +323,15 @@ const LeftSideNavMobile = () => {
       {/* Sticky nav buttons */}
       <div className="bg-secondary sticky top-0 z-10">
         <div className="space-y-0.5 px-2 py-2">
-          <Button
-            onClick={() => {
-              setActiveConversation(null);
-              setShowStartLastMessage(false);
-              setUserMessage('');
-              setSelectedOption(null);
-              router.push('/');
-              close();
-            }}
-            className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-          >
-            <SquarePen />
-            <span className="text-sm font-normal">New Chat</span>
-          </Button>
+          {plusProps.visible && (
+            <Button
+              onClick={plusProps.onClick}
+              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 animate-in fade-in zoom-in duration-200"
+            >
+              <Plus className="size-4 mr-2 text-black" />
+              <span className="text-sm font-normal">{plusProps.label}</span>
+            </Button>
+          )}
 
           {isLoggedIn && (
             <>
@@ -148,71 +402,412 @@ const LeftSideNavMobile = () => {
                 </svg>
                 <span className="text-sm font-normal">Apps</span>
               </Button> */}
-
-              <div className="mt-6 flex items-center space-x-4">
-                <div className="flex items-center gap-2 pl-4 text-sm text-gray-500">
-                  <span>Chat history</span>
-                  {mode === UserMode.TENANT && currentTenant && (
-                    <Badge
-                      variant="outline"
-                      className="h-5 px-1.5 text-[10px] font-normal"
-                    >
-                      <Building2 className="mr-1 size-2.5" />
-                      {currentTenant.name}
-                    </Badge>
-                  )}
-                  {mode === UserMode.PERSONAL && (
-                    <Badge
-                      variant="outline"
-                      className="h-5 px-1.5 text-[10px] font-normal"
-                    >
-                      <User className="mr-1 size-2.5" />
-                      Personal
-                    </Badge>
-                  )}
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Bookmark
-                        onClick={() => {
-                          router.push('/saved-chats');
-                          close();
-                        }}
-                        className="size-3.5 text-gray-500"
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>Saved Chats</p>
-                    </TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Search
-                        className="size-3.5 text-gray-500"
-                        onClick={() => {
-                          onOpen({
-                            type: 'search-chats',
-                          });
-                          close();
-                        }}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>Search Chats</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-              </div>
             </>
           )}
         </div>
       </div>
 
+      {/* Chat / Research / Agents / Data / Apps icon row toggle */}
+      {isLoggedIn && (
+        <div className="border-b border-black/5 px-4 py-2 bg-secondary">
+          <div className="flex bg-black/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03]">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('chat')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'chat'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <MessageSquare className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Chat</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('research')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'research'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Globe className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Research</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('bots')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'bots'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Bot className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Agents</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('data')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'data'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Database className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Data</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('apps')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'apps'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Puzzle className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Apps</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('workflows')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'workflows'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Zap className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Workflows</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        </div>
+      )}
+
       {/* Scrollable conversation list */}
       {isLoggedIn && (
         <div className="flex-1 overflow-y-auto px-4 pb-4">
-          <ConversationsList />
+          <div className="mt-3 mb-2 flex items-center justify-between px-1">
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
+              <span>
+                {activeTab === 'bots' 
+                  ? 'My Agents' 
+                  : activeTab === 'research' 
+                    ? 'Research History' 
+                    : activeTab === 'apps' 
+                      ? 'Composio Apps' 
+                      : activeTab === 'data' 
+                        ? 'Data Connectors' 
+                        : activeTab === 'workflows'
+                          ? 'Active Workflows'
+                          : 'Chat History'}
+              </span>
+              {activeTab !== 'apps' && activeTab !== 'bots' && activeTab !== 'data' && mode === UserMode.TENANT && currentTenant && (
+                <Badge
+                  variant="outline"
+                  className="h-4 px-1.5 text-[9px] font-normal border-gray-400 text-gray-500 bg-transparent"
+                >
+                  <Building2 className="mr-0.5 size-2" />
+                  {currentTenant.name}
+                </Badge>
+              )}
+              {activeTab !== 'apps' && activeTab !== 'bots' && activeTab !== 'data' && mode === UserMode.PERSONAL && (
+                <Badge
+                  variant="outline"
+                  className="h-4 px-1.5 text-[9px] font-normal border-gray-400 text-gray-500 bg-transparent"
+                >
+                  <User className="mr-0.5 size-2" />
+                  Personal
+                </Badge>
+              )}
+            </div>
+            {activeTab === 'apps' || activeTab === 'data' ? (
+              <div className="flex h-7 flex-1 items-center gap-1.5 rounded-lg border border-black/10 bg-white px-2 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 ml-4 max-w-[150px]">
+                <Search className="size-3 text-black" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-transparent text-[11px] text-black outline-none placeholder:text-gray-500"
+                />
+              </div>
+            ) : activeTab === 'bots' ? (
+              <button
+                type="button"
+                onClick={() => {
+                  onOpen({ type: 'add-chatbot' });
+                  close();
+                }}
+                className="flex h-5 w-5 items-center justify-center rounded-md bg-black/5 hover:bg-black/10 text-black transition-colors"
+                title="New Agent"
+              >
+                <Plus className="size-3.5" />
+              </button>
+            ) : (
+              <Search
+                onClick={() => {
+                  onOpen({
+                    type: 'search-chats',
+                  });
+                  close();
+                }}
+                className="size-3.5 cursor-pointer text-gray-500 hover:text-black transition-colors"
+              />
+            )}
+          </div>
+          {activeTab === 'bots' ? (
+            <div className="space-y-1 py-1 pb-4">
+              {bots
+                .filter(bot =>
+                  bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  bot.description.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map(bot => {
+                  const isSelected = activeBotId === bot.id && pathname === '/my-chatbots';
+                  return (
+                    <button
+                      key={bot.id}
+                      onClick={() => {
+                        setActiveBotId(bot.id);
+                        router.push(`/my-chatbots?bot=${bot.id}`);
+                        close();
+                      }}
+                      className={cn(
+                        "group flex h-9 w-full items-center justify-between rounded-md text-sm font-medium text-black text-left transition-all",
+                        isSelected 
+                          ? "bg-black/10 font-semibold" 
+                          : "hover:bg-black/5"
+                      )}
+                    >
+                      <span className="flex-1 truncate px-1 py-2">
+                        {bot.name}
+                      </span>
+                      <ChevronRight className="mr-2 h-3.5 w-3.5 text-black transition-opacity" />
+                    </button>
+                  );
+                })}
+              {bots.filter(bot =>
+                bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                bot.description.toLowerCase().includes(searchQuery.toLowerCase())
+              ).length === 0 && (
+                <div className="py-4 text-center text-xs text-gray-500">
+                  No agents found.
+                </div>
+              )}
+            </div>
+          ) : activeTab === 'apps' ? (
+            <div className="space-y-1 py-1 pb-4">
+              {filteredApps.length === 0 ? (
+                <div className="py-4 text-center text-xs text-gray-500">
+                  No integrations found.
+                </div>
+              ) : (
+                filteredApps.map(app => {
+                  const isConnected = connectedAppSlugs.has(app.app_name.toLowerCase());
+                  const isSelected = activeAppSlug === app.app_name;
+                  
+                  return (
+                    <button
+                      key={app.app_name}
+                      onClick={() => {
+                        router.push(`/apps?app=${app.app_name}`);
+                        close();
+                      }}
+                      className={cn(
+                        "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
+                        isSelected 
+                          ? "bg-black/[0.06] border border-black/10 shadow-xs" 
+                          : "hover:bg-black/[0.03] border border-transparent"
+                      )}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        {/* App Logo with Fallback */}
+                        <div className="relative flex-none h-7 w-7 rounded-md overflow-hidden border border-black/10 bg-white p-1 flex items-center justify-center">
+                          {app.image ? (
+                            <img 
+                              src={app.image} 
+                              alt={app.title} 
+                              className="h-full w-full object-contain"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                e.currentTarget.parentElement!.innerHTML = `<span class="text-xs font-semibold text-blue-600">${app.title.charAt(0)}</span>`;
+                              }}
+                            />
+                          ) : (
+                            <span className="text-xs font-semibold text-blue-600">{app.title.charAt(0)}</span>
+                          )}
+                        </div>
+ 
+                        <div className="min-w-0">
+                          <h4 className={cn(
+                            "text-xs font-semibold truncate",
+                            isSelected ? "text-blue-600 font-bold" : "text-gray-950"
+                          )}>
+                            {app.title}
+                          </h4>
+                          <p className="text-[10px] text-gray-500 truncate max-w-[130px]">
+                            {app.description}
+                          </p>
+                        </div>
+                      </div>
+ 
+                      {/* Right hand Status dot indicators */}
+                      <div className="flex items-center gap-1">
+                        {isConnected ? (
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Connected" />
+                        ) : (
+                          <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:translate-x-0.5 transition-transform" />
+                        )}
+                      </div>
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          ) : activeTab === 'data' ? (
+            <div className="space-y-1 py-1 pb-4">
+              {DATA_CONNECTORS.filter(conn =>
+                conn.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                conn.description.toLowerCase().includes(searchQuery.toLowerCase())
+              ).map(conn => {
+                const isSelected = activeConnectorId === conn.id && pathname === '/knowledge';
+                return (
+                  <button
+                    key={conn.id}
+                    onClick={() => {
+                      router.push(`/knowledge?connector=${conn.id}`);
+                      close();
+                    }}
+                    className={cn(
+                      "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
+                      isSelected 
+                        ? "bg-black/[0.06] border border-black/10 shadow-xs" 
+                        : "hover:bg-black/[0.03] border border-transparent"
+                    )}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex-none h-7 w-7 rounded-md bg-white border border-black/10 flex items-center justify-center text-sm shadow-sm">
+                        {conn.icon}
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className={cn(
+                          "text-xs font-semibold truncate",
+                          isSelected ? "text-blue-600 font-bold" : "text-gray-950"
+                        )}>
+                          {conn.name}
+                        </h4>
+                        <p className="text-[10px] text-gray-500 truncate max-w-[130px]">
+                          {conn.description}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-1">
+                      {conn.status === 'active' ? (
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Active" />
+                      ) : (
+                        <span className="text-[9px] font-medium text-gray-400 bg-gray-200/50 px-1 py-0.5 rounded-sm dark:bg-gray-800">Soon</span>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          ) : activeTab === 'workflows' ? (
+            <div className="space-y-1 py-1 pb-4">
+              {[
+                { id: 'wf-1', name: 'Daily Market Intel', icon: '📊', trigger: 'Every Day @ 8am', active: true },
+                { id: 'wf-2', name: 'Code Vulnerability Scan', icon: '🛡️', trigger: 'On Git Push', active: true },
+                { id: 'wf-3', name: 'Sales Prospecting Flow', icon: '🎯', trigger: 'On Notion Add', active: false },
+                { id: 'wf-4', name: 'Support Mail Auto-Draft', icon: '✉️', trigger: 'On New Email', active: true }
+              ].filter(wf => wf.name.toLowerCase().includes(searchQuery.toLowerCase())).map(wf => (
+                <button
+                  key={wf.id}
+                  onClick={() => {
+                    router.push('/workflows');
+                    close();
+                  }}
+                  className={cn(
+                    "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group hover:bg-black/[0.03] border border-transparent"
+                  )}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex-none h-7 w-7 rounded-md bg-white border border-black/10 flex items-center justify-center text-sm shadow-sm">
+                      {wf.icon}
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="text-xs font-semibold truncate text-gray-950">
+                        {wf.name}
+                      </h4>
+                      <p className="text-[10px] text-gray-500 truncate max-w-[130px]">
+                        {wf.trigger}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {wf.active ? (
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Active" />
+                    ) : (
+                      <span className="h-1.5 w-1.5 rounded-full bg-gray-400" title="Paused" />
+                    )}
+                  </div>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <ConversationsList activeTab={activeTab} />
+          )}
         </div>
       )}
 
@@ -277,37 +872,19 @@ const LeftSideNavMobile = () => {
                     <LayoutDashboard className="text-black" /> Dashboard
                   </DropdownMenuItem>
                 )}
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push('/organizations');
-                    close();
-                  }}
-                >
-                  <Building2 className="text-black" /> Organizations
-                </DropdownMenuItem>
 
                 <DropdownMenuItem
                   onClick={() => {
                     router.push(
                       mode === UserMode.TENANT && currentTenant
-                        ? `/organizations/${currentTenant.id}/billing`
-                        : '/billing',
+                        ? `/organizations/${currentTenant.id}/members`
+                        : '/organizations',
                     );
                     close();
                   }}
                 >
-                  <ReceiptText className="text-black" /> Billing
+                  <Users className="text-black" /> Members
                 </DropdownMenuItem>
-                {mode === UserMode.TENANT && currentTenant && (
-                  <DropdownMenuItem
-                    onClick={() => {
-                      router.push(`/organizations/${currentTenant.id}/members`);
-                      close();
-                    }}
-                  >
-                    <Users className="text-black" /> Members
-                  </DropdownMenuItem>
-                )}
                 <DropdownMenuItem
                   onClick={() => {
                     router.push('/settings');

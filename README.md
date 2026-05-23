@@ -51,3 +51,6 @@ For deploying this frontend directly to the GCP VM running Nginx, ensure the fol
    - `AUTH_URL=https://altihq.com` (forces absolute auth callback URLs)
    - `NEXT_PUBLIC_API_URL=https://altihq.com/api/v1`
 
+## Release Verification
+- **v1.7.3 Release build**: May 23, 2026 (Simplified Tooltips)
+

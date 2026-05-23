@@ -29,7 +29,13 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 
-export default function ConversationsList({ searchQuery = '' }: { searchQuery?: string }) {
+export default function ConversationsList({
+  searchQuery = '',
+  activeTab = 'chat',
+}: {
+  searchQuery?: string;
+  activeTab?: 'chat' | 'research';
+}) {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
   const { close } = useDrawerStore();
@@ -42,8 +48,14 @@ export default function ConversationsList({ searchQuery = '' }: { searchQuery?: 
     !!session?.accessToken &&
     !session.isTokenExpired;
 
+  // isDeepSearch drives server-side filtering: each tab hits its own API query
+  const isDeepSearch = activeTab === 'research';
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-    useConversations(canFetchConversations ? session.accessToken : undefined);
+    useConversations(
+      canFetchConversations ? session.accessToken : undefined,
+      isDeepSearch,
+    );
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 
@@ -53,6 +65,7 @@ export default function ConversationsList({ searchQuery = '' }: { searchQuery?: 
     new Map(rawConversations.map(chat => [chat._id, chat])).values(),
   );
 
+  // Search filter only — tab filtering is done server-side via isDeepSearch
   const filteredConversations = searchQuery
     ? conversations.filter(chat => chat.title?.toLowerCase().includes(searchQuery.toLowerCase()))
     : conversations;
@@ -100,6 +113,15 @@ export default function ConversationsList({ searchQuery = '' }: { searchQuery?: 
       className="mt-2 h-[calc(100vh-60px)] overflow-y-auto"
       style={{ backgroundColor: '#F2F3F5' }}
     >
+      {filteredConversations.length === 0 && status === 'success' && (
+        <div className="mt-6 flex flex-col items-center gap-1 px-2 text-center">
+          <p className="text-xs text-gray-400">
+            {activeTab === 'research'
+              ? 'No research sessions yet. Switch to Research mode in the prompt bar to get started.'
+              : 'No conversations yet. Start a new chat!'}
+          </p>
+        </div>
+      )}
       {filteredConversations.map(chat => (
         <div
           className="group flex h-9 w-full items-center justify-between rounded-md text-sm font-medium text-black hover:bg-black/5"

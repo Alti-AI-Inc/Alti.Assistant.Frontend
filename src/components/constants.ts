@@ -54,11 +54,6 @@ export const ALLOWED_DOC_EXTENSIONS = [
 
 export const TOOLBAR_ITEMS = [
   {
-    type: OPTIONS.RESEARCH,
-    label: 'Deep Research',
-    Icon: Microscope,
-  },
-  {
     type: OPTIONS.Transcribe,
     label: 'Transcribe Audio',
     Icon: AudioLines,

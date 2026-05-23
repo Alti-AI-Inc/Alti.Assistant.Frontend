@@ -15,6 +15,7 @@ export async function PostConversation(
   accessToken: string,
   conversationId?: string,
   knowledgebaseId?: string,
+  extraParams?: Record<string, any>,
 ): Promise<ApiResponse> {
   try {
     console.log('[conversationsAction] PostConversation payload:', {
@@ -22,6 +23,7 @@ export async function PostConversation(
       knowledgebaseId,
       conversationId,
       message,
+      extraParams,
     });
     const response = await apiClient(apiUrl, {
       method: 'POST',
@@ -36,6 +38,7 @@ export async function PostConversation(
         timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
         localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
         localTime: new Date().toLocaleTimeString('en-US'),
+        ...extraParams,
       }),
     });
 
@@ -127,6 +130,7 @@ export interface Conversation {
   conversationId: string;
   title: string;
   is_saved?: boolean;
+  is_deep_search?: boolean;
   updatedAt: string;
   createdAt: string;
   messages?: ConversationMessage[];
@@ -149,10 +153,18 @@ export interface ConversationListResponse {
 export async function fetchConversationList(
   accessToken: string,
   page = 1,
+  isDeepSearch?: boolean,
 ): Promise<ApiResponse<ConversationListResponse>> {
   try {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: '20',
+    });
+    if (isDeepSearch !== undefined) {
+      params.set('is_deep_search', String(isDeepSearch));
+    }
     const res = await apiClient(
-      `${process.env.NEXT_PUBLIC_API_URL}/conversations?page=${page}&limit=20`,
+      `${process.env.NEXT_PUBLIC_API_URL}/conversations?${params.toString()}`,
       {
         method: 'GET',
         headers: {

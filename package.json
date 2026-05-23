@@ -1,11 +1,11 @@
 {
   "name": "alti-chat-frontend",
-  "version": "1.6.2",
+  "version": "1.8.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "dev:webpack": "next dev --webpack",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write ."

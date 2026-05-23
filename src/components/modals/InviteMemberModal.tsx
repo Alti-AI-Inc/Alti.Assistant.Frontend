@@ -215,26 +215,45 @@ export function InviteMemberModal() {
                   <SelectContent>
                     <SelectItem value={TenantRole.MEMBER}>
                       <div>
-                        <div className="font-medium capitalize">
-                          {TenantRole.MEMBER}
+                        <div className="font-medium">
+                          User
                         </div>
                         <div className="text-muted-foreground text-xs">
-                          Can use organization resources
+                          Can use organization resources and tools
+                        </div>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value={TenantRole.ADMIN}>
+                      <div>
+                        <div className="font-medium">
+                          Admin
+                        </div>
+                        <div className="text-muted-foreground text-xs">
+                          Can manage members and billing settings
                         </div>
                       </div>
                     </SelectItem>
                     <SelectItem value={TenantRole.OWNER}>
                       <div>
-                        <div className="font-medium capitalize">
-                          {TenantRole.OWNER}
+                        <div className="font-medium">
+                          Owner
                         </div>
                         <div className="text-muted-foreground text-xs">
-                          Full control of the organization
+                          Full control of the organization and billing
                         </div>
                       </div>
                     </SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="rounded-lg border border-black/10 bg-black/[0.03] p-3 text-xs text-black shadow-xs">
+                <p className="font-semibold text-black">
+                  Billing Notice
+                </p>
+                <p className="mt-1 text-gray-500">
+                  Adding this member will add an active seat to your organization plan. You will be billed <span className="font-semibold text-black">$25.00/month</span> for this member.
+                </p>
               </div>
             </div>
 

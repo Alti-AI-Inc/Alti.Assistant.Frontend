@@ -10,6 +10,7 @@ import {
   SlidersHorizontal,
   ShieldCheck,
   PanelLeftClose,
+  UserPlus,
 } from 'lucide-react';
 
 export interface SettingsOption {
@@ -48,6 +49,12 @@ const settingsOptions: SettingsOption[] = [
     title: 'Password',
     value: 'password',
     icon: <KeyRound className="h-5 w-5" />,
+  },
+  {
+    id: '5',
+    title: 'Invite',
+    value: 'invite',
+    icon: <UserPlus className="h-5 w-5" />,
   },
 ];
 
