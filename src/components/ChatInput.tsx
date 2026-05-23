@@ -416,8 +416,8 @@ const ChatInput = ({
         return '/legal-contract/assistant';
       // case OPTIONS.CODE:
       //   return '/search/code';
-      // case OPTIONS.RESEARCH:
-      //   return '/deep-research/assistant';
+      case OPTIONS.RESEARCH:
+        return '/deep-research/assistant';
       // case OPTIONS.GENERATE_PLAN:
       //   return '/search/plan';
       // case OPTIONS.GENERATE_REPORT:
@@ -600,6 +600,7 @@ const ChatInput = ({
           case OPTIONS.CREATIVE_WRITING:
             return response.data?.response;
           case OPTIONS.CODE:
+          case OPTIONS.RESEARCH:
             return response.data?.responseMessage?.answer;
           case OPTIONS.PRESENTATION:
             return response.data?.message;

@@ -43,8 +43,9 @@ import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { allApps } from '@/lib/all-apps';
 import { apiClientJson, buildApiUrl } from '@/lib/api-client';
+import { useBotsStore } from '@/stores/useBotsStore';
 
-type SidebarTab = 'chat' | 'research' | 'apps';
+type SidebarTab = 'chat' | 'research' | 'bots' | 'apps';
 
 const LeftSideNav = () => {
   const { data } = useSession();
@@ -54,12 +55,15 @@ const LeftSideNav = () => {
 
   const { onOpen } = useModalStore();
   const {
+    activeConversation,
+    selectedOption,
     setActiveConversation,
     setSelectedOption,
     setShowStartLastMessage,
     setUserMessage,
   } = useConversationsStore();
   const { isLeftSidebarOpen, toggleLeftSidebar } = useSidebarStore();
+  const { bots, activeBotId, setActiveBotId } = useBotsStore();
 
   const hideSidebar = !isLeftSidebarOpen;
   const isLoggedIn = data?.accessToken;
@@ -107,16 +111,41 @@ const LeftSideNav = () => {
   useEffect(() => {
     if (pathname === '/apps') {
       setActiveTab('apps');
+    } else if (pathname === '/my-chatbots' || pathname.startsWith('/my-chatbots')) {
+      setActiveTab('bots');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       const isResearch = useConversationsStore.getState().selectedOption === OPTIONS.RESEARCH;
       setActiveTab(isResearch ? 'research' : 'chat');
     }
   }, [pathname]);
 
+  // Synchronize tab and option selection with activeConversation.is_deep_search
+  useEffect(() => {
+    if (activeConversation) {
+      const isDeepSearch = !!((activeConversation as any).is_deep_search);
+      if (isDeepSearch) {
+        setActiveTab('research');
+        if (selectedOption !== OPTIONS.RESEARCH) {
+          setSelectedOption(OPTIONS.RESEARCH);
+        }
+      } else {
+        // Only set to chat if not on the bots page or apps page
+        if (pathname !== '/my-chatbots' && !pathname.startsWith('/my-chatbots') && pathname !== '/apps') {
+          setActiveTab('chat');
+          if (selectedOption === OPTIONS.RESEARCH) {
+            setSelectedOption(null);
+          }
+        }
+      }
+    }
+  }, [activeConversation, selectedOption, setSelectedOption, pathname]);
+
   const handleTabChange = (tab: SidebarTab) => {
     setActiveTab(tab);
     if (tab === 'apps') {
       router.push('/apps');
+    } else if (tab === 'bots') {
+      router.push('/my-chatbots');
     } else if (tab === 'research') {
       setSelectedOption(OPTIONS.RESEARCH);
       if (pathname !== '/' && !pathname.startsWith('/c/')) {
@@ -246,25 +275,26 @@ const LeftSideNav = () => {
         )}{' '}
       </div>
 
-      {/* Chat / Research / Apps toggle */}
+      {/* Chat / Research / Bots / Apps toggle */}
       {!hideSidebar && isLoggedIn && (
         <div className="border-b border-black/10 px-4 py-2" style={{ backgroundColor: '#F2F3F5' }}>
           <div className="relative flex rounded-lg bg-black/[0.06] p-0.5">
             {/* sliding indicator */}
             <div
               className={cn(
-                'absolute top-0.5 bottom-0.5 w-[calc(33.33%-2px)] rounded-md bg-white shadow-sm transition-all duration-200 ease-in-out',
+                'absolute top-0.5 bottom-0.5 w-[calc(25%-2px)] rounded-md bg-white shadow-sm transition-all duration-200 ease-in-out',
                 activeTab === 'chat' && 'left-0.5',
-                activeTab === 'research' && 'left-[calc(33.33%+0.5px)]',
-                activeTab === 'apps' && 'left-[calc(66.66%+0.5px)]',
+                activeTab === 'research' && 'left-[calc(25%+0.5px)]',
+                activeTab === 'bots' && 'left-[calc(50%+0.5px)]',
+                activeTab === 'apps' && 'left-[calc(75%+0.5px)]',
               )}
             />
             <button
               type="button"
               onClick={() => handleTabChange('chat')}
               className={cn(
-                'relative z-10 flex-1 rounded-md py-1 text-xs font-medium transition-colors duration-150',
-                activeTab === 'chat' ? 'text-black' : 'text-gray-500 hover:text-gray-700',
+                'relative z-10 flex-1 rounded-md py-1 text-[11px] font-medium transition-colors duration-150',
+                activeTab === 'chat' ? 'text-black font-semibold' : 'text-gray-500 hover:text-gray-700',
               )}
             >
               Chat
@@ -273,18 +303,28 @@ const LeftSideNav = () => {
               type="button"
               onClick={() => handleTabChange('research')}
               className={cn(
-                'relative z-10 flex-1 rounded-md py-1 text-xs font-medium transition-colors duration-150',
-                activeTab === 'research' ? 'text-black' : 'text-gray-500 hover:text-gray-700',
+                'relative z-10 flex-1 rounded-md py-1 text-[11px] font-medium transition-colors duration-150',
+                activeTab === 'research' ? 'text-black font-semibold' : 'text-gray-500 hover:text-gray-700',
               )}
             >
               Research
             </button>
             <button
               type="button"
+              onClick={() => handleTabChange('bots')}
+              className={cn(
+                'relative z-10 flex-1 rounded-md py-1 text-[11px] font-medium transition-colors duration-150',
+                activeTab === 'bots' ? 'text-black font-semibold' : 'text-gray-500 hover:text-gray-700',
+              )}
+            >
+              Bots
+            </button>
+            <button
+              type="button"
               onClick={() => handleTabChange('apps')}
               className={cn(
-                'relative z-10 flex-1 rounded-md py-1 text-xs font-medium transition-colors duration-150',
-                activeTab === 'apps' ? 'text-black' : 'text-gray-500 hover:text-gray-700',
+                'relative z-10 flex-1 rounded-md py-1 text-[11px] font-medium transition-colors duration-150',
+                activeTab === 'apps' ? 'text-black font-semibold' : 'text-gray-500 hover:text-gray-700',
               )}
             >
               Apps
@@ -304,10 +344,73 @@ const LeftSideNav = () => {
           {/* Dynamic sub-header reflecting the selected active tab history */}
           <div className="mt-4 mb-2 px-1 flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-              {activeTab === 'research' ? 'Research History' : activeTab === 'apps' ? 'Composio Apps' : 'Chat History'}
+              {activeTab === 'bots' ? 'My Bots' : activeTab === 'research' ? 'Research History' : activeTab === 'apps' ? 'Composio Apps' : 'Chat History'}
             </span>
+            {activeTab === 'bots' && (
+              <button
+                type="button"
+                onClick={() => onOpen({ type: 'add-chatbot' })}
+                className="flex h-5 w-5 items-center justify-center rounded-md bg-black/5 hover:bg-black/10 text-black transition-colors"
+                title="Create Custom Bot"
+              >
+                <Plus className="size-3.5" />
+              </button>
+            )}
           </div>
-          {activeTab === 'apps' ? (
+          {activeTab === 'bots' ? (
+            <div className="flex-1 space-y-1 py-1 pb-4">
+              {bots
+                .filter(bot =>
+                  bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  bot.description.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map(bot => {
+                  const isSelected = activeBotId === bot.id && pathname === '/my-chatbots';
+                  return (
+                    <button
+                      key={bot.id}
+                      onClick={() => {
+                        setActiveBotId(bot.id);
+                        router.push(`/my-chatbots?bot=${bot.id}`);
+                      }}
+                      className={cn(
+                        "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
+                        isSelected 
+                          ? "bg-black/[0.06] border border-black/10 shadow-xs" 
+                          : "hover:bg-black/[0.03] border border-transparent"
+                      )}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        {/* Avatar */}
+                        <div className="flex-none h-7 w-7 rounded-md bg-white border border-black/10 flex items-center justify-center text-lg shadow-sm">
+                          {bot.avatar || '🤖'}
+                        </div>
+                        <div className="min-w-0">
+                          <h4 className={cn(
+                            "text-xs font-semibold truncate",
+                            isSelected ? "text-blue-600 font-bold" : "text-gray-950"
+                          )}>
+                            {bot.name}
+                          </h4>
+                          <p className="text-[10px] text-gray-500 truncate max-w-[130px]">
+                            {bot.description}
+                          </p>
+                        </div>
+                      </div>
+                      <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+                  );
+                })}
+              {bots.filter(bot =>
+                bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                bot.description.toLowerCase().includes(searchQuery.toLowerCase())
+              ).length === 0 && (
+                <div className="py-4 text-center text-xs text-gray-500">
+                  No bots found.
+                </div>
+              )}
+            </div>
+          ) : activeTab === 'apps' ? (
             <div className="flex-1 space-y-1 py-1 pb-4">
               {filteredApps.length === 0 ? (
                 <div className="py-4 text-center text-xs text-gray-500">
@@ -348,7 +451,7 @@ const LeftSideNav = () => {
                             <span className="text-xs font-semibold text-blue-600">{app.title.charAt(0)}</span>
                           )}
                         </div>
-
+ 
                         <div className="min-w-0">
                           <h4 className={cn(
                             "text-xs font-semibold truncate",
@@ -361,7 +464,7 @@ const LeftSideNav = () => {
                           </p>
                         </div>
                       </div>
-
+ 
                       {/* Right hand Status dot indicators */}
                       <div className="flex items-center gap-1">
                         {isConnected ? (
