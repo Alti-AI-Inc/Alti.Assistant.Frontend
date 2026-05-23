@@ -15,7 +15,6 @@ import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { UserMode } from '@/types/tenant';
 import {
-  Bookmark,
   Building2,
   LayoutDashboard,
   LogOut,
@@ -227,26 +226,6 @@ const LeftSideNav = () => {
 
             {/* Action Buttons to the right */}
             <div className="flex flex-none items-center gap-1.5">
-              {/* Favorites Button */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black"
-                    onClick={() => {
-                      router.push('/saved-chats');
-                      close();
-                    }}
-                  >
-                    <Bookmark className="size-4 text-black" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>Saved Chats</p>
-                </TooltipContent>
-              </Tooltip>
-
               {/* Plus for New Chat Button */}
               <Tooltip>
                 <TooltipTrigger asChild>

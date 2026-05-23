@@ -15,7 +15,6 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { UserMode } from '@/types/tenant';
 import {
-  Bookmark,
   Building2,
   LayoutDashboard,
   LogOut,
@@ -363,24 +362,15 @@ const LeftSideNavMobile = () => {
                 <Plus className="size-3.5" />
               </button>
             ) : (
-              <div className="flex items-center space-x-2.5">
-                <Bookmark
-                  onClick={() => {
-                    router.push('/saved-chats');
-                    close();
-                  }}
-                  className="size-3.5 cursor-pointer text-gray-500 hover:text-black transition-colors"
-                />
-                <Search
-                  onClick={() => {
-                    onOpen({
-                      type: 'search-chats',
-                    });
-                    close();
-                  }}
-                  className="size-3.5 cursor-pointer text-gray-500 hover:text-black transition-colors"
-                />
-              </div>
+              <Search
+                onClick={() => {
+                  onOpen({
+                    type: 'search-chats',
+                  });
+                  close();
+                }}
+                className="size-3.5 cursor-pointer text-gray-500 hover:text-black transition-colors"
+              />
             )}
           </div>
           {activeTab === 'bots' ? (
