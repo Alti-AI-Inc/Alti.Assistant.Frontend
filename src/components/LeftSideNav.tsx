@@ -253,6 +253,63 @@ const LeftSideNav = () => {
   };
   const { close } = useDrawerStore();
 
+  const getPlusButtonProps = () => {
+    switch (activeTab) {
+      case 'chat':
+        return {
+          visible: true,
+          tooltip: 'New Chat',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(null);
+            close();
+            router.push('/');
+          },
+        };
+      case 'research':
+        return {
+          visible: true,
+          tooltip: 'New Research Session',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.RESEARCH);
+            close();
+            router.push('/');
+          },
+        };
+      case 'bots':
+        return {
+          visible: true,
+          tooltip: 'Create Custom Agent',
+          onClick: () => {
+            onOpen({ type: 'add-chatbot' });
+          },
+        };
+      case 'workflows':
+        return {
+          visible: true,
+          tooltip: 'Create New Workflow',
+          onClick: () => {
+            alert('Define Cron or Webhook triggers to chain your custom agents and RAG indexes in a new workflow!');
+          },
+        };
+      case 'data':
+      case 'apps':
+      default:
+        return {
+          visible: false,
+          tooltip: '',
+          onClick: () => {},
+        };
+    }
+  };
+
+  const plusProps = getPlusButtonProps();
+
   const handleLogoMouseEnter = () => {
     if (hideSidebar) {
       setLogoHovered(true);
@@ -319,33 +376,29 @@ const LeftSideNav = () => {
             </div>
 
             {/* Action Buttons to the right */}
-            <div className="flex flex-none items-center gap-1.5">
-              {/* Plus for New Chat Button */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black"
-                    onClick={() => {
-                      setActiveConversation(null);
-                      setShowStartLastMessage(false);
-                      setUserMessage('');
-                      setSelectedOption(null);
-                      close();
-                      router.push('/');
-                    }}
-                  >
-                    <Plus className="size-4 text-black" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>New Chat</p>
-                </TooltipContent>
-              </Tooltip>
-            </div>
+            {plusProps.visible && (
+              <div className="flex flex-none items-center gap-1.5 animate-in fade-in zoom-in duration-200">
+                {/* Plus for Dynamic Tab Action */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black"
+                      onClick={plusProps.onClick}
+                    >
+                      <Plus className="size-4 text-black" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>{plusProps.tooltip}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            )}
           </div>
-        )}{' '}
+        )}
+{' '}
       </div>
 
       {/* Chat / Research / Agents / Data / Apps icon row toggle */}

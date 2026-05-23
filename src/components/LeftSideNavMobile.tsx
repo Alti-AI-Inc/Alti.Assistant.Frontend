@@ -252,6 +252,65 @@ const LeftSideNavMobile = () => {
     }
   };
 
+  const getPlusButtonProps = () => {
+    switch (activeTab) {
+      case 'chat':
+        return {
+          visible: true,
+          label: 'New Chat',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(null);
+            router.push('/');
+            close();
+          },
+        };
+      case 'research':
+        return {
+          visible: true,
+          label: 'New Research Session',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.RESEARCH);
+            router.push('/');
+            close();
+          },
+        };
+      case 'bots':
+        return {
+          visible: true,
+          label: 'Create Custom Agent',
+          onClick: () => {
+            onOpen({ type: 'add-chatbot' });
+            close();
+          },
+        };
+      case 'workflows':
+        return {
+          visible: true,
+          label: 'Create New Workflow',
+          onClick: () => {
+            alert('Define Cron or Webhook triggers to chain your custom agents and RAG indexes in a new workflow!');
+            close();
+          },
+        };
+      case 'data':
+      case 'apps':
+      default:
+        return {
+          visible: false,
+          label: '',
+          onClick: () => {},
+        };
+    }
+  };
+
+  const plusProps = getPlusButtonProps();
+
   return (
     <div className="bg-secondary flex h-full flex-col">
       {/* TenantModeSwitcher at top */}
@@ -264,20 +323,15 @@ const LeftSideNavMobile = () => {
       {/* Sticky nav buttons */}
       <div className="bg-secondary sticky top-0 z-10">
         <div className="space-y-0.5 px-2 py-2">
-          <Button
-            onClick={() => {
-              setActiveConversation(null);
-              setShowStartLastMessage(false);
-              setUserMessage('');
-              setSelectedOption(null);
-              router.push('/');
-              close();
-            }}
-            className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-          >
-            <SquarePen />
-            <span className="text-sm font-normal">New Chat</span>
-          </Button>
+          {plusProps.visible && (
+            <Button
+              onClick={plusProps.onClick}
+              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 animate-in fade-in zoom-in duration-200"
+            >
+              <Plus className="size-4 mr-2 text-black" />
+              <span className="text-sm font-normal">{plusProps.label}</span>
+            </Button>
+          )}
 
           {isLoggedIn && (
             <>
