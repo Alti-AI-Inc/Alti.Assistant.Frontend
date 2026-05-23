@@ -50,6 +50,7 @@ import { toast } from 'sonner';
 import { ALLOWED_DOC_EXTENSIONS } from './constants';
 import { Textarea } from './ui/textarea';
 import { WarningMessageModal } from './WarningMessageModal';
+import PreFlightPanel, { PreFlightSettings } from './research/PreFlightPanel';
 
 interface ChatInputProps {
   conversationId?: string;
@@ -143,6 +144,11 @@ const ChatInput = ({
 
   // Custom files state for docs (controlled or uncontrolled)
   const [internalSelectedFiles, setInternalSelectedFiles] = useState<File[]>([]);
+  const [researchSettings, setResearchSettings] = useState<PreFlightSettings>({
+    depth: 'thorough',
+    consensusLevel: 'majority',
+    boardPersonas: ['McKinsey Strategy Partner', 'Gartner Research Director', 'YC Technical Architect']
+  });
 
   const selectedFiles =
     externalSelectedFiles !== undefined
@@ -536,6 +542,7 @@ const ChatInput = ({
           ? activeConversation?.conversationId || undefined
           : conversationId,
         activeConversation?.knowledgebaseId,
+        selectedOption === OPTIONS.RESEARCH ? researchSettings : undefined
       );
     },
     onMutate: ({ message: userMessage }) => {
@@ -1138,6 +1145,13 @@ const ChatInput = ({
                   <p>Attach File</p>
                 </TooltipContent>
               </Tooltip>
+            )}
+
+            {selectedOption === OPTIONS.RESEARCH && (
+              <PreFlightPanel
+                settings={researchSettings}
+                onSettingsChange={setResearchSettings}
+              />
             )}
 
             <Textarea

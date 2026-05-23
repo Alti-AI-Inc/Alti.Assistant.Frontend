@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useBotsStore, Chatbot } from '@/stores/useBotsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
@@ -40,7 +40,7 @@ const DEFAULT_ICONS: Record<string, any> = {
   'general-assistant': BrainCircuit,
 };
 
-export default function MyChatbotsPage() {
+function MyChatbotsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session } = useSession();
@@ -328,5 +328,20 @@ export default function MyChatbotsPage() {
       {/* Right Column (Bot Specific Details & Timeline) */}
       <BotRightSidebar botId={activeBot.id} activeThreadId={activeBotThreadId} />
     </div>
+  );
+}
+
+export default function MyChatbotsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex-1 bg-gray-50/50 dark:bg-gray-900/50 min-h-screen flex items-center justify-center">
+        <div className="flex items-center gap-2 text-gray-500 font-semibold text-sm">
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
+          Loading Chatbot Workspace...
+        </div>
+      </div>
+    }>
+      <MyChatbotsContent />
+    </Suspense>
   );
 }

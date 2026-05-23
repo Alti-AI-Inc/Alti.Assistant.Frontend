@@ -28,6 +28,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { Streamdown } from 'streamdown';
 import ReferencesList from './ReferenceList';
+import TelemetryConsole from '@/components/research/TelemetryConsole';
+import InteractiveTopology from '@/components/research/InteractiveTopology';
 
 import FileDownloadCard from './FileDownloadCard';
 import VideoComponent from './VideoComponent';
@@ -605,7 +607,10 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     <FileDownloadCard document={message.metadata.document} />
                   )}
                   {!!message.metadata?.reference?.length && (
-                    <ReferencesList references={message.metadata.reference} />
+                    <>
+                      <ReferencesList references={message.metadata.reference} />
+                      <InteractiveTopology sources={message.metadata.reference} knowledgeGraph={(message.metadata as any).knowledgeGraph} />
+                    </>
                   )}
                   {message.metadata?.financialTicker && (
                     <FinancialWidget 
@@ -668,12 +673,19 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
               )}
             {/* Loading message - visible in the messages area */}
             {isLoadingResponse && (
-              <div className="flex items-center justify-start py-4">
-                <div className="flex items-center space-x-2 text-gray-500">
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"></div>
-                  <span>{getStatusMessage()}</span>
+              selectedOption === OPTIONS.RESEARCH ? (
+                <TelemetryConsole
+                  conversationId={activeConversation?.conversationId || 'new-chat'}
+                  active={isLoadingResponse}
+                />
+              ) : (
+                <div className="flex items-center justify-start py-4">
+                  <div className="flex items-center space-x-2 text-gray-500">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"></div>
+                    <span>{getStatusMessage()}</span>
+                  </div>
                 </div>
-              </div>
+              )
             )}
             <div
               className={cn(
