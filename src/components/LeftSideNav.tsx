@@ -376,7 +376,7 @@ const LeftSideNav = () => {
               )}
             </div>
           ) : (
-            <ConversationsList searchQuery={searchQuery} activeTab={activeTab === 'apps' ? 'chat' : activeTab} />
+            <ConversationsList searchQuery={searchQuery} activeTab={activeTab} />
           )}
         </div>
       )}

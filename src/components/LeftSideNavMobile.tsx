@@ -402,7 +402,7 @@ const LeftSideNavMobile = () => {
               )}
             </div>
           ) : (
-            <ConversationsList activeTab={activeTab === 'apps' ? 'chat' : activeTab} />
+            <ConversationsList activeTab={activeTab} />
           )}
         </div>
       )}

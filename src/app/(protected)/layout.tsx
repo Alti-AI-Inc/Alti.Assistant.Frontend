@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import LeftSideNav from '@/components/LeftSideNav';
 
 import LeftSideNavMobile from '@/components/LeftSideNavMobile';
@@ -64,7 +65,9 @@ export default function ProtectedLayout({
                 </Link>
               </SheetTitle>
             </SheetHeader>
-            <LeftSideNavMobile />
+            <Suspense fallback={null}>
+              <LeftSideNavMobile />
+            </Suspense>
           </SheetContent>
         </Sheet>
 
@@ -102,7 +105,9 @@ export default function ProtectedLayout({
           )}
           style={{ backgroundColor: '#F2F3F5' }}
         >
-          <LeftSideNav />
+          <Suspense fallback={null}>
+            <LeftSideNav />
+          </Suspense>
         </div>
 
         {/* Main content */}

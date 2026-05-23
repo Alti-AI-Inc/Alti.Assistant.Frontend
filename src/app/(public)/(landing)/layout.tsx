@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import LeftSideNav from '@/components/LeftSideNav';
 import LeftSideNavMobile from '@/components/LeftSideNavMobile';
 import {
@@ -45,7 +46,9 @@ export default function PublicLayout({
                 />
               </SheetTitle>
             </SheetHeader>
-            <LeftSideNavMobile />
+            <Suspense fallback={null}>
+              <LeftSideNavMobile />
+            </Suspense>
           </SheetContent>
         </Sheet>
         <Link href="/">
@@ -69,7 +72,9 @@ export default function PublicLayout({
           )}
           style={{ backgroundColor: '#F2F3F5' }}
         >
-          <LeftSideNav />
+          <Suspense fallback={null}>
+            <LeftSideNav />
+          </Suspense>
         </div>
 
         {/* Main content */}
