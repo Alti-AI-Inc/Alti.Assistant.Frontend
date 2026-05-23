@@ -400,168 +400,30 @@ export function OrganizationTenantOverview({
   }
 
   return (
-    <section className={fixedTenantId ? 'space-y-6' : 'mt-10 space-y-6'}>
-      {!fixedTenantId && (
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <h2 className="text-xl font-semibold tracking-tight">
-              Organization overview
-            </h2>
-            <p className="text-muted-foreground text-sm">
-              Members, invitations, and usage for the selected organization
-            </p>
-          </div>
-          <div className="flex w-full flex-col gap-2 md:max-w-sm">
-            <label className="text-sm font-medium">Organization</label>
-            <Select
-              value={selectedTenantId}
-              onValueChange={setSelectedTenantId}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Choose organization" />
-              </SelectTrigger>
-              <SelectContent>
-                {organizations.map(org => (
-                  <SelectItem key={org.id} value={org.id}>
-                    {org.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      )}
-
-      {isLoadingDashboard && fixedTenantId ? (
+    <section className="space-y-6">
+      {isLoadingDashboard ? (
         <div className="space-y-6">
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Skeleton className="h-20 rounded-lg" />
-            <Skeleton className="h-20 rounded-lg" />
-          </div>
-          <Card>
-            <CardHeader>
-              <Skeleton className="h-6 w-48 max-w-full" />
-              <Skeleton className="mt-2 h-4 w-72 max-w-full" />
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {[1, 2, 3, 4].map(i => (
-                <Skeleton key={i} className="h-10 w-full" />
-              ))}
-            </CardContent>
-          </Card>
-        </div>
-      ) : isLoadingDashboard ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {[1, 2, 3, 4].map(i => (
-            <Skeleton key={i} className="h-28" />
-          ))}
+          <Skeleton className="h-10 w-48" />
+          <Skeleton className="h-[200px] rounded-lg" />
         </div>
       ) : selectedTenantId ? (
         <>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <Card>
-              <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-                <div className="space-y-1">
-                  <CardDescription>Organization</CardDescription>
-                  <CardTitle className="text-xl">{displayTenantName}</CardTitle>
-                </div>
-                <Building2 className="text-muted-foreground size-5" />
-              </CardHeader>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-                <div className="space-y-1">
-                  <CardDescription>Total members</CardDescription>
-                  <CardTitle className="text-2xl">{members.length}</CardTitle>
-                </div>
-                <Users className="text-muted-foreground size-5" />
-              </CardHeader>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-                <div className="space-y-1">
-                  <CardDescription>Plan</CardDescription>
-                  <CardTitle className="text-2xl capitalize">
-                    {planName}
-                  </CardTitle>
-                </div>
-                <CreditCard className="text-muted-foreground size-5" />
-              </CardHeader>
-            </Card>
-            <Card>
-              <CardHeader className="space-y-1 pb-2">
-                <CardDescription>Status</CardDescription>
-                <CardTitle className="text-2xl capitalize">{status}</CardTitle>
-              </CardHeader>
-              <CardContent className="text-muted-foreground text-xs">
-                {seatUsage.maxSeats > 0
-                  ? `${seatUsage.usedSeats} / ${seatUsage.maxSeats} seats used`
-                  : `${seatUsage.usedSeats} active seats`}
-              </CardContent>
-            </Card>
-          </div>
-
-          {usage && (
+          {/* Vercel-style Header (Title on left, Invite button on right) */}
+          <div className="flex items-center justify-between border-b border-black/10 pb-5">
             <div>
-              <h3 className="text-muted-foreground mb-3 text-sm font-medium">
-                Usage statistics
-              </h3>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <Card>
-                  <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-                    <CardDescription>Members</CardDescription>
-                    <Users className="text-muted-foreground size-4" />
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-2xl font-semibold">
-                      {formatUsageValue(
-                        'memberCount',
-                        usage.memberCount ??
-                          (usage as { usersCount?: number }).usersCount,
-                      )}
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-                    <CardDescription>Storage</CardDescription>
-                    <HardDrive className="text-muted-foreground size-4" />
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-2xl font-semibold">
-                      {formatUsageValue(
-                        'storageUsed',
-                        usage.storageUsed ?? organization?.usage?.storageUsed,
-                      )}
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-                    <CardDescription>API calls</CardDescription>
-                    <Activity className="text-muted-foreground size-4" />
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-2xl font-semibold">
-                      {formatUsageValue(
-                        'apiCalls',
-                        usage.apiCalls ?? organization?.usage?.apiCallsUsed,
-                      )}
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
+              <h2 className="text-xl font-semibold tracking-tight text-black">
+                Team Members
+              </h2>
+              <p className="text-gray-500 text-xs mt-1">
+                Manage your team members and their roles.
+              </p>
             </div>
-          )}
-
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div />
-            <div className="flex flex-wrap items-center gap-2">
+            <div>
               {canInvite &&
                 (canInviteTeam ? (
-                  <Button type="button" onClick={handleInviteMember}>
+                  <Button type="button" onClick={handleInviteMember} className="bg-black text-white hover:bg-black/90 text-xs h-9">
                     <UserPlus className="mr-2 size-4" />
-                    Invite member
+                    Invite Member
                   </Button>
                 ) : (
                   <TooltipProvider>
@@ -571,68 +433,46 @@ export function OrganizationTenantOverview({
                           <Button
                             type="button"
                             disabled
-                            className="pointer-events-none"
+                            className="pointer-events-none text-xs h-9"
                           >
                             <Lock className="mr-2 size-4" />
-                            Invite member
+                            Invite Member
                           </Button>
                         </span>
                       </TooltipTrigger>
-                      <TooltipContent>
+                      <TooltipContent side="top">
                         <p>Upgrade your plan to invite members</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                 ))}
-              {!fixedTenantId && (
-                <Button variant="outline" asChild>
-                  <Link href={`/organizations/${selectedTenantId}/members`}>
-                    Full members page
-                    <ArrowRight className="ml-2 size-4" />
-                  </Link>
-                </Button>
-              )}
             </div>
           </div>
 
+          {/* Pending Invitations Section */}
           {invitations.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Pending invitations</CardTitle>
-                <CardDescription>
-                  Invitations waiting to be accepted
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
+            <div className="space-y-2">
+              <h3 className="text-sm font-semibold text-black">Pending Invitations</h3>
+              <div className="rounded-lg border border-black/10 bg-white p-4">
                 <PendingInvitations
                   invitations={invitations}
                   onUpdate={reloadDashboard}
                 />
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
 
-          <Card>
-            <CardHeader>
-              <CardTitle>
-                Team members ({members.length}
-                {maxMembers !== undefined ? ` / ${maxMembers}` : ''})
-              </CardTitle>
-              <CardDescription>
-                People with access to this organization
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <MembersList
-                members={members}
-                tenantId={selectedTenantId}
-                onUpdate={reloadDashboard}
-              />
-            </CardContent>
-          </Card>
+          {/* Team Members List Table (Simple table without nested Card) */}
+          <div className="space-y-2 pt-2">
+            <MembersList
+              members={members}
+              tenantId={selectedTenantId}
+              onUpdate={reloadDashboard}
+            />
+          </div>
         </>
       ) : (
-        <p className="text-muted-foreground text-sm">
+        <p className="text-gray-500 text-xs">
           Select an organization to load details.
         </p>
       )}
