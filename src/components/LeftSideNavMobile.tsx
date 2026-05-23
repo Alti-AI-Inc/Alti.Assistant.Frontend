@@ -30,14 +30,14 @@ import {
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ConversationsList from './ConversationsList';
 import { TenantModeSwitcher } from './TenantModeSwitcher';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
-type SidebarTab = 'chat' | 'research';
+type SidebarTab = 'chat' | 'research' | 'apps';
 
 const LeftSideNavMobile = () => {
   const { data } = useSession();
@@ -57,12 +57,32 @@ const LeftSideNavMobile = () => {
   const isLoggedIn = data?.accessToken;
   const [activeTab, setActiveTab] = useState<SidebarTab>('chat');
 
+  useEffect(() => {
+    if (pathname === '/apps') {
+      setActiveTab('apps');
+    } else if (pathname === '/' || pathname.startsWith('/c/')) {
+      const isResearch = useConversationsStore.getState().selectedOption === OPTIONS.RESEARCH;
+      setActiveTab(isResearch ? 'research' : 'chat');
+    }
+  }, [pathname]);
+
   const handleTabChange = (tab: SidebarTab) => {
     setActiveTab(tab);
-    if (tab === 'research') {
+    if (tab === 'apps') {
+      router.push('/apps');
+      close();
+    } else if (tab === 'research') {
       setSelectedOption(OPTIONS.RESEARCH);
+      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+        router.push('/');
+      }
+      close();
     } else {
       setSelectedOption(null);
+      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+        router.push('/');
+      }
+      close();
     }
   };
 
@@ -223,15 +243,17 @@ const LeftSideNavMobile = () => {
         </div>
       </div>
 
-      {/* Chat / Research toggle */}
+      {/* Chat / Research / Apps toggle */}
       {isLoggedIn && (
         <div className="border-b border-black/5 px-4 py-2 bg-secondary">
           <div className="relative flex rounded-lg bg-black/[0.06] p-0.5">
             {/* sliding indicator */}
             <div
               className={cn(
-                'absolute top-0.5 bottom-0.5 w-[calc(50%-2px)] rounded-md bg-white shadow-sm transition-all duration-200 ease-in-out',
-                activeTab === 'chat' ? 'left-0.5' : 'left-[calc(50%+1px)]',
+                'absolute top-0.5 bottom-0.5 w-[calc(33.33%-2px)] rounded-md bg-white shadow-sm transition-all duration-200 ease-in-out',
+                activeTab === 'chat' && 'left-0.5',
+                activeTab === 'research' && 'left-[calc(33.33%+0.5px)]',
+                activeTab === 'apps' && 'left-[calc(66.66%+0.5px)]',
               )}
             />
             <button
@@ -253,6 +275,16 @@ const LeftSideNavMobile = () => {
               )}
             >
               Research
+            </button>
+            <button
+              type="button"
+              onClick={() => handleTabChange('apps')}
+              className={cn(
+                'relative z-10 flex-1 rounded-md py-1 text-xs font-medium transition-colors duration-150',
+                activeTab === 'apps' ? 'text-black' : 'text-gray-500 hover:text-gray-700',
+              )}
+            >
+              Apps
             </button>
           </div>
         </div>
