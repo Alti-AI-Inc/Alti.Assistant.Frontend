@@ -55,10 +55,10 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   };
 
   return (
-    <aside className="w-80 flex-none flex flex-col border-l border-gray-200 bg-gray-50/50 dark:border-gray-800 dark:bg-gray-950/50 h-full overflow-hidden transition-all duration-300">
+    <aside className="w-80 flex-none flex flex-col border-l border-black/10 h-full overflow-hidden transition-all duration-300" style={{ backgroundColor: '#F2F3F5' }}>
       {/* Header matching left side menu */}
       <header
-        className="h-14 border-b border-black/10 flex items-center justify-between px-6 flex-none"
+        className="sticky top-0 z-30 flex items-center justify-between border-b border-black/10 px-4 pt-4 pb-4 flex-none"
         style={{ backgroundColor: '#F2F3F5' }}
       >
         <button
@@ -66,9 +66,9 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
           className="p-1 rounded-md hover:bg-black/5 transition-colors"
         >
           {isLeftSidebarOpen ? (
-            <PanelLeftClose className="size-5 text-gray-600" />
-          ) : (
             <PanelLeft className="size-5 text-gray-600" />
+          ) : (
+            <PanelLeftClose className="size-5 text-gray-600" />
           )}
         </button>
 
