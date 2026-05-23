@@ -282,11 +282,11 @@ const LeftSideNav = () => {
             {/* sliding indicator */}
             <div
               className={cn(
-                'absolute top-0.5 bottom-0.5 w-[calc(25%-2px)] rounded-md bg-white shadow-sm transition-all duration-200 ease-in-out',
-                activeTab === 'chat' && 'left-0.5',
-                activeTab === 'research' && 'left-[calc(25%+0.5px)]',
-                activeTab === 'bots' && 'left-[calc(50%+0.5px)]',
-                activeTab === 'apps' && 'left-[calc(75%+0.5px)]',
+                'absolute top-0.5 bottom-0.5 w-[calc(25%-2px)] rounded-md shadow-xs transition-all duration-200 ease-in-out',
+                activeTab === 'chat' && 'left-0.5 bg-blue-600',
+                activeTab === 'research' && 'left-[calc(25%+0.5px)] bg-indigo-600',
+                activeTab === 'bots' && 'left-[calc(50%+0.5px)] bg-emerald-600',
+                activeTab === 'apps' && 'left-[calc(75%+0.5px)] bg-purple-600',
               )}
             />
             <button
@@ -294,7 +294,7 @@ const LeftSideNav = () => {
               onClick={() => handleTabChange('chat')}
               className={cn(
                 'relative z-10 flex-1 rounded-md py-1 text-[11px] font-medium transition-colors duration-150',
-                activeTab === 'chat' ? 'text-black font-semibold' : 'text-gray-500 hover:text-gray-700',
+                activeTab === 'chat' ? 'text-white font-bold' : 'text-gray-500 hover:text-gray-700',
               )}
             >
               Chat
@@ -304,7 +304,7 @@ const LeftSideNav = () => {
               onClick={() => handleTabChange('research')}
               className={cn(
                 'relative z-10 flex-1 rounded-md py-1 text-[11px] font-medium transition-colors duration-150',
-                activeTab === 'research' ? 'text-black font-semibold' : 'text-gray-500 hover:text-gray-700',
+                activeTab === 'research' ? 'text-white font-bold' : 'text-gray-500 hover:text-gray-700',
               )}
             >
               Research
@@ -314,7 +314,7 @@ const LeftSideNav = () => {
               onClick={() => handleTabChange('bots')}
               className={cn(
                 'relative z-10 flex-1 rounded-md py-1 text-[11px] font-medium transition-colors duration-150',
-                activeTab === 'bots' ? 'text-black font-semibold' : 'text-gray-500 hover:text-gray-700',
+                activeTab === 'bots' ? 'text-white font-bold' : 'text-gray-500 hover:text-gray-700',
               )}
             >
               Bots
@@ -324,7 +324,7 @@ const LeftSideNav = () => {
               onClick={() => handleTabChange('apps')}
               className={cn(
                 'relative z-10 flex-1 rounded-md py-1 text-[11px] font-medium transition-colors duration-150',
-                activeTab === 'apps' ? 'text-black font-semibold' : 'text-gray-500 hover:text-gray-700',
+                activeTab === 'apps' ? 'text-white font-bold' : 'text-gray-500 hover:text-gray-700',
               )}
             >
               Apps
