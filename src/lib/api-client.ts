@@ -30,7 +30,7 @@ function getTenantContext(): { mode: UserMode; activeTenantId: string | null } {
   }
 
   try {
-    const stored = localStorage.getItem('tenant-storage');
+    const stored = localStorage.getItem('tenant-store');
     if (!stored) {
       return { mode: UserMode.PERSONAL, activeTenantId: null };
     }

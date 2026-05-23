@@ -278,15 +278,15 @@ const LeftSideNav = () => {
       {/* Chat / Research / Bots / Apps toggle */}
       {!hideSidebar && isLoggedIn && (
         <div className="border-b border-black/10 px-4 py-2" style={{ backgroundColor: '#F2F3F5' }}>
-          <div className="flex gap-1.5 p-0.5">
+          <div className="flex bg-black/[0.06] p-1 rounded-xl w-full gap-1">
             <button
               type="button"
               onClick={() => handleTabChange('chat')}
               className={cn(
-                'flex-1 rounded-lg py-1.5 text-[11px] font-bold shadow-xs transition-all duration-150 text-center border border-transparent',
+                'flex-1 rounded-lg py-1.5 text-[11px] font-bold transition-all duration-200 text-center border border-transparent focus:outline-none select-none',
                 activeTab === 'chat'
-                  ? 'bg-white text-gray-950 shadow-xs border-black/5'
-                  : 'bg-black/[0.04] text-gray-500 hover:text-gray-800 hover:bg-black/[0.08]',
+                  ? 'bg-white text-gray-950 shadow-sm border-black/[0.02]'
+                  : 'bg-transparent text-gray-500 hover:text-gray-800',
               )}
             >
               Chat
@@ -295,10 +295,10 @@ const LeftSideNav = () => {
               type="button"
               onClick={() => handleTabChange('research')}
               className={cn(
-                'flex-1 rounded-lg py-1.5 text-[11px] font-bold shadow-xs transition-all duration-150 text-center border border-transparent',
+                'flex-1 rounded-lg py-1.5 text-[11px] font-bold transition-all duration-200 text-center border border-transparent focus:outline-none select-none',
                 activeTab === 'research'
-                  ? 'bg-white text-gray-950 shadow-xs border-black/5'
-                  : 'bg-black/[0.04] text-gray-500 hover:text-gray-800 hover:bg-black/[0.08]',
+                  ? 'bg-white text-gray-950 shadow-sm border-black/[0.02]'
+                  : 'bg-transparent text-gray-500 hover:text-gray-800',
               )}
             >
               Research
@@ -307,10 +307,10 @@ const LeftSideNav = () => {
               type="button"
               onClick={() => handleTabChange('bots')}
               className={cn(
-                'flex-1 rounded-lg py-1.5 text-[11px] font-bold shadow-xs transition-all duration-150 text-center border border-transparent',
+                'flex-1 rounded-lg py-1.5 text-[11px] font-bold transition-all duration-200 text-center border border-transparent focus:outline-none select-none',
                 activeTab === 'bots'
-                  ? 'bg-white text-gray-950 shadow-xs border-black/5'
-                  : 'bg-black/[0.04] text-gray-500 hover:text-gray-800 hover:bg-black/[0.08]',
+                  ? 'bg-white text-gray-950 shadow-sm border-black/[0.02]'
+                  : 'bg-transparent text-gray-500 hover:text-gray-800',
               )}
             >
               Bots
@@ -319,10 +319,10 @@ const LeftSideNav = () => {
               type="button"
               onClick={() => handleTabChange('apps')}
               className={cn(
-                'flex-1 rounded-lg py-1.5 text-[11px] font-bold shadow-xs transition-all duration-150 text-center border border-transparent',
+                'flex-1 rounded-lg py-1.5 text-[11px] font-bold transition-all duration-200 text-center border border-transparent focus:outline-none select-none',
                 activeTab === 'apps'
-                  ? 'bg-white text-gray-950 shadow-xs border-black/5'
-                  : 'bg-black/[0.04] text-gray-500 hover:text-gray-800 hover:bg-black/[0.08]',
+                  ? 'bg-white text-gray-950 shadow-sm border-black/[0.02]'
+                  : 'bg-transparent text-gray-500 hover:text-gray-800',
               )}
             >
               Apps
