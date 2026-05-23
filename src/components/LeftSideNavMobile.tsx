@@ -624,30 +624,16 @@ const LeftSideNavMobile = () => {
                         close();
                       }}
                       className={cn(
-                        "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
+                        "group flex h-9 w-full items-center justify-between rounded-md text-sm font-medium text-black text-left transition-all",
                         isSelected 
-                          ? "bg-black/[0.06] border border-black/10 shadow-xs" 
-                          : "hover:bg-black/[0.03] border border-transparent"
+                          ? "bg-black/10 font-semibold" 
+                          : "hover:bg-black/5"
                       )}
                     >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        {/* Avatar */}
-                        <div className="flex-none h-7 w-7 rounded-md bg-white border border-black/10 flex items-center justify-center text-lg shadow-sm">
-                          {bot.avatar || '🤖'}
-                        </div>
-                        <div className="min-w-0">
-                          <h4 className={cn(
-                            "text-xs font-semibold truncate",
-                            isSelected ? "text-blue-600 font-bold" : "text-gray-950"
-                          )}>
-                            {bot.name}
-                          </h4>
-                          <p className="text-[10px] text-gray-500 truncate max-w-[130px]">
-                            {bot.description}
-                          </p>
-                        </div>
-                      </div>
-                      <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:translate-x-0.5 transition-transform" />
+                      <span className="flex-1 truncate px-1 py-2">
+                        {bot.name}
+                      </span>
+                      <ChevronRight className="mr-2 h-3.5 w-3.5 text-black transition-opacity" />
                     </button>
                   );
                 })}

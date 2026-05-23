@@ -158,7 +158,6 @@ function MyChatbotsContent() {
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bots.map((bot) => {
-            const IconComponent = DEFAULT_ICONS[bot.id] || Bot;
             return (
               <div
                 key={bot.id}
@@ -169,22 +168,9 @@ function MyChatbotsContent() {
                 className="group relative flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all hover:scale-[1.02] hover:shadow-md cursor-pointer dark:border-gray-800 dark:bg-gray-950"
               >
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-900/10 text-2xl group-hover:scale-110 transition-transform">
-                      {bot.avatar || '🤖'}
-                    </div>
-                    <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest bg-gray-50 dark:bg-gray-900 px-2 py-1 rounded-md">
-                      {bot.model}
-                    </span>
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="font-bold text-gray-950 dark:text-gray-50 text-sm group-hover:text-blue-600 transition-colors">
-                      {bot.name}
-                    </h3>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
-                      {bot.description}
-                    </p>
-                  </div>
+                  <h3 className="font-bold text-gray-950 dark:text-gray-50 text-sm group-hover:text-blue-600 transition-colors">
+                    {bot.name}
+                  </h3>
                 </div>
 
                 <div className="mt-6 flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-4 text-xs font-semibold text-gray-400 group-hover:text-blue-600 transition-colors">
