@@ -182,62 +182,6 @@ const LeftSideNavMobile = () => {
                 </svg>
                 <span className="text-sm font-normal">Apps</span>
               </Button> */}
-
-              <div className="mt-6 flex items-center space-x-4">
-                <div className="flex items-center gap-2 pl-4 text-sm text-gray-500">
-                  <span>Chat history</span>
-                  {mode === UserMode.TENANT && currentTenant && (
-                    <Badge
-                      variant="outline"
-                      className="h-5 px-1.5 text-[10px] font-normal"
-                    >
-                      <Building2 className="mr-1 size-2.5" />
-                      {currentTenant.name}
-                    </Badge>
-                  )}
-                  {mode === UserMode.PERSONAL && (
-                    <Badge
-                      variant="outline"
-                      className="h-5 px-1.5 text-[10px] font-normal"
-                    >
-                      <User className="mr-1 size-2.5" />
-                      Personal
-                    </Badge>
-                  )}
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Bookmark
-                        onClick={() => {
-                          router.push('/saved-chats');
-                          close();
-                        }}
-                        className="size-3.5 text-gray-500"
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>Saved Chats</p>
-                    </TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Search
-                        className="size-3.5 text-gray-500"
-                        onClick={() => {
-                          onOpen({
-                            type: 'search-chats',
-                          });
-                          close();
-                        }}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>Search Chats</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-              </div>
             </>
           )}
         </div>
@@ -293,6 +237,49 @@ const LeftSideNavMobile = () => {
       {/* Scrollable conversation list */}
       {isLoggedIn && (
         <div className="flex-1 overflow-y-auto px-4 pb-4">
+          <div className="mt-3 mb-2 flex items-center justify-between px-1">
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
+              <span>
+                {activeTab === 'research' ? 'Research History' : 'Chat History'}
+              </span>
+              {mode === UserMode.TENANT && currentTenant && (
+                <Badge
+                  variant="outline"
+                  className="h-4 px-1.5 text-[9px] font-normal border-gray-400 text-gray-500 bg-transparent"
+                >
+                  <Building2 className="mr-0.5 size-2" />
+                  {currentTenant.name}
+                </Badge>
+              )}
+              {mode === UserMode.PERSONAL && (
+                <Badge
+                  variant="outline"
+                  className="h-4 px-1.5 text-[9px] font-normal border-gray-400 text-gray-500 bg-transparent"
+                >
+                  <User className="mr-0.5 size-2" />
+                  Personal
+                </Badge>
+              )}
+            </div>
+            <div className="flex items-center space-x-2.5">
+              <Bookmark
+                onClick={() => {
+                  router.push('/saved-chats');
+                  close();
+                }}
+                className="size-3.5 cursor-pointer text-gray-500 hover:text-black transition-colors"
+              />
+              <Search
+                onClick={() => {
+                  onOpen({
+                    type: 'search-chats',
+                  });
+                  close();
+                }}
+                className="size-3.5 cursor-pointer text-gray-500 hover:text-black transition-colors"
+              />
+            </div>
+          </div>
           <ConversationsList activeTab={activeTab === 'apps' ? 'chat' : activeTab} />
         </div>
       )}

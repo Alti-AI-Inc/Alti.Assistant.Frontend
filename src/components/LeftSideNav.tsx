@@ -262,6 +262,11 @@ const LeftSideNav = () => {
           )}
           style={{ backgroundColor: '#F2F3F5' }}
         >
+          <div className="mt-4 mb-2 px-1 flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+              {activeTab === 'research' ? 'Research History' : 'Chat History'}
+            </span>
+          </div>
           <ConversationsList searchQuery={searchQuery} activeTab={activeTab === 'apps' ? 'chat' : activeTab} />
         </div>
       )}
