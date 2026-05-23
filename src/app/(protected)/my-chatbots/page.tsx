@@ -4,43 +4,15 @@ export const dynamic = 'force-dynamic';
 
 import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect, Suspense } from 'react';
-import { useBotsStore, Chatbot } from '@/stores/useBotsStore';
+import { useEffect, Suspense } from 'react';
+import { useBotsStore } from '@/stores/useBotsStore';
 import { useModalStore } from '@/stores/useModalStore';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
-import { PostConversation } from '@/actions/conversationsAction';
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
-import BotRightSidebar from '@/components/panels/BotRightSidebar';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Sparkles, Plus, ArrowRight, Bot, ArrowLeft, SendHorizontal, Code2, Palette, PenTool, BrainCircuit } from 'lucide-react';
+import { Sparkles, Plus, ArrowRight, Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const DEFAULT_PROMPTS: Record<string, string[]> = {
-  'python-expert': [
-    'Draft a clean, PEP-8 compliant decorator for logging execution time in Python.',
-    'Explain how to optimize a dictionary lookup with millions of keys in Python.',
-  ],
-  'ui-design-guru': [
-    'Design a beautiful, responsive landing page hero section in Tailwind CSS.',
-    'Create a cohesive, luxurious dark mode HSL palette for a SaaS dashboard.',
-  ],
-  'copywriter': [
-    'Draft a high-conversion sales email pitching an automated AI developer tool.',
-    'Create five catchy headlines for a blog post about software architecture best practices.',
-  ],
-  'general-assistant': [
-    'Help me brainstorm five innovative startup ideas in the renewable energy space.',
-    'Write a polite letter requesting an extension on a project deadline.',
-  ],
-};
 
-const DEFAULT_ICONS: Record<string, any> = {
-  'python-expert': Code2,
-  'ui-design-guru': Palette,
-  'copywriter': PenTool,
-  'general-assistant': BrainCircuit,
-};
 
 function MyChatbotsContent() {
   const router = useRouter();
@@ -48,15 +20,11 @@ function MyChatbotsContent() {
   const { data: session } = useSession();
   const { onOpen } = useModalStore();
 
-  const { bots, activeBotId, activeBotThreadId, setActiveBotId, setActiveBotThreadId, addThread } = useBotsStore();
-  const { setActiveConversation } = useConversationsStore();
+  const { bots, activeBotId, activeBotThreadId, setActiveBotId, setActiveBotThreadId } = useBotsStore();
 
   // Read URL params
   const botParam = searchParams?.get('bot');
   const threadParam = searchParams?.get('thread');
-
-  const [message, setMessage] = useState('');
-  const [isStarting, setIsStarting] = useState(false);
 
   // Sync state with URL params
   useEffect(() => {
@@ -74,52 +42,6 @@ function MyChatbotsContent() {
   }, [botParam, threadParam, setActiveBotId, setActiveBotThreadId]);
 
   const activeBot = bots.find((b) => b.id === activeBotId);
-
-  // Handle submit for starting a new bot thread
-  const handleFirstMessageSubmit = async (text: string) => {
-    if (!text.trim() || !session?.accessToken || !activeBot) return;
-    setIsStarting(true);
-
-    try {
-      // Inject instructions into first message
-      const fullMessage = `[System Instructions: ${activeBot.instructions}]\n\nUser Message: ${text}`;
-      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/orchestrator/route-prompt`;
-
-      const response = await PostConversation(
-        apiUrl,
-        fullMessage,
-        session.accessToken
-      );
-
-      if (response.success && response.data?.conversationId) {
-        const newThreadId = response.data.conversationId;
-        
-        // Save thread mapping locally
-        addThread(activeBot.id, newThreadId, text.substring(0, 40));
-        
-        // Sync Zustand conversations state
-        setActiveConversation({
-          conversationId: newThreadId,
-          messages: [
-            { role: 'user' as any, content: text, timestamp: new Date().toISOString() },
-            { role: 'assistant' as any, content: response.data.responseMessage?.answer || response.data.message || '', timestamp: new Date().toISOString() }
-          ]
-        });
-
-        // Dynamic URL redirection inside the Bot workspace
-        router.push(`/my-chatbots?bot=${activeBot.id}&thread=${newThreadId}`);
-      } else {
-        console.error('Failed to initialize chatbot conversation:', response.message);
-      }
-    } catch (error) {
-      console.error('Error starting conversation:', error);
-    } finally {
-      setIsStarting(false);
-      setMessage('');
-    }
-  };
-
-  const activeIcon = activeBot ? (DEFAULT_ICONS[activeBot.id] || Bot) : Bot;
 
   // Render Dashboard Library Grid
   if (!activeBot) {
@@ -199,85 +121,27 @@ function MyChatbotsContent() {
     );
   }
 
-  // Render 3-Column Chatbot Workspace
+  // Render Chatbot Workspace — same UI as Chat/Research landing page
   return (
-    <div className="flex h-screen w-full bg-white dark:bg-gray-950 overflow-hidden">
-      {/* Center Panel (Conversation / Interface) */}
-      <div className="flex-1 flex flex-col min-w-0 h-full relative">
-        {/* Content Body */}
-        <div className="flex-1 overflow-hidden relative">
-          {activeBotThreadId ? (
-            /* Active Chat Thread Mode (Wraps standard FullConversation seamlessly) */
-            <FullConversation conversationId={activeBotThreadId} />
-          ) : (
-            /* New Chat Welcome Mode */
-            <div className="absolute inset-0 flex flex-col justify-between overflow-y-auto bg-gray-50/20 dark:bg-gray-950/20">
-              {/* Welcome Banner */}
-              <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-2xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
-                <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-blue-50 dark:bg-blue-900/10 text-5xl border border-black/5 shadow-md">
-                  {activeBot.avatar || '🤖'}
-                </div>
-                <div className="space-y-2">
-                  <h1 className="text-2xl font-extrabold text-gray-950 dark:text-gray-50">
-                    Talk with {activeBot.name}
-                  </h1>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed max-w-md">
-                    {activeBot.description}
-                  </p>
-                </div>
+    <div
+      className={cn(
+        'flex h-full w-full flex-1 flex-col items-center justify-center',
+      )}
+      style={{ backgroundColor: '#FCFCFC' }}
+    >
+      {!activeBotThreadId && (
+        <h1 className="mb-8 text-4xl font-medium">
+          {activeBot.name}
+        </h1>
+      )}
 
-                {/* Quick Prompts */}
-                {DEFAULT_PROMPTS[activeBot.id] && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl pt-4">
-                    {DEFAULT_PROMPTS[activeBot.id].map((prompt, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => handleFirstMessageSubmit(prompt)}
-                        className="p-3.5 text-left rounded-xl border border-gray-200/80 bg-white hover:bg-gray-50 dark:bg-gray-900 dark:border-gray-800 text-xs text-gray-700 hover:text-blue-600 transition-all font-semibold leading-relaxed shadow-2xs"
-                      >
-                        {prompt}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+      <FullConversation conversationId={activeBotThreadId || 'new-chat'} />
 
-              {/* Chat Input Viewport */}
-              <div className="p-4 sm:p-6 lg:p-8 flex-none w-full bg-white dark:bg-gray-950 border-t border-gray-150 dark:border-gray-800">
-                <div className="max-w-2xl mx-auto flex items-end gap-2 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-2xl px-4 py-3 shadow-xs focus-within:ring-1 focus-within:ring-blue-500/50 focus-within:border-blue-500/50 transition-all">
-                  <Textarea
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        handleFirstMessageSubmit(message);
-                      }
-                    }}
-                    placeholder={`Message ${activeBot.name}...`}
-                    className="flex-1 min-h-[24px] max-h-32 bg-transparent border-none outline-none resize-none focus-visible:ring-0 focus-visible:ring-offset-0 text-xs p-0 leading-relaxed placeholder:text-gray-400 dark:bg-transparent"
-                    rows={1}
-                  />
-                  <Button
-                    onClick={() => handleFirstMessageSubmit(message)}
-                    disabled={!message.trim() || isStarting}
-                    className="flex-none bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-8 w-8 p-0 flex items-center justify-center shadow-xs"
-                  >
-                    {isStarting ? (
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    ) : (
-                      <SendHorizontal className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Right Column (Bot Specific Details & Timeline) */}
-      <BotRightSidebar botId={activeBot.id} activeThreadId={activeBotThreadId} />
+      {!activeBotThreadId && (
+        <p className="absolute bottom-3 text-xs text-neutral-500">
+          We don&apos;t train on your data. Your chats stay private.
+        </p>
+      )}
     </div>
   );
 }
