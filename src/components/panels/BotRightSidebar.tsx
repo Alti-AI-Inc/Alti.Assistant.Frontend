@@ -5,7 +5,7 @@ import { useBotsStore } from '@/stores/useBotsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
-import { MessageSquare, Plus, Trash2, Settings2, Info, ChevronDown, ChevronUp, PanelLeft, PanelLeftClose } from 'lucide-react';
+import { MessageSquare, Plus, Trash2, Settings2, Info, ChevronDown, ChevronUp, PanelLeft, PanelLeftClose, Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -25,8 +25,13 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   const bot = bots.find((b) => b.id === botId);
   const botThreads = threads.filter((t) => t.botId === botId);
 
+  const [searchQuery, setSearchQuery] = useState('');
   const [isPromptExpanded, setIsPromptExpanded] = useState(true);
   const [isHistoryExpanded, setIsHistoryExpanded] = useState(true);
+
+  const filteredThreads = botThreads.filter((t) =>
+    (t.title || 'Untitled Chat').toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (!bot) return null;
 
@@ -72,33 +77,51 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
         </span>
       </header>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {/* Action: New Chat */}
-        <Button
-          onClick={handleNewChat}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-5 text-xs font-bold gap-2 shadow-sm transition-all"
-        >
-          <Plus className="h-4 w-4" /> New Conversation
-        </Button>
+      {/* Search & Actions Row matching left side menu */}
+      <div className="flex items-center justify-between gap-2 border-b border-black/10 px-4 py-4 transition-all duration-300 flex-none" style={{ backgroundColor: '#F2F3F5' }}>
+        {/* Search Bar Input */}
+        <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-white px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">
+          <Search className="size-3.5 flex-none text-black" />
+          <input
+            type="text"
+            placeholder="Search chats..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-transparent text-xs text-black outline-none placeholder:text-gray-500"
+          />
+        </div>
 
+        {/* Action Button: New Chat */}
+        <Button
+          variant="outline"
+          size="icon"
+          className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black flex-none"
+          onClick={handleNewChat}
+          title="New Conversation"
+        >
+          <Plus className="size-4 text-black" />
+        </Button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {/* Section: Chat History */}
         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-xs">
           <button
             onClick={() => setIsHistoryExpanded(!isHistoryExpanded)}
             className="w-full flex items-center justify-between px-4 py-3 text-left border-b border-gray-150 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors"
           >
-            <span className="text-[11px] font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">History ({botThreads.length})</span>
+            <span className="text-[11px] font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">History ({filteredThreads.length})</span>
             {isHistoryExpanded ? <ChevronUp className="h-3.5 w-3.5 text-gray-500" /> : <ChevronDown className="h-3.5 w-3.5 text-gray-500" />}
           </button>
 
           {isHistoryExpanded && (
             <div className="p-2 max-h-64 overflow-y-auto space-y-1">
-              {botThreads.length === 0 ? (
+              {filteredThreads.length === 0 ? (
                 <div className="p-3 text-center text-xs text-gray-400">
-                  No past conversations.
+                  {searchQuery ? 'No matching chats.' : 'No past conversations.'}
                 </div>
               ) : (
-                botThreads.map((thread) => {
+                filteredThreads.map((thread) => {
                   const isSelected = activeThreadId === thread.id;
                   return (
                     <div
