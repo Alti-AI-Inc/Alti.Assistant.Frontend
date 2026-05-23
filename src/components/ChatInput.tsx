@@ -1147,12 +1147,6 @@ const ChatInput = ({
               </Tooltip>
             )}
 
-            {selectedOption === OPTIONS.RESEARCH && (
-              <PreFlightPanel
-                settings={researchSettings}
-                onSettingsChange={setResearchSettings}
-              />
-            )}
 
             <Textarea
               name="message"
