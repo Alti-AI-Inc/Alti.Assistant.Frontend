@@ -45,7 +45,80 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { allApps } from '@/lib/all-apps';
 import { apiClientJson, buildApiUrl } from '@/lib/api-client';
 import { useBotsStore } from '@/stores/useBotsStore';
-import { useKnowledgeBankGetFoldersQuery } from '@/hooks/useKnowledgeBank';
+
+interface DataConnector {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
+  status: 'active' | 'soon';
+}
+
+const DATA_CONNECTORS: DataConnector[] = [
+  {
+    id: 'file',
+    name: 'File Upload',
+    icon: '📁',
+    description: 'Upload PDF, TXT, Word up to 1MB',
+    status: 'active',
+  },
+  {
+    id: 'google-drive',
+    name: 'Google Drive',
+    icon: '🤖',
+    description: 'Sync Google Drive folders',
+    status: 'soon',
+  },
+  {
+    id: 'notion',
+    name: 'Notion Workspace',
+    icon: '📓',
+    description: 'Index Notion pages & databases',
+    status: 'soon',
+  },
+  {
+    id: 'sharepoint',
+    name: 'SharePoint',
+    icon: '📦',
+    description: 'Ingest enterprise documents',
+    status: 'soon',
+  },
+  {
+    id: 'slack',
+    name: 'Slack Channel',
+    icon: '💬',
+    description: 'Index conversation histories',
+    status: 'soon',
+  },
+  {
+    id: 'github',
+    name: 'GitHub Repo',
+    icon: '🐙',
+    description: 'Parse codebase markdown files',
+    status: 'soon',
+  },
+  {
+    id: 'confluence',
+    name: 'Confluence',
+    icon: '📄',
+    description: 'Sync Confluence wiki pages',
+    status: 'soon',
+  },
+  {
+    id: 'dropbox',
+    name: 'Dropbox Folder',
+    icon: '📦',
+    description: 'Import Dropbox directories',
+    status: 'soon',
+  },
+  {
+    id: 's3',
+    name: 'AWS S3 Bucket',
+    icon: '☁️',
+    description: 'Index S3 storage buckets',
+    status: 'soon',
+  },
+];
 
 type SidebarTab = 'chat' | 'research' | 'bots' | 'apps' | 'data';
 
@@ -68,11 +141,11 @@ const LeftSideNavMobile = () => {
 
   const isLoggedIn = data?.accessToken;
   const { bots, activeBotId, setActiveBotId } = useBotsStore();
-  const { data: knowledgeBankFolders, isLoading: isKnowledgeLoading } = useKnowledgeBankGetFoldersQuery();
   const [activeTab, setActiveTab] = useState<SidebarTab>('chat');
   const [searchQuery, setSearchQuery] = useState('');
   const searchParams = useSearchParams();
   const activeAppSlug = searchParams?.get('app');
+  const activeConnectorId = searchParams?.get('connector') || 'file';
 
   const [connectedAppSlugs, setConnectedAppSlugs] = useState<Set<string>>(new Set());
   const [isFetchingStatus, setIsFetchingStatus] = useState(false);
@@ -156,7 +229,7 @@ const LeftSideNavMobile = () => {
       router.push('/my-chatbots');
       close();
     } else if (tab === 'data') {
-      router.push('/knowledge');
+      router.push('/knowledge?connector=file');
       close();
     } else if (tab === 'research') {
       setSelectedOption(OPTIONS.RESEARCH);
@@ -387,7 +460,7 @@ const LeftSideNavMobile = () => {
           <div className="mt-3 mb-2 flex items-center justify-between px-1">
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
               <span>
-                {activeTab === 'bots' ? 'My Agents' : activeTab === 'research' ? 'Research History' : activeTab === 'apps' ? 'Composio Apps' : activeTab === 'data' ? 'Knowledge Bases' : 'Chat History'}
+                {activeTab === 'bots' ? 'My Agents' : activeTab === 'research' ? 'Research History' : activeTab === 'apps' ? 'Composio Apps' : activeTab === 'data' ? 'Data Connectors' : 'Chat History'}
               </span>
               {activeTab !== 'apps' && activeTab !== 'bots' && activeTab !== 'data' && mode === UserMode.TENANT && currentTenant && (
                 <Badge
@@ -408,7 +481,7 @@ const LeftSideNavMobile = () => {
                 </Badge>
               )}
             </div>
-            {activeTab === 'apps' ? (
+            {activeTab === 'apps' || activeTab === 'data' ? (
               <div className="flex h-7 flex-1 items-center gap-1.5 rounded-lg border border-black/10 bg-white px-2 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 ml-4 max-w-[150px]">
                 <Search className="size-3 text-black" />
                 <input
@@ -428,18 +501,6 @@ const LeftSideNavMobile = () => {
                 }}
                 className="flex h-5 w-5 items-center justify-center rounded-md bg-black/5 hover:bg-black/10 text-black transition-colors"
                 title="Create Custom Agent"
-              >
-                <Plus className="size-3.5" />
-              </button>
-            ) : activeTab === 'data' ? (
-              <button
-                type="button"
-                onClick={() => {
-                  onOpen({ type: 'create-knowledge-bank-folder' });
-                  close();
-                }}
-                className="flex h-5 w-5 items-center justify-center rounded-md bg-black/5 hover:bg-black/10 text-black transition-colors"
-                title="Create Knowledge Base"
               >
                 <Plus className="size-3.5" />
               </button>
@@ -580,55 +641,52 @@ const LeftSideNavMobile = () => {
             </div>
           ) : activeTab === 'data' ? (
             <div className="space-y-1 py-1 pb-4">
-              {knowledgeBankFolders
-                ?.filter(folder =>
-                  folder.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                  folder.description.toLowerCase().includes(searchQuery.toLowerCase())
-                )
-                .map(folder => {
-                  const isSelected = pathname.startsWith(`/knowledge/${folder.id}`) || (pathname === '/knowledge' && searchParams?.get('folder') === folder.id);
-                  return (
-                    <button
-                      key={folder.id}
-                      onClick={() => {
-                        router.push(`/knowledge`);
-                        close();
-                      }}
-                      className={cn(
-                        "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
-                        isSelected 
-                          ? "bg-black/[0.06] border border-black/10 shadow-xs" 
-                          : "hover:bg-black/[0.03] border border-transparent"
-                      )}
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="flex-none h-7 w-7 rounded-md bg-white border border-black/10 flex items-center justify-center text-sm shadow-sm">
-                          📁
-                        </div>
-                        <div className="min-w-0">
-                          <h4 className={cn(
-                            "text-xs font-semibold truncate",
-                            isSelected ? "text-blue-600 font-bold" : "text-gray-950"
-                          )}>
-                            {folder.name}
-                          </h4>
-                          <p className="text-[10px] text-gray-500 truncate max-w-[130px]">
-                            {folder.description || 'No description'}
-                          </p>
-                        </div>
+              {DATA_CONNECTORS.filter(conn =>
+                conn.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                conn.description.toLowerCase().includes(searchQuery.toLowerCase())
+              ).map(conn => {
+                const isSelected = activeConnectorId === conn.id && pathname === '/knowledge';
+                return (
+                  <button
+                    key={conn.id}
+                    onClick={() => {
+                      router.push(`/knowledge?connector=${conn.id}`);
+                      close();
+                    }}
+                    className={cn(
+                      "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
+                      isSelected 
+                        ? "bg-black/[0.06] border border-black/10 shadow-xs" 
+                        : "hover:bg-black/[0.03] border border-transparent"
+                    )}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex-none h-7 w-7 rounded-md bg-white border border-black/10 flex items-center justify-center text-sm shadow-sm">
+                        {conn.icon}
                       </div>
-                      <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:translate-x-0.5 transition-transform" />
-                    </button>
-                  );
-                })}
-              {(!knowledgeBankFolders || knowledgeBankFolders.filter(folder =>
-                folder.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                folder.description.toLowerCase().includes(searchQuery.toLowerCase())
-              ).length === 0) && (
-                <div className="py-4 text-center text-xs text-gray-500">
-                  {isKnowledgeLoading ? 'Loading knowledge bases...' : 'No knowledge bases found.'}
-                </div>
-              )}
+                      <div className="min-w-0">
+                        <h4 className={cn(
+                          "text-xs font-semibold truncate",
+                          isSelected ? "text-blue-600 font-bold" : "text-gray-950"
+                        )}>
+                          {conn.name}
+                        </h4>
+                        <p className="text-[10px] text-gray-500 truncate max-w-[130px]">
+                          {conn.description}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-1">
+                      {conn.status === 'active' ? (
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Active" />
+                      ) : (
+                        <span className="text-[9px] font-medium text-gray-400 bg-gray-200/50 px-1 py-0.5 rounded-sm dark:bg-gray-800">Soon</span>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           ) : (
             <ConversationsList activeTab={activeTab} />
