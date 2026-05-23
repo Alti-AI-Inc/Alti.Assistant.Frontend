@@ -33,7 +33,7 @@ import {
   Globe,
   Bot,
   Database,
-  Puzzle,
+  LayoutGrid,
   Zap,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -497,7 +497,7 @@ const LeftSideNav = () => {
                       : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                   )}
                 >
-                  <Puzzle className="size-4" />
+                  <LayoutGrid className="size-4" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
