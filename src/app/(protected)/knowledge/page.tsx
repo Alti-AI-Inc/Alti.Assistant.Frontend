@@ -1,5 +1,8 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useTenant } from '@/contexts/TenantContext';
 import { UserMode } from '@/types/tenant';
@@ -8,7 +11,7 @@ import { Building2, User, Sparkles, ExternalLink } from 'lucide-react';
 import { LlamaIndexChat } from './_components/LlamaIndexChat';
 import { motion } from 'framer-motion';
 
-const pageNow = () => {
+const KnowledgePageContent = () => {
   const { mode, currentTenant } = useTenant();
   const searchParams = useSearchParams();
   const connector = searchParams?.get('connector') || 'file';
@@ -179,4 +182,14 @@ const pageNow = () => {
   );
 };
 
-export default pageNow;
+export default function KnowledgePage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-full w-full items-center justify-center p-8 bg-white dark:bg-gray-950">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <KnowledgePageContent />
+    </Suspense>
+  );
+}
