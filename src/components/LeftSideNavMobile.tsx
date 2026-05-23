@@ -563,14 +563,6 @@ const LeftSideNavMobile = () => {
                     <LayoutDashboard className="text-black" /> Dashboard
                   </DropdownMenuItem>
                 )}
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push('/organizations');
-                    close();
-                  }}
-                >
-                  <Building2 className="text-black" /> Organizations
-                </DropdownMenuItem>
 
                 <DropdownMenuItem
                   onClick={() => {
