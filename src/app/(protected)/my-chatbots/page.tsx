@@ -7,9 +7,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, Suspense } from 'react';
 import { useBotsStore } from '@/stores/useBotsStore';
 import { useModalStore } from '@/stores/useModalStore';
+import { useSidebarStore } from '@/stores/useSidebarStore';
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
+import BotRightSidebar from '@/components/panels/BotRightSidebar';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Plus, ArrowRight, Bot } from 'lucide-react';
+import { Sparkles, Plus, ArrowRight, Bot, PanelLeft, PanelLeftClose } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 
@@ -19,6 +21,7 @@ function MyChatbotsContent() {
   const searchParams = useSearchParams();
   const { data: session } = useSession();
   const { onOpen } = useModalStore();
+  const { isLeftSidebarOpen, toggleLeftSidebar } = useSidebarStore();
 
   const { bots, activeBotId, activeBotThreadId, setActiveBotId, setActiveBotThreadId } = useBotsStore();
 
@@ -121,27 +124,55 @@ function MyChatbotsContent() {
     );
   }
 
-  // Render Chatbot Workspace — same UI as Chat/Research landing page
+  // Render 3-Column Chatbot Workspace
   return (
-    <div
-      className={cn(
-        'flex h-full w-full flex-1 flex-col items-center justify-center',
-      )}
-      style={{ backgroundColor: '#FCFCFC' }}
-    >
-      {!activeBotThreadId && (
-        <h1 className="mb-8 text-4xl font-medium">
-          {activeBot.name}
-        </h1>
-      )}
+    <div className="flex h-screen w-full bg-white dark:bg-gray-950 overflow-hidden">
+      {/* Center Panel (Conversation / Interface) */}
+      <div
+        className="flex-1 flex flex-col min-w-0 h-full relative"
+        style={{ backgroundColor: '#FCFCFC' }}
+      >
+        {/* Top section matching left side menu */}
+        <header
+          className="h-14 border-b border-black/10 flex items-center justify-between px-6 flex-none"
+          style={{ backgroundColor: '#F2F3F5' }}
+        >
+          <button
+            onClick={toggleLeftSidebar}
+            className="p-1 rounded-md hover:bg-black/5 transition-colors"
+          >
+            {isLeftSidebarOpen ? (
+              <PanelLeftClose className="size-5 text-gray-600" />
+            ) : (
+              <PanelLeft className="size-5 text-gray-600" />
+            )}
+          </button>
 
-      <FullConversation conversationId={activeBotThreadId || 'new-chat'} />
+          <span className="text-sm font-bold text-gray-800 dark:text-gray-200">
+            {activeBot.name}
+          </span>
+        </header>
 
-      {!activeBotThreadId && (
-        <p className="absolute bottom-3 text-xs text-neutral-500">
-          We don&apos;t train on your data. Your chats stay private.
-        </p>
-      )}
+        {/* Chatbot Content Body */}
+        <div className="flex-1 flex flex-col items-center justify-center overflow-hidden relative">
+          {!activeBotThreadId && (
+            <h1 className="mb-8 text-4xl font-medium">
+              {activeBot.name}
+            </h1>
+          )}
+
+          <FullConversation conversationId={activeBotThreadId || 'new-chat'} />
+
+          {!activeBotThreadId && (
+            <p className="absolute bottom-3 text-xs text-neutral-500">
+              We don&apos;t train on your data. Your chats stay private.
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Right Column (Bot Specific Details & Timeline) */}
+      <BotRightSidebar botId={activeBot.id} activeThreadId={activeBotThreadId} />
     </div>
   );
 }
