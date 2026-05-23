@@ -271,7 +271,7 @@ const LeftSideNav = () => {
       case 'research':
         return {
           visible: true,
-          tooltip: 'New Research Session',
+          tooltip: 'New Research',
           onClick: () => {
             setActiveConversation(null);
             setShowStartLastMessage(false);
@@ -284,7 +284,7 @@ const LeftSideNav = () => {
       case 'bots':
         return {
           visible: true,
-          tooltip: 'Create Custom Agent',
+          tooltip: 'New Agent',
           onClick: () => {
             onOpen({ type: 'add-chatbot' });
           },
@@ -292,7 +292,7 @@ const LeftSideNav = () => {
       case 'workflows':
         return {
           visible: true,
-          tooltip: 'Create New Workflow',
+          tooltip: 'New Workflow',
           onClick: () => {
             alert('Define Cron or Webhook triggers to chain your custom agents and RAG indexes in a new workflow!');
           },

@@ -270,7 +270,7 @@ const LeftSideNavMobile = () => {
       case 'research':
         return {
           visible: true,
-          label: 'New Research Session',
+          label: 'New Research',
           onClick: () => {
             setActiveConversation(null);
             setShowStartLastMessage(false);
@@ -283,7 +283,7 @@ const LeftSideNavMobile = () => {
       case 'bots':
         return {
           visible: true,
-          label: 'Create Custom Agent',
+          label: 'New Agent',
           onClick: () => {
             onOpen({ type: 'add-chatbot' });
             close();
@@ -292,7 +292,7 @@ const LeftSideNavMobile = () => {
       case 'workflows':
         return {
           visible: true,
-          label: 'Create New Workflow',
+          label: 'New Workflow',
           onClick: () => {
             alert('Define Cron or Webhook triggers to chain your custom agents and RAG indexes in a new workflow!');
             close();
