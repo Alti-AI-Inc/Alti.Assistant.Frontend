@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { useBotsStore } from '@/stores/useBotsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
-import { MessageSquare, Plus, Trash2, Settings2, Info, ChevronDown, ChevronUp } from 'lucide-react';
+import { useSidebarStore } from '@/stores/useSidebarStore';
+import { MessageSquare, Plus, Trash2, Settings2, Info, ChevronDown, ChevronUp, PanelLeft, PanelLeftClose } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -19,6 +20,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   const { onOpen } = useModalStore();
   const { bots, threads, deleteThread, setActiveBotThreadId } = useBotsStore();
   const { setActiveConversation } = useConversationsStore();
+  const { isLeftSidebarOpen, toggleLeftSidebar } = useSidebarStore();
 
   const bot = bots.find((b) => b.id === botId);
   const botThreads = threads.filter((t) => t.botId === botId);
@@ -49,21 +51,26 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
   return (
     <aside className="w-80 flex-none flex flex-col border-l border-gray-200 bg-gray-50/50 dark:border-gray-800 dark:bg-gray-950/50 h-full overflow-hidden transition-all duration-300">
-      {/* Header */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between bg-white dark:bg-gray-950">
-        <div className="flex items-center gap-2">
-          <Settings2 className="h-4 w-4 text-blue-600" />
-          <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 uppercase tracking-wider">Agent Hub</h3>
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onOpen({ type: 'edit-chatbot', actionId: botId })}
-          className="rounded-lg h-8 px-2.5 text-xs font-semibold gap-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+      {/* Header matching left side menu */}
+      <header
+        className="h-14 border-b border-black/10 flex items-center justify-between px-6 flex-none"
+        style={{ backgroundColor: '#F2F3F5' }}
+      >
+        <button
+          onClick={toggleLeftSidebar}
+          className="p-1 rounded-md hover:bg-black/5 transition-colors"
         >
-          Customize
-        </Button>
-      </div>
+          {isLeftSidebarOpen ? (
+            <PanelLeftClose className="size-5 text-gray-600" />
+          ) : (
+            <PanelLeft className="size-5 text-gray-600" />
+          )}
+        </button>
+
+        <span className="text-sm font-bold text-gray-800 dark:text-gray-200">
+          {bot.name}
+        </span>
+      </header>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {/* Action: New Chat */}
@@ -148,6 +155,15 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   {bot.instructions}
                 </div>
               </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onOpen({ type: 'edit-chatbot', actionId: botId })}
+                className="w-full rounded-xl py-4 text-xs font-semibold gap-1 hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800 mt-2"
+              >
+                Customize Agent Prompt
+              </Button>
             </div>
           )}
         </div>

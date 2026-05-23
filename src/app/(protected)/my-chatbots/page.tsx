@@ -21,7 +21,6 @@ function MyChatbotsContent() {
   const searchParams = useSearchParams();
   const { data: session } = useSession();
   const { onOpen } = useModalStore();
-  const { isLeftSidebarOpen, toggleLeftSidebar } = useSidebarStore();
 
   const { bots, activeBotId, activeBotThreadId, setActiveBotId, setActiveBotThreadId } = useBotsStore();
 
@@ -132,27 +131,6 @@ function MyChatbotsContent() {
         className="flex-1 flex flex-col min-w-0 h-full relative"
         style={{ backgroundColor: '#FCFCFC' }}
       >
-        {/* Top section matching left side menu */}
-        <header
-          className="h-14 border-b border-black/10 flex items-center justify-between px-6 flex-none"
-          style={{ backgroundColor: '#F2F3F5' }}
-        >
-          <button
-            onClick={toggleLeftSidebar}
-            className="p-1 rounded-md hover:bg-black/5 transition-colors"
-          >
-            {isLeftSidebarOpen ? (
-              <PanelLeftClose className="size-5 text-gray-600" />
-            ) : (
-              <PanelLeft className="size-5 text-gray-600" />
-            )}
-          </button>
-
-          <span className="text-sm font-bold text-gray-800 dark:text-gray-200">
-            {activeBot.name}
-          </span>
-        </header>
-
         {/* Chatbot Content Body */}
         <div className="flex-1 flex flex-col items-center justify-center overflow-hidden relative">
           {!activeBotThreadId && (
