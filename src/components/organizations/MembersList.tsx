@@ -88,6 +88,8 @@ function MembersListComponent({
     switch (role.toLowerCase()) {
       case 'owner':
         return 'default';
+      case 'admin':
+        return 'secondary';
       default:
         return 'outline';
     }
@@ -158,7 +160,7 @@ function MembersListComponent({
                           variant={getRoleBadgeVariant(memberRole)}
                           className="capitalize"
                         >
-                          {memberRole}
+                          {memberRole === 'member' ? 'user' : memberRole}
                         </Badge>
                       )}
                     </TableCell>
