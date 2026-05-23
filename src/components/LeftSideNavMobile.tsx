@@ -33,6 +33,7 @@ import {
   Bot,
   Database,
   Puzzle,
+  Zap,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -120,7 +121,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'research' | 'bots' | 'apps' | 'data';
+type SidebarTab = 'chat' | 'research' | 'bots' | 'apps' | 'data' | 'workflows';
 
 const LeftSideNavMobile = () => {
   const { data } = useSession();
@@ -187,6 +188,8 @@ const LeftSideNavMobile = () => {
       setActiveTab('bots');
     } else if (pathname === '/knowledge' || pathname.startsWith('/knowledge')) {
       setActiveTab('data');
+    } else if (pathname === '/workflows' || pathname.startsWith('/workflows')) {
+      setActiveTab('workflows');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       const isResearch = useConversationsStore.getState().selectedOption === OPTIONS.RESEARCH;
       setActiveTab(isResearch ? 'research' : 'chat');
@@ -230,6 +233,9 @@ const LeftSideNavMobile = () => {
       close();
     } else if (tab === 'data') {
       router.push('/knowledge?connector=file');
+      close();
+    } else if (tab === 'workflows') {
+      router.push('/workflows');
       close();
     } else if (tab === 'research') {
       setSelectedOption(OPTIONS.RESEARCH);
@@ -450,6 +456,26 @@ const LeftSideNavMobile = () => {
                 <p>Apps</p>
               </TooltipContent>
             </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('workflows')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'workflows'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Zap className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Workflows</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       )}
@@ -460,7 +486,17 @@ const LeftSideNavMobile = () => {
           <div className="mt-3 mb-2 flex items-center justify-between px-1">
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
               <span>
-                {activeTab === 'bots' ? 'My Agents' : activeTab === 'research' ? 'Research History' : activeTab === 'apps' ? 'Composio Apps' : activeTab === 'data' ? 'Data Connectors' : 'Chat History'}
+                {activeTab === 'bots' 
+                  ? 'My Agents' 
+                  : activeTab === 'research' 
+                    ? 'Research History' 
+                    : activeTab === 'apps' 
+                      ? 'Composio Apps' 
+                      : activeTab === 'data' 
+                        ? 'Data Connectors' 
+                        : activeTab === 'workflows'
+                          ? 'Active Workflows'
+                          : 'Chat History'}
               </span>
               {activeTab !== 'apps' && activeTab !== 'bots' && activeTab !== 'data' && mode === UserMode.TENANT && currentTenant && (
                 <Badge
@@ -687,6 +723,47 @@ const LeftSideNavMobile = () => {
                   </button>
                 );
               })}
+            </div>
+          ) : activeTab === 'workflows' ? (
+            <div className="space-y-1 py-1 pb-4">
+              {[
+                { id: 'wf-1', name: 'Daily Market Intel', icon: '📊', trigger: 'Every Day @ 8am', active: true },
+                { id: 'wf-2', name: 'Code Vulnerability Scan', icon: '🛡️', trigger: 'On Git Push', active: true },
+                { id: 'wf-3', name: 'Sales Prospecting Flow', icon: '🎯', trigger: 'On Notion Add', active: false },
+                { id: 'wf-4', name: 'Support Mail Auto-Draft', icon: '✉️', trigger: 'On New Email', active: true }
+              ].filter(wf => wf.name.toLowerCase().includes(searchQuery.toLowerCase())).map(wf => (
+                <button
+                  key={wf.id}
+                  onClick={() => {
+                    router.push('/workflows');
+                    close();
+                  }}
+                  className={cn(
+                    "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group hover:bg-black/[0.03] border border-transparent"
+                  )}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex-none h-7 w-7 rounded-md bg-white border border-black/10 flex items-center justify-center text-sm shadow-sm">
+                      {wf.icon}
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="text-xs font-semibold truncate text-gray-950">
+                        {wf.name}
+                      </h4>
+                      <p className="text-[10px] text-gray-500 truncate max-w-[130px]">
+                        {wf.trigger}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {wf.active ? (
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Active" />
+                    ) : (
+                      <span className="h-1.5 w-1.5 rounded-full bg-gray-400" title="Paused" />
+                    )}
+                  </div>
+                </button>
+              ))}
             </div>
           ) : (
             <ConversationsList activeTab={activeTab} />
