@@ -278,23 +278,15 @@ const LeftSideNav = () => {
       {/* Chat / Research / Bots / Apps toggle */}
       {!hideSidebar && isLoggedIn && (
         <div className="border-b border-black/10 px-4 py-2" style={{ backgroundColor: '#F2F3F5' }}>
-          <div className="relative flex rounded-lg bg-black/[0.06] p-0.5">
-            {/* sliding indicator */}
-            <div
-              className={cn(
-                'absolute top-0.5 bottom-0.5 w-[calc(25%-2px)] rounded-md shadow-xs transition-all duration-200 ease-in-out',
-                activeTab === 'chat' && 'left-0.5 bg-blue-600',
-                activeTab === 'research' && 'left-[calc(25%+0.5px)] bg-indigo-600',
-                activeTab === 'bots' && 'left-[calc(50%+0.5px)] bg-emerald-600',
-                activeTab === 'apps' && 'left-[calc(75%+0.5px)] bg-purple-600',
-              )}
-            />
+          <div className="flex gap-1.5 p-0.5">
             <button
               type="button"
               onClick={() => handleTabChange('chat')}
               className={cn(
-                'relative z-10 flex-1 rounded-md py-1 text-[11px] font-medium transition-colors duration-150',
-                activeTab === 'chat' ? 'text-white font-bold' : 'text-gray-500 hover:text-gray-700',
+                'flex-1 rounded-lg py-1.5 text-[11px] font-bold shadow-xs transition-all duration-150 text-center border border-transparent',
+                activeTab === 'chat'
+                  ? 'bg-white text-gray-950 shadow-xs border-black/5'
+                  : 'bg-black/[0.04] text-gray-500 hover:text-gray-800 hover:bg-black/[0.08]',
               )}
             >
               Chat
@@ -303,8 +295,10 @@ const LeftSideNav = () => {
               type="button"
               onClick={() => handleTabChange('research')}
               className={cn(
-                'relative z-10 flex-1 rounded-md py-1 text-[11px] font-medium transition-colors duration-150',
-                activeTab === 'research' ? 'text-white font-bold' : 'text-gray-500 hover:text-gray-700',
+                'flex-1 rounded-lg py-1.5 text-[11px] font-bold shadow-xs transition-all duration-150 text-center border border-transparent',
+                activeTab === 'research'
+                  ? 'bg-white text-gray-950 shadow-xs border-black/5'
+                  : 'bg-black/[0.04] text-gray-500 hover:text-gray-800 hover:bg-black/[0.08]',
               )}
             >
               Research
@@ -313,8 +307,10 @@ const LeftSideNav = () => {
               type="button"
               onClick={() => handleTabChange('bots')}
               className={cn(
-                'relative z-10 flex-1 rounded-md py-1 text-[11px] font-medium transition-colors duration-150',
-                activeTab === 'bots' ? 'text-white font-bold' : 'text-gray-500 hover:text-gray-700',
+                'flex-1 rounded-lg py-1.5 text-[11px] font-bold shadow-xs transition-all duration-150 text-center border border-transparent',
+                activeTab === 'bots'
+                  ? 'bg-white text-gray-950 shadow-xs border-black/5'
+                  : 'bg-black/[0.04] text-gray-500 hover:text-gray-800 hover:bg-black/[0.08]',
               )}
             >
               Bots
@@ -323,8 +319,10 @@ const LeftSideNav = () => {
               type="button"
               onClick={() => handleTabChange('apps')}
               className={cn(
-                'relative z-10 flex-1 rounded-md py-1 text-[11px] font-medium transition-colors duration-150',
-                activeTab === 'apps' ? 'text-white font-bold' : 'text-gray-500 hover:text-gray-700',
+                'flex-1 rounded-lg py-1.5 text-[11px] font-bold shadow-xs transition-all duration-150 text-center border border-transparent',
+                activeTab === 'apps'
+                  ? 'bg-white text-gray-950 shadow-xs border-black/5'
+                  : 'bg-black/[0.04] text-gray-500 hover:text-gray-800 hover:bg-black/[0.08]',
               )}
             >
               Apps
