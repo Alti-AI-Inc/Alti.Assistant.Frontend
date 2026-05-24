@@ -35,6 +35,9 @@ import FileDownloadCard from './FileDownloadCard';
 import VideoComponent from './VideoComponent';
 import VideoComponentForContent from './YoutubePlayer';
 import FinancialWidget from './FinancialWidget';
+import SportsWidget from './SportsWidget';
+import RealEstateWidget from './RealEstateWidget';
+import SecurityVulnerabilityWidget from './SecurityVulnerabilityWidget';
 
 import { BrainstormData } from './BrainstormData';
 import { PlanDataComponent } from './PlanData';
@@ -622,6 +625,18 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       ticker={message.metadata.financialTicker} 
                       liveData={message.metadata} 
                     />
+                  )}
+
+                  {(message.metadata?.domain === 'sports_odds' || message.metadata?.homeTeam) && (
+                    <SportsWidget sportsData={message.metadata} />
+                  )}
+
+                  {(message.metadata?.domain === 'real_estate' || message.metadata?.domain === 'census_bps' || message.metadata?.address) && (
+                    <RealEstateWidget realEstateData={message.metadata} />
+                  )}
+
+                  {(message.metadata?.domain === 'cisa_kev' || message.metadata?.domain === 'nist_nvd_cve' || message.metadata?.cveId) && (
+                    <SecurityVulnerabilityWidget vulnerabilityData={message.metadata} />
                   )}
 
                   {message.metadata?.brainstormData && (

@@ -167,7 +167,7 @@ const LeftSideNavMobile = () => {
   };
 
   useEffect(() => {
-    if (activeTab === 'apps') {
+    if (activeTab === 'apps' || activeTab === 'data') {
       fetchConnectionStatus();
     }
   }, [activeTab]);
@@ -702,52 +702,105 @@ const LeftSideNavMobile = () => {
             </div>
           ) : activeTab === 'data' ? (
             <div className="space-y-1 py-1 pb-4">
-              {DATA_CONNECTORS.filter(conn =>
-                conn.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                conn.description.toLowerCase().includes(searchQuery.toLowerCase())
-              ).map(conn => {
-                const isSelected = activeConnectorId === conn.id && pathname === '/knowledge';
+              {/* File Upload special connector */}
+              {'file upload'.includes(searchQuery.toLowerCase()) && (
+                <button
+                  onClick={() => {
+                    router.push(`/knowledge?connector=file`);
+                    close();
+                  }}
+                  className={cn(
+                    "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
+                    (activeConnectorId === 'file' || !activeConnectorId) && pathname === '/knowledge'
+                      ? "bg-black/[0.06] border border-black/10 shadow-xs"
+                      : "hover:bg-black/[0.03] border border-transparent"
+                  )}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex-none h-7 w-7 rounded-md bg-white border border-black/10 flex items-center justify-center text-sm shadow-xs">
+                      📁
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className={cn(
+                        "text-xs font-semibold truncate",
+                        (activeConnectorId === 'file' || !activeConnectorId) && pathname === '/knowledge'
+                          ? "text-blue-600 font-bold"
+                          : "text-gray-950"
+                      )}>
+                        File Upload
+                      </h4>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Active" />
+                  </div>
+                </button>
+              )}
+
+              {/* Dynamic Composio apps acting as data connectors */}
+              {filteredApps.map(app => {
+                const isConnected = connectedAppSlugs.has(app.app_name.toLowerCase());
+                const isSelected = activeConnectorId === app.app_name && pathname === '/knowledge';
+
                 return (
                   <button
-                    key={conn.id}
+                    key={app.app_name}
                     onClick={() => {
-                      router.push(`/knowledge?connector=${conn.id}`);
+                      router.push(`/knowledge?connector=${app.app_name}`);
                       close();
                     }}
                     className={cn(
                       "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
-                      isSelected 
-                        ? "bg-black/[0.06] border border-black/10 shadow-xs" 
+                      isSelected
+                        ? "bg-black/[0.06] border border-black/10 shadow-xs"
                         : "hover:bg-black/[0.03] border border-transparent"
                     )}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="flex-none h-7 w-7 rounded-md bg-white border border-black/10 flex items-center justify-center text-sm shadow-sm">
-                        {conn.icon}
+                      {/* App Logo with Fallback */}
+                      <div className="relative flex-none h-7 w-7 rounded-md overflow-hidden border border-black/10 bg-white p-1 flex items-center justify-center">
+                        {app.image ? (
+                          <img
+                            src={app.image}
+                            alt={app.title}
+                            className="h-full w-full object-contain"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              e.currentTarget.parentElement!.innerHTML = `<span class="text-xs font-semibold text-blue-600">${app.title.charAt(0)}</span>`;
+                            }}
+                          />
+                        ) : (
+                          <span className="text-xs font-semibold text-blue-600">{app.title.charAt(0)}</span>
+                        )}
                       </div>
+
                       <div className="min-w-0">
                         <h4 className={cn(
                           "text-xs font-semibold truncate",
                           isSelected ? "text-blue-600 font-bold" : "text-gray-950"
                         )}>
-                          {conn.name}
+                          {app.title}
                         </h4>
-                        <p className="text-[10px] text-gray-500 truncate max-w-[130px]">
-                          {conn.description}
-                        </p>
                       </div>
                     </div>
-                    
+
+                    {/* Right hand Status dot indicators */}
                     <div className="flex items-center gap-1">
-                      {conn.status === 'active' ? (
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Active" />
+                      {isConnected ? (
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Connected" />
                       ) : (
-                        <span className="text-[9px] font-medium text-gray-400 bg-gray-200/50 px-1 py-0.5 rounded-sm dark:bg-gray-800">Soon</span>
+                        <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:translate-x-0.5 transition-transform" />
                       )}
                     </div>
                   </button>
                 );
               })}
+
+              {!['file upload'].includes(searchQuery.toLowerCase()) && filteredApps.length === 0 && (
+                <div className="py-4 text-center text-xs text-gray-500">
+                  No integrations found.
+                </div>
+              )}
             </div>
           ) : activeTab === 'workflows' ? (
             <div className="space-y-1 py-1 pb-4">
