@@ -627,15 +627,15 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     />
                   )}
 
-                  {(message.metadata?.domain === 'sports_odds' || message.metadata?.homeTeam) && (
+                  {((message.metadata as any)?.domain === 'sports_odds' || (message.metadata as any)?.homeTeam) && (
                     <SportsWidget sportsData={message.metadata} />
                   )}
 
-                  {(message.metadata?.domain === 'real_estate' || message.metadata?.domain === 'census_bps' || message.metadata?.address) && (
+                  {((message.metadata as any)?.domain === 'real_estate' || (message.metadata as any)?.domain === 'census_bps' || (message.metadata as any)?.address) && (
                     <RealEstateWidget realEstateData={message.metadata} />
                   )}
 
-                  {(message.metadata?.domain === 'cisa_kev' || message.metadata?.domain === 'nist_nvd_cve' || message.metadata?.cveId) && (
+                  {((message.metadata as any)?.domain === 'cisa_kev' || (message.metadata as any)?.domain === 'nist_nvd_cve' || (message.metadata as any)?.cveId) && (
                     <SecurityVulnerabilityWidget vulnerabilityData={message.metadata} />
                   )}
 
