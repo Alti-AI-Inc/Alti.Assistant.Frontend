@@ -6789,6 +6789,34 @@ export const allApps: APP[] = [
     "image": "https://www.google.com/s2/favicons?domain=navitaire.com&sz=128",
     "app_name": "navitaire",
     "isAvailable": true
+  },
+  {
+    "title": "Twilio",
+    "description": "Twilio coordinates private cloud communications, tracking SMS campaigns, phone logs, and message telemetry.",
+    "image": "https://www.google.com/s2/favicons?domain=twilio.com&sz=128",
+    "app_name": "twilio",
+    "isAvailable": true
+  },
+  {
+    "title": "Samsara",
+    "description": "Samsara provides real-time fleet logistics tracking, commercial vehicle telemetry, and sensor data pipelines.",
+    "image": "https://www.google.com/s2/favicons?domain=samsara.com&sz=128",
+    "app_name": "samsara",
+    "isAvailable": true
+  },
+  {
+    "title": "Flexport",
+    "description": "Flexport tracks global ocean and air freight shipping containers, customs declarations, and supply chain logs.",
+    "image": "https://www.google.com/s2/favicons?domain=flexport.com&sz=128",
+    "app_name": "flexport",
+    "isAvailable": true
+  },
+  {
+    "title": "ShipStation",
+    "description": "ShipStation tracks retail e-commerce shipping labels, courier package statuses, and customer order logs.",
+    "image": "https://www.google.com/s2/favicons?domain=shipstation.com&sz=128",
+    "app_name": "shipstation",
+    "isAvailable": true
   }
 ];
 
