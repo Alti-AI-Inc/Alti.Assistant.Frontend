@@ -6439,6 +6439,104 @@ export const allApps: APP[] = [
     "image": "https://www.google.com/s2/favicons?domain=entrata.com&sz=128",
     "app_name": "entrata",
     "isAvailable": true
+  },
+  {
+    "title": "CoinGecko",
+    "description": "CoinGecko provides independent cryptocurrency prices, trading volumes, and global crypto market capitalization charts.",
+    "image": "https://www.google.com/s2/favicons?domain=coingecko.com&sz=128",
+    "app_name": "coingecko",
+    "isAvailable": true
+  },
+  {
+    "title": "ExchangeRate-API",
+    "description": "ExchangeRate-API provides fast, reliable real-time and historical global currency conversion rates.",
+    "image": "https://www.google.com/s2/favicons?domain=exchangerate-api.com&sz=128",
+    "app_name": "exchangerate",
+    "isAvailable": true
+  },
+  {
+    "title": "Frankfurter API",
+    "description": "Frankfurter is a completely open-source currency exchange rate API tracking Reference Rates from the European Central Bank.",
+    "image": "https://www.google.com/s2/favicons?domain=frankfurter.app&sz=128",
+    "app_name": "frankfurter",
+    "isAvailable": true
+  },
+  {
+    "title": "IP-API",
+    "description": "IP-API provides instant geolocation information mapping IP addresses to regional ISPs, cities, and countries.",
+    "image": "https://www.google.com/s2/favicons?domain=ip-api.com&sz=128",
+    "app_name": "ip_api",
+    "isAvailable": true
+  },
+  {
+    "title": "REST Countries",
+    "description": "REST Countries delivers structured geographic and cultural details of global country profiles and flag vectors.",
+    "image": "https://www.google.com/s2/favicons?domain=restcountries.com&sz=128",
+    "app_name": "rest_countries",
+    "isAvailable": true
+  },
+  {
+    "title": "Open-Meteo",
+    "description": "Open-Meteo provides completely open global weather forecasts, marine conditions, and historical climate datasets.",
+    "image": "https://www.google.com/s2/favicons?domain=open-meteo.com&sz=128",
+    "app_name": "open_meteo",
+    "isAvailable": true
+  },
+  {
+    "title": "FRED",
+    "description": "FRED (Federal Reserve Economic Data) publishes over 800,000 national and international economic time series indexes.",
+    "image": "https://www.google.com/s2/favicons?domain=fred.stlouisfed.org&sz=128",
+    "app_name": "fred",
+    "isAvailable": true
+  },
+  {
+    "title": "Bureau of Labor Statistics",
+    "description": "Bureau of Labor Statistics publishes critical economic indicators including Consumer Price Index, PPI, and labor rates.",
+    "image": "https://www.google.com/s2/favicons?domain=bls.gov&sz=128",
+    "app_name": "bls",
+    "isAvailable": true
+  },
+  {
+    "title": "OMDb API",
+    "description": "OMDb API (Open Movie Database) provides comprehensive movie/show metadata, IMDb ratings, and poster assets.",
+    "image": "https://www.google.com/s2/favicons?domain=omdbapi.com&sz=128",
+    "app_name": "omdb",
+    "isAvailable": true
+  },
+  {
+    "title": "NASA Open APIs",
+    "description": "NASA Open APIs provide public space exploration feeds, including near-Earth objects trackers and Mars Rover logs.",
+    "image": "https://www.google.com/s2/favicons?domain=api.nasa.gov&sz=128",
+    "app_name": "nasa",
+    "isAvailable": true
+  },
+  {
+    "title": "DuckDuckGo Search",
+    "description": "DuckDuckGo Search provides quick instant answers, official summaries, and quick definitions for search terms.",
+    "image": "https://www.google.com/s2/favicons?domain=duckduckgo.com&sz=128",
+    "app_name": "duckduckgo",
+    "isAvailable": true
+  },
+  {
+    "title": "Open Food Facts",
+    "description": "Open Food Facts is a collaborative, open database tracking food product ingredients, allergens, and nutritional specs.",
+    "image": "https://www.google.com/s2/favicons?domain=openfoodfacts.org&sz=128",
+    "app_name": "open_food_facts",
+    "isAvailable": true
+  },
+  {
+    "title": "Rainforest API",
+    "description": "Rainforest API retrieves structured real-time e-commerce catalog pricing, product logs, and reviews from Amazon.",
+    "image": "https://www.google.com/s2/favicons?domain=rainforestapi.com&sz=128",
+    "app_name": "rainforest",
+    "isAvailable": true
+  },
+  {
+    "title": "CoinAPI",
+    "description": "CoinAPI provides standard cryptocurrency market data, integration feeds, and pricing histories across 100+ exchanges.",
+    "image": "https://www.google.com/s2/favicons?domain=coinapi.io&sz=128",
+    "app_name": "coinapi",
+    "isAvailable": true
   }
 ];
 
