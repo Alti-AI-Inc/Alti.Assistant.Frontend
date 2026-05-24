@@ -645,9 +645,6 @@ const LeftSideNav = () => {
                           )}>
                             {app.title}
                           </h4>
-                          <p className="text-[10px] text-gray-500 truncate max-w-[130px]">
-                            {app.description}
-                          </p>
                         </div>
                       </div>
  

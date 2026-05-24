@@ -81,10 +81,6 @@ const AppCard = ({
 
             <h3 className="text-xl font-medium text-gray-900">{app.title}</h3>
           </div>
-
-          <p className="mt-2 flex flex-1 flex-col text-sm text-gray-500">
-            {app.description}
-          </p>
           {errorMessage && (
             <p className="mt-2 flex flex-1 flex-col text-center text-sm text-red-500">
               {errorMessage}
