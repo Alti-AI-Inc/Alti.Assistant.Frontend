@@ -6530,6 +6530,76 @@ export const allApps: APP[] = [
     "image": "https://www.google.com/s2/favicons?domain=crunchbase.com&sz=128",
     "app_name": "crunchbase",
     "isAvailable": true
+  },
+  {
+    "title": "Carta",
+    "description": "Carta tracks startup equity, handles 409A valuations, and automates venture capital fund administration.",
+    "image": "https://www.google.com/s2/favicons?domain=carta.com&sz=128",
+    "app_name": "carta",
+    "isAvailable": true
+  },
+  {
+    "title": "Preqin",
+    "description": "Preqin provides comprehensive alternative assets market intelligence, hedge fund tracking, and PE fund benchmark metrics.",
+    "image": "https://www.google.com/s2/favicons?domain=preqin.com&sz=128",
+    "app_name": "preqin",
+    "isAvailable": true
+  },
+  {
+    "title": "eFront",
+    "description": "eFront is a leading software platform for General Partners and Limited Partners to manage alternative investment portfolios.",
+    "image": "https://www.google.com/s2/favicons?domain=efront.com&sz=128",
+    "app_name": "efront",
+    "isAvailable": true
+  },
+  {
+    "title": "Oracle NetSuite",
+    "description": "Oracle NetSuite is a comprehensive enterprise cloud ERP managing general ledgers, financial planning, and inventory logs.",
+    "image": "https://www.google.com/s2/favicons?domain=netsuite.com&sz=128",
+    "app_name": "netsuite",
+    "isAvailable": true
+  },
+  {
+    "title": "Workday",
+    "description": "Workday is an enterprise human capital and financial management system managing corporate directory databases.",
+    "image": "https://www.google.com/s2/favicons?domain=workday.com&sz=128",
+    "app_name": "workday",
+    "isAvailable": true
+  },
+  {
+    "title": "Amazon S3",
+    "description": "Amazon S3 provides secure cloud object storage to ingest, index, and query unstructured corporate file folders and documents.",
+    "image": "https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=128",
+    "app_name": "amazon_s3",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Cloud Storage",
+    "description": "Google Cloud Storage provides scalable enterprise object storage buckets to index, store, and query corporate PDF archives.",
+    "image": "https://www.google.com/s2/favicons?domain=cloud.google.com&sz=128",
+    "app_name": "gcs",
+    "isAvailable": true
+  },
+  {
+    "title": "MongoDB Atlas",
+    "description": "MongoDB Atlas is a cloud document database powering dynamic application data stores and custom collections.",
+    "image": "https://www.google.com/s2/favicons?domain=mongodb.com&sz=128",
+    "app_name": "mongodb_atlas",
+    "isAvailable": true
+  },
+  {
+    "title": "Argus Enterprise",
+    "description": "Argus Enterprise is the industry standard commercial real estate asset valuation and leasing cash flow modeling database.",
+    "image": "https://www.google.com/s2/favicons?domain=altusgroup.com&sz=128",
+    "app_name": "argus",
+    "isAvailable": true
+  },
+  {
+    "title": "Buildium",
+    "description": "Buildium is an all-in-one property management database tracking tenant ledger accounts and work order logs.",
+    "image": "https://www.google.com/s2/favicons?domain=buildium.com&sz=128",
+    "app_name": "buildium",
+    "isAvailable": true
   }
 ];
 
