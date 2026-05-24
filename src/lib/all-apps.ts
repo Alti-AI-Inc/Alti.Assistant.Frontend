@@ -6474,6 +6474,20 @@ export const allApps: APP[] = [
     "image": "https://www.google.com/s2/favicons?domain=coinapi.io&sz=128",
     "app_name": "coinapi",
     "isAvailable": true
+  },
+  {
+    "title": "Procore",
+    "description": "Procore is an enterprise construction project management database tracking submittals, RFIs, and construction logs.",
+    "image": "https://www.google.com/s2/favicons?domain=procore.com&sz=128",
+    "app_name": "procore",
+    "isAvailable": true
+  },
+  {
+    "title": "Clio",
+    "description": "Clio is an enterprise legal practice management platform tracking case files, billable hours, and client trust accounts.",
+    "image": "https://www.google.com/s2/favicons?domain=clio.com&sz=128",
+    "app_name": "clio",
+    "isAvailable": true
   }
 ];
 
