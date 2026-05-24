@@ -1375,7 +1375,7 @@ export const allApps: APP[] = [
   {
     "title": "Amazon",
     "description": "Integrate Amazon to seamlessly execute automated workflows, synchronize data, and orchestrate Amazon actions directly within Alti.",
-    "image": "https://logos.composio.dev/api/amazon",
+    "image": "https://www.google.com/s2/favicons?domain=amazon.com&sz=128",
     "app_name": "amazon",
     "isAvailable": true
   },
@@ -6816,6 +6816,55 @@ export const allApps: APP[] = [
     "description": "ShipStation tracks retail e-commerce shipping labels, courier package statuses, and customer order logs.",
     "image": "https://www.google.com/s2/favicons?domain=shipstation.com&sz=128",
     "app_name": "shipstation",
+    "isAvailable": true
+  },
+  {
+    "title": "ShipBob",
+    "description": "ShipBob coordinates global omnifulfillment logistics, tracking inventory levels, order shipments, and 3PL center operations.",
+    "image": "https://www.google.com/s2/favicons?domain=shipbob.com&sz=128",
+    "app_name": "shipbob",
+    "isAvailable": true
+  },
+  {
+    "title": "Deliverr",
+    "description": "Deliverr manages fast-fulfillment logistics, tracking retail channels, inventory levels, and shipment pipelines.",
+    "image": "https://www.google.com/s2/favicons?domain=deliverr.com&sz=128",
+    "app_name": "deliverr",
+    "isAvailable": true
+  },
+  {
+    "title": "SkuVault",
+    "description": "SkuVault coordinates e-commerce inventory levels, tracking warehouse stock locations, purchase orders, and catalogs.",
+    "image": "https://www.google.com/s2/favicons?domain=skuvault.com&sz=128",
+    "app_name": "skuvault",
+    "isAvailable": true
+  },
+  {
+    "title": "Klaviyo",
+    "description": "Klaviyo coordinates e-commerce marketing analytics, tracking email campaign logs, SMS outreach, and customer behavior.",
+    "image": "https://www.google.com/s2/favicons?domain=klaviyo.com&sz=128",
+    "app_name": "klaviyo",
+    "isAvailable": true
+  },
+  {
+    "title": "Recharge Payments",
+    "description": "Recharge Payments manages recurring subscription transactions, customer subscription contracts, and billing analytics.",
+    "image": "https://www.google.com/s2/favicons?domain=rechargepayments.com&sz=128",
+    "app_name": "recharge",
+    "isAvailable": true
+  },
+  {
+    "title": "Amazon Seller Central",
+    "description": "Amazon Seller Central coordinates e-commerce sales campaigns, merchant inventory levels, pricing strategies, and shipment logs.",
+    "image": "https://www.google.com/s2/favicons?domain=sellercentral.amazon.com&sz=128",
+    "app_name": "amazon_seller",
+    "isAvailable": true
+  },
+  {
+    "title": "AWS (Amazon Web Services)",
+    "description": "AWS integrates cloud compute management, relational database instances, serverless functions, and infrastructure operations.",
+    "image": "https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=128",
+    "app_name": "aws",
     "isAvailable": true
   }
 ];
