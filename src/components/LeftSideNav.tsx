@@ -45,7 +45,7 @@ import ConversationsList from './ConversationsList';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-import { allApps } from '@/lib/all-apps';
+import { allApps, APP } from '@/lib/all-apps';
 import { apiClientJson, buildApiUrl } from '@/lib/api-client';
 import { useBotsStore } from '@/stores/useBotsStore';
 
@@ -178,9 +178,19 @@ const LeftSideNav = () => {
     }
   }, [activeTab]);
 
-  const availableComposioApps = allApps
-    .filter(app => app.isAvailable && app.app_name)
-    .sort((a, b) => a.title.localeCompare(b.title));
+  const availableComposioApps = (() => {
+    const uniqueMap = new Map<string, APP>();
+    allApps.forEach(app => {
+      if (app.isAvailable && app.app_name) {
+        const slug = app.app_name.toLowerCase();
+        if (!uniqueMap.has(slug)) {
+          uniqueMap.set(slug, app);
+        }
+      }
+    });
+    return Array.from(uniqueMap.values())
+      .sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+  })();
 
   const filteredApps = availableComposioApps.filter(app =>
     app.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

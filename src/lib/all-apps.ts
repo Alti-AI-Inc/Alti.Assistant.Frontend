@@ -8,1168 +8,6 @@ export type APP = {
 
 export const allApps: APP[] = [
   {
-    "title": "Gmail",
-    "description": "Gmail is Google’s email service, featuring spam protection, search functions, and seamless integration with other G Suite apps for productivity.",
-    "image": "/assets/apps-logos/gmail.svg",
-    "app_name": "gmail",
-    "isAvailable": true
-  },
-  {
-    "title": "GitHub",
-    "description": "GitHub is a code hosting platform for version control and collaboration, offering Git-based repository management, issue tracking, and continuous integration features.",
-    "image": "/assets/apps-logos/github.png",
-    "app_name": "github",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Calendar",
-    "description": "Google Calendar is a time management tool providing scheduling features, event reminders, and integration with email and other apps for streamlined organization.",
-    "image": "/assets/apps-logos/google-calendar.svg",
-    "app_name": "googlecalendar",
-    "isAvailable": true
-  },
-  {
-    "title": "Notion",
-    "description": "Notion centralizes notes, docs, wikis, and tasks in a unified workspace, letting teams build custom workflows for collaboration and knowledge management.",
-    "image": "/assets/apps-logos/notion.svg",
-    "app_name": "notion",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Sheets",
-    "description": "Google Sheets is a cloud-based spreadsheet tool enabling real-time collaboration, data analysis, and integration with other Google Workspace apps.",
-    "image": "/assets/apps-logos/google-sheets.svg",
-    "app_name": "googlesheets",
-    "isAvailable": true
-  },
-  {
-    "title": "Slack",
-    "description": "Slack is a channel-based messaging platform. With Slack, people can work together more effectively, connect all their software tools and services, and find the information they need to do their best work — all within a secure, enterprise-grade environment.",
-    "image": "/assets/apps-logos/slack.svg",
-    "app_name": "slack",
-    "isAvailable": true
-  },
-  {
-    "title": "Linear",
-    "description": "Linear is a streamlined issue tracking and project planning tool for modern teams, featuring fast workflows, keyboard shortcuts, and GitHub integrations.",
-    "image": "/assets/apps-logos/linear.png",
-    "app_name": "linear",
-    "isAvailable": true
-  },
-  {
-    "title": "Trello",
-    "description": "A web-based, kanban-style, list-making application.",
-    "image": "/assets/apps-logos/trello.svg",
-    "app_name": "trello",
-    "isAvailable": true
-  },
-  {
-    "title": "Supabase",
-    "description": "Supabase is an open-source backend-as-a-service providing a Postgres database, authentication, storage, and real-time subscription APIs for building modern applications.",
-    "image": "/assets/apps-logos/supabase.jpeg",
-    "app_name": "supabase",
-    "isAvailable": true
-  },
-  {
-    "title": "Bitbucket",
-    "description": "Bitbucket is a Git-based code hosting and collaboration platform supporting private and public repositories, enabling teams to manage and review code through pull requests and integrations.",
-    "image": "/assets/apps-logos/bitbucket.svg",
-    "app_name": "bitbucket",
-    "isAvailable": true
-  },
-  {
-    "title": "Sentry",
-    "description": "Integrate Sentry to manage your error tracking and monitoring.",
-    "image": "/assets/apps-logos/sentry.svg",
-    "app_name": "sentry",
-    "isAvailable": true
-  },
-  {
-    "title": "Neon",
-    "description": "Postgres, on a serverless platform designed to help you build reliable and scalable applications faster.",
-    "image": "/assets/apps-logos/neon.png",
-    "app_name": "neon",
-    "isAvailable": true
-  },
-  {
-    "title": "ZenRows",
-    "description": "ZenRows is a web scraping API allowing developers to bypass CAPTCHAs and blocks, gather structured data from dynamic websites, and quickly integrate results into applications.",
-    "image": "/assets/apps-logos/zenrows.jpeg",
-    "app_name": "zenrows",
-    "isAvailable": true
-  },
-  {
-    "title": "Pagerduty",
-    "description": "Integrate PagerDuty to manage incidents, schedules, and alerts directly from your application.",
-    "image": "/assets/apps-logos/pagerduty.png",
-    "app_name": "pagerduty",
-    "isAvailable": true
-  },
-  {
-    "title": "Contentful",
-    "description": "Contentful is a headless CMS allowing developers to create, manage, and distribute content across multiple channels and devices with an API-first approach.",
-    "image": "/assets/apps-logos/contentful-logo.png",
-    "app_name": "contentful",
-    "isAvailable": true
-  },
-  {
-    "title": "Ably",
-    "description": "Ably is a real-time messaging platform helping developers build live features, including chat and data synchronization, with global scalability and robust reliability for modern applications.",
-    "image": "/assets/apps-logos/ably.svg",
-    "app_name": "ably",
-    "isAvailable": true
-  },
-  {
-    "title": "Ngrok",
-    "description": "Ngrok creates secure tunnels to locally hosted applications, enabling developers to share and test webhooks or services without configuring complex network settings.",
-    "image": "/assets/apps-logos/ngrok-logo.jpeg",
-    "app_name": "ngrok",
-    "isAvailable": true
-  },
-  {
-    "title": "Baserow",
-    "description": "Baserow is an open-source database tool that lets teams build no-code data applications, collaborate on records, and integrate with other services for data management.",
-    "image": "/assets/apps-logos/baserow-logo.jpeg",
-    "app_name": "baserow",
-    "isAvailable": true
-  },
-  {
-    "title": "Datadog",
-    "description": "Datadog offers monitoring, observability, and security for cloud-scale applications, unifying metrics, logs, and traces to help teams detect issues and optimize performance.",
-    "image": "/assets/apps-logos/datadog-logo.png",
-    "app_name": "datadog",
-    "isAvailable": true
-  },
-  {
-    "title": "Outlook",
-    "description": "Outlook is Microsoft’s email and calendaring platform integrating contacts, tasks, and scheduling, enabling users to manage communications and events in a unified workspace.",
-    "image": "/assets/apps-logos/Outlook.svg",
-    "app_name": "outlook",
-    "isAvailable": true
-  },
-  {
-    "title": "Slack Bot",
-    "description": "Slack Bot automates responses and reminders within Slack, assisting with tasks like onboarding, FAQs, and notifications to streamline team productivity.",
-    "image": "/assets/apps-logos/slack.svg",
-    "app_name": "slackbot",
-    "isAvailable": true
-  },
-  {
-    "title": "Microsoft Teams",
-    "description": "Microsoft Teams integrates chat, video meetings, and file storage within Microsoft 365, providing virtual collaboration and communication for distributed teams.",
-    "image": "/assets/apps-logos/microsoft-teams-logo.jpeg",
-    "app_name": "microsoft_teams",
-    "isAvailable": true
-  },
-  {
-    "title": "Discord Bot",
-    "description": "Discord Bot refers to automated programs on Discord servers, performing tasks like moderation, music playback, and user engagement to enhance community interactions.",
-    "image": "/assets/apps-logos/discord.svg",
-    "app_name": "discordbot",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Meet",
-    "description": "Google Meet is a secure video conferencing platform that integrates with Google Workspace, facilitating remote meetings, screen sharing, and chat.",
-    "image": "/assets/apps-logos/google-meet.webp",
-    "app_name": "googlemeet",
-    "isAvailable": true
-  },
-  {
-    "title": "Zoom",
-    "description": "Zoom is a video conferencing and online meeting platform featuring breakout rooms, screen sharing, and integrations with various enterprise tools.",
-    "image": "/assets/apps-logos/zoom.svg",
-    "app_name": "zoom",
-    "isAvailable": true
-  },
-  {
-    "title": "RetellAI",
-    "description": "RetellAI captures calls and transcripts, enabling businesses to analyze conversations, extract insights, and enhance customer interactions in one centralized platform.",
-    "image": "/assets/apps-logos/retellai.jpeg",
-    "app_name": "retellai",
-    "isAvailable": true
-  },
-  {
-    "title": "SharePoint",
-    "description": "SharePoint is a Microsoft platform for document management and intranets, enabling teams to collaborate, store, and organize content securely and effectively.",
-    "image": "/assets/apps-logos/sharepoint-icon.svg",
-    "app_name": "share_point",
-    "isAvailable": true
-  },
-  {
-    "title": "Webex",
-    "description": "Webex is a Cisco-powered video conferencing and collaboration platform offering online meetings, webinars, screen sharing, and team messaging.",
-    "image": "/assets/apps-logos/webex.png",
-    "app_name": "webex",
-    "isAvailable": true
-  },
-  {
-    "title": "Daily Bot",
-    "description": "Daily Bot simplifies team collaboration and tasks with chat-based standups, reminders, polls, and integrations, streamlining workflow automation in popular messaging platforms.",
-    "image": "/assets/apps-logos/dailybot.jpg",
-    "app_name": "dailybot",
-    "isAvailable": true
-  },
-  {
-    "title": "Chatwork",
-    "description": "Chatwork is a team communication platform featuring group chats, file sharing, and task management, aiming to enhance collaboration and productivity for businesses.",
-    "image": "/assets/apps-logos/chatwork-logo.jpg",
-    "app_name": "chatwork",
-    "isAvailable": true
-  },
-  {
-    "title": "Dialpad",
-    "description": "Dialpad is a cloud-based business phone system and contact center platform that enables voice, video, messages and meetings across your existing devices.",
-    "image": "/assets/apps-logos/dialpad.png",
-    "app_name": "dialpad",
-    "isAvailable": true
-  },
-  {
-    "title": "Stack Exchange",
-    "description": "Stack Exchange is a network of Q&A communities where users ask questions, share knowledge, and collaborate on topics like coding, math, and more.",
-    "image": "/assets/apps-logos/stackexchange.png",
-    "app_name": "stack_exchange",
-    "isAvailable": true
-  },
-  {
-    "title": "EchtPost",
-    "description": "EchtPost facilitates secure digital communication, encryption, and data privacy, providing a reliable channel for sending confidential documents and messages.",
-    "image": "/assets/apps-logos/echtpost.svg",
-    "app_name": "echtpost",
-    "isAvailable": true
-  },
-  {
-    "title": "Perplexity AI",
-    "description": "Perplexity AI provides conversational AI models for generating human-like text responses.",
-    "image": "/assets/apps-logos/perplexity.jpeg",
-    "app_name": "perplexityai",
-    "isAvailable": true
-  },
-  {
-    "title": "Mem0",
-    "description": "Mem0 assists with AI-driven note-taking, knowledge recall, and productivity tools, allowing users to organize, search, and generate content from stored information.",
-    "image": "/assets/apps-logos/mem0.png",
-    "app_name": "mem0",
-    "isAvailable": true
-  },
-  {
-    "title": "Semantic Scholar",
-    "description": "Semantic Scholar is an AI-powered academic search engine that helps researchers discover and understand scientific literature.",
-    "image": "/assets/apps-logos/semanticscholar.png",
-    "app_name": "semanticscholar",
-    "isAvailable": true
-  },
-  {
-    "title": "Lmnt",
-    "description": "LMNT focuses on voice and audio manipulation, possibly leveraging AI to generate or transform sound for various creative and technical use cases.",
-    "image": "/assets/apps-logos/lmnt_logo.jpeg",
-    "app_name": "lmnt",
-    "isAvailable": true
-  },
-  {
-    "title": "Typefully",
-    "description": "Typefully is a platform for creating and managing AI-powered content.",
-    "image": "/assets/apps-logos/typefully.png",
-    "app_name": "typefully",
-    "isAvailable": true
-  },
-  {
-    "title": "Humanloop",
-    "description": "Humanloop helps developers build and refine AI applications, offering user feedback loops, model training, and data annotation to iterate on language model performance.",
-    "image": "/assets/apps-logos/humanloop.jpeg",
-    "app_name": "humanloop",
-    "isAvailable": true
-  },
-  {
-    "title": "TextRazor",
-    "description": "TextRazor is a natural language processing API that extracts meaning, entities, and relationships from text, powering advanced content analysis and sentiment detection.",
-    "image": "/assets/apps-logos/textrazor.svg",
-    "app_name": "textrazor",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Drive",
-    "description": "Google Drive is a cloud storage solution for uploading, sharing, and collaborating on files across devices, with robust search and offline access.",
-    "image": "/assets/apps-logos/google-drive.svg",
-    "app_name": "googledrive",
-    "isAvailable": true
-  },
-  {
-    "title": "One drive",
-    "description": "OneDrive is Microsoft’s cloud storage solution enabling users to store, sync, and share files across devices, offering offline access, real-time collaboration, and enterprise-grade security.",
-    "image": "/assets/apps-logos/one-drive.svg",
-    "app_name": "one_drive",
-    "isAvailable": true
-  },
-  {
-    "title": "DocuSign",
-    "description": "DocuSign provides eSignature and digital agreement solutions, enabling businesses to send, sign, track, and manage documents electronically.",
-    "image": "/assets/apps-logos/docusign.svg",
-    "app_name": "docusign",
-    "isAvailable": true
-  },
-  {
-    "title": "Dropbox",
-    "description": "Dropbox is a cloud storage service offering file syncing, sharing, and collaboration across devices with version control and robust integrations.",
-    "image": "/assets/apps-logos/dropbox.svg",
-    "app_name": "dropbox",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Photos",
-    "description": "Google Photos is a cloud-based photo storage and organization service offering automatic backups, AI-assisted search, and shared albums for personal and collaborative media management.",
-    "image": "/assets/apps-logos/Google_Photos.png",
-    "app_name": "googlephotos",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Super",
-    "description": "Google Super App combines all Google services including Drive, Calendar, Gmail, Sheets, Analytics, Ads, and more, providing a unified platform for seamless integration and management of your digital life.",
-    "image": "/assets/apps-logos/google.svg",
-    "app_name": "googlesuper",
-    "isAvailable": true
-  },
-  {
-    "title": "Pandadoc",
-    "description": "PandaDoc offers document creation, e-signatures, and workflow automation, helping sales teams and businesses streamline proposals, contracts, and agreement processes.",
-    "image": "/assets/apps-logos/pandadoc.svg",
-    "app_name": "pandadoc",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Docs",
-    "description": "Google Docs is a cloud-based word processor with real-time collaboration, version history, and integration with other Google Workspace apps.",
-    "image": "/assets/apps-logos/google-docs.svg",
-    "app_name": "googledocs",
-    "isAvailable": true
-  },
-  {
-    "title": "Airtable",
-    "description": "Airtable merges spreadsheet functionality with database power, enabling teams to organize projects, track tasks, and collaborate through customizable views, automation, and integrations for data management.",
-    "image": "/assets/apps-logos/airtable.svg",
-    "app_name": "airtable",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Tasks",
-    "description": "Google Tasks provides a simple to-do list and task management system integrated into Gmail and Google Calendar for quick and easy tracking.",
-    "image": "/assets/apps-logos/google-tasks.png",
-    "app_name": "googletasks",
-    "isAvailable": true
-  },
-  {
-    "title": "Wrike",
-    "description": "Wrike is a project management and collaboration tool offering customizable workflows, Gantt charts, reporting, and resource management to boost team productivity.",
-    "image": "/assets/apps-logos/wrike.png",
-    "app_name": "wrike",
-    "isAvailable": true
-  },
-  {
-    "title": "ClickUp",
-    "description": "ClickUp unifies tasks, docs, goals, and chat in a single platform, allowing teams to plan, organize, and collaborate across projects with customizable workflows.",
-    "image": "/assets/apps-logos/clickup.png",
-    "app_name": "clickup",
-    "isAvailable": true
-  },
-  {
-    "title": "Shortcut",
-    "description": "Shortcut aligns product development work with company objectives so teams can execute with a shared purpose.",
-    "image": "/assets/apps-logos/shortcut.svg",
-    "app_name": "shortcut",
-    "isAvailable": true
-  },
-  {
-    "title": "Coda",
-    "description": "Collaborative workspace platform that transforms documents into powerful tools for team productivity and project management.",
-    "image": "/assets/apps-logos/coda.png",
-    "app_name": "coda",
-    "isAvailable": true
-  },
-  {
-    "title": "Monday",
-    "description": "Monday.com is a customizable work management platform for project planning, collaboration, and automation, supporting agile, sales, marketing, and more.",
-    "image": "/assets/apps-logos/monday.png",
-    "app_name": "monday",
-    "isAvailable": true
-  },
-  {
-    "title": "Onepage",
-    "description": "API for enriching user and company data, providing endpoints for token validation and generic search.",
-    "image": "/assets/apps-logos/onepage.svg",
-    "app_name": "onepage",
-    "isAvailable": true
-  },
-  {
-    "title": "LinkHut",
-    "description": "LinkHut manages bookmarked links in a minimalistic, shareable interface, helping teams organize URLs and track references in one place.",
-    "image": "/assets/apps-logos/linkhut.svg",
-    "app_name": "linkhut",
-    "isAvailable": true
-  },
-  {
-    "title": "Timely",
-    "description": "Timely is an automatic time-tracking platform capturing activity across applications, calendars, and devices, creating detailed timesheets for billing or productivity insights.",
-    "image": "/assets/apps-logos/timely.png",
-    "app_name": "timely",
-    "isAvailable": true
-  },
-  {
-    "title": "Todoist",
-    "description": "Todoist is a task management tool allowing users to create to-do lists, set deadlines, and collaborate on projects with reminders and cross-platform syncing.",
-    "image": "/assets/apps-logos/todoist.svg",
-    "app_name": "todoist",
-    "isAvailable": true
-  },
-  {
-    "title": "Harvest",
-    "description": "Harvest is a time-tracking and invoicing tool designed for teams and freelancers, helping them log billable hours, manage projects, and streamline payments.",
-    "image": "/assets/apps-logos/harvest.png",
-    "app_name": "harvest",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Slides",
-    "description": "Google Slides is a cloud-based presentation editor with real-time collaboration, template gallery, and integration with other Google Workspace apps.",
-    "image": "/assets/apps-logos/google-slides.svg",
-    "app_name": "googleslides",
-    "isAvailable": true
-  },
-  {
-    "title": "Hubspot",
-    "description": "HubSpot is an inbound marketing, sales, and customer service platform integrating CRM, email automation, and analytics to facilitate lead nurturing and seamless customer experiences.",
-    "image": "/assets/apps-logos/hubspot.webp",
-    "app_name": "hubspot",
-    "isAvailable": true
-  },
-  {
-    "title": "Salesforce",
-    "description": "Salesforce is a leading CRM platform integrating sales, service, marketing, and analytics to build customer relationships and drive business growth.",
-    "image": "/assets/apps-logos/salesforce.svg",
-    "app_name": "salesforce",
-    "isAvailable": true
-  },
-  {
-    "title": "Apollo",
-    "description": "Apollo provides CRM and lead generation capabilities, helping businesses discover contacts, manage outreach, and track sales pipelines for consistent customer relationship development.",
-    "image": "/assets/apps-logos/apollo.jpg",
-    "app_name": "apollo",
-    "isAvailable": true
-  },
-  {
-    "title": "Attio",
-    "description": "Attio is a fully customizable workspace for your team's relationships and workflows.",
-    "image": "/assets/apps-logos/attio.webp",
-    "app_name": "attio",
-    "isAvailable": true
-  },
-  {
-    "title": "Zoho",
-    "description": "Zoho is a suite of cloud applications including CRM, email marketing, and collaboration tools, enabling businesses to automate and scale operations.",
-    "image": "/assets/apps-logos/zoho.png",
-    "app_name": "zoho",
-    "isAvailable": true
-  },
-  {
-    "title": "Freshdesk",
-    "description": "Freshdesk provides customer support software with ticketing, knowledge base, and automation features for efficient helpdesk operations and better customer experiences.",
-    "image": "/assets/apps-logos/freshdesk.svg",
-    "app_name": "freshdesk",
-    "isAvailable": true
-  },
-  {
-    "title": "AccuLynx",
-    "description": "Using the AccuLynx API, data can be seamlessly exchanged between AccuLynx and other applications for greater efficiency and productivity.",
-    "image": "/assets/apps-logos/acculynx.jpeg",
-    "app_name": "acculynx",
-    "isAvailable": true
-  },
-  {
-    "title": "Affinity",
-    "description": "Affinity helps private capital investors to find, manage, and close more deals.",
-    "image": "/assets/apps-logos/affinity.jpeg",
-    "app_name": "affinity",
-    "isAvailable": true
-  },
-  {
-    "title": "AgencyZoom",
-    "description": "AgencyZoom is for the P&C insurance agent that's looking to increase sales, boost retention and analyze agency & producer performance.",
-    "image": "/assets/apps-logos/agencyzoom_logo.jpeg",
-    "app_name": "agencyzoom",
-    "isAvailable": true
-  },
-  {
-    "title": "Pipedrive",
-    "description": "Pipedrive is a sales management tool built around pipeline visualization, lead tracking, activity reminders, and automation to keep deals progressing.",
-    "image": "/assets/apps-logos/pipedrive.svg",
-    "app_name": "pipedrive",
-    "isAvailable": true
-  },
-  {
-    "title": "Dynamics365",
-    "description": "Dynamics 365 from Microsoft combines CRM, ERP, and productivity apps to streamline sales, marketing, customer service, and operations in one integrated platform.",
-    "image": "/assets/apps-logos/Dynamics365.svg",
-    "app_name": "dynamics365",
-    "isAvailable": true
-  },
-  {
-    "title": "Zendesk",
-    "description": "Zendesk provides customer support software with ticketing, live chat, and knowledge base features, enabling efficient helpdesk operations and customer engagement.",
-    "image": "/assets/apps-logos/zendesk.svg",
-    "app_name": "zendesk",
-    "isAvailable": true
-  },
-  {
-    "title": "Close",
-    "description": "Close is a CRM platform designed to help businesses manage and streamline their sales processes, including calling, email automation, and predictive dialers.",
-    "image": "/assets/apps-logos/close-logo.jpeg",
-    "app_name": "close",
-    "isAvailable": true
-  },
-  {
-    "title": "Simplesat",
-    "description": "Simplesat captures customer feedback and CSAT scores through surveys, integrating directly with helpdesk systems for real-time performance insights.",
-    "image": "/assets/apps-logos/simplesat.jpeg",
-    "app_name": "simplesat",
-    "isAvailable": true
-  },
-  {
-    "title": "Zoho Bigin",
-    "description": "Zoho Bigin is a simplified CRM solution from Zoho tailored for small businesses, focusing on pipeline tracking and relationship management.",
-    "image": "/assets/apps-logos/zoho.png",
-    "app_name": "zoho_bigin",
-    "isAvailable": true
-  },
-  {
-    "title": "Gorgias",
-    "description": "Gorgias is a helpdesk and live chat platform specializing in e-commerce, offering automated support, order management, and unified customer communication.",
-    "image": "/assets/apps-logos/gorgias.png",
-    "app_name": "gorgias",
-    "isAvailable": true
-  },
-  {
-    "title": "Kommo",
-    "description": "Kommo CRM (formerly amoCRM) integration tool for managing customer relationships, sales pipelines, and business processes.",
-    "image": "/assets/apps-logos/kommo.png",
-    "app_name": "kommo",
-    "isAvailable": true
-  },
-  {
-    "title": "Zoominfo",
-    "description": "AgencyZoom is for the P&C insurance agent that's looking to increase sales, boost retention and analyze agency & producer performance.",
-    "image": "/assets/apps-logos/zoominfo.ico",
-    "app_name": "zoominfo",
-    "isAvailable": true
-  },
-  {
-    "title": "Intercom",
-    "description": "Intercom provides live chat, messaging, and customer engagement tools, enabling businesses to drive conversions, handle support, and personalize communication at scale.",
-    "image": "/assets/apps-logos/intercom.svg",
-    "app_name": "intercom",
-    "isAvailable": true
-  },
-  {
-    "title": "Capsule CRM",
-    "description": "Capsule CRM is a simple yet powerful CRM platform designed to help businesses manage customer relationships, sales pipelines, and tasks efficiently.",
-    "image": "/assets/apps-logos/capsule_crm-logo.png",
-    "app_name": "capsule_crm",
-    "isAvailable": true
-  },
-  {
-    "title": "Fireberry",
-    "description": "Fireberry is a CRM platform that offers integrations with various tools and applications to streamline business processes.",
-    "image": "/assets/apps-logos/fireberry-logo.png",
-    "app_name": "fireberry",
-    "isAvailable": true
-  },
-  {
-    "title": "Folk",
-    "description": "folk is a next-generation CRM designed for teams to manage and nurture their relationships efficiently.",
-    "image": "/assets/apps-logos/folk_round3_20250722.png",
-    "app_name": "folk",
-    "isAvailable": true
-  },
-  {
-    "title": "JobNimbus",
-    "description": "JobNimbus is a CRM and project management software designed for contractors, helping streamline scheduling, estimates, invoicing, and job tracking.",
-    "image": "/assets/apps-logos/jobnimbus-logo.jpeg",
-    "app_name": "jobnimbus",
-    "isAvailable": true
-  },
-  {
-    "title": "noCRM.io",
-    "description": "noCRM.io is a lead management software designed to help sales teams track and close deals efficiently.",
-    "image": "/assets/apps-logos/nocrm_io_round2_20250722.png",
-    "app_name": "nocrm_io",
-    "isAvailable": true
-  },
-  {
-    "title": "Salesmate",
-    "description": "Salesmate is an AI-powered CRM platform designed to help businesses engage leads, close deals faster, nurture relationships, and provide seamless support through a unified, intuitive interface.",
-    "image": "/assets/apps-logos/salesmate-logo.jpeg",
-    "app_name": "salesmate",
-    "isAvailable": true
-  },
-  {
-    "title": "SerpApi",
-    "description": "SerpApi provides a real-time API for structured search engine results, allowing developers to scrape, parse, and analyze SERP data for SEO and research.",
-    "image": "/assets/apps-logos/serpapi.png",
-    "app_name": "serpapi",
-    "isAvailable": true
-  },
-  {
-    "title": "Firecrawl",
-    "description": "Firecrawl automates web crawling and data extraction, enabling organizations to gather content, index sites, and gain insights from online sources at scale.",
-    "image": "/assets/apps-logos/firecrawl.jpeg",
-    "app_name": "firecrawl",
-    "isAvailable": true
-  },
-  {
-    "title": "Tavily",
-    "description": "Tavily offers search and data retrieval solutions, helping teams quickly locate and filter relevant information from documents, databases, or web sources.",
-    "image": "/assets/apps-logos/tavily.svg",
-    "app_name": "tavily",
-    "isAvailable": true
-  },
-  {
-    "title": "Exa",
-    "description": "Exa focuses on data extraction and search, helping teams gather, analyze, and visualize information from websites, APIs, or internal databases.",
-    "image": "/assets/apps-logos/exa.png",
-    "app_name": "exa",
-    "isAvailable": true
-  },
-  {
-    "title": "Snowflake",
-    "description": "Snowflake is a cloud-based data warehouse offering elastic scaling, secure data sharing, and SQL analytics across multiple cloud environments.",
-    "image": "/assets/apps-logos/snowflake.svg",
-    "app_name": "snowflake",
-    "isAvailable": true
-  },
-  {
-    "title": "PeopleDataLabs",
-    "description": "PeopleDataLabs provides B2B data enrichment and identity resolution, empowering organizations to build enriched user profiles and validate customer information.",
-    "image": "/assets/apps-logos/pdl.png",
-    "app_name": "peopledatalabs",
-    "isAvailable": true
-  },
-  {
-    "title": "PostHog",
-    "description": "PostHog is an open-source product analytics platform tracking user interactions and behaviors to help teams refine features, improve funnels, and reduce churn.",
-    "image": "/assets/apps-logos/posthog.svg",
-    "app_name": "posthog",
-    "isAvailable": true
-  },
-  {
-    "title": "Fireflies",
-    "description": "Fireflies.ai helps your team transcribe, summarize, search, and analyze voice conversations.",
-    "image": "/assets/apps-logos/fireflies.jpg",
-    "app_name": "fireflies",
-    "isAvailable": true
-  },
-  {
-    "title": "Mixpanel",
-    "description": "Mixpanel is a product analytics platform tracking user interactions and engagement, providing cohort analysis, funnels, and A/B testing to improve user experiences.",
-    "image": "/assets/apps-logos/mixpanel.svg",
-    "app_name": "mixpanel",
-    "isAvailable": true
-  },
-  {
-    "title": "Amplitude",
-    "description": "Amplitude Inc. is an American publicly trading company that develops digital analytics software.",
-    "image": "/assets/apps-logos/amplitude.svg",
-    "app_name": "amplitude",
-    "isAvailable": true
-  },
-  {
-    "title": "Google BigQuery",
-    "description": "Google BigQuery is a fully managed data warehouse for large-scale data analytics, offering fast SQL queries and machine learning capabilities on massive datasets.",
-    "image": "/assets/apps-logos/googl-bigquery.svg",
-    "app_name": "googlebigquery",
-    "isAvailable": true
-  },
-  {
-    "title": "Microsoft Clarity",
-    "description": "Microsoft Clarity is a free user behavior analytics tool that captures heatmaps, session recordings, and engagement metrics to help improve website experiences.",
-    "image": "/assets/apps-logos/microsoft-clarity-logo.jpeg",
-    "app_name": "microsoft_clarity",
-    "isAvailable": true
-  },
-  {
-    "title": "Servicenow",
-    "description": "Servicenow provides IT Service Management Transform service management to boost productivity and maximize ROI.",
-    "image": "/assets/apps-logos/servicenow.png",
-    "app_name": "servicenow",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Analytics",
-    "description": "Google Analytics tracks and reports website traffic, user behavior, and conversion data, enabling marketers to optimize online performance and customer journeys.",
-    "image": "/assets/apps-logos/googleanalytics.png",
-    "app_name": "google_analytics",
-    "isAvailable": true
-  },
-  {
-    "title": "BrowseAI",
-    "description": "Browse.ai allows you to turn any website into an API using its advanced web automation and data extraction tools, enabling easy monitoring and data retrieval from websites.",
-    "image": "/assets/apps-logos/browseai.svg",
-    "app_name": "browseai",
-    "isAvailable": true
-  },
-  {
-    "title": "Placekey",
-    "description": "Placekey standardizes location data by assigning unique IDs to physical addresses, simplifying address matching and enabling data sharing across platforms.",
-    "image": "/assets/apps-logos/placekey.png",
-    "app_name": "placekey",
-    "isAvailable": true
-  },
-  {
-    "title": "Kibana",
-    "description": "Kibana is a visualization and analytics platform for Elasticsearch, offering dashboards, data exploration, and monitoring capabilities for gaining insights from data.",
-    "image": "/assets/apps-logos/kibana.svg",
-    "app_name": "kibana",
-    "isAvailable": true
-  },
-  {
-    "title": "Jira",
-    "description": "A tool for bug tracking, issue tracking, and agile project management.",
-    "image": "/assets/apps-logos/jira.svg",
-    "app_name": "jira",
-    "isAvailable": true
-  },
-  {
-    "title": "Asana",
-    "description": "Tool to help teams organize, track, and manage their work.",
-    "image": "/assets/apps-logos/asana.png",
-    "app_name": "asana",
-    "isAvailable": true
-  },
-  {
-    "title": "Bolna",
-    "description": "Create conversational voice agents using Bolna AI to enhance interactions, streamline operations and automate support.",
-    "image": "/assets/apps-logos/bolna-logo.png",
-    "app_name": "bolna",
-    "isAvailable": true
-  },
-  {
-    "title": "Calendar Hero",
-    "description": "Calendar Hero is a versatile scheduling tool designed to streamline and simplify your calendar management. It integrates seamlessly with your existing calendars, allowing you to efficiently schedule, reschedule, and manage meetings with ease.",
-    "image": "/assets/apps-logos/calendarhero_fixed_20250722.png",
-    "app_name": "calendarhero",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Admin",
-    "description": "Google Admin Console for managing Google Workspace users, groups, and organizational units.",
-    "image": "/assets/apps-logos/google-admin.svg",
-    "app_name": "google_admin",
-    "isAvailable": true
-  },
-  {
-    "title": "Pushbullet",
-    "description": "Pushbullet enables seamless sharing of notifications and files across devices.",
-    "image": "/assets/apps-logos/pushbullet_round3_20250722.png",
-    "app_name": "pushbullet",
-    "isAvailable": true
-  },
-  {
-    "title": "TickTick",
-    "description": "TickTick is a cross-platform task management and to-do list application designed to help users organize their tasks and schedules efficiently.",
-    "image": "/assets/apps-logos/ticktick.ico",
-    "app_name": "ticktick",
-    "isAvailable": true
-  },
-  {
-    "title": "YouTube",
-    "description": "YouTube is a video-sharing platform with user-generated content, live streaming, and monetization opportunities, widely used for marketing, education, and entertainment.",
-    "image": "/assets/apps-logos/youtube.svg",
-    "app_name": "youtube",
-    "isAvailable": true
-  },
-  {
-    "title": "Spotify",
-    "description": "Spotify is a digital music and podcast streaming service with millions of tracks, personalized playlists, and social sharing features.",
-    "image": "/assets/apps-logos/spotify-icon.svg",
-    "app_name": "spotify",
-    "isAvailable": true
-  },
-  {
-    "title": "Canvas",
-    "description": "Canvas is a learning management system supporting online courses, assignments, grading, and collaboration, widely used by schools and universities for virtual classrooms.",
-    "image": "/assets/apps-logos/canvas.jpeg",
-    "app_name": "canvas",
-    "isAvailable": true
-  },
-  {
-    "title": "D2L Brightspace",
-    "description": "D2L Brightspace is a learning management system that provides a comprehensive suite of tools for educators to create, manage, and deliver online courses and learning experiences.",
-    "image": "/assets/apps-logos/d2lbrightspace.png",
-    "app_name": "d2lbrightspace",
-    "isAvailable": true
-  },
-  {
-    "title": "Figma",
-    "description": "A collaborative interface design tool.",
-    "image": "/assets/apps-logos/figma.svg",
-    "app_name": "figma",
-    "isAvailable": true
-  },
-  {
-    "title": "Miro",
-    "description": "Miro is a collaborative online whiteboard enabling teams to brainstorm ideas, design wireframes, plan workflows, and manage projects visually.",
-    "image": "/assets/apps-logos/miro.svg",
-    "app_name": "miro",
-    "isAvailable": true
-  },
-  {
-    "title": "Canva",
-    "description": "Canva offers a drag-and-drop design suite for creating social media graphics, presentations, and marketing materials with prebuilt templates and a vast element library.",
-    "image": "/assets/apps-logos/canva.jpeg",
-    "app_name": "canva",
-    "isAvailable": true
-  },
-  {
-    "title": "Webflow",
-    "description": "Webflow is a no-code website design and hosting platform, letting users build responsive sites, launch online stores, and maintain content without coding.",
-    "image": "/assets/apps-logos/webflow.jpeg",
-    "app_name": "webflow",
-    "isAvailable": true
-  },
-  {
-    "title": "Mural",
-    "description": "Mural is a digital whiteboard platform enabling distributed teams to visually brainstorm, map ideas, and collaborate in real time with sticky notes and diagrams.",
-    "image": "/assets/apps-logos/mural.svg",
-    "app_name": "mural",
-    "isAvailable": true
-  },
-  {
-    "title": "Reddit",
-    "description": "Reddit is a social news platform with user-driven communities (subreddits), offering content sharing, discussions, and viral marketing opportunities for brands.",
-    "image": "/assets/apps-logos/reddit.svg",
-    "app_name": "reddit",
-    "isAvailable": true
-  },
-  {
-    "title": "Linkedin",
-    "description": "LinkedIn is a professional networking platform enabling job seekers, companies, and thought leaders to connect, share content, and discover business opportunities.",
-    "image": "/assets/apps-logos/linkedin.svg",
-    "app_name": "linkedin",
-    "isAvailable": true
-  },
-  {
-    "title": "Twitter Media",
-    "description": "Twitter Media focuses on multimedia tools and features within Twitter, allowing brands to leverage rich content for marketing campaigns.",
-    "image": "/assets/apps-logos/twitter.png",
-    "app_name": "twitter_media",
-    "isAvailable": false
-  },
-  {
-    "title": "Klaviyo",
-    "description": "Klaviyo is a data-driven email and SMS marketing platform that allows e-commerce brands to deliver targeted messages, track conversions, and scale customer relationships.",
-    "image": "/assets/apps-logos/klaviyo.png",
-    "app_name": "klaviyo",
-    "isAvailable": true
-  },
-  {
-    "title": "Mailchimp",
-    "description": "Mailchimp is an email marketing and automation platform providing campaign templates, audience segmentation, and performance analytics to drive engagement and conversions.",
-    "image": "/assets/apps-logos/mailchimp.svg",
-    "app_name": "mailchimp",
-    "isAvailable": true
-  },
-  {
-    "title": "Ahrefs",
-    "description": "Ahrefs is an SEO and marketing platform offering site audits, keyword research, content analysis, and competitive insights to improve search rankings and drive organic traffic.",
-    "image": "/assets/apps-logos/ahrefs.png",
-    "app_name": "ahrefs",
-    "isAvailable": true
-  },
-  {
-    "title": "SendGrid",
-    "description": "SendGrid is a cloud-based email delivery platform providing transactional and marketing email services, with APIs for integration, analytics, and scalability.",
-    "image": "/assets/apps-logos/sendgrid.png",
-    "app_name": "sendgrid",
-    "isAvailable": true
-  },
-  {
-    "title": "Facebook",
-    "description": "Facebook is a social media and advertising platform used by individuals and businesses to connect, share content, and promote products or services.",
-    "image": "/assets/apps-logos/facebook.svg",
-    "app_name": "facebook",
-    "isAvailable": true
-  },
-  {
-    "title": "CrustData",
-    "description": "CrustData is an AI-powered data intelligence platform that provides real-time company and people data via APIs and webhooks, empowering B2B sales teams, AI SDRs, and investors to act on live signals.",
-    "image": "/assets/apps-logos/crustdata.png",
-    "app_name": "crustdata",
-    "isAvailable": true
-  },
-  {
-    "title": "Brandfetch",
-    "description": "Brandfetch offers an API that retrieves company logos, brand colors, and other visual assets, helping marketers and developers maintain consistent branding across apps.",
-    "image": "/assets/apps-logos/brandfetch-logo.png",
-    "app_name": "brandfetch",
-    "isAvailable": true
-  },
-  {
-    "title": "AMCards",
-    "description": "AMCards enables users to create personalized greeting cards, automate mailing campaigns, strengthen customer relationships using a convenient online platform for individualized connections.",
-    "image": "/assets/apps-logos/amcards.svg",
-    "app_name": "amcards",
-    "isAvailable": true
-  },
-  {
-    "title": "ActiveCampaign",
-    "description": "ActiveCampaign is a marketing automation and CRM platform enabling businesses to manage email campaigns, sales pipelines, and customer segmentation to boost engagement and drive growth.",
-    "image": "/assets/apps-logos/activecampaign.png",
-    "app_name": "active_campaign",
-    "isAvailable": true
-  },
-  {
-    "title": "Eventbrite",
-    "description": "Eventbrite enables organizers to plan, promote, and manage events, selling tickets and providing attendee tools for conferences, concerts, and gatherings.",
-    "image": "/assets/apps-logos/eventbrite.svg",
-    "app_name": "eventbrite",
-    "isAvailable": true
-  },
-  {
-    "title": "Cal",
-    "description": "Cal simplifies meeting coordination by providing shareable booking pages, calendar syncing, and availability management to streamline the scheduling process.",
-    "image": "/assets/apps-logos/cal-logo.png",
-    "app_name": "cal",
-    "isAvailable": true
-  },
-  {
-    "title": "Calendly",
-    "description": "Calendly is an appointment scheduling tool that automates meeting invitations, availability checks, and reminders, helping individuals and teams avoid email back-and-forth.",
-    "image": "/assets/apps-logos/calendly.svg",
-    "app_name": "calendly",
-    "isAvailable": true
-  },
-  {
-    "title": "Apaleo",
-    "description": "Apaleo is a cloud-based property management platform handling reservations, billing, and daily operations for hospitality businesses.",
-    "image": "/assets/apps-logos/apaleo.png",
-    "app_name": "apaleo",
-    "isAvailable": true
-  },
-  {
-    "title": "Shopify",
-    "description": "Shopify is an e-commerce platform enabling merchants to create online stores, manage products, and process payments with themes, apps, and integrated marketing tools.",
-    "image": "/assets/apps-logos/shopify.svg",
-    "app_name": "shopify",
-    "isAvailable": true
-  },
-  {
-    "title": "Jungle Scout",
-    "description": "Jungle Scout assists Amazon sellers with product research, sales estimates, and competitive insights to optimize inventory, pricing, and listing strategies.",
-    "image": "/assets/apps-logos/junglescout.jpeg",
-    "app_name": "junglescout",
-    "isAvailable": true
-  },
-  {
-    "title": "Gumroad",
-    "description": "Gumroad simplifies selling digital goods, physical products, and memberships by offering a streamlined checkout, marketing tools, and direct payout options.",
-    "image": "/assets/apps-logos/gumroad.svg",
-    "app_name": "gumroad",
-    "isAvailable": true
-  },
-  {
-    "title": "ASIN Data API",
-    "description": "ASIN Data API provides detailed product data from Amazon, including price, rank, reviews, and more, enabling real-time insights for e-commerce professionals, marketers, and data analysts.",
-    "image": "/assets/apps-logos/asin-data-api.jpeg",
-    "app_name": "asin_data_api",
-    "isAvailable": true
-  },
-  {
-    "title": "BaseLinker",
-    "description": "BaseLinker is a comprehensive e-commerce management platform that integrates with various marketplaces, online stores, carriers, and accounting systems to streamline order processing, inventory management, and sales automation.",
-    "image": "/assets/apps-logos/baselinker-logo.png",
-    "app_name": "baselinker",
-    "isAvailable": true
-  },
-  {
-    "title": "Cloud Cart",
-    "description": "Cloud Cart is an e-commerce platform that enables businesses to create and manage online stores efficiently.",
-    "image": "/assets/apps-logos/cloudcart.png",
-    "app_name": "cloudcart",
-    "isAvailable": true
-  },
-  {
-    "title": "Lemon Squeezy",
-    "description": "Lemon Squeezy is a platform designed to simplify payments, taxes, and subscriptions for software companies, offering a powerful API and webhooks for seamless integration.",
-    "image": "/assets/apps-logos/lemonsqueezy-logo.jpeg",
-    "app_name": "lemon_squeezy",
-    "isAvailable": true
-  },
-  {
-    "title": "Payhip",
-    "description": "Payhip is an e-commerce platform that enables individuals and businesses to sell digital products, memberships, and physical goods directly to their audience.",
-    "image": "/assets/apps-logos/payhip-logo.jpeg",
-    "app_name": "payhip",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Maps",
-    "description": "Integrate Google Maps to access location data, geocoding, directions, and mapping services in your application.",
-    "image": "/assets/apps-logos/google_maps.jpeg",
-    "app_name": "google_maps",
-    "isAvailable": true
-  },
-  {
-    "title": "You Search",
-    "description": "You Search is a search engine or search tool that enables users to find relevant information, possibly with enhanced filtering or privacy-focused features.",
-    "image": "/assets/apps-logos/you.webp",
-    "app_name": "yousearch",
-    "isAvailable": true
-  },
-  {
-    "title": "Linkup",
-    "description": "Search the Web for Relevant Results (RAG Use Case).",
-    "image": "/assets/apps-logos/linkup.jpeg",
-    "app_name": "linkup",
-    "isAvailable": true
-  },
-  {
-    "title": "More Trees",
-    "description": "More Trees is a sustainability-focused platform planting trees on behalf of individuals or businesses aiming to offset carbon footprints and support reforestation.",
-    "image": "/assets/apps-logos/more-trees.jpg",
-    "app_name": "more_trees",
-    "isAvailable": true
-  },
-  {
-    "title": "Yandex",
-    "description": "Yandex is a Russian internet services provider offering search, email, navigation, and other web-based solutions, often referred to as “Russia’s Google”.",
-    "image": "/assets/apps-logos/yandex.svg",
-    "app_name": "yandex",
-    "isAvailable": true
-  },
-  {
-    "title": "Tiny URL",
-    "description": "Tiny URL shortens lengthy URLs, generating concise links for easier sharing and managing, often used in social media and marketing campaigns.",
-    "image": "/assets/apps-logos/tinyurl-logo.png",
-    "app_name": "tinyurl",
-    "isAvailable": true
-  },
-  {
-    "title": "Foursquare",
-    "description": "Search for places and place recommendations from the Foursquare Places database.",
-    "image": "/assets/apps-logos/foursquare.png",
-    "app_name": "foursquare",
-    "isAvailable": true
-  },
-  {
-    "title": "Stripe",
-    "description": "Stripe offers online payment infrastructure, fraud prevention, and APIs enabling businesses to accept and manage payments globally.",
-    "image": "/assets/apps-logos/stripe.jpeg",
-    "app_name": "stripe",
-    "isAvailable": true
-  },
-  {
-    "title": "RecallAI",
-    "description": "The universal API for meeting bots & conversation data.",
-    "image": "/assets/apps-logos/recall.svg",
-    "app_name": "recallai",
-    "isAvailable": true
-  },
-  {
-    "title": "Xero",
-    "description": "Xero is a cloud-based accounting software for small businesses, providing invoicing, bank reconciliation, bookkeeping, and financial reporting in real time.",
-    "image": "/assets/apps-logos/xero.svg",
-    "app_name": "xero",
-    "isAvailable": true
-  },
-  {
-    "title": "Brex",
-    "description": "Brex provides corporate credit cards, spend management, and financial tools tailored for startups and tech businesses to optimize cash flow, accounting, and growth.",
-    "image": "/assets/apps-logos/brex-staging-logo.png",
-    "app_name": "brex",
-    "isAvailable": true
-  },
-  {
-    "title": "Zoho Invoice",
-    "description": "Zoho Invoice simplifies billing, recurring payments, and expense management, helping freelancers and small businesses send professional invoices.",
-    "image": "/assets/apps-logos/zoho.png",
-    "app_name": "zoho_invoice",
-    "isAvailable": true
-  },
-  {
-    "title": "Quickbooks",
-    "description": "Quickbooks is a cloud-based accounting software that helps you manage your finances, track your income and expenses, and get insights into your business.",
-    "image": "/assets/apps-logos/quickbooks.jpg",
-    "app_name": "quickbooks",
-    "isAvailable": true
-  },
-  {
-    "title": "Ramp",
-    "description": "Ramp is a platform that helps you manage your finances, track your income and expenses, and get insights into your business.",
-    "image": "/assets/apps-logos/ramp.svg",
-    "app_name": "ramp",
-    "isAvailable": true
-  },
-  {
-    "title": "Borneo",
-    "description": "Borneo is a data security and privacy platform designed for sensitive data discovery and remediation.",
-    "image": "/assets/apps-logos/borneo.jpeg",
-    "app_name": "borneo",
-    "isAvailable": true
-  },
-  {
-    "title": "Heygen",
-    "description": "HeyGen is an innovative video platform that harnesses the power of generative AI to streamline your video creation process.",
-    "image": "/assets/apps-logos/heygen.jpg",
-    "app_name": "heygen",
-    "isAvailable": true
-  },
-  {
-    "title": "Coinbase",
-    "description": "Coinbase is a platform for buying, selling, transferring, and storing cryptocurrency.",
-    "image": "/assets/apps-logos/coinbase.svg",
-    "app_name": "coinbase",
-    "isAvailable": true
-  },
-  {
-    "title": "Coinranking",
-    "description": "Coinranking provides a comprehensive API for accessing cryptocurrency market data, including coin prices, market caps, and historical data.",
-    "image": "/assets/apps-logos/Coinranking.ico",
-    "app_name": "coinranking",
-    "isAvailable": true
-  },
-  {
-    "title": "Bannerbear",
-    "description": "Bannerbear offers an automated image and video generation API, allowing businesses to create graphics, social media visuals, and marketing collateral with customizable templates at scale.",
-    "image": "/assets/apps-logos/bannerbear-logo.jpg",
-    "app_name": "bannerbear",
-    "isAvailable": true
-  },
-  {
-    "title": "Process Street",
-    "description": "Process Street supports creating and running checklists, SOPs, and workflows, helping teams automate recurring processes and track compliance.",
-    "image": "/assets/apps-logos/process-street-logo.png",
-    "app_name": "process_street",
-    "isAvailable": true
-  },
-  {
-    "title": "Workiom",
-    "description": "Workiom allows businesses to create custom workflows, integrate apps, and automate processes, reducing manual overhead and streamlining operations.",
-    "image": "/assets/apps-logos/workiom.jpeg",
-    "app_name": "workiom",
-    "isAvailable": true
-  },
-  {
-    "title": "Formsite",
-    "description": "Formsite helps users create online forms and surveys with drag-and-drop tools, secure data capture, and integrations to simplify workflows.",
-    "image": "/assets/apps-logos/formsite.png",
-    "app_name": "formsite",
-    "isAvailable": true
-  },
-  {
-    "title": "ServiceM8",
-    "description": "ServiceM8 helps field service businesses schedule jobs, send quotes, and manage invoices, offering staff mobile apps and real-time job status tracking.",
-    "image": "/assets/apps-logos/servicem8.svg",
-    "app_name": "servicem8",
-    "isAvailable": true
-  },
-  {
     "title": " 21risk",
     "description": "Integrate  21risk to seamlessly execute automated workflows, synchronize data, and orchestrate  21risk actions directly within Alti.",
     "image": "https://logos.composio.dev/api/_21risk",
@@ -1181,6 +19,13 @@ export const allApps: APP[] = [
     "description": "Integrate  2chat to seamlessly execute automated workflows, synchronize data, and orchestrate  2chat actions directly within Alti.",
     "image": "https://logos.composio.dev/api/_2chat",
     "app_name": "_2chat",
+    "isAvailable": true
+  },
+  {
+    "title": "Ably",
+    "description": "Ably is a real-time messaging platform helping developers build live features, including chat and data synchronization, with global scalability and robust reliability for modern applications.",
+    "image": "/assets/apps-logos/ably.svg",
+    "app_name": "ably",
     "isAvailable": true
   },
   {
@@ -1216,6 +61,27 @@ export const allApps: APP[] = [
     "description": "Integrate Accredible Certificates to seamlessly execute automated workflows, synchronize data, and orchestrate Accredible Certificates actions directly within Alti.",
     "image": "https://logos.composio.dev/api/accredible_certificates",
     "app_name": "accredible_certificates",
+    "isAvailable": true
+  },
+  {
+    "title": "AccuLynx",
+    "description": "Using the AccuLynx API, data can be seamlessly exchanged between AccuLynx and other applications for greater efficiency and productivity.",
+    "image": "/assets/apps-logos/acculynx.jpeg",
+    "app_name": "acculynx",
+    "isAvailable": true
+  },
+  {
+    "title": "ActiveCampaign",
+    "description": "ActiveCampaign is a marketing automation and CRM platform enabling businesses to manage email campaigns, sales pipelines, and customer segmentation to boost engagement and drive growth.",
+    "image": "/assets/apps-logos/activecampaign.png",
+    "app_name": "active_campaign",
+    "isAvailable": true
+  },
+  {
+    "title": "Addepar",
+    "description": "Addepar aggregates wealth portfolio holdings, tracking investment returns, client distributions, and multi-asset performance.",
+    "image": "https://www.google.com/s2/favicons?domain=addepar.com&sz=128",
+    "app_name": "addepar",
     "isAvailable": true
   },
   {
@@ -1268,6 +134,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Affinity",
+    "description": "Affinity helps private capital investors to find, manage, and close more deals.",
+    "image": "/assets/apps-logos/affinity.jpeg",
+    "app_name": "affinity",
+    "isAvailable": true
+  },
+  {
+    "title": "AgencyZoom",
+    "description": "AgencyZoom is for the P&C insurance agent that's looking to increase sales, boost retention and analyze agency & producer performance.",
+    "image": "/assets/apps-logos/agencyzoom_logo.jpeg",
+    "app_name": "agencyzoom",
+    "isAvailable": true
+  },
+  {
     "title": "Agent Mail",
     "description": "Integrate Agent Mail to seamlessly execute automated workflows, synchronize data, and orchestrate Agent Mail actions directly within Alti.",
     "image": "https://logos.composio.dev/api/agent_mail",
@@ -1303,10 +183,31 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Aha! Roadmaps",
+    "description": "Aha! Roadmaps tracks enterprise product strategies, feature release schedules, and product launch timelines.",
+    "image": "https://www.google.com/s2/favicons?domain=aha.io&sz=128",
+    "app_name": "aha",
+    "isAvailable": true
+  },
+  {
+    "title": "Ahrefs",
+    "description": "Ahrefs is an SEO and marketing platform offering site audits, keyword research, content analysis, and competitive insights to improve search rankings and drive organic traffic.",
+    "image": "/assets/apps-logos/ahrefs.png",
+    "app_name": "ahrefs",
+    "isAvailable": true
+  },
+  {
     "title": "AI Ml API",
     "description": "Integrate AI Ml API to seamlessly execute automated workflows, synchronize data, and orchestrate AI Ml API actions directly within Alti.",
     "image": "https://logos.composio.dev/api/ai_ml_api",
     "app_name": "ai_ml_api",
+    "isAvailable": true
+  },
+  {
+    "title": "Airtable",
+    "description": "Airtable merges spreadsheet functionality with database power, enabling teams to organize projects, track tasks, and collaborate through customizable views, automation, and integrations for data management.",
+    "image": "/assets/apps-logos/airtable.svg",
+    "app_name": "airtable",
     "isAvailable": true
   },
   {
@@ -1380,6 +281,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Amazon S3",
+    "description": "Amazon S3 provides secure cloud object storage to ingest, index, and query unstructured corporate file folders and documents.",
+    "image": "https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=128",
+    "app_name": "amazon_s3",
+    "isAvailable": true
+  },
+  {
+    "title": "Amazon Seller Central",
+    "description": "Amazon Seller Central coordinates e-commerce sales campaigns, merchant inventory levels, pricing strategies, and shipment logs.",
+    "image": "https://www.google.com/s2/favicons?domain=sellercentral.amazon.com&sz=128",
+    "app_name": "amazon_seller",
+    "isAvailable": true
+  },
+  {
     "title": "Ambee",
     "description": "Integrate Ambee to seamlessly execute automated workflows, synchronize data, and orchestrate Ambee actions directly within Alti.",
     "image": "https://logos.composio.dev/api/ambee",
@@ -1391,6 +306,20 @@ export const allApps: APP[] = [
     "description": "Integrate Ambient Weather to seamlessly execute automated workflows, synchronize data, and orchestrate Ambient Weather actions directly within Alti.",
     "image": "https://logos.composio.dev/api/ambient_weather",
     "app_name": "ambient_weather",
+    "isAvailable": true
+  },
+  {
+    "title": "AMCards",
+    "description": "AMCards enables users to create personalized greeting cards, automate mailing campaigns, strengthen customer relationships using a convenient online platform for individualized connections.",
+    "image": "/assets/apps-logos/amcards.svg",
+    "app_name": "amcards",
+    "isAvailable": true
+  },
+  {
+    "title": "Amplitude",
+    "description": "Amplitude Inc. is an American publicly trading company that develops digital analytics software.",
+    "image": "/assets/apps-logos/amplitude.svg",
+    "app_name": "amplitude",
     "isAvailable": true
   },
   {
@@ -1412,6 +341,13 @@ export const allApps: APP[] = [
     "description": "Integrate Anthropic Administrator to seamlessly execute automated workflows, synchronize data, and orchestrate Anthropic Administrator actions directly within Alti.",
     "image": "https://logos.composio.dev/api/anthropic_administrator",
     "app_name": "anthropic_administrator",
+    "isAvailable": true
+  },
+  {
+    "title": "Apaleo",
+    "description": "Apaleo is a cloud-based property management platform handling reservations, billing, and daily operations for hospitality businesses.",
+    "image": "/assets/apps-logos/apaleo.png",
+    "app_name": "apaleo",
     "isAvailable": true
   },
   {
@@ -1499,6 +435,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Apollo",
+    "description": "Apollo provides CRM and lead generation capabilities, helping businesses discover contacts, manage outreach, and track sales pipelines for consistent customer relationship development.",
+    "image": "/assets/apps-logos/apollo.jpg",
+    "app_name": "apollo",
+    "isAvailable": true
+  },
+  {
     "title": "Appcircle",
     "description": "Integrate Appcircle to seamlessly execute automated workflows, synchronize data, and orchestrate Appcircle actions directly within Alti.",
     "image": "https://logos.composio.dev/api/appcircle",
@@ -1510,6 +453,13 @@ export const allApps: APP[] = [
     "description": "Integrate Appdrag to seamlessly execute automated workflows, synchronize data, and orchestrate Appdrag actions directly within Alti.",
     "image": "https://logos.composio.dev/api/appdrag",
     "app_name": "appdrag",
+    "isAvailable": true
+  },
+  {
+    "title": "AppFolio",
+    "description": "AppFolio is a top property management database tracking tenant lease ledgers and maintenance requests.",
+    "image": "https://www.google.com/s2/favicons?domain=appfolio.com&sz=128",
+    "app_name": "appfolio",
     "isAvailable": true
   },
   {
@@ -1534,10 +484,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Argus Enterprise",
+    "description": "Argus Enterprise is the industry standard commercial real estate asset valuation and leasing cash flow modeling database.",
+    "image": "https://www.google.com/s2/favicons?domain=altusgroup.com&sz=128",
+    "app_name": "argus",
+    "isAvailable": true
+  },
+  {
     "title": "Aryn",
     "description": "Integrate Aryn to seamlessly execute automated workflows, synchronize data, and orchestrate Aryn actions directly within Alti.",
     "image": "https://logos.composio.dev/api/aryn",
     "app_name": "aryn",
+    "isAvailable": true
+  },
+  {
+    "title": "Asana",
+    "description": "Tool to help teams organize, track, and manage their work.",
+    "image": "/assets/apps-logos/asana.png",
+    "app_name": "asana",
     "isAvailable": true
   },
   {
@@ -1555,6 +519,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "ASIN Data API",
+    "description": "ASIN Data API provides detailed product data from Amazon, including price, rank, reviews, and more, enabling real-time insights for e-commerce professionals, marketers, and data analysts.",
+    "image": "/assets/apps-logos/asin-data-api.jpeg",
+    "app_name": "asin_data_api",
+    "isAvailable": true
+  },
+  {
     "title": "Astica AI",
     "description": "Integrate Astica AI to seamlessly execute automated workflows, synchronize data, and orchestrate Astica AI actions directly within Alti.",
     "image": "https://logos.composio.dev/api/astica_ai",
@@ -1569,10 +540,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Athenahealth",
+    "description": "Athenahealth EHR manages medical practice calendars, billing codes, and insurance claims.",
+    "image": "https://www.google.com/s2/favicons?domain=athenahealth.com&sz=128",
+    "app_name": "athenahealth",
+    "isAvailable": true
+  },
+  {
     "title": "Atlassian",
     "description": "Integrate Atlassian to seamlessly execute automated workflows, synchronize data, and orchestrate Atlassian actions directly within Alti.",
     "image": "https://logos.composio.dev/api/atlassian",
     "app_name": "atlassian",
+    "isAvailable": true
+  },
+  {
+    "title": "Attio",
+    "description": "Attio is a fully customizable workspace for your team's relationships and workflows.",
+    "image": "/assets/apps-logos/attio.webp",
+    "app_name": "attio",
     "isAvailable": true
   },
   {
@@ -1594,6 +579,13 @@ export const allApps: APP[] = [
     "description": "Integrate Autom to seamlessly execute automated workflows, synchronize data, and orchestrate Autom actions directly within Alti.",
     "image": "https://logos.composio.dev/api/autom",
     "app_name": "autom",
+    "isAvailable": true
+  },
+  {
+    "title": "AWS (Amazon Web Services)",
+    "description": "AWS integrates cloud compute management, relational database instances, serverless functions, and infrastructure operations.",
+    "image": "https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=128",
+    "app_name": "aws",
     "isAvailable": true
   },
   {
@@ -1625,10 +617,31 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Bannerbear",
+    "description": "Bannerbear offers an automated image and video generation API, allowing businesses to create graphics, social media visuals, and marketing collateral with customizable templates at scale.",
+    "image": "/assets/apps-logos/bannerbear-logo.jpg",
+    "app_name": "bannerbear",
+    "isAvailable": true
+  },
+  {
     "title": "Bart",
     "description": "Integrate Bart to seamlessly execute automated workflows, synchronize data, and orchestrate Bart actions directly within Alti.",
     "image": "https://logos.composio.dev/api/bart",
     "app_name": "bart",
+    "isAvailable": true
+  },
+  {
+    "title": "BaseLinker",
+    "description": "BaseLinker is a comprehensive e-commerce management platform that integrates with various marketplaces, online stores, carriers, and accounting systems to streamline order processing, inventory management, and sales automation.",
+    "image": "/assets/apps-logos/baselinker-logo.png",
+    "app_name": "baselinker",
+    "isAvailable": true
+  },
+  {
+    "title": "Baserow",
+    "description": "Baserow is an open-source database tool that lets teams build no-code data applications, collaborate on records, and integrate with other services for data management.",
+    "image": "/assets/apps-logos/baserow-logo.jpeg",
+    "app_name": "baserow",
     "isAvailable": true
   },
   {
@@ -1730,6 +743,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "BigCommerce",
+    "description": "BigCommerce connects SaaS e-commerce stores, tracking enterprise multi-channel products, customer orders, and payments.",
+    "image": "https://www.google.com/s2/favicons?domain=bigcommerce.com&sz=128",
+    "app_name": "bigcommerce",
+    "isAvailable": true
+  },
+  {
     "title": "Bigmailer",
     "description": "Integrate Bigmailer to seamlessly execute automated workflows, synchronize data, and orchestrate Bigmailer actions directly within Alti.",
     "image": "https://logos.composio.dev/api/bigmailer",
@@ -1755,6 +775,13 @@ export const allApps: APP[] = [
     "description": "Integrate Bill to seamlessly execute automated workflows, synchronize data, and orchestrate Bill actions directly within Alti.",
     "image": "https://logos.composio.dev/api/bill",
     "app_name": "bill",
+    "isAvailable": true
+  },
+  {
+    "title": "Bitbucket",
+    "description": "Bitbucket is a Git-based code hosting and collaboration platform supporting private and public repositories, enabling teams to manage and review code through pull requests and integrations.",
+    "image": "/assets/apps-logos/bitbucket.svg",
+    "app_name": "bitbucket",
     "isAvailable": true
   },
   {
@@ -1800,10 +827,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Bloomberg Professional",
+    "description": "Bloomberg Professional connects financial professionals to real-time market data, transaction networks, and portfolio tools.",
+    "image": "https://www.google.com/s2/favicons?domain=bloomberg.com&sz=128",
+    "app_name": "bloomberg",
+    "isAvailable": true
+  },
+  {
     "title": "Boldsign",
     "description": "Integrate Boldsign to seamlessly execute automated workflows, synchronize data, and orchestrate Boldsign actions directly within Alti.",
     "image": "https://logos.composio.dev/api/boldsign",
     "app_name": "boldsign",
+    "isAvailable": true
+  },
+  {
+    "title": "Bolna",
+    "description": "Create conversational voice agents using Bolna AI to enhance interactions, streamline operations and automate support.",
+    "image": "/assets/apps-logos/bolna-logo.png",
+    "app_name": "bolna",
     "isAvailable": true
   },
   {
@@ -1842,6 +883,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Borneo",
+    "description": "Borneo is a data security and privacy platform designed for sensitive data discovery and remediation.",
+    "image": "/assets/apps-logos/borneo.jpeg",
+    "app_name": "borneo",
+    "isAvailable": true
+  },
+  {
     "title": "Botbaba",
     "description": "Integrate Botbaba to seamlessly execute automated workflows, synchronize data, and orchestrate Botbaba actions directly within Alti.",
     "image": "https://logos.composio.dev/api/botbaba",
@@ -1867,6 +915,13 @@ export const allApps: APP[] = [
     "description": "Integrate Botstar to seamlessly execute automated workflows, synchronize data, and orchestrate Botstar actions directly within Alti.",
     "image": "https://logos.composio.dev/api/botstar",
     "app_name": "botstar",
+    "isAvailable": true
+  },
+  {
+    "title": "Boulevard",
+    "description": "Boulevard is a premium beauty salon and spa management platform tracking client intake and bookings.",
+    "image": "https://www.google.com/s2/favicons?domain=joinblvd.com&sz=128",
+    "app_name": "boulevard",
     "isAvailable": true
   },
   {
@@ -1898,6 +953,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Brandfetch",
+    "description": "Brandfetch offers an API that retrieves company logos, brand colors, and other visual assets, helping marketers and developers maintain consistent branding across apps.",
+    "image": "/assets/apps-logos/brandfetch-logo.png",
+    "app_name": "brandfetch",
+    "isAvailable": true
+  },
+  {
     "title": "Breeze",
     "description": "Integrate Breeze to seamlessly execute automated workflows, synchronize data, and orchestrate Breeze actions directly within Alti.",
     "image": "https://logos.composio.dev/api/breeze",
@@ -1916,6 +978,13 @@ export const allApps: APP[] = [
     "description": "Integrate Brevo to seamlessly execute automated workflows, synchronize data, and orchestrate Brevo actions directly within Alti.",
     "image": "https://logos.composio.dev/api/brevo",
     "app_name": "brevo",
+    "isAvailable": true
+  },
+  {
+    "title": "Brex",
+    "description": "Brex provides corporate credit cards, spend management, and financial tools tailored for startups and tech businesses to optimize cash flow, accounting, and growth.",
+    "image": "/assets/apps-logos/brex-staging-logo.png",
+    "app_name": "brex",
     "isAvailable": true
   },
   {
@@ -1944,6 +1013,13 @@ export const allApps: APP[] = [
     "description": "Integrate Brilliant Directories to seamlessly execute automated workflows, synchronize data, and orchestrate Brilliant Directories actions directly within Alti.",
     "image": "https://logos.composio.dev/api/brilliant_directories",
     "app_name": "brilliant_directories",
+    "isAvailable": true
+  },
+  {
+    "title": "BrowseAI",
+    "description": "Browse.ai allows you to turn any website into an API using its advanced web automation and data extraction tools, enabling easy monitoring and data retrieval from websites.",
+    "image": "/assets/apps-logos/browseai.svg",
+    "app_name": "browseai",
     "isAvailable": true
   },
   {
@@ -2010,6 +1086,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Buildium",
+    "description": "Buildium is an all-in-one property management database tracking tenant ledger accounts and work order logs.",
+    "image": "https://www.google.com/s2/favicons?domain=buildium.com&sz=128",
+    "app_name": "buildium",
+    "isAvailable": true
+  },
+  {
     "title": "Buildkite",
     "description": "Integrate Buildkite to seamlessly execute automated workflows, synchronize data, and orchestrate Buildkite actions directly within Alti.",
     "image": "https://logos.composio.dev/api/buildkite",
@@ -2042,6 +1125,27 @@ export const allApps: APP[] = [
     "description": "Integrate Cabinpanda to seamlessly execute automated workflows, synchronize data, and orchestrate Cabinpanda actions directly within Alti.",
     "image": "https://logos.composio.dev/api/cabinpanda",
     "app_name": "cabinpanda",
+    "isAvailable": true
+  },
+  {
+    "title": "Cal",
+    "description": "Cal simplifies meeting coordination by providing shareable booking pages, calendar syncing, and availability management to streamline the scheduling process.",
+    "image": "/assets/apps-logos/cal-logo.png",
+    "app_name": "cal",
+    "isAvailable": true
+  },
+  {
+    "title": "Calendar Hero",
+    "description": "Calendar Hero is a versatile scheduling tool designed to streamline and simplify your calendar management. It integrates seamlessly with your existing calendars, allowing you to efficiently schedule, reschedule, and manage meetings with ease.",
+    "image": "/assets/apps-logos/calendarhero_fixed_20250722.png",
+    "app_name": "calendarhero",
+    "isAvailable": true
+  },
+  {
+    "title": "Calendly",
+    "description": "Calendly is an appointment scheduling tool that automates meeting invitations, availability checks, and reminders, helping individuals and teams avoid email back-and-forth.",
+    "image": "/assets/apps-logos/calendly.svg",
+    "app_name": "calendly",
     "isAvailable": true
   },
   {
@@ -2087,6 +1191,27 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Canva",
+    "description": "Canva offers a drag-and-drop design suite for creating social media graphics, presentations, and marketing materials with prebuilt templates and a vast element library.",
+    "image": "/assets/apps-logos/canva.jpeg",
+    "app_name": "canva",
+    "isAvailable": true
+  },
+  {
+    "title": "Canvas",
+    "description": "Canvas is a learning management system supporting online courses, assignments, grading, and collaboration, widely used by schools and universities for virtual classrooms.",
+    "image": "/assets/apps-logos/canvas.jpeg",
+    "app_name": "canvas",
+    "isAvailable": true
+  },
+  {
+    "title": "Capsule CRM",
+    "description": "Capsule CRM is a simple yet powerful CRM platform designed to help businesses manage customer relationships, sales pipelines, and tasks efficiently.",
+    "image": "/assets/apps-logos/capsule_crm-logo.png",
+    "app_name": "capsule_crm",
+    "isAvailable": true
+  },
+  {
     "title": "Carbone",
     "description": "Integrate Carbone to seamlessly execute automated workflows, synchronize data, and orchestrate Carbone actions directly within Alti.",
     "image": "https://logos.composio.dev/api/carbone",
@@ -2098,6 +1223,13 @@ export const allApps: APP[] = [
     "description": "Integrate Cardly to seamlessly execute automated workflows, synchronize data, and orchestrate Cardly actions directly within Alti.",
     "image": "https://logos.composio.dev/api/cardly",
     "app_name": "cardly",
+    "isAvailable": true
+  },
+  {
+    "title": "Carta",
+    "description": "Carta tracks startup equity, handles 409A valuations, and automates venture capital fund administration.",
+    "image": "https://www.google.com/s2/favicons?domain=carta.com&sz=128",
+    "app_name": "carta",
     "isAvailable": true
   },
   {
@@ -2143,6 +1275,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Chargebee",
+    "description": "Chargebee manages SaaS subscription billing analytics, recurring contract invoicing, and payment ledgers.",
+    "image": "https://www.google.com/s2/favicons?domain=chargebee.com&sz=128",
+    "app_name": "chargebee",
+    "isAvailable": true
+  },
+  {
     "title": "Chaser",
     "description": "Integrate Chaser to seamlessly execute automated workflows, synchronize data, and orchestrate Chaser actions directly within Alti.",
     "image": "https://logos.composio.dev/api/chaser",
@@ -2161,6 +1300,13 @@ export const allApps: APP[] = [
     "description": "Integrate Chatfai to seamlessly execute automated workflows, synchronize data, and orchestrate Chatfai actions directly within Alti.",
     "image": "https://logos.composio.dev/api/chatfai",
     "app_name": "chatfai",
+    "isAvailable": true
+  },
+  {
+    "title": "Chatwork",
+    "description": "Chatwork is a team communication platform featuring group chats, file sharing, and task management, aiming to enhance collaboration and productivity for businesses.",
+    "image": "/assets/apps-logos/chatwork-logo.jpg",
+    "app_name": "chatwork",
     "isAvailable": true
   },
   {
@@ -2220,10 +1366,38 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "ClickUp",
+    "description": "ClickUp unifies tasks, docs, goals, and chat in a single platform, allowing teams to plan, organize, and collaborate across projects with customizable workflows.",
+    "image": "/assets/apps-logos/clickup.png",
+    "app_name": "clickup",
+    "isAvailable": true
+  },
+  {
+    "title": "Clio",
+    "description": "Clio is an enterprise legal practice management platform tracking case files, billable hours, and client trust accounts.",
+    "image": "https://www.google.com/s2/favicons?domain=clio.com&sz=128",
+    "app_name": "clio",
+    "isAvailable": true
+  },
+  {
     "title": "Clockify",
     "description": "Integrate Clockify to seamlessly execute automated workflows, synchronize data, and orchestrate Clockify actions directly within Alti.",
     "image": "https://logos.composio.dev/api/clockify",
     "app_name": "clockify",
+    "isAvailable": true
+  },
+  {
+    "title": "Close",
+    "description": "Close is a CRM platform designed to help businesses manage and streamline their sales processes, including calling, email automation, and predictive dialers.",
+    "image": "/assets/apps-logos/close-logo.jpeg",
+    "app_name": "close",
+    "isAvailable": true
+  },
+  {
+    "title": "Cloud Cart",
+    "description": "Cloud Cart is an e-commerce platform that enables businesses to create and manage online stores efficiently.",
+    "image": "/assets/apps-logos/cloudcart.png",
+    "app_name": "cloudcart",
     "isAvailable": true
   },
   {
@@ -2276,10 +1450,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Clover POS",
+    "description": "Clover POS integrates small-business payment terminals, merchant services, and customer loyalty histories.",
+    "image": "https://www.google.com/s2/favicons?domain=clover.com&sz=128",
+    "app_name": "clover",
+    "isAvailable": true
+  },
+  {
     "title": "Coassemble",
     "description": "Integrate Coassemble to seamlessly execute automated workflows, synchronize data, and orchestrate Coassemble actions directly within Alti.",
     "image": "https://logos.composio.dev/api/coassemble",
     "app_name": "coassemble",
+    "isAvailable": true
+  },
+  {
+    "title": "Coda",
+    "description": "Collaborative workspace platform that transforms documents into powerful tools for team productivity and project management.",
+    "image": "/assets/apps-logos/coda.png",
+    "app_name": "coda",
     "isAvailable": true
   },
   {
@@ -2304,6 +1492,27 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "CoinAPI",
+    "description": "CoinAPI provides standard cryptocurrency market data, integration feeds, and pricing histories across 100+ exchanges.",
+    "image": "https://www.google.com/s2/favicons?domain=coinapi.io&sz=128",
+    "app_name": "coinapi",
+    "isAvailable": true
+  },
+  {
+    "title": "Coinbase",
+    "description": "Coinbase is a platform for buying, selling, transferring, and storing cryptocurrency.",
+    "image": "/assets/apps-logos/coinbase.svg",
+    "app_name": "coinbase",
+    "isAvailable": true
+  },
+  {
+    "title": "CoinGecko",
+    "description": "CoinGecko provides independent cryptocurrency prices, trading volumes, and global crypto market capitalization charts.",
+    "image": "https://www.google.com/s2/favicons?domain=coingecko.com&sz=128",
+    "app_name": "coingecko",
+    "isAvailable": true
+  },
+  {
     "title": "Coinmarketcal",
     "description": "Integrate Coinmarketcal to seamlessly execute automated workflows, synchronize data, and orchestrate Coinmarketcal actions directly within Alti.",
     "image": "https://logos.composio.dev/api/coinmarketcal",
@@ -2315,6 +1524,13 @@ export const allApps: APP[] = [
     "description": "Integrate Coinmarketcap to seamlessly execute automated workflows, synchronize data, and orchestrate Coinmarketcap actions directly within Alti.",
     "image": "https://logos.composio.dev/api/coinmarketcap",
     "app_name": "coinmarketcap",
+    "isAvailable": true
+  },
+  {
+    "title": "Coinranking",
+    "description": "Coinranking provides a comprehensive API for accessing cryptocurrency market data, including coin prices, market caps, and historical data.",
+    "image": "/assets/apps-logos/Coinranking.ico",
+    "app_name": "coinranking",
     "isAvailable": true
   },
   {
@@ -2350,6 +1566,13 @@ export const allApps: APP[] = [
     "description": "Integrate Connecteam to seamlessly execute automated workflows, synchronize data, and orchestrate Connecteam actions directly within Alti.",
     "image": "https://logos.composio.dev/api/connecteam",
     "app_name": "connecteam",
+    "isAvailable": true
+  },
+  {
+    "title": "Contentful",
+    "description": "Contentful is a headless CMS allowing developers to create, manage, and distribute content across multiple channels and devices with an API-first approach.",
+    "image": "/assets/apps-logos/contentful-logo.png",
+    "app_name": "contentful",
     "isAvailable": true
   },
   {
@@ -2402,6 +1625,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "CoStar Group",
+    "description": "CoStar Group provides standard commercial real estate asset histories, vacancy rates, and transaction directories.",
+    "image": "https://www.google.com/s2/favicons?domain=costar.com&sz=128",
+    "app_name": "costar",
+    "isAvailable": true
+  },
+  {
     "title": "Countdown API",
     "description": "Integrate Countdown API to seamlessly execute automated workflows, synchronize data, and orchestrate Countdown API actions directly within Alti.",
     "image": "https://logos.composio.dev/api/countdown_api",
@@ -2416,6 +1646,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Cova",
+    "description": "Cova POS is a robust, compliance-centric cannabis retail system tracking excise taxes and state-limit allocations.",
+    "image": "https://www.google.com/s2/favicons?domain=covasoftware.com&sz=128",
+    "app_name": "cova",
+    "isAvailable": true
+  },
+  {
     "title": "Craftmypdf",
     "description": "Integrate Craftmypdf to seamlessly execute automated workflows, synchronize data, and orchestrate Craftmypdf actions directly within Alti.",
     "image": "https://logos.composio.dev/api/craftmypdf",
@@ -2427,6 +1664,20 @@ export const allApps: APP[] = [
     "description": "Integrate Crowdin to seamlessly execute automated workflows, synchronize data, and orchestrate Crowdin actions directly within Alti.",
     "image": "https://logos.composio.dev/api/crowdin",
     "app_name": "crowdin",
+    "isAvailable": true
+  },
+  {
+    "title": "Crunchbase Enterprise",
+    "description": "Crunchbase Enterprise tracks private company profiles, funding histories, founding teams, and investment logs.",
+    "image": "https://www.google.com/s2/favicons?domain=crunchbase.com&sz=128",
+    "app_name": "crunchbase",
+    "isAvailable": true
+  },
+  {
+    "title": "CrustData",
+    "description": "CrustData is an AI-powered data intelligence platform that provides real-time company and people data via APIs and webhooks, empowering B2B sales teams, AI SDRs, and investors to act on live signals.",
+    "image": "/assets/apps-logos/crustdata.png",
+    "app_name": "crustdata",
     "isAvailable": true
   },
   {
@@ -2479,6 +1730,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "D2L Brightspace",
+    "description": "D2L Brightspace is a learning management system that provides a comprehensive suite of tools for educators to create, manage, and deliver online courses and learning experiences.",
+    "image": "/assets/apps-logos/d2lbrightspace.png",
+    "app_name": "d2lbrightspace",
+    "isAvailable": true
+  },
+  {
     "title": "Dadata Ru",
     "description": "Integrate Dadata Ru to seamlessly execute automated workflows, synchronize data, and orchestrate Dadata Ru actions directly within Alti.",
     "image": "https://logos.composio.dev/api/dadata_ru",
@@ -2490,6 +1748,27 @@ export const allApps: APP[] = [
     "description": "Integrate Daffy to seamlessly execute automated workflows, synchronize data, and orchestrate Daffy actions directly within Alti.",
     "image": "https://logos.composio.dev/api/daffy",
     "app_name": "daffy",
+    "isAvailable": true
+  },
+  {
+    "title": "Daily Bot",
+    "description": "Daily Bot simplifies team collaboration and tasks with chat-based standups, reminders, polls, and integrations, streamlining workflow automation in popular messaging platforms.",
+    "image": "/assets/apps-logos/dailybot.jpg",
+    "app_name": "dailybot",
+    "isAvailable": true
+  },
+  {
+    "title": "Databricks",
+    "description": "Databricks is a unified data lakehouse database managing transactional raw logs and advanced analytics data pools.",
+    "image": "https://www.google.com/s2/favicons?domain=databricks.com&sz=128",
+    "app_name": "databricks",
+    "isAvailable": true
+  },
+  {
+    "title": "Datadog",
+    "description": "Datadog offers monitoring, observability, and security for cloud-scale applications, unifying metrics, logs, and traces to help teams detect issues and optimize performance.",
+    "image": "/assets/apps-logos/datadog-logo.png",
+    "app_name": "datadog",
     "isAvailable": true
   },
   {
@@ -2528,10 +1807,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Deliverr",
+    "description": "Deliverr manages fast-fulfillment logistics, tracking retail channels, inventory levels, and shipment pipelines.",
+    "image": "https://www.google.com/s2/favicons?domain=deliverr.com&sz=128",
+    "app_name": "deliverr",
+    "isAvailable": true
+  },
+  {
     "title": "Demio",
     "description": "Integrate Demio to seamlessly execute automated workflows, synchronize data, and orchestrate Demio actions directly within Alti.",
     "image": "https://logos.composio.dev/api/demio",
     "app_name": "demio",
+    "isAvailable": true
+  },
+  {
+    "title": "Dentrix",
+    "description": "Dentrix is an enterprise dental clinic practice management database tracking treatment plans.",
+    "image": "https://www.google.com/s2/favicons?domain=dentrix.com&sz=128",
+    "app_name": "dentrix",
     "isAvailable": true
   },
   {
@@ -2553,6 +1846,13 @@ export const allApps: APP[] = [
     "description": "Integrate Dialmycalls to seamlessly execute automated workflows, synchronize data, and orchestrate Dialmycalls actions directly within Alti.",
     "image": "https://logos.composio.dev/api/dialmycalls",
     "app_name": "dialmycalls",
+    "isAvailable": true
+  },
+  {
+    "title": "Dialpad",
+    "description": "Dialpad is a cloud-based business phone system and contact center platform that enables voice, video, messages and meetings across your existing devices.",
+    "image": "/assets/apps-logos/dialpad.png",
+    "app_name": "dialpad",
     "isAvailable": true
   },
   {
@@ -2588,6 +1888,13 @@ export const allApps: APP[] = [
     "description": "Integrate Discord to seamlessly execute automated workflows, synchronize data, and orchestrate Discord actions directly within Alti.",
     "image": "/assets/apps-logos/discord.svg",
     "app_name": "discord",
+    "isAvailable": true
+  },
+  {
+    "title": "Discord Bot",
+    "description": "Discord Bot refers to automated programs on Discord servers, performing tasks like moderation, music playback, and user engagement to enhance community interactions.",
+    "image": "/assets/apps-logos/discord.svg",
+    "app_name": "discordbot",
     "isAvailable": true
   },
   {
@@ -2682,6 +1989,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "DocuSign",
+    "description": "DocuSign provides eSignature and digital agreement solutions, enabling businesses to send, sign, track, and manage documents electronically.",
+    "image": "/assets/apps-logos/docusign.svg",
+    "app_name": "docusign",
+    "isAvailable": true
+  },
+  {
     "title": "Doppler Marketing Automation",
     "description": "Integrate Doppler Marketing Automation to seamlessly execute automated workflows, synchronize data, and orchestrate Doppler Marketing Automation actions directly within Alti.",
     "image": "https://logos.composio.dev/api/doppler_marketing_automation",
@@ -2724,6 +2038,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "DrChrono",
+    "description": "DrChrono is a mobile-first EHR practice management platform tracking clinical notes and scheduling.",
+    "image": "https://www.google.com/s2/favicons?domain=drchrono.com&sz=128",
+    "app_name": "drchrono",
+    "isAvailable": true
+  },
+  {
     "title": "Dreamstudio",
     "description": "Integrate Dreamstudio to seamlessly execute automated workflows, synchronize data, and orchestrate Dreamstudio actions directly within Alti.",
     "image": "https://logos.composio.dev/api/dreamstudio",
@@ -2752,6 +2073,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Dropbox",
+    "description": "Dropbox is a cloud storage service offering file syncing, sharing, and collaboration across devices with version control and robust integrations.",
+    "image": "/assets/apps-logos/dropbox.svg",
+    "app_name": "dropbox",
+    "isAvailable": true
+  },
+  {
     "title": "Dropbox Sign",
     "description": "Integrate Dropbox Sign to seamlessly execute automated workflows, synchronize data, and orchestrate Dropbox Sign actions directly within Alti.",
     "image": "https://logos.composio.dev/api/dropbox_sign",
@@ -2770,6 +2098,34 @@ export const allApps: APP[] = [
     "description": "Integrate Dungeon Fighter Online to seamlessly execute automated workflows, synchronize data, and orchestrate Dungeon Fighter Online actions directly within Alti.",
     "image": "https://logos.composio.dev/api/dungeon_fighter_online",
     "app_name": "dungeon_fighter_online",
+    "isAvailable": true
+  },
+  {
+    "title": "Dutchie POS",
+    "description": "Dutchie POS is a premier cannabis retail and e-commerce platform managing compliant transaction records and inventory.",
+    "image": "https://www.google.com/s2/favicons?domain=dutchie.com&sz=128",
+    "app_name": "dutchie",
+    "isAvailable": true
+  },
+  {
+    "title": "Dynamics365",
+    "description": "Dynamics 365 from Microsoft combines CRM, ERP, and productivity apps to streamline sales, marketing, customer service, and operations in one integrated platform.",
+    "image": "/assets/apps-logos/Dynamics365.svg",
+    "app_name": "dynamics365",
+    "isAvailable": true
+  },
+  {
+    "title": "EchtPost",
+    "description": "EchtPost facilitates secure digital communication, encryption, and data privacy, providing a reliable channel for sending confidential documents and messages.",
+    "image": "/assets/apps-logos/echtpost.svg",
+    "app_name": "echtpost",
+    "isAvailable": true
+  },
+  {
+    "title": "eFront",
+    "description": "eFront is a leading software platform for General Partners and Limited Partners to manage alternative investment portfolios.",
+    "image": "https://www.google.com/s2/favicons?domain=efront.com&sz=128",
+    "app_name": "efront",
     "isAvailable": true
   },
   {
@@ -2829,6 +2185,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Encompass Mortgage",
+    "description": "Encompass processes private mortgage loan originations, property appraisals, and underwriting sheets.",
+    "image": "https://www.google.com/s2/favicons?domain=icemortgagetechnology.com&sz=128",
+    "app_name": "encompass_mortgage",
+    "isAvailable": true
+  },
+  {
     "title": "Endorsal",
     "description": "Integrate Endorsal to seamlessly execute automated workflows, synchronize data, and orchestrate Endorsal actions directly within Alti.",
     "image": "https://logos.composio.dev/api/endorsal",
@@ -2857,6 +2220,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Entrata",
+    "description": "Entrata is a multifamily property leasing and rent collection platform tracking tenant profiles.",
+    "image": "https://www.google.com/s2/favicons?domain=entrata.com&sz=128",
+    "app_name": "entrata",
+    "isAvailable": true
+  },
+  {
     "title": "Eodhd Apis",
     "description": "Integrate Eodhd Apis to seamlessly execute automated workflows, synchronize data, and orchestrate Eodhd Apis actions directly within Alti.",
     "image": "https://logos.composio.dev/api/eodhd_apis",
@@ -2868,6 +2238,20 @@ export const allApps: APP[] = [
     "description": "Integrate Epic Games to seamlessly execute automated workflows, synchronize data, and orchestrate Epic Games actions directly within Alti.",
     "image": "https://logos.composio.dev/api/epic_games",
     "app_name": "epic_games",
+    "isAvailable": true
+  },
+  {
+    "title": "Epic Systems",
+    "description": "Epic EHR tracks clinical charts, patient medical sheets, and healthcare provider treatment records.",
+    "image": "https://www.google.com/s2/favicons?domain=epic.com&sz=128",
+    "app_name": "epic_systems",
+    "isAvailable": true
+  },
+  {
+    "title": "Epicor",
+    "description": "Epicor is a powerful industrial ERP system tracking manufacturing bill-of-materials and warehouse logs.",
+    "image": "https://www.google.com/s2/favicons?domain=epicor.com&sz=128",
+    "app_name": "epicor",
     "isAvailable": true
   },
   {
@@ -2906,6 +2290,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Eventbrite",
+    "description": "Eventbrite enables organizers to plan, promote, and manage events, selling tickets and providing attendee tools for conferences, concerts, and gatherings.",
+    "image": "/assets/apps-logos/eventbrite.svg",
+    "app_name": "eventbrite",
+    "isAvailable": true
+  },
+  {
     "title": "Eventee",
     "description": "Integrate Eventee to seamlessly execute automated workflows, synchronize data, and orchestrate Eventee actions directly within Alti.",
     "image": "https://logos.composio.dev/api/eventee",
@@ -2934,10 +2325,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Exa",
+    "description": "Exa focuses on data extraction and search, helping teams gather, analyze, and visualize information from websites, APIs, or internal databases.",
+    "image": "/assets/apps-logos/exa.png",
+    "app_name": "exa",
+    "isAvailable": true
+  },
+  {
     "title": "Excel",
     "description": "Integrate Excel to seamlessly execute automated workflows, synchronize data, and orchestrate Excel actions directly within Alti.",
     "image": "https://logos.composio.dev/api/excel",
     "app_name": "excel",
+    "isAvailable": true
+  },
+  {
+    "title": "ExchangeRate-API",
+    "description": "ExchangeRate-API provides fast, reliable real-time and historical global currency conversion rates.",
+    "image": "https://www.google.com/s2/favicons?domain=exchangerate-api.com&sz=128",
+    "app_name": "exchangerate",
     "isAvailable": true
   },
   {
@@ -2962,6 +2367,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Facebook",
+    "description": "Facebook is a social media and advertising platform used by individuals and businesses to connect, share content, and promote products or services.",
+    "image": "/assets/apps-logos/facebook.svg",
+    "app_name": "facebook",
+    "isAvailable": true
+  },
+  {
     "title": "Faceup",
     "description": "Integrate Faceup to seamlessly execute automated workflows, synchronize data, and orchestrate Faceup actions directly within Alti.",
     "image": "https://logos.composio.dev/api/faceup",
@@ -2973,6 +2385,13 @@ export const allApps: APP[] = [
     "description": "Integrate Factorial to seamlessly execute automated workflows, synchronize data, and orchestrate Factorial actions directly within Alti.",
     "image": "https://logos.composio.dev/api/factorial",
     "app_name": "factorial",
+    "isAvailable": true
+  },
+  {
+    "title": "FactSet",
+    "description": "FactSet integrates robust financial data, portfolio analytics, and multi-asset class market research for investment professionals.",
+    "image": "https://www.google.com/s2/favicons?domain=factset.com&sz=128",
+    "app_name": "factset",
     "isAvailable": true
   },
   {
@@ -3004,10 +2423,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Figma",
+    "description": "A collaborative interface design tool.",
+    "image": "/assets/apps-logos/figma.svg",
+    "app_name": "figma",
+    "isAvailable": true
+  },
+  {
     "title": "Files Com",
     "description": "Integrate Files Com to seamlessly execute automated workflows, synchronize data, and orchestrate Files Com actions directly within Alti.",
     "image": "https://logos.composio.dev/api/files_com",
     "app_name": "files_com",
+    "isAvailable": true
+  },
+  {
+    "title": "Filevine",
+    "description": "Filevine organizes legal case management sheets, litigation documents, and client communication timelines.",
+    "image": "https://www.google.com/s2/favicons?domain=filevine.com&sz=128",
+    "app_name": "filevine",
     "isAvailable": true
   },
   {
@@ -3053,6 +2486,27 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Fireberry",
+    "description": "Fireberry is a CRM platform that offers integrations with various tools and applications to streamline business processes.",
+    "image": "/assets/apps-logos/fireberry-logo.png",
+    "app_name": "fireberry",
+    "isAvailable": true
+  },
+  {
+    "title": "Firecrawl",
+    "description": "Firecrawl automates web crawling and data extraction, enabling organizations to gather content, index sites, and gain insights from online sources at scale.",
+    "image": "/assets/apps-logos/firecrawl.jpeg",
+    "app_name": "firecrawl",
+    "isAvailable": true
+  },
+  {
+    "title": "Fireflies",
+    "description": "Fireflies.ai helps your team transcribe, summarize, search, and analyze voice conversations.",
+    "image": "/assets/apps-logos/fireflies.jpg",
+    "app_name": "fireflies",
+    "isAvailable": true
+  },
+  {
     "title": "Firmao",
     "description": "Integrate Firmao to seamlessly execute automated workflows, synchronize data, and orchestrate Firmao actions directly within Alti.",
     "image": "https://logos.composio.dev/api/firmao",
@@ -3088,6 +2542,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Flexport",
+    "description": "Flexport tracks global ocean and air freight shipping containers, customs declarations, and supply chain logs.",
+    "image": "https://www.google.com/s2/favicons?domain=flexport.com&sz=128",
+    "app_name": "flexport",
+    "isAvailable": true
+  },
+  {
+    "title": "Flowhub",
+    "description": "Flowhub is a compliant cannabis retail POS managing seed-to-sale Metrc databases and compliance logs.",
+    "image": "https://www.google.com/s2/favicons?domain=flowhub.com&sz=128",
+    "app_name": "flowhub",
+    "isAvailable": true
+  },
+  {
     "title": "Flowiseai",
     "description": "Integrate Flowiseai to seamlessly execute automated workflows, synchronize data, and orchestrate Flowiseai actions directly within Alti.",
     "image": "https://logos.composio.dev/api/flowiseai",
@@ -3106,6 +2574,13 @@ export const allApps: APP[] = [
     "description": "Integrate Fluxguard to seamlessly execute automated workflows, synchronize data, and orchestrate Fluxguard actions directly within Alti.",
     "image": "https://logos.composio.dev/api/fluxguard",
     "app_name": "fluxguard",
+    "isAvailable": true
+  },
+  {
+    "title": "Folk",
+    "description": "folk is a next-generation CRM designed for teams to manage and nurture their relationships efficiently.",
+    "image": "/assets/apps-logos/folk_round3_20250722.png",
+    "app_name": "folk",
     "isAvailable": true
   },
   {
@@ -3144,6 +2619,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Formsite",
+    "description": "Formsite helps users create online forms and surveys with drag-and-drop tools, secure data capture, and integrations to simplify workflows.",
+    "image": "/assets/apps-logos/formsite.png",
+    "app_name": "formsite",
+    "isAvailable": true
+  },
+  {
+    "title": "Foursquare",
+    "description": "Search for places and place recommendations from the Foursquare Places database.",
+    "image": "/assets/apps-logos/foursquare.png",
+    "app_name": "foursquare",
+    "isAvailable": true
+  },
+  {
     "title": "Fraudlabs Pro",
     "description": "Integrate Fraudlabs Pro to seamlessly execute automated workflows, synchronize data, and orchestrate Fraudlabs Pro actions directly within Alti.",
     "image": "https://logos.composio.dev/api/fraudlabs_pro",
@@ -3155,6 +2644,13 @@ export const allApps: APP[] = [
     "description": "Integrate Freshbooks to seamlessly execute automated workflows, synchronize data, and orchestrate Freshbooks actions directly within Alti.",
     "image": "https://logos.composio.dev/api/freshbooks",
     "app_name": "freshbooks",
+    "isAvailable": true
+  },
+  {
+    "title": "Freshdesk",
+    "description": "Freshdesk provides customer support software with ticketing, knowledge base, and automation features for efficient helpdesk operations and better customer experiences.",
+    "image": "/assets/apps-logos/freshdesk.svg",
+    "app_name": "freshdesk",
     "isAvailable": true
   },
   {
@@ -3291,6 +2787,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "GitHub",
+    "description": "GitHub is a code hosting platform for version control and collaboration, offering Git-based repository management, issue tracking, and continuous integration features.",
+    "image": "/assets/apps-logos/github.png",
+    "app_name": "github",
+    "isAvailable": true
+  },
+  {
     "title": "GitLab",
     "description": "Integrate GitLab to seamlessly execute automated workflows, synchronize data, and orchestrate GitLab actions directly within Alti.",
     "image": "https://logos.composio.dev/api/gitlab",
@@ -3323,6 +2826,13 @@ export const allApps: APP[] = [
     "description": "Integrate Globalping to seamlessly execute automated workflows, synchronize data, and orchestrate Globalping actions directly within Alti.",
     "image": "https://logos.composio.dev/api/globalping",
     "app_name": "globalping",
+    "isAvailable": true
+  },
+  {
+    "title": "Gmail",
+    "description": "Gmail is Google’s email service, featuring spam protection, search functions, and seamless integration with other G Suite apps for productivity.",
+    "image": "/assets/apps-logos/gmail.svg",
+    "app_name": "gmail",
     "isAvailable": true
   },
   {
@@ -3368,10 +2878,52 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Google Admin",
+    "description": "Google Admin Console for managing Google Workspace users, groups, and organizational units.",
+    "image": "/assets/apps-logos/google-admin.svg",
+    "app_name": "google_admin",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Ads",
+    "description": "Integrate Google Ads to seamlessly execute automated workflows, synchronize data, and orchestrate Google Ads actions directly within Alti.",
+    "image": "https://logos.composio.dev/api/googleads",
+    "app_name": "googleads",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Analytics",
+    "description": "Google Analytics tracks and reports website traffic, user behavior, and conversion data, enabling marketers to optimize online performance and customer journeys.",
+    "image": "/assets/apps-logos/googleanalytics.png",
+    "app_name": "google_analytics",
+    "isAvailable": true
+  },
+  {
+    "title": "Google BigQuery",
+    "description": "Google BigQuery is a fully managed data warehouse for large-scale data analytics, offering fast SQL queries and machine learning capabilities on massive datasets.",
+    "image": "/assets/apps-logos/googl-bigquery.svg",
+    "app_name": "googlebigquery",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Calendar",
+    "description": "Google Calendar is a time management tool providing scheduling features, event reminders, and integration with email and other apps for streamlined organization.",
+    "image": "/assets/apps-logos/google-calendar.svg",
+    "app_name": "googlecalendar",
+    "isAvailable": true
+  },
+  {
     "title": "Google Classroom",
     "description": "Integrate Google Classroom to seamlessly execute automated workflows, synchronize data, and orchestrate Google Classroom actions directly within Alti.",
     "image": "https://logos.composio.dev/api/google_classroom",
     "app_name": "google_classroom",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Cloud Storage",
+    "description": "Google Cloud Storage provides scalable enterprise object storage buckets to index, store, and query corporate PDF archives.",
+    "image": "https://www.google.com/s2/favicons?domain=cloud.google.com&sz=128",
+    "app_name": "gcs",
     "isAvailable": true
   },
   {
@@ -3382,6 +2934,41 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Google Docs",
+    "description": "Google Docs is a cloud-based word processor with real-time collaboration, version history, and integration with other Google Workspace apps.",
+    "image": "/assets/apps-logos/google-docs.svg",
+    "app_name": "googledocs",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Drive",
+    "description": "Google Drive is a cloud storage solution for uploading, sharing, and collaborating on files across devices, with robust search and offline access.",
+    "image": "/assets/apps-logos/google-drive.svg",
+    "app_name": "googledrive",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Maps",
+    "description": "Integrate Google Maps to access location data, geocoding, directions, and mapping services in your application.",
+    "image": "/assets/apps-logos/google_maps.jpeg",
+    "app_name": "google_maps",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Meet",
+    "description": "Google Meet is a secure video conferencing platform that integrates with Google Workspace, facilitating remote meetings, screen sharing, and chat.",
+    "image": "/assets/apps-logos/google-meet.webp",
+    "app_name": "googlemeet",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Photos",
+    "description": "Google Photos is a cloud-based photo storage and organization service offering automatic backups, AI-assisted search, and shared albums for personal and collaborative media management.",
+    "image": "/assets/apps-logos/Google_Photos.png",
+    "app_name": "googlephotos",
+    "isAvailable": true
+  },
+  {
     "title": "Google Search Console",
     "description": "Integrate Google Search Console to seamlessly execute automated workflows, synchronize data, and orchestrate Google Search Console actions directly within Alti.",
     "image": "https://logos.composio.dev/api/google_search_console",
@@ -3389,10 +2976,38 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Google Ads",
-    "description": "Integrate Google Ads to seamlessly execute automated workflows, synchronize data, and orchestrate Google Ads actions directly within Alti.",
-    "image": "https://logos.composio.dev/api/googleads",
-    "app_name": "googleads",
+    "title": "Google Sheets",
+    "description": "Google Sheets is a cloud-based spreadsheet tool enabling real-time collaboration, data analysis, and integration with other Google Workspace apps.",
+    "image": "/assets/apps-logos/google-sheets.svg",
+    "app_name": "googlesheets",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Slides",
+    "description": "Google Slides is a cloud-based presentation editor with real-time collaboration, template gallery, and integration with other Google Workspace apps.",
+    "image": "/assets/apps-logos/google-slides.svg",
+    "app_name": "googleslides",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Super",
+    "description": "Google Super App combines all Google services including Drive, Calendar, Gmail, Sheets, Analytics, Ads, and more, providing a unified platform for seamless integration and management of your digital life.",
+    "image": "/assets/apps-logos/google.svg",
+    "app_name": "googlesuper",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Tasks",
+    "description": "Google Tasks provides a simple to-do list and task management system integrated into Gmail and Google Calendar for quick and easy tracking.",
+    "image": "/assets/apps-logos/google-tasks.png",
+    "app_name": "googletasks",
+    "isAvailable": true
+  },
+  {
+    "title": "Gorgias",
+    "description": "Gorgias is a helpdesk and live chat platform specializing in e-commerce, offering automated support, order management, and unified customer communication.",
+    "image": "/assets/apps-logos/gorgias.png",
+    "app_name": "gorgias",
     "isAvailable": true
   },
   {
@@ -3438,6 +3053,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Guidewire",
+    "description": "Guidewire tracks insurance policy underwriting, claim requests, and property insurance transaction logs.",
+    "image": "https://www.google.com/s2/favicons?domain=guidewire.com&sz=128",
+    "app_name": "guidewire",
+    "isAvailable": true
+  },
+  {
+    "title": "Gumroad",
+    "description": "Gumroad simplifies selling digital goods, physical products, and memberships by offering a streamlined checkout, marketing tools, and direct payout options.",
+    "image": "/assets/apps-logos/gumroad.svg",
+    "app_name": "gumroad",
+    "isAvailable": true
+  },
+  {
     "title": "Guru",
     "description": "Integrate Guru to seamlessly execute automated workflows, synchronize data, and orchestrate Guru actions directly within Alti.",
     "image": "https://logos.composio.dev/api/guru",
@@ -3470,6 +3099,13 @@ export const allApps: APP[] = [
     "description": "Integrate Happy Scribe to seamlessly execute automated workflows, synchronize data, and orchestrate Happy Scribe actions directly within Alti.",
     "image": "https://logos.composio.dev/api/happy_scribe",
     "app_name": "happy_scribe",
+    "isAvailable": true
+  },
+  {
+    "title": "Harvest",
+    "description": "Harvest is a time-tracking and invoicing tool designed for teams and freelancers, helping them log billable hours, manage projects, and streamline payments.",
+    "image": "/assets/apps-logos/harvest.png",
+    "app_name": "harvest",
     "isAvailable": true
   },
   {
@@ -3512,6 +3148,13 @@ export const allApps: APP[] = [
     "description": "Integrate Here to seamlessly execute automated workflows, synchronize data, and orchestrate Here actions directly within Alti.",
     "image": "https://logos.composio.dev/api/here",
     "app_name": "here",
+    "isAvailable": true
+  },
+  {
+    "title": "Heygen",
+    "description": "HeyGen is an innovative video platform that harnesses the power of generative AI to streamline your video creation process.",
+    "image": "/assets/apps-logos/heygen.jpg",
+    "app_name": "heygen",
     "isAvailable": true
   },
   {
@@ -3578,10 +3221,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Hubspot",
+    "description": "HubSpot is an inbound marketing, sales, and customer service platform integrating CRM, email automation, and analytics to facilitate lead nurturing and seamless customer experiences.",
+    "image": "/assets/apps-logos/hubspot.webp",
+    "app_name": "hubspot",
+    "isAvailable": true
+  },
+  {
     "title": "Humanitix",
     "description": "Integrate Humanitix to seamlessly execute automated workflows, synchronize data, and orchestrate Humanitix actions directly within Alti.",
     "image": "https://logos.composio.dev/api/humanitix",
     "app_name": "humanitix",
+    "isAvailable": true
+  },
+  {
+    "title": "Humanloop",
+    "description": "Humanloop helps developers build and refine AI applications, offering user feedback loops, model training, and data annotation to iterate on language model performance.",
+    "image": "/assets/apps-logos/humanloop.jpeg",
+    "app_name": "humanloop",
     "isAvailable": true
   },
   {
@@ -3669,6 +3326,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "iManage",
+    "description": "iManage is the leading legal document management system tracking secure client matters, emails, and file archives.",
+    "image": "https://www.google.com/s2/favicons?domain=imanage.com&sz=128",
+    "app_name": "imanage",
+    "isAvailable": true
+  },
+  {
     "title": "Imejis Io",
     "description": "Integrate Imejis Io to seamlessly execute automated workflows, synchronize data, and orchestrate Imejis Io actions directly within Alti.",
     "image": "https://logos.composio.dev/api/imejis_io",
@@ -3732,6 +3396,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Intercom",
+    "description": "Intercom provides live chat, messaging, and customer engagement tools, enabling businesses to drive conversions, handle support, and personalize communication at scale.",
+    "image": "/assets/apps-logos/intercom.svg",
+    "app_name": "intercom",
+    "isAvailable": true
+  },
+  {
     "title": "Interzoid",
     "description": "Integrate Interzoid to seamlessly execute automated workflows, synchronize data, and orchestrate Interzoid actions directly within Alti.",
     "image": "https://logos.composio.dev/api/interzoid",
@@ -3788,10 +3459,31 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Jane App",
+    "description": "Jane App is a specialized clinic booking and charting database for practitioners and therapists.",
+    "image": "https://www.google.com/s2/favicons?domain=jane.app&sz=128",
+    "app_name": "jane_app",
+    "isAvailable": true
+  },
+  {
     "title": "Jigsawstack",
     "description": "Integrate Jigsawstack to seamlessly execute automated workflows, synchronize data, and orchestrate Jigsawstack actions directly within Alti.",
     "image": "https://logos.composio.dev/api/jigsawstack",
     "app_name": "jigsawstack",
+    "isAvailable": true
+  },
+  {
+    "title": "Jira",
+    "description": "A tool for bug tracking, issue tracking, and agile project management.",
+    "image": "/assets/apps-logos/jira.svg",
+    "app_name": "jira",
+    "isAvailable": true
+  },
+  {
+    "title": "JobNimbus",
+    "description": "JobNimbus is a CRM and project management software designed for contractors, helping streamline scheduling, estimates, invoicing, and job tracking.",
+    "image": "/assets/apps-logos/jobnimbus-logo.jpeg",
+    "app_name": "jobnimbus",
     "isAvailable": true
   },
   {
@@ -3806,6 +3498,13 @@ export const allApps: APP[] = [
     "description": "Integrate Jumpcloud to seamlessly execute automated workflows, synchronize data, and orchestrate Jumpcloud actions directly within Alti.",
     "image": "https://logos.composio.dev/api/jumpcloud",
     "app_name": "jumpcloud",
+    "isAvailable": true
+  },
+  {
+    "title": "Jungle Scout",
+    "description": "Jungle Scout assists Amazon sellers with product research, sales estimates, and competitive insights to optimize inventory, pricing, and listing strategies.",
+    "image": "/assets/apps-logos/junglescout.jpeg",
+    "app_name": "junglescout",
     "isAvailable": true
   },
   {
@@ -3844,6 +3543,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Kibana",
+    "description": "Kibana is a visualization and analytics platform for Elasticsearch, offering dashboards, data exploration, and monitoring capabilities for gaining insights from data.",
+    "image": "/assets/apps-logos/kibana.svg",
+    "app_name": "kibana",
+    "isAvailable": true
+  },
+  {
     "title": "Kickbox",
     "description": "Integrate Kickbox to seamlessly execute automated workflows, synchronize data, and orchestrate Kickbox actions directly within Alti.",
     "image": "https://logos.composio.dev/api/kickbox",
@@ -3858,6 +3564,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Klaviyo",
+    "description": "Klaviyo is a data-driven email and SMS marketing platform that allows e-commerce brands to deliver targeted messages, track conversions, and scale customer relationships.",
+    "image": "/assets/apps-logos/klaviyo.png",
+    "app_name": "klaviyo",
+    "isAvailable": true
+  },
+  {
     "title": "Klipfolio",
     "description": "Integrate Klipfolio to seamlessly execute automated workflows, synchronize data, and orchestrate Klipfolio actions directly within Alti.",
     "image": "https://logos.composio.dev/api/klipfolio",
@@ -3869,6 +3582,13 @@ export const allApps: APP[] = [
     "description": "Integrate Ko Fi to seamlessly execute automated workflows, synchronize data, and orchestrate Ko Fi actions directly within Alti.",
     "image": "https://logos.composio.dev/api/ko_fi",
     "app_name": "ko_fi",
+    "isAvailable": true
+  },
+  {
+    "title": "Kommo",
+    "description": "Kommo CRM (formerly amoCRM) integration tool for managing customer relationships, sales pipelines, and business processes.",
+    "image": "/assets/apps-logos/kommo.png",
+    "app_name": "kommo",
     "isAvailable": true
   },
   {
@@ -3956,6 +3676,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Lemon Squeezy",
+    "description": "Lemon Squeezy is a platform designed to simplify payments, taxes, and subscriptions for software companies, offering a powerful API and webhooks for seamless integration.",
+    "image": "/assets/apps-logos/lemonsqueezy-logo.jpeg",
+    "app_name": "lemon_squeezy",
+    "isAvailable": true
+  },
+  {
     "title": "Lessonspace",
     "description": "Integrate Lessonspace to seamlessly execute automated workflows, synchronize data, and orchestrate Lessonspace actions directly within Alti.",
     "image": "https://logos.composio.dev/api/lessonspace",
@@ -3984,6 +3711,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "LexisNexis",
+    "description": "LexisNexis provides access to legal research cases, regulatory filings, and global public records databases.",
+    "image": "https://www.google.com/s2/favicons?domain=lexisnexis.com&sz=128",
+    "app_name": "lexisnexis",
+    "isAvailable": true
+  },
+  {
     "title": "Lexoffice",
     "description": "Integrate Lexoffice to seamlessly execute automated workflows, synchronize data, and orchestrate Lexoffice actions directly within Alti.",
     "image": "https://logos.composio.dev/api/lexoffice",
@@ -3991,10 +3725,45 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Lightspeed Retail",
+    "description": "Lightspeed POS manages multi-location retail store inventories, purchase orders, and customer records.",
+    "image": "https://www.google.com/s2/favicons?domain=lightspeedhq.com&sz=128",
+    "app_name": "lightspeed",
+    "isAvailable": true
+  },
+  {
+    "title": "Linear",
+    "description": "Linear is a streamlined issue tracking and project planning tool for modern teams, featuring fast workflows, keyboard shortcuts, and GitHub integrations.",
+    "image": "/assets/apps-logos/linear.png",
+    "app_name": "linear",
+    "isAvailable": true
+  },
+  {
     "title": "Linguapop",
     "description": "Integrate Linguapop to seamlessly execute automated workflows, synchronize data, and orchestrate Linguapop actions directly within Alti.",
     "image": "https://logos.composio.dev/api/linguapop",
     "app_name": "linguapop",
+    "isAvailable": true
+  },
+  {
+    "title": "Linkedin",
+    "description": "LinkedIn is a professional networking platform enabling job seekers, companies, and thought leaders to connect, share content, and discover business opportunities.",
+    "image": "/assets/apps-logos/linkedin.svg",
+    "app_name": "linkedin",
+    "isAvailable": true
+  },
+  {
+    "title": "LinkHut",
+    "description": "LinkHut manages bookmarked links in a minimalistic, shareable interface, helping teams organize URLs and track references in one place.",
+    "image": "/assets/apps-logos/linkhut.svg",
+    "app_name": "linkhut",
+    "isAvailable": true
+  },
+  {
+    "title": "Linkup",
+    "description": "Search the Web for Relevant Results (RAG Use Case).",
+    "image": "/assets/apps-logos/linkup.jpeg",
+    "app_name": "linkup",
     "isAvailable": true
   },
   {
@@ -4016,6 +3785,13 @@ export const allApps: APP[] = [
     "description": "Integrate Livesession to seamlessly execute automated workflows, synchronize data, and orchestrate Livesession actions directly within Alti.",
     "image": "https://logos.composio.dev/api/livesession",
     "app_name": "livesession",
+    "isAvailable": true
+  },
+  {
+    "title": "Lmnt",
+    "description": "LMNT focuses on voice and audio manipulation, possibly leveraging AI to generate or transform sound for various creative and technical use cases.",
+    "image": "/assets/apps-logos/lmnt_logo.jpeg",
+    "app_name": "lmnt",
     "isAvailable": true
   },
   {
@@ -4047,6 +3823,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "LSEG Workspace",
+    "description": "LSEG Workspace provides enterprise investment research, global financial market data feeds, and transactional analytics.",
+    "image": "https://www.google.com/s2/favicons?domain=lseg.com&sz=128",
+    "app_name": "lseg",
+    "isAvailable": true
+  },
+  {
+    "title": "Magento (Adobe Commerce)",
+    "description": "Magento manages enterprise-scale e-commerce stores, tracking transactional orders, inventory levels, and customer profiles.",
+    "image": "https://www.google.com/s2/favicons?domain=adobe.com&sz=128",
+    "app_name": "magento",
+    "isAvailable": true
+  },
+  {
     "title": "Magnetic",
     "description": "Integrate Magnetic to seamlessly execute automated workflows, synchronize data, and orchestrate Magnetic actions directly within Alti.",
     "image": "https://logos.composio.dev/api/magnetic",
@@ -4072,6 +3862,13 @@ export const allApps: APP[] = [
     "description": "Integrate Mailcheck to seamlessly execute automated workflows, synchronize data, and orchestrate Mailcheck actions directly within Alti.",
     "image": "https://logos.composio.dev/api/mailcheck",
     "app_name": "mailcheck",
+    "isAvailable": true
+  },
+  {
+    "title": "Mailchimp",
+    "description": "Mailchimp is an email marketing and automation platform providing campaign templates, audience segmentation, and performance analytics to drive engagement and conversions.",
+    "image": "/assets/apps-logos/mailchimp.svg",
+    "app_name": "mailchimp",
     "isAvailable": true
   },
   {
@@ -4166,6 +3963,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Mem0",
+    "description": "Mem0 assists with AI-driven note-taking, knowledge recall, and productivity tools, allowing users to organize, search, and generate content from stored information.",
+    "image": "/assets/apps-logos/mem0.png",
+    "app_name": "mem0",
+    "isAvailable": true
+  },
+  {
     "title": "Memberspot",
     "description": "Integrate Memberspot to seamlessly execute automated workflows, synchronize data, and orchestrate Memberspot actions directly within Alti.",
     "image": "https://logos.composio.dev/api/memberspot",
@@ -4215,6 +4019,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Microsoft Clarity",
+    "description": "Microsoft Clarity is a free user behavior analytics tool that captures heatmaps, session recordings, and engagement metrics to help improve website experiences.",
+    "image": "/assets/apps-logos/microsoft-clarity-logo.jpeg",
+    "app_name": "microsoft_clarity",
+    "isAvailable": true
+  },
+  {
+    "title": "Microsoft Teams",
+    "description": "Microsoft Teams integrates chat, video meetings, and file storage within Microsoft 365, providing virtual collaboration and communication for distributed teams.",
+    "image": "/assets/apps-logos/microsoft-teams-logo.jpeg",
+    "app_name": "microsoft_teams",
+    "isAvailable": true
+  },
+  {
     "title": "Microsoft Tenant",
     "description": "Integrate Microsoft Tenant to seamlessly execute automated workflows, synchronize data, and orchestrate Microsoft Tenant actions directly within Alti.",
     "image": "https://logos.composio.dev/api/microsoft_tenant",
@@ -4222,10 +4040,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Mindbody",
+    "description": "Mindbody is the leading fitness, yoga, and wellness class scheduling and membership management system.",
+    "image": "https://www.google.com/s2/favicons?domain=mindbodyonline.com&sz=128",
+    "app_name": "mindbody",
+    "isAvailable": true
+  },
+  {
     "title": "Minerstat",
     "description": "Integrate Minerstat to seamlessly execute automated workflows, synchronize data, and orchestrate Minerstat actions directly within Alti.",
     "image": "https://logos.composio.dev/api/minerstat",
     "app_name": "minerstat",
+    "isAvailable": true
+  },
+  {
+    "title": "Miro",
+    "description": "Miro is a collaborative online whiteboard enabling teams to brainstorm ideas, design wireframes, plan workflows, and manage projects visually.",
+    "image": "/assets/apps-logos/miro.svg",
+    "app_name": "miro",
     "isAvailable": true
   },
   {
@@ -4240,6 +4072,13 @@ export const allApps: APP[] = [
     "description": "Integrate Mistral AI to seamlessly execute automated workflows, synchronize data, and orchestrate Mistral AI actions directly within Alti.",
     "image": "https://logos.composio.dev/api/mistral_ai",
     "app_name": "mistral_ai",
+    "isAvailable": true
+  },
+  {
+    "title": "Mixpanel",
+    "description": "Mixpanel is a product analytics platform tracking user interactions and engagement, providing cohort analysis, funnels, and A/B testing to improve user experiences.",
+    "image": "/assets/apps-logos/mixpanel.svg",
+    "app_name": "mixpanel",
     "isAvailable": true
   },
   {
@@ -4264,10 +4103,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Monday",
+    "description": "Monday.com is a customizable work management platform for project planning, collaboration, and automation, supporting agile, sales, marketing, and more.",
+    "image": "/assets/apps-logos/monday.png",
+    "app_name": "monday",
+    "isAvailable": true
+  },
+  {
     "title": "Moneybird",
     "description": "Integrate Moneybird to seamlessly execute automated workflows, synchronize data, and orchestrate Moneybird actions directly within Alti.",
     "image": "https://logos.composio.dev/api/moneybird",
     "app_name": "moneybird",
+    "isAvailable": true
+  },
+  {
+    "title": "MongoDB Atlas",
+    "description": "MongoDB Atlas is a cloud document database powering dynamic application data stores and custom collections.",
+    "image": "https://www.google.com/s2/favicons?domain=mongodb.com&sz=128",
+    "app_name": "mongodb_atlas",
     "isAvailable": true
   },
   {
@@ -4292,6 +4145,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "More Trees",
+    "description": "More Trees is a sustainability-focused platform planting trees on behalf of individuals or businesses aiming to offset carbon footprints and support reforestation.",
+    "image": "/assets/apps-logos/more-trees.jpg",
+    "app_name": "more_trees",
+    "isAvailable": true
+  },
+  {
     "title": "Moxie",
     "description": "Integrate Moxie to seamlessly execute automated workflows, synchronize data, and orchestrate Moxie actions directly within Alti.",
     "image": "https://logos.composio.dev/api/moxie",
@@ -4310,6 +4170,13 @@ export const allApps: APP[] = [
     "description": "Integrate Msg91 to seamlessly execute automated workflows, synchronize data, and orchestrate Msg91 actions directly within Alti.",
     "image": "https://logos.composio.dev/api/msg91",
     "app_name": "msg91",
+    "isAvailable": true
+  },
+  {
+    "title": "Mural",
+    "description": "Mural is a digital whiteboard platform enabling distributed teams to visually brainstorm, map ideas, and collaborate in real time with sticky notes and diagrams.",
+    "image": "/assets/apps-logos/mural.svg",
+    "app_name": "mural",
     "isAvailable": true
   },
   {
@@ -4355,6 +4222,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Navitaire",
+    "description": "Navitaire organizes passenger ticket bookings, airline scheduling systems, and loyalty account ledgers.",
+    "image": "https://www.google.com/s2/favicons?domain=navitaire.com&sz=128",
+    "app_name": "navitaire",
+    "isAvailable": true
+  },
+  {
+    "title": "NCR Aloha",
+    "description": "NCR Aloha POS provides reliable restaurant point-of-sale terminal management and retail workflow logs.",
+    "image": "https://www.google.com/s2/favicons?domain=ncr.com&sz=128",
+    "app_name": "ncr_aloha",
+    "isAvailable": true
+  },
+  {
     "title": "Ncscale",
     "description": "Integrate Ncscale to seamlessly execute automated workflows, synchronize data, and orchestrate Ncscale actions directly within Alti.",
     "image": "https://logos.composio.dev/api/ncscale",
@@ -4366,6 +4247,20 @@ export const allApps: APP[] = [
     "description": "Integrate Needle to seamlessly execute automated workflows, synchronize data, and orchestrate Needle actions directly within Alti.",
     "image": "https://logos.composio.dev/api/needle",
     "app_name": "needle",
+    "isAvailable": true
+  },
+  {
+    "title": "Neon",
+    "description": "Postgres, on a serverless platform designed to help you build reliable and scalable applications faster.",
+    "image": "/assets/apps-logos/neon.png",
+    "app_name": "neon",
+    "isAvailable": true
+  },
+  {
+    "title": "NetDocuments",
+    "description": "NetDocuments is a cloud-native document management platform organizing secure corporate files, litigation sheets, and legal contracts.",
+    "image": "https://www.google.com/s2/favicons?domain=netdocuments.com&sz=128",
+    "app_name": "netdocuments",
     "isAvailable": true
   },
   {
@@ -4418,10 +4313,31 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Ngrok",
+    "description": "Ngrok creates secure tunnels to locally hosted applications, enabling developers to share and test webhooks or services without configuring complex network settings.",
+    "image": "/assets/apps-logos/ngrok-logo.jpeg",
+    "app_name": "ngrok",
+    "isAvailable": true
+  },
+  {
     "title": "Ninox",
     "description": "Integrate Ninox to seamlessly execute automated workflows, synchronize data, and orchestrate Ninox actions directly within Alti.",
     "image": "https://logos.composio.dev/api/ninox",
     "app_name": "ninox",
+    "isAvailable": true
+  },
+  {
+    "title": "noCRM.io",
+    "description": "noCRM.io is a lead management software designed to help sales teams track and close deals efficiently.",
+    "image": "/assets/apps-logos/nocrm_io_round2_20250722.png",
+    "app_name": "nocrm_io",
+    "isAvailable": true
+  },
+  {
+    "title": "Notion",
+    "description": "Notion centralizes notes, docs, wikis, and tasks in a unified workspace, letting teams build custom workflows for collaboration and knowledge management.",
+    "image": "/assets/apps-logos/notion.svg",
+    "app_name": "notion",
     "isAvailable": true
   },
   {
@@ -4446,6 +4362,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Okta",
+    "description": "Okta is a cloud identity single sign-on database managing employee profiles, application access logs, and MFA checks.",
+    "image": "https://www.google.com/s2/favicons?domain=okta.com&sz=128",
+    "app_name": "okta",
+    "isAvailable": true
+  },
+  {
+    "title": "OMDb API",
+    "description": "OMDb API (Open Movie Database) provides comprehensive movie/show metadata, IMDb ratings, and poster assets.",
+    "image": "https://www.google.com/s2/favicons?domain=omdbapi.com&sz=128",
+    "app_name": "omdb",
+    "isAvailable": true
+  },
+  {
     "title": "Omnisend",
     "description": "Integrate Omnisend to seamlessly execute automated workflows, synchronize data, and orchestrate Omnisend actions directly within Alti.",
     "image": "https://logos.composio.dev/api/omnisend",
@@ -4460,10 +4390,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "One drive",
+    "description": "OneDrive is Microsoft’s cloud storage solution enabling users to store, sync, and share files across devices, offering offline access, real-time collaboration, and enterprise-grade security.",
+    "image": "/assets/apps-logos/one-drive.svg",
+    "app_name": "one_drive",
+    "isAvailable": true
+  },
+  {
     "title": "Onedesk",
     "description": "Integrate Onedesk to seamlessly execute automated workflows, synchronize data, and orchestrate Onedesk actions directly within Alti.",
     "image": "https://logos.composio.dev/api/onedesk",
     "app_name": "onedesk",
+    "isAvailable": true
+  },
+  {
+    "title": "Onepage",
+    "description": "API for enriching user and company data, providing endpoints for token validation and generic search.",
+    "image": "/assets/apps-logos/onepage.svg",
+    "app_name": "onepage",
     "isAvailable": true
   },
   {
@@ -4478,6 +4422,13 @@ export const allApps: APP[] = [
     "description": "Integrate Onesignal User Auth to seamlessly execute automated workflows, synchronize data, and orchestrate Onesignal User Auth actions directly within Alti.",
     "image": "https://logos.composio.dev/api/onesignal_user_auth",
     "app_name": "onesignal_user_auth",
+    "isAvailable": true
+  },
+  {
+    "title": "Open Dental",
+    "description": "Open Dental EHR manages comprehensive patient dental charting, scheduling, and lab reports.",
+    "image": "https://www.google.com/s2/favicons?domain=opendental.com&sz=128",
+    "app_name": "open_dental",
     "isAvailable": true
   },
   {
@@ -4523,6 +4474,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "OpenTable",
+    "description": "OpenTable tracks dining guest lists, restaurant table reservations, and restaurant client directories.",
+    "image": "https://www.google.com/s2/favicons?domain=opentable.com&sz=128",
+    "app_name": "opentable",
+    "isAvailable": true
+  },
+  {
     "title": "Openweather API",
     "description": "Integrate Openweather API to seamlessly execute automated workflows, synchronize data, and orchestrate Openweather API actions directly within Alti.",
     "image": "https://logos.composio.dev/api/openweather_api",
@@ -4537,6 +4495,34 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Oracle MICROS",
+    "description": "Oracle MICROS POS delivers enterprise-grade hospitality and restaurant transaction management globally.",
+    "image": "https://www.google.com/s2/favicons?domain=oracle.com&sz=128",
+    "app_name": "oracle_micros",
+    "isAvailable": true
+  },
+  {
+    "title": "Oracle NetSuite",
+    "description": "Oracle NetSuite is a leading enterprise cloud ERP managing general ledgers, CRM, and supply chain databases.",
+    "image": "https://www.google.com/s2/favicons?domain=netsuite.com&sz=128",
+    "app_name": "oracle_netsuite",
+    "isAvailable": true
+  },
+  {
+    "title": "Outlook",
+    "description": "Outlook is Microsoft’s email and calendaring platform integrating contacts, tasks, and scheduling, enabling users to manage communications and events in a unified workspace.",
+    "image": "/assets/apps-logos/Outlook.svg",
+    "app_name": "outlook",
+    "isAvailable": true
+  },
+  {
+    "title": "Outreach",
+    "description": "Outreach.io is a sales execution platform coordinating buyer engagement campaigns and pipeline outreach logs.",
+    "image": "https://www.google.com/s2/favicons?domain=outreach.io&sz=128",
+    "app_name": "outreach",
+    "isAvailable": true
+  },
+  {
     "title": "Owl Protocol",
     "description": "Integrate Owl Protocol to seamlessly execute automated workflows, synchronize data, and orchestrate Owl Protocol actions directly within Alti.",
     "image": "https://logos.composio.dev/api/owl_protocol",
@@ -4548,6 +4534,20 @@ export const allApps: APP[] = [
     "description": "Integrate Page X to seamlessly execute automated workflows, synchronize data, and orchestrate Page X actions directly within Alti.",
     "image": "https://logos.composio.dev/api/page_x",
     "app_name": "page_x",
+    "isAvailable": true
+  },
+  {
+    "title": "Pagerduty",
+    "description": "Integrate PagerDuty to manage incidents, schedules, and alerts directly from your application.",
+    "image": "/assets/apps-logos/pagerduty.png",
+    "app_name": "pagerduty",
+    "isAvailable": true
+  },
+  {
+    "title": "Pandadoc",
+    "description": "PandaDoc offers document creation, e-signatures, and workflow automation, helping sales teams and businesses streamline proposals, contracts, and agreement processes.",
+    "image": "/assets/apps-logos/pandadoc.svg",
+    "app_name": "pandadoc",
     "isAvailable": true
   },
   {
@@ -4607,6 +4607,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Payhip",
+    "description": "Payhip is an e-commerce platform that enables individuals and businesses to sell digital products, memberships, and physical goods directly to their audience.",
+    "image": "/assets/apps-logos/payhip-logo.jpeg",
+    "app_name": "payhip",
+    "isAvailable": true
+  },
+  {
     "title": "PDF API Io",
     "description": "Integrate PDF API Io to seamlessly execute automated workflows, synchronize data, and orchestrate PDF API Io actions directly within Alti.",
     "image": "https://logos.composio.dev/api/pdf_api_io",
@@ -4642,10 +4649,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "PeopleDataLabs",
+    "description": "PeopleDataLabs provides B2B data enrichment and identity resolution, empowering organizations to build enriched user profiles and validate customer information.",
+    "image": "/assets/apps-logos/pdl.png",
+    "app_name": "peopledatalabs",
+    "isAvailable": true
+  },
+  {
     "title": "Perigon",
     "description": "Integrate Perigon to seamlessly execute automated workflows, synchronize data, and orchestrate Perigon actions directly within Alti.",
     "image": "https://logos.composio.dev/api/perigon",
     "app_name": "perigon",
+    "isAvailable": true
+  },
+  {
+    "title": "Perplexity AI",
+    "description": "Perplexity AI provides conversational AI models for generating human-like text responses.",
+    "image": "/assets/apps-logos/perplexity.jpeg",
+    "app_name": "perplexityai",
     "isAvailable": true
   },
   {
@@ -4698,6 +4719,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Pipedrive",
+    "description": "Pipedrive is a sales management tool built around pipeline visualization, lead tracking, activity reminders, and automation to keep deals progressing.",
+    "image": "/assets/apps-logos/pipedrive.svg",
+    "app_name": "pipedrive",
+    "isAvailable": true
+  },
+  {
     "title": "Pipeline CRM",
     "description": "Integrate Pipeline CRM to seamlessly execute automated workflows, synchronize data, and orchestrate Pipeline CRM actions directly within Alti.",
     "image": "https://logos.composio.dev/api/pipeline_crm",
@@ -4705,10 +4733,31 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "PitchBook",
+    "description": "PitchBook provides comprehensive data on the global venture capital, private equity, and M&A markets.",
+    "image": "https://www.google.com/s2/favicons?domain=pitchbook.com&sz=128",
+    "app_name": "pitchbook",
+    "isAvailable": true
+  },
+  {
+    "title": "Placekey",
+    "description": "Placekey standardizes location data by assigning unique IDs to physical addresses, simplifying address matching and enabling data sharing across platforms.",
+    "image": "/assets/apps-logos/placekey.png",
+    "app_name": "placekey",
+    "isAvailable": true
+  },
+  {
     "title": "Placid",
     "description": "Integrate Placid to seamlessly execute automated workflows, synchronize data, and orchestrate Placid actions directly within Alti.",
     "image": "https://logos.composio.dev/api/placid",
     "app_name": "placid",
+    "isAvailable": true
+  },
+  {
+    "title": "Plaid",
+    "description": "Plaid connects private banking accounts to sync transactions, account balances, and credit details.",
+    "image": "https://www.google.com/s2/favicons?domain=plaid.com&sz=128",
+    "app_name": "plaid",
     "isAvailable": true
   },
   {
@@ -4775,6 +4824,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "PostHog",
+    "description": "PostHog is an open-source product analytics platform tracking user interactions and behaviors to help teams refine features, improve funnels, and reduce churn.",
+    "image": "/assets/apps-logos/posthog.svg",
+    "app_name": "posthog",
+    "isAvailable": true
+  },
+  {
     "title": "Postmark",
     "description": "Integrate Postmark to seamlessly execute automated workflows, synchronize data, and orchestrate Postmark actions directly within Alti.",
     "image": "https://logos.composio.dev/api/postmark",
@@ -4786,6 +4842,13 @@ export const allApps: APP[] = [
     "description": "Integrate Precoro to seamlessly execute automated workflows, synchronize data, and orchestrate Precoro actions directly within Alti.",
     "image": "https://logos.composio.dev/api/precoro",
     "app_name": "precoro",
+    "isAvailable": true
+  },
+  {
+    "title": "Preqin",
+    "description": "Preqin provides comprehensive alternative assets market intelligence, hedge fund tracking, and PE fund benchmark metrics.",
+    "image": "https://www.google.com/s2/favicons?domain=preqin.com&sz=128",
+    "app_name": "preqin",
     "isAvailable": true
   },
   {
@@ -4824,10 +4887,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Process Street",
+    "description": "Process Street supports creating and running checklists, SOPs, and workflows, helping teams automate recurring processes and track compliance.",
+    "image": "/assets/apps-logos/process-street-logo.png",
+    "app_name": "process_street",
+    "isAvailable": true
+  },
+  {
     "title": "Procfu",
     "description": "Integrate Procfu to seamlessly execute automated workflows, synchronize data, and orchestrate Procfu actions directly within Alti.",
     "image": "https://logos.composio.dev/api/procfu",
     "app_name": "procfu",
+    "isAvailable": true
+  },
+  {
+    "title": "Procore",
+    "description": "Procore is an enterprise construction project management database tracking submittals, RFIs, and construction logs.",
+    "image": "https://www.google.com/s2/favicons?domain=procore.com&sz=128",
+    "app_name": "procore",
     "isAvailable": true
   },
   {
@@ -4873,6 +4950,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Pushbullet",
+    "description": "Pushbullet enables seamless sharing of notifications and files across devices.",
+    "image": "/assets/apps-logos/pushbullet_round3_20250722.png",
+    "app_name": "pushbullet",
+    "isAvailable": true
+  },
+  {
     "title": "Pushover",
     "description": "Integrate Pushover to seamlessly execute automated workflows, synchronize data, and orchestrate Pushover actions directly within Alti.",
     "image": "https://logos.composio.dev/api/pushover",
@@ -4891,6 +4975,13 @@ export const allApps: APP[] = [
     "description": "Integrate Qualaroo to seamlessly execute automated workflows, synchronize data, and orchestrate Qualaroo actions directly within Alti.",
     "image": "https://logos.composio.dev/api/qualaroo",
     "app_name": "qualaroo",
+    "isAvailable": true
+  },
+  {
+    "title": "Quickbooks",
+    "description": "Quickbooks is a cloud-based accounting software that helps you manage your finances, track your income and expenses, and get insights into your business.",
+    "image": "/assets/apps-logos/quickbooks.jpg",
+    "app_name": "quickbooks",
     "isAvailable": true
   },
   {
@@ -4915,10 +5006,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Rainforest API",
+    "description": "Rainforest API retrieves structured real-time e-commerce catalog pricing, product logs, and reviews from Amazon.",
+    "image": "https://www.google.com/s2/favicons?domain=rainforestapi.com&sz=128",
+    "app_name": "rainforest",
+    "isAvailable": true
+  },
+  {
     "title": "Raisely",
     "description": "Integrate Raisely to seamlessly execute automated workflows, synchronize data, and orchestrate Raisely actions directly within Alti.",
     "image": "https://logos.composio.dev/api/raisely",
     "app_name": "raisely",
+    "isAvailable": true
+  },
+  {
+    "title": "Ramp",
+    "description": "Ramp is a platform that helps you manage your finances, track your income and expenses, and get insights into your business.",
+    "image": "/assets/apps-logos/ramp.svg",
+    "app_name": "ramp",
     "isAvailable": true
   },
   {
@@ -4943,10 +5048,31 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "RecallAI",
+    "description": "The universal API for meeting bots & conversation data.",
+    "image": "/assets/apps-logos/recall.svg",
+    "app_name": "recallai",
+    "isAvailable": true
+  },
+  {
+    "title": "Recharge Payments",
+    "description": "Recharge Payments manages recurring subscription transactions, customer subscription contracts, and billing analytics.",
+    "image": "https://www.google.com/s2/favicons?domain=rechargepayments.com&sz=128",
+    "app_name": "recharge",
+    "isAvailable": true
+  },
+  {
     "title": "Recruitee",
     "description": "Integrate Recruitee to seamlessly execute automated workflows, synchronize data, and orchestrate Recruitee actions directly within Alti.",
     "image": "https://logos.composio.dev/api/recruitee",
     "app_name": "recruitee",
+    "isAvailable": true
+  },
+  {
+    "title": "Reddit",
+    "description": "Reddit is a social news platform with user-driven communities (subreddits), offering content sharing, discussions, and viral marketing opportunities for brands.",
+    "image": "/assets/apps-logos/reddit.svg",
+    "app_name": "reddit",
     "isAvailable": true
   },
   {
@@ -5041,6 +5167,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "RetellAI",
+    "description": "RetellAI captures calls and transcripts, enabling businesses to analyze conversations, extract insights, and enhance customer interactions in one centralized platform.",
+    "image": "/assets/apps-logos/retellai.jpeg",
+    "app_name": "retellai",
+    "isAvailable": true
+  },
+  {
     "title": "Retently",
     "description": "Integrate Retently to seamlessly execute automated workflows, synchronize data, and orchestrate Retently actions directly within Alti.",
     "image": "https://logos.composio.dev/api/retently",
@@ -5052,6 +5185,13 @@ export const allApps: APP[] = [
     "description": "Integrate Rev AI to seamlessly execute automated workflows, synchronize data, and orchestrate Rev AI actions directly within Alti.",
     "image": "https://logos.composio.dev/api/rev_ai",
     "app_name": "rev_ai",
+    "isAvailable": true
+  },
+  {
+    "title": "Revel Systems",
+    "description": "Revel Systems POS provides cloud-based iPad retail and quick-service operations tracking ingredient-level inventory.",
+    "image": "https://www.google.com/s2/favicons?domain=revelsystems.com&sz=128",
+    "app_name": "revel_systems",
     "isAvailable": true
   },
   {
@@ -5125,6 +5265,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "S&P Capital IQ",
+    "description": "S&P Capital IQ delivers comprehensive global market intelligence, financial analytics, and corporate profile research.",
+    "image": "https://www.google.com/s2/favicons?domain=spglobal.com&sz=128",
+    "app_name": "capitaliq",
+    "isAvailable": true
+  },
+  {
+    "title": "Sabre GDS",
+    "description": "Sabre connects airline schedules, hotel reservation blocks, and global travel inventory directories.",
+    "image": "https://www.google.com/s2/favicons?domain=sabre.com&sz=128",
+    "app_name": "sabre",
+    "isAvailable": true
+  },
+  {
     "title": "Safetyculture",
     "description": "Integrate Safetyculture to seamlessly execute automated workflows, synchronize data, and orchestrate Safetyculture actions directly within Alti.",
     "image": "https://logos.composio.dev/api/safetyculture",
@@ -5139,6 +5293,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Salesforce",
+    "description": "Salesforce is a leading CRM platform integrating sales, service, marketing, and analytics to build customer relationships and drive business growth.",
+    "image": "/assets/apps-logos/salesforce.svg",
+    "app_name": "salesforce",
+    "isAvailable": true
+  },
+  {
+    "title": "Salesforce Commerce Cloud",
+    "description": "Salesforce Commerce Cloud integrates enterprise-grade e-commerce transactions, inventory systems, and multi-channel customer records.",
+    "image": "https://www.google.com/s2/favicons?domain=salesforce.com&sz=128",
+    "app_name": "salesforce_commerce",
+    "isAvailable": true
+  },
+  {
     "title": "Salesforce Marketing Cloud",
     "description": "Integrate Salesforce Marketing Cloud to seamlessly execute automated workflows, synchronize data, and orchestrate Salesforce Marketing Cloud actions directly within Alti.",
     "image": "https://logos.composio.dev/api/salesforce_marketing_cloud",
@@ -5150,6 +5318,27 @@ export const allApps: APP[] = [
     "description": "Integrate Salesforce Service Cloud to seamlessly execute automated workflows, synchronize data, and orchestrate Salesforce Service Cloud actions directly within Alti.",
     "image": "https://logos.composio.dev/api/salesforce_service_cloud",
     "app_name": "salesforce_service_cloud",
+    "isAvailable": true
+  },
+  {
+    "title": "Salesloft",
+    "description": "Salesloft manages cold outreach email campaigns, sales sequence templates, and lead response logs.",
+    "image": "https://www.google.com/s2/favicons?domain=salesloft.com&sz=128",
+    "app_name": "salesloft",
+    "isAvailable": true
+  },
+  {
+    "title": "Salesmate",
+    "description": "Salesmate is an AI-powered CRM platform designed to help businesses engage leads, close deals faster, nurture relationships, and provide seamless support through a unified, intuitive interface.",
+    "image": "/assets/apps-logos/salesmate-logo.jpeg",
+    "app_name": "salesmate",
+    "isAvailable": true
+  },
+  {
+    "title": "Samsara",
+    "description": "Samsara provides real-time fleet logistics tracking, commercial vehicle telemetry, and sensor data pipelines.",
+    "image": "https://www.google.com/s2/favicons?domain=samsara.com&sz=128",
+    "app_name": "samsara",
     "isAvailable": true
   },
   {
@@ -5251,6 +5440,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Semantic Scholar",
+    "description": "Semantic Scholar is an AI-powered academic search engine that helps researchers discover and understand scientific literature.",
+    "image": "/assets/apps-logos/semanticscholar.png",
+    "app_name": "semanticscholar",
+    "isAvailable": true
+  },
+  {
     "title": "Semrush",
     "description": "Integrate Semrush to seamlessly execute automated workflows, synchronize data, and orchestrate Semrush actions directly within Alti.",
     "image": "https://logos.composio.dev/api/semrush",
@@ -5276,6 +5472,13 @@ export const allApps: APP[] = [
     "description": "Integrate Sendfox to seamlessly execute automated workflows, synchronize data, and orchestrate Sendfox actions directly within Alti.",
     "image": "https://logos.composio.dev/api/sendfox",
     "app_name": "sendfox",
+    "isAvailable": true
+  },
+  {
+    "title": "SendGrid",
+    "description": "SendGrid is a cloud-based email delivery platform providing transactional and marketing email services, with APIs for integration, analytics, and scalability.",
+    "image": "/assets/apps-logos/sendgrid.png",
+    "app_name": "sendgrid",
     "isAvailable": true
   },
   {
@@ -5307,10 +5510,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Sentry",
+    "description": "Integrate Sentry to manage your error tracking and monitoring.",
+    "image": "/assets/apps-logos/sentry.svg",
+    "app_name": "sentry",
+    "isAvailable": true
+  },
+  {
     "title": "Seqera",
     "description": "Integrate Seqera to seamlessly execute automated workflows, synchronize data, and orchestrate Seqera actions directly within Alti.",
     "image": "https://logos.composio.dev/api/seqera",
     "app_name": "seqera",
+    "isAvailable": true
+  },
+  {
+    "title": "SerpApi",
+    "description": "SerpApi provides a real-time API for structured search engine results, allowing developers to scrape, parse, and analyze SERP data for SEO and research.",
+    "image": "/assets/apps-logos/serpapi.png",
+    "app_name": "serpapi",
     "isAvailable": true
   },
   {
@@ -5328,6 +5545,27 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "ServiceM8",
+    "description": "ServiceM8 helps field service businesses schedule jobs, send quotes, and manage invoices, offering staff mobile apps and real-time job status tracking.",
+    "image": "/assets/apps-logos/servicem8.svg",
+    "app_name": "servicem8",
+    "isAvailable": true
+  },
+  {
+    "title": "Servicenow",
+    "description": "Servicenow provides IT Service Management Transform service management to boost productivity and maximize ROI.",
+    "image": "/assets/apps-logos/servicenow.png",
+    "app_name": "servicenow",
+    "isAvailable": true
+  },
+  {
+    "title": "ServiceNow ITSM",
+    "description": "ServiceNow ITSM tracks enterprise IT support tickets, hardware assets, and network operations databases.",
+    "image": "https://www.google.com/s2/favicons?domain=servicenow.com&sz=128",
+    "app_name": "servicenow_itsm",
+    "isAvailable": true
+  },
+  {
     "title": "Sevdesk",
     "description": "Integrate Sevdesk to seamlessly execute automated workflows, synchronize data, and orchestrate Sevdesk actions directly within Alti.",
     "image": "https://logos.composio.dev/api/sevdesk",
@@ -5335,10 +5573,38 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "SharePoint",
+    "description": "SharePoint is a Microsoft platform for document management and intranets, enabling teams to collaborate, store, and organize content securely and effectively.",
+    "image": "/assets/apps-logos/sharepoint-icon.svg",
+    "app_name": "share_point",
+    "isAvailable": true
+  },
+  {
+    "title": "ShipBob",
+    "description": "ShipBob coordinates global omnifulfillment logistics, tracking inventory levels, order shipments, and 3PL center operations.",
+    "image": "https://www.google.com/s2/favicons?domain=shipbob.com&sz=128",
+    "app_name": "shipbob",
+    "isAvailable": true
+  },
+  {
     "title": "Shipengine",
     "description": "Integrate Shipengine to seamlessly execute automated workflows, synchronize data, and orchestrate Shipengine actions directly within Alti.",
     "image": "https://logos.composio.dev/api/shipengine",
     "app_name": "shipengine",
+    "isAvailable": true
+  },
+  {
+    "title": "ShipStation",
+    "description": "ShipStation tracks retail e-commerce shipping labels, courier package statuses, and customer order logs.",
+    "image": "https://www.google.com/s2/favicons?domain=shipstation.com&sz=128",
+    "app_name": "shipstation",
+    "isAvailable": true
+  },
+  {
+    "title": "Shopify",
+    "description": "Shopify is an e-commerce platform enabling merchants to create online stores, manage products, and process payments with themes, apps, and integrated marketing tools.",
+    "image": "/assets/apps-logos/shopify.svg",
+    "app_name": "shopify",
     "isAvailable": true
   },
   {
@@ -5353,6 +5619,13 @@ export const allApps: APP[] = [
     "description": "Integrate Short Menu to seamlessly execute automated workflows, synchronize data, and orchestrate Short Menu actions directly within Alti.",
     "image": "https://logos.composio.dev/api/short_menu",
     "app_name": "short_menu",
+    "isAvailable": true
+  },
+  {
+    "title": "Shortcut",
+    "description": "Shortcut aligns product development work with company objectives so teams can execute with a shared purpose.",
+    "image": "/assets/apps-logos/shortcut.svg",
+    "app_name": "shortcut",
     "isAvailable": true
   },
   {
@@ -5426,6 +5699,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Simplesat",
+    "description": "Simplesat captures customer feedback and CSAT scores through surveys, integrating directly with helpdesk systems for real-time performance insights.",
+    "image": "/assets/apps-logos/simplesat.jpeg",
+    "app_name": "simplesat",
+    "isAvailable": true
+  },
+  {
     "title": "Sitespeakai",
     "description": "Integrate Sitespeakai to seamlessly execute automated workflows, synchronize data, and orchestrate Sitespeakai actions directly within Alti.",
     "image": "https://logos.composio.dev/api/sitespeakai",
@@ -5433,10 +5713,31 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "SkuVault",
+    "description": "SkuVault coordinates e-commerce inventory levels, tracking warehouse stock locations, purchase orders, and catalogs.",
+    "image": "https://www.google.com/s2/favicons?domain=skuvault.com&sz=128",
+    "app_name": "skuvault",
+    "isAvailable": true
+  },
+  {
     "title": "Skyfire",
     "description": "Integrate Skyfire to seamlessly execute automated workflows, synchronize data, and orchestrate Skyfire actions directly within Alti.",
     "image": "https://logos.composio.dev/api/skyfire",
     "app_name": "skyfire",
+    "isAvailable": true
+  },
+  {
+    "title": "Slack",
+    "description": "Slack is a channel-based messaging platform. With Slack, people can work together more effectively, connect all their software tools and services, and find the information they need to do their best work — all within a secure, enterprise-grade environment.",
+    "image": "/assets/apps-logos/slack.svg",
+    "app_name": "slack",
+    "isAvailable": true
+  },
+  {
+    "title": "Slack Bot",
+    "description": "Slack Bot automates responses and reminders within Slack, assisting with tasks like onboarding, FAQs, and notifications to streamline team productivity.",
+    "image": "/assets/apps-logos/slack.svg",
+    "app_name": "slackbot",
     "isAvailable": true
   },
   {
@@ -5475,6 +5776,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Snowflake",
+    "description": "Snowflake is a cloud-based data warehouse offering elastic scaling, secure data sharing, and SQL analytics across multiple cloud environments.",
+    "image": "/assets/apps-logos/snowflake.svg",
+    "app_name": "snowflake",
+    "isAvailable": true
+  },
+  {
     "title": "Snowflake Basic",
     "description": "Integrate Snowflake Basic to seamlessly execute automated workflows, synchronize data, and orchestrate Snowflake Basic actions directly within Alti.",
     "image": "https://logos.composio.dev/api/snowflake_basic",
@@ -5510,6 +5818,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Spotify",
+    "description": "Spotify is a digital music and podcast streaming service with millions of tracks, personalized playlists, and social sharing features.",
+    "image": "/assets/apps-logos/spotify-icon.svg",
+    "app_name": "spotify",
+    "isAvailable": true
+  },
+  {
     "title": "Spotlightr",
     "description": "Integrate Spotlightr to seamlessly execute automated workflows, synchronize data, and orchestrate Spotlightr actions directly within Alti.",
     "image": "https://logos.composio.dev/api/spotlightr",
@@ -5524,10 +5839,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Squarespace Commerce",
+    "description": "Squarespace Commerce connects online retail stores, tracking product inventory, billing transactions, and customer invoices.",
+    "image": "https://www.google.com/s2/favicons?domain=squarespace.com&sz=128",
+    "app_name": "squarespace",
+    "isAvailable": true
+  },
+  {
     "title": "Sslmate Cert Spotter API",
     "description": "Integrate Sslmate Cert Spotter API to seamlessly execute automated workflows, synchronize data, and orchestrate Sslmate Cert Spotter API actions directly within Alti.",
     "image": "https://logos.composio.dev/api/sslmate_cert_spotter_api",
     "app_name": "sslmate_cert_spotter_api",
+    "isAvailable": true
+  },
+  {
+    "title": "Stack Exchange",
+    "description": "Stack Exchange is a network of Q&A communities where users ask questions, share knowledge, and collaborate on topics like coding, math, and more.",
+    "image": "/assets/apps-logos/stackexchange.png",
+    "app_name": "stack_exchange",
     "isAvailable": true
   },
   {
@@ -5587,6 +5916,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Stripe",
+    "description": "Stripe offers online payment infrastructure, fraud prevention, and APIs enabling businesses to accept and manage payments globally.",
+    "image": "/assets/apps-logos/stripe.jpeg",
+    "app_name": "stripe",
+    "isAvailable": true
+  },
+  {
+    "title": "Supabase",
+    "description": "Supabase is an open-source backend-as-a-service providing a Postgres database, authentication, storage, and real-time subscription APIs for building modern applications.",
+    "image": "/assets/apps-logos/supabase.jpeg",
+    "app_name": "supabase",
+    "isAvailable": true
+  },
+  {
     "title": "Supadata",
     "description": "Integrate Supadata to seamlessly execute automated workflows, synchronize data, and orchestrate Supadata actions directly within Alti.",
     "image": "https://logos.composio.dev/api/supadata",
@@ -5643,6 +5986,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Tableau",
+    "description": "Tableau connects dynamic corporate sales dashboards, analytics visualizations, and business intelligence sheets.",
+    "image": "https://www.google.com/s2/favicons?domain=tableau.com&sz=128",
+    "app_name": "tableau",
+    "isAvailable": true
+  },
+  {
     "title": "Taggun",
     "description": "Integrate Taggun to seamlessly execute automated workflows, synchronize data, and orchestrate Taggun actions directly within Alti.",
     "image": "https://logos.composio.dev/api/taggun",
@@ -5675,6 +6025,13 @@ export const allApps: APP[] = [
     "description": "Integrate Tapform to seamlessly execute automated workflows, synchronize data, and orchestrate Tapform actions directly within Alti.",
     "image": "https://logos.composio.dev/api/tapform",
     "app_name": "tapform",
+    "isAvailable": true
+  },
+  {
+    "title": "Tavily",
+    "description": "Tavily offers search and data retrieval solutions, helping teams quickly locate and filter relevant information from documents, databases, or web sources.",
+    "image": "/assets/apps-logos/tavily.svg",
+    "app_name": "tavily",
     "isAvailable": true
   },
   {
@@ -5755,6 +6112,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "TextRazor",
+    "description": "TextRazor is a natural language processing API that extracts meaning, entities, and relationships from text, powering advanced content analysis and sentiment detection.",
+    "image": "/assets/apps-logos/textrazor.svg",
+    "app_name": "textrazor",
+    "isAvailable": true
+  },
+  {
     "title": "Thanks Io",
     "description": "Integrate Thanks Io to seamlessly execute automated workflows, synchronize data, and orchestrate Thanks Io actions directly within Alti.",
     "image": "https://logos.composio.dev/api/thanks_io",
@@ -5773,6 +6137,13 @@ export const allApps: APP[] = [
     "description": "Integrate Ticketmaster to seamlessly execute automated workflows, synchronize data, and orchestrate Ticketmaster actions directly within Alti.",
     "image": "https://logos.composio.dev/api/ticketmaster",
     "app_name": "ticketmaster",
+    "isAvailable": true
+  },
+  {
+    "title": "TickTick",
+    "description": "TickTick is a cross-platform task management and to-do list application designed to help users organize their tasks and schedules efficiently.",
+    "image": "/assets/apps-logos/ticktick.ico",
+    "app_name": "ticktick",
     "isAvailable": true
   },
   {
@@ -5811,6 +6182,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Timely",
+    "description": "Timely is an automatic time-tracking platform capturing activity across applications, calendars, and devices, creating detailed timesheets for billing or productivity insights.",
+    "image": "/assets/apps-logos/timely.png",
+    "app_name": "timely",
+    "isAvailable": true
+  },
+  {
+    "title": "Tiny URL",
+    "description": "Tiny URL shortens lengthy URLs, generating concise links for easier sharing and managing, often used in social media and marketing campaigns.",
+    "image": "/assets/apps-logos/tinyurl-logo.png",
+    "app_name": "tinyurl",
+    "isAvailable": true
+  },
+  {
     "title": "Tinypng",
     "description": "Integrate Tinypng to seamlessly execute automated workflows, synchronize data, and orchestrate Tinypng actions directly within Alti.",
     "image": "https://logos.composio.dev/api/tinypng",
@@ -5822,6 +6207,27 @@ export const allApps: APP[] = [
     "description": "Integrate Tisane to seamlessly execute automated workflows, synchronize data, and orchestrate Tisane actions directly within Alti.",
     "image": "https://logos.composio.dev/api/tisane",
     "app_name": "tisane",
+    "isAvailable": true
+  },
+  {
+    "title": "Toast POS",
+    "description": "Toast POS is a leading restaurant management platform integrating front-of-house, back-of-house, and online ordering database systems.",
+    "image": "https://www.google.com/s2/favicons?domain=toasttab.com&sz=128",
+    "app_name": "toast",
+    "isAvailable": true
+  },
+  {
+    "title": "Toast POS",
+    "description": "Toast POS tracks restaurant sales transactions, dining orders, menu catalogs, and labor payroll ledgers.",
+    "image": "https://www.google.com/s2/favicons?domain=toasttab.com&sz=128",
+    "app_name": "toast_pos",
+    "isAvailable": true
+  },
+  {
+    "title": "Todoist",
+    "description": "Todoist is a task management tool allowing users to create to-do lists, set deadlines, and collaborate on projects with reminders and cross-platform syncing.",
+    "image": "/assets/apps-logos/todoist.svg",
+    "app_name": "todoist",
     "isAvailable": true
   },
   {
@@ -5860,10 +6266,31 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "TouchBistro",
+    "description": "TouchBistro POS is a dedicated iPad restaurant management system tracking table flows, staff tips, and sales.",
+    "image": "https://www.google.com/s2/favicons?domain=touchbistro.com&sz=128",
+    "app_name": "touchbistro",
+    "isAvailable": true
+  },
+  {
     "title": "Tpscheck",
     "description": "Integrate Tpscheck to seamlessly execute automated workflows, synchronize data, and orchestrate Tpscheck actions directly within Alti.",
     "image": "https://logos.composio.dev/api/tpscheck",
     "app_name": "tpscheck",
+    "isAvailable": true
+  },
+  {
+    "title": "Treez",
+    "description": "Treez is a cannabis POS and automated cashless payment system tracking retail drawers and wholesale trends.",
+    "image": "https://www.google.com/s2/favicons?domain=treez.io&sz=128",
+    "app_name": "treez",
+    "isAvailable": true
+  },
+  {
+    "title": "Trello",
+    "description": "A web-based, kanban-style, list-making application.",
+    "image": "/assets/apps-logos/trello.svg",
+    "app_name": "trello",
     "isAvailable": true
   },
   {
@@ -5902,6 +6329,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Twilio",
+    "description": "Twilio coordinates private cloud communications, tracking SMS campaigns, phone logs, and message telemetry.",
+    "image": "https://www.google.com/s2/favicons?domain=twilio.com&sz=128",
+    "app_name": "twilio",
+    "isAvailable": true
+  },
+  {
     "title": "Twitch",
     "description": "Integrate Twitch to seamlessly execute automated workflows, synchronize data, and orchestrate Twitch actions directly within Alti.",
     "image": "https://logos.composio.dev/api/twitch",
@@ -5916,10 +6350,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Twitter Media",
+    "description": "Twitter Media focuses on multimedia tools and features within Twitter, allowing brands to leverage rich content for marketing campaigns.",
+    "image": "/assets/apps-logos/twitter.png",
+    "app_name": "twitter_media",
+    "isAvailable": false
+  },
+  {
     "title": "Twocaptcha",
     "description": "Integrate Twocaptcha to seamlessly execute automated workflows, synchronize data, and orchestrate Twocaptcha actions directly within Alti.",
     "image": "https://logos.composio.dev/api/twocaptcha",
     "app_name": "twocaptcha",
+    "isAvailable": true
+  },
+  {
+    "title": "Typefully",
+    "description": "Typefully is a platform for creating and managing AI-powered content.",
+    "image": "/assets/apps-logos/typefully.png",
+    "app_name": "typefully",
     "isAvailable": true
   },
   {
@@ -5976,6 +6424,20 @@ export const allApps: APP[] = [
     "description": "Integrate V0 to seamlessly execute automated workflows, synchronize data, and orchestrate V0 actions directly within Alti.",
     "image": "https://logos.composio.dev/api/v0",
     "app_name": "v0",
+    "isAvailable": true
+  },
+  {
+    "title": "Vagaro",
+    "description": "Vagaro is a popular salon, spa, and beauty booking POS managing stylist calendars and rentals.",
+    "image": "https://www.google.com/s2/favicons?domain=vagaro.com&sz=128",
+    "app_name": "vagaro",
+    "isAvailable": true
+  },
+  {
+    "title": "Veeva Vault",
+    "description": "Veeva Vault manages biotech clinical trials, pharmaceutical drug approvals, and lifecare regulatory docs.",
+    "image": "https://www.google.com/s2/favicons?domain=veeva.com&sz=128",
+    "app_name": "veeva_vault",
     "isAvailable": true
   },
   {
@@ -6091,6 +6553,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Webex",
+    "description": "Webex is a Cisco-powered video conferencing and collaboration platform offering online meetings, webinars, screen sharing, and team messaging.",
+    "image": "/assets/apps-logos/webex.png",
+    "app_name": "webex",
+    "isAvailable": true
+  },
+  {
+    "title": "Webflow",
+    "description": "Webflow is a no-code website design and hosting platform, letting users build responsive sites, launch online stores, and maintain content without coding.",
+    "image": "/assets/apps-logos/webflow.jpeg",
+    "app_name": "webflow",
+    "isAvailable": true
+  },
+  {
     "title": "Webscraping AI",
     "description": "Integrate Webscraping AI to seamlessly execute automated workflows, synchronize data, and orchestrate Webscraping AI actions directly within Alti.",
     "image": "https://logos.composio.dev/api/webscraping_ai",
@@ -6133,6 +6609,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Wix Stores",
+    "description": "Wix Stores integrates digital storefronts, managing online inventory, transaction orders, and subscriber databases.",
+    "image": "https://www.google.com/s2/favicons?domain=wix.com&sz=128",
+    "app_name": "wix",
+    "isAvailable": true
+  },
+  {
     "title": "Wiz",
     "description": "Integrate Wiz to seamlessly execute automated workflows, synchronize data, and orchestrate Wiz actions directly within Alti.",
     "image": "https://logos.composio.dev/api/wiz",
@@ -6144,6 +6627,13 @@ export const allApps: APP[] = [
     "description": "Integrate Wolfram Alpha API to seamlessly execute automated workflows, synchronize data, and orchestrate Wolfram Alpha API actions directly within Alti.",
     "image": "https://logos.composio.dev/api/wolfram_alpha_api",
     "app_name": "wolfram_alpha_api",
+    "isAvailable": true
+  },
+  {
+    "title": "WooCommerce",
+    "description": "WooCommerce integrates open-source e-commerce stores, managing WordPress products, sales transactions, and inventory logs.",
+    "image": "https://www.google.com/s2/favicons?domain=woocommerce.com&sz=128",
+    "app_name": "woocommerce",
     "isAvailable": true
   },
   {
@@ -6168,10 +6658,31 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Workday Financials",
+    "description": "Workday Financials manages enterprise general ledgers, corporate budgets, and operational business planning.",
+    "image": "https://www.google.com/s2/favicons?domain=workday.com&sz=128",
+    "app_name": "workday_financials",
+    "isAvailable": true
+  },
+  {
+    "title": "Workiom",
+    "description": "Workiom allows businesses to create custom workflows, integrate apps, and automate processes, reducing manual overhead and streamlining operations.",
+    "image": "/assets/apps-logos/workiom.jpeg",
+    "app_name": "workiom",
+    "isAvailable": true
+  },
+  {
     "title": "Worksnaps",
     "description": "Integrate Worksnaps to seamlessly execute automated workflows, synchronize data, and orchestrate Worksnaps actions directly within Alti.",
     "image": "https://logos.composio.dev/api/worksnaps",
     "app_name": "worksnaps",
+    "isAvailable": true
+  },
+  {
+    "title": "Wrike",
+    "description": "Wrike is a project management and collaboration tool offering customizable workflows, Gantt charts, reporting, and resource management to boost team productivity.",
+    "image": "/assets/apps-logos/wrike.png",
+    "app_name": "wrike",
     "isAvailable": true
   },
   {
@@ -6182,10 +6693,31 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Xero",
+    "description": "Xero is a cloud-based accounting software for small businesses, providing invoicing, bank reconciliation, bookkeeping, and financial reporting in real time.",
+    "image": "/assets/apps-logos/xero.svg",
+    "app_name": "xero",
+    "isAvailable": true
+  },
+  {
     "title": "Y Gy",
     "description": "Integrate Y Gy to seamlessly execute automated workflows, synchronize data, and orchestrate Y Gy actions directly within Alti.",
     "image": "https://logos.composio.dev/api/y_gy",
     "app_name": "y_gy",
+    "isAvailable": true
+  },
+  {
+    "title": "Yandex",
+    "description": "Yandex is a Russian internet services provider offering search, email, navigation, and other web-based solutions, often referred to as “Russia’s Google”.",
+    "image": "/assets/apps-logos/yandex.svg",
+    "app_name": "yandex",
+    "isAvailable": true
+  },
+  {
+    "title": "Yardi Systems",
+    "description": "Yardi is an enterprise real estate and asset performance ERP managing general ledger logs.",
+    "image": "https://www.google.com/s2/favicons?domain=yardi.com&sz=128",
+    "app_name": "yardi_systems",
     "isAvailable": true
   },
   {
@@ -6200,6 +6732,41 @@ export const allApps: APP[] = [
     "description": "Integrate Ynab to seamlessly execute automated workflows, synchronize data, and orchestrate Ynab actions directly within Alti.",
     "image": "https://logos.composio.dev/api/ynab",
     "app_name": "ynab",
+    "isAvailable": true
+  },
+  {
+    "title": "You Search",
+    "description": "You Search is a search engine or search tool that enables users to find relevant information, possibly with enhanced filtering or privacy-focused features.",
+    "image": "/assets/apps-logos/you.webp",
+    "app_name": "yousearch",
+    "isAvailable": true
+  },
+  {
+    "title": "YouTube",
+    "description": "YouTube is a video-sharing platform with user-generated content, live streaming, and monetization opportunities, widely used for marketing, education, and entertainment.",
+    "image": "/assets/apps-logos/youtube.svg",
+    "app_name": "youtube",
+    "isAvailable": true
+  },
+  {
+    "title": "Zendesk",
+    "description": "Zendesk provides customer support software with ticketing, live chat, and knowledge base features, enabling efficient helpdesk operations and customer engagement.",
+    "image": "/assets/apps-logos/zendesk.svg",
+    "app_name": "zendesk",
+    "isAvailable": true
+  },
+  {
+    "title": "Zenoti",
+    "description": "Zenoti is an enterprise spa and salon franchise software system tracking multi-location transactions.",
+    "image": "https://www.google.com/s2/favicons?domain=zenoti.com&sz=128",
+    "app_name": "zenoti",
+    "isAvailable": true
+  },
+  {
+    "title": "ZenRows",
+    "description": "ZenRows is a web scraping API allowing developers to bypass CAPTCHAs and blocks, gather structured data from dynamic websites, and quickly integrate results into applications.",
+    "image": "/assets/apps-logos/zenrows.jpeg",
+    "app_name": "zenrows",
     "isAvailable": true
   },
   {
@@ -6224,6 +6791,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Zoho",
+    "description": "Zoho is a suite of cloud applications including CRM, email marketing, and collaboration tools, enabling businesses to automate and scale operations.",
+    "image": "/assets/apps-logos/zoho.png",
+    "app_name": "zoho",
+    "isAvailable": true
+  },
+  {
+    "title": "Zoho Bigin",
+    "description": "Zoho Bigin is a simplified CRM solution from Zoho tailored for small businesses, focusing on pipeline tracking and relationship management.",
+    "image": "/assets/apps-logos/zoho.png",
+    "app_name": "zoho_bigin",
+    "isAvailable": true
+  },
+  {
     "title": "Zoho Books",
     "description": "Integrate Zoho Books to seamlessly execute automated workflows, synchronize data, and orchestrate Zoho Books actions directly within Alti.",
     "image": "https://logos.composio.dev/api/zoho_books",
@@ -6245,10 +6826,31 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Zoho Invoice",
+    "description": "Zoho Invoice simplifies billing, recurring payments, and expense management, helping freelancers and small businesses send professional invoices.",
+    "image": "/assets/apps-logos/zoho.png",
+    "app_name": "zoho_invoice",
+    "isAvailable": true
+  },
+  {
     "title": "Zoho Mail",
     "description": "Integrate Zoho Mail to seamlessly execute automated workflows, synchronize data, and orchestrate Zoho Mail actions directly within Alti.",
     "image": "https://logos.composio.dev/api/zoho_mail",
     "app_name": "zoho_mail",
+    "isAvailable": true
+  },
+  {
+    "title": "Zoom",
+    "description": "Zoom is a video conferencing and online meeting platform featuring breakout rooms, screen sharing, and integrations with various enterprise tools.",
+    "image": "/assets/apps-logos/zoom.svg",
+    "app_name": "zoom",
+    "isAvailable": true
+  },
+  {
+    "title": "Zoominfo",
+    "description": "AgencyZoom is for the P&C insurance agent that's looking to increase sales, boost retention and analyze agency & producer performance.",
+    "image": "/assets/apps-logos/zoominfo.ico",
+    "app_name": "zoominfo",
     "isAvailable": true
   },
   {
@@ -6263,650 +6865,6 @@ export const allApps: APP[] = [
     "description": "Integrate Zyte API to seamlessly execute automated workflows, synchronize data, and orchestrate Zyte API actions directly within Alti.",
     "image": "https://logos.composio.dev/api/zyte_api",
     "app_name": "zyte_api",
-    "isAvailable": true
-  },
-  {
-    "title": "Toast POS",
-    "description": "Toast POS is a leading restaurant management platform integrating front-of-house, back-of-house, and online ordering database systems.",
-    "image": "https://www.google.com/s2/favicons?domain=toasttab.com&sz=128",
-    "app_name": "toast",
-    "isAvailable": true
-  },
-  {
-    "title": "Dutchie POS",
-    "description": "Dutchie POS is a premier cannabis retail and e-commerce platform managing compliant transaction records and inventory.",
-    "image": "https://www.google.com/s2/favicons?domain=dutchie.com&sz=128",
-    "app_name": "dutchie",
-    "isAvailable": true
-  },
-  {
-    "title": "Oracle MICROS",
-    "description": "Oracle MICROS POS delivers enterprise-grade hospitality and restaurant transaction management globally.",
-    "image": "https://www.google.com/s2/favicons?domain=oracle.com&sz=128",
-    "app_name": "oracle_micros",
-    "isAvailable": true
-  },
-  {
-    "title": "NCR Aloha",
-    "description": "NCR Aloha POS provides reliable restaurant point-of-sale terminal management and retail workflow logs.",
-    "image": "https://www.google.com/s2/favicons?domain=ncr.com&sz=128",
-    "app_name": "ncr_aloha",
-    "isAvailable": true
-  },
-  {
-    "title": "Clover POS",
-    "description": "Clover POS integrates small-business payment terminals, merchant services, and customer loyalty histories.",
-    "image": "https://www.google.com/s2/favicons?domain=clover.com&sz=128",
-    "app_name": "clover",
-    "isAvailable": true
-  },
-  {
-    "title": "TouchBistro",
-    "description": "TouchBistro POS is a dedicated iPad restaurant management system tracking table flows, staff tips, and sales.",
-    "image": "https://www.google.com/s2/favicons?domain=touchbistro.com&sz=128",
-    "app_name": "touchbistro",
-    "isAvailable": true
-  },
-  {
-    "title": "Revel Systems",
-    "description": "Revel Systems POS provides cloud-based iPad retail and quick-service operations tracking ingredient-level inventory.",
-    "image": "https://www.google.com/s2/favicons?domain=revelsystems.com&sz=128",
-    "app_name": "revel_systems",
-    "isAvailable": true
-  },
-  {
-    "title": "Flowhub",
-    "description": "Flowhub is a compliant cannabis retail POS managing seed-to-sale Metrc databases and compliance logs.",
-    "image": "https://www.google.com/s2/favicons?domain=flowhub.com&sz=128",
-    "app_name": "flowhub",
-    "isAvailable": true
-  },
-  {
-    "title": "Cova",
-    "description": "Cova POS is a robust, compliance-centric cannabis retail system tracking excise taxes and state-limit allocations.",
-    "image": "https://www.google.com/s2/favicons?domain=covasoftware.com&sz=128",
-    "app_name": "cova",
-    "isAvailable": true
-  },
-  {
-    "title": "Treez",
-    "description": "Treez is a cannabis POS and automated cashless payment system tracking retail drawers and wholesale trends.",
-    "image": "https://www.google.com/s2/favicons?domain=treez.io&sz=128",
-    "app_name": "treez",
-    "isAvailable": true
-  },
-  {
-    "title": "Mindbody",
-    "description": "Mindbody is the leading fitness, yoga, and wellness class scheduling and membership management system.",
-    "image": "https://www.google.com/s2/favicons?domain=mindbodyonline.com&sz=128",
-    "app_name": "mindbody",
-    "isAvailable": true
-  },
-  {
-    "title": "Vagaro",
-    "description": "Vagaro is a popular salon, spa, and beauty booking POS managing stylist calendars and rentals.",
-    "image": "https://www.google.com/s2/favicons?domain=vagaro.com&sz=128",
-    "app_name": "vagaro",
-    "isAvailable": true
-  },
-  {
-    "title": "Boulevard",
-    "description": "Boulevard is a premium beauty salon and spa management platform tracking client intake and bookings.",
-    "image": "https://www.google.com/s2/favicons?domain=joinblvd.com&sz=128",
-    "app_name": "boulevard",
-    "isAvailable": true
-  },
-  {
-    "title": "Zenoti",
-    "description": "Zenoti is an enterprise spa and salon franchise software system tracking multi-location transactions.",
-    "image": "https://www.google.com/s2/favicons?domain=zenoti.com&sz=128",
-    "app_name": "zenoti",
-    "isAvailable": true
-  },
-  {
-    "title": "Lightspeed Retail",
-    "description": "Lightspeed POS manages multi-location retail store inventories, purchase orders, and customer records.",
-    "image": "https://www.google.com/s2/favicons?domain=lightspeedhq.com&sz=128",
-    "app_name": "lightspeed",
-    "isAvailable": true
-  },
-  {
-    "title": "Oracle NetSuite",
-    "description": "Oracle NetSuite is a leading enterprise cloud ERP managing general ledgers, CRM, and supply chain databases.",
-    "image": "https://www.google.com/s2/favicons?domain=netsuite.com&sz=128",
-    "app_name": "oracle_netsuite",
-    "isAvailable": true
-  },
-  {
-    "title": "Epicor",
-    "description": "Epicor is a powerful industrial ERP system tracking manufacturing bill-of-materials and warehouse logs.",
-    "image": "https://www.google.com/s2/favicons?domain=epicor.com&sz=128",
-    "app_name": "epicor",
-    "isAvailable": true
-  },
-  {
-    "title": "Athenahealth",
-    "description": "Athenahealth EHR manages medical practice calendars, billing codes, and insurance claims.",
-    "image": "https://www.google.com/s2/favicons?domain=athenahealth.com&sz=128",
-    "app_name": "athenahealth",
-    "isAvailable": true
-  },
-  {
-    "title": "DrChrono",
-    "description": "DrChrono is a mobile-first EHR practice management platform tracking clinical notes and scheduling.",
-    "image": "https://www.google.com/s2/favicons?domain=drchrono.com&sz=128",
-    "app_name": "drchrono",
-    "isAvailable": true
-  },
-  {
-    "title": "Open Dental",
-    "description": "Open Dental EHR manages comprehensive patient dental charting, scheduling, and lab reports.",
-    "image": "https://www.google.com/s2/favicons?domain=opendental.com&sz=128",
-    "app_name": "open_dental",
-    "isAvailable": true
-  },
-  {
-    "title": "Dentrix",
-    "description": "Dentrix is an enterprise dental clinic practice management database tracking treatment plans.",
-    "image": "https://www.google.com/s2/favicons?domain=dentrix.com&sz=128",
-    "app_name": "dentrix",
-    "isAvailable": true
-  },
-  {
-    "title": "Jane App",
-    "description": "Jane App is a specialized clinic booking and charting database for practitioners and therapists.",
-    "image": "https://www.google.com/s2/favicons?domain=jane.app&sz=128",
-    "app_name": "jane_app",
-    "isAvailable": true
-  },
-  {
-    "title": "AppFolio",
-    "description": "AppFolio is a top property management database tracking tenant lease ledgers and maintenance requests.",
-    "image": "https://www.google.com/s2/favicons?domain=appfolio.com&sz=128",
-    "app_name": "appfolio",
-    "isAvailable": true
-  },
-  {
-    "title": "Yardi Systems",
-    "description": "Yardi is an enterprise real estate and asset performance ERP managing general ledger logs.",
-    "image": "https://www.google.com/s2/favicons?domain=yardi.com&sz=128",
-    "app_name": "yardi_systems",
-    "isAvailable": true
-  },
-  {
-    "title": "Entrata",
-    "description": "Entrata is a multifamily property leasing and rent collection platform tracking tenant profiles.",
-    "image": "https://www.google.com/s2/favicons?domain=entrata.com&sz=128",
-    "app_name": "entrata",
-    "isAvailable": true
-  },
-  {
-    "title": "CoinGecko",
-    "description": "CoinGecko provides independent cryptocurrency prices, trading volumes, and global crypto market capitalization charts.",
-    "image": "https://www.google.com/s2/favicons?domain=coingecko.com&sz=128",
-    "app_name": "coingecko",
-    "isAvailable": true
-  },
-  {
-    "title": "ExchangeRate-API",
-    "description": "ExchangeRate-API provides fast, reliable real-time and historical global currency conversion rates.",
-    "image": "https://www.google.com/s2/favicons?domain=exchangerate-api.com&sz=128",
-    "app_name": "exchangerate",
-    "isAvailable": true
-  },
-  {
-    "title": "OMDb API",
-    "description": "OMDb API (Open Movie Database) provides comprehensive movie/show metadata, IMDb ratings, and poster assets.",
-    "image": "https://www.google.com/s2/favicons?domain=omdbapi.com&sz=128",
-    "app_name": "omdb",
-    "isAvailable": true
-  },
-  {
-    "title": "Rainforest API",
-    "description": "Rainforest API retrieves structured real-time e-commerce catalog pricing, product logs, and reviews from Amazon.",
-    "image": "https://www.google.com/s2/favicons?domain=rainforestapi.com&sz=128",
-    "app_name": "rainforest",
-    "isAvailable": true
-  },
-  {
-    "title": "CoinAPI",
-    "description": "CoinAPI provides standard cryptocurrency market data, integration feeds, and pricing histories across 100+ exchanges.",
-    "image": "https://www.google.com/s2/favicons?domain=coinapi.io&sz=128",
-    "app_name": "coinapi",
-    "isAvailable": true
-  },
-  {
-    "title": "Procore",
-    "description": "Procore is an enterprise construction project management database tracking submittals, RFIs, and construction logs.",
-    "image": "https://www.google.com/s2/favicons?domain=procore.com&sz=128",
-    "app_name": "procore",
-    "isAvailable": true
-  },
-  {
-    "title": "Clio",
-    "description": "Clio is an enterprise legal practice management platform tracking case files, billable hours, and client trust accounts.",
-    "image": "https://www.google.com/s2/favicons?domain=clio.com&sz=128",
-    "app_name": "clio",
-    "isAvailable": true
-  },
-  {
-    "title": "LSEG Workspace",
-    "description": "LSEG Workspace provides enterprise investment research, global financial market data feeds, and transactional analytics.",
-    "image": "https://www.google.com/s2/favicons?domain=lseg.com&sz=128",
-    "app_name": "lseg",
-    "isAvailable": true
-  },
-  {
-    "title": "FactSet",
-    "description": "FactSet integrates robust financial data, portfolio analytics, and multi-asset class market research for investment professionals.",
-    "image": "https://www.google.com/s2/favicons?domain=factset.com&sz=128",
-    "app_name": "factset",
-    "isAvailable": true
-  },
-  {
-    "title": "PitchBook",
-    "description": "PitchBook provides comprehensive data on the global venture capital, private equity, and M&A markets.",
-    "image": "https://www.google.com/s2/favicons?domain=pitchbook.com&sz=128",
-    "app_name": "pitchbook",
-    "isAvailable": true
-  },
-  {
-    "title": "Bloomberg Professional",
-    "description": "Bloomberg Professional connects financial professionals to real-time market data, transaction networks, and portfolio tools.",
-    "image": "https://www.google.com/s2/favicons?domain=bloomberg.com&sz=128",
-    "app_name": "bloomberg",
-    "isAvailable": true
-  },
-  {
-    "title": "S&P Capital IQ",
-    "description": "S&P Capital IQ delivers comprehensive global market intelligence, financial analytics, and corporate profile research.",
-    "image": "https://www.google.com/s2/favicons?domain=spglobal.com&sz=128",
-    "app_name": "capitaliq",
-    "isAvailable": true
-  },
-  {
-    "title": "Crunchbase Enterprise",
-    "description": "Crunchbase Enterprise tracks private company profiles, funding histories, founding teams, and investment logs.",
-    "image": "https://www.google.com/s2/favicons?domain=crunchbase.com&sz=128",
-    "app_name": "crunchbase",
-    "isAvailable": true
-  },
-  {
-    "title": "Carta",
-    "description": "Carta tracks startup equity, handles 409A valuations, and automates venture capital fund administration.",
-    "image": "https://www.google.com/s2/favicons?domain=carta.com&sz=128",
-    "app_name": "carta",
-    "isAvailable": true
-  },
-  {
-    "title": "Preqin",
-    "description": "Preqin provides comprehensive alternative assets market intelligence, hedge fund tracking, and PE fund benchmark metrics.",
-    "image": "https://www.google.com/s2/favicons?domain=preqin.com&sz=128",
-    "app_name": "preqin",
-    "isAvailable": true
-  },
-  {
-    "title": "eFront",
-    "description": "eFront is a leading software platform for General Partners and Limited Partners to manage alternative investment portfolios.",
-    "image": "https://www.google.com/s2/favicons?domain=efront.com&sz=128",
-    "app_name": "efront",
-    "isAvailable": true
-  },
-  {
-    "title": "Oracle NetSuite",
-    "description": "Oracle NetSuite is a comprehensive enterprise cloud ERP managing general ledgers, financial planning, and inventory logs.",
-    "image": "https://www.google.com/s2/favicons?domain=netsuite.com&sz=128",
-    "app_name": "netsuite",
-    "isAvailable": true
-  },
-  {
-    "title": "Workday",
-    "description": "Workday is an enterprise human capital and financial management system managing corporate directory databases.",
-    "image": "https://www.google.com/s2/favicons?domain=workday.com&sz=128",
-    "app_name": "workday",
-    "isAvailable": true
-  },
-  {
-    "title": "Amazon S3",
-    "description": "Amazon S3 provides secure cloud object storage to ingest, index, and query unstructured corporate file folders and documents.",
-    "image": "https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=128",
-    "app_name": "amazon_s3",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Cloud Storage",
-    "description": "Google Cloud Storage provides scalable enterprise object storage buckets to index, store, and query corporate PDF archives.",
-    "image": "https://www.google.com/s2/favicons?domain=cloud.google.com&sz=128",
-    "app_name": "gcs",
-    "isAvailable": true
-  },
-  {
-    "title": "MongoDB Atlas",
-    "description": "MongoDB Atlas is a cloud document database powering dynamic application data stores and custom collections.",
-    "image": "https://www.google.com/s2/favicons?domain=mongodb.com&sz=128",
-    "app_name": "mongodb_atlas",
-    "isAvailable": true
-  },
-  {
-    "title": "Argus Enterprise",
-    "description": "Argus Enterprise is the industry standard commercial real estate asset valuation and leasing cash flow modeling database.",
-    "image": "https://www.google.com/s2/favicons?domain=altusgroup.com&sz=128",
-    "app_name": "argus",
-    "isAvailable": true
-  },
-  {
-    "title": "Buildium",
-    "description": "Buildium is an all-in-one property management database tracking tenant ledger accounts and work order logs.",
-    "image": "https://www.google.com/s2/favicons?domain=buildium.com&sz=128",
-    "app_name": "buildium",
-    "isAvailable": true
-  },
-  {
-    "title": "iManage",
-    "description": "iManage is the leading legal document management system tracking secure client matters, emails, and file archives.",
-    "image": "https://www.google.com/s2/favicons?domain=imanage.com&sz=128",
-    "app_name": "imanage",
-    "isAvailable": true
-  },
-  {
-    "title": "NetDocuments",
-    "description": "NetDocuments is a cloud-native document management platform organizing secure corporate files, litigation sheets, and legal contracts.",
-    "image": "https://www.google.com/s2/favicons?domain=netdocuments.com&sz=128",
-    "app_name": "netdocuments",
-    "isAvailable": true
-  },
-  {
-    "title": "Addepar",
-    "description": "Addepar aggregates wealth portfolio holdings, tracking investment returns, client distributions, and multi-asset performance.",
-    "image": "https://www.google.com/s2/favicons?domain=addepar.com&sz=128",
-    "app_name": "addepar",
-    "isAvailable": true
-  },
-  {
-    "title": "Tableau",
-    "description": "Tableau connects dynamic corporate sales dashboards, analytics visualizations, and business intelligence sheets.",
-    "image": "https://www.google.com/s2/favicons?domain=tableau.com&sz=128",
-    "app_name": "tableau",
-    "isAvailable": true
-  },
-  {
-    "title": "Databricks",
-    "description": "Databricks is a unified data lakehouse database managing transactional raw logs and advanced analytics data pools.",
-    "image": "https://www.google.com/s2/favicons?domain=databricks.com&sz=128",
-    "app_name": "databricks",
-    "isAvailable": true
-  },
-  {
-    "title": "CoStar Group",
-    "description": "CoStar Group provides standard commercial real estate asset histories, vacancy rates, and transaction directories.",
-    "image": "https://www.google.com/s2/favicons?domain=costar.com&sz=128",
-    "app_name": "costar",
-    "isAvailable": true
-  },
-  {
-    "title": "Okta",
-    "description": "Okta is a cloud identity single sign-on database managing employee profiles, application access logs, and MFA checks.",
-    "image": "https://www.google.com/s2/favicons?domain=okta.com&sz=128",
-    "app_name": "okta",
-    "isAvailable": true
-  },
-  {
-    "title": "Gong.io",
-    "description": "Gong.io records, transcribes, and analyzes sales meeting audio and contract negotiation logs.",
-    "image": "https://www.google.com/s2/favicons?domain=gong.io&sz=128",
-    "app_name": "gong",
-    "isAvailable": true
-  },
-  {
-    "title": "Salesloft",
-    "description": "Salesloft manages cold outreach email campaigns, sales sequence templates, and lead response logs.",
-    "image": "https://www.google.com/s2/favicons?domain=salesloft.com&sz=128",
-    "app_name": "salesloft",
-    "isAvailable": true
-  },
-  {
-    "title": "Outreach",
-    "description": "Outreach.io is a sales execution platform coordinating buyer engagement campaigns and pipeline outreach logs.",
-    "image": "https://www.google.com/s2/favicons?domain=outreach.io&sz=128",
-    "app_name": "outreach",
-    "isAvailable": true
-  },
-  {
-    "title": "Aha! Roadmaps",
-    "description": "Aha! Roadmaps tracks enterprise product strategies, feature release schedules, and product launch timelines.",
-    "image": "https://www.google.com/s2/favicons?domain=aha.io&sz=128",
-    "app_name": "aha",
-    "isAvailable": true
-  },
-  {
-    "title": "Productboard",
-    "description": "Productboard prioritizes product feedback loops, feature requests, and conversational customer feedback logs.",
-    "image": "https://www.google.com/s2/favicons?domain=productboard.com&sz=128",
-    "app_name": "productboard",
-    "isAvailable": true
-  },
-  {
-    "title": "Chargebee",
-    "description": "Chargebee manages SaaS subscription billing analytics, recurring contract invoicing, and payment ledgers.",
-    "image": "https://www.google.com/s2/favicons?domain=chargebee.com&sz=128",
-    "app_name": "chargebee",
-    "isAvailable": true
-  },
-  {
-    "title": "Plaid",
-    "description": "Plaid connects private banking accounts to sync transactions, account balances, and credit details.",
-    "image": "https://www.google.com/s2/favicons?domain=plaid.com&sz=128",
-    "app_name": "plaid",
-    "isAvailable": true
-  },
-  {
-    "title": "Brex",
-    "description": "Brex tracks corporate card spends, corporate cash balances, and company credit ledgers.",
-    "image": "https://www.google.com/s2/favicons?domain=brex.com&sz=128",
-    "app_name": "brex",
-    "isAvailable": true
-  },
-  {
-    "title": "LexisNexis",
-    "description": "LexisNexis provides access to legal research cases, regulatory filings, and global public records databases.",
-    "image": "https://www.google.com/s2/favicons?domain=lexisnexis.com&sz=128",
-    "app_name": "lexisnexis",
-    "isAvailable": true
-  },
-  {
-    "title": "Filevine",
-    "description": "Filevine organizes legal case management sheets, litigation documents, and client communication timelines.",
-    "image": "https://www.google.com/s2/favicons?domain=filevine.com&sz=128",
-    "app_name": "filevine",
-    "isAvailable": true
-  },
-  {
-    "title": "Epic Systems",
-    "description": "Epic EHR tracks clinical charts, patient medical sheets, and healthcare provider treatment records.",
-    "image": "https://www.google.com/s2/favicons?domain=epic.com&sz=128",
-    "app_name": "epic_systems",
-    "isAvailable": true
-  },
-  {
-    "title": "Veeva Vault",
-    "description": "Veeva Vault manages biotech clinical trials, pharmaceutical drug approvals, and lifecare regulatory docs.",
-    "image": "https://www.google.com/s2/favicons?domain=veeva.com&sz=128",
-    "app_name": "veeva_vault",
-    "isAvailable": true
-  },
-  {
-    "title": "Workday Financials",
-    "description": "Workday Financials manages enterprise general ledgers, corporate budgets, and operational business planning.",
-    "image": "https://www.google.com/s2/favicons?domain=workday.com&sz=128",
-    "app_name": "workday_financials",
-    "isAvailable": true
-  },
-  {
-    "title": "ServiceNow ITSM",
-    "description": "ServiceNow ITSM tracks enterprise IT support tickets, hardware assets, and network operations databases.",
-    "image": "https://www.google.com/s2/favicons?domain=servicenow.com&sz=128",
-    "app_name": "servicenow_itsm",
-    "isAvailable": true
-  },
-  {
-    "title": "Toast POS",
-    "description": "Toast POS tracks restaurant sales transactions, dining orders, menu catalogs, and labor payroll ledgers.",
-    "image": "https://www.google.com/s2/favicons?domain=toasttab.com&sz=128",
-    "app_name": "toast_pos",
-    "isAvailable": true
-  },
-  {
-    "title": "OpenTable",
-    "description": "OpenTable tracks dining guest lists, restaurant table reservations, and restaurant client directories.",
-    "image": "https://www.google.com/s2/favicons?domain=opentable.com&sz=128",
-    "app_name": "opentable",
-    "isAvailable": true
-  },
-  {
-    "title": "Encompass Mortgage",
-    "description": "Encompass processes private mortgage loan originations, property appraisals, and underwriting sheets.",
-    "image": "https://www.google.com/s2/favicons?domain=icemortgagetechnology.com&sz=128",
-    "app_name": "encompass_mortgage",
-    "isAvailable": true
-  },
-  {
-    "title": "Guidewire",
-    "description": "Guidewire tracks insurance policy underwriting, claim requests, and property insurance transaction logs.",
-    "image": "https://www.google.com/s2/favicons?domain=guidewire.com&sz=128",
-    "app_name": "guidewire",
-    "isAvailable": true
-  },
-  {
-    "title": "Sabre GDS",
-    "description": "Sabre connects airline schedules, hotel reservation blocks, and global travel inventory directories.",
-    "image": "https://www.google.com/s2/favicons?domain=sabre.com&sz=128",
-    "app_name": "sabre",
-    "isAvailable": true
-  },
-  {
-    "title": "Navitaire",
-    "description": "Navitaire organizes passenger ticket bookings, airline scheduling systems, and loyalty account ledgers.",
-    "image": "https://www.google.com/s2/favicons?domain=navitaire.com&sz=128",
-    "app_name": "navitaire",
-    "isAvailable": true
-  },
-  {
-    "title": "Twilio",
-    "description": "Twilio coordinates private cloud communications, tracking SMS campaigns, phone logs, and message telemetry.",
-    "image": "https://www.google.com/s2/favicons?domain=twilio.com&sz=128",
-    "app_name": "twilio",
-    "isAvailable": true
-  },
-  {
-    "title": "Samsara",
-    "description": "Samsara provides real-time fleet logistics tracking, commercial vehicle telemetry, and sensor data pipelines.",
-    "image": "https://www.google.com/s2/favicons?domain=samsara.com&sz=128",
-    "app_name": "samsara",
-    "isAvailable": true
-  },
-  {
-    "title": "Flexport",
-    "description": "Flexport tracks global ocean and air freight shipping containers, customs declarations, and supply chain logs.",
-    "image": "https://www.google.com/s2/favicons?domain=flexport.com&sz=128",
-    "app_name": "flexport",
-    "isAvailable": true
-  },
-  {
-    "title": "ShipStation",
-    "description": "ShipStation tracks retail e-commerce shipping labels, courier package statuses, and customer order logs.",
-    "image": "https://www.google.com/s2/favicons?domain=shipstation.com&sz=128",
-    "app_name": "shipstation",
-    "isAvailable": true
-  },
-  {
-    "title": "ShipBob",
-    "description": "ShipBob coordinates global omnifulfillment logistics, tracking inventory levels, order shipments, and 3PL center operations.",
-    "image": "https://www.google.com/s2/favicons?domain=shipbob.com&sz=128",
-    "app_name": "shipbob",
-    "isAvailable": true
-  },
-  {
-    "title": "Deliverr",
-    "description": "Deliverr manages fast-fulfillment logistics, tracking retail channels, inventory levels, and shipment pipelines.",
-    "image": "https://www.google.com/s2/favicons?domain=deliverr.com&sz=128",
-    "app_name": "deliverr",
-    "isAvailable": true
-  },
-  {
-    "title": "SkuVault",
-    "description": "SkuVault coordinates e-commerce inventory levels, tracking warehouse stock locations, purchase orders, and catalogs.",
-    "image": "https://www.google.com/s2/favicons?domain=skuvault.com&sz=128",
-    "app_name": "skuvault",
-    "isAvailable": true
-  },
-  {
-    "title": "Klaviyo",
-    "description": "Klaviyo coordinates e-commerce marketing analytics, tracking email campaign logs, SMS outreach, and customer behavior.",
-    "image": "https://www.google.com/s2/favicons?domain=klaviyo.com&sz=128",
-    "app_name": "klaviyo",
-    "isAvailable": true
-  },
-  {
-    "title": "Recharge Payments",
-    "description": "Recharge Payments manages recurring subscription transactions, customer subscription contracts, and billing analytics.",
-    "image": "https://www.google.com/s2/favicons?domain=rechargepayments.com&sz=128",
-    "app_name": "recharge",
-    "isAvailable": true
-  },
-  {
-    "title": "Amazon Seller Central",
-    "description": "Amazon Seller Central coordinates e-commerce sales campaigns, merchant inventory levels, pricing strategies, and shipment logs.",
-    "image": "https://www.google.com/s2/favicons?domain=sellercentral.amazon.com&sz=128",
-    "app_name": "amazon_seller",
-    "isAvailable": true
-  },
-  {
-    "title": "AWS (Amazon Web Services)",
-    "description": "AWS integrates cloud compute management, relational database instances, serverless functions, and infrastructure operations.",
-    "image": "https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=128",
-    "app_name": "aws",
-    "isAvailable": true
-  },
-  {
-    "title": "WooCommerce",
-    "description": "WooCommerce integrates open-source e-commerce stores, managing WordPress products, sales transactions, and inventory logs.",
-    "image": "https://www.google.com/s2/favicons?domain=woocommerce.com&sz=128",
-    "app_name": "woocommerce",
-    "isAvailable": true
-  },
-  {
-    "title": "BigCommerce",
-    "description": "BigCommerce connects SaaS e-commerce stores, tracking enterprise multi-channel products, customer orders, and payments.",
-    "image": "https://www.google.com/s2/favicons?domain=bigcommerce.com&sz=128",
-    "app_name": "bigcommerce",
-    "isAvailable": true
-  },
-  {
-    "title": "Magento (Adobe Commerce)",
-    "description": "Magento manages enterprise-scale e-commerce stores, tracking transactional orders, inventory levels, and customer profiles.",
-    "image": "https://www.google.com/s2/favicons?domain=adobe.com&sz=128",
-    "app_name": "magento",
-    "isAvailable": true
-  },
-  {
-    "title": "Squarespace Commerce",
-    "description": "Squarespace Commerce connects online retail stores, tracking product inventory, billing transactions, and customer invoices.",
-    "image": "https://www.google.com/s2/favicons?domain=squarespace.com&sz=128",
-    "app_name": "squarespace",
-    "isAvailable": true
-  },
-  {
-    "title": "Wix Stores",
-    "description": "Wix Stores integrates digital storefronts, managing online inventory, transaction orders, and subscriber databases.",
-    "image": "https://www.google.com/s2/favicons?domain=wix.com&sz=128",
-    "app_name": "wix",
-    "isAvailable": true
-  },
-  {
-    "title": "Salesforce Commerce Cloud",
-    "description": "Salesforce Commerce Cloud integrates enterprise-grade e-commerce transactions, inventory systems, and multi-channel customer records.",
-    "image": "https://www.google.com/s2/favicons?domain=salesforce.com&sz=128",
-    "app_name": "salesforce_commerce",
     "isAvailable": true
   }
 ];

@@ -16,14 +16,19 @@ export default function AppIntegrationsGrid() {
   );
 
   const filteredAndSorted = useMemo(() => {
-    return allApps
-      .filter(
-        app =>
-          app.title.toLowerCase().includes(query.toLowerCase()) &&
-          app.isAvailable,
-        // || app.description.toLowerCase().includes(query.toLowerCase()),
-      )
-      .sort((a, b) => a.title.localeCompare(b.title));
+    const uniqueMap = new Map<string, APP>();
+    allApps.forEach(app => {
+      if (app.isAvailable && app.app_name) {
+        const slug = app.app_name.toLowerCase();
+        if (!uniqueMap.has(slug)) {
+          uniqueMap.set(slug, app);
+        }
+      }
+    });
+
+    return Array.from(uniqueMap.values())
+      .filter(app => app.title.toLowerCase().includes(query.toLowerCase()))
+      .sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
   }, [query]);
 
   const connectedSlugs = useMemo(() => {
