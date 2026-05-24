@@ -99,6 +99,15 @@ function WorkflowsDashboardContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState<string>('all');
 
+  // Interactive Prompt Generator States
+  const [prompt, setPrompt] = useState('');
+  const [triggerType, setTriggerType] = useState<'action' | 'time'>('action');
+  const [actionTrigger, setActionTrigger] = useState('Notion Lead Added');
+  const [customAction, setCustomAction] = useState('');
+  const [timeTrigger, setTimeTrigger] = useState('Every Day @ 8am');
+  const [customSchedule, setCustomSchedule] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+
   const toggleWorkflowStatus = (id: string) => {
     setWorkflows(prev =>
       prev.map(wf => {
@@ -113,6 +122,79 @@ function WorkflowsDashboardContent() {
 
   const handleRunNow = (id: string) => {
     alert(`Triggering live manual execution for Workflow: ${workflows.find(w => w.id === id)?.name}`);
+  };
+
+  const handleCreateWorkflow = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!prompt.trim()) {
+      alert('Please prompt your workflow first!');
+      return;
+    }
+
+    setIsGenerating(true);
+
+    setTimeout(() => {
+      // Parse category
+      let category: 'research' | 'dev' | 'sales' | 'support' = 'research';
+      const promptLower = prompt.toLowerCase();
+      if (promptLower.includes('lead') || promptLower.includes('sale') || promptLower.includes('prospect')) {
+        category = 'sales';
+      } else if (promptLower.includes('code') || promptLower.includes('git') || promptLower.includes('vulnerab') || promptLower.includes('pr') || promptLower.includes('commit') || promptLower.includes('compile') || promptLower.includes('build')) {
+        category = 'dev';
+      } else if (promptLower.includes('support') || promptLower.includes('mail') || promptLower.includes('email') || promptLower.includes('ticket')) {
+        category = 'support';
+      }
+
+      // Parse app icons
+      const appsList: string[] = ['🤖'];
+      if (promptLower.includes('slack') || promptLower.includes('message') || promptLower.includes('chat')) appsList.push('💬');
+      if (promptLower.includes('notion')) appsList.push('📓');
+      if (promptLower.includes('git') || promptLower.includes('github') || promptLower.includes('commit') || promptLower.includes('code')) appsList.push('🐙');
+      if (promptLower.includes('mail') || promptLower.includes('email') || promptLower.includes('inbox')) appsList.push('✉️');
+      if (promptLower.includes('search') || promptLower.includes('google') || promptLower.includes('scrape') || promptLower.includes('web')) appsList.push('🌐');
+      if (promptLower.includes('database') || promptLower.includes('sql') || promptLower.includes('file')) appsList.push('📄');
+
+      // Determine trigger description
+      let finalTriggerDesc = '';
+      if (triggerType === 'action') {
+        finalTriggerDesc = actionTrigger === 'custom' 
+          ? `Action: ${customAction || 'If Custom Trigger Event'}` 
+          : `Action: ${actionTrigger}`;
+      } else {
+        finalTriggerDesc = timeTrigger === 'custom' 
+          ? `Cron: ${customSchedule || 'Custom Schedule'}` 
+          : `Cron: ${timeTrigger}`;
+      }
+
+      const stepsCount = Math.min(6, Math.max(3, Math.floor(prompt.length / 30) + 2));
+
+      const icons = {
+        research: '📊',
+        dev: '🛡️',
+        sales: '🎯',
+        support: '✉️'
+      };
+
+      const newWorkflow: WorkflowItem = {
+        id: `wf-${Date.now()}`,
+        name: prompt.split('. ')[0].substring(0, 45) + (prompt.length > 45 ? '...' : ''),
+        description: prompt,
+        trigger: finalTriggerDesc,
+        status: 'active',
+        lastRun: 'Just generated',
+        successRate: '100%',
+        apps: Array.from(new Set(appsList)),
+        stepsCount: stepsCount,
+        icon: icons[category] || '⚙️',
+        category: category
+      };
+
+      setWorkflows(prev => [newWorkflow, ...prev]);
+      setPrompt('');
+      setCustomAction('');
+      setCustomSchedule('');
+      setIsGenerating(false);
+    }, 1200);
   };
 
   const filteredWorkflows = workflows.filter(wf => {
@@ -139,6 +221,123 @@ function WorkflowsDashboardContent() {
           <Workflow className="h-56 w-56 stroke-[1px]" />
         </div>
       </div>
+
+      {/* Workflow Generator Prompt Box Card */}
+      <form onSubmit={handleCreateWorkflow} className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-3xl p-6 shadow-xs space-y-4 transition-all focus-within:shadow-md focus-within:border-indigo-500/50">
+        <div className="space-y-1">
+          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Prompt-Based Swarm Generator</label>
+          <textarea
+            rows={3}
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="Describe your automation in plain English... (e.g., 'Every morning, scrape L1 crypto trends from Google, compile a research report, and send a Slack message to #intel')"
+            className="w-full text-sm bg-transparent outline-none resize-none placeholder:text-gray-450 text-gray-900 dark:text-gray-50 border-b border-black/5 dark:border-gray-800/80 pb-3 leading-relaxed"
+          />
+        </div>
+
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
+          {/* Trigger settings selectors */}
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">When to trigger:</span>
+            
+            {/* Trigger Type Toggle */}
+            <div className="flex bg-gray-100 dark:bg-gray-900/60 p-0.5 rounded-lg border border-black/[0.03] dark:border-gray-800/50 flex-none">
+              <button
+                type="button"
+                onClick={() => setTriggerType('action')}
+                className={cn(
+                  "px-3 py-1 text-[11px] font-bold rounded-md transition-all cursor-pointer select-none",
+                  triggerType === 'action'
+                    ? "bg-white dark:bg-gray-800 text-indigo-650 dark:text-indigo-400 shadow-2xs font-extrabold"
+                    : "text-gray-500 hover:text-gray-850 dark:hover:text-gray-300"
+                )}
+              >
+                ⚡ Action/Event
+              </button>
+              <button
+                type="button"
+                onClick={() => setTriggerType('time')}
+                className={cn(
+                  "px-3 py-1 text-[11px] font-bold rounded-md transition-all cursor-pointer select-none",
+                  triggerType === 'time'
+                    ? "bg-white dark:bg-gray-800 text-indigo-650 dark:text-indigo-400 shadow-2xs font-extrabold"
+                    : "text-gray-500 hover:text-gray-850 dark:hover:text-gray-300"
+                )}
+              >
+                🕒 Time/Schedule
+              </button>
+            </div>
+
+            {/* Dynamic selectors */}
+            {triggerType === 'action' ? (
+              <div className="flex items-center gap-1.5 min-w-0">
+                <select
+                  value={actionTrigger}
+                  onChange={(e) => setActionTrigger(e.target.value)}
+                  className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg px-2.5 py-1.5 text-xs outline-none text-gray-700 dark:text-gray-300 cursor-pointer shadow-2xs transition-all hover:bg-gray-100/50 dark:hover:bg-gray-800/80"
+                >
+                  <option value="Notion Lead Added">On Notion Lead Added</option>
+                  <option value="Git Commit Push">On Git Push (Commit)</option>
+                  <option value="New Support Email">On New Support Email</option>
+                  <option value="Slack Message Sent">On Slack Workspace Activity</option>
+                  <option value="custom">Custom Condition...</option>
+                </select>
+                {actionTrigger === 'custom' && (
+                  <input
+                    type="text"
+                    value={customAction}
+                    onChange={(e) => setCustomAction(e.target.value)}
+                    placeholder="If this happens..."
+                    className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg px-2.5 py-1 text-xs outline-none text-gray-900 dark:text-gray-150 shadow-2xs max-w-[150px] animate-in slide-in-from-left-2 duration-200"
+                  />
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 min-w-0">
+                <select
+                  value={timeTrigger}
+                  onChange={(e) => setTimeTrigger(e.target.value)}
+                  className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg px-2.5 py-1.5 text-xs outline-none text-gray-700 dark:text-gray-300 cursor-pointer shadow-2xs transition-all hover:bg-gray-100/50 dark:hover:bg-gray-800/80"
+                >
+                  <option value="Every Day @ 8am">Every morning @ 8:00 AM</option>
+                  <option value="Every Week @ Monday 9am">Every Monday @ 9:00 AM</option>
+                  <option value="Every Hour">Every hour</option>
+                  <option value="Every Month @ 1st 12am">Monthly @ 1st 12:00 AM</option>
+                  <option value="custom">Custom CRON...</option>
+                </select>
+                {timeTrigger === 'custom' && (
+                  <input
+                    type="text"
+                    value={customSchedule}
+                    onChange={(e) => setCustomSchedule(e.target.value)}
+                    placeholder="e.g. 0 8 * * 1-5"
+                    className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg px-2.5 py-1 text-xs outline-none text-gray-900 dark:text-gray-150 shadow-2xs max-w-[150px] animate-in slide-in-from-left-2 duration-200"
+                  />
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Create button */}
+          <Button
+            type="submit"
+            disabled={isGenerating}
+            className="bg-indigo-650 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold px-4 py-2 h-9 flex items-center gap-1.5 shadow-xs transition-all active:scale-95 disabled:opacity-50 flex-none cursor-pointer"
+          >
+            {isGenerating ? (
+              <>
+                <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                Compiling Swarm...
+              </>
+            ) : (
+              <>
+                <Sparkles className="h-3.5 w-3.5" />
+                Create Swarm Workflow
+              </>
+            )}
+          </Button>
+        </div>
+      </form>
 
       {/* Stats row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
