@@ -55,30 +55,27 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   };
 
   return (
-    <aside className="w-80 flex-none flex flex-col border-l border-black/10 h-full overflow-hidden transition-all duration-300" style={{ backgroundColor: '#F2F3F5' }}>
+    <aside className="w-68 flex-none flex flex-col border-l border-black/10 h-full overflow-hidden transition-all duration-300" style={{ backgroundColor: '#F2F3F5' }}>
       {/* Header matching left side menu */}
       <header
         className="sticky top-0 z-30 flex items-center justify-between border-b border-black/10 px-4 pt-4 pb-4 flex-none"
         style={{ backgroundColor: '#F2F3F5' }}
       >
-        <button
+        <PanelLeftClose
+          className="size-5 cursor-pointer text-gray-600 transition-transform duration-300"
           onClick={toggleLeftSidebar}
-          className="p-1 rounded-md hover:bg-black/5 transition-colors"
-        >
-          {isLeftSidebarOpen ? (
-            <PanelLeft className="size-5 text-gray-600" />
-          ) : (
-            <PanelLeftClose className="size-5 text-gray-600" />
-          )}
-        </button>
+        />
 
-        <span className="text-sm font-bold text-gray-800 dark:text-gray-200">
+        <span className="text-sm font-bold text-gray-850 dark:text-gray-200">
           {bot.name}
         </span>
       </header>
 
       {/* Search & Actions Row matching left side menu */}
-      <div className="flex items-center justify-between gap-2 border-b border-black/10 px-4 py-4 transition-all duration-300 flex-none" style={{ backgroundColor: '#F2F3F5' }}>
+      <div
+        className="flex items-center justify-between gap-2 border-b border-black/10 px-4 py-4 transition-all duration-300 flex-none"
+        style={{ backgroundColor: '#F2F3F5' }}
+      >
         {/* Search Bar Input */}
         <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-white px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">
           <Search className="size-3.5 flex-none text-black" />
@@ -103,92 +100,84 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
         </Button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6" style={{ backgroundColor: '#F2F3F5' }}>
         {/* Section: Chat History */}
-        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-xs">
-          <button
-            onClick={() => setIsHistoryExpanded(!isHistoryExpanded)}
-            className="w-full flex items-center justify-between px-4 py-3 text-left border-b border-gray-150 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors"
-          >
-            <span className="text-[11px] font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">History ({filteredThreads.length})</span>
-            {isHistoryExpanded ? <ChevronUp className="h-3.5 w-3.5 text-gray-500" /> : <ChevronDown className="h-3.5 w-3.5 text-gray-500" />}
-          </button>
+        <div className="space-y-2">
+          <div className="px-1 flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+              History ({filteredThreads.length})
+            </span>
+          </div>
 
-          {isHistoryExpanded && (
-            <div className="p-2 max-h-64 overflow-y-auto space-y-1">
-              {filteredThreads.length === 0 ? (
-                <div className="p-3 text-center text-xs text-gray-400">
-                  {searchQuery ? 'No matching chats.' : 'No past conversations.'}
-                </div>
-              ) : (
-                filteredThreads.map((thread) => {
-                  const isSelected = activeThreadId === thread.id;
-                  return (
-                    <div
-                      key={thread.id}
-                      onClick={() => handleThreadSelect(thread.id)}
-                      className={cn(
-                        "group flex items-center justify-between rounded-xl p-2.5 text-left text-xs cursor-pointer transition-all min-w-0 border border-transparent",
-                        isSelected
-                          ? "bg-blue-500/10 text-blue-600 font-bold border-blue-500/20"
-                          : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-750 dark:text-gray-300"
-                      )}
-                    >
-                      <div className="flex items-center gap-2 min-w-0 flex-1">
-                        <MessageSquare className="h-3.5 w-3.5 flex-none text-gray-400 group-hover:text-blue-500" />
-                        <span className="truncate flex-1">{thread.title || 'Untitled Chat'}</span>
-                      </div>
-                      <button
-                        onClick={(e) => handleThreadDelete(e, thread.id)}
-                        className="opacity-0 group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1 rounded-md transition-all flex-none"
-                        title="Delete Thread"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
+          <div className="space-y-1 max-h-64 overflow-y-auto">
+            {filteredThreads.length === 0 ? (
+              <div className="p-3 text-center text-xs text-gray-400">
+                {searchQuery ? 'No matching chats.' : 'No past conversations.'}
+              </div>
+            ) : (
+              filteredThreads.map((thread) => {
+                const isSelected = activeThreadId === thread.id;
+                return (
+                  <div
+                    key={thread.id}
+                    onClick={() => handleThreadSelect(thread.id)}
+                    className={cn(
+                      "group flex items-center justify-between rounded-lg p-2.5 text-left text-xs cursor-pointer transition-all min-w-0 border",
+                      isSelected
+                        ? "bg-black/[0.06] border-black/10 shadow-xs text-black font-bold"
+                        : "hover:bg-black/[0.03] border-transparent text-gray-750 dark:text-gray-305"
+                    )}
+                  >
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <MessageSquare className="h-3.5 w-3.5 flex-none text-gray-400 group-hover:text-blue-500" />
+                      <span className="truncate flex-1">{thread.title || 'Untitled Chat'}</span>
                     </div>
-                  );
-                })
-              )}
-            </div>
-          )}
+                    <button
+                      onClick={(e) => handleThreadDelete(e, thread.id)}
+                      className="opacity-0 group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1 rounded-md transition-all flex-none"
+                      title="Delete Thread"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                );
+              })
+            )}
+          </div>
         </div>
 
-        {/* Section: Profile & Config */}
-        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-xs">
-          <button
-            onClick={() => setIsPromptExpanded(!isPromptExpanded)}
-            className="w-full flex items-center justify-between px-4 py-3 text-left border-b border-gray-150 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors"
-          >
-            <span className="text-[11px] font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider flex items-center gap-1.5"><Info className="h-3.5 w-3.5 text-blue-500" /> Settings</span>
-            {isPromptExpanded ? <ChevronUp className="h-3.5 w-3.5 text-gray-500" /> : <ChevronDown className="h-3.5 w-3.5 text-gray-500" />}
-          </button>
+        {/* Section: Settings */}
+        <div className="space-y-2">
+          <div className="px-1 flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+              Settings
+            </span>
+          </div>
 
-          {isPromptExpanded && (
-            <div className="p-4 space-y-3">
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">AI model</span>
-                <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-950 px-2.5 py-1.5 rounded-lg border border-gray-100 dark:border-gray-800">
-                  {bot.model || 'Gemini 1.5 Pro'}
-                </p>
-              </div>
-
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Instructions</span>
-                <div className="text-[11px] leading-relaxed text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-950 p-2.5 rounded-lg border border-gray-100 dark:border-gray-800 max-h-40 overflow-y-auto whitespace-pre-wrap select-text scrollbar-thin">
-                  {bot.instructions}
-                </div>
-              </div>
-
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => onOpen({ type: 'edit-chatbot', actionId: botId })}
-                className="w-full rounded-xl py-4 text-xs font-semibold gap-1 hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800 mt-2"
-              >
-                Customize Agent Prompt
-              </Button>
+          <div className="p-3 bg-black/[0.02] border border-black/5 rounded-xl space-y-3">
+            <div className="space-y-1">
+              <span className="text-[10px] font-bold text-gray-450 uppercase tracking-wider">AI model</span>
+              <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-950 px-2.5 py-1.5 rounded-lg border border-black/5 shadow-2xs">
+                {bot.model || 'Gemini 1.5 Pro'}
+              </p>
             </div>
-          )}
+
+            <div className="space-y-1">
+              <span className="text-[10px] font-bold text-gray-450 uppercase tracking-wider">Instructions</span>
+              <div className="text-[11px] leading-relaxed text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-950 p-2.5 rounded-lg border border-black/5 max-h-40 overflow-y-auto whitespace-pre-wrap select-text scrollbar-thin shadow-2xs">
+                {bot.instructions}
+              </div>
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onOpen({ type: 'edit-chatbot', actionId: botId })}
+              className="w-full rounded-xl py-4 text-xs font-semibold gap-1 hover:bg-black/[0.03] bg-white border border-black/10 text-black mt-2 shadow-xs"
+            >
+              Customize Agent Prompt
+            </Button>
+          </div>
         </div>
       </div>
     </aside>
