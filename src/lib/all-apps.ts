@@ -6600,6 +6600,55 @@ export const allApps: APP[] = [
     "image": "https://www.google.com/s2/favicons?domain=buildium.com&sz=128",
     "app_name": "buildium",
     "isAvailable": true
+  },
+  {
+    "title": "iManage",
+    "description": "iManage is the leading legal document management system tracking secure client matters, emails, and file archives.",
+    "image": "https://www.google.com/s2/favicons?domain=imanage.com&sz=128",
+    "app_name": "imanage",
+    "isAvailable": true
+  },
+  {
+    "title": "NetDocuments",
+    "description": "NetDocuments is a cloud-native document management platform organizing secure corporate files, litigation sheets, and legal contracts.",
+    "image": "https://www.google.com/s2/favicons?domain=netdocuments.com&sz=128",
+    "app_name": "netdocuments",
+    "isAvailable": true
+  },
+  {
+    "title": "Addepar",
+    "description": "Addepar aggregates wealth portfolio holdings, tracking investment returns, client distributions, and multi-asset performance.",
+    "image": "https://www.google.com/s2/favicons?domain=addepar.com&sz=128",
+    "app_name": "addepar",
+    "isAvailable": true
+  },
+  {
+    "title": "Tableau",
+    "description": "Tableau connects dynamic corporate sales dashboards, analytics visualizations, and business intelligence sheets.",
+    "image": "https://www.google.com/s2/favicons?domain=tableau.com&sz=128",
+    "app_name": "tableau",
+    "isAvailable": true
+  },
+  {
+    "title": "Databricks",
+    "description": "Databricks is a unified data lakehouse database managing transactional raw logs and advanced analytics data pools.",
+    "image": "https://www.google.com/s2/favicons?domain=databricks.com&sz=128",
+    "app_name": "databricks",
+    "isAvailable": true
+  },
+  {
+    "title": "CoStar Group",
+    "description": "CoStar Group provides standard commercial real estate asset histories, vacancy rates, and transaction directories.",
+    "image": "https://www.google.com/s2/favicons?domain=costar.com&sz=128",
+    "app_name": "costar",
+    "isAvailable": true
+  },
+  {
+    "title": "Okta",
+    "description": "Okta is a cloud identity single sign-on database managing employee profiles, application access logs, and MFA checks.",
+    "image": "https://www.google.com/s2/favicons?domain=okta.com&sz=128",
+    "app_name": "okta",
+    "isAvailable": true
   }
 ];
 
