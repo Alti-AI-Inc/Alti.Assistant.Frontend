@@ -19,6 +19,14 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/alti_assistant_generated_photo/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'logos.composio.dev',
+      },
+      {
+        protocol: 'https',
+        hostname: 'logo.clearbit.com',
+      },
     ],
   },
   async headers() {
