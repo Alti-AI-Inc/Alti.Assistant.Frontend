@@ -6691,6 +6691,104 @@ export const allApps: APP[] = [
     "image": "https://www.google.com/s2/favicons?domain=chargebee.com&sz=128",
     "app_name": "chargebee",
     "isAvailable": true
+  },
+  {
+    "title": "Plaid",
+    "description": "Plaid connects private banking accounts to sync transactions, account balances, and credit details.",
+    "image": "https://www.google.com/s2/favicons?domain=plaid.com&sz=128",
+    "app_name": "plaid",
+    "isAvailable": true
+  },
+  {
+    "title": "Brex",
+    "description": "Brex tracks corporate card spends, corporate cash balances, and company credit ledgers.",
+    "image": "https://www.google.com/s2/favicons?domain=brex.com&sz=128",
+    "app_name": "brex",
+    "isAvailable": true
+  },
+  {
+    "title": "LexisNexis",
+    "description": "LexisNexis provides access to legal research cases, regulatory filings, and global public records databases.",
+    "image": "https://www.google.com/s2/favicons?domain=lexisnexis.com&sz=128",
+    "app_name": "lexisnexis",
+    "isAvailable": true
+  },
+  {
+    "title": "Filevine",
+    "description": "Filevine organizes legal case management sheets, litigation documents, and client communication timelines.",
+    "image": "https://www.google.com/s2/favicons?domain=filevine.com&sz=128",
+    "app_name": "filevine",
+    "isAvailable": true
+  },
+  {
+    "title": "Epic Systems",
+    "description": "Epic EHR tracks clinical charts, patient medical sheets, and healthcare provider treatment records.",
+    "image": "https://www.google.com/s2/favicons?domain=epic.com&sz=128",
+    "app_name": "epic_systems",
+    "isAvailable": true
+  },
+  {
+    "title": "Veeva Vault",
+    "description": "Veeva Vault manages biotech clinical trials, pharmaceutical drug approvals, and lifecare regulatory docs.",
+    "image": "https://www.google.com/s2/favicons?domain=veeva.com&sz=128",
+    "app_name": "veeva_vault",
+    "isAvailable": true
+  },
+  {
+    "title": "Workday Financials",
+    "description": "Workday Financials manages enterprise general ledgers, corporate budgets, and operational business planning.",
+    "image": "https://www.google.com/s2/favicons?domain=workday.com&sz=128",
+    "app_name": "workday_financials",
+    "isAvailable": true
+  },
+  {
+    "title": "ServiceNow ITSM",
+    "description": "ServiceNow ITSM tracks enterprise IT support tickets, hardware assets, and network operations databases.",
+    "image": "https://www.google.com/s2/favicons?domain=servicenow.com&sz=128",
+    "app_name": "servicenow_itsm",
+    "isAvailable": true
+  },
+  {
+    "title": "Toast POS",
+    "description": "Toast POS tracks restaurant sales transactions, dining orders, menu catalogs, and labor payroll ledgers.",
+    "image": "https://www.google.com/s2/favicons?domain=toasttab.com&sz=128",
+    "app_name": "toast_pos",
+    "isAvailable": true
+  },
+  {
+    "title": "OpenTable",
+    "description": "OpenTable tracks dining guest lists, restaurant table reservations, and restaurant client directories.",
+    "image": "https://www.google.com/s2/favicons?domain=opentable.com&sz=128",
+    "app_name": "opentable",
+    "isAvailable": true
+  },
+  {
+    "title": "Encompass Mortgage",
+    "description": "Encompass processes private mortgage loan originations, property appraisals, and underwriting sheets.",
+    "image": "https://www.google.com/s2/favicons?domain=icemortgagetechnology.com&sz=128",
+    "app_name": "encompass_mortgage",
+    "isAvailable": true
+  },
+  {
+    "title": "Guidewire",
+    "description": "Guidewire tracks insurance policy underwriting, claim requests, and property insurance transaction logs.",
+    "image": "https://www.google.com/s2/favicons?domain=guidewire.com&sz=128",
+    "app_name": "guidewire",
+    "isAvailable": true
+  },
+  {
+    "title": "Sabre GDS",
+    "description": "Sabre connects airline schedules, hotel reservation blocks, and global travel inventory directories.",
+    "image": "https://www.google.com/s2/favicons?domain=sabre.com&sz=128",
+    "app_name": "sabre",
+    "isAvailable": true
+  },
+  {
+    "title": "Navitaire",
+    "description": "Navitaire organizes passenger ticket bookings, airline scheduling systems, and loyalty account ledgers.",
+    "image": "https://www.google.com/s2/favicons?domain=navitaire.com&sz=128",
+    "app_name": "navitaire",
+    "isAvailable": true
   }
 ];
 
