@@ -6866,6 +6866,48 @@ export const allApps: APP[] = [
     "image": "https://www.google.com/s2/favicons?domain=aws.amazon.com&sz=128",
     "app_name": "aws",
     "isAvailable": true
+  },
+  {
+    "title": "WooCommerce",
+    "description": "WooCommerce integrates open-source e-commerce stores, managing WordPress products, sales transactions, and inventory logs.",
+    "image": "https://www.google.com/s2/favicons?domain=woocommerce.com&sz=128",
+    "app_name": "woocommerce",
+    "isAvailable": true
+  },
+  {
+    "title": "BigCommerce",
+    "description": "BigCommerce connects SaaS e-commerce stores, tracking enterprise multi-channel products, customer orders, and payments.",
+    "image": "https://www.google.com/s2/favicons?domain=bigcommerce.com&sz=128",
+    "app_name": "bigcommerce",
+    "isAvailable": true
+  },
+  {
+    "title": "Magento (Adobe Commerce)",
+    "description": "Magento manages enterprise-scale e-commerce stores, tracking transactional orders, inventory levels, and customer profiles.",
+    "image": "https://www.google.com/s2/favicons?domain=adobe.com&sz=128",
+    "app_name": "magento",
+    "isAvailable": true
+  },
+  {
+    "title": "Squarespace Commerce",
+    "description": "Squarespace Commerce connects online retail stores, tracking product inventory, billing transactions, and customer invoices.",
+    "image": "https://www.google.com/s2/favicons?domain=squarespace.com&sz=128",
+    "app_name": "squarespace",
+    "isAvailable": true
+  },
+  {
+    "title": "Wix Stores",
+    "description": "Wix Stores integrates digital storefronts, managing online inventory, transaction orders, and subscriber databases.",
+    "image": "https://www.google.com/s2/favicons?domain=wix.com&sz=128",
+    "app_name": "wix",
+    "isAvailable": true
+  },
+  {
+    "title": "Salesforce Commerce Cloud",
+    "description": "Salesforce Commerce Cloud integrates enterprise-grade e-commerce transactions, inventory systems, and multi-channel customer records.",
+    "image": "https://www.google.com/s2/favicons?domain=salesforce.com&sz=128",
+    "app_name": "salesforce_commerce",
+    "isAvailable": true
   }
 ];
 
