@@ -6488,6 +6488,48 @@ export const allApps: APP[] = [
     "image": "https://www.google.com/s2/favicons?domain=clio.com&sz=128",
     "app_name": "clio",
     "isAvailable": true
+  },
+  {
+    "title": "LSEG Workspace",
+    "description": "LSEG Workspace provides enterprise investment research, global financial market data feeds, and transactional analytics.",
+    "image": "https://www.google.com/s2/favicons?domain=lseg.com&sz=128",
+    "app_name": "lseg",
+    "isAvailable": true
+  },
+  {
+    "title": "FactSet",
+    "description": "FactSet integrates robust financial data, portfolio analytics, and multi-asset class market research for investment professionals.",
+    "image": "https://www.google.com/s2/favicons?domain=factset.com&sz=128",
+    "app_name": "factset",
+    "isAvailable": true
+  },
+  {
+    "title": "PitchBook",
+    "description": "PitchBook provides comprehensive data on the global venture capital, private equity, and M&A markets.",
+    "image": "https://www.google.com/s2/favicons?domain=pitchbook.com&sz=128",
+    "app_name": "pitchbook",
+    "isAvailable": true
+  },
+  {
+    "title": "Bloomberg Professional",
+    "description": "Bloomberg Professional connects financial professionals to real-time market data, transaction networks, and portfolio tools.",
+    "image": "https://www.google.com/s2/favicons?domain=bloomberg.com&sz=128",
+    "app_name": "bloomberg",
+    "isAvailable": true
+  },
+  {
+    "title": "S&P Capital IQ",
+    "description": "S&P Capital IQ delivers comprehensive global market intelligence, financial analytics, and corporate profile research.",
+    "image": "https://www.google.com/s2/favicons?domain=spglobal.com&sz=128",
+    "app_name": "capitaliq",
+    "isAvailable": true
+  },
+  {
+    "title": "Crunchbase Enterprise",
+    "description": "Crunchbase Enterprise tracks private company profiles, funding histories, founding teams, and investment logs.",
+    "image": "https://www.google.com/s2/favicons?domain=crunchbase.com&sz=128",
+    "app_name": "crunchbase",
+    "isAvailable": true
   }
 ];
 
