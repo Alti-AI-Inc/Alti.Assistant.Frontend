@@ -759,39 +759,29 @@ const LeftSideNavMobile = () => {
                 { id: 'wf-2', name: 'Code Vulnerability Scan', icon: '🛡️', trigger: 'On Git Push', active: true },
                 { id: 'wf-3', name: 'Sales Prospecting Flow', icon: '🎯', trigger: 'On Notion Add', active: false },
                 { id: 'wf-4', name: 'Support Mail Auto-Draft', icon: '✉️', trigger: 'On New Email', active: true }
-              ].filter(wf => wf.name.toLowerCase().includes(searchQuery.toLowerCase())).map(wf => (
-                <button
-                  key={wf.id}
-                  onClick={() => {
-                    router.push('/workflows');
-                    close();
-                  }}
-                  className={cn(
-                    "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group hover:bg-black/[0.03] border border-transparent"
-                  )}
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="flex-none h-7 w-7 rounded-md bg-white border border-black/10 flex items-center justify-center text-sm shadow-sm">
-                      {wf.icon}
-                    </div>
-                    <div className="min-w-0">
-                      <h4 className="text-xs font-semibold truncate text-gray-950">
-                        {wf.name}
-                      </h4>
-                      <p className="text-[10px] text-gray-500 truncate max-w-[130px]">
-                        {wf.trigger}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    {wf.active ? (
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Active" />
-                    ) : (
-                      <span className="h-1.5 w-1.5 rounded-full bg-gray-400" title="Paused" />
+              ].filter(wf => wf.name.toLowerCase().includes(searchQuery.toLowerCase())).map(wf => {
+                const isSelected = pathname === '/workflows' && searchParams?.get('wf') === wf.id;
+                return (
+                  <button
+                    key={wf.id}
+                    onClick={() => {
+                      router.push(`/workflows?wf=${wf.id}`);
+                      close();
+                    }}
+                    className={cn(
+                      "group flex h-9 w-full items-center justify-between rounded-md text-sm font-medium text-black text-left transition-all",
+                      isSelected 
+                        ? "bg-black/10 font-semibold" 
+                        : "hover:bg-black/5"
                     )}
-                  </div>
-                </button>
-              ))}
+                  >
+                    <span className="flex-1 truncate px-1 py-2">
+                      {wf.name}
+                    </span>
+                    <ChevronRight className="mr-2 h-3.5 w-3.5 text-black opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity" />
+                  </button>
+                );
+              })}
             </div>
           ) : (
             <ConversationsList activeTab={activeTab} />
