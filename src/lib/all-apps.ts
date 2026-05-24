@@ -6649,6 +6649,48 @@ export const allApps: APP[] = [
     "image": "https://www.google.com/s2/favicons?domain=okta.com&sz=128",
     "app_name": "okta",
     "isAvailable": true
+  },
+  {
+    "title": "Gong.io",
+    "description": "Gong.io records, transcribes, and analyzes sales meeting audio and contract negotiation logs.",
+    "image": "https://www.google.com/s2/favicons?domain=gong.io&sz=128",
+    "app_name": "gong",
+    "isAvailable": true
+  },
+  {
+    "title": "Salesloft",
+    "description": "Salesloft manages cold outreach email campaigns, sales sequence templates, and lead response logs.",
+    "image": "https://www.google.com/s2/favicons?domain=salesloft.com&sz=128",
+    "app_name": "salesloft",
+    "isAvailable": true
+  },
+  {
+    "title": "Outreach",
+    "description": "Outreach.io is a sales execution platform coordinating buyer engagement campaigns and pipeline outreach logs.",
+    "image": "https://www.google.com/s2/favicons?domain=outreach.io&sz=128",
+    "app_name": "outreach",
+    "isAvailable": true
+  },
+  {
+    "title": "Aha! Roadmaps",
+    "description": "Aha! Roadmaps tracks enterprise product strategies, feature release schedules, and product launch timelines.",
+    "image": "https://www.google.com/s2/favicons?domain=aha.io&sz=128",
+    "app_name": "aha",
+    "isAvailable": true
+  },
+  {
+    "title": "Productboard",
+    "description": "Productboard prioritizes product feedback loops, feature requests, and conversational customer feedback logs.",
+    "image": "https://www.google.com/s2/favicons?domain=productboard.com&sz=128",
+    "app_name": "productboard",
+    "isAvailable": true
+  },
+  {
+    "title": "Chargebee",
+    "description": "Chargebee manages SaaS subscription billing analytics, recurring contract invoicing, and payment ledgers.",
+    "image": "https://www.google.com/s2/favicons?domain=chargebee.com&sz=128",
+    "app_name": "chargebee",
+    "isAvailable": true
   }
 ];
 
