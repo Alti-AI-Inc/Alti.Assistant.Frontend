@@ -63,14 +63,14 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
       {/* Header matching left side menu */}
       <header
         className={cn(
-          "sticky top-0 z-30 flex items-center justify-between border-b border-black/10 px-4 pt-4 pb-4 flex-none",
-          hideSidebar && "justify-center"
+          "sticky top-0 z-30 flex items-center justify-between border-b border-black/10 pt-4 pb-4 flex-none",
+          hideSidebar ? "px-0 justify-center" : "px-4"
         )}
         style={{ backgroundColor: '#F2F3F5' }}
       >
         <PanelLeftClose
           className={cn(
-            "size-5 cursor-pointer text-gray-600 transition-transform duration-300",
+            "size-5 cursor-pointer text-gray-600 transition-transform duration-300 flex-none",
             !hideSidebar && "scale-x-[-1]"
           )}
           onClick={toggleRightSidebar}
