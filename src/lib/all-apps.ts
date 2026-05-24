@@ -6268,175 +6268,175 @@ export const allApps: APP[] = [
   {
     "title": "Toast POS",
     "description": "Toast POS is a leading restaurant management platform integrating front-of-house, back-of-house, and online ordering database systems.",
-    "image": "https://logo.clearbit.com/toasttab.com",
+    "image": "https://www.google.com/s2/favicons?domain=toasttab.com&sz=128",
     "app_name": "toast",
     "isAvailable": true
   },
   {
     "title": "Dutchie POS",
     "description": "Dutchie POS is a premier cannabis retail and e-commerce platform managing compliant transaction records and inventory.",
-    "image": "https://logo.clearbit.com/dutchie.com",
+    "image": "https://www.google.com/s2/favicons?domain=dutchie.com&sz=128",
     "app_name": "dutchie",
     "isAvailable": true
   },
   {
     "title": "Oracle MICROS",
     "description": "Oracle MICROS POS delivers enterprise-grade hospitality and restaurant transaction management globally.",
-    "image": "https://logo.clearbit.com/oracle.com",
+    "image": "https://www.google.com/s2/favicons?domain=oracle.com&sz=128",
     "app_name": "oracle_micros",
     "isAvailable": true
   },
   {
     "title": "NCR Aloha",
     "description": "NCR Aloha POS provides reliable restaurant point-of-sale terminal management and retail workflow logs.",
-    "image": "https://logo.clearbit.com/ncr.com",
+    "image": "https://www.google.com/s2/favicons?domain=ncr.com&sz=128",
     "app_name": "ncr_aloha",
     "isAvailable": true
   },
   {
     "title": "Clover POS",
     "description": "Clover POS integrates small-business payment terminals, merchant services, and customer loyalty histories.",
-    "image": "https://logo.clearbit.com/clover.com",
+    "image": "https://www.google.com/s2/favicons?domain=clover.com&sz=128",
     "app_name": "clover",
     "isAvailable": true
   },
   {
     "title": "TouchBistro",
     "description": "TouchBistro POS is a dedicated iPad restaurant management system tracking table flows, staff tips, and sales.",
-    "image": "https://logo.clearbit.com/touchbistro.com",
+    "image": "https://www.google.com/s2/favicons?domain=touchbistro.com&sz=128",
     "app_name": "touchbistro",
     "isAvailable": true
   },
   {
     "title": "Revel Systems",
     "description": "Revel Systems POS provides cloud-based iPad retail and quick-service operations tracking ingredient-level inventory.",
-    "image": "https://logo.clearbit.com/revelsystems.com",
+    "image": "https://www.google.com/s2/favicons?domain=revelsystems.com&sz=128",
     "app_name": "revel_systems",
     "isAvailable": true
   },
   {
     "title": "Flowhub",
     "description": "Flowhub is a compliant cannabis retail POS managing seed-to-sale Metrc databases and compliance logs.",
-    "image": "https://logo.clearbit.com/flowhub.com",
+    "image": "https://www.google.com/s2/favicons?domain=flowhub.com&sz=128",
     "app_name": "flowhub",
     "isAvailable": true
   },
   {
     "title": "Cova",
     "description": "Cova POS is a robust, compliance-centric cannabis retail system tracking excise taxes and state-limit allocations.",
-    "image": "https://logo.clearbit.com/covasoftware.com",
+    "image": "https://www.google.com/s2/favicons?domain=covasoftware.com&sz=128",
     "app_name": "cova",
     "isAvailable": true
   },
   {
     "title": "Treez",
     "description": "Treez is a cannabis POS and automated cashless payment system tracking retail drawers and wholesale trends.",
-    "image": "https://logo.clearbit.com/treez.io",
+    "image": "https://www.google.com/s2/favicons?domain=treez.io&sz=128",
     "app_name": "treez",
     "isAvailable": true
   },
   {
     "title": "Mindbody",
     "description": "Mindbody is the leading fitness, yoga, and wellness class scheduling and membership management system.",
-    "image": "https://logo.clearbit.com/mindbodyonline.com",
+    "image": "https://www.google.com/s2/favicons?domain=mindbodyonline.com&sz=128",
     "app_name": "mindbody",
     "isAvailable": true
   },
   {
     "title": "Vagaro",
     "description": "Vagaro is a popular salon, spa, and beauty booking POS managing stylist calendars and rentals.",
-    "image": "https://logo.clearbit.com/vagaro.com",
+    "image": "https://www.google.com/s2/favicons?domain=vagaro.com&sz=128",
     "app_name": "vagaro",
     "isAvailable": true
   },
   {
     "title": "Boulevard",
     "description": "Boulevard is a premium beauty salon and spa management platform tracking client intake and bookings.",
-    "image": "https://logo.clearbit.com/joinblvd.com",
+    "image": "https://www.google.com/s2/favicons?domain=joinblvd.com&sz=128",
     "app_name": "boulevard",
     "isAvailable": true
   },
   {
     "title": "Zenoti",
     "description": "Zenoti is an enterprise spa and salon franchise software system tracking multi-location transactions.",
-    "image": "https://logo.clearbit.com/zenoti.com",
+    "image": "https://www.google.com/s2/favicons?domain=zenoti.com&sz=128",
     "app_name": "zenoti",
     "isAvailable": true
   },
   {
     "title": "Lightspeed Retail",
     "description": "Lightspeed POS manages multi-location retail store inventories, purchase orders, and customer records.",
-    "image": "https://logo.clearbit.com/lightspeedhq.com",
+    "image": "https://www.google.com/s2/favicons?domain=lightspeedhq.com&sz=128",
     "app_name": "lightspeed",
     "isAvailable": true
   },
   {
     "title": "Oracle NetSuite",
     "description": "Oracle NetSuite is a leading enterprise cloud ERP managing general ledgers, CRM, and supply chain databases.",
-    "image": "https://logo.clearbit.com/netsuite.com",
+    "image": "https://www.google.com/s2/favicons?domain=netsuite.com&sz=128",
     "app_name": "oracle_netsuite",
     "isAvailable": true
   },
   {
     "title": "Epicor",
     "description": "Epicor is a powerful industrial ERP system tracking manufacturing bill-of-materials and warehouse logs.",
-    "image": "https://logo.clearbit.com/epicor.com",
+    "image": "https://www.google.com/s2/favicons?domain=epicor.com&sz=128",
     "app_name": "epicor",
     "isAvailable": true
   },
   {
     "title": "Athenahealth",
     "description": "Athenahealth EHR manages medical practice calendars, billing codes, and insurance claims.",
-    "image": "https://logo.clearbit.com/athenahealth.com",
+    "image": "https://www.google.com/s2/favicons?domain=athenahealth.com&sz=128",
     "app_name": "athenahealth",
     "isAvailable": true
   },
   {
     "title": "DrChrono",
     "description": "DrChrono is a mobile-first EHR practice management platform tracking clinical notes and scheduling.",
-    "image": "https://logo.clearbit.com/drchrono.com",
+    "image": "https://www.google.com/s2/favicons?domain=drchrono.com&sz=128",
     "app_name": "drchrono",
     "isAvailable": true
   },
   {
     "title": "Open Dental",
     "description": "Open Dental EHR manages comprehensive patient dental charting, scheduling, and lab reports.",
-    "image": "https://logo.clearbit.com/opendental.com",
+    "image": "https://www.google.com/s2/favicons?domain=opendental.com&sz=128",
     "app_name": "open_dental",
     "isAvailable": true
   },
   {
     "title": "Dentrix",
     "description": "Dentrix is an enterprise dental clinic practice management database tracking treatment plans.",
-    "image": "https://logo.clearbit.com/dentrix.com",
+    "image": "https://www.google.com/s2/favicons?domain=dentrix.com&sz=128",
     "app_name": "dentrix",
     "isAvailable": true
   },
   {
     "title": "Jane App",
     "description": "Jane App is a specialized clinic booking and charting database for practitioners and therapists.",
-    "image": "https://logo.clearbit.com/jane.app",
+    "image": "https://www.google.com/s2/favicons?domain=jane.app&sz=128",
     "app_name": "jane_app",
     "isAvailable": true
   },
   {
     "title": "AppFolio",
     "description": "AppFolio is a top property management database tracking tenant lease ledgers and maintenance requests.",
-    "image": "https://logo.clearbit.com/appfolio.com",
+    "image": "https://www.google.com/s2/favicons?domain=appfolio.com&sz=128",
     "app_name": "appfolio",
     "isAvailable": true
   },
   {
     "title": "Yardi Systems",
     "description": "Yardi is an enterprise real estate and asset performance ERP managing general ledger logs.",
-    "image": "https://logo.clearbit.com/yardi.com",
+    "image": "https://www.google.com/s2/favicons?domain=yardi.com&sz=128",
     "app_name": "yardi_systems",
     "isAvailable": true
   },
   {
     "title": "Entrata",
     "description": "Entrata is a multifamily property leasing and rent collection platform tracking tenant profiles.",
-    "image": "https://logo.clearbit.com/entrata.com",
+    "image": "https://www.google.com/s2/favicons?domain=entrata.com&sz=128",
     "app_name": "entrata",
     "isAvailable": true
   }
