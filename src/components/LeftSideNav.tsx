@@ -294,7 +294,12 @@ const LeftSideNav = () => {
           visible: true,
           tooltip: 'New Workflow',
           onClick: () => {
-            alert('Define Cron or Webhook triggers to chain your custom agents and RAG indexes in a new workflow!');
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(null);
+            close();
+            router.push('/workflows');
           },
         };
       case 'data':
