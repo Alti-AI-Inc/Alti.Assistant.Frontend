@@ -8,7 +8,7 @@ import {
   Upload, FileText, Send, AlertCircle, RefreshCw, 
   HelpCircle, ChevronDown, ChevronUp, FileCode, CheckCircle2,
   Layers, Zap, Cpu, Settings, Activity, Gauge, Terminal, CheckCircle,
-  BarChart2, RefreshCcw, Sparkles
+  BarChart2, RefreshCcw, Sparkles, Database, Search, Trash2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -57,6 +57,11 @@ export const LlamaIndexChat = () => {
   const [indexState, setIndexState] = useState<'idle' | 'uploading' | 'indexed' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [indexedFileName, setIndexedFileName] = useState<string>('');
+  
+  // Vault Files & Search States
+  const [vaultFiles, setVaultFiles] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isLoadingFiles, setIsLoadingFiles] = useState(false);
   
   // Workbench Strategy States
   const [queryMode, setQueryMode] = useState<string>('vector');
@@ -160,6 +165,7 @@ export const LlamaIndexChat = () => {
 
       setIndexState('indexed');
       setIndexedFileName(selectedFile.name);
+      fetchVaultFiles();
       setMessages([
         {
           id: 'welcome',
@@ -418,6 +424,75 @@ export const LlamaIndexChat = () => {
     }));
   };
 
+  const fetchVaultFiles = async () => {
+    setIsLoadingFiles(true);
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
+      const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+      
+      const response = await fetch(`${cleanBaseUrl}/rag-system/documents`, {
+        headers: {
+          'Authorization': `Bearer ${session?.accessToken || ''}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setVaultFiles(data.documents || []);
+      }
+    } catch (error) {
+      console.error('Failed to fetch vault documents:', error);
+    } finally {
+      setIsLoadingFiles(false);
+    }
+  };
+
+  const handleDeleteFile = async (docId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!confirm('Are you sure you want to permanently delete this document from the vault?')) return;
+    
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
+      const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+
+      const response = await fetch(`${cleanBaseUrl}/rag-system/documents/${docId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${session?.accessToken || ''}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete document');
+      }
+
+      fetchVaultFiles();
+    } catch (error: any) {
+      console.error('Failed to delete document:', error);
+      alert(error.message || 'Failed to delete document from the vault.');
+    }
+  };
+
+  const handleActivateFile = (selectedFile: any) => {
+    setFile(null);
+    setIndexedFileName(selectedFile.fileName);
+    setIndexState('indexed');
+    setMessages([
+      {
+        id: 'welcome',
+        role: 'assistant',
+        content: `Successfully activated cognitive RAG context for **${selectedFile.fileName}**!\n\nI have loaded the vector store database. Ask me any question to query the document context.`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      }
+    ]);
+  };
+
+  useEffect(() => {
+    if (session?.accessToken) {
+      fetchVaultFiles();
+    }
+  }, [session?.accessToken]);
+
   const handleReset = () => {
     setFile(null);
     setIndexState('idle');
@@ -657,7 +732,6 @@ export const LlamaIndexChat = () => {
               )}
             </div>
 
-            {/* Error notifications */}
             {errorMessage && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -671,6 +745,79 @@ export const LlamaIndexChat = () => {
                 </div>
               </motion.div>
             )}
+
+            {/* Centered Minimal Search Bar (styled exactly like the chat prompt box) */}
+            <div className="mt-8 max-w-3xl mx-auto w-full flex flex-col gap-3">
+              <div className="flex gap-2.5 w-full">
+                <Input
+                  placeholder="Search vault files..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 h-11 text-sm rounded-xl bg-gray-50 border-gray-200 dark:border-gray-800 dark:bg-gray-950 focus-visible:ring-1 focus-visible:ring-blue-500/30 focus-visible:border-blue-500"
+                />
+
+                <Button
+                  disabled={isLoadingFiles}
+                  className="h-11 w-11 flex-none bg-blue-600 hover:bg-blue-700 text-white rounded-xl p-0 flex items-center justify-center shadow-lg shadow-blue-500/10 dark:bg-blue-700 dark:hover:bg-blue-800"
+                >
+                  <Search className="h-4.5 w-4.5" />
+                </Button>
+              </div>
+
+              {/* Minimal Results List (Only displayed when files exist in vault) */}
+              {vaultFiles.length > 0 && (
+                <div className="w-full bg-white/40 dark:bg-gray-900/10 border border-gray-150 dark:border-gray-800/80 backdrop-blur-xl rounded-2xl overflow-hidden p-2 text-left">
+                  {(() => {
+                    const filtered = vaultFiles.filter(f =>
+                      f.fileName.toLowerCase().includes(searchQuery.toLowerCase())
+                    );
+
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="py-4 px-4 text-center text-xs text-gray-400">
+                          No matching documents found in vault
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <div className="divide-y divide-gray-100 dark:divide-gray-800/60 max-h-52 overflow-y-auto">
+                        {filtered.map((doc) => (
+                          <div
+                            key={doc.docId}
+                            className="group flex items-center justify-between py-2.5 px-3 hover:bg-blue-50/40 dark:hover:bg-blue-955/5 rounded-xl cursor-pointer transition-colors duration-150"
+                            onClick={() => handleActivateFile(doc)}
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <FileText className="h-4.5 w-4.5 text-blue-500 flex-none animate-pulse" />
+                              <div className="min-w-0">
+                                <span className="text-xs font-bold text-gray-900 dark:text-gray-200 truncate block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-150">
+                                  {doc.fileName}
+                                </span>
+                                <span className="text-[10px] text-gray-400 uppercase font-mono font-bold tracking-wider mt-0.5 block">
+                                  {doc.fileType || 'doc'} • {doc.charCount ? `${(doc.charCount / 1000).toFixed(1)}k chars` : `${doc.pageCount || 1} pages`}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Active Hover Delete Button */}
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={(e) => handleDeleteFile(doc.docId, e)}
+                              className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none"
+                              title="Delete from Vault"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })()}
+                </div>
+              )}
+            </div>
 
           </motion.div>
         ) : (
