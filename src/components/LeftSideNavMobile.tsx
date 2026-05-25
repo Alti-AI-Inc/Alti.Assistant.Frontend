@@ -312,8 +312,9 @@ const LeftSideNavMobile = () => {
       case 'models':
         return {
           visible: true,
-          label: 'New Chat',
+          label: 'New Model',
           onClick: () => {
+            setActiveBotId(null);
             setActiveConversation(null);
             setShowStartLastMessage(false);
             setUserMessage('');

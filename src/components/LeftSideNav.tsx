@@ -323,7 +323,13 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           visible: true,
           tooltip: 'New Model',
           onClick: () => {
-            onOpen({ type: 'add-model' });
+            setActiveBotId(null);
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(null);
+            close();
+            router.push('/models');
           },
         };
       case 'apps':
