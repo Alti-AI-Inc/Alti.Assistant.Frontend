@@ -127,7 +127,11 @@ const DATA_CONNECTORS: DataConnector[] = [
 
 type SidebarTab = 'chat' | 'research' | 'bots' | 'models' | 'apps' | 'workflows';
 
-const LeftSideNav = () => {
+interface LeftSideNavProps {
+  side?: 'left' | 'right';
+}
+
+const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const { data } = useSession();
   const router = useRouter();
   const pathname = usePathname();
@@ -430,7 +434,7 @@ const LeftSideNav = () => {
       </div>
 
       {/* Chat / Research / Agents / Data / Apps icon row toggle */}
-      {!hideSidebar && isLoggedIn && (
+      {!hideSidebar && isLoggedIn && side !== 'right' && (
         <div className="border-b border-black/10 px-4 pt-0 pb-2" style={{ backgroundColor: '#F2F3F5' }}>
           <div className="flex bg-black/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03]">
             <Tooltip>
@@ -705,90 +709,92 @@ const LeftSideNav = () => {
 
       {!isLoggedIn && <div className="flex flex-1 flex-col"></div>}
 
-      <div
-        className={cn(
-          'sticky bottom-0 z-30 flex h-20 items-center justify-center border-t border-black/10 p-4 py-1.5',
-          hideSidebar && 'hidden',
-        )}
-        style={{ backgroundColor: '#F2F3F5' }}
-      >
-        {!isLoggedIn ? (
-          <div className="flex w-full items-center gap-2">
-            <Button
-              variant="default"
-              className="flex-1 bg-black px-0 text-white hover:bg-black/90"
-              onClick={() => onOpen({ type: 'auth-modal', actionId: 'login' })}
-            >
-              Login
-            </Button>
-            <Button
-              variant="default"
-              className="flex-1 bg-black px-0 text-white hover:bg-black/90"
-              onClick={() =>
-                onOpen({ type: 'auth-modal', actionId: 'register' })
-              }
-            >
-              Register
-            </Button>
-          </div>
-        ) : (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full">
-                My Account
+      {side !== 'right' && (
+        <div
+          className={cn(
+            'sticky bottom-0 z-30 flex h-20 items-center justify-center border-t border-black/10 p-4 py-1.5',
+            hideSidebar && 'hidden',
+          )}
+          style={{ backgroundColor: '#F2F3F5' }}
+        >
+          {!isLoggedIn ? (
+            <div className="flex w-full items-center gap-2">
+              <Button
+                variant="default"
+                className="flex-1 bg-black px-0 text-white hover:bg-black/90"
+                onClick={() => onOpen({ type: 'auth-modal', actionId: 'login' })}
+              >
+                Login
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              className="w-[var(--radix-dropdown-menu-trigger-width)]"
-              align="start"
-            >
-              <DropdownMenuGroup>
-                {data?.user?.role === 'super_admin' && (
-                  <DropdownMenuItem onClick={() => router.push('/admin')}>
-                    <LayoutDashboard className="text-black" /> Dashboard
+              <Button
+                variant="default"
+                className="flex-1 bg-black px-0 text-white hover:bg-black/90"
+                onClick={() =>
+                  onOpen({ type: 'auth-modal', actionId: 'register' })
+                }
+              >
+                Register
+              </Button>
+            </div>
+          ) : (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-full">
+                  My Account
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="w-[var(--radix-dropdown-menu-trigger-width)]"
+                align="start"
+              >
+                <DropdownMenuGroup>
+                  {data?.user?.role === 'super_admin' && (
+                    <DropdownMenuItem onClick={() => router.push('/admin')}>
+                      <LayoutDashboard className="text-black" /> Dashboard
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem onClick={() => router.push('/knowledge')}>
+                    <Database className="text-black" /> Data
                   </DropdownMenuItem>
-                )}
-                <DropdownMenuItem onClick={() => router.push('/knowledge')}>
-                  <Database className="text-black" /> Data
-                </DropdownMenuItem>
-                {/* Plans dropdown menu item */}
-                <DropdownMenuItem onClick={() => router.push('/upgrade')}>
-                  <Orbit className="text-black" /> Plans
-                </DropdownMenuItem>
+                  {/* Plans dropdown menu item */}
+                  <DropdownMenuItem onClick={() => router.push('/upgrade')}>
+                    <Orbit className="text-black" /> Plans
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={() =>
+                      router.push(
+                        mode === UserMode.TENANT && currentTenant
+                          ? `/organizations/${currentTenant.id}/members`
+                          : '/organizations',
+                      )
+                    }
+                  >
+                    <Users className="text-black" /> Members
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push('/legal')}>
+                    <Scale className="text-black" /> Legal
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push('/settings')}>
+                    <Settings className="text-black" /> Settings
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
 
                 <DropdownMenuItem
                   onClick={() =>
-                    router.push(
-                      mode === UserMode.TENANT && currentTenant
-                        ? `/organizations/${currentTenant.id}/members`
-                        : '/organizations',
-                    )
+                    onOpen({
+                      type: 'logout',
+                    })
                   }
                 >
-                  <Users className="text-black" /> Members
+                  <LogOut className="text-black" /> Logout
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/legal')}>
-                  <Scale className="text-black" /> Legal
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/settings')}>
-                  <Settings className="text-black" /> Settings
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem
-                onClick={() =>
-                  onOpen({
-                    type: 'logout',
-                  })
-                }
-              >
-                <LogOut className="text-black" /> Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
-      </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+        </div>
+      )}
     </>
   );
 };

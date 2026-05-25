@@ -64,7 +64,7 @@ function ModelsPage() {
         style={{ backgroundColor: '#F2F3F5' }}
       >
         <Suspense fallback={null}>
-          <LeftSideNav />
+          <LeftSideNav side="right" />
         </Suspense>
       </div>
     </div>
