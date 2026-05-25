@@ -1137,38 +1137,56 @@ const ChatInput = ({
           {/* Input container with Plus icon inside */}
           <div className="relative flex items-center gap-2 py-2">
             {!activeConversation?.knowledgebaseId && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    type="button"
-                    className="flex cursor-pointer items-center focus:outline-none"
-                    aria-label="Actions"
-                  >
-                    <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="rounded-xl w-48 shadow-lg border border-black/10 bg-white p-1">
-                  <DropdownMenuItem
-                    onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 rounded-lg cursor-pointer hover:bg-black/5"
-                  >
-                    <Paperclip className="size-4 text-gray-500" />
-                    <span>Attach Files</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => setSelectedOption(selectedOption === OPTIONS.RESEARCH ? null : OPTIONS.RESEARCH)}
-                    className={cn(
-                      "flex items-center gap-2 px-3 py-2 text-sm rounded-lg cursor-pointer transition-colors",
-                      selectedOption === OPTIONS.RESEARCH
-                        ? "text-blue-700 bg-blue-50 hover:bg-blue-100/80"
-                        : "text-gray-700 hover:bg-black/5"
-                    )}
-                  >
-                    <Globe className="size-4 text-blue-600" />
-                    <span>Deep Research</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              pathname === '/workflows' || pathname?.startsWith('/workflows') ? (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex cursor-pointer items-center focus:outline-none"
+                      aria-label="Attach File"
+                    >
+                      <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    <p>Attach File</p>
+                  </TooltipContent>
+                </Tooltip>
+              ) : (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type="button"
+                      className="flex cursor-pointer items-center focus:outline-none"
+                      aria-label="Actions"
+                    >
+                      <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="rounded-xl w-48 shadow-lg border border-black/10 bg-white p-1">
+                    <DropdownMenuItem
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 rounded-lg cursor-pointer hover:bg-black/5"
+                    >
+                      <Paperclip className="size-4 text-gray-500" />
+                      <span>Attach Files</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => setSelectedOption(selectedOption === OPTIONS.RESEARCH ? null : OPTIONS.RESEARCH)}
+                      className={cn(
+                        "flex items-center gap-2 px-3 py-2 text-sm rounded-lg cursor-pointer transition-colors",
+                        selectedOption === OPTIONS.RESEARCH
+                          ? "text-blue-700 bg-blue-50 hover:bg-blue-100/80"
+                          : "text-gray-700 hover:bg-black/5"
+                      )}
+                    >
+                      <Globe className="size-4 text-blue-600" />
+                      <span>Deep Research</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )
             )}
 
 
