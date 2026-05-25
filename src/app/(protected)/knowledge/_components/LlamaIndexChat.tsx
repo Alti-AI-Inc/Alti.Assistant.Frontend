@@ -615,7 +615,7 @@ export const LlamaIndexChat = () => {
               onDragLeave={handleDrag}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className={`w-full relative group cursor-pointer border-2 border-dashed rounded-3xl py-20 px-10 flex flex-col items-center text-center transition-all duration-300 ${
+              className={`w-full relative group cursor-pointer border-2 border-dashed rounded-3xl py-10 px-10 flex flex-col items-center text-center transition-all duration-300 ${
                 dragActive 
                   ? "border-blue-500 bg-blue-50/40 dark:bg-blue-955/20" 
                   : "border-gray-250 bg-gray-50/50 hover:bg-gray-50/80 dark:border-gray-800 dark:bg-gray-900/30 dark:hover:bg-gray-900/50"
