@@ -169,48 +169,34 @@ function ModelsPageContent() {
                 />
               </div>
 
-              {/* Box 2: Data (Knowledge Base / Connected Apps) */}
+              {/* Box 2: Select Apps (Connected Apps Only) */}
               <div className="space-y-2">
                 <Label
                   htmlFor="data"
                   className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest flex items-center gap-1.5"
                 >
                   <Database className="h-3.5 w-3.5 text-indigo-500/60" />
-                  Data
+                  Select Apps
                 </Label>
                 <select
                   id="data"
                   value={dataSelection}
                   onChange={(e) => setDataSelection(e.target.value)}
-                  className="w-full max-w-3xl rounded-xl border border-gray-200 bg-white/40 dark:bg-gray-900/40 p-4 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-gray-800 dark:text-gray-200 cursor-pointer"
+                  className="w-full rounded-xl border border-gray-200 bg-white/40 dark:bg-gray-900/40 p-4 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-gray-800 dark:text-gray-200 cursor-pointer"
                 >
-                  <option value="">No specific data source (Sandbox General Model)</option>
+                  <option value="">Select App</option>
                   
-                  <optgroup label="Workspaces & Knowledge Bases" className="font-semibold text-gray-750 dark:text-gray-300">
-                    {isLoadingKBs ? (
-                      <option disabled>Loading workspaces/knowledge bases...</option>
-                    ) : (
-                      knowledgeBases?.map((kb) => (
-                        <option key={kb.id} value={kb.id} className="font-normal">
-                          {kb.name} ({kb.documentsCount} documents)
-                        </option>
-                      ))
-                    )}
-                  </optgroup>
-
-                  <optgroup label="Connected Apps & Integrations" className="font-semibold text-gray-750 dark:text-gray-300">
-                    {isLoadingApps ? (
-                      <option disabled>Loading connected integrations...</option>
-                    ) : connectedApps.length === 0 ? (
-                      <option disabled className="text-gray-400 italic">No apps connected. Connect apps in the Apps tab.</option>
-                    ) : (
-                      connectedApps.map((app) => (
-                        <option key={app.app_name} value={`app_${app.app_name.toLowerCase()}`} className="font-normal">
-                          {app.title} (Connected)
-                        </option>
-                      ))
-                    )}
-                  </optgroup>
+                  {isLoadingApps ? (
+                    <option disabled>Loading connected integrations...</option>
+                  ) : connectedApps.length === 0 ? (
+                    <option disabled className="text-gray-400 italic">No apps connected. Connect apps in the Apps tab.</option>
+                  ) : (
+                    connectedApps.map((app) => (
+                      <option key={app.app_name} value={`app_${app.app_name.toLowerCase()}`}>
+                        {app.title}
+                      </option>
+                    ))
+                  )}
                 </select>
               </div>
 
