@@ -371,6 +371,47 @@ const LeftSideNav = () => {
             onClick={toggleLeftSidebar}
           />
         </div>
+        {/* Enclosed Search & Actions Row */}
+        {!hideSidebar && (
+          <div className="flex items-center justify-between gap-2 border-b border-black/10 px-4 py-4 transition-all duration-300">
+            {/* Search Bar Input */}
+            <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-white px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">
+              <Search className="size-3.5 flex-none text-black" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-transparent text-xs text-black outline-none placeholder:text-gray-500"
+              />
+            </div>
+
+            {/* Action Buttons to the right */}
+            {plusProps.visible && (
+              <div className="flex flex-none items-center gap-1.5 animate-in fade-in zoom-in duration-200">
+                {/* Plus for Dynamic Tab Action */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black"
+                      onClick={plusProps.onClick}
+                    >
+                      <Plus className="size-4 text-black" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>{plusProps.tooltip}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            )}
+          </div>
+        )}
+{' '}
+      </div>
+
       {/* Chat / Research / Agents / Data / Apps icon row toggle */}
       {!hideSidebar && isLoggedIn && (
         <div className="border-b border-black/10 px-4 py-2" style={{ backgroundColor: '#F2F3F5' }}>
@@ -479,46 +520,6 @@ const LeftSideNav = () => {
           </div>
         </div>
       )}
-
-      {/* Enclosed Search & Actions Row */}
-      {!hideSidebar && (
-        <div className="flex items-center justify-between gap-2 border-b border-black/10 px-4 py-4 transition-all duration-300" style={{ backgroundColor: '#F2F3F5' }}>
-          {/* Search Bar Input */}
-          <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-white px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">
-            <Search className="size-3.5 flex-none text-black" />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-transparent text-xs text-black outline-none placeholder:text-gray-500"
-            />
-          </div>
-
-          {/* Action Buttons to the right */}
-          {plusProps.visible && (
-            <div className="flex flex-none items-center gap-1.5 animate-in fade-in zoom-in duration-200">
-              {/* Plus for Dynamic Tab Action */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black"
-                    onClick={plusProps.onClick}
-                  >
-                    <Plus className="size-4 text-black" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>{plusProps.tooltip}</p>
-                </TooltipContent>
-              </Tooltip>
-            </div>
-          )}
-        </div>
-      )}
-      </div>
 
       {isLoggedIn && (
         <div
