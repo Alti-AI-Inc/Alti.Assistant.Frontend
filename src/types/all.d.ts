@@ -8,6 +8,7 @@ type ModalType =
   | 'search-workflows'
   | 'delete-conversation'
   | 'add-chatbot'
+  | 'add-model'
   | 'delete-chatbot'
   | 'edit-chatbot'
   | 'share-conversation'

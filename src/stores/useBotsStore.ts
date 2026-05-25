@@ -9,6 +9,8 @@ export interface Chatbot {
   model: string;
   avatar: string; // Emoji
   createdAt: string;
+  data?: string;
+  guardrails?: string;
 }
 
 export interface BotThread {

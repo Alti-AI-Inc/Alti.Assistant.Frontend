@@ -2,6 +2,7 @@
 import { useModalStore } from '@/stores/useModalStore';
 import { useEffect } from 'react';
 import { AddChatbotModal } from './AddChatbotModal';
+import { AddModelModal } from './AddModelModal';
 import { AuthModal } from './AuthModal';
 import CreateKnowledgeBankFolderModal from './CreateKnowledgeBankFolderModal';
 import CreateKnowledgeBaseModal from './CreateKnowledgeBaseModal';
@@ -43,6 +44,7 @@ export const ModalProvider = () => {
       {type === 'search-workflows' && <SearchWorkflows />}
       {type === 'delete-conversation' && <DeleteConversation />}
       {type === 'add-chatbot' && <AddChatbotModal />}
+      {type === 'add-model' && <AddModelModal />}
       {type === 'edit-chatbot' && <EditChatbotModal />}
       {type === 'delete-chatbot' && <DeleteChatbotModal />}
       {type === 'share-conversation' && <ShareConversationModal />}
