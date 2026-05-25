@@ -43,6 +43,7 @@ import {
   FileSpreadsheet,
   FileText,
   FileType,
+  Code,
   Globe,
   Image as ImageIcon,
   Paperclip,
@@ -427,8 +428,8 @@ const ChatInput = ({
         return '/presentation/assistant';
       case OPTIONS.WRITE_CONTRACT:
         return '/legal-contract/assistant';
-      // case OPTIONS.CODE:
-      //   return '/search/code';
+      case OPTIONS.CODE:
+        return '/code/assistant';
       case OPTIONS.RESEARCH:
         return '/deep-research/assistant';
       // case OPTIONS.GENERATE_PLAN:
@@ -1195,6 +1196,18 @@ const ChatInput = ({
                     >
                       <ImageIcon className="size-4 text-purple-600" />
                       <span>Generate Image</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => setSelectedOption(selectedOption === OPTIONS.CODE ? null : OPTIONS.CODE)}
+                      className={cn(
+                        "flex items-center gap-2 px-3 py-2 text-sm rounded-lg cursor-pointer transition-colors",
+                        selectedOption === OPTIONS.CODE
+                          ? "text-emerald-700 bg-emerald-50 hover:bg-emerald-100/80"
+                          : "text-gray-700 hover:bg-black/5"
+                      )}
+                    >
+                      <Code className="size-4 text-emerald-600" />
+                      <span>Generate Code</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
