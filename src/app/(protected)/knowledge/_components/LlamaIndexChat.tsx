@@ -747,22 +747,13 @@ export const LlamaIndexChat = () => {
             )}
 
             {/* Centered Minimal Search Bar (styled exactly like the chat prompt box) */}
-            <div className="mt-8 max-w-3xl mx-auto w-full flex flex-col gap-3">
-              <div className="flex gap-2.5 w-full">
-                <Input
-                  placeholder="Search vault files..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="flex-1 h-11 text-sm rounded-xl bg-gray-50 border-gray-200 dark:border-gray-800 dark:bg-gray-950 focus-visible:ring-1 focus-visible:ring-blue-500/30 focus-visible:border-blue-500"
-                />
-
-                <Button
-                  disabled={isLoadingFiles}
-                  className="h-11 w-11 flex-none bg-blue-600 hover:bg-blue-700 text-white rounded-xl p-0 flex items-center justify-center shadow-lg shadow-blue-500/10 dark:bg-blue-700 dark:hover:bg-blue-800"
-                >
-                  <Search className="h-4.5 w-4.5" />
-                </Button>
-              </div>
+            <div className="mt-8 max-w-5xl mx-auto w-full flex flex-col gap-3">
+              <Input
+                placeholder="Search vault files..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-11 text-sm rounded-xl bg-gray-50 border-gray-200 dark:border-gray-800 dark:bg-gray-950 focus-visible:ring-1 focus-visible:ring-blue-500/30 focus-visible:border-blue-500"
+              />
 
               {/* Minimal Results List (Only displayed when files exist in vault) */}
               {vaultFiles.length > 0 && (
