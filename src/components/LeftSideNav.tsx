@@ -20,6 +20,7 @@ import {
   LogOut,
   Orbit,
   PanelLeftClose,
+  PanelRightClose,
   Plus,
   ReceiptText,
   Scale,
@@ -355,6 +356,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           className={cn(
             'sticky top-0 z-30 flex items-center justify-between border-b border-black/10 px-4 pt-4 pb-4',
             hideSidebar && 'justify-center',
+            side === 'right' && 'flex-row-reverse',
           )}
           style={{ backgroundColor: '#F2F3F5' }}
         >
@@ -384,13 +386,23 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             )}
           </div>
 
-          <PanelLeftClose
-            className={cn(
-              'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
-              hideSidebar && 'hidden',
-            )}
-            onClick={toggleLeftSidebar}
-          />
+          {side === 'right' ? (
+            <PanelRightClose
+              className={cn(
+                'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
+                hideSidebar && 'hidden',
+              )}
+              onClick={toggleLeftSidebar}
+            />
+          ) : (
+            <PanelLeftClose
+              className={cn(
+                'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
+                hideSidebar && 'hidden',
+              )}
+              onClick={toggleLeftSidebar}
+            />
+          )}
         </div>
         {/* Enclosed Search & Actions Row */}
         {!hideSidebar && (
