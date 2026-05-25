@@ -392,7 +392,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
                 hideSidebar && 'hidden',
               )}
-              onClick={toggleLeftSidebar}
+              onClick={toggleRightSidebar}
             />
           ) : (
             <PanelLeftClose
