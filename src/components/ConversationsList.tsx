@@ -49,7 +49,7 @@ export default function ConversationsList({
     !session.isTokenExpired;
 
   // isDeepSearch drives server-side filtering: each tab hits its own API query
-  const isDeepSearch = activeTab === 'research';
+  const isDeepSearch = activeTab === 'research' ? true : undefined;
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useConversations(

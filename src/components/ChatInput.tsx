@@ -1134,26 +1134,6 @@ const ChatInput = ({
             </div>
           )}
 
-          {/* Deep Research Active Pill */}
-          {selectedOption === OPTIONS.RESEARCH && (
-            <div className="flex flex-wrap gap-2 border-b border-black/10 px-4 py-3">
-              <div
-                className="inline-flex items-center gap-2 rounded-lg border border-blue-200 px-2.5 py-1.5 shadow-xs animate-in fade-in duration-200 text-blue-700 bg-blue-50/50"
-              >
-                <Globe className="size-4 flex-shrink-0 animate-pulse text-blue-600" />
-                <span className="text-xs font-semibold">Deep Research Enabled</span>
-                <button
-                  type="button"
-                  onClick={() => setSelectedOption(null)}
-                  className="flex-shrink-0 rounded-md p-0.5 text-blue-400 transition-colors hover:bg-blue-100 hover:text-blue-700"
-                  title="Disable Deep Research"
-                >
-                  <X className="size-3.5" />
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* Input container with Plus icon inside */}
           <div className="relative flex items-center gap-2 py-2">
             {!activeConversation?.knowledgebaseId && (

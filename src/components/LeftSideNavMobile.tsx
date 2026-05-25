@@ -200,8 +200,7 @@ const LeftSideNavMobile = () => {
     } else if (pathname === '/workflows' || pathname.startsWith('/workflows')) {
       setActiveTab('workflows');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
-      const isResearch = useConversationsStore.getState().selectedOption === OPTIONS.RESEARCH;
-      setActiveTab(isResearch ? 'research' : 'chat');
+      setActiveTab('chat');
     }
   }, [pathname]);
 
@@ -210,7 +209,7 @@ const LeftSideNavMobile = () => {
     if (activeConversation) {
       const isDeepSearch = !!((activeConversation as any).is_deep_search);
       if (isDeepSearch) {
-        setActiveTab('research');
+        setActiveTab('chat');
         if (selectedOption !== OPTIONS.RESEARCH) {
           setSelectedOption(OPTIONS.RESEARCH);
         }
@@ -436,25 +435,6 @@ const LeftSideNavMobile = () => {
               </TooltipContent>
             </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('research')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'research'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <Globe className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Research</p>
-              </TooltipContent>
-            </Tooltip>
 
             <Tooltip>
               <TooltipTrigger asChild>
