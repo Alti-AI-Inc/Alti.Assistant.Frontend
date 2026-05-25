@@ -41,7 +41,13 @@ function App() {
       {!activeConversation?.knowledgebaseId &&
         !activeConversation?.messages.length && (
           <h1 className="mb-8 text-4xl font-medium">
-            {selectedOption === OPTIONS.RESEARCH ? 'Deep Research' : 'Real-Time Intelligence'}
+            {selectedOption === OPTIONS.RESEARCH
+              ? 'Deep Research'
+              : selectedOption === OPTIONS.IMAGE
+              ? 'Image Generation'
+              : selectedOption === OPTIONS.CODE
+              ? 'Code Generation'
+              : 'Real-Time Intelligence'}
           </h1>
         )}
 
