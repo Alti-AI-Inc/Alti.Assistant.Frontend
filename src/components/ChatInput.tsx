@@ -13,6 +13,12 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useBrainstorm } from '@/hooks/useBrainstorm';
 import { useContractReview } from '@/hooks/useContractReview';
 import { useDocument } from '@/hooks/useDocument';
@@ -37,6 +43,7 @@ import {
   FileSpreadsheet,
   FileText,
   FileType,
+  Globe,
   Image as ImageIcon,
   Paperclip,
   Plus,
@@ -1127,24 +1134,61 @@ const ChatInput = ({
             </div>
           )}
 
+          {/* Deep Research Active Pill */}
+          {selectedOption === OPTIONS.RESEARCH && (
+            <div className="flex flex-wrap gap-2 border-b border-black/10 px-4 py-3">
+              <div
+                className="inline-flex items-center gap-2 rounded-lg border border-blue-200 px-2.5 py-1.5 shadow-xs animate-in fade-in duration-200 text-blue-700 bg-blue-50/50"
+              >
+                <Globe className="size-4 flex-shrink-0 animate-pulse text-blue-600" />
+                <span className="text-xs font-semibold">Deep Research Enabled</span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedOption(null)}
+                  className="flex-shrink-0 rounded-md p-0.5 text-blue-400 transition-colors hover:bg-blue-100 hover:text-blue-700"
+                  title="Disable Deep Research"
+                >
+                  <X className="size-3.5" />
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Input container with Plus icon inside */}
           <div className="relative flex items-center gap-2 py-2">
             {!activeConversation?.knowledgebaseId && (
-              <Tooltip>
-                <TooltipTrigger asChild>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="flex cursor-pointer items-center"
-                    aria-label="Attach File"
+                    className="flex cursor-pointer items-center focus:outline-none"
+                    aria-label="Actions"
                   >
-                    <Paperclip className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                    <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
                   </button>
-                </TooltipTrigger>
-                <TooltipContent side="top">
-                  <p>Attach File</p>
-                </TooltipContent>
-              </Tooltip>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="rounded-xl w-48 shadow-lg border border-black/10 bg-white p-1">
+                  <DropdownMenuItem
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 rounded-lg cursor-pointer hover:bg-black/5"
+                  >
+                    <Paperclip className="size-4 text-gray-500" />
+                    <span>Attach Files</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setSelectedOption(selectedOption === OPTIONS.RESEARCH ? null : OPTIONS.RESEARCH)}
+                    className={cn(
+                      "flex items-center gap-2 px-3 py-2 text-sm rounded-lg cursor-pointer transition-colors",
+                      selectedOption === OPTIONS.RESEARCH
+                        ? "text-blue-700 bg-blue-50 hover:bg-blue-100/80"
+                        : "text-gray-700 hover:bg-black/5"
+                    )}
+                  >
+                    <Globe className="size-4 text-blue-600" />
+                    <span>Deep Research</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
 
 
