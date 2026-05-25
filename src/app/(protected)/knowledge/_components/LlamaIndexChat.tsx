@@ -433,7 +433,7 @@ export const LlamaIndexChat = () => {
   }, [showDiagnostics]);
 
   return (
-    <div className="w-full flex-1 flex flex-col h-[calc(100vh-160px)] bg-white dark:bg-gray-950 overflow-hidden relative">
+    <div className="w-full flex-1 flex flex-col h-[calc(100vh-53px)] bg-white dark:bg-gray-950 overflow-hidden relative">
       
       {/* Diagnostics Panel overlay */}
       <AnimatePresence>
