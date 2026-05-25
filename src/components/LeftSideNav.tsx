@@ -31,7 +31,7 @@ import {
   ChevronRight,
   MessageSquare,
   Globe,
-  Bot,
+  Folder,
   Database,
   LayoutGrid,
   Zap,
@@ -290,7 +290,7 @@ const LeftSideNav = () => {
       case 'bots':
         return {
           visible: true,
-          tooltip: 'New Agent',
+          tooltip: 'New Project',
           onClick: () => {
             onOpen({ type: 'add-chatbot' });
           },
@@ -448,11 +448,11 @@ const LeftSideNav = () => {
                       : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                   )}
                 >
-                  <Bot className="size-4" />
+                  <Folder className="size-4" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Agents</p>
+                <p>Projects</p>
               </TooltipContent>
             </Tooltip>
 
@@ -513,7 +513,7 @@ const LeftSideNav = () => {
           <div className="mt-4 mb-2 px-1 flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
               {activeTab === 'bots' 
-                ? 'My Agents' 
+                ? 'My Projects' 
                 : activeTab === 'research' 
                   ? 'Research History' 
                   : activeTab === 'apps' 
@@ -558,7 +558,7 @@ const LeftSideNav = () => {
                 bot.description.toLowerCase().includes(searchQuery.toLowerCase())
               ).length === 0 && (
                 <div className="py-4 text-center text-xs text-gray-500">
-                  No agents found.
+                  No projects found.
                 </div>
               )}
             </div>

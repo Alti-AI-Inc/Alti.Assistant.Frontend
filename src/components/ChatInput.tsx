@@ -1178,7 +1178,7 @@ const ChatInput = ({
                       className={cn(
                         "flex items-center gap-2 px-3 py-2 text-sm rounded-lg cursor-pointer transition-colors",
                         selectedOption === OPTIONS.RESEARCH
-                          ? "text-blue-700 bg-blue-50 hover:bg-blue-100/80"
+                          ? "bg-black/[0.06] text-black font-medium"
                           : "text-gray-700 hover:bg-black/5"
                       )}
                     >
@@ -1190,7 +1190,7 @@ const ChatInput = ({
                       className={cn(
                         "flex items-center gap-2 px-3 py-2 text-sm rounded-lg cursor-pointer transition-colors",
                         selectedOption === OPTIONS.IMAGE
-                          ? "text-purple-700 bg-purple-50 hover:bg-purple-100/80"
+                          ? "bg-black/[0.06] text-black font-medium"
                           : "text-gray-700 hover:bg-black/5"
                       )}
                     >
@@ -1202,7 +1202,7 @@ const ChatInput = ({
                       className={cn(
                         "flex items-center gap-2 px-3 py-2 text-sm rounded-lg cursor-pointer transition-colors",
                         selectedOption === OPTIONS.CODE
-                          ? "text-emerald-700 bg-emerald-50 hover:bg-emerald-100/80"
+                          ? "bg-black/[0.06] text-black font-medium"
                           : "text-gray-700 hover:bg-black/5"
                       )}
                     >
