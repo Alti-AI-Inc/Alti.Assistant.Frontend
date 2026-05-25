@@ -11,6 +11,8 @@ import { cn } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { useBotsStore } from '@/stores/useBotsStore';
+import { apiClientJson, buildApiUrl } from '@/lib/api-client';
+import { allApps } from '@/lib/all-apps';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -47,6 +49,39 @@ function ModelsPageContent() {
   const [guardrails, setGuardrails] = useState('');
   const [error, setError] = useState('');
 
+  const [connectedApps, setConnectedApps] = useState<any[]>([]);
+  const [isLoadingApps, setIsLoadingApps] = useState(false);
+
+  useEffect(() => {
+    const fetchConnectedApps = async () => {
+      setIsLoadingApps(true);
+      try {
+        const response = await apiClientJson<{ connectedAccountId: string; toolkit: { slug: string } }[]>(
+          buildApiUrl('/composio-simple/connected-accounts')
+        );
+        if (response.success && Array.isArray(response.data)) {
+          const activeSlugs = new Set(
+            response.data.map(account => account.toolkit?.slug?.toLowerCase()).filter(Boolean)
+          );
+          
+          // Match with allApps list
+          const matched = allApps.filter(app => 
+            app.isAvailable && app.app_name && activeSlugs.has(app.app_name.toLowerCase())
+          );
+          setConnectedApps(matched);
+        }
+      } catch (error) {
+        console.error('Failed to fetch connected apps', error);
+      } finally {
+        setIsLoadingApps(false);
+      }
+    };
+
+    if (session?.accessToken) {
+      fetchConnectedApps();
+    }
+  }, [session?.accessToken]);
+
   const activeBot = bots.find((b) => b.id === botParam);
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -61,7 +96,16 @@ function ModelsPageContent() {
     }
 
     const selectedKB = knowledgeBases?.find((kb) => kb.id === dataSelection);
-    const dataName = selectedKB ? selectedKB.name : (dataSelection || 'No specific data source selected');
+    let dataName = 'No specific data source selected';
+    if (selectedKB) {
+      dataName = selectedKB.name;
+    } else if (dataSelection.startsWith('app_')) {
+      const appName = dataSelection.replace('app_', '');
+      const matchedApp = connectedApps.find(a => a.app_name.toLowerCase() === appName);
+      dataName = matchedApp ? matchedApp.title : appName;
+    } else {
+      dataName = dataSelection || 'No specific data source selected';
+    }
 
     // Create the bot
     const newBot = addBot({
@@ -125,7 +169,7 @@ function ModelsPageContent() {
                 />
               </div>
 
-              {/* Box 2: Data (Knowledge Base) */}
+              {/* Box 2: Data (Knowledge Base / Connected Apps) */}
               <div className="space-y-2">
                 <Label
                   htmlFor="data"
@@ -138,18 +182,35 @@ function ModelsPageContent() {
                   id="data"
                   value={dataSelection}
                   onChange={(e) => setDataSelection(e.target.value)}
-                  className="w-full rounded-xl border border-gray-200 bg-white/40 dark:bg-gray-900/40 p-4 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-gray-800 dark:text-gray-200 cursor-pointer"
+                  className="w-full max-w-3xl rounded-xl border border-gray-200 bg-white/40 dark:bg-gray-900/40 p-4 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-gray-800 dark:text-gray-200 cursor-pointer"
                 >
                   <option value="">No specific data source (Sandbox General Model)</option>
-                  {isLoadingKBs ? (
-                    <option disabled>Loading workspaces/knowledge bases...</option>
-                  ) : (
-                    knowledgeBases?.map((kb) => (
-                      <option key={kb.id} value={kb.id}>
-                        {kb.name} ({kb.documentsCount} documents)
-                      </option>
-                    ))
-                  )}
+                  
+                  <optgroup label="Workspaces & Knowledge Bases" className="font-semibold text-gray-750 dark:text-gray-300">
+                    {isLoadingKBs ? (
+                      <option disabled>Loading workspaces/knowledge bases...</option>
+                    ) : (
+                      knowledgeBases?.map((kb) => (
+                        <option key={kb.id} value={kb.id} className="font-normal">
+                          {kb.name} ({kb.documentsCount} documents)
+                        </option>
+                      ))
+                    )}
+                  </optgroup>
+
+                  <optgroup label="Connected Apps & Integrations" className="font-semibold text-gray-750 dark:text-gray-300">
+                    {isLoadingApps ? (
+                      <option disabled>Loading connected integrations...</option>
+                    ) : connectedApps.length === 0 ? (
+                      <option disabled className="text-gray-400 italic">No apps connected. Connect apps in the Apps tab.</option>
+                    ) : (
+                      connectedApps.map((app) => (
+                        <option key={app.app_name} value={`app_${app.app_name.toLowerCase()}`} className="font-normal">
+                          {app.title} (Connected)
+                        </option>
+                      ))
+                    )}
+                  </optgroup>
                 </select>
               </div>
 
