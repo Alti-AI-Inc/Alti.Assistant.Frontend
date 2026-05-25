@@ -1184,6 +1184,18 @@ const ChatInput = ({
                       <Globe className="size-4 text-blue-600" />
                       <span>Deep Research</span>
                     </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => setSelectedOption(selectedOption === OPTIONS.IMAGE ? null : OPTIONS.IMAGE)}
+                      className={cn(
+                        "flex items-center gap-2 px-3 py-2 text-sm rounded-lg cursor-pointer transition-colors",
+                        selectedOption === OPTIONS.IMAGE
+                          ? "text-purple-700 bg-purple-50 hover:bg-purple-100/80"
+                          : "text-gray-700 hover:bg-black/5"
+                      )}
+                    >
+                      <ImageIcon className="size-4 text-purple-600" />
+                      <span>Generate Image</span>
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               )
