@@ -548,6 +548,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           className={cn(
             'flex flex-1 flex-col overflow-y-scroll px-4',
             hideSidebar && 'hidden',
+            side === 'right' && 'pb-8',
           )}
           style={{ backgroundColor: '#F2F3F5' }}
         >
