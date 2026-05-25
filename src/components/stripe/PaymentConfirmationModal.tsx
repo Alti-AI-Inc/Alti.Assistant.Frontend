@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import { useSession } from 'next-auth/react';
+import { cn } from '@/lib/utils';
 import {
   Dialog,
   DialogContent,
@@ -26,7 +27,9 @@ import {
   Loader2,
   AlertCircle,
   ArrowLeft,
+  Sparkles,
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 /**
  * Payment Confirmation Modal Component
@@ -356,104 +359,151 @@ export function PaymentConfirmationModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl">Confirm Payment</DialogTitle>
-          <DialogDescription>
-            Complete your subscription to {plan.name}
+      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-2xl shadow-2xl">
+        <DialogHeader className="space-y-1.5 pb-2 text-center sm:text-left">
+          <DialogTitle className="text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 flex items-center justify-center sm:justify-start gap-2">
+            <Sparkles className="size-5 text-indigo-500 animate-pulse" />
+            Secure Checkout
+          </DialogTitle>
+          <DialogDescription className="text-zinc-500 dark:text-zinc-400 text-sm">
+            Activate your premium capabilities for {plan.name}
           </DialogDescription>
         </DialogHeader>
 
-        {/* Plan Summary */}
-        <div className="border-primary/20 bg-primary/5 rounded-lg border-2 p-4">
-          <div className="flex items-center justify-between">
+        {/* Plan Summary Card - High-Fidelity Glassmorphism */}
+        <div className="relative overflow-hidden rounded-2xl border border-blue-500/20 bg-gradient-to-tr from-blue-600/10 via-indigo-600/5 to-purple-600/10 p-5 dark:border-blue-500/30">
+          <div className="absolute inset-0 bg-white/20 dark:bg-zinc-950/20 backdrop-blur-xs pointer-events-none" />
+          <div className="relative z-10 flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold">{plan.name}</h3>
-              <p className="text-muted-foreground text-sm">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Selected Option</span>
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-50 mt-0.5">{plan.name} Plan</h3>
+              <p className="text-xs text-zinc-500 dark:text-zinc-450 mt-1 leading-snug">
                 Billed {plan.interval || 'monthly'}
               </p>
             </div>
             <div className="text-right">
-              <div className="text-3xl font-bold">${plan.price}</div>
-              <div className="text-muted-foreground text-xs">
-                /{plan.interval || 'month'}
+              <div className="text-3xl font-extrabold text-zinc-900 dark:text-white tracking-tight">${plan.price}</div>
+              <div className="text-zinc-500 dark:text-zinc-450 text-[10px] font-bold uppercase tracking-wider mt-0.5">
+                per {plan.interval || 'month'}
               </div>
             </div>
           </div>
         </div>
 
         {/* Main Content Wrapper - relative positioning for overlay */}
-        <div className="relative">
-          {/* Loading State */}
-          {step === 'loading' && (
-            <div className="flex flex-col items-center justify-center py-12">
-              <Loader2 className="text-primary mb-4 h-10 w-10 animate-spin" />
-              <p className="text-muted-foreground text-sm">
-                Loading payment methods...
-              </p>
-            </div>
-          )}
+        <div className="relative min-h-[160px] flex flex-col justify-center">
+          <AnimatePresence mode="wait">
+            {/* Loading State */}
+            {step === 'loading' && (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="flex flex-col items-center justify-center py-8 space-y-3"
+              >
+                <Loader2 className="text-indigo-500 h-8 w-8 animate-spin" />
+                <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium animate-pulse">
+                  Querying vault credentials...
+                </p>
+              </motion.div>
+            )}
 
-          {/* Payment Method Selection */}
-          {step === 'select_method' && (
-            <div className="space-y-4">
-              <PaymentMethodList
-                paymentMethods={paymentMethods as unknown as PaymentMethod[]}
-                selectedMethodId={selectedMethodId}
-                onSelectMethod={setSelectedMethodId}
-                onAddNew={handleAddNewCard}
-              />
-            </div>
-          )}
+            {/* Payment Method Selection */}
+            {step === 'select_method' && (
+              <motion.div
+                key="select_method"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-4 py-2"
+              >
+                <PaymentMethodList
+                  paymentMethods={paymentMethods as unknown as PaymentMethod[]}
+                  selectedMethodId={selectedMethodId}
+                  onSelectMethod={setSelectedMethodId}
+                  onAddNew={handleAddNewCard}
+                />
+              </motion.div>
+            )}
 
-          {/* Add New Card */}
-          {(step === 'add_card' || step === 'processing') && (
-            <div className="relative space-y-4">
-              {paymentMethods.length > 0 && (
-                <Button
-                  variant="ghost"
-                  onClick={handleBackToSelection}
-                  className="gap-2"
-                  disabled={step === 'processing'}
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  Back to saved cards
-                </Button>
-              )}
+            {/* Add New Card */}
+            {(step === 'add_card' || step === 'processing') && (
+              <motion.div
+                key="add_card"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="relative space-y-4 py-2"
+              >
+                {paymentMethods.length > 0 && (
+                  <Button
+                    variant="ghost"
+                    onClick={handleBackToSelection}
+                    className="gap-2 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
+                    disabled={step === 'processing'}
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Back to saved cards
+                  </Button>
+                )}
 
-              <StripeCardForm
-                onCardComplete={setIsCardComplete}
-                onError={setCardError}
-                onReady={() => setIsCardReady(true)}
-              />
-            </div>
-          )}
+                <StripeCardForm
+                  onCardComplete={setIsCardComplete}
+                  onError={setCardError}
+                  onReady={() => setIsCardReady(true)}
+                />
+              </motion.div>
+            )}
 
-          {/* Processing Overlay - shown on top of add_card step */}
+            {/* Success State */}
+            {step === 'success' && (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ type: 'spring', damping: 15 }}
+                className="flex flex-col items-center justify-center py-10 text-center space-y-5"
+              >
+                <div className="relative flex items-center justify-center">
+                  <div className="absolute inset-0 size-16 rounded-full bg-emerald-500/20 dark:bg-emerald-500/10 blur-xl animate-pulse" />
+                  <motion.div
+                    initial={{ scale: 0.7, rotate: -20 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: 'spring', delay: 0.1 }}
+                    className="relative flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
+                  >
+                    <CheckCircle2 className="h-9 w-9 stroke-[2.5]" />
+                  </motion.div>
+                </div>
+                <div className="space-y-1.5 max-w-sm">
+                  <h3 className="text-xl font-bold text-zinc-900 dark:text-white">
+                    Upgrade Successful!
+                  </h3>
+                  <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed">
+                    Your {plan.name} subscription is active. Preparing your intelligence sandbox...
+                  </p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Processing Overlay */}
           {step === 'processing' && (
-            <div className="bg-background/95 absolute inset-0 z-10 flex flex-col items-center justify-center rounded-lg backdrop-blur-sm">
-              <Loader2 className="text-primary mb-4 h-10 w-10 animate-spin" />
-              <p className="text-muted-foreground text-sm">
-                {processingMessage}
-              </p>
-              <p className="text-muted-foreground mt-2 text-xs">
-                Please wait...
-              </p>
-            </div>
-          )}
-
-          {/* Success State */}
-          {step === 'success' && (
-            <div className="flex flex-col items-center justify-center py-12">
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-                <CheckCircle2 className="h-10 w-10 text-green-600" />
+            <div className="bg-white/95 dark:bg-zinc-950/95 absolute inset-0 z-20 flex flex-col items-center justify-center rounded-2xl backdrop-blur-md space-y-4">
+              <Loader2 className="text-indigo-500 h-10 w-10 animate-spin" />
+              <div className="text-center space-y-1">
+                <p className="text-zinc-950 dark:text-zinc-50 text-sm font-bold animate-pulse">
+                  {processingMessage}
+                </p>
+                <p className="text-zinc-400 dark:text-zinc-500 text-xs">
+                  Securing transaction block, please do not close...
+                </p>
               </div>
-              <h3 className="mb-2 text-xl font-semibold">
-                Payment Successful!
-              </h3>
-              <p className="text-muted-foreground text-center text-sm">
-                Your subscription has been activated. Redirecting...
-              </p>
             </div>
           )}
         </div>
@@ -461,32 +511,41 @@ export function PaymentConfirmationModal({
 
         {/* Error State */}
         {step === 'error' && (
-          <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/50 dark:text-red-200">
-            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-            <p>{error}</p>
+          <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50/50 p-4 text-sm text-red-800 dark:border-red-900/40 dark:bg-red-950/20 dark:text-red-300">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
+            <p className="leading-snug">{error}</p>
           </div>
         )}
 
         {/* Error Message (inline) */}
         {error && step !== 'error' && (
-          <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/50 dark:text-red-200">
-            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-            <p>{error}</p>
+          <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50/50 p-4 text-sm text-red-800 dark:border-red-900/40 dark:bg-red-950/20 dark:text-red-300">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
+            <p className="leading-snug">{error}</p>
           </div>
         )}
 
         {/* Action Buttons */}
         {step !== 'loading' && step !== 'processing' && step !== 'success' && (
-          <div className="flex gap-3 pt-2">
-            <Button variant="outline" onClick={handleClose} className="flex-1">
+          <div className="flex gap-4 pt-3 border-t border-zinc-100 dark:border-zinc-900/40 mt-2">
+            <Button
+              variant="outline"
+              onClick={handleClose}
+              className="flex-1 py-5 rounded-xl border-zinc-250 dark:border-zinc-800 font-bold text-zinc-500 dark:text-zinc-400"
+            >
               Cancel
             </Button>
             <Button
               onClick={handleConfirm}
-              className="flex-1"
+              className={cn(
+                "flex-1 py-5 rounded-xl font-bold transition-all duration-300 text-white border-none shadow-md",
+                canConfirm
+                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-blue-500/10 hover:shadow-indigo-500/20 hover:scale-[1.01]"
+                  : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-900 dark:text-zinc-600 shadow-none"
+              )}
               disabled={!canConfirm}
             >
-              Confirm Payment - ${plan.price}
+              Confirm Checkout - ${plan.price}
             </Button>
           </div>
         )}

@@ -36,6 +36,7 @@ import {
   LayoutGrid,
   Zap,
   Upload,
+  Cpu,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -124,7 +125,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'research' | 'bots' | 'apps' | 'workflows';
+type SidebarTab = 'chat' | 'research' | 'bots' | 'models' | 'apps' | 'workflows';
 
 const LeftSideNav = () => {
   const { data } = useSession();
@@ -205,6 +206,8 @@ const LeftSideNav = () => {
       setActiveTab('bots');
     } else if (pathname === '/workflows' || pathname.startsWith('/workflows')) {
       setActiveTab('workflows');
+    } else if (pathname === '/models' || pathname.startsWith('/models')) {
+      setActiveTab('models');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       setActiveTab('chat');
     }
@@ -245,6 +248,8 @@ const LeftSideNav = () => {
       router.push('/my-chatbots');
     } else if (tab === 'workflows') {
       router.push('/workflows');
+    } else if (tab === 'models') {
+      router.push('/models');
     } else if (tab === 'research') {
       setSelectedOption(OPTIONS.RESEARCH);
       if (pathname !== '/' && !pathname.startsWith('/c/')) {
@@ -306,6 +311,19 @@ const LeftSideNav = () => {
             setSelectedOption(null);
             close();
             router.push('/workflows');
+          },
+        };
+      case 'models':
+        return {
+          visible: true,
+          tooltip: 'New Chat',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(null);
+            close();
+            router.push('/models');
           },
         };
       case 'apps':
@@ -462,6 +480,26 @@ const LeftSideNav = () => {
               <TooltipTrigger asChild>
                 <button
                   type="button"
+                  onClick={() => handleTabChange('models')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'models'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Cpu className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Models</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
                   onClick={() => handleTabChange('apps')}
                   className={cn(
                     'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
@@ -520,7 +558,9 @@ const LeftSideNav = () => {
                     ? 'Composio Apps' 
                     : activeTab === 'workflows'
                       ? 'Active Workflows'
-                      : 'Chat History'}
+                      : activeTab === 'models'
+                        ? 'Model History'
+                        : 'Chat History'}
             </span>
           </div>
           {activeTab === 'bots' ? (
@@ -658,7 +698,7 @@ const LeftSideNav = () => {
               })}
             </div>
           ) : (
-            <ConversationsList searchQuery={searchQuery} activeTab={activeTab} />
+            <ConversationsList searchQuery={searchQuery} activeTab={activeTab === 'models' ? 'chat' : activeTab as any} />
           )}
         </div>
       )}

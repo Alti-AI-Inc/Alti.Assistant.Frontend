@@ -13,6 +13,7 @@ import StripeProviderWithErrorBoundary from '@/components/stripe/StripeProvider'
 import { Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 function UpgradePage() {
   const { data: session } = useSession();
@@ -82,16 +83,27 @@ function UpgradePage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col px-6 py-12">
-      <div className="container mx-auto max-w-7xl">
-        <h1 className="mt-10 text-center text-5xl font-semibold tracking-tighter">
-          Plans
-        </h1>
-        <p className="text-muted-foreground mt-4 text-center text-lg">
-          Choose the perfect plan for your needs.
-        </p>
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className="flex min-h-screen flex-col px-6 py-12 relative overflow-hidden"
+    >
+      {/* Decorative premium aura background glows */}
+      <div className="absolute top-0 left-1/4 size-[400px] rounded-full bg-blue-500/5 dark:bg-blue-500/5 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 size-[400px] rounded-full bg-indigo-500/5 dark:bg-indigo-500/5 blur-[120px] pointer-events-none" />
 
-        <div className="mt-20">
+      <div className="container mx-auto max-w-7xl relative z-10">
+        <div className="text-center space-y-4 max-w-2xl mx-auto mt-8">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-zinc-900 via-indigo-950 to-zinc-900 dark:from-white dark:via-indigo-200 dark:to-white bg-clip-text text-transparent">
+            Upgrade Your Intelligence
+          </h1>
+          <p className="text-zinc-500 dark:text-zinc-400 text-base sm:text-lg leading-relaxed">
+            Choose the perfect plan to unlock safe recursive deep research, multi-agent workspaces, and real-time knowledge graphs.
+          </p>
+        </div>
+
+        <div className="mt-16 sm:mt-24">
           <OrganizationPricingCards
             onSelectPlan={handleSelectPlan}
             currentPlanId={currentPlanId}
@@ -114,7 +126,7 @@ function UpgradePage() {
           }}
         />
       )}
-    </div>
+    </motion.div>
   );
 }
 

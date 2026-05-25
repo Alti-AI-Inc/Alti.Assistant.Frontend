@@ -35,6 +35,7 @@ import {
   LayoutGrid,
   Zap,
   Upload,
+  Cpu,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -122,7 +123,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'research' | 'bots' | 'apps' | 'workflows';
+type SidebarTab = 'chat' | 'research' | 'bots' | 'models' | 'apps' | 'workflows';
 
 const LeftSideNavMobile = () => {
   const { data } = useSession();
@@ -199,6 +200,8 @@ const LeftSideNavMobile = () => {
       setActiveTab('bots');
     } else if (pathname === '/workflows' || pathname.startsWith('/workflows')) {
       setActiveTab('workflows');
+    } else if (pathname === '/models' || pathname.startsWith('/models')) {
+      setActiveTab('models');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       setActiveTab('chat');
     }
@@ -241,6 +244,9 @@ const LeftSideNavMobile = () => {
       close();
     } else if (tab === 'workflows') {
       router.push('/workflows');
+      close();
+    } else if (tab === 'models') {
+      router.push('/models');
       close();
     } else if (tab === 'research') {
       setSelectedOption(OPTIONS.RESEARCH);
@@ -300,6 +306,19 @@ const LeftSideNavMobile = () => {
           label: 'New Workflow',
           onClick: () => {
             alert('Define Cron or Webhook triggers to chain your custom agents and RAG indexes in a new workflow!');
+            close();
+          },
+        };
+      case 'models':
+        return {
+          visible: true,
+          label: 'New Chat',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(null);
+            router.push('/models');
             close();
           },
         };
@@ -462,6 +481,26 @@ const LeftSideNavMobile = () => {
               <TooltipTrigger asChild>
                 <button
                   type="button"
+                  onClick={() => handleTabChange('models')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'models'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Cpu className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Models</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
                   onClick={() => handleTabChange('apps')}
                   className={cn(
                     'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
@@ -515,7 +554,9 @@ const LeftSideNavMobile = () => {
                       ? 'Composio Apps' 
                       : activeTab === 'workflows'
                         ? 'Active Workflows'
-                        : 'Chat History'}
+                        : activeTab === 'models'
+                          ? 'Model History'
+                          : 'Chat History'}
               </span>
               {activeTab !== 'apps' && activeTab !== 'bots' && mode === UserMode.TENANT && currentTenant && (
                 <Badge
@@ -698,7 +739,7 @@ const LeftSideNavMobile = () => {
               })}
             </div>
           ) : (
-            <ConversationsList activeTab={activeTab} />
+            <ConversationsList activeTab={activeTab === 'models' ? 'chat' : activeTab as any} />
           )}
         </div>
       )}
