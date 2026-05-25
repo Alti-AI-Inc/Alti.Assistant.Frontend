@@ -34,6 +34,7 @@ import {
   Database,
   LayoutGrid,
   Zap,
+  Upload,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -121,7 +122,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'research' | 'bots' | 'apps' | 'data' | 'workflows';
+type SidebarTab = 'chat' | 'research' | 'bots' | 'apps' | 'workflows';
 
 const LeftSideNavMobile = () => {
   const { data } = useSession();
@@ -167,7 +168,7 @@ const LeftSideNavMobile = () => {
   };
 
   useEffect(() => {
-    if (activeTab === 'apps' || activeTab === 'data') {
+    if (activeTab === 'apps') {
       fetchConnectionStatus();
     }
   }, [activeTab]);
@@ -196,8 +197,6 @@ const LeftSideNavMobile = () => {
       setActiveTab('apps');
     } else if (pathname === '/my-chatbots' || pathname.startsWith('/my-chatbots')) {
       setActiveTab('bots');
-    } else if (pathname === '/knowledge' || pathname.startsWith('/knowledge')) {
-      setActiveTab('data');
     } else if (pathname === '/workflows' || pathname.startsWith('/workflows')) {
       setActiveTab('workflows');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
@@ -240,9 +239,6 @@ const LeftSideNavMobile = () => {
       close();
     } else if (tab === 'bots') {
       router.push('/my-chatbots');
-      close();
-    } else if (tab === 'data') {
-      router.push('/knowledge?connector=file');
       close();
     } else if (tab === 'workflows') {
       router.push('/workflows');
@@ -308,7 +304,6 @@ const LeftSideNavMobile = () => {
             close();
           },
         };
-      case 'data':
       case 'apps':
       default:
         return {
@@ -481,25 +476,7 @@ const LeftSideNavMobile = () => {
               </TooltipContent>
             </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('data')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'data'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <Database className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Data</p>
-              </TooltipContent>
-            </Tooltip>
+            {/* Removed Data tab */}
 
             <Tooltip>
               <TooltipTrigger asChild>
@@ -556,13 +533,11 @@ const LeftSideNavMobile = () => {
                     ? 'Research History' 
                     : activeTab === 'apps' 
                       ? 'Composio Apps' 
-                      : activeTab === 'data' 
-                        ? 'Data Connectors' 
-                        : activeTab === 'workflows'
-                          ? 'Active Workflows'
-                          : 'Chat History'}
+                      : activeTab === 'workflows'
+                        ? 'Active Workflows'
+                        : 'Chat History'}
               </span>
-              {activeTab !== 'apps' && activeTab !== 'bots' && activeTab !== 'data' && mode === UserMode.TENANT && currentTenant && (
+              {activeTab !== 'apps' && activeTab !== 'bots' && mode === UserMode.TENANT && currentTenant && (
                 <Badge
                   variant="outline"
                   className="h-4 px-1.5 text-[9px] font-normal border-gray-400 text-gray-500 bg-transparent"
@@ -571,7 +546,7 @@ const LeftSideNavMobile = () => {
                   {currentTenant.name}
                 </Badge>
               )}
-              {activeTab !== 'apps' && activeTab !== 'bots' && activeTab !== 'data' && mode === UserMode.PERSONAL && (
+              {activeTab !== 'apps' && activeTab !== 'bots' && mode === UserMode.PERSONAL && (
                 <Badge
                   variant="outline"
                   className="h-4 px-1.5 text-[9px] font-normal border-gray-400 text-gray-500 bg-transparent"
@@ -581,7 +556,7 @@ const LeftSideNavMobile = () => {
                 </Badge>
               )}
             </div>
-            {activeTab === 'apps' || activeTab === 'data' ? (
+            {activeTab === 'apps' ? (
               <div className="flex h-7 flex-1 items-center gap-1.5 rounded-lg border border-black/10 bg-white px-2 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 ml-4 max-w-[150px]">
                 <Search className="size-3 text-black" />
                 <input
@@ -710,108 +685,7 @@ const LeftSideNavMobile = () => {
                 })
               )}
             </div>
-          ) : activeTab === 'data' ? (
-            <div className="space-y-1 py-1 pb-4">
-              {/* File Upload special connector */}
-              {'file upload'.includes(searchQuery.toLowerCase()) && (
-                <button
-                  onClick={() => {
-                    router.push(`/knowledge?connector=file`);
-                    close();
-                  }}
-                  className={cn(
-                    "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
-                    (activeConnectorId === 'file' || !activeConnectorId) && pathname === '/knowledge'
-                      ? "bg-black/[0.06] border border-black/10 shadow-xs"
-                      : "hover:bg-black/[0.03] border border-transparent"
-                  )}
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="flex-none h-7 w-7 rounded-md bg-white border border-black/10 flex items-center justify-center text-sm shadow-xs">
-                      📁
-                    </div>
-                    <div className="min-w-0">
-                      <h4 className={cn(
-                        "text-xs font-semibold truncate",
-                        (activeConnectorId === 'file' || !activeConnectorId) && pathname === '/knowledge'
-                          ? "text-blue-600 font-bold"
-                          : "text-gray-950"
-                      )}>
-                        File Upload
-                      </h4>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Active" />
-                  </div>
-                </button>
-              )}
 
-              {/* Dynamic Composio apps acting as data connectors */}
-              {filteredApps.map(app => {
-                const isConnected = connectedAppSlugs.has(app.app_name.toLowerCase());
-                const isSelected = activeConnectorId === app.app_name && pathname === '/knowledge';
-
-                return (
-                  <button
-                    key={app.app_name}
-                    onClick={() => {
-                      router.push(`/knowledge?connector=${app.app_name}`);
-                      close();
-                    }}
-                    className={cn(
-                      "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
-                      isSelected
-                        ? "bg-black/[0.06] border border-black/10 shadow-xs"
-                        : "hover:bg-black/[0.03] border border-transparent"
-                    )}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      {/* App Logo with Fallback */}
-                      <div className="relative flex-none h-7 w-7 rounded-md overflow-hidden border border-black/10 bg-white p-1 flex items-center justify-center">
-                        {app.image ? (
-                          <img
-                            src={app.image}
-                            alt={app.title}
-                            className="h-full w-full object-contain"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                              e.currentTarget.parentElement!.innerHTML = `<span class="text-xs font-semibold text-blue-600">${app.title.charAt(0)}</span>`;
-                            }}
-                          />
-                        ) : (
-                          <span className="text-xs font-semibold text-blue-600">{app.title.charAt(0)}</span>
-                        )}
-                      </div>
-
-                      <div className="min-w-0">
-                        <h4 className={cn(
-                          "text-xs font-semibold truncate",
-                          isSelected ? "text-blue-600 font-bold" : "text-gray-950"
-                        )}>
-                          {app.title}
-                        </h4>
-                      </div>
-                    </div>
-
-                    {/* Right hand Status dot indicators */}
-                    <div className="flex items-center gap-1">
-                      {isConnected ? (
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Connected" />
-                      ) : (
-                        <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:translate-x-0.5 transition-transform" />
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
-
-              {!['file upload'].includes(searchQuery.toLowerCase()) && filteredApps.length === 0 && (
-                <div className="py-4 text-center text-xs text-gray-500">
-                  No integrations found.
-                </div>
-              )}
-            </div>
           ) : activeTab === 'workflows' ? (
             <div className="space-y-1 py-1 pb-4">
               {[
@@ -938,6 +812,14 @@ const LeftSideNavMobile = () => {
                   }}
                 >
                   <Scale className="text-black" /> Legal
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push('/knowledge');
+                    close();
+                  }}
+                >
+                  <Upload className="text-black" /> File Upload
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
