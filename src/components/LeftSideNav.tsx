@@ -320,7 +320,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       case 'models':
         return {
           visible: true,
-          tooltip: 'New Chat',
+          tooltip: 'New Model',
           onClick: () => {
             setActiveConversation(null);
             setShowStartLastMessage(false);
