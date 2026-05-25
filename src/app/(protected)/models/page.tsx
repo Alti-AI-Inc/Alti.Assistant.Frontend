@@ -168,9 +168,11 @@ function ModelsPageContent() {
                   onChange={(e) => {
                     setInstructions(e.target.value);
                     if (error) setError('');
+                    e.target.style.height = 'auto';
+                    e.target.style.height = `${e.target.scrollHeight}px`;
                   }}
                   placeholder="Instructions"
-                  className="w-full min-h-[140px] rounded-xl border-gray-200/80 bg-white/40 dark:bg-gray-900/40 p-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 text-sm leading-relaxed"
+                  className="w-full min-h-[140px] resize-none overflow-hidden rounded-xl border-gray-200/80 bg-white/40 dark:bg-gray-900/40 p-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 text-sm leading-relaxed"
                 />
               </div>
 
@@ -186,9 +188,13 @@ function ModelsPageContent() {
                 <Textarea
                   id="guardrails"
                   value={guardrails}
-                  onChange={(e) => setGuardrails(e.target.value)}
+                  onChange={(e) => {
+                    setGuardrails(e.target.value);
+                    e.target.style.height = 'auto';
+                    e.target.style.height = `${e.target.scrollHeight}px`;
+                  }}
                   placeholder="Guardrails"
-                  className="w-full min-h-[140px] rounded-xl border-gray-200/80 bg-white/40 dark:bg-gray-900/40 p-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 text-sm leading-relaxed"
+                  className="w-full min-h-[140px] resize-none overflow-hidden rounded-xl border-gray-200/80 bg-white/40 dark:bg-gray-900/40 p-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 text-sm leading-relaxed"
                 />
               </div>
             </div>
