@@ -414,7 +414,7 @@ const LeftSideNav = () => {
 
       {/* Chat / Research / Agents / Data / Apps icon row toggle */}
       {!hideSidebar && isLoggedIn && (
-        <div className="border-b border-black/10 px-4 py-2" style={{ backgroundColor: '#F2F3F5' }}>
+        <div className="border-b border-black/10 px-4 pt-0 pb-2" style={{ backgroundColor: '#F2F3F5' }}>
           <div className="flex bg-black/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03]">
             <Tooltip>
               <TooltipTrigger asChild>
