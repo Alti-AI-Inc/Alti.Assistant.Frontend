@@ -11,8 +11,10 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 export default function AudioRecorder({
   setMessage,
+  setIsRecording,
 }: {
   setMessage: (message: string) => void;
+  setIsRecording?: (recording: boolean) => void;
 }) {
   const { data } = useSession();
   const [recording, setRecording] = useState(false);
@@ -27,6 +29,7 @@ export default function AudioRecorder({
   const startRecording = async () => {
     cancelRef.current = false;
     audioChunks.current = [];
+    if (setIsRecording) setIsRecording(true);
 
     // 1. Try Browser SpeechRecognition (provides live streaming, zero-latency Speech-to-Text)
     const SpeechRecognition =
@@ -112,6 +115,7 @@ export default function AudioRecorder({
               console.error('❌ Error uploading:', err);
             } finally {
               setLoadingText(false);
+              if (setIsRecording) setIsRecording(false);
             }
           } else {
             audioChunks.current = [];
@@ -128,6 +132,8 @@ export default function AudioRecorder({
   };
 
   const stopRecording = () => {
+    if (setIsRecording) setIsRecording(false);
+
     if (recognitionRef.current) {
       try {
         recognitionRef.current.stop();
@@ -150,6 +156,8 @@ export default function AudioRecorder({
 
   const handleCancelRecording = () => {
     cancelRef.current = true;
+    if (setIsRecording) setIsRecording(false);
+    setMessage(''); // Clear the prompt text on cancel!
 
     if (recognitionRef.current) {
       try {

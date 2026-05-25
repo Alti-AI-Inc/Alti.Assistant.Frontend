@@ -152,6 +152,7 @@ const ChatInput = ({
 
   // Custom files state for docs (controlled or uncontrolled)
   const [internalSelectedFiles, setInternalSelectedFiles] = useState<File[]>([]);
+  const [isAudioRecording, setIsAudioRecording] = useState(false);
   const [researchSettings, setResearchSettings] = useState<PreFlightSettings>({
     depth: 'thorough',
     consensusLevel: 'majority',
@@ -1170,7 +1171,7 @@ const ChatInput = ({
                       onClick={() => fileInputRef.current?.click()}
                       className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 rounded-lg cursor-pointer hover:bg-black/5"
                     >
-                      <Paperclip className="size-4 text-gray-500" />
+                      <Paperclip className="size-4 text-black" />
                       <span>Attach Files</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem
@@ -1182,7 +1183,7 @@ const ChatInput = ({
                           : "text-gray-700 hover:bg-black/5"
                       )}
                     >
-                      <Globe className="size-4 text-blue-600" />
+                      <Globe className="size-4 text-black" />
                       <span>Deep Research</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem
@@ -1194,7 +1195,7 @@ const ChatInput = ({
                           : "text-gray-700 hover:bg-black/5"
                       )}
                     >
-                      <ImageIcon className="size-4 text-purple-600" />
+                      <ImageIcon className="size-4 text-black" />
                       <span>Generate Image</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem
@@ -1206,7 +1207,7 @@ const ChatInput = ({
                           : "text-gray-700 hover:bg-black/5"
                       )}
                     >
-                      <Code className="size-4 text-emerald-600" />
+                      <Code className="size-4 text-black" />
                       <span>Generate Code</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -1236,7 +1237,7 @@ const ChatInput = ({
               className="min-h-8 w-full flex-1 resize-none border-none px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
               autoFocus
             />
-            {message ? (
+            {message && !isAudioRecording ? (
               <ArrowUp
                 onClick={handleSubmit}
                 className={cn(
@@ -1247,7 +1248,7 @@ const ChatInput = ({
                 )}
               />
             ) : (
-              <AudioRecorder setMessage={setMessage} />
+              <AudioRecorder setMessage={setMessage} setIsRecording={setIsAudioRecording} />
             )}
           </div>
         </div>
