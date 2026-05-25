@@ -22,68 +22,152 @@ export default function AudioRecorder({
   );
   const audioChunks = useRef<Blob[]>([]);
   const cancelRef = useRef(false);
+  const recognitionRef = useRef<any>(null);
 
   const startRecording = async () => {
-    if (!navigator.mediaDevices) return;
-
     cancelRef.current = false;
-
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const recorder = new MediaRecorder(stream);
-    setMediaRecorder(recorder);
     audioChunks.current = [];
 
-    recorder.ondataavailable = e => {
-      audioChunks.current.push(e.data);
-    };
+    // 1. Try Browser SpeechRecognition (provides live streaming, zero-latency Speech-to-Text)
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
-    recorder.onstop = async () => {
-      // release mic
-      stream.getTracks().forEach(track => track.stop());
-      if (cancelRef.current) {
-        audioChunks.current = [];
-        return;
-      }
-      const blob = new Blob(audioChunks.current, { type: 'audio/webm' });
-      audioChunks.current = [];
-
-      const formData = new FormData();
-      formData.append('file', blob, 'recording.webm');
-      formData.append('user', data?.user.id as string);
-
+    if (SpeechRecognition) {
       try {
-        const res = await getTranscription(formData);
-        console.log({ res });
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
 
-        if (!res.success) {
-          console.error('Transcription failed:', res.debugMessage);
-          // throw new Error(res.message);
-        } else if (res.data && res.data.transcription) {
-          setMessage(res.data.transcription);
-        }
+        let finalTranscript = '';
+
+        recognition.onresult = (event: any) => {
+          let interimTranscript = '';
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+              finalTranscript += event.results[i][0].transcript;
+            } else {
+              interimTranscript += event.results[i][0].transcript;
+            }
+          }
+          const text = finalTranscript + interimTranscript;
+          if (text.trim() && !cancelRef.current) {
+            setMessage(text);
+          }
+        };
+
+        recognition.onerror = (event: any) => {
+          console.error('Speech recognition error:', event.error);
+        };
+
+        recognition.onend = () => {
+          console.log('Speech recognition ended');
+        };
+
+        recognitionRef.current = recognition;
+        recognition.start();
       } catch (err) {
-        setLoadingText(false);
-        console.error('❌ Error uploading:', err);
-      } finally {
-        setLoadingText(false);
+        console.warn('Failed to start SpeechRecognition:', err);
       }
-    };
+    }
 
-    recorder.start();
+    // 2. Concurrently record raw audio for server-side GCP STT backup
+    if (navigator.mediaDevices) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const recorder = new MediaRecorder(stream);
+        setMediaRecorder(recorder);
+
+        recorder.ondataavailable = e => {
+          audioChunks.current.push(e.data);
+        };
+
+        recorder.onstop = async () => {
+          stream.getTracks().forEach(track => track.stop());
+          if (cancelRef.current) {
+            audioChunks.current = [];
+            return;
+          }
+
+          // If browser didn't support live recognition, we fall back to uploading the file to the GCP backend
+          if (!SpeechRecognition) {
+            const blob = new Blob(audioChunks.current, { type: 'audio/webm' });
+            audioChunks.current = [];
+
+            const formData = new FormData();
+            formData.append('file', blob, 'recording.webm');
+            formData.append('user', data?.user.id as string);
+
+            try {
+              setLoadingText(true);
+              const res = await getTranscription(formData);
+              console.log({ res });
+
+              if (!res.success) {
+                console.error('Transcription failed:', res.debugMessage);
+              } else if (res.data && res.data.transcription) {
+                setMessage(res.data.transcription);
+              }
+            } catch (err) {
+              console.error('❌ Error uploading:', err);
+            } finally {
+              setLoadingText(false);
+            }
+          } else {
+            audioChunks.current = [];
+          }
+        };
+
+        recorder.start();
+      } catch (err) {
+        console.error('Failed to get media devices for backup recording:', err);
+      }
+    }
+
     setRecording(true);
   };
 
   const stopRecording = () => {
-    if (!mediaRecorder) return;
-    mediaRecorder.stop();
-    setLoadingText(true);
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch (err) {
+        console.error('Error stopping recognition:', err);
+      }
+      recognitionRef.current = null;
+    }
+
+    if (mediaRecorder) {
+      try {
+        mediaRecorder.stop();
+      } catch (err) {
+        console.error('Error stopping media recorder:', err);
+      }
+    }
+
     setRecording(false);
   };
 
   const handleCancelRecording = () => {
-    if (!mediaRecorder) return;
     cancelRef.current = true;
-    mediaRecorder.stop();
+
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.abort();
+      } catch (err) {
+        console.error('Error aborting recognition:', err);
+      }
+      recognitionRef.current = null;
+    }
+
+    if (mediaRecorder) {
+      try {
+        mediaRecorder.stop();
+      } catch (err) {
+        console.error('Error stopping media recorder on cancel:', err);
+      }
+    }
+
     setRecording(false);
     setLoadingText(false);
   };
