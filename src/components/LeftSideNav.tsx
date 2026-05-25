@@ -576,11 +576,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     : activeTab === 'workflows'
                       ? 'Active Workflows'
                       : activeTab === 'models'
-                        ? 'Model History'
+                        ? (side === 'right' ? 'Chat History' : 'My Models')
                         : 'Chat History'}
             </span>
           </div>
-          {activeTab === 'bots' ? (
+          {activeTab === 'bots' || (activeTab === 'models' && side === 'left') ? (
             <div className="flex-1 space-y-1 py-1 pb-4">
               {bots
                 .filter(bot =>
@@ -588,13 +588,21 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   bot.description.toLowerCase().includes(searchQuery.toLowerCase())
                 )
                 .map(bot => {
-                  const isSelected = activeBotId === bot.id && pathname === '/my-chatbots';
+                  const isSelected = activeBotId === bot.id && (
+                    activeTab === 'models' 
+                      ? pathname === '/models' 
+                      : pathname === '/my-chatbots'
+                  );
                   return (
                     <button
                       key={bot.id}
                       onClick={() => {
                         setActiveBotId(bot.id);
-                        router.push(`/my-chatbots?bot=${bot.id}`);
+                        if (activeTab === 'models') {
+                          router.push(`/models?bot=${bot.id}`);
+                        } else {
+                          router.push(`/my-chatbots?bot=${bot.id}`);
+                        }
                       }}
                       className={cn(
                         "group flex h-9 w-full items-center justify-between rounded-md text-sm font-medium text-black text-left transition-all",
@@ -615,7 +623,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 bot.description.toLowerCase().includes(searchQuery.toLowerCase())
               ).length === 0 && (
                 <div className="py-4 text-center text-xs text-gray-500">
-                  No projects found.
+                  {activeTab === 'models' ? 'No models found.' : 'No projects found.'}
                 </div>
               )}
             </div>
