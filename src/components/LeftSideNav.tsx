@@ -728,6 +728,9 @@ const LeftSideNav = () => {
                     <LayoutDashboard className="text-black" /> Dashboard
                   </DropdownMenuItem>
                 )}
+                <DropdownMenuItem onClick={() => router.push('/knowledge')}>
+                  <Database className="text-black" /> Data
+                </DropdownMenuItem>
                 {/* Plans dropdown menu item */}
                 <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                   <Orbit className="text-black" /> Plans
@@ -749,9 +752,6 @@ const LeftSideNav = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/settings')}>
                   <Settings className="text-black" /> Settings
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/knowledge')}>
-                  <Upload className="text-black" /> File Upload
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

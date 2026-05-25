@@ -757,14 +757,14 @@ const LeftSideNavMobile = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuGroup>
-                {/* <DropdownMenuItem
+                <DropdownMenuItem
                   onClick={() => {
-                    router.push('/apps');
+                    router.push('/knowledge');
                     close();
                   }}
                 >
-                  <LayoutGrid className="text-black" /> Apps
-                </DropdownMenuItem> */}
+                  <Database className="text-black" /> Data
+                </DropdownMenuItem>
                 {/* Plans dropdown menu item */}
                 <DropdownMenuItem
                   onClick={() => {
@@ -812,14 +812,6 @@ const LeftSideNavMobile = () => {
                   }}
                 >
                   <Scale className="text-black" /> Legal
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push('/knowledge');
-                    close();
-                  }}
-                >
-                  <Upload className="text-black" /> File Upload
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
