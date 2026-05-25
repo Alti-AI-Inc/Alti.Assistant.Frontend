@@ -606,7 +606,7 @@ export const LlamaIndexChat = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
-            className="flex-1 flex flex-col items-center justify-center p-8 max-w-xl mx-auto w-full"
+            className="flex-1 flex flex-col items-center justify-start py-12 px-8 max-w-5xl mx-auto w-full"
           >
             {/* Visual Glassmorphic Dropping zone */}
             <div 
@@ -615,9 +615,9 @@ export const LlamaIndexChat = () => {
               onDragLeave={handleDrag}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className={`w-full relative group cursor-pointer border-2 border-dashed rounded-3xl p-10 flex flex-col items-center text-center transition-all duration-300 ${
+              className={`w-full relative group cursor-pointer border-2 border-dashed rounded-3xl py-20 px-10 flex flex-col items-center text-center transition-all duration-300 ${
                 dragActive 
-                  ? "border-blue-500 bg-blue-50/40 dark:bg-blue-950/20" 
+                  ? "border-blue-500 bg-blue-50/40 dark:bg-blue-955/20" 
                   : "border-gray-250 bg-gray-50/50 hover:bg-gray-50/80 dark:border-gray-800 dark:bg-gray-900/30 dark:hover:bg-gray-900/50"
               }`}
             >
@@ -641,7 +641,7 @@ export const LlamaIndexChat = () => {
                 </div>
               ) : (
                 <div className="flex flex-col items-center space-y-4">
-                  <div className="h-14 w-14 rounded-2xl bg-blue-50/60 dark:bg-blue-950/30 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform duration-300">
+                  <div className="h-14 w-14 rounded-2xl bg-blue-50/60 dark:bg-blue-955/30 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform duration-300">
                     <Upload className="h-7 w-7" />
                   </div>
                   <div>
@@ -657,30 +657,12 @@ export const LlamaIndexChat = () => {
               )}
             </div>
 
-            {/* Ingestion Strategy Options selector */}
-            <div className="w-full mt-4 flex items-center justify-between p-3 rounded-2xl border border-gray-150 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/10 text-left">
-              <div>
-                <span className="text-[11px] font-bold text-gray-900 dark:text-gray-100 block">Deduplication Strategy</span>
-                <span className="text-[9.5px] text-gray-500">Determine how LlamaIndex updates existing vector indices.</span>
-              </div>
-              <select
-                value={ingestStrategy}
-                onChange={e => setIngestStrategy(e.target.value as any)}
-                onClick={e => e.stopPropagation()}
-                className="text-xs h-8 px-2.5 rounded-lg border border-gray-250 bg-white dark:border-gray-800 dark:bg-gray-900 text-gray-700 dark:text-gray-300 font-medium"
-              >
-                <option value="upsert">Smart Update (Upsert)</option>
-                <option value="duplicates">Append Duplicates</option>
-                <option value="upserts_and_delete">Sync & Purge Old</option>
-              </select>
-            </div>
-
             {/* Error notifications */}
             {errorMessage && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="w-full mt-4 flex items-start gap-2.5 p-3.5 rounded-xl border border-red-200 bg-red-50 text-red-750 text-xs dark:bg-red-950/15 dark:border-red-900 dark:text-red-400 text-left"
+                className="w-full mt-4 flex items-start gap-2.5 p-3.5 rounded-xl border border-red-200 bg-red-50 text-red-750 text-xs dark:bg-red-955/15 dark:border-red-900 dark:text-red-400 text-left"
               >
                 <AlertCircle className="h-4 w-4 flex-none mt-0.5" />
                 <div>
@@ -689,20 +671,6 @@ export const LlamaIndexChat = () => {
                 </div>
               </motion.div>
             )}
-
-            {/* Ingestion Info card */}
-            <div className="w-full grid grid-cols-2 gap-3 mt-6 text-left">
-              <div className="p-3.5 rounded-2xl border border-gray-150 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-900/10">
-                <FileCode className="h-4.5 w-4.5 text-blue-500 mb-2" />
-                <h4 className="text-xs font-bold text-gray-950 dark:text-gray-50">Vector Embeddings</h4>
-                <p className="text-[10px] text-gray-500 mt-1 leading-normal">LlamaIndex translates text into 768-dim embeddings in real-time.</p>
-              </div>
-              <div className="p-3.5 rounded-2xl border border-gray-150 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-900/10">
-                <CheckCircle2 className="h-4.5 w-4.5 text-blue-500 mb-2" />
-                <h4 className="text-xs font-bold text-gray-950 dark:text-gray-50">Zero Hallucinations</h4>
-                <p className="text-[10px] text-gray-500 mt-1 leading-normal">Strict context containment limits answers purely to your document data.</p>
-              </div>
-            </div>
 
           </motion.div>
         ) : (
