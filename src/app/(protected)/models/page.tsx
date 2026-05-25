@@ -6,11 +6,13 @@ import LeftSideNav from '@/components/LeftSideNav';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import { cn } from '@/lib/utils';
 import { useConversationsStore, OPTIONS } from '@/stores/useConverstionsStore';
+import { useSidebarStore } from '@/stores/useSidebarStore';
 import { useSession } from 'next-auth/react';
 
 function ModelsPage() {
   const { data } = useSession();
   const { activeConversation, setActiveConversation, selectedOption } = useConversationsStore();
+  const { isRightSidebarOpen } = useSidebarStore();
 
   useEffect(() => {
     setActiveConversation(null);
@@ -60,7 +62,10 @@ function ModelsPage() {
 
       {/* Right Sidebar - Desktop Companion Menu (Mirroring the Left Menu) */}
       <div
-        className="sticky top-0 right-0 hidden h-screen w-68 flex-col border-l border-black/10 transition-all duration-300 ease-in-out md:flex"
+        className={cn(
+          'sticky top-0 right-0 hidden h-screen flex-col border-l border-black/10 transition-all duration-300 ease-in-out md:flex',
+          isRightSidebarOpen ? 'w-68' : 'w-10',
+        )}
         style={{ backgroundColor: '#F2F3F5' }}
       >
         <Suspense fallback={null}>

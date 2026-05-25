@@ -147,10 +147,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     setShowStartLastMessage,
     setUserMessage,
   } = useConversationsStore();
-  const { isLeftSidebarOpen, toggleLeftSidebar } = useSidebarStore();
+  const { isLeftSidebarOpen, toggleLeftSidebar, isRightSidebarOpen, toggleRightSidebar } = useSidebarStore();
   const { bots, activeBotId, setActiveBotId } = useBotsStore();
 
-  const hideSidebar = !isLeftSidebarOpen;
+  const hideSidebar = side === 'right' ? !isRightSidebarOpen : !isLeftSidebarOpen;
   const isLoggedIn = data?.accessToken;
 
   const [logoHovered, setLogoHovered] = useState(false);
@@ -372,7 +372,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 className={cn(
                   'size-[21px] cursor-pointer text-gray-600 transition-transform duration-300',
                 )}
-                onClick={toggleLeftSidebar}
+                onClick={side === 'right' ? toggleRightSidebar : toggleLeftSidebar}
               />
             ) : (
               <Link href="/">
