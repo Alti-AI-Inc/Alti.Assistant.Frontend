@@ -164,7 +164,7 @@ export const LlamaIndexChat = () => {
         {
           id: 'welcome',
           role: 'assistant',
-          content: `LlamaIndex successfully parsed and indexed **${selectedFile.name}** using the **${ingestStrategy.toUpperCase()}** strategy!\n\nI have loaded the vector store database. Ask me any question to query the document context.`,
+          content: `Successfully parsed and indexed **${selectedFile.name}**!\n\nI have loaded the vector store database. Ask me any question to query the document context.`,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         }
       ]);
@@ -346,7 +346,7 @@ export const LlamaIndexChat = () => {
       const errorMessage: Message = {
         id: `error-${Date.now()}`,
         role: 'assistant',
-        content: `Error retrieving data from LlamaIndex: **${error.message || 'Server timeout or connection failed.'}**`,
+        content: `Error retrieving data from the vault: **${error.message || 'Server timeout or connection failed.'}**`,
         timestamp: botTimestamp,
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -635,8 +635,8 @@ export const LlamaIndexChat = () => {
                     <RefreshCw className="h-10 w-10 text-blue-600 animate-spin" />
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-gray-955 dark:text-gray-50">LlamaIndex Ingest</h3>
-                    <p className="text-xs text-gray-500 mt-1 animate-pulse">Running {ingestStrategy.toUpperCase()} strategies & vector mapping...</p>
+                    <h3 className="text-base font-semibold text-gray-955 dark:text-gray-50">Processing document...</h3>
+                    <p className="text-xs text-gray-500 mt-1 animate-pulse">Analyzing structures & vector mapping...</p>
                   </div>
                 </div>
               ) : (
@@ -835,14 +835,14 @@ export const LlamaIndexChat = () => {
                         </div>
                       )}
 
-                      {/* Interactive LlamaIndex Citations */}
+                      {/* Interactive Citations */}
                       {!isUser && hasSources && (
                         <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800 w-full">
                           <button
                             onClick={() => toggleSources(msg.id)}
                             className="flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:opacity-80 transition-opacity focus:outline-none cursor-pointer"
                           >
-                            <span>LlamaIndex Retrieved Source Nodes</span>
+                            <span>Retrieved Source Context</span>
                             {isExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                           </button>
 
