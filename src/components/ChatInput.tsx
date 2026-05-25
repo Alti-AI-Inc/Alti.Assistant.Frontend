@@ -1231,11 +1231,7 @@ const ChatInput = ({
                   : activeConversation?.knowledgebaseId &&
                       activeKnowledgeBaseName
                     ? `Chat with ${activeKnowledgeBaseName}`
-                    : selectedOption === OPTIONS.IMAGE
-                      ? 'Describe the image you want to create...'
-                      : selectedOption === OPTIONS.EDIT_IMAGE
-                        ? 'Describe how you want to edit the image...'
-                        : 'Chat with alti'
+                    : 'Enter prompt here...'
               }
               className="min-h-8 w-full flex-1 resize-none border-none px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
               autoFocus
