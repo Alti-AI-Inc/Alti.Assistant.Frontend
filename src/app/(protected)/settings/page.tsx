@@ -9,6 +9,10 @@ import {
   Card,
   CardContent,
 } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+} from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Input } from '@/components/ui/input';
@@ -113,6 +117,7 @@ const Instructions = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isAudioRecording, setIsAudioRecording] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -268,7 +273,7 @@ const Instructions = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => handleDeleteInstruction(item.id)}
+                  onClick={() => setDeleteTargetId(item.id)}
                   className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none ml-2"
                   title="Delete Custom Prompt"
                 >
@@ -279,6 +284,45 @@ const Instructions = () => {
           </div>
         )}
       </div>
+
+      {/* iOS-Style Delete Confirmation Dialog */}
+      <Dialog open={deleteTargetId !== null} onOpenChange={(open) => !open && setDeleteTargetId(null)}>
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[270px] sm:max-w-[270px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+          {/* Centered Content Section */}
+          <div className="px-5 pt-5 pb-4 text-center">
+            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+              Delete Instruction
+            </h2>
+            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+              Are you sure you want to remove this instruction?
+            </p>
+          </div>
+
+          {/* Extended Border & iOS Layout Action Buttons */}
+          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+            {/* Cancel Option */}
+            <button
+              onClick={() => setDeleteTargetId(null)}
+              className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none"
+            >
+              Cancel
+            </button>
+            
+            {/* Confirm Option */}
+            <button
+              onClick={() => {
+                if (deleteTargetId) {
+                  handleDeleteInstruction(deleteTargetId);
+                  setDeleteTargetId(null);
+                }
+              }}
+              className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none"
+            >
+              Delete
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
@@ -290,6 +334,7 @@ const Guardrails = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isAudioRecording, setIsAudioRecording] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -445,7 +490,7 @@ const Guardrails = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => handleDeleteGuardrail(item.id)}
+                  onClick={() => setDeleteTargetId(item.id)}
                   className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none ml-2"
                   title="Delete Safety Rule"
                 >
@@ -456,6 +501,45 @@ const Guardrails = () => {
           </div>
         )}
       </div>
+
+      {/* iOS-Style Delete Confirmation Dialog */}
+      <Dialog open={deleteTargetId !== null} onOpenChange={(open) => !open && setDeleteTargetId(null)}>
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[270px] sm:max-w-[270px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+          {/* Centered Content Section */}
+          <div className="px-5 pt-5 pb-4 text-center">
+            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+              Delete Guardrail
+            </h2>
+            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+              Are you sure you want to remove this guardrail?
+            </p>
+          </div>
+
+          {/* Extended Border & iOS Layout Action Buttons */}
+          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+            {/* Cancel Option */}
+            <button
+              onClick={() => setDeleteTargetId(null)}
+              className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none"
+            >
+              Cancel
+            </button>
+            
+            {/* Confirm Option */}
+            <button
+              onClick={() => {
+                if (deleteTargetId) {
+                  handleDeleteGuardrail(deleteTargetId);
+                  setDeleteTargetId(null);
+                }
+              }}
+              className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none"
+            >
+              Delete
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
