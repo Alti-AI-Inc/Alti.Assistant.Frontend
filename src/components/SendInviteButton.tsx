@@ -1,4 +1,3 @@
-import { ArrowRight, Check } from 'lucide-react';
 import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -19,13 +18,13 @@ const SendInviteButton = ({
     try {
       setIsCopied(true);
 
-      // Reset back to copy icon after 2 seconds
+      // Reset back after 1.5 seconds
       setTimeout(() => {
-        // setIsCopied(false);
+        setIsCopied(false);
         onClose();
-      }, 500);
+      }, 1500);
     } catch (err) {
-      console.error('Failed to copy text: ', err);
+      console.error('Failed to send: ', err);
     }
   };
 
@@ -34,17 +33,12 @@ const SendInviteButton = ({
       onClick={handleCopy}
       variant="ghost"
       className={cn(
-        '-ml-2 flex size-8 items-center justify-center bg-gray-300 transition-all duration-200 hover:bg-gray-400',
-        content && 'bg-black hover:bg-black',
+        'flex h-8 items-center justify-center rounded-md px-3 text-xs font-medium transition-all duration-200 bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-300',
+        content && 'bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black',
         className,
       )}
-      // title={isCopied ? 'Copied!' : 'Copy to clipboard'}
     >
-      {isCopied ? (
-        <Check className="size-4 text-green-600 transition-all duration-200" />
-      ) : (
-        <ArrowRight className="size-4 text-white transition-all duration-200" />
-      )}
+      {isCopied ? 'Sent!' : 'Send'}
     </Button>
   );
 };
