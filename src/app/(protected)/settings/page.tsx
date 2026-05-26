@@ -61,46 +61,39 @@ const Page = () => {
 
 const Memory = () => {
   return (
-    <div className="max-w-2xl">
-      <p className="text-muted-foreground text-sm">
-        Configure how long you want Alti to remember and learn from your previous
-        conversations to build context.
-      </p>
-      
-      <div className="mt-6 rounded-xl border border-black/10 bg-white p-6 shadow-xs dark:bg-gray-800">
-        <RadioGroup defaultValue="1-month" className="space-y-4">
-          <div className="flex items-center gap-3">
-            <RadioGroupItem className="border-gray-400" value="off" id="r1" />
-            <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r1">
-              Off
-            </Label>
-          </div>
-          <div className="flex items-center gap-3">
-            <RadioGroupItem className="border-gray-400" value="1-month" id="r2" />
-            <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r2">
-              1 Month
-            </Label>
-          </div>
-          <div className="flex items-center gap-3">
-            <RadioGroupItem className="border-gray-400" value="3-month" id="r3" />
-            <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r3">
-              3 Months
-            </Label>
-          </div>
-          <div className="flex items-center gap-3">
-            <RadioGroupItem className="border-gray-400" value="6-month" id="r4" />
-            <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r4">
-              6 Months
-            </Label>
-          </div>
-          <div className="flex items-center gap-3">
-            <RadioGroupItem className="border-gray-400" value="12-month" id="r5" />
-            <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r5">
-              12 Months
-            </Label>
-          </div>
-        </RadioGroup>
-      </div>
+    <div className="max-w-2xl pt-2">
+      <RadioGroup defaultValue="1-month" className="space-y-4">
+        <div className="flex items-center gap-3">
+          <RadioGroupItem className="border-gray-400" value="off" id="r1" />
+          <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r1">
+            Off
+          </Label>
+        </div>
+        <div className="flex items-center gap-3">
+          <RadioGroupItem className="border-gray-400" value="1-month" id="r2" />
+          <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r2">
+            1 Month
+          </Label>
+        </div>
+        <div className="flex items-center gap-3">
+          <RadioGroupItem className="border-gray-400" value="3-month" id="r3" />
+          <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r3">
+            3 Months
+          </Label>
+        </div>
+        <div className="flex items-center gap-3">
+          <RadioGroupItem className="border-gray-400" value="6-month" id="r4" />
+          <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r4">
+            6 Months
+          </Label>
+        </div>
+        <div className="flex items-center gap-3">
+          <RadioGroupItem className="border-gray-400" value="12-month" id="r5" />
+          <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r5">
+            12 Months
+          </Label>
+        </div>
+      </RadioGroup>
     </div>
   );
 };
