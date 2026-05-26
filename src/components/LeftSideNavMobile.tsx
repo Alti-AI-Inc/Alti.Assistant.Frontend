@@ -36,6 +36,7 @@ import {
   Zap,
   Upload,
   Cpu,
+  Sparkles,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -479,7 +480,7 @@ const LeftSideNavMobile = () => {
                   : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
               )}
             >
-              <Cpu className="size-4" />
+              <Sparkles className="size-4" />
             </button>
 
             <button
