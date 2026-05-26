@@ -26,10 +26,13 @@ function App() {
     kb => kb.id === activeConversation?.knowledgebaseId,
   )[0]?.name;
 
+  const hasMessages = !!activeConversation?.messages?.length;
+
   return (
     <div
       className={cn(
-        'flex h-full w-full flex-1 flex-col items-center justify-center',
+        'flex h-full w-full flex-1 flex-col items-center',
+        hasMessages ? 'justify-start pt-0' : 'justify-start pt-[22vh]',
       )}
       style={{ backgroundColor: '#FCFCFC' }}
     >
@@ -39,7 +42,7 @@ function App() {
         </h1>
       )}
       {!activeConversation?.knowledgebaseId &&
-        !activeConversation?.messages.length && (
+        !hasMessages && (
           <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
             {selectedOption === OPTIONS.RESEARCH
               ? 'Deep Research'

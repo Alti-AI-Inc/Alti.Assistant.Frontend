@@ -7,6 +7,8 @@ import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversat
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useBotsStore } from '@/stores/useBotsStore';
 
+import { cn } from '@/lib/utils';
+
 function AssistantWorkspaceContent() {
   const searchParams = useSearchParams();
   
@@ -25,6 +27,8 @@ function AssistantWorkspaceContent() {
     }
   }, [convIdParam, setActiveBotId, setActiveConversation]);
 
+  const hasMessages = !!activeConversation?.messages?.length;
+
   return (
     <div className="flex h-full w-full overflow-hidden bg-[#FCFCFC] dark:bg-gray-950 relative">
       {/* Background blobs for premium glassmorphism */}
@@ -32,9 +36,14 @@ function AssistantWorkspaceContent() {
       <div className="absolute bottom-10 left-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Middle Interactive Workspace */}
-      <div className="flex h-full w-full flex-1 flex-col items-center justify-center relative z-10">
-        {!activeConversation?.messages?.length && (
-          <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white">
+      <div
+        className={cn(
+          'flex h-full w-full flex-1 flex-col items-center relative z-10',
+          hasMessages ? 'justify-start pt-0' : 'justify-start pt-[22vh]',
+        )}
+      >
+        {!hasMessages && (
+          <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
             Alti Assistant
           </h1>
         )}
