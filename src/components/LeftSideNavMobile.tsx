@@ -126,6 +126,20 @@ const DATA_CONNECTORS: DataConnector[] = [
 
 type SidebarTab = 'chat' | 'research' | 'bots' | 'models' | 'apps' | 'workflows';
 
+const AVAILABLE_COMPOSIO_APPS = (() => {
+  const uniqueMap = new Map<string, APP>();
+  allApps.forEach(app => {
+    if (app.isAvailable && app.app_name) {
+      const slug = app.app_name.toLowerCase();
+      if (!uniqueMap.has(slug)) {
+        uniqueMap.set(slug, app);
+      }
+    }
+  });
+  return Array.from(uniqueMap.values())
+    .sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+})();
+
 const LeftSideNavMobile = () => {
   const { data } = useSession();
   const router = useRouter();
@@ -166,24 +180,21 @@ const LeftSideNavMobile = () => {
     }
   }, [connections]);
 
-  const availableComposioApps = (() => {
-    const uniqueMap = new Map<string, APP>();
-    allApps.forEach(app => {
-      if (app.isAvailable && app.app_name) {
-        const slug = app.app_name.toLowerCase();
-        if (!uniqueMap.has(slug)) {
-          uniqueMap.set(slug, app);
-        }
-      }
-    });
-    return Array.from(uniqueMap.values())
-      .sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
-  })();
+  const filteredApps = useMemo(() => {
+    return AVAILABLE_COMPOSIO_APPS.filter(app =>
+      app.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      app.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [searchQuery]);
 
-  const filteredApps = availableComposioApps.filter(app =>
-    app.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    app.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const displayedApps = useMemo(() => {
+    if (searchQuery.trim() !== '') {
+      return filteredApps;
+    }
+    const connected = AVAILABLE_COMPOSIO_APPS.filter(app => connectedAppSlugs.has(app.app_name.toLowerCase()));
+    const nonConnected = AVAILABLE_COMPOSIO_APPS.filter(app => !connectedAppSlugs.has(app.app_name.toLowerCase())).slice(0, 50);
+    return [...connected, ...nonConnected];
+  }, [searchQuery, filteredApps, connectedAppSlugs]);
 
   useEffect(() => {
     if (pathname === '/apps') {
@@ -604,68 +615,75 @@ const LeftSideNavMobile = () => {
             </div>
           ) : activeTab === 'apps' ? (
             <div className="space-y-1 py-1 pb-4">
-              {filteredApps.length === 0 ? (
+              {displayedApps.length === 0 ? (
                 <div className="py-4 text-center text-xs text-gray-500">
                   No integrations found.
                 </div>
               ) : (
-                filteredApps.map(app => {
-                  const isConnected = connectedAppSlugs.has(app.app_name.toLowerCase());
-                  const isSelected = activeAppSlug === app.app_name;
-                  
-                  return (
-                    <button
-                      key={app.app_name}
-                      onClick={() => {
-                        router.push(`/apps?app=${app.app_name}`);
-                        close();
-                      }}
-                      className={cn(
-                        "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
-                        isSelected 
-                          ? "bg-black/[0.06] border border-black/10 shadow-xs" 
-                          : "hover:bg-black/[0.03] border border-transparent"
-                      )}
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        {/* App Logo with Fallback */}
-                        <div className="relative flex-none h-7 w-7 rounded-md overflow-hidden border border-black/10 bg-white p-1 flex items-center justify-center">
-                          {app.image ? (
-                            <img 
-                              src={app.image} 
-                              alt={app.title} 
-                              className="h-full w-full object-contain"
-                              onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                                e.currentTarget.parentElement!.innerHTML = `<span class="text-xs font-semibold text-blue-600">${app.title.charAt(0)}</span>`;
-                              }}
-                            />
+                <>
+                  {displayedApps.map(app => {
+                    const isConnected = connectedAppSlugs.has(app.app_name.toLowerCase());
+                    const isSelected = activeAppSlug === app.app_name;
+                    
+                    return (
+                      <button
+                        key={app.app_name}
+                        onClick={() => {
+                          router.push(`/apps?app=${app.app_name}`);
+                          close();
+                        }}
+                        className={cn(
+                          "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
+                          isSelected 
+                            ? "bg-black/[0.06] border border-black/10 shadow-xs" 
+                            : "hover:bg-black/[0.03] border border-transparent"
+                        )}
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          {/* App Logo with Fallback */}
+                          <div className="relative flex-none h-7 w-7 rounded-md overflow-hidden border border-black/10 bg-white p-1 flex items-center justify-center">
+                            {app.image ? (
+                              <img 
+                                src={app.image} 
+                                alt={app.title} 
+                                className="h-full w-full object-contain"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                  e.currentTarget.parentElement!.innerHTML = `<span class="text-xs font-semibold text-blue-600">${app.title.charAt(0)}</span>`;
+                                }}
+                              />
+                            ) : (
+                              <span className="text-xs font-semibold text-blue-600">{app.title.charAt(0)}</span>
+                            )}
+                          </div>
+   
+                          <div className="min-w-0">
+                            <h4 className={cn(
+                              "text-xs font-semibold truncate",
+                              isSelected ? "text-blue-600 font-bold" : "text-gray-950"
+                            )}>
+                              {app.title}
+                            </h4>
+                          </div>
+                        </div>
+   
+                        {/* Right hand Status dot indicators */}
+                        <div className="flex items-center gap-1">
+                          {isConnected ? (
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Connected" />
                           ) : (
-                            <span className="text-xs font-semibold text-blue-600">{app.title.charAt(0)}</span>
+                            <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:translate-x-0.5 transition-transform" />
                           )}
                         </div>
- 
-                        <div className="min-w-0">
-                          <h4 className={cn(
-                            "text-xs font-semibold truncate",
-                            isSelected ? "text-blue-600 font-bold" : "text-gray-950"
-                          )}>
-                            {app.title}
-                          </h4>
-                        </div>
-                      </div>
- 
-                      {/* Right hand Status dot indicators */}
-                      <div className="flex items-center gap-1">
-                        {isConnected ? (
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Connected" />
-                        ) : (
-                          <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:translate-x-0.5 transition-transform" />
-                        )}
-                      </div>
-                    </button>
-                  );
-                })
+                      </button>
+                    );
+                  })}
+                  {filteredApps.length > displayedApps.length && (
+                    <div className="py-2 px-3 text-[10px] text-center text-gray-500 italic bg-black/[0.02] rounded-lg border border-dashed border-black/5 mt-2">
+                      Use search to find all {filteredApps.length} apps.
+                    </div>
+                  )}
+                </>
               )}
             </div>
 
