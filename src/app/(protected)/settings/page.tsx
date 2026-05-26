@@ -198,7 +198,7 @@ const Instructions = () => {
       {/* Top Add Instruction Prompter (Integrated Chat-Style Input Box) */}
       <div className="flex items-center rounded-2xl border border-black/10 dark:border-white/10 bg-gray-50/50 dark:bg-gray-900/30 px-3.5 py-1.5 shadow-xs transition-all focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
         <input
-          placeholder="Enter new custom instruction prompt here..."
+          placeholder="Enter instruction here..."
           value={inputVal}
           onChange={(e) => setInputVal(e.target.value)}
           onKeyDown={(e) => {
@@ -230,7 +230,7 @@ const Instructions = () => {
         <div className="relative flex items-center">
           <Search className="absolute left-3 h-4 w-4 text-gray-400" />
           <Input
-            placeholder="Search system instructions..."
+            placeholder="Search instructions..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-11 pl-9 text-sm rounded-xl bg-gray-50 border-gray-200 dark:border-gray-800 dark:bg-gray-955 focus-visible:ring-1 focus-visible:ring-indigo-500/30 focus-visible:border-indigo-500"
@@ -375,7 +375,7 @@ const Guardrails = () => {
       {/* Top Add Guardrail Prompter (Integrated Chat-Style Input Box) */}
       <div className="flex items-center rounded-2xl border border-black/10 dark:border-white/10 bg-gray-50/50 dark:bg-gray-900/30 px-3.5 py-1.5 shadow-xs transition-all focus-within:border-rose-500 focus-within:ring-1 focus-within:ring-rose-500">
         <input
-          placeholder="Enter new safety guardrail rule here..."
+          placeholder="Enter guardrail here..."
           value={inputVal}
           onChange={(e) => setInputVal(e.target.value)}
           onKeyDown={(e) => {
@@ -407,7 +407,7 @@ const Guardrails = () => {
         <div className="relative flex items-center">
           <Search className="absolute left-3 h-4 w-4 text-gray-400" />
           <Input
-            placeholder="Search guardrail rules..."
+            placeholder="Search guardrails..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-11 pl-9 text-sm rounded-xl bg-gray-50 border-gray-200 dark:border-gray-800 dark:bg-gray-955 focus-visible:ring-1 focus-visible:ring-rose-500/30 focus-visible:border-rose-500"
