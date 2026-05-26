@@ -100,7 +100,7 @@ function MyChatbotsContent() {
         <div
           className={cn(
             'flex-1 flex flex-col items-center overflow-hidden relative',
-            activeBotThreadId ? 'justify-start pt-0' : 'justify-start pt-[22vh]',
+            activeBotThreadId ? 'justify-start pt-0' : 'justify-start pt-36',
           )}
         >
           {!activeBotThreadId && (

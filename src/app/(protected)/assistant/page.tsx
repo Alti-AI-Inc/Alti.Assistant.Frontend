@@ -39,7 +39,7 @@ function AssistantWorkspaceContent() {
       <div
         className={cn(
           'flex h-full w-full flex-1 flex-col items-center relative z-10',
-          hasMessages ? 'justify-start pt-0' : 'justify-start pt-[22vh]',
+          hasMessages ? 'justify-start pt-0' : 'justify-start pt-36',
         )}
       >
         {!hasMessages && (

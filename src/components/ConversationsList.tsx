@@ -168,10 +168,7 @@ export default function ConversationsList({
   }
 
   return (
-    <div
-      className="mt-2 h-[calc(100vh-60px)] overflow-y-auto"
-      style={{ backgroundColor: '#F2F3F5' }}
-    >
+    <div className="mt-2 space-y-1 py-1 pb-4">
       {filteredConversations.length === 0 && status === 'success' && (
         <div className="mt-6 flex flex-col items-center gap-1 px-2 text-center">
           <p className="text-xs text-gray-400">

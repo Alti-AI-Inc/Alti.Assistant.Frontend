@@ -14,13 +14,13 @@ function WorkflowsClient() {
     setActiveConversation(null);
   }, [setActiveConversation]);
 
-  const hasMessages = !!activeConversation?.messages.length;
+  const hasMessages = !!activeConversation?.messages?.length;
 
   return (
     <div
       className={cn(
         'flex h-full w-full flex-1 flex-col items-center',
-        hasMessages ? 'justify-start pt-0' : 'justify-start pt-[22vh]',
+        hasMessages ? 'justify-start pt-0' : 'justify-start pt-36',
       )}
       style={{ backgroundColor: '#FCFCFC' }}
     >

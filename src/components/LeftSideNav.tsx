@@ -552,7 +552,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         >
 
           {activeTab === 'bots' ? (
-            <div className="flex-1 space-y-1 py-1 pb-4 mt-2">
+            <div className="mt-2 space-y-1 py-1 pb-4">
               {bots
                 .filter(bot =>
                   bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -608,7 +608,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               )}
             </div>
           ) : activeTab === 'apps' ? (
-            <div className="flex-1 space-y-1 py-1 pb-4">
+            <div className="mt-2 space-y-1 py-1 pb-4">
               {displayedApps.length === 0 ? (
                 <div className="py-4 text-center text-xs text-gray-500">
                   No integrations found.
@@ -680,7 +680,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               )}
             </div>
           ) : activeTab === 'workflows' ? (
-            <div className="flex-1 space-y-1 py-1 pb-4 mt-2">
+            <div className="mt-2 space-y-1 py-1 pb-4">
               {[
                 { id: 'wf-1', name: 'Daily Market Intel', icon: '📊', trigger: 'Every Day @ 8am', active: true },
                 { id: 'wf-2', name: 'Code Vulnerability Scan', icon: '🛡️', trigger: 'On Git Push', active: true },
