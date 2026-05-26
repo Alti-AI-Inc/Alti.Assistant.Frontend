@@ -17,7 +17,6 @@ import {
   ShieldCheck,
   Sparkles,
   AlertCircle,
-  Settings,
   UserPlus,
 } from 'lucide-react';
 import { useState } from 'react';
@@ -39,13 +38,7 @@ const Page = () => {
       {/* Main Content Area */}
       <div className="flex-1 overflow-y-auto">
         <div className="mx-auto max-w-4xl p-8">
-          {/* Header Mode Indicator */}
-          <div className="mb-6 flex items-center gap-2">
-            <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1 bg-white shadow-xs border-black/10 text-gray-700">
-              <Settings className="size-3.5" />
-              System Configuration
-            </Badge>
-          </div>
+
 
           {/* Content based on selected option */}
           <div className="mt-6">
