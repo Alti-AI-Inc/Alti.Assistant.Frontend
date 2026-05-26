@@ -573,8 +573,9 @@ const LeftSideNavMobile = () => {
                           : "hover:bg-black/5"
                       )}
                     >
-                      <span className="flex-1 truncate px-1 py-2">
-                        📁 {bot.name}
+                      <span className="flex-1 truncate px-3 py-2 flex items-center gap-2.5">
+                        <Folder className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />
+                        <span className="truncate">{bot.name}</span>
                       </span>
                       <ChevronRight className="mr-2 h-3.5 w-3.5 text-black transition-opacity" />
                     </button>
@@ -686,8 +687,9 @@ const LeftSideNavMobile = () => {
                         : "hover:bg-black/5"
                     )}
                   >
-                    <span className="flex-1 truncate px-1 py-2">
-                      ⚡ {wf.name}
+                    <span className="flex-1 truncate px-3 py-2 flex items-center gap-2.5">
+                      <Zap className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />
+                      <span className="truncate">{wf.name}</span>
                     </span>
                     <ChevronRight className="mr-2 h-3.5 w-3.5 text-black opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity" />
                   </button>

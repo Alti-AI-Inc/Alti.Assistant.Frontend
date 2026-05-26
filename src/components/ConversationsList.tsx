@@ -16,6 +16,14 @@ import {
   Pencil,
   Share,
   Trash2,
+  MessageSquare,
+  Search,
+  Code2,
+  Mail,
+  FileText,
+  Scale,
+  Palette,
+  Sparkles,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -57,28 +65,52 @@ export default function ConversationsList({
       isDeepSearch,
     );
 
+  const getDisplayIcon = (title: string) => {
+    if (activeTab === 'chat') {
+      return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    }
+    if (activeTab !== 'assistant') {
+      return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    }
+
+    const cleanTitle = formatConversationTitle(title);
+    const lower = cleanTitle.toLowerCase();
+
+    if (lower.includes('search') || lower.includes('google') || lower.includes('web')) {
+      return <Search className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    } else if (lower.includes('code') || lower.includes('write') || lower.includes('debug') || lower.includes('python') || lower.includes('rust') || lower.includes('go')) {
+      return <Code2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    } else if (lower.includes('email') || lower.includes('mail') || lower.includes('send') || lower.includes('draft') || lower.includes('composio')) {
+      return <Mail className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    } else if (lower.includes('notion') || lower.includes('doc') || lower.includes('file') || lower.includes('summarize') || lower.includes('pdf')) {
+      return <FileText className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    } else if (lower.includes('contract') || lower.includes('legal') || lower.includes('agreement')) {
+      return <Scale className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    } else if (lower.includes('image') || lower.includes('draw') || lower.includes('photo') || lower.includes('generation')) {
+      return <Palette className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    }
+    return <Sparkles className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+  };
+
   const getDisplayTitle = (title: string) => {
     const cleanTitle = formatConversationTitle(title);
-    if (activeTab === 'chat') {
-      return `💬 ${cleanTitle}`;
-    }
     if (activeTab !== 'assistant') return cleanTitle;
 
     const lower = cleanTitle.toLowerCase();
     if (lower.includes('search') || lower.includes('google') || lower.includes('web')) {
-      return `🔍 /web_search: ${cleanTitle}`;
+      return `/web_search: ${cleanTitle}`;
     } else if (lower.includes('code') || lower.includes('write') || lower.includes('debug') || lower.includes('python') || lower.includes('rust') || lower.includes('go')) {
-      return `💻 /code_gen: ${cleanTitle}`;
+      return `/code_gen: ${cleanTitle}`;
     } else if (lower.includes('email') || lower.includes('mail') || lower.includes('send') || lower.includes('draft') || lower.includes('composio')) {
-      return `✉️ /composio: ${cleanTitle}`;
+      return `/composio: ${cleanTitle}`;
     } else if (lower.includes('notion') || lower.includes('doc') || lower.includes('file') || lower.includes('summarize') || lower.includes('pdf')) {
-      return `📁 /doc_analysis: ${cleanTitle}`;
+      return `/doc_analysis: ${cleanTitle}`;
     } else if (lower.includes('contract') || lower.includes('legal') || lower.includes('agreement')) {
-      return `⚖️ /legal_bot: ${cleanTitle}`;
+      return `/legal_bot: ${cleanTitle}`;
     } else if (lower.includes('image') || lower.includes('draw') || lower.includes('photo') || lower.includes('generation')) {
-      return `🎨 /image_gen: ${cleanTitle}`;
+      return `/image_gen: ${cleanTitle}`;
     }
-    return `⭐ ${cleanTitle}`;
+    return cleanTitle;
   };
 
   const observerRef = useRef<HTMLDivElement | null>(null);
@@ -156,10 +188,11 @@ export default function ConversationsList({
           key={chat._id}
         >
           <span
-            className="flex-1 cursor-pointer truncate px-1 py-2 text-xs font-semibold"
+            className="flex-1 cursor-pointer truncate px-3 py-2 text-xs font-semibold flex items-center gap-2.5"
             onClick={() => handleConversationClick(chat.conversationId)}
           >
-            {getDisplayTitle(chat.title)}
+            {getDisplayIcon(chat.title)}
+            <span className="truncate">{getDisplayTitle(chat.title)}</span>
           </span>
 
           <DropdownMenu>
