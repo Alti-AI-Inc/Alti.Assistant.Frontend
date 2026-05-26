@@ -244,43 +244,28 @@ const Invite = () => {
   const [email, setEmail] = useState('');
 
   return (
-    <div className="max-w-2xl space-y-6">
-      <div>
-        <p className="text-muted-foreground text-sm">
-          Invite your friends or team members to join Alti and collaborate seamlessly on tasks, research, and workflows.
-        </p>
+    <div className="max-w-2xl pt-2">
+      <div className="relative flex items-center">
+        <input
+          id="friend-email"
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder="Enter email address"
+          className="w-full h-10 rounded-lg border border-black/10 bg-gray-50/50 px-4 pr-32 text-sm text-gray-800 placeholder-gray-400 shadow-inner focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 outline-none transition-all"
+        />
+        <div className="absolute right-1">
+          <SendInviteButton
+            content={email}
+            className={`h-8 px-4 text-xs font-semibold rounded-md shadow-sm transition-all ${
+              email.trim()
+                ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                : 'bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 pointer-events-none'
+            }`}
+            onClose={() => setEmail('')}
+          />
+        </div>
       </div>
-
-      <Card className="border border-black/10 shadow-xs bg-white dark:bg-gray-800">
-        <CardContent className="pt-6 space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="friend-email" className="text-sm font-semibold text-gray-800 dark:text-gray-200">
-              Email Address
-            </Label>
-            <div className="relative flex items-center">
-              <input
-                id="friend-email"
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="Enter email address"
-                className="w-full h-10 rounded-lg border border-black/10 bg-gray-50/50 px-4 pr-32 text-sm text-gray-800 placeholder-gray-400 shadow-inner focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 outline-none transition-all"
-              />
-              <div className="absolute right-1">
-                <SendInviteButton
-                  content={email}
-                  className={`h-8 px-4 text-xs font-semibold rounded-md shadow-sm transition-all ${
-                    email.trim()
-                      ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
-                      : 'bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 pointer-events-none'
-                  }`}
-                  onClose={() => setEmail('')}
-                />
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };
