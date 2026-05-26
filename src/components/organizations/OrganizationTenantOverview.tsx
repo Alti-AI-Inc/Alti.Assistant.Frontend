@@ -438,8 +438,8 @@ export function OrganizationTenantOverview({
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2 border-t border-black/5">
-              <div className="text-[10px] text-gray-500 max-w-md">
-                <span className="font-semibold text-black dark:text-gray-300">Billing notice:</span> Adding a new team member adds an active seat to your plan at <span className="font-semibold text-black dark:text-white">$25.00/month</span>.
+              <div className="text-[10px] text-gray-500 max-w-none">
+                <span className="font-semibold text-black dark:text-gray-300">Billing notice:</span> Adding a new team member adds an active seat to your plan at $25.00/month.
               </div>
               {canInvite && (
                 <Button
