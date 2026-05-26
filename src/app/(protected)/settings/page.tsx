@@ -531,6 +531,7 @@ const Guardrails = () => {
 const Invite = () => {
   const [email, setEmail] = useState('');
   const [showSentModal, setShowSentModal] = useState(false);
+  const [sentEmail, setSentEmail] = useState('');
 
   return (
     <div className="max-w-4xl pt-2">
@@ -548,7 +549,10 @@ const Invite = () => {
             content={email}
             className="h-8 px-4 text-xs font-semibold rounded-md shadow-sm transition-all bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black"
             onClose={() => setEmail('')}
-            onSent={() => setShowSentModal(true)}
+            onSent={() => {
+              setSentEmail(email);
+              setShowSentModal(true);
+            }}
           />
         </div>
       </div>
@@ -562,7 +566,10 @@ const Invite = () => {
               Invite Sent
             </h2>
             <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
-              Your invitation has been sent!
+              Your invitation has been sent to:
+              <span className="block mt-1 font-semibold text-indigo-650 dark:text-indigo-400 break-all select-all">
+                {sentEmail}
+              </span>
             </p>
           </div>
 
