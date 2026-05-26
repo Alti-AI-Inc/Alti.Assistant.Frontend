@@ -8,13 +8,6 @@ export type APP = {
 
 export const allApps: APP[] = [
   {
-    "title": "Secure SQL Database MCP",
-    "description": "Connect your custom PostgreSQL, MySQL, SQLite, or BigQuery database dynamically to execute queries securely.",
-    "image": "",
-    "app_name": "custom_db_mcp",
-    "isAvailable": true
-  },
-  {
     "title": " 21risk",
     "description": "Integrate  21risk to seamlessly execute automated workflows, synchronize data, and orchestrate  21risk actions directly within Alti.",
     "image": "https://logos.composio.dev/api/_21risk",

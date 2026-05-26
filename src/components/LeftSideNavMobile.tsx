@@ -137,11 +137,8 @@ const AVAILABLE_COMPOSIO_APPS = (() => {
       }
     }
   });
-  const allList = Array.from(uniqueMap.values());
-  const customMcp = allList.find(app => app.app_name === 'custom_db_mcp');
-  const otherApps = allList.filter(app => app.app_name !== 'custom_db_mcp')
+  return Array.from(uniqueMap.values())
     .sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
-  return customMcp ? [customMcp, ...otherApps] : otherApps;
 })();
 
 const LeftSideNavMobile = () => {
@@ -176,31 +173,12 @@ const LeftSideNavMobile = () => {
   );
 
   useEffect(() => {
-    let activeSlugs = new Set<string>();
     if (connections) {
-      activeSlugs = new Set(
+      const activeSlugs = new Set(
         connections.map(account => account.toolkit?.slug?.toLowerCase()).filter(Boolean)
       );
+      setConnectedAppSlugs(activeSlugs);
     }
-
-    const checkStatus = async () => {
-      try {
-        const res = await apiClientJson<{ connected: boolean }>(buildApiUrl('/mcp-toolbox/status'), { method: 'GET' });
-        const nextSlugs = new Set(activeSlugs);
-        if (res.success && res.data?.connected) {
-          nextSlugs.add('custom_db_mcp');
-        } else {
-          nextSlugs.delete('custom_db_mcp');
-        }
-        setConnectedAppSlugs(nextSlugs);
-      } catch (err) {
-        setConnectedAppSlugs(activeSlugs);
-      }
-    };
-
-    checkStatus();
-    const interval = setInterval(checkStatus, 4000);
-    return () => clearInterval(interval);
   }, [connections]);
 
   const filteredApps = useMemo(() => {
