@@ -538,7 +538,7 @@ const LeftSideNavMobile = () => {
             )}
           </div>
           {activeTab === 'bots' ? (
-            <div className="space-y-1 py-1 pb-4">
+            <div className="space-y-1 py-1 pb-4 mt-2">
               {bots
                 .filter(bot =>
                   bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -670,7 +670,7 @@ const LeftSideNavMobile = () => {
             </div>
 
           ) : activeTab === 'workflows' ? (
-            <div className="space-y-1 py-1 pb-4">
+            <div className="space-y-1 py-1 pb-4 mt-2">
               {[
                 { id: 'wf-1', name: 'Daily Market Intel', icon: '📊', trigger: 'Every Day @ 8am', active: true },
                 { id: 'wf-2', name: 'Code Vulnerability Scan', icon: '🛡️', trigger: 'On Git Push', active: true },
