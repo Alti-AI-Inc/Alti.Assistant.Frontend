@@ -44,7 +44,7 @@ const Page = () => {
         {/* Dynamic Settings Top Navbar (Header) */}
         <div className="h-[53px] border-b border-black/10 dark:border-white/10 flex items-center px-8 flex-none bg-white dark:bg-gray-955 justify-between">
           <h1 className="text-base font-semibold text-gray-900 dark:text-white">
-            {selectedOption === 'memory' && 'Long Term Memory'}
+            {selectedOption === 'memory' && 'Chat Memory'}
             {selectedOption === 'instructions' && 'System Instructions'}
             {selectedOption === 'guardrails' && 'Safety Guardrails'}
             {selectedOption === 'password' && 'Update Password'}
