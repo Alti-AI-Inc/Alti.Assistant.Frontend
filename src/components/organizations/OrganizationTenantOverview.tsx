@@ -78,7 +78,7 @@ export function OrganizationTenantOverview({
   const [inviteFirstName, setInviteFirstName] = useState('');
   const [inviteLastName, setInviteLastName] = useState('');
   const [inviteEmail, setInviteEmail] = useState('');
-  const [inviteRole, setInviteRole] = useState('member');
+  const [inviteRole, setInviteRole] = useState('');
   const [isInviting, setIsInviting] = useState(false);
 
   useEffect(() => {
@@ -307,7 +307,7 @@ export function OrganizationTenantOverview({
       const response = await inviteMember({
         tenantId: selectedTenantId,
         email: inviteEmail.trim(),
-        role: inviteRole,
+        role: inviteRole || 'member',
         message: '',
       });
 
@@ -331,7 +331,7 @@ export function OrganizationTenantOverview({
         setInviteFirstName('');
         setInviteLastName('');
         setInviteEmail('');
-        setInviteRole('member');
+        setInviteRole('');
         void reloadDashboard();
       } else {
         toast.error(response.message || 'Failed to send invitation');
@@ -390,63 +390,51 @@ export function OrganizationTenantOverview({
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Row 1: First Name & Last Name */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-black dark:text-gray-300" htmlFor="first-name">First Name</label>
-                <Input
-                  id="first-name"
-                  type="text"
-                  placeholder="First name"
-                  value={inviteFirstName}
-                  onChange={(e) => setInviteFirstName(e.target.value)}
-                  className="h-9 text-xs border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
-                  disabled={isInviting}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-black dark:text-gray-300" htmlFor="last-name">Last Name</label>
-                <Input
-                  id="last-name"
-                  type="text"
-                  placeholder="Last name"
-                  value={inviteLastName}
-                  onChange={(e) => setInviteLastName(e.target.value)}
-                  className="h-9 text-xs border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
-                  disabled={isInviting}
-                />
-              </div>
+              <Input
+                id="first-name"
+                type="text"
+                placeholder="Enter First Name"
+                value={inviteFirstName}
+                onChange={(e) => setInviteFirstName(e.target.value)}
+                className="h-9 text-xs border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
+                disabled={isInviting}
+              />
+              <Input
+                id="last-name"
+                type="text"
+                placeholder="Enter Last Name"
+                value={inviteLastName}
+                onChange={(e) => setInviteLastName(e.target.value)}
+                className="h-9 text-xs border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
+                disabled={isInviting}
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Row 2: Email & Role */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-black dark:text-gray-300" htmlFor="email-address">Email Address</label>
-                <Input
-                  id="email-address"
-                  type="email"
-                  placeholder="colleague@example.com"
-                  value={inviteEmail}
-                  onChange={(e) => setInviteEmail(e.target.value)}
-                  className="h-9 text-xs border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
-                  disabled={isInviting}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-black dark:text-gray-300" htmlFor="invite-role">Select Role</label>
-                <Select
-                  value={inviteRole}
-                  onValueChange={setInviteRole}
-                  disabled={isInviting}
-                >
-                  <SelectTrigger id="invite-role" className="h-9 text-xs border-black/10 focus:ring-black bg-white dark:bg-zinc-950">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="border-black/10">
-                    <SelectItem value="member" className="text-xs">User</SelectItem>
-                    <SelectItem value="admin" className="text-xs">Admin</SelectItem>
-                    <SelectItem value="owner" className="text-xs">Owner</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <Input
+                id="email-address"
+                type="email"
+                placeholder="Enter Email Address"
+                value={inviteEmail}
+                onChange={(e) => setInviteEmail(e.target.value)}
+                className="h-9 text-xs border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
+                disabled={isInviting}
+              />
+              <Select
+                value={inviteRole}
+                onValueChange={setInviteRole}
+                disabled={isInviting}
+              >
+                <SelectTrigger id="invite-role" className="h-9 text-xs border-black/10 focus:ring-black bg-white dark:bg-zinc-950">
+                  <SelectValue placeholder="Select Role" />
+                </SelectTrigger>
+                <SelectContent className="border-black/10">
+                  <SelectItem value="member" className="text-xs">User</SelectItem>
+                  <SelectItem value="admin" className="text-xs">Admin</SelectItem>
+                  <SelectItem value="owner" className="text-xs">Owner</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2 border-t border-black/5">
