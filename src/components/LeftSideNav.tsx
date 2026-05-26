@@ -450,108 +450,77 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {!hideSidebar && isLoggedIn && side !== 'right' && (
         <div className="border-b border-black/10 px-4 pt-0 pb-2" style={{ backgroundColor: '#F2F3F5' }}>
           <div className="flex bg-black/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03]">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('chat')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'chat'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <MessageSquare className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Chat</p>
-              </TooltipContent>
-            </Tooltip>
+            <button
+              type="button"
+              title="Chat"
+              onClick={() => handleTabChange('chat')}
+              className={cn(
+                'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                activeTab === 'chat'
+                  ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+              )}
+            >
+              <MessageSquare className="size-4" />
+            </button>
 
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('bots')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'bots'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <Folder className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Projects</p>
-              </TooltipContent>
-            </Tooltip>
+            <button
+              type="button"
+              title="Projects"
+              onClick={() => handleTabChange('bots')}
+              className={cn(
+                'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                activeTab === 'bots'
+                  ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+              )}
+            >
+              <Folder className="size-4" />
+            </button>
 
             {/* Removed Data tab */}
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('models')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'models'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <Cpu className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Models</p>
-              </TooltipContent>
-            </Tooltip>
+            <button
+              type="button"
+              title="Models"
+              onClick={() => handleTabChange('models')}
+              className={cn(
+                'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                activeTab === 'models'
+                  ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+              )}
+            >
+              <Cpu className="size-4" />
+            </button>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('apps')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'apps'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <LayoutGrid className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Apps</p>
-              </TooltipContent>
-            </Tooltip>
+            <button
+              type="button"
+              title="Apps"
+              onClick={() => handleTabChange('apps')}
+              className={cn(
+                'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                activeTab === 'apps'
+                  ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+              )}
+            >
+              <LayoutGrid className="size-4" />
+            </button>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('workflows')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'workflows'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <Zap className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Workflows</p>
-              </TooltipContent>
-            </Tooltip>
+            <button
+              type="button"
+              title="Workflows"
+              onClick={() => handleTabChange('workflows')}
+              className={cn(
+                'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                activeTab === 'workflows'
+                  ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+              )}
+            >
+              <Zap className="size-4" />
+            </button>
           </div>
         </div>
       )}
