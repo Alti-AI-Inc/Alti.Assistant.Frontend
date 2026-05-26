@@ -13,7 +13,6 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
 import { getStripeProducts } from '@/actions/stripeActions';
 
 // API Product type from backend
@@ -181,100 +180,54 @@ export function OrganizationPricingCards({
 
   return (
     <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-2">
-      {plans.map((plan, index) => {
+      {plans.map(plan => {
         const isCurrentPlan = currentPlanId === plan.id;
-        const isPopular = plan.popular;
 
         return (
-          <motion.div
+          <Card
             key={plan.id}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              type: 'spring',
-              stiffness: 100,
-              damping: 15,
-              delay: index * 0.15,
-            }}
-            whileHover={{ y: -8, scale: 1.01 }}
-            className="flex flex-col h-full"
+            className={cn(
+              'relative flex flex-col transition-all duration-300 hover:-translate-y-1',
+              'bg-white/80 dark:bg-zinc-950/50 shadow-xl border-blue-500 border-2 ring-1 ring-blue-500/30 dark:border-blue-500',
+              isCurrentPlan && 'border-green-500 ring-1 ring-green-500/30 shadow-lg',
+            )}
           >
-            <Card
-              className={cn(
-                'relative flex flex-col h-full transition-all duration-300 border backdrop-blur-xl',
-                'bg-white/30 dark:bg-zinc-950/20 border-white/20 dark:border-zinc-800/80 shadow-2xl',
-                isPopular && 'border-indigo-500/50 ring-2 ring-indigo-500/20 dark:border-indigo-500',
-                isCurrentPlan && 'border-emerald-500/50 ring-2 ring-emerald-500/20 shadow-emerald-500/5 dark:border-emerald-500',
-              )}
-            >
-              {isCurrentPlan && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                  <Badge className="bg-emerald-500 hover:bg-emerald-600 px-4 py-1 text-white shadow-lg border-none font-bold tracking-wider text-xs">
-                    Current Plan
-                  </Badge>
-                </div>
-              )}
-              
-              {!isCurrentPlan && isPopular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                  <Badge className="bg-indigo-600 hover:bg-indigo-700 px-4 py-1 text-white shadow-lg border-none font-bold tracking-wider text-xs uppercase animate-pulse">
-                    Popular
-                  </Badge>
-                </div>
-              )}
-
-              <CardHeader className="pt-10 pb-6">
-                <CardTitle className="text-3xl font-extrabold tracking-tight text-center bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-                  {plan.name}
-                </CardTitle>
-                <CardDescription className="min-h-[3rem] mt-3 text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm text-center px-4">
-                  {plan.description}
-                </CardDescription>
-                <div className="mt-8 flex items-baseline justify-center gap-1">
-                  <span className="text-6xl font-black tracking-tighter bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400 bg-clip-text text-transparent">${plan.price}</span>
-                  <span className="text-zinc-500 dark:text-zinc-400 font-semibold text-base">{plan.period}</span>
-                </div>
-              </CardHeader>
-
-              {/* Dynamic Feature Checklist */}
-              <div className="flex-1 px-8 py-6 border-t border-b border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
-                <ul className="space-y-4">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm text-zinc-700 dark:text-zinc-300">
-                      <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-500 dark:text-indigo-400">
-                        <svg
-                          className="h-3.5 w-3.5 stroke-[3]"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                      <span className="leading-snug">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+            {isCurrentPlan && (
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                <Badge className="bg-green-500 hover:bg-green-600 px-3 py-1 text-white shadow-md border-none font-semibold tracking-wide">
+                  Current Plan
+                </Badge>
               </div>
+            )}
 
-              <CardFooter className="pb-10 pt-8 px-8">
-                <Button
-                  onClick={() => onSelectPlan?.(plan)}
-                  disabled={isCurrentPlan}
-                  className={cn(
-                    'w-full py-7 text-sm font-bold tracking-wide transition-all shadow-lg hover:shadow-indigo-500/25 border-none rounded-xl cursor-pointer',
-                    'bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white',
-                    isCurrentPlan && 'bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800/50 dark:text-zinc-600 shadow-none hover:shadow-none hover:bg-none bg-none',
-                  )}
-                  variant="default"
-                >
-                  {isCurrentPlan
-                    ? 'Active Plan'
-                    : 'Upgrade Now'}
-                </Button>
-              </CardFooter>
-            </Card>
-          </motion.div>
+            <CardHeader className="pt-8">
+              <CardTitle className="text-3xl font-bold tracking-tight text-center">{plan.name}</CardTitle>
+              <CardDescription className="min-h-[3rem] mt-2 text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm text-center">
+                {plan.description}
+              </CardDescription>
+              <div className="mt-6 flex items-baseline justify-center gap-1">
+                <span className="text-5xl font-extrabold tracking-tight">${plan.price}</span>
+                <span className="text-zinc-500 dark:text-zinc-400 font-medium text-base">{plan.period}</span>
+              </div>
+            </CardHeader>
+
+            <CardFooter className="pb-8 pt-4">
+              <Button
+                onClick={() => onSelectPlan?.(plan)}
+                disabled={isCurrentPlan}
+                className={cn(
+                  'w-full py-6 text-sm font-bold tracking-wide transition-all shadow-md',
+                  'bg-blue-600 hover:bg-blue-700 text-white border-none',
+                  isCurrentPlan && 'bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-600 shadow-none',
+                )}
+                variant="default"
+              >
+                {isCurrentPlan
+                  ? 'Active Plan'
+                  : 'Select Plan'}
+              </Button>
+            </CardFooter>
+          </Card>
         );
       })}
     </div>
