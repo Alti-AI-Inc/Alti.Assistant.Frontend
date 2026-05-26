@@ -117,7 +117,7 @@ export const SettingsSidebar = ({
                 ? 'w-full justify-start gap-3 text-left'
                 : 'h-10 w-10 rounded-md p-0 flex items-center justify-center',
               selectedOption === option.value
-                ? 'bg-gray-150 text-gray-900 dark:bg-gray-800 dark:text-gray-100 shadow-sm'
+                ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100 shadow-sm'
                 : isSettingsSidebarOpen
                   ? 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-900'
                   : 'hover:bg-gray-200 dark:hover:bg-gray-700',
