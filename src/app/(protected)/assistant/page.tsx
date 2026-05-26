@@ -26,7 +26,7 @@ function AssistantWorkspaceContent() {
   const searchParams = useSearchParams();
   const { data: session } = useSession();
   
-  const { setActiveConversation } = useConversationsStore();
+  const { setActiveConversation, activeConversation } = useConversationsStore();
   const { isRightSidebarOpen } = useSidebarStore();
   const { setActiveBotId } = useBotsStore();
 
@@ -96,30 +96,13 @@ function AssistantWorkspaceContent() {
       <div className="absolute bottom-10 left-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Middle Interactive Workspace */}
-      <div className="flex flex-1 flex-col items-center justify-between relative overflow-y-auto h-full px-4 md:px-8 z-10">
-        
-        {/* Workspace Branded Header */}
-        <div className="w-full max-w-[796px] pt-8 pb-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-black/5 dark:border-white/5">
-          <div className="space-y-1">
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white flex items-center gap-2">
-              <Sparkles className="h-6 w-6 text-indigo-500 animate-pulse" />
-              Alti Assistant
-            </h1>
-            <p className="text-xs text-neutral-500">
-              Powered by OpenClaw tool routing & Hermes cognitive reasoning
-            </p>
-          </div>
-          
-          {/* Status Badges */}
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50/80 dark:bg-indigo-950/40 px-2.5 py-1 text-[10px] font-bold text-indigo-600 dark:text-indigo-400 border border-indigo-100/50 dark:border-indigo-900/50 backdrop-blur-xs">
-              <Brain className="h-3.5 w-3.5" /> Hermes Core
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50/80 dark:bg-emerald-950/40 px-2.5 py-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 border border-emerald-100/50 dark:border-emerald-900/50 backdrop-blur-xs">
-              <Zap className="h-3.5 w-3.5" /> OpenClaw Active
-            </span>
-          </div>
-        </div>
+      <div className="flex flex-1 flex-col items-center justify-center relative overflow-y-auto h-full px-4 md:px-8 z-10">
+        {!activeConversation?.messages?.length && (
+          <h1 className="mb-8 text-4xl font-medium tracking-tight text-gray-900 dark:text-white flex items-center gap-2.5">
+            <Sparkles className="h-9 w-9 text-indigo-500 animate-pulse" />
+            Alti Assistant
+          </h1>
+        )}
 
         {/* Chat Component */}
         <div className="flex-1 w-full overflow-hidden flex flex-col justify-center">
