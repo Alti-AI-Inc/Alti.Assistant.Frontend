@@ -233,7 +233,7 @@ const Instructions = () => {
             placeholder="Search instructions..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-11 pl-9 text-sm rounded-xl bg-gray-50 border-gray-200 dark:border-gray-800 dark:bg-gray-955 focus-visible:ring-1 focus-visible:ring-indigo-500/30 focus-visible:border-indigo-500"
+            className="w-full h-11 pl-9 text-sm rounded-xl bg-gray-50/50 border-gray-200 dark:border-gray-800 dark:bg-gray-900/30 focus-visible:ring-1 focus-visible:ring-indigo-500/30 focus-visible:border-indigo-500"
           />
         </div>
 
@@ -410,7 +410,7 @@ const Guardrails = () => {
             placeholder="Search guardrails..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-11 pl-9 text-sm rounded-xl bg-gray-50 border-gray-200 dark:border-gray-800 dark:bg-gray-955 focus-visible:ring-1 focus-visible:ring-rose-500/30 focus-visible:border-rose-500"
+            className="w-full h-11 pl-9 text-sm rounded-xl bg-gray-50/50 border-gray-200 dark:border-gray-800 dark:bg-gray-900/30 focus-visible:ring-1 focus-visible:ring-rose-500/30 focus-visible:border-rose-500"
           />
         </div>
 
