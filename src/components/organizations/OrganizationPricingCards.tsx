@@ -11,10 +11,9 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Check, Sparkles } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getStripeProducts } from '@/actions/stripeActions';
-import { motion } from 'framer-motion';
 
 // API Product type from backend
 interface ApiProduct {
@@ -166,16 +165,7 @@ export function OrganizationPricingCards({
     fetchPlans();
   }, [session?.accessToken]);
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 space-y-4">
-        <Loader2 className="size-10 text-blue-500 animate-spin" />
-        <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium tracking-wide animate-pulse">
-          Fetching premium pricing structures...
-        </p>
-      </div>
-    );
-  }
+
 
   if (error) {
     return (
@@ -189,106 +179,57 @@ export function OrganizationPricingCards({
   }
 
   return (
-    <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2 items-stretch">
-      {plans.map((plan, idx) => {
+    <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-2">
+      {plans.map(plan => {
         const isCurrentPlan = currentPlanId === plan.id;
 
         return (
-          <motion.div
+          <Card
             key={plan.id}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: idx * 0.15 }}
-            whileHover={{ y: -6, transition: { duration: 0.2 } }}
-            className="flex h-full"
+            className={cn(
+              'relative flex flex-col transition-all duration-300 hover:-translate-y-1',
+              'bg-white/80 dark:bg-zinc-950/50 shadow-xl border-blue-500 border-2 ring-1 ring-blue-500/30 dark:border-blue-500',
+              isCurrentPlan && 'border-green-500 ring-1 ring-green-500/30 shadow-lg',
+            )}
           >
-            <Card
-              className={cn(
-                'relative flex flex-col w-full rounded-3xl overflow-hidden transition-all duration-300',
-                'backdrop-blur-xl bg-white/60 dark:bg-zinc-950/60',
-                plan.highlighted
-                  ? 'border border-indigo-500/40 dark:border-indigo-500/50 shadow-[0_0_35px_rgba(99,102,241,0.1)] dark:shadow-[0_0_50px_rgba(99,102,241,0.15)]'
-                  : 'border border-zinc-200/80 dark:border-zinc-800/80 shadow-xl',
-                isCurrentPlan && 'border-emerald-500/50 ring-1 ring-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.1)]'
-              )}
-            >
-              {plan.highlighted && (
-                <div className="absolute -top-3.5 right-6 z-10">
-                  <span className="flex items-center gap-1.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-3.5 py-1 text-[10px] font-bold text-white uppercase tracking-wider rounded-full shadow-md shadow-indigo-500/10">
-                    <Sparkles className="size-3 animate-pulse" /> Popular
-                  </span>
-                </div>
-              )}
-
-              {isCurrentPlan && (
-                <div className="absolute -top-3.5 left-6 z-10">
-                  <Badge className="bg-emerald-500 hover:bg-emerald-600 px-3 py-0.5 text-white border-none font-bold text-[10px] tracking-wider rounded-full shadow-md shadow-emerald-500/10">
-                    Active Plan
-                  </Badge>
-                </div>
-              )}
-
-              <CardHeader className="pt-8 px-8 pb-4 text-center">
-                <CardTitle className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">{plan.name}</CardTitle>
-                <CardDescription className="min-h-[3.5rem] mt-3 text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm">
-                  {plan.description}
-                </CardDescription>
-                <div className="mt-6 flex items-baseline justify-center gap-1.5">
-                  <span className="text-5xl font-extrabold tracking-tight text-zinc-900 dark:text-white">${plan.price}</span>
-                  <span className="text-zinc-500 dark:text-zinc-400 font-semibold text-base">{plan.period}</span>
-                </div>
-              </CardHeader>
-
-              {/* Features list */}
-              <div className="flex-1 px-8 py-6 border-t border-zinc-100 dark:border-zinc-800/60 space-y-4">
-                <p className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 text-left">
-                  Core capabilities
-                </p>
-                <ul className="space-y-3.5">
-                  {plan.features.map((feature, i) => (
-                    <motion.li
-                      key={i}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.3 + i * 0.05 }}
-                      className="flex items-start gap-3 text-sm text-zinc-600 dark:text-zinc-300 text-left"
-                    >
-                      <span className="flex-shrink-0 mt-0.5 rounded-full p-0.5 bg-emerald-500/10 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
-                        <Check className="size-3.5 stroke-[3]" />
-                      </span>
-                      <span className="leading-snug">{feature}</span>
-                    </motion.li>
-                  ))}
-                </ul>
+            {isCurrentPlan && (
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                <Badge className="bg-green-500 hover:bg-green-600 px-3 py-1 text-white shadow-md border-none font-semibold tracking-wide">
+                  Current Plan
+                </Badge>
               </div>
+            )}
 
-              <CardFooter className="pb-8 pt-4 px-8 border-t border-zinc-50 dark:border-zinc-900/40">
-                {isCurrentPlan ? (
-                  <Button
-                    disabled={true}
-                    className="w-full py-6 text-sm bg-zinc-100 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-650 font-bold border-none rounded-2xl cursor-not-allowed shadow-inner"
-                  >
-                    Current Plan
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={() => onSelectPlan?.(plan)}
-                    className={cn(
-                      'w-full py-6 text-sm font-extrabold tracking-wide transition-all duration-300 rounded-2xl border-none shadow-md',
-                      plan.highlighted
-                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-blue-500/10 hover:shadow-indigo-500/25 hover:scale-[1.02]'
-                        : 'bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-white dark:text-zinc-950 shadow-zinc-950/10 hover:scale-[1.02]'
-                    )}
-                  >
-                    Choose {plan.name}
-                  </Button>
+            <CardHeader className="pt-8">
+              <CardTitle className="text-3xl font-bold tracking-tight text-center">{plan.name}</CardTitle>
+              <CardDescription className="min-h-[3rem] mt-2 text-zinc-500 dark:text-zinc-400 leading-relaxed text-sm text-center">
+                {plan.description}
+              </CardDescription>
+              <div className="mt-6 flex items-baseline justify-center gap-1">
+                <span className="text-5xl font-extrabold tracking-tight">${plan.price}</span>
+                <span className="text-zinc-500 dark:text-zinc-400 font-medium text-base">{plan.period}</span>
+              </div>
+            </CardHeader>
+
+            <CardFooter className="pb-8 pt-4">
+              <Button
+                onClick={() => onSelectPlan?.(plan)}
+                disabled={isCurrentPlan}
+                className={cn(
+                  'w-full py-6 text-sm font-bold tracking-wide transition-all shadow-md',
+                  'bg-blue-600 hover:bg-blue-700 text-white border-none',
+                  isCurrentPlan && 'bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-600 shadow-none',
                 )}
-              </CardFooter>
-            </Card>
-          </motion.div>
+                variant="default"
+              >
+                {isCurrentPlan
+                  ? 'Active Plan'
+                  : 'Select Plan'}
+              </Button>
+            </CardFooter>
+          </Card>
         );
       })}
     </div>
   );
 }
-
