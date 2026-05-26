@@ -12,12 +12,8 @@ import {
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
-  Brain,
-  SlidersHorizontal,
-  ShieldCheck,
   Sparkles,
   AlertCircle,
-  UserPlus,
 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -36,12 +32,21 @@ const Page = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="mx-auto max-w-4xl p-8">
+      <div className="flex-1 flex flex-col h-full overflow-hidden bg-white dark:bg-gray-950">
+        {/* Dynamic Settings Top Navbar (Header) */}
+        <div className="h-[53px] border-b border-black/10 dark:border-white/10 flex items-center px-8 flex-none bg-white dark:bg-gray-950 justify-between">
+          <h1 className="text-base font-semibold text-gray-900 dark:text-white">
+            {selectedOption === 'memory' && 'Long Term Memory'}
+            {selectedOption === 'instructions' && 'System Instructions'}
+            {selectedOption === 'guardrails' && 'Safety Guardrails'}
+            {selectedOption === 'password' && 'Update Password'}
+            {selectedOption === 'invite' && 'Invite Friends'}
+          </h1>
+        </div>
 
-
-          {/* Content based on selected option */}
-          <div className="mt-6">
+        {/* Workspace Body */}
+        <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
+          <div className="max-w-2xl">
             {selectedOption === 'memory' && <Memory />}
             {selectedOption === 'instructions' && <Instructions />}
             {selectedOption === 'guardrails' && <Guardrails />}
@@ -57,16 +62,12 @@ const Page = () => {
 const Memory = () => {
   return (
     <div className="max-w-2xl">
-      <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2">
-        <Brain className="size-6 text-indigo-600" />
-        Long Term Memory
-      </h1>
-      <p className="text-muted-foreground mt-2 text-sm">
+      <p className="text-muted-foreground text-sm">
         Configure how long you want Alti to remember and learn from your previous
         conversations to build context.
       </p>
       
-      <div className="mt-8 rounded-xl border border-black/10 bg-white p-6 shadow-xs dark:bg-gray-800">
+      <div className="mt-6 rounded-xl border border-black/10 bg-white p-6 shadow-xs dark:bg-gray-800">
         <RadioGroup defaultValue="1-month" className="space-y-4">
           <div className="flex items-center gap-3">
             <RadioGroupItem className="border-gray-400" value="off" id="r1" />
@@ -121,11 +122,7 @@ const Instructions = () => {
   return (
     <div className="max-w-2xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2">
-          <SlidersHorizontal className="size-6 text-indigo-600" />
-          Instructions
-        </h1>
-        <p className="text-muted-foreground mt-2 text-sm">
+        <p className="text-muted-foreground text-sm">
           Fine-tune the Alti assistant by adding custom system instructions. Guide its personality, tone, language style, and expert perspective.
         </p>
       </div>
@@ -193,11 +190,7 @@ const Guardrails = () => {
   return (
     <div className="max-w-2xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2">
-          <ShieldCheck className="size-6 text-indigo-600" />
-          Guardrails
-        </h1>
-        <p className="text-muted-foreground mt-2 text-sm">
+        <p className="text-muted-foreground text-sm">
           Define boundaries, prohibited content, and safe zones for Alti. Enforce robust controls on output accuracy, domain filtering, and security compliance.
         </p>
       </div>
@@ -253,11 +246,7 @@ const Invite = () => {
   return (
     <div className="max-w-2xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2">
-          <UserPlus className="size-6 text-indigo-600" />
-          Invite Friends
-        </h1>
-        <p className="text-muted-foreground mt-2 text-sm">
+        <p className="text-muted-foreground text-sm">
           Invite your friends or team members to join Alti and collaborate seamlessly on tasks, research, and workflows.
         </p>
       </div>

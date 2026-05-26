@@ -85,7 +85,6 @@ export default function ChangePassword() {
       <div className="flex h-full w-full">
         <div className="flex w-full max-w-md items-center justify-center">
           <div className="rounded-large flex w-full max-w-lg flex-col gap-4 pb-10">
-            <p className="pb-4 text-2xl font-semibold">Change Password</p>
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
