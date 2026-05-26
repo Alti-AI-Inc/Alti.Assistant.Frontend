@@ -7,16 +7,21 @@ const SendInviteButton = ({
   content,
   className = '',
   onClose,
+  onSent,
 }: {
   content: string;
   className?: string;
   onClose: () => void;
+  onSent?: () => void;
 }) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopy = async () => {
     try {
       setIsCopied(true);
+      if (onSent) {
+        onSent();
+      }
 
       // Reset back after 1.5 seconds
       setTimeout(() => {
