@@ -96,17 +96,14 @@ function AssistantWorkspaceContent() {
       <div className="absolute bottom-10 left-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Middle Interactive Workspace */}
-      <div className="flex flex-1 flex-col items-center justify-center relative overflow-y-auto h-full px-4 md:px-8 z-10">
+      <div className="flex h-full w-full flex-1 flex-col items-center justify-center relative px-4 md:px-8 z-10">
         {!activeConversation?.messages?.length && (
           <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white">
             Alti Assistant
           </h1>
         )}
 
-        {/* Chat Component */}
-        <div className="flex-1 w-full overflow-hidden flex flex-col justify-center">
-          <FullConversation conversationId={activeConversationId} />
-        </div>
+        <FullConversation conversationId={activeConversationId} />
       </div>
 
       {/* Right Telemetry Pane - Desktop only */}
