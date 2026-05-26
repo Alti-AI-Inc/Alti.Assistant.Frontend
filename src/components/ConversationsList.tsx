@@ -34,7 +34,7 @@ export default function ConversationsList({
   activeTab = 'chat',
 }: {
   searchQuery?: string;
-  activeTab?: 'chat' | 'research';
+  activeTab?: 'chat' | 'research' | 'assistant';
 }) {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
@@ -56,6 +56,27 @@ export default function ConversationsList({
       canFetchConversations ? session.accessToken : undefined,
       isDeepSearch,
     );
+
+  const getDisplayTitle = (title: string) => {
+    const cleanTitle = formatConversationTitle(title);
+    if (activeTab !== 'assistant') return cleanTitle;
+
+    const lower = cleanTitle.toLowerCase();
+    if (lower.includes('search') || lower.includes('google') || lower.includes('web')) {
+      return `🔍 /web_search: ${cleanTitle}`;
+    } else if (lower.includes('code') || lower.includes('write') || lower.includes('debug') || lower.includes('python') || lower.includes('rust') || lower.includes('go')) {
+      return `💻 /code_gen: ${cleanTitle}`;
+    } else if (lower.includes('email') || lower.includes('mail') || lower.includes('send') || lower.includes('draft') || lower.includes('composio')) {
+      return `✉️ /composio: ${cleanTitle}`;
+    } else if (lower.includes('notion') || lower.includes('doc') || lower.includes('file') || lower.includes('summarize') || lower.includes('pdf')) {
+      return `📁 /doc_analysis: ${cleanTitle}`;
+    } else if (lower.includes('contract') || lower.includes('legal') || lower.includes('agreement')) {
+      return `⚖️ /legal_bot: ${cleanTitle}`;
+    } else if (lower.includes('image') || lower.includes('draw') || lower.includes('photo') || lower.includes('generation')) {
+      return `🎨 /image_gen: ${cleanTitle}`;
+    }
+    return `⚡ /command: ${cleanTitle}`;
+  };
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 
@@ -92,7 +113,11 @@ export default function ConversationsList({
     setSelectedOption(null);
     setShowStartLastMessage(false);
     setUserMessage('');
-    router.push(`/c/${id}`);
+    if (activeTab === 'assistant') {
+      router.push(`/assistant?c=${id}`);
+    } else {
+      router.push(`/c/${id}`);
+    }
   };
 
   if (!canFetchConversations) {
@@ -128,10 +153,10 @@ export default function ConversationsList({
           key={chat._id}
         >
           <span
-            className="flex-1 cursor-pointer truncate px-1 py-2"
+            className="flex-1 cursor-pointer truncate px-1 py-2 text-xs font-semibold"
             onClick={() => handleConversationClick(chat.conversationId)}
           >
-            {formatConversationTitle(chat.title)}
+            {getDisplayTitle(chat.title)}
           </span>
 
           <DropdownMenu>

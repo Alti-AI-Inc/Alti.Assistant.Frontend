@@ -127,7 +127,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'research' | 'bots' | 'models' | 'apps' | 'workflows';
+type SidebarTab = 'chat' | 'research' | 'bots' | 'assistant' | 'apps' | 'workflows';
 
 const AVAILABLE_COMPOSIO_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -214,8 +214,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       setActiveTab('bots');
     } else if (pathname === '/workflows' || pathname.startsWith('/workflows')) {
       setActiveTab('workflows');
-    } else if (pathname === '/models' || pathname.startsWith('/models')) {
-      setActiveTab('models');
+    } else if (pathname === '/assistant' || pathname.startsWith('/assistant')) {
+      setActiveTab('assistant');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       setActiveTab('chat');
     }
@@ -256,8 +256,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       router.push('/my-chatbots');
     } else if (tab === 'workflows') {
       router.push('/workflows');
-    } else if (tab === 'models') {
-      router.push('/models');
+    } else if (tab === 'assistant') {
+      router.push('/assistant');
     } else if (tab === 'research') {
       setSelectedOption(OPTIONS.RESEARCH);
       if (pathname !== '/' && !pathname.startsWith('/c/')) {
@@ -321,10 +321,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             router.push('/workflows');
           },
         };
-      case 'models':
+      case 'assistant':
         return {
           visible: true,
-          tooltip: 'New Model',
+          tooltip: 'New Command',
           onClick: () => {
             setActiveBotId(null);
             setActiveConversation(null);
@@ -332,7 +332,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             setUserMessage('');
             setSelectedOption(null);
             close();
-            router.push('/models');
+            router.push('/assistant');
           },
         };
       case 'apps':
@@ -484,11 +484,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
             <button
               type="button"
-              title="Models"
-              onClick={() => handleTabChange('models')}
+              title="Assistant"
+              onClick={() => handleTabChange('assistant')}
               className={cn(
                 'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                activeTab === 'models'
+                activeTab === 'assistant'
                   ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                   : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
               )}
@@ -546,12 +546,12 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     ? 'Composio Apps' 
                     : activeTab === 'workflows'
                       ? 'Active Workflows'
-                      : activeTab === 'models'
-                        ? (side === 'right' ? 'Chat History' : 'My Models')
+                      : activeTab === 'assistant'
+                        ? 'Assistant History'
                         : 'Chat History'}
             </span>
           </div>
-          {activeTab === 'bots' || (activeTab === 'models' && side === 'left') ? (
+          {activeTab === 'bots' ? (
             <div className="flex-1 space-y-1 py-1 pb-4">
               {bots
                 .filter(bot =>
@@ -559,21 +559,13 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   bot.description.toLowerCase().includes(searchQuery.toLowerCase())
                 )
                 .map(bot => {
-                  const isSelected = activeBotId === bot.id && (
-                    activeTab === 'models' 
-                      ? pathname === '/models' 
-                      : pathname === '/my-chatbots'
-                  );
+                  const isSelected = activeBotId === bot.id && pathname === '/my-chatbots';
                   return (
                     <button
                       key={bot.id}
                       onClick={() => {
                         setActiveBotId(bot.id);
-                        if (activeTab === 'models') {
-                          router.push(`/models?bot=${bot.id}`);
-                        } else {
-                          router.push(`/my-chatbots?bot=${bot.id}`);
-                        }
+                        router.push(`/my-chatbots?bot=${bot.id}`);
                       }}
                       className={cn(
                         "group flex h-9 w-full items-center justify-between rounded-md text-sm font-medium text-black text-left transition-all",
@@ -594,7 +586,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 bot.description.toLowerCase().includes(searchQuery.toLowerCase())
               ).length === 0 && (
                 <div className="py-4 text-center text-xs text-gray-500">
-                  {activeTab === 'models' ? 'No models found.' : 'No projects found.'}
+                  No projects found.
                 </div>
               )}
             </div>
@@ -701,7 +693,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               })}
             </div>
           ) : (
-            <ConversationsList searchQuery={searchQuery} activeTab={activeTab === 'models' ? 'chat' : activeTab as any} />
+            <ConversationsList searchQuery={searchQuery} activeTab={activeTab === 'assistant' ? 'assistant' : activeTab as any} />
           )}
         </div>
       )}

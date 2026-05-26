@@ -124,7 +124,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'research' | 'bots' | 'models' | 'apps' | 'workflows';
+type SidebarTab = 'chat' | 'research' | 'bots' | 'assistant' | 'apps' | 'workflows';
 
 const AVAILABLE_COMPOSIO_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -203,8 +203,8 @@ const LeftSideNavMobile = () => {
       setActiveTab('bots');
     } else if (pathname === '/workflows' || pathname.startsWith('/workflows')) {
       setActiveTab('workflows');
-    } else if (pathname === '/models' || pathname.startsWith('/models')) {
-      setActiveTab('models');
+    } else if (pathname === '/assistant' || pathname.startsWith('/assistant')) {
+      setActiveTab('assistant');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       setActiveTab('chat');
     }
@@ -248,8 +248,8 @@ const LeftSideNavMobile = () => {
     } else if (tab === 'workflows') {
       router.push('/workflows');
       close();
-    } else if (tab === 'models') {
-      router.push('/models');
+    } else if (tab === 'assistant') {
+      router.push('/assistant');
       close();
     } else if (tab === 'research') {
       setSelectedOption(OPTIONS.RESEARCH);
@@ -312,17 +312,17 @@ const LeftSideNavMobile = () => {
             close();
           },
         };
-      case 'models':
+      case 'assistant':
         return {
           visible: true,
-          label: 'New Model',
+          label: 'New Command',
           onClick: () => {
             setActiveBotId(null);
             setActiveConversation(null);
             setShowStartLastMessage(false);
             setUserMessage('');
             setSelectedOption(null);
-            router.push('/models');
+            router.push('/assistant');
             close();
           },
         };
@@ -470,11 +470,11 @@ const LeftSideNavMobile = () => {
 
             <button
               type="button"
-              title="Models"
-              onClick={() => handleTabChange('models')}
+              title="Assistant"
+              onClick={() => handleTabChange('assistant')}
               className={cn(
                 'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                activeTab === 'models'
+                activeTab === 'assistant'
                   ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                   : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
               )}
@@ -527,8 +527,8 @@ const LeftSideNavMobile = () => {
                       ? 'Composio Apps' 
                       : activeTab === 'workflows'
                         ? 'Active Workflows'
-                        : activeTab === 'models'
-                          ? 'Model History'
+                        : activeTab === 'assistant'
+                          ? 'Assistant History'
                           : 'Chat History'}
               </span>
               {activeTab !== 'apps' && activeTab !== 'bots' && mode === UserMode.TENANT && currentTenant && (
@@ -719,7 +719,7 @@ const LeftSideNavMobile = () => {
               })}
             </div>
           ) : (
-            <ConversationsList activeTab={activeTab === 'models' ? 'chat' : activeTab as any} />
+            <ConversationsList activeTab={activeTab === 'assistant' ? 'assistant' : activeTab as any} />
           )}
         </div>
       )}
