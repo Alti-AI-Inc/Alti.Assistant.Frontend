@@ -128,8 +128,8 @@ export const LlamaIndexChat = () => {
       return;
     }
 
-    if (selectedFile.size > 1 * 1024 * 1024) { // 1MB limit
-      setErrorMessage('File size exceeds the 1MB limit. Please upload a smaller document.');
+    if (selectedFile.size > 100 * 1024 * 1024 * 1024) { // 100GB limit
+      setErrorMessage('File size exceeds the 100GB limit. Please upload a smaller document.');
       return;
     }
 
@@ -725,7 +725,7 @@ export const LlamaIndexChat = () => {
                       Drag and drop your file, or click to browse.
                     </p>
                     <p className="text-[10px] text-gray-400 font-mono mt-2.5">
-                      PDF, TXT, DOC, DOCX up to 1MB
+                      PDF, TXT, DOC, DOCX up to 100GB
                     </p>
                   </div>
                 </div>

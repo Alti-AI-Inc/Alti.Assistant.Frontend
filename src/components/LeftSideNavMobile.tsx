@@ -62,7 +62,7 @@ const DATA_CONNECTORS: DataConnector[] = [
     id: 'file',
     name: 'File Upload',
     icon: '📁',
-    description: 'Upload PDF, TXT, Word up to 1MB',
+    description: 'Upload PDF, TXT, Word up to 100GB',
     status: 'active',
   },
   {
