@@ -48,7 +48,7 @@ function MyChatbotsContent() {
   // Render Focused Projects Workspace Dashboard (when no bot is active)
   if (!activeBot) {
     return (
-      <div className="flex-1 bg-white dark:bg-gray-950 min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-4 animate-in fade-in duration-500">
+      <div className="flex-1 bg-[#FCFCFC] dark:bg-gray-950 h-full flex flex-col items-center justify-center relative overflow-hidden px-4 animate-in fade-in duration-500">
         
         {/* Soft elegant ambient light blobs */}
         <div className="absolute -top-40 right-20 w-[500px] h-[500px] bg-gradient-to-tr from-blue-500/10 to-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -90,7 +90,7 @@ function MyChatbotsContent() {
 
   // Render 3-Column Chatbot Workspace
   return (
-    <div className="flex h-screen w-full bg-white dark:bg-gray-950 overflow-hidden">
+    <div className="flex h-full w-full bg-[#FCFCFC] dark:bg-gray-950 overflow-hidden">
       {/* Center Panel (Conversation / Interface) */}
       <div
         className="flex-1 flex flex-col min-w-0 h-full relative"
@@ -99,7 +99,7 @@ function MyChatbotsContent() {
         {/* Chatbot Content Body */}
         <div className="flex-1 flex flex-col items-center justify-center overflow-hidden relative">
           {!activeBotThreadId && (
-            <h1 className="mb-8 text-4xl font-medium">
+            <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
               {activeBot.name}
             </h1>
           )}

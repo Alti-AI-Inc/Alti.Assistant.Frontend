@@ -34,13 +34,13 @@ function App() {
       style={{ backgroundColor: '#FCFCFC' }}
     >
       {activeConversation?.knowledgebaseId && (
-        <h1 className="mb-8 text-4xl font-medium">
+        <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
           Chat with {activeKnowledgeBaseName}
         </h1>
       )}
       {!activeConversation?.knowledgebaseId &&
         !activeConversation?.messages.length && (
-          <h1 className="mb-8 text-4xl font-medium">
+          <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
             {selectedOption === OPTIONS.RESEARCH
               ? 'Deep Research'
               : selectedOption === OPTIONS.IMAGE

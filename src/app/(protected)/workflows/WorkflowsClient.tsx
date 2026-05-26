@@ -22,7 +22,7 @@ function WorkflowsClient() {
       style={{ backgroundColor: '#FCFCFC' }}
     >
       {!activeConversation?.messages.length && (
-        <h1 className="mb-8 text-4xl font-medium">
+        <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
           Workflow Automation
         </h1>
       )}

@@ -26,13 +26,13 @@ function AssistantWorkspaceContent() {
   }, [convIdParam, setActiveBotId, setActiveConversation]);
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#FCFCFC] dark:bg-gray-950 relative">
+    <div className="flex h-full w-full overflow-hidden bg-[#FCFCFC] dark:bg-gray-950 relative">
       {/* Background blobs for premium glassmorphism */}
       <div className="absolute -top-40 right-20 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-10 left-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Middle Interactive Workspace */}
-      <div className="flex h-full w-full flex-1 flex-col items-center justify-center relative px-4 md:px-8 z-10">
+      <div className="flex h-full w-full flex-1 flex-col items-center justify-center relative z-10">
         {!activeConversation?.messages?.length && (
           <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white">
             Alti Assistant
