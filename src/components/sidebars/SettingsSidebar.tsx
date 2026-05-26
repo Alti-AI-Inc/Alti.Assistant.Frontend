@@ -21,47 +21,67 @@ export interface SettingsOption {
   icon: React.ReactNode;
 }
 
+export interface SettingsSection {
+  sectionTitle: string;
+  options: SettingsOption[];
+}
+
 interface SettingsSidebarProps {
   selectedOption: string;
   onSelectOption: (value: string) => void;
 }
 
-const settingsOptions: SettingsOption[] = [
+const settingsSections: SettingsSection[] = [
   {
-    id: '1',
-    title: 'Memory',
-    value: 'memory',
-    icon: <Brain className="h-5 w-5" />,
+    sectionTitle: 'AI Cognition',
+    options: [
+      {
+        id: '1',
+        title: 'Memory',
+        value: 'memory',
+        icon: <Brain className="h-5 w-5" />,
+      },
+      {
+        id: 'data-tab',
+        title: 'Data',
+        value: 'data',
+        icon: <Database className="h-5 w-5" />,
+      },
+    ],
   },
   {
-    id: 'data-tab',
-    title: 'Data',
-    value: 'data',
-    icon: <Database className="h-5 w-5" />,
+    sectionTitle: 'AI Behavior',
+    options: [
+      {
+        id: '2',
+        title: 'Instructions',
+        value: 'instructions',
+        icon: <SlidersHorizontal className="h-5 w-5" />,
+      },
+      {
+        id: '3',
+        title: 'Guardrails',
+        value: 'guardrails',
+        icon: <ShieldCheck className="h-5 w-5" />,
+      },
+    ],
   },
   {
-    id: '2',
-    title: 'Instructions',
-    value: 'instructions',
-    icon: <SlidersHorizontal className="h-5 w-5" />,
-  },
-  {
-    id: '3',
-    title: 'Guardrails',
-    value: 'guardrails',
-    icon: <ShieldCheck className="h-5 w-5" />,
-  },
-  {
-    id: '4',
-    title: 'Password',
-    value: 'password',
-    icon: <KeyRound className="h-5 w-5" />,
-  },
-  {
-    id: '5',
-    title: 'Invite',
-    value: 'invite',
-    icon: <UserPlus className="h-5 w-5" />,
+    sectionTitle: 'Account Settings',
+    options: [
+      {
+        id: '4',
+        title: 'Password',
+        value: 'password',
+        icon: <KeyRound className="h-5 w-5" />,
+      },
+      {
+        id: '5',
+        title: 'Invite',
+        value: 'invite',
+        icon: <UserPlus className="h-5 w-5" />,
+      },
+    ],
   },
 ];
 
@@ -84,7 +104,7 @@ export const SettingsSidebar = ({
       <div
         className={cn(
           'sticky top-0 z-30 flex h-[53px] items-center justify-between border-b border-black/10 px-4 py-3 transition-colors duration-300',
-          hideSidebar ? 'justify-center bg-[#F2F3F5] dark:bg-gray-900' : 'bg-white dark:bg-gray-950',
+          hideSidebar ? 'justify-center bg-[#F2F3F5] dark:bg-gray-900' : 'bg-white dark:bg-gray-955',
         )}
       >
         {!hideSidebar ? (
@@ -110,32 +130,46 @@ export const SettingsSidebar = ({
         className={cn(
           'flex-1 overflow-y-auto',
           isSettingsSidebarOpen
-            ? 'w-full p-4 space-y-1'
-            : 'flex flex-col items-center gap-2 p-2 pt-4',
+            ? 'w-full p-4 space-y-5'
+            : 'flex flex-col items-center gap-2.5 p-2 pt-4',
         )}
       >
-        {settingsOptions.map(option => (
-          <Button
-            key={option.id}
-            variant={selectedOption === option.value ? 'secondary' : 'ghost'}
-            onClick={() => onSelectOption(option.value)}
-            className={cn(
-              isSettingsSidebarOpen
-                ? 'w-full justify-start gap-3 text-left'
-                : 'h-10 w-10 rounded-md p-0 flex items-center justify-center',
-              selectedOption === option.value
-                ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100 shadow-sm'
-                : isSettingsSidebarOpen
-                  ? 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-900'
-                  : 'hover:bg-gray-200 dark:hover:bg-gray-700',
-            )}
-            title={!isSettingsSidebarOpen ? option.title : undefined}
-          >
-            {option.icon}
+        {settingsSections.map((section, idx) => (
+          <div key={section.sectionTitle} className="space-y-1.5 w-full flex flex-col items-center">
             {isSettingsSidebarOpen && (
-              <span className="text-sm font-medium">{option.title}</span>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none self-start">
+                {section.sectionTitle}
+              </div>
             )}
-          </Button>
+            
+            {section.options.map(option => (
+              <Button
+                key={option.id}
+                variant={selectedOption === option.value ? 'secondary' : 'ghost'}
+                onClick={() => onSelectOption(option.value)}
+                className={cn(
+                  isSettingsSidebarOpen
+                    ? 'w-full justify-start gap-3 text-left'
+                    : 'h-10 w-10 rounded-md p-0 flex items-center justify-center',
+                  selectedOption === option.value
+                    ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100 shadow-sm'
+                    : isSettingsSidebarOpen
+                      ? 'text-gray-700 hover:bg-gray-55 dark:text-gray-300 dark:hover:bg-gray-900'
+                      : 'hover:bg-gray-200 dark:hover:bg-gray-700',
+                )}
+                title={!isSettingsSidebarOpen ? option.title : undefined}
+              >
+                {option.icon}
+                {isSettingsSidebarOpen && (
+                  <span className="text-sm font-medium">{option.title}</span>
+                )}
+              </Button>
+            ))}
+
+            {!isSettingsSidebarOpen && idx < settingsSections.length - 1 && (
+              <div className="w-8 h-px bg-black/15 dark:bg-white/15 my-1" />
+            )}
+          </div>
         ))}
       </div>
     </div>
