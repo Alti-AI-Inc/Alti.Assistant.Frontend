@@ -567,9 +567,9 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         router.push(`/my-chatbots?bot=${bot.id}`);
                       }}
                       className={cn(
-                        "group flex h-9 w-full items-center justify-between rounded-md text-sm font-medium text-black text-left transition-all",
+                        "group flex h-9 w-full items-center justify-between rounded-md text-xs font-semibold text-black text-left transition-all",
                         isSelected 
-                          ? "bg-black/10 font-semibold" 
+                          ? "bg-black/10" 
                           : "hover:bg-black/5"
                       )}
                     >
@@ -678,9 +678,9 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       router.push(`/workflows?wf=${wf.id}`);
                     }}
                     className={cn(
-                      "group flex h-9 w-full items-center justify-between rounded-md text-sm font-medium text-black text-left transition-all",
+                      "group flex h-9 w-full items-center justify-between rounded-md text-xs font-semibold text-black text-left transition-all",
                       isSelected 
-                        ? "bg-black/10 font-semibold" 
+                        ? "bg-black/10" 
                         : "hover:bg-black/5"
                     )}
                   >

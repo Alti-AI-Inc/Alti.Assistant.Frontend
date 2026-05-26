@@ -28,7 +28,6 @@ import {
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
-import SaveConversation from './SaveConversation';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -184,7 +183,7 @@ export default function ConversationsList({
       )}
       {filteredConversations.map(chat => (
         <div
-          className="group flex h-9 w-full items-center justify-between rounded-md text-sm font-medium text-black hover:bg-black/5"
+          className="group flex h-9 w-full items-center justify-between rounded-md text-xs font-semibold text-black hover:bg-black/5"
           key={chat._id}
         >
           <span
@@ -200,10 +199,6 @@ export default function ConversationsList({
               <EllipsisVertical className="mr-2 rotate-90 text-black opacity-100 md:opacity-0 md:group-hover:opacity-100" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="rounded-2xl">
-              <DropdownMenuItem onSelect={e => e.preventDefault()}>
-                <SaveConversation conversationId={chat.conversationId} />
-              </DropdownMenuItem>
-
               <DropdownMenuItem
                 onClick={() =>
                   onOpen({

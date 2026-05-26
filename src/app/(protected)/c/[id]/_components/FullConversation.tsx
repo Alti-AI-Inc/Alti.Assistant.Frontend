@@ -5,7 +5,6 @@ import { ConfigForm } from '@/components/documents/ConfigForm';
 import { ModeSelector } from '@/components/documents/ModeSelector';
 import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
-import SaveConversation from '@/components/SaveConversation';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -499,13 +498,6 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
  
             {/* <DropdownMenuSeparator /> */}
  
-            {activeConversation?.conversationId && (
-              <DropdownMenuItem onSelect={e => e.preventDefault()} className="rounded-xl">
-                <SaveConversation
-                  conversationId={activeConversation?.conversationId}
-                />
-              </DropdownMenuItem>
-            )}
             <DropdownMenuItem
               className="rounded-xl focus:bg-red-500/10 focus:text-red-600 dark:focus:bg-red-500/20 dark:focus:text-red-400"
               onClick={() => {
