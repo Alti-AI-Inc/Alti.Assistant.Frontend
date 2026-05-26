@@ -39,7 +39,7 @@ import {
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import ConversationsList from './ConversationsList';
 import { TenantModeSwitcher } from './TenantModeSwitcher';
 import { Badge } from './ui/badge';
@@ -48,6 +48,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { allApps, APP } from '@/lib/all-apps';
 import { apiClientJson, buildApiUrl } from '@/lib/api-client';
 import { useBotsStore } from '@/stores/useBotsStore';
+import { useConnectionsQuery } from '@/hooks/useConnectApps';
 
 interface DataConnector {
   id: string;
@@ -151,28 +152,19 @@ const LeftSideNavMobile = () => {
   const activeConnectorId = searchParams?.get('connector') || 'file';
 
   const [connectedAppSlugs, setConnectedAppSlugs] = useState<Set<string>>(new Set());
-  const [isFetchingStatus, setIsFetchingStatus] = useState(false);
 
-  const fetchConnectionStatus = async () => {
-    setIsFetchingStatus(true);
-    const response = await apiClientJson<{ connectedAccountId: string; toolkit: { slug: string } }[]>(
-      buildApiUrl('/composio-simple/connected-accounts')
-    );
-    
-    if (response.success && Array.isArray(response.data)) {
+  const { data: connections } = useConnectionsQuery(
+    data?.accessToken,
+  );
+
+  useEffect(() => {
+    if (connections) {
       const activeSlugs = new Set(
-        response.data.map(account => account.toolkit?.slug?.toLowerCase()).filter(Boolean)
+        connections.map(account => account.toolkit?.slug?.toLowerCase()).filter(Boolean)
       );
       setConnectedAppSlugs(activeSlugs);
     }
-    setIsFetchingStatus(false);
-  };
-
-  useEffect(() => {
-    if (activeTab === 'apps') {
-      fetchConnectionStatus();
-    }
-  }, [activeTab]);
+  }, [connections]);
 
   const availableComposioApps = (() => {
     const uniqueMap = new Map<string, APP>();

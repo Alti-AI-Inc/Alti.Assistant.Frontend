@@ -4,8 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { allApps, APP } from '@/lib/all-apps';
 import { apiClientJson, buildApiUrl } from '@/lib/api-client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { useConnectionsQuery } from '@/hooks/useConnectApps';
+import { useQueryClient } from '@tanstack/react-query';
 import { 
   Search, MessageSquare, Shield, CheckCircle, AlertTriangle, 
   ArrowRight, Key, ExternalLink, RefreshCw, Send, Sparkles, 
@@ -27,8 +30,24 @@ export const AppsPanelsContainer = () => {
   const activeAppSlug = searchParams?.get('app');
 
   const [selectedApp, setSelectedApp] = useState<APP | null>(null);
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+
+  const { data: connections, isLoading: isFetchingStatus } = useConnectionsQuery(
+    session?.accessToken,
+  );
+
   const [connectedAppSlugs, setConnectedAppSlugs] = useState<Set<string>>(new Set());
-  const [isFetchingStatus, setIsFetchingStatus] = useState(true);
+
+  useEffect(() => {
+    if (connections) {
+      const activeSlugs = new Set(
+        connections.map(account => account.toolkit?.slug?.toLowerCase()).filter(Boolean)
+      );
+      setConnectedAppSlugs(activeSlugs);
+    }
+  }, [connections]);
+
   const [isConnecting, setIsConnecting] = useState(false);
   const [connectionError, setConnectionError] = useState<string | null>(null);
   
@@ -52,28 +71,6 @@ export const AppsPanelsContainer = () => {
       setSelectedApp(null);
     }
   }, [activeAppSlug]);
-
-  // --- Fetch Connected Status ---
-  const fetchConnectionStatus = async () => {
-    setIsFetchingStatus(true);
-    const response = await apiClientJson<{ connectedAccountId: string; toolkit: { slug: string } }[]>(
-      buildApiUrl('/composio-simple/connected-accounts')
-    );
-    
-    if (response.success && Array.isArray(response.data)) {
-      const activeSlugs = new Set(
-        response.data.map(account => account.toolkit?.slug?.toLowerCase()).filter(Boolean)
-      );
-      setConnectedAppSlugs(activeSlugs);
-    } else {
-      console.error('Failed to retrieve connected accounts from Composio:', response.debugMessage);
-    }
-    setIsFetchingStatus(false);
-  };
-
-  useEffect(() => {
-    fetchConnectionStatus();
-  }, []);
 
   // Scroll to bottom of chat when messages or loading state change
   useEffect(() => {
@@ -146,6 +143,8 @@ export const AppsPanelsContainer = () => {
             next.add(app.app_name.toLowerCase());
             return next;
           });
+          // Invalidate connections query to refetch status globally
+          queryClient.invalidateQueries({ queryKey: ['connections'] });
         }
       }, 3000);
     } else {
@@ -268,7 +267,13 @@ export const AppsPanelsContainer = () => {
           ========================================================= */}
       <main className="flex-1 flex flex-col bg-white dark:bg-gray-950 overflow-hidden relative">
         
-        {!selectedApp ? (
+        {isFetchingStatus ? (
+          /* Premium loading state to prevent layout flashing */
+          <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-4 bg-white dark:bg-gray-950">
+            <RefreshCw className="h-8 w-8 text-blue-600 animate-spin" />
+            <p className="text-sm text-gray-500 animate-pulse">Loading workspace status...</p>
+          </div>
+        ) : !selectedApp ? (
           /* STATE 0: Welcome Screen / Dashboard overview */
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center max-w-xl mx-auto space-y-6">
             <div className="h-16 w-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
