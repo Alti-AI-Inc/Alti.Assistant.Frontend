@@ -97,12 +97,7 @@ function MyChatbotsContent() {
         style={{ backgroundColor: '#FCFCFC' }}
       >
         {/* Chatbot Content Body */}
-        <div
-          className={cn(
-            'flex-1 flex flex-col items-center overflow-hidden relative',
-            activeBotThreadId ? 'justify-start pt-0' : 'justify-start pt-36',
-          )}
-        >
+        <div className="flex-1 flex flex-col items-center justify-center overflow-hidden relative">
           {!activeBotThreadId && (
             <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
               {activeBot.name}
