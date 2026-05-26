@@ -396,7 +396,7 @@ export function OrganizationTenantOverview({
                 placeholder="Enter First Name"
                 value={inviteFirstName}
                 onChange={(e) => setInviteFirstName(e.target.value)}
-                className="h-9 text-xs border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
+                className="h-9 text-xs md:text-sm border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
                 disabled={isInviting}
               />
               <Input
@@ -405,7 +405,7 @@ export function OrganizationTenantOverview({
                 placeholder="Enter Last Name"
                 value={inviteLastName}
                 onChange={(e) => setInviteLastName(e.target.value)}
-                className="h-9 text-xs border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
+                className="h-9 text-xs md:text-sm border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
                 disabled={isInviting}
               />
             </div>
@@ -418,7 +418,7 @@ export function OrganizationTenantOverview({
                 placeholder="Enter Email Address"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
-                className="h-9 text-xs border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
+                className="h-9 text-xs md:text-sm border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
                 disabled={isInviting}
               />
               <Select
@@ -426,7 +426,7 @@ export function OrganizationTenantOverview({
                 onValueChange={setInviteRole}
                 disabled={isInviting}
               >
-                <SelectTrigger id="invite-role" className="h-9 text-xs border-black/10 focus:ring-black bg-white dark:bg-zinc-950 w-full">
+                <SelectTrigger id="invite-role" className="h-9 text-xs md:text-sm border-black/10 focus:ring-black bg-white dark:bg-zinc-950 w-full">
                   <SelectValue placeholder="Select Role" />
                 </SelectTrigger>
                 <SelectContent className="border-black/10">
