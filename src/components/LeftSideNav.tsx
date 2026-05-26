@@ -355,14 +355,13 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
   return (
     <>
-      <div className="pt-0 pb-2" style={{ backgroundColor: '#F2F3F5' }}>
+      <div className="pt-0 pb-2 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300">
         <div
           className={cn(
-            'sticky top-0 z-30 flex items-center justify-between border-b border-black/10 px-4 pt-4 pb-4',
+            'sticky top-0 z-30 flex items-center justify-between border-b border-black/10 dark:border-zinc-800/80 px-4 pt-4 pb-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300',
             hideSidebar && 'justify-center',
             side === 'right' && 'flex-row-reverse',
           )}
-          style={{ backgroundColor: '#F2F3F5' }}
         >
           <div
             className={cn(
@@ -374,7 +373,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             {logoHovered && hideSidebar ? (
               <PanelLeftClose
                 className={cn(
-                  'size-[21px] cursor-pointer text-gray-600 transition-transform duration-300',
+                  'size-[21px] cursor-pointer text-gray-600 dark:text-zinc-400 transition-transform duration-300',
                 )}
                 onClick={side === 'right' ? toggleRightSidebar : toggleLeftSidebar}
               />
@@ -410,16 +409,16 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         </div>
         {/* Enclosed Search & Actions Row */}
         {!hideSidebar && (
-          <div className="flex items-center justify-between gap-2 border-b border-black/10 px-4 py-4 transition-all duration-300">
+          <div className="flex items-center justify-between gap-2 border-b border-black/10 dark:border-zinc-800/80 px-4 py-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-all duration-300">
             {/* Search Bar Input */}
-            <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-white px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">
-              <Search className="size-3.5 flex-none text-black" />
+            <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 dark:border-zinc-800/80 bg-white dark:bg-zinc-800/50 px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 dark:focus-within:ring-white/10">
+              <Search className="size-3.5 flex-none text-zinc-500 dark:text-zinc-400" />
               <input
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent text-xs text-black outline-none placeholder:text-gray-500"
+                className="w-full bg-transparent text-xs text-black dark:text-zinc-100 outline-none placeholder:text-zinc-500 dark:placeholder:text-zinc-400"
               />
             </div>
 
@@ -531,11 +530,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {isLoggedIn && (
         <div
           className={cn(
-            'flex flex-1 flex-col overflow-y-scroll px-4',
+            'flex flex-1 flex-col overflow-y-scroll px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300',
             hideSidebar && 'hidden',
             side === 'right' && 'pb-8',
           )}
-          style={{ backgroundColor: '#F2F3F5' }}
         >
           {/* Dynamic sub-header reflecting the selected active tab history */}
           <div className="mt-4 mb-2 px-1 flex items-center justify-between">
@@ -708,7 +706,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         </div>
       )}
 
-      {!isLoggedIn && <div className="flex flex-1 flex-col"></div>}
+      {!isLoggedIn && <div className="flex flex-1 flex-col bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300"></div>}
 
       {side !== 'right' && (
         <div
@@ -783,6 +781,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem
+                  className="rounded-xl"
                   onClick={() =>
                     onOpen({
                       type: 'logout',

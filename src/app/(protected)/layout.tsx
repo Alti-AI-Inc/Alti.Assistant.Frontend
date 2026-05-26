@@ -3,6 +3,8 @@
 // parent layout is a client component.
 import ProtectedLayoutClient from './ProtectedLayoutClient';
 
+import { motion } from 'framer-motion';
+
 export default function ProtectedLayout({
   children,
 }: Readonly<{

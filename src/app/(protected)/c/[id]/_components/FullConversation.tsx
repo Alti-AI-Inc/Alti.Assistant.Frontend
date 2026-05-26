@@ -486,27 +486,28 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             })
           }
           variant="ghost"
-          className="bg-white"
+          className="bg-white/80 dark:bg-zinc-900/80 border border-black/5 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800/95 transition-all shadow-sm rounded-xl font-semibold gap-1.5"
         >
-          <Share /> Share
+          <Share className="size-4" /> Share
         </Button>
         <DropdownMenu>
-          <DropdownMenuTrigger className="outline-hidden">
-            <EllipsisVertical className="size-5 rotate-90" />
+          <DropdownMenuTrigger className="outline-hidden p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-all">
+            <EllipsisVertical className="size-5 rotate-90 text-zinc-600 dark:text-zinc-400" />
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="mr-5 rounded-2xl">
+          <DropdownMenuContent className="mr-5 rounded-2xl backdrop-blur-xl bg-white/90 dark:bg-zinc-900/90 border border-black/10 dark:border-zinc-800 shadow-xl">
             {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
-
+ 
             {/* <DropdownMenuSeparator /> */}
-
+ 
             {activeConversation?.conversationId && (
-              <DropdownMenuItem onSelect={e => e.preventDefault()}>
+              <DropdownMenuItem onSelect={e => e.preventDefault()} className="rounded-xl">
                 <SaveConversation
                   conversationId={activeConversation?.conversationId}
                 />
               </DropdownMenuItem>
             )}
             <DropdownMenuItem
+              className="rounded-xl focus:bg-red-500/10 focus:text-red-600 dark:focus:bg-red-500/20 dark:focus:text-red-400"
               onClick={() => {
                 if (queryConversation?._id) {
                   onOpen({
@@ -516,8 +517,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 }
               }}
             >
-              <Trash2 className="text-black" />{' '}
-              <span className="text-black">Delete</span>
+              <Trash2 className="size-4 text-red-500 dark:text-red-400" />{' '}
+              <span className="text-red-500 dark:text-red-400 font-medium">Delete</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -534,9 +535,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         selectedOption === OPTIONS.REVIEW_CONTRACT ||
         selectedOption === OPTIONS.GENERATE_REPORT) && (
         <div
-          className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8"
+          className="flex-grow overflow-y-auto px-4 sm:px-6 lg:px-8 bg-zinc-50/50 dark:bg-zinc-950/20 transition-colors duration-300"
           ref={messagesContainerRef}
-          style={{ backgroundColor: '#FFFFFF' }}
         >
           <div
             className={cn(
@@ -557,7 +557,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     >
                       <div
                         className={cn(
-                          'w-fit max-w-[85%] rounded-2xl bg-gray-100 px-4 py-2 text-black shadow',
+                          'w-fit max-w-[85%] rounded-2xl bg-zinc-100 dark:bg-zinc-800 px-4 py-2.5 text-zinc-900 dark:text-zinc-100 border border-black/5 dark:border-white/5 shadow-sm transition-colors duration-300 leading-relaxed text-sm font-medium',
                           showStartLastMessage && 'mt-8',
                         )}
                       >
@@ -565,27 +565,27 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       </div>
                     </div>
                   )}
-
+ 
                   {message.role === 'assistant' &&
                     // Skip rendering if content is empty and there's no image
                     !(
                       !message.content?.trim() && !message.metadata?.imageUrl
                     ) && (
-                      <div>
+                      <div className="text-zinc-850 dark:text-zinc-200">
                         {containsYouTubeUrl(message.content) ? (
                           <VideoComponentForContent content={message.content} />
                         ) : (
-                          <div>
-                            <Streamdown className="w-full rounded-lg">
+                          <div className="relative group">
+                            <Streamdown className="w-full rounded-lg leading-relaxed text-sm">
                               {message.content}
                             </Streamdown>
-
+ 
                             <CopyButton content={message.content} />
                           </div>
                         )}
                       </div>
                     )}
-
+ 
                   {message.metadata?.imageUrl && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -595,10 +595,10 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                           : (message.metadata.imageUrl as any)?.url
                       }
                       alt={message.metadata.type || 'Generated image'}
-                      className="max-w-full rounded-lg shadow-md"
+                      className="max-w-full rounded-lg shadow-md border border-black/5 dark:border-white/5"
                       onError={e => {
                         console.error(
-                          '[FullConversation] Image failed to load:',
+                           '[FullConversation] Image failed to load:',
                           message.metadata!.imageUrl,
                         );
                         console.error('Error details:', e);
@@ -610,7 +610,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       operationId={message.metadata?.video?.name}
                     />
                   )}
-
+ 
                   {message.metadata?.document && (
                     <FileDownloadCard document={message.metadata.document} />
                   )}
@@ -675,11 +675,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 <>
                   {!shouldHideModeSelector() && (
                     <ModeSelector
-                      currentMode={getCurrentMode()}
+                       currentMode={getCurrentMode()}
                       modeContext={getModeContext()}
                     />
                   )}
-
+ 
                   {shouldShowConfigForm() && (
                     <div
                       className={cn(
@@ -721,30 +721,29 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       {isLoading && (
         <div
           className={cn(
-            'flex h-[calc()100vh_-110px] flex-1 items-center justify-center py-4',
+            'flex h-[calc()100vh_-110px] flex-grow items-center justify-center py-4 bg-zinc-50/50 dark:bg-zinc-950/20',
           )}
         >
-          <div className="flex items-center space-x-2 text-gray-500">
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"></div>
-            <span>loading chat...</span>
+          <div className="flex items-center space-x-2.5 text-zinc-500 dark:text-zinc-400">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-500/10 border-t-indigo-500"></div>
+            <span className="text-xs font-semibold">loading chat...</span>
           </div>
         </div>
       )}
-
+ 
       {/* {error && !isHomePage && (
         <div className="my-6 text-center">{error.message}</div>
       )} */}
-
+ 
       {/* Sticky chat input at bottom */}
       {/* <div className="sticky bottom-0 bg-white px-4 pb-4"> */}
       <div
         className={cn(
-          'sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8',
+          'sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8 border-t border-black/5 dark:border-zinc-800/80 backdrop-blur-xl bg-white/70 dark:bg-zinc-950/70',
           hasMessages
-            ? 'flex h-20 items-center justify-center border-t border-black/10 py-1.5'
+            ? 'flex h-20 items-center justify-center py-1.5'
             : 'py-4',
         )}
-        style={{ backgroundColor: hasMessages ? '#FFFFFF' : '#FCFCFC' }}
       >
         <div className="mx-auto w-full max-w-[796px]">
           <ChatInput

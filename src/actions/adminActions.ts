@@ -65,7 +65,7 @@ export async function getAllUsers(
           .join('&')
       : '';
 
-    const res = await fetch(`${BASE_URL}/admin/all-user${qs}`, {
+    const res = await fetch(`${API_BASE}/admin/all-user${qs}`, {
       method: 'GET',
       headers: {
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
@@ -99,7 +99,7 @@ export async function deleteUser(
   accessToken?: string,
 ): Promise<ApiResponse<{ deleted: boolean }>> {
   try {
-    const res = await fetch(`${BASE_URL}/admin/delete-user/${userId}`, {
+    const res = await fetch(`${API_BASE}/admin/delete-user/${userId}`, {
       method: 'DELETE',
       headers: {
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
@@ -311,7 +311,7 @@ export async function getAllPayments(
           .join('&')
       : '';
 
-    const res = await fetch(`${BASE_URL}/admin/all-payment${qs}`, {
+    const res = await fetch(`${API_BASE}/admin/all-payment${qs}`, {
       method: 'GET',
       headers: {
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
@@ -356,7 +356,7 @@ export async function getTenants(
           .join('&')
       : '';
 
-    const res = await fetch(`${BASE_URL}/admin/tenants${qs}`, {
+    const res = await fetch(`${API_BASE}/admin/tenants${qs}`, {
       method: 'GET',
       headers: {
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
@@ -390,7 +390,7 @@ export async function getTenantById(
   accessToken?: string,
 ): Promise<ApiResponse<AdminTenantDetail>> {
   try {
-    const res = await fetch(`${BASE_URL}/admin/tenants/${tenantId}`, {
+    const res = await fetch(`${API_BASE}/admin/tenants/${tenantId}`, {
       method: 'GET',
       headers: {
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
@@ -425,7 +425,7 @@ export async function updateTenantStatus(
   accessToken?: string,
 ): Promise<ApiResponse<unknown>> {
   try {
-    const res = await fetch(`${BASE_URL}/admin/tenants/${tenantId}/status`, {
+    const res = await fetch(`${API_BASE}/admin/tenants/${tenantId}/status`, {
       method: 'PATCH',
       headers: {
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
@@ -662,7 +662,7 @@ export async function extendTenantTrial(
 ): Promise<ApiResponse<unknown>> {
   try {
     const res = await fetch(
-      `${BASE_URL}/admin/tenants/${tenantId}/extend-trial`,
+      `${API_BASE}/admin/tenants/${tenantId}/extend-trial`,
       {
         method: 'POST',
         headers: {

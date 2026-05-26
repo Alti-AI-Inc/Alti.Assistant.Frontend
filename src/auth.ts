@@ -32,7 +32,9 @@ declare module 'next-auth' {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
   providers: [
+    // ── Email / Password ─────────────────────────────────────────────────────
     Credentials({
+      id: 'credentials',
       name: 'credentials',
       credentials: {
         email: { label: 'Email', type: 'email' },
@@ -45,7 +47,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null;
         }
         try {
-          console.log('Authorizing user with email:', credentials.email);
           const body: Record<string, string> = {
             email: credentials.email as string,
             password: credentials.password as string,
@@ -54,25 +55,38 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             body.invitationToken = credentials.invitationToken as string;
           }
           const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
-          console.log('Attempting login with:', body);
-          console.log('API URL:', apiUrl);
           const response = await fetch(`${apiUrl}/auth/login`, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body),
           });
           const user = await response.json();
-          console.log('Login response status:', response.status, response.ok);
           if (!response.ok) return null;
-
-          return {
-            id: user.data._id,
-            accessToken: user.data.accessToken,
-          };
+          return { id: user.data._id, accessToken: user.data.accessToken };
         } catch (error) {
           console.error(error);
+          return null;
+        }
+      },
+    }),
+
+    // ── Google OAuth popup — accepts pre-issued backend JWT ──────────────────
+    Credentials({
+      id: 'social-token',
+      name: 'social-token',
+      credentials: {
+        accessToken: { label: 'Access Token', type: 'text' },
+      },
+      async authorize(credentials) {
+        if (!credentials?.accessToken) return null;
+        try {
+          const token = credentials.accessToken as string;
+          const decoded = jwt.decode(token) as jwt.JwtPayload & { _id?: string };
+          if (!decoded || !decoded._id) return null;
+          if (decoded.exp && decoded.exp * 1000 < Date.now()) return null;
+          return { id: decoded._id, accessToken: token };
+        } catch (error) {
+          console.error('[social-token]', error);
           return null;
         }
       },
