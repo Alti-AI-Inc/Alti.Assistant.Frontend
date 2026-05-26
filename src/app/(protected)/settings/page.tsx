@@ -173,10 +173,6 @@ const Instructions = () => {
       localStorage.setItem('alti_instructions', JSON.stringify(updatedList));
       setInputVal('');
       setIsSaving(false);
-      
-      toast.success('System instruction added successfully!', {
-        description: 'Applied instantly to all new agent conversations.'
-      });
     }, 300);
   };
 
@@ -390,10 +386,6 @@ const Guardrails = () => {
       localStorage.setItem('alti_guardrails', JSON.stringify(updatedList));
       setInputVal('');
       setIsSaving(false);
-
-      toast.success('Safety guardrail applied successfully!', {
-        description: 'Locked into core assistant validation rules.'
-      });
     }, 300);
   };
 
