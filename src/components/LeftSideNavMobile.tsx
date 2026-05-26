@@ -397,7 +397,7 @@ const LeftSideNavMobile = () => {
                   <rect x="2" y="2" width="5" height="5" rx="1" />
                 </svg>
                 <span className="text-sm font-normal">Spaces</span>
-              </Button>
+              </Button> */}
 
               <Button
                 disabled={pathname === '/apps'}
@@ -411,25 +411,9 @@ const LeftSideNavMobile = () => {
                 }}
                 className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-package"
-                >
-                  <line x1="16.5" y1="9.4" x2="7.5" y2="4.21" />
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                  <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                  <line x1="12" y1="22.08" x2="12" y2="12" />
-                </svg>
+                <LayoutGrid className="size-4 mr-2 text-black" />
                 <span className="text-sm font-normal">Apps</span>
-              </Button> */}
+              </Button>
             </>
           )}
         </div>
@@ -483,19 +467,7 @@ const LeftSideNavMobile = () => {
               <Sparkles className="size-4" />
             </button>
 
-            <button
-              type="button"
-              title="Apps"
-              onClick={() => handleTabChange('apps')}
-              className={cn(
-                'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                activeTab === 'apps'
-                  ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-              )}
-            >
-              <LayoutGrid className="size-4" />
-            </button>
+
 
             <button
               type="button"
