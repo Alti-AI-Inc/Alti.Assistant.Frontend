@@ -734,14 +734,6 @@ const LeftSideNavMobile = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuGroup>
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push('/knowledge');
-                    close();
-                  }}
-                >
-                  <Database className="text-black" /> Data
-                </DropdownMenuItem>
                 {/* Plans dropdown menu item */}
                 <DropdownMenuItem
                   onClick={() => {

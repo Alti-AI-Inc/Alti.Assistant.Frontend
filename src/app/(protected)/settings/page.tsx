@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { LlamaIndexChat } from '@/app/(protected)/knowledge/_components/LlamaIndexChat';
 
 const Page = () => {
   const [selectedOption, setSelectedOption] = useState('memory');
@@ -49,6 +50,7 @@ const Page = () => {
         <div className="h-[53px] border-b border-black/10 dark:border-white/10 flex items-center px-8 flex-none bg-white dark:bg-gray-955 justify-between">
           <h1 className="text-base font-semibold text-gray-900 dark:text-white">
             {selectedOption === 'memory' && 'Chat Memory'}
+            {selectedOption === 'data' && 'Data Vault'}
             {selectedOption === 'instructions' && 'System Instructions'}
             {selectedOption === 'guardrails' && 'Safety Guardrails'}
             {selectedOption === 'password' && 'Update Password'}
@@ -57,15 +59,21 @@ const Page = () => {
         </div>
 
         {/* Workspace Body */}
-        <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
-          <div className="max-w-4xl">
-            {selectedOption === 'memory' && <Memory />}
-            {selectedOption === 'instructions' && <Instructions />}
-            {selectedOption === 'guardrails' && <Guardrails />}
-            {selectedOption === 'password' && <ChangePassword />}
-            {selectedOption === 'invite' && <Invite />}
+        {selectedOption === 'data' ? (
+          <div className="flex-1 min-h-0 overflow-hidden bg-white dark:bg-gray-955">
+            <LlamaIndexChat />
           </div>
-        </div>
+        ) : (
+          <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
+            <div className="max-w-4xl">
+              {selectedOption === 'memory' && <Memory />}
+              {selectedOption === 'instructions' && <Instructions />}
+              {selectedOption === 'guardrails' && <Guardrails />}
+              {selectedOption === 'password' && <ChangePassword />}
+              {selectedOption === 'invite' && <Invite />}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

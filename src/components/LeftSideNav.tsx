@@ -760,9 +760,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       <LayoutDashboard className="text-black" /> Dashboard
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem onClick={() => router.push('/knowledge')}>
-                    <Database className="text-black" /> Data
-                  </DropdownMenuItem>
                   {/* Plans dropdown menu item */}
                   <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                     <Orbit className="text-black" /> Plans

@@ -11,6 +11,7 @@ import {
   ShieldCheck,
   PanelLeftClose,
   UserPlus,
+  Database,
 } from 'lucide-react';
 
 export interface SettingsOption {
@@ -31,6 +32,12 @@ const settingsOptions: SettingsOption[] = [
     title: 'Memory',
     value: 'memory',
     icon: <Brain className="h-5 w-5" />,
+  },
+  {
+    id: 'data-tab',
+    title: 'Data',
+    value: 'data',
+    icon: <Database className="h-5 w-5" />,
   },
   {
     id: '2',
