@@ -13,6 +13,7 @@ import StripeProviderWithErrorBoundary from '@/components/stripe/StripeProvider'
 import { Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
+import SpacesLayout from '@/components/sidebars/SpacesLayout';
 
 function UpgradePage() {
   const { data: session } = useSession();
@@ -82,21 +83,24 @@ function UpgradePage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col px-6 py-12">
-      <div className="container mx-auto max-w-7xl">
-        <h1 className="mt-10 text-center text-5xl font-semibold tracking-tighter">
-          Plans
+    <div className="h-full flex flex-col bg-white dark:bg-gray-950 overflow-hidden">
+      {/* Dynamic Header */}
+      <div className="h-[53px] border-b border-black/10 dark:border-white/10 flex items-center px-8 flex-none bg-white dark:bg-gray-950">
+        <h1 className="text-base font-semibold text-gray-900 dark:text-white">
+          Pricing Plans
         </h1>
-        <p className="text-muted-foreground mt-4 text-center text-lg">
-          Choose the perfect plan for your needs.
-        </p>
+      </div>
 
-        <div className="mt-20">
-          <OrganizationPricingCards
-            onSelectPlan={handleSelectPlan}
-            currentPlanId={currentPlanId}
-            showContactSales={true}
-          />
+      {/* Main Workspace Body */}
+      <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
+        <div className="container mx-auto max-w-7xl">
+          <div className="mt-4">
+            <OrganizationPricingCards
+              onSelectPlan={handleSelectPlan}
+              currentPlanId={currentPlanId}
+              showContactSales={true}
+            />
+          </div>
         </div>
       </div>
 
@@ -121,7 +125,9 @@ function UpgradePage() {
 export default function UpgradePageWithStripe() {
   return (
     <StripeProviderWithErrorBoundary>
-      <UpgradePage />
+      <SpacesLayout showColumnPanels={false}>
+        <UpgradePage />
+      </SpacesLayout>
     </StripeProviderWithErrorBoundary>
   );
 }
