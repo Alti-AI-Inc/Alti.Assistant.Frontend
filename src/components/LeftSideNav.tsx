@@ -39,6 +39,7 @@ import {
   Upload,
   Cpu,
   Sparkles,
+  EllipsisVertical,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -560,12 +561,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 .map(bot => {
                   const isSelected = activeBotId === bot.id && pathname === '/my-chatbots';
                   return (
-                    <button
+                    <div
                       key={bot.id}
-                      onClick={() => {
-                        setActiveBotId(bot.id);
-                        router.push(`/my-chatbots?bot=${bot.id}`);
-                      }}
                       className={cn(
                         "group flex h-9 w-full items-center justify-between rounded-md text-xs font-semibold text-black text-left transition-all",
                         isSelected 
@@ -573,12 +570,32 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                           : "hover:bg-black/5"
                       )}
                     >
-                      <span className="flex-1 truncate px-3 py-2 flex items-center gap-2.5">
+                      <span
+                        className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
+                        onClick={() => {
+                          setActiveBotId(bot.id);
+                          router.push(`/my-chatbots?bot=${bot.id}`);
+                        }}
+                      >
                         <Folder className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />
                         <span className="truncate">{bot.name}</span>
                       </span>
-                      <ChevronRight className="mr-2 h-3.5 w-3.5 text-black opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity" />
-                    </button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger className="focus-visible:outline-none">
+                          <EllipsisVertical className="mr-2 rotate-90 h-3.5 w-3.5 text-black opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="rounded-2xl">
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setActiveBotId(bot.id);
+                              router.push(`/my-chatbots?bot=${bot.id}`);
+                            }}
+                          >
+                            <Folder className="text-black h-4 w-4 mr-2" /> Open
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   );
                 })}
               {bots.filter(bot =>
@@ -672,11 +689,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               ].filter(wf => wf.name.toLowerCase().includes(searchQuery.toLowerCase())).map(wf => {
                 const isSelected = pathname === '/workflows' && searchParams?.get('wf') === wf.id;
                 return (
-                  <button
+                  <div
                     key={wf.id}
-                    onClick={() => {
-                      router.push(`/workflows?wf=${wf.id}`);
-                    }}
                     className={cn(
                       "group flex h-9 w-full items-center justify-between rounded-md text-xs font-semibold text-black text-left transition-all",
                       isSelected 
@@ -684,12 +698,30 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         : "hover:bg-black/5"
                     )}
                   >
-                    <span className="flex-1 truncate px-3 py-2 flex items-center gap-2.5">
+                    <span
+                      className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
+                      onClick={() => {
+                        router.push(`/workflows?wf=${wf.id}`);
+                      }}
+                    >
                       <Zap className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />
                       <span className="truncate">{wf.name}</span>
                     </span>
-                    <ChevronRight className="mr-2 h-3.5 w-3.5 text-black opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity" />
-                  </button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className="focus-visible:outline-none">
+                        <EllipsisVertical className="mr-2 rotate-90 h-3.5 w-3.5 text-black opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity" />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="rounded-2xl">
+                        <DropdownMenuItem
+                          onClick={() => {
+                            router.push(`/workflows?wf=${wf.id}`);
+                          }}
+                        >
+                          <Zap className="text-black h-4 w-4 mr-2" /> Open
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 );
               })}
             </div>
