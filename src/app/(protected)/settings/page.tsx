@@ -54,7 +54,7 @@ const Page = () => {
 
         {/* Workspace Body */}
         <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
-          <div className="max-w-2xl">
+          <div className="max-w-4xl">
             {selectedOption === 'memory' && <Memory />}
             {selectedOption === 'instructions' && <Instructions />}
             {selectedOption === 'guardrails' && <Guardrails />}
@@ -69,7 +69,7 @@ const Page = () => {
 
 const Memory = () => {
   return (
-    <div className="max-w-2xl pt-2">
+    <div className="max-w-4xl pt-2">
       <RadioGroup defaultValue="1-month" className="space-y-4">
         <div className="flex items-center gap-3">
           <RadioGroupItem className="border-gray-400" value="off" id="r1" />
@@ -194,7 +194,7 @@ const Instructions = () => {
   }
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="max-w-4xl space-y-6">
       {/* Top Add Instruction Prompter (Integrated Chat-Style Input Box) */}
       <div className="flex items-center rounded-2xl border border-black/10 dark:border-white/10 bg-gray-50/50 dark:bg-gray-900/30 px-3.5 py-1.5 shadow-xs transition-all focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
         <input
@@ -371,7 +371,7 @@ const Guardrails = () => {
   }
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="max-w-4xl space-y-6">
       {/* Top Add Guardrail Prompter (Integrated Chat-Style Input Box) */}
       <div className="flex items-center rounded-2xl border border-black/10 dark:border-white/10 bg-gray-50/50 dark:bg-gray-900/30 px-3.5 py-1.5 shadow-xs transition-all focus-within:border-rose-500 focus-within:ring-1 focus-within:ring-rose-500">
         <input
@@ -464,7 +464,7 @@ const Invite = () => {
   const [email, setEmail] = useState('');
 
   return (
-    <div className="max-w-2xl pt-2">
+    <div className="max-w-4xl pt-2">
       <div className="relative flex items-center">
         <input
           id="friend-email"
