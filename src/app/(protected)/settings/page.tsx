@@ -237,49 +237,47 @@ const Instructions = () => {
           />
         </div>
 
-        {/* Dynamic Results Grid */}
-        <div className="w-full bg-white/40 dark:bg-gray-900/10 border border-black/10 dark:border-white/10 backdrop-blur-xl rounded-2xl overflow-hidden p-2 text-left">
-          {filteredInstructions.length === 0 ? (
-            <div className="py-8 px-4 text-center text-xs text-gray-400 flex flex-col items-center justify-center gap-2">
-              <Search className="h-6 w-6 text-gray-300 dark:text-gray-700" />
-              <span>No matching instructions found</span>
-            </div>
-          ) : (
-            <div className="divide-y divide-gray-100 dark:divide-gray-800/60 max-h-[350px] overflow-y-auto pr-1">
-              {filteredInstructions.map((item) => (
-                <div
-                  key={item.id}
-                  className="group flex items-start justify-between py-3.5 px-3 hover:bg-indigo-50/40 dark:hover:bg-indigo-955/10 rounded-xl transition-all duration-150"
-                >
-                  <div className="flex items-start gap-3 min-w-0 pr-3">
-                    <div className="h-7 w-7 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Terminal className="h-4 w-4" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-wrap break-words">
-                        {item.text}
-                      </p>
-                      <span className="text-[10px] text-gray-400 font-medium block mt-1.5 uppercase font-mono tracking-wider">
-                        Prompt Rule • {item.timestamp}
-                      </span>
-                    </div>
+        {/* Dynamic Results Grid (Floating Individual Cards) */}
+        {filteredInstructions.length === 0 ? (
+          <div className="w-full border border-black/10 dark:border-white/10 rounded-2xl bg-white/40 dark:bg-gray-900/10 py-8 px-4 text-center text-xs text-gray-400 flex flex-col items-center justify-center gap-2">
+            <Search className="h-6 w-6 text-gray-300 dark:text-gray-700" />
+            <span>No matching instructions found</span>
+          </div>
+        ) : (
+          <div className="space-y-3 max-h-[450px] overflow-y-auto pr-1">
+            {filteredInstructions.map((item) => (
+              <div
+                key={item.id}
+                className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-indigo-50/20 dark:hover:bg-indigo-950/10"
+              >
+                <div className="flex items-center gap-3 min-w-0 pr-3 flex-1">
+                  <div className="h-7 w-7 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
+                    <Terminal className="h-4 w-4" />
                   </div>
-
-                  {/* Active Hover Delete Button */}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDeleteInstruction(item.id)}
-                    className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none self-center"
-                    title="Delete Custom Prompt"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed" title={item.text}>
+                      {item.text}
+                    </p>
+                    <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                      Prompt Rule • {item.timestamp}
+                    </span>
+                  </div>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+
+                {/* Active Hover Delete Button */}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleDeleteInstruction(item.id)}
+                  className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none ml-2"
+                  title="Delete Custom Prompt"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -416,49 +414,47 @@ const Guardrails = () => {
           />
         </div>
 
-        {/* Dynamic Results Grid */}
-        <div className="w-full bg-white/40 dark:bg-gray-900/10 border border-black/10 dark:border-white/10 backdrop-blur-xl rounded-2xl overflow-hidden p-2 text-left">
-          {filteredGuardrails.length === 0 ? (
-            <div className="py-8 px-4 text-center text-xs text-gray-400 flex flex-col items-center justify-center gap-2">
-              <Search className="h-6 w-6 text-gray-300 dark:text-gray-700" />
-              <span>No matching safety rules found</span>
-            </div>
-          ) : (
-            <div className="divide-y divide-gray-100 dark:divide-gray-800/60 max-h-[350px] overflow-y-auto pr-1">
-              {filteredGuardrails.map((item) => (
-                <div
-                  key={item.id}
-                  className="group flex items-start justify-between py-3.5 px-3 hover:bg-rose-50/40 dark:hover:bg-rose-955/10 rounded-xl transition-all duration-150"
-                >
-                  <div className="flex items-start gap-3 min-w-0 pr-3">
-                    <div className="h-7 w-7 rounded-lg bg-rose-50 dark:bg-rose-955/40 text-rose-650 dark:text-rose-450 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <AlertCircle className="h-4 w-4" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-wrap break-words">
-                        {item.text}
-                      </p>
-                      <span className="text-[10px] text-gray-400 font-medium block mt-1.5 uppercase font-mono tracking-wider">
-                        Safety Rule • {item.timestamp}
-                      </span>
-                    </div>
+        {/* Dynamic Results Grid (Floating Individual Cards) */}
+        {filteredGuardrails.length === 0 ? (
+          <div className="w-full border border-black/10 dark:border-white/10 rounded-2xl bg-white/40 dark:bg-gray-900/10 py-8 px-4 text-center text-xs text-gray-400 flex flex-col items-center justify-center gap-2">
+            <Search className="h-6 w-6 text-gray-300 dark:text-gray-700" />
+            <span>No matching safety rules found</span>
+          </div>
+        ) : (
+          <div className="space-y-3 max-h-[450px] overflow-y-auto pr-1">
+            {filteredGuardrails.map((item) => (
+              <div
+                key={item.id}
+                className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-rose-50/20 dark:hover:bg-rose-955/10"
+              >
+                <div className="flex items-center gap-3 min-w-0 pr-3 flex-1">
+                  <div className="h-7 w-7 rounded-lg bg-rose-50 dark:bg-rose-955/40 text-rose-650 dark:text-rose-450 flex items-center justify-center flex-shrink-0">
+                    <AlertCircle className="h-4 w-4" />
                   </div>
-
-                  {/* Active Hover Delete Button */}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDeleteGuardrail(item.id)}
-                    className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none self-center"
-                    title="Delete Safety Rule"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed" title={item.text}>
+                      {item.text}
+                    </p>
+                    <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                      Safety Rule • {item.timestamp}
+                    </span>
+                  </div>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+
+                {/* Active Hover Delete Button */}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleDeleteGuardrail(item.id)}
+                  className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none ml-2"
+                  title="Delete Safety Rule"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
