@@ -427,50 +427,48 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             </div>
 
             {/* Action Buttons to the right */}
-            <div className="flex flex-none items-center gap-1.5">
-              {/* Apps Icon Button */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className={cn(
-                      "flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                      activeTab === 'apps'
-                        ? "bg-white border-black/10 text-black shadow-xs scale-105"
-                        : "bg-white border-black/10 text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
-                    )}
-                    onClick={() => handleTabChange('apps')}
-                  >
-                    <LayoutGrid className="size-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>Apps Workspace</p>
-                </TooltipContent>
-              </Tooltip>
-
-              {plusProps.visible && (
-                <div className="animate-in fade-in zoom-in duration-200">
-                  {/* Plus for Dynamic Tab Action */}
+            {((activeTab !== 'apps') || plusProps.visible) && (
+              <div className="flex flex-none items-center gap-1.5">
+                {activeTab !== 'apps' && (
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
                         variant="outline"
                         size="icon"
-                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black"
-                        onClick={plusProps.onClick}
+                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 transition-all duration-200 focus:outline-none select-none"
+                        onClick={() => handleTabChange('apps')}
                       >
-                        <Plus className="size-4 text-black" />
+                        <LayoutGrid className="size-4" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom">
-                      <p>{plusProps.tooltip}</p>
+                      <p>Apps Workspace</p>
                     </TooltipContent>
                   </Tooltip>
-                </div>
-              )}
-            </div>
+                )}
+
+                {plusProps.visible && (
+                  <div className="animate-in fade-in zoom-in duration-200">
+                    {/* Plus for Dynamic Tab Action */}
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black"
+                          onClick={plusProps.onClick}
+                        >
+                          <Plus className="size-4 text-black" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">
+                        <p>{plusProps.tooltip}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 {' '}
