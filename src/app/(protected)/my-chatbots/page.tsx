@@ -11,7 +11,7 @@ import { useSidebarStore } from '@/stores/useSidebarStore';
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
 import BotRightSidebar from '@/components/panels/BotRightSidebar';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Plus, ArrowRight, Bot, PanelLeft, PanelLeftClose } from 'lucide-react';
+import { Sparkles, Plus, ArrowRight, Bot, PanelLeft, PanelLeftClose, FolderPlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 
@@ -45,78 +45,43 @@ function MyChatbotsContent() {
 
   const activeBot = bots.find((b) => b.id === activeBotId);
 
-  // Render Dashboard Library Grid
+  // Render Focused Projects Workspace Dashboard (when no bot is active)
   if (!activeBot) {
     return (
-      <div className="flex-1 bg-gray-50/50 dark:bg-gray-900/50 min-h-screen p-8 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-300">
-        {/* Banner */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-8 text-white shadow-xl flex items-center justify-between">
-          <div className="space-y-3 max-w-lg z-10">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-xs">
-              <Sparkles className="h-3 w-3" /> Custom Personas
-            </span>
-            <h1 className="text-3xl font-extrabold tracking-tight">Meet Your Specialized Agents</h1>
-            <p className="text-sm text-blue-100 leading-relaxed">
-              Create and talk to custom assistants pre-loaded with specialized rules, guidelines, system prompts, and AI personalities.
-            </p>
-          </div>
-          <div className="hidden lg:block text-white/10 absolute -right-10 -bottom-10 scale-150 transform">
-            <Bot className="h-48 w-48 stroke-[1px]" />
-          </div>
-        </div>
+      <div className="flex-1 bg-white dark:bg-gray-950 min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-4 animate-in fade-in duration-500">
+        
+        {/* Soft elegant ambient light blobs */}
+        <div className="absolute -top-40 right-20 w-[500px] h-[500px] bg-gradient-to-tr from-blue-500/10 to-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-40 left-20 w-[500px] h-[500px] bg-gradient-to-tr from-purple-500/10 to-pink-500/5 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Section Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50">Active Agents</h2>
-            <p className="text-xs text-gray-500">Pick an agent to begin chatting or build your own custom assistant.</p>
-          </div>
-          <Button
-            onClick={() => onOpen({ type: 'add-chatbot' })}
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold px-4 py-2 flex items-center gap-1.5 shadow-sm text-xs"
-          >
-            <Plus className="h-4 w-4" /> Create Custom Agent
-          </Button>
-        </div>
-
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {bots.map((bot) => {
-            return (
-              <div
-                key={bot.id}
-                onClick={() => {
-                  setActiveBotId(bot.id);
-                  router.push(`/my-chatbots?bot=${bot.id}`);
-                }}
-                className="group relative flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-xs transition-all hover:scale-[1.02] hover:shadow-md cursor-pointer dark:border-gray-800 dark:bg-gray-950"
-              >
-                <div className="space-y-4">
-                  <h3 className="font-bold text-gray-950 dark:text-gray-50 text-sm group-hover:text-blue-600 transition-colors">
-                    {bot.name}
-                  </h3>
-                </div>
-
-                <div className="mt-6 flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-4 text-xs font-semibold text-gray-400 group-hover:text-blue-600 transition-colors">
-                  <span>Enter workspace</span>
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-            );
-          })}
-
-          {/* Dotted Create Bot Card */}
-          <div
-            onClick={() => onOpen({ type: 'add-chatbot' })}
-            className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-300 p-8 text-center hover:border-blue-500 hover:bg-blue-500/[0.02] transition-all cursor-pointer group dark:border-gray-800"
-          >
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-500 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-              <Plus className="h-6 w-6" />
+        {/* Central Card */}
+        <div className="w-full max-w-md text-center space-y-6 z-10">
+          {/* Glowing Premium Icon Wrapper */}
+          <div className="relative mx-auto w-20 h-20 flex items-center justify-center">
+            {/* Pulsing ring */}
+            <div className="absolute inset-0 rounded-2xl bg-blue-500/10 dark:bg-blue-500/5 blur-md animate-pulse" />
+            <div className="relative w-16 h-16 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-gray-900/60 shadow-lg flex items-center justify-center backdrop-blur-md">
+              <FolderPlus className="h-7 w-7 text-blue-600 dark:text-blue-500" />
             </div>
-            <h3 className="mt-4 font-bold text-gray-900 dark:text-gray-50 text-sm">Create New Agent</h3>
-            <p className="mt-1 text-xs text-gray-500 max-w-[200px]">
-              Set custom instructions, models, and pick a custom icon.
+          </div>
+
+          {/* Text Content */}
+          <div className="space-y-2">
+            <h2 className="text-xl font-bold text-gray-950 dark:text-gray-50 tracking-tight">Specialized Project Hub</h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400 max-w-sm mx-auto leading-relaxed">
+              Create an isolated project sandbox pre-loaded with specialized rules, guidelines, system prompts, and custom tools.
             </p>
+          </div>
+
+          {/* High Fidelity Button */}
+          <div className="pt-2">
+            <Button
+              onClick={() => onOpen({ type: 'add-chatbot' })}
+              className="px-6 h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-lg shadow-blue-500/10 flex items-center gap-2 font-semibold text-sm mx-auto transition-transform hover:scale-[1.01]"
+            >
+              <Plus className="h-4 w-4" />
+              Create New Project
+            </Button>
           </div>
         </div>
       </div>
