@@ -75,7 +75,7 @@ export default function ConversationsList({
     } else if (lower.includes('image') || lower.includes('draw') || lower.includes('photo') || lower.includes('generation')) {
       return `🎨 /image_gen: ${cleanTitle}`;
     }
-    return `⚡ ${cleanTitle}`;
+    return `⭐ ${cleanTitle}`;
   };
 
   const observerRef = useRef<HTMLDivElement | null>(null);

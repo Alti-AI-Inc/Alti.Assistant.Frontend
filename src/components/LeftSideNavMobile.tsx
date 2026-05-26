@@ -687,7 +687,7 @@ const LeftSideNavMobile = () => {
                     )}
                   >
                     <span className="flex-1 truncate px-1 py-2">
-                      {wf.name}
+                      ⚡ {wf.name}
                     </span>
                     <ChevronRight className="mr-2 h-3.5 w-3.5 text-black opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity" />
                   </button>
