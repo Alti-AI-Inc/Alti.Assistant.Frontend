@@ -180,10 +180,6 @@ const Instructions = () => {
     const updatedList = instructionsList.filter(item => item.id !== id);
     setInstructionsList(updatedList);
     localStorage.setItem('alti_instructions', JSON.stringify(updatedList));
-    
-    toast.success('System instruction deleted.', {
-      description: 'The instruction has been removed from settings.'
-    });
   };
 
   const filteredInstructions = instructionsList.filter(item =>
@@ -393,10 +389,6 @@ const Guardrails = () => {
     const updatedList = guardrailsList.filter(item => item.id !== id);
     setGuardrailsList(updatedList);
     localStorage.setItem('alti_guardrails', JSON.stringify(updatedList));
-
-    toast.success('Safety guardrail deleted.', {
-      description: 'The guardrail rule has been removed.'
-    });
   };
 
   const filteredGuardrails = guardrailsList.filter(item =>
