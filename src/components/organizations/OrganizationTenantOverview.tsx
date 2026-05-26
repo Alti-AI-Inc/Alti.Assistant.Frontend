@@ -426,7 +426,7 @@ export function OrganizationTenantOverview({
                 onValueChange={setInviteRole}
                 disabled={isInviting}
               >
-                <SelectTrigger id="invite-role" className="h-9 text-xs border-black/10 focus:ring-black bg-white dark:bg-zinc-950">
+                <SelectTrigger id="invite-role" className="h-9 text-xs border-black/10 focus:ring-black bg-white dark:bg-zinc-950 w-full">
                   <SelectValue placeholder="Select Role" />
                 </SelectTrigger>
                 <SelectContent className="border-black/10">
