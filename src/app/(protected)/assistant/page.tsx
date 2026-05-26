@@ -98,8 +98,7 @@ function AssistantWorkspaceContent() {
       {/* Middle Interactive Workspace */}
       <div className="flex flex-1 flex-col items-center justify-center relative overflow-y-auto h-full px-4 md:px-8 z-10">
         {!activeConversation?.messages?.length && (
-          <h1 className="mb-8 text-4xl font-medium tracking-tight text-gray-900 dark:text-white flex items-center gap-2.5">
-            <Sparkles className="h-9 w-9 text-indigo-500 animate-pulse" />
+          <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white">
             Alti Assistant
           </h1>
         )}
