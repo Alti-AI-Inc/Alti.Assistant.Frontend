@@ -221,11 +221,14 @@ const LeftSideNavMobile = () => {
           setSelectedOption(OPTIONS.RESEARCH);
         }
       } else {
-        // Only set to chat if not on the bots page or apps page or data page
+        // Only set to chat if not on the bots page or apps page or data page or assistant/workflows
         if (
           pathname !== '/my-chatbots' &&
           !pathname.startsWith('/my-chatbots') &&
           pathname !== '/apps' &&
+          pathname !== '/workflows' &&
+          pathname !== '/assistant' &&
+          !pathname.startsWith('/assistant') &&
           pathname !== '/knowledge' &&
           !pathname.startsWith('/knowledge')
         ) {
