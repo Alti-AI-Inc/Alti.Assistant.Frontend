@@ -118,7 +118,7 @@ export default function ChangePassword() {
                           {...field}
                           type="password"
                           id="password"
-                          placeholder="Password"
+                          placeholder="New Password"
                           className="max-w-md border-none bg-gray-100 focus-visible:ring-0"
                         />
                       </FormControl>
@@ -136,7 +136,7 @@ export default function ChangePassword() {
                           {...field}
                           type="password"
                           id="new-password"
-                          placeholder="Confirm Password"
+                          placeholder="Confirm New Password"
                           className="max-w-md border-none bg-gray-100 focus-visible:ring-0"
                         />
                       </FormControl>
