@@ -1,9 +1,26 @@
 'use client';
 
 import { OrganizationTenantOverview } from '@/components/organizations/OrganizationTenantOverview';
-import { ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
 import { use } from 'react';
+import SpacesLayout from '@/components/sidebars/SpacesLayout';
+
+const OrganizationMembersPageContent = ({ tenantId }: { tenantId: string }) => {
+  return (
+    <div className="h-full flex flex-col bg-white dark:bg-gray-950 overflow-hidden">
+      {/* Dynamic Header */}
+      <div className="h-[53px] border-b border-black/10 dark:border-white/10 flex items-center px-8 flex-none bg-white dark:bg-gray-950">
+        <h1 className="text-base font-semibold text-gray-900 dark:text-white">
+          Member Management
+        </h1>
+      </div>
+
+      {/* Main Workspace Body */}
+      <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
+        <OrganizationTenantOverview fixedTenantId={tenantId} />
+      </div>
+    </div>
+  );
+};
 
 export default function OrganizationMembersPage({
   params,
@@ -13,23 +30,8 @@ export default function OrganizationMembersPage({
   const { tenantId } = use(params);
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-8">
-      <Link
-        href="/organizations"
-        className="text-muted-foreground hover:text-foreground mb-6 inline-flex items-center text-sm transition-colors"
-      >
-        <ArrowLeft className="mr-2 size-4" />
-        Back to organizations
-      </Link>
-
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Members</h1>
-        <p className="text-muted-foreground mt-1">
-          Team members, invitations, and usage for this organization
-        </p>
-      </div>
-
-      <OrganizationTenantOverview fixedTenantId={tenantId} />
-    </div>
+    <SpacesLayout showColumnPanels={false}>
+      <OrganizationMembersPageContent tenantId={tenantId} />
+    </SpacesLayout>
   );
 }
