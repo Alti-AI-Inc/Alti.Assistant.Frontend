@@ -59,6 +59,9 @@ export default function ConversationsList({
 
   const getDisplayTitle = (title: string) => {
     const cleanTitle = formatConversationTitle(title);
+    if (activeTab === 'chat') {
+      return `💬 ${cleanTitle}`;
+    }
     if (activeTab !== 'assistant') return cleanTitle;
 
     const lower = cleanTitle.toLowerCase();

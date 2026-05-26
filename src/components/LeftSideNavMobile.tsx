@@ -574,7 +574,7 @@ const LeftSideNavMobile = () => {
                       )}
                     >
                       <span className="flex-1 truncate px-1 py-2">
-                        {bot.name}
+                        📁 {bot.name}
                       </span>
                       <ChevronRight className="mr-2 h-3.5 w-3.5 text-black transition-opacity" />
                     </button>
