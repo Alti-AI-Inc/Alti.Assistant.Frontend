@@ -17,7 +17,6 @@ import {
   Building2,
   ExternalLink,
   MoreVertical,
-  Settings,
   Users,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -109,23 +108,7 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
               <ExternalLink className="mr-2 size-4" />
               Open Dashboard
             </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={async e => {
-                e.stopPropagation();
-                setIsNavigating(true);
-                try {
-                  await switchToTenantMode(organization.id);
-                  router.push(`/organizations/${organization.id}/settings`);
-                } catch (error) {
-                  console.error('Failed to navigate:', error);
-                } finally {
-                  setIsNavigating(false);
-                }
-              }}
-            >
-              <Settings className="mr-2 size-4" />
-              Settings
-            </DropdownMenuItem>
+
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={async e => {

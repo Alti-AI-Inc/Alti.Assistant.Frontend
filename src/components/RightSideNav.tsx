@@ -16,7 +16,6 @@ import {
   Trash2,
   Building2,
   Users,
-  Settings as SettingsIcon,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
@@ -154,25 +153,14 @@ export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
               )}
             </div>
           </div>
-          <div className="mt-3 grid grid-cols-2 gap-2">
+          <div className="mt-3">
             <Button
               size="sm"
               variant="outline"
               onClick={() => router.push(`/organizations/${currentTenant.id}`)}
-              className="h-8 text-xs"
+              className="h-8 text-xs w-full"
             >
               Dashboard
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() =>
-                router.push(`/organizations/${currentTenant.id}/settings`)
-              }
-              className="h-8 text-xs"
-            >
-              <SettingsIcon className="mr-1 size-3" />
-              Settings
             </Button>
           </div>
         </Card>
