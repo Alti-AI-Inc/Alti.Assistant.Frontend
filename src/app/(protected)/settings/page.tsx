@@ -72,7 +72,7 @@ const Memory = () => {
           <div className="flex items-center gap-3">
             <RadioGroupItem className="border-gray-400" value="off" id="r1" />
             <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r1">
-              Off (No history retention)
+              Off
             </Label>
           </div>
           <div className="flex items-center gap-3">
@@ -96,7 +96,7 @@ const Memory = () => {
           <div className="flex items-center gap-3">
             <RadioGroupItem className="border-gray-400" value="12-month" id="r5" />
             <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r5">
-              12 Months (Recommended)
+              12 Months
             </Label>
           </div>
         </RadioGroup>
@@ -269,7 +269,11 @@ const Invite = () => {
               <div className="absolute right-1">
                 <SendInviteButton
                   content={email}
-                  className="h-8 px-4 text-xs font-semibold bg-indigo-650 hover:bg-indigo-700 text-white rounded-md shadow-sm transition-all"
+                  className={`h-8 px-4 text-xs font-semibold rounded-md shadow-sm transition-all ${
+                    email.trim()
+                      ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                      : 'bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 pointer-events-none'
+                  }`}
                   onClose={() => setEmail('')}
                 />
               </div>
