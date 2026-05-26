@@ -739,10 +739,10 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       {/* <div className="sticky bottom-0 bg-white px-4 pb-4"> */}
       <div
         className={cn(
-          'sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8 border-t border-black/5 dark:border-zinc-800/80 backdrop-blur-xl bg-white/70 dark:bg-zinc-950/70',
+          'sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8',
           hasMessages
-            ? 'flex h-20 items-center justify-center py-1.5'
-            : 'py-4',
+            ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-800/80 backdrop-blur-xl bg-[#FCFCFC]/70 dark:bg-zinc-950/70'
+            : 'py-4 bg-transparent border-t-0',
         )}
       >
         <div className="mx-auto w-full max-w-[796px]">
