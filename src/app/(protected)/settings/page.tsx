@@ -191,9 +191,9 @@ const Instructions = () => {
 
   return (
     <div className="max-w-2xl space-y-6">
-      {/* Top Add Instruction Prompter (Simple Chat-Style Input Row) */}
-      <div className="flex gap-2.5 w-full">
-        <Input
+      {/* Top Add Instruction Prompter (Integrated Chat-Style Input Box) */}
+      <div className="flex items-center rounded-2xl border border-black/10 dark:border-white/10 bg-gray-50/50 dark:bg-gray-900/30 px-3.5 py-1.5 shadow-xs transition-all focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
+        <input
           placeholder="Enter new custom instruction prompt here..."
           value={inputVal}
           onChange={(e) => setInputVal(e.target.value)}
@@ -203,18 +203,18 @@ const Instructions = () => {
             }
           }}
           disabled={isSaving}
-          className="flex-1 h-11 text-sm rounded-xl bg-gray-50 border-gray-200 dark:border-gray-800 dark:bg-gray-950 focus-visible:ring-1 focus-visible:ring-indigo-500/30 focus-visible:border-indigo-500"
+          className="flex-1 min-w-0 bg-transparent border-none py-1.5 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 outline-none focus:ring-0 focus-visible:ring-0"
         />
         <Button
           onClick={handleAddInstruction}
           disabled={isSaving || !inputVal.trim()}
-          className="h-11 w-11 flex-none bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl p-0 flex items-center justify-center shadow-lg shadow-indigo-500/10 dark:bg-indigo-700 dark:hover:bg-indigo-800 transition-all duration-200"
+          className="h-8 w-8 flex-none bg-indigo-650 hover:bg-indigo-700 text-white rounded-lg p-0 flex items-center justify-center transition-all duration-200 shadow-sm ml-2"
           title="Add Custom Prompt"
         >
           {isSaving ? (
-            <div className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+            <div className="size-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
           ) : (
-            <Sparkles className="h-4.5 w-4.5" />
+            <Sparkles className="h-4 w-4" />
           )}
         </Button>
       </div>
@@ -244,7 +244,7 @@ const Instructions = () => {
               {filteredInstructions.map((item) => (
                 <div
                   key={item.id}
-                  className="group flex items-start justify-between py-3.5 px-3 hover:bg-indigo-50/40 dark:hover:bg-indigo-950/20 rounded-xl transition-all duration-150"
+                  className="group flex items-start justify-between py-3.5 px-3 hover:bg-indigo-50/40 dark:hover:bg-indigo-955/10 rounded-xl transition-all duration-150"
                 >
                   <div className="flex items-start gap-3 min-w-0 pr-3">
                     <div className="h-7 w-7 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -368,9 +368,9 @@ const Guardrails = () => {
 
   return (
     <div className="max-w-2xl space-y-6">
-      {/* Top Add Guardrail Prompter (Simple Chat-Style Input Row) */}
-      <div className="flex gap-2.5 w-full">
-        <Input
+      {/* Top Add Guardrail Prompter (Integrated Chat-Style Input Box) */}
+      <div className="flex items-center rounded-2xl border border-black/10 dark:border-white/10 bg-gray-50/50 dark:bg-gray-900/30 px-3.5 py-1.5 shadow-xs transition-all focus-within:border-rose-500 focus-within:ring-1 focus-within:ring-rose-500">
+        <input
           placeholder="Enter new safety guardrail rule here..."
           value={inputVal}
           onChange={(e) => setInputVal(e.target.value)}
@@ -380,18 +380,18 @@ const Guardrails = () => {
             }
           }}
           disabled={isSaving}
-          className="flex-1 h-11 text-sm rounded-xl bg-gray-50 border-gray-200 dark:border-gray-800 dark:bg-gray-955 focus-visible:ring-1 focus-visible:ring-rose-500/30 focus-visible:border-rose-500"
+          className="flex-1 min-w-0 bg-transparent border-none py-1.5 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 outline-none focus:ring-0 focus-visible:ring-0"
         />
         <Button
           onClick={handleAddGuardrail}
           disabled={isSaving || !inputVal.trim()}
-          className="h-11 w-11 flex-none bg-rose-600 hover:bg-rose-700 text-white rounded-xl p-0 flex items-center justify-center shadow-lg shadow-rose-500/10 dark:bg-rose-700 dark:hover:bg-rose-800 transition-all duration-200"
+          className="h-8 w-8 flex-none bg-rose-600 hover:bg-rose-700 text-white rounded-lg p-0 flex items-center justify-center transition-all duration-200 shadow-sm ml-2"
           title="Add Safety Rule"
         >
           {isSaving ? (
-            <div className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+            <div className="size-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
           ) : (
-            <Shield className="h-4.5 w-4.5" />
+            <Shield className="h-4 w-4" />
           )}
         </Button>
       </div>
@@ -421,10 +421,10 @@ const Guardrails = () => {
               {filteredGuardrails.map((item) => (
                 <div
                   key={item.id}
-                  className="group flex items-start justify-between py-3.5 px-3 hover:bg-rose-50/40 dark:hover:bg-rose-950/20 rounded-xl transition-all duration-150"
+                  className="group flex items-start justify-between py-3.5 px-3 hover:bg-rose-50/40 dark:hover:bg-rose-955/10 rounded-xl transition-all duration-150"
                 >
                   <div className="flex items-start gap-3 min-w-0 pr-3">
-                    <div className="h-7 w-7 rounded-lg bg-rose-50 dark:bg-rose-955/40 text-rose-650 dark:text-rose-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="h-7 w-7 rounded-lg bg-rose-50 dark:bg-rose-955/40 text-rose-650 dark:text-rose-450 flex items-center justify-center flex-shrink-0 mt-0.5">
                       <AlertCircle className="h-4 w-4" />
                     </div>
                     <div className="min-w-0">
