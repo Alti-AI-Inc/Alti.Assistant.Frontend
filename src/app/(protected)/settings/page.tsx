@@ -250,11 +250,7 @@ const Invite = () => {
         <div className="absolute right-1">
           <SendInviteButton
             content={email}
-            className={`h-8 px-4 text-xs font-semibold rounded-md shadow-sm transition-all ${
-              email.trim()
-                ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
-                : 'bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 pointer-events-none'
-            }`}
+            className="h-8 px-4 text-xs font-semibold rounded-md shadow-sm transition-all bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black"
             onClose={() => setEmail('')}
           />
         </div>
