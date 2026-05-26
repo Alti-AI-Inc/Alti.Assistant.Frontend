@@ -559,15 +559,15 @@ const Invite = () => {
 
       {/* iOS-Style Invite Sent Confirmation Dialog */}
       <Dialog open={showSentModal} onOpenChange={setShowSentModal}>
-        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[270px] sm:max-w-[270px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] w-fit min-w-[270px] max-w-[90vw] sm:max-w-[420px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
           {/* Centered Content Section */}
-          <div className="px-5 pt-5 pb-4 text-center">
+          <div className="px-6 pt-5 pb-5 text-center">
             <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
               Invite Sent
             </h2>
-            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+            <p className="mt-3.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
               Your invitation has been sent to:
-              <span className="block mt-1 font-semibold text-indigo-650 dark:text-indigo-400 break-all select-all">
+              <span className="block mt-1 text-[13px] font-normal text-gray-500 dark:text-gray-400 break-all select-all">
                 {sentEmail}
               </span>
             </p>
