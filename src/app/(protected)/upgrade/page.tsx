@@ -92,15 +92,13 @@ function UpgradePage() {
       </div>
 
       {/* Main Workspace Body */}
-      <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
-        <div className="container mx-auto max-w-7xl">
-          <div className="mt-4">
-            <OrganizationPricingCards
-              onSelectPlan={handleSelectPlan}
-              currentPlanId={currentPlanId}
-              showContactSales={true}
-            />
-          </div>
+      <div className="flex-1 overflow-y-auto min-h-0 px-8 py-12 flex flex-col justify-center">
+        <div className="container mx-auto max-w-7xl my-auto">
+          <OrganizationPricingCards
+            onSelectPlan={handleSelectPlan}
+            currentPlanId={currentPlanId}
+            showContactSales={true}
+          />
         </div>
       </div>
 
