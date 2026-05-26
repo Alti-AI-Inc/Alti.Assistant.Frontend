@@ -549,22 +549,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             side === 'right' && 'pb-8',
           )}
         >
-          {/* Dynamic sub-header reflecting the selected active tab history */}
-          <div className="mt-4 mb-2 px-1 flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-              {activeTab === 'bots' 
-                ? 'My Projects' 
-                : activeTab === 'research' 
-                  ? 'Research History' 
-                  : activeTab === 'apps' 
-                    ? 'Composio Apps' 
-                    : activeTab === 'workflows'
-                      ? 'Active Workflows'
-                      : activeTab === 'assistant'
-                        ? 'Assistant History'
-                        : 'Chat History'}
-            </span>
-          </div>
+
           {activeTab === 'bots' ? (
             <div className="flex-1 space-y-1 py-1 pb-4">
               {bots

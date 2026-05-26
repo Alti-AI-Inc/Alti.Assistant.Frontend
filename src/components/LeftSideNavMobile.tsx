@@ -493,20 +493,7 @@ const LeftSideNavMobile = () => {
       {isLoggedIn && (
         <div className="flex-1 overflow-y-auto px-4 pb-4">
           <div className="mt-3 mb-2 flex items-center justify-between px-1">
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
-              <span>
-                {activeTab === 'bots' 
-                  ? 'My Projects' 
-                  : activeTab === 'research' 
-                    ? 'Research History' 
-                    : activeTab === 'apps' 
-                      ? 'Composio Apps' 
-                      : activeTab === 'workflows'
-                        ? 'Active Workflows'
-                        : activeTab === 'assistant'
-                          ? 'Assistant History'
-                          : 'Chat History'}
-              </span>
+            <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-zinc-400">
               {activeTab !== 'apps' && activeTab !== 'bots' && mode === UserMode.TENANT && currentTenant && (
                 <Badge
                   variant="outline"
