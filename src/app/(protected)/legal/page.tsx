@@ -1,4 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import SpacesLayout from '@/components/sidebars/SpacesLayout';
 
 export const dynamic = 'force-dynamic';
 
@@ -607,104 +608,118 @@ export default function page() {
   };
 
   return (
-    <Tabs defaultValue="privacyPolicy" className="mx-auto max-w-5xl px-4 pb-10">
-      {/* Sticky header with scrollable tab list */}
-      <div className="sticky top-0 z-10 bg-white pt-6">
-        <TabsList className="mx-auto mb-6 flex w-full max-w-full overflow-x-auto sm:grid sm:w-[600px] sm:grid-cols-3">
-          <TabsTrigger
-            className="flex-1 cursor-pointer md:min-w-[150px]"
-            value="privacyPolicy"
-          >
-            Privacy Policy
-          </TabsTrigger>
-          <TabsTrigger
-            className="flex-1 cursor-pointer md:min-w-[150px]"
-            value="termsOfUsage"
-          >
-            Terms of Use
-          </TabsTrigger>
-          <TabsTrigger
-            className="flex-1 cursor-pointer md:min-w-[150px]"
-            value="cookiesPolicy"
-          >
-            Cookies Policy
-          </TabsTrigger>
-        </TabsList>
+    <SpacesLayout showColumnPanels={false}>
+      <div className="h-full flex flex-col bg-white dark:bg-gray-950 overflow-hidden">
+        {/* Dynamic Header */}
+        <div className="h-[53px] border-b border-black/10 dark:border-white/10 flex items-center px-8 flex-none bg-white dark:bg-gray-950">
+          <h1 className="text-base font-semibold text-gray-900 dark:text-white">
+            Legal Documents
+          </h1>
+        </div>
+
+        {/* Main Workspace Body */}
+        <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
+          <Tabs defaultValue="privacyPolicy" className="mx-auto max-w-5xl px-4 pb-10">
+            {/* Sticky header with scrollable tab list */}
+            <div className="sticky top-0 z-10 bg-white dark:bg-gray-950 pt-2 pb-6">
+              <TabsList className="mx-auto mb-6 flex w-full max-w-full overflow-x-auto sm:grid sm:w-[600px] sm:grid-cols-3">
+                <TabsTrigger
+                  className="flex-1 cursor-pointer md:min-w-[150px]"
+                  value="privacyPolicy"
+                >
+                  Privacy Policy
+                </TabsTrigger>
+                <TabsTrigger
+                  className="flex-1 cursor-pointer md:min-w-[150px]"
+                  value="termsOfUsage"
+                >
+                  Terms of Use
+                </TabsTrigger>
+                <TabsTrigger
+                  className="flex-1 cursor-pointer md:min-w-[150px]"
+                  value="cookiesPolicy"
+                >
+                  Cookies Policy
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            {/* Privacy Policy */}
+            <TabsContent value="privacyPolicy">
+              <div className="mx-auto rounded-lg text-sm sm:text-base text-gray-900 dark:text-zinc-100">
+                <p className="mb-2 text-xs text-gray-500 dark:text-zinc-500">
+                  Last Updated: {LAST_UPDATED}
+                </p>
+                <p className="mb-6 leading-relaxed">{privacyPolicy.intro}</p>
+                {privacyPolicy.sections.map((section, index) => (
+                  <div key={index} className="mb-6">
+                    <h2 className="mb-3 text-lg font-semibold sm:text-xl text-gray-900 dark:text-white">
+                      {section.heading}
+                    </h2>
+                    {Array.isArray(section.content) ? (
+                      <ul className="mb-4 list-disc space-y-2 pl-6">
+                        {section.content.map((item, idx) => (
+                          <li key={idx}>
+                            <strong>{item.text}</strong> {item.description}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : typeof section.content === 'string' ? (
+                      <p className="mb-4 leading-relaxed">{section.content}</p>
+                    ) : (
+                      <div className="mb-4 leading-relaxed">{section.content}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+
+            {/* Terms of Use */}
+            <TabsContent value="termsOfUsage">
+              <div className="mx-auto rounded-lg text-sm sm:text-base text-gray-900 dark:text-zinc-100">
+                <p className="mb-2 text-xs text-gray-500 dark:text-zinc-500">
+                  Last Updated: {LAST_UPDATED}
+                </p>
+                <p className="mb-6 leading-relaxed">{terms.intro}</p>
+                {terms.sections.map((section, index) => (
+                  <div key={index} className="mb-5">
+                    <h2 className="mb-2 text-lg font-semibold sm:text-xl text-gray-900 dark:text-white">
+                      {section.heading}
+                    </h2>
+                    {typeof section.content === 'string' ? (
+                      <p className="leading-relaxed">{section.content}</p>
+                    ) : (
+                      <div className="leading-relaxed">{section.content}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+
+            {/* Cookies Policy */}
+            <TabsContent value="cookiesPolicy">
+              <div className="mx-auto rounded-lg text-sm sm:text-base text-gray-900 dark:text-zinc-100">
+                <p className="mb-2 text-xs text-gray-500 dark:text-zinc-500">
+                  Last Updated: {LAST_UPDATED}
+                </p>
+                <p className="mb-6 leading-relaxed">{cookiesPolicy.intro}</p>
+                {cookiesPolicy.sections.map((section, index) => (
+                  <div key={index} className="mb-6">
+                    <h2 className="mb-3 text-lg font-semibold sm:text-xl text-gray-900 dark:text-white">
+                      {section.heading}
+                    </h2>
+                    {typeof section.content === 'string' ? (
+                      <p className="leading-relaxed">{section.content}</p>
+                    ) : (
+                      <div className="leading-relaxed">{section.content}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
-
-      {/* Privacy Policy */}
-      <TabsContent value="privacyPolicy">
-        <div className="mx-auto rounded-lg text-sm sm:text-base">
-          <p className="mb-2 text-xs text-gray-500">
-            Last Updated: {LAST_UPDATED}
-          </p>
-          <p className="mb-6">{privacyPolicy.intro}</p>
-          {privacyPolicy.sections.map((section, index) => (
-            <div key={index} className="mb-6">
-              <h2 className="mb-3 text-lg font-semibold sm:text-xl">
-                {section.heading}
-              </h2>
-              {Array.isArray(section.content) ? (
-                <ul className="mb-4 list-disc space-y-2 pl-6">
-                  {section.content.map((item, idx) => (
-                    <li key={idx}>
-                      <strong>{item.text}</strong> {item.description}
-                    </li>
-                  ))}
-                </ul>
-              ) : typeof section.content === 'string' ? (
-                <p className="mb-4">{section.content}</p>
-              ) : (
-                <div className="mb-4">{section.content}</div>
-              )}
-            </div>
-          ))}
-        </div>
-      </TabsContent>
-
-      {/* Terms of Use */}
-      <TabsContent value="termsOfUsage">
-        <div className="mx-auto rounded-lg text-sm sm:text-base">
-          <p className="mb-2 text-xs text-gray-500">
-            Last Updated: {LAST_UPDATED}
-          </p>
-          <p className="mb-6">{terms.intro}</p>
-          {terms.sections.map((section, index) => (
-            <div key={index} className="mb-5">
-              <h2 className="mb-2 text-lg font-semibold sm:text-xl">
-                {section.heading}
-              </h2>
-              {typeof section.content === 'string' ? (
-                <p>{section.content}</p>
-              ) : (
-                <div>{section.content}</div>
-              )}
-            </div>
-          ))}
-        </div>
-      </TabsContent>
-
-      {/* Cookies Policy */}
-      <TabsContent value="cookiesPolicy">
-        <div className="mx-auto rounded-lg text-sm sm:text-base">
-          <p className="mb-2 text-xs text-gray-500">
-            Last Updated: {LAST_UPDATED}
-          </p>
-          <p className="mb-6">{cookiesPolicy.intro}</p>
-          {cookiesPolicy.sections.map((section, index) => (
-            <div key={index} className="mb-6">
-              <h2 className="mb-3 text-lg font-semibold sm:text-xl">
-                {section.heading}
-              </h2>
-              {typeof section.content === 'string' ? (
-                <p>{section.content}</p>
-              ) : (
-                <div>{section.content}</div>
-              )}
-            </div>
-          ))}
-        </div>
-      </TabsContent>
-    </Tabs>
+    </SpacesLayout>
   );
 }
