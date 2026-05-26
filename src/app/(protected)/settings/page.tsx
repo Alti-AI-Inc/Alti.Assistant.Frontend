@@ -72,40 +72,57 @@ const Page = () => {
 };
 
 const Memory = () => {
+  const [selected, setSelected] = useState('1-month');
+
+  useEffect(() => {
+    const stored = localStorage.getItem('alti_memory_retention');
+    if (stored) {
+      setSelected(stored);
+    }
+  }, []);
+
+  const handleSelect = (val: string) => {
+    setSelected(val);
+    localStorage.setItem('alti_memory_retention', val);
+  };
+
+  const options = [
+    { value: 'off', label: 'Off' },
+    { value: '1-month', label: '1 Month' },
+    { value: '3-month', label: '3 Months' },
+    { value: '6-month', label: '6 Months' },
+    { value: '12-month', label: '12 Months' },
+  ];
+
+  const activeIndex = options.findIndex(opt => opt.value === selected);
+
   return (
     <div className="max-w-4xl pt-2">
-      <RadioGroup defaultValue="1-month" className="space-y-4">
-        <div className="flex items-center gap-3">
-          <RadioGroupItem className="border-gray-400" value="off" id="r1" />
-          <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r1">
-            Off
-          </Label>
-        </div>
-        <div className="flex items-center gap-3">
-          <RadioGroupItem className="border-gray-400" value="1-month" id="r2" />
-          <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r2">
-            1 Month
-          </Label>
-        </div>
-        <div className="flex items-center gap-3">
-          <RadioGroupItem className="border-gray-400" value="3-month" id="r3" />
-          <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r3">
-            3 Months
-          </Label>
-        </div>
-        <div className="flex items-center gap-3">
-          <RadioGroupItem className="border-gray-400" value="6-month" id="r4" />
-          <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r4">
-            6 Months
-          </Label>
-        </div>
-        <div className="flex items-center gap-3">
-          <RadioGroupItem className="border-gray-400" value="12-month" id="r5" />
-          <Label className="cursor-pointer text-sm font-medium text-gray-800 dark:text-gray-200" htmlFor="r5">
-            12 Months
-          </Label>
-        </div>
-      </RadioGroup>
+      <div className="relative bg-gray-50/50 dark:bg-gray-900/30 p-1 rounded-2xl flex w-full max-w-3xl border border-black/10 dark:border-white/10 shadow-xs select-none">
+        {/* Dynamic sliding highlight block */}
+        <div
+          className="absolute top-1 bottom-1 rounded-xl bg-white dark:bg-zinc-800 shadow-sm transition-all duration-300 ease-out border border-black/5 dark:border-white/5"
+          style={{
+            left: `calc(${activeIndex * 20}% + 4px)`,
+            width: `calc(20% - 8px)`,
+          }}
+        />
+
+        {options.map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => handleSelect(opt.value)}
+            className={cn(
+              "relative z-10 flex-1 py-3 text-sm font-semibold transition-colors duration-200 outline-none rounded-xl text-center flex items-center justify-center cursor-pointer",
+              selected === opt.value
+                ? "text-indigo-650 dark:text-indigo-400"
+                : "text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+            )}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
