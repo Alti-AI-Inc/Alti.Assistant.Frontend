@@ -380,9 +380,9 @@ export function OrganizationTenantOverview({
       ) : selectedTenantId ? (
         <>
           {/* Permanent Invite Member Form Box */}
-          <div className="rounded-lg border border-black/10 bg-white p-6 shadow-xs space-y-4">
+          <div className="rounded-lg border border-black/10 bg-zinc-50 dark:bg-zinc-900/50 p-6 shadow-xs space-y-4">
             <div>
-              <h3 className="text-sm font-semibold text-black">Invite Team Member</h3>
+              <h3 className="text-sm font-semibold text-black dark:text-white">Invite Team Member</h3>
               <p className="text-xs text-gray-500 mt-0.5">
                 Add a new member to your team. They will receive an invitation email.
               </p>
@@ -391,26 +391,26 @@ export function OrganizationTenantOverview({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Row 1: First Name & Last Name */}
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-black" htmlFor="first-name">First Name</label>
+                <label className="text-xs font-medium text-black dark:text-gray-300" htmlFor="first-name">First Name</label>
                 <Input
                   id="first-name"
                   type="text"
                   placeholder="First name"
                   value={inviteFirstName}
                   onChange={(e) => setInviteFirstName(e.target.value)}
-                  className="h-9 text-xs border-black/10 focus-visible:ring-black"
+                  className="h-9 text-xs border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
                   disabled={isInviting}
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-black" htmlFor="last-name">Last Name</label>
+                <label className="text-xs font-medium text-black dark:text-gray-300" htmlFor="last-name">Last Name</label>
                 <Input
                   id="last-name"
                   type="text"
                   placeholder="Last name"
                   value={inviteLastName}
                   onChange={(e) => setInviteLastName(e.target.value)}
-                  className="h-9 text-xs border-black/10 focus-visible:ring-black"
+                  className="h-9 text-xs border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
                   disabled={isInviting}
                 />
               </div>
@@ -419,25 +419,25 @@ export function OrganizationTenantOverview({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Row 2: Email & Role */}
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-black" htmlFor="email-address">Email Address</label>
+                <label className="text-xs font-medium text-black dark:text-gray-300" htmlFor="email-address">Email Address</label>
                 <Input
                   id="email-address"
                   type="email"
                   placeholder="colleague@example.com"
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
-                  className="h-9 text-xs border-black/10 focus-visible:ring-black"
+                  className="h-9 text-xs border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
                   disabled={isInviting}
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-black" htmlFor="invite-role">Select Role</label>
+                <label className="text-xs font-medium text-black dark:text-gray-300" htmlFor="invite-role">Select Role</label>
                 <Select
                   value={inviteRole}
                   onValueChange={setInviteRole}
                   disabled={isInviting}
                 >
-                  <SelectTrigger id="invite-role" className="h-9 text-xs border-black/10 focus:ring-black">
+                  <SelectTrigger id="invite-role" className="h-9 text-xs border-black/10 focus:ring-black bg-white dark:bg-zinc-950">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="border-black/10">
@@ -451,13 +451,13 @@ export function OrganizationTenantOverview({
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2 border-t border-black/5">
               <div className="text-[10px] text-gray-500 max-w-md">
-                <span className="font-semibold text-black">Billing notice:</span> Adding a new team member adds an active seat to your plan at <span className="font-semibold text-black">$25.00/month</span>.
+                <span className="font-semibold text-black dark:text-gray-300">Billing notice:</span> Adding a new team member adds an active seat to your plan at <span className="font-semibold text-black dark:text-white">$25.00/month</span>.
               </div>
               {canInvite && (
                 <Button
                   onClick={handleSendInvite}
                   disabled={isInviting || !inviteEmail.trim()}
-                  className="bg-black text-white hover:bg-black/90 text-xs h-9 px-5 shrink-0"
+                  className="bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 text-xs h-9 px-5 shrink-0"
                 >
                   {isInviting && <Loader2 className="mr-2 size-4 animate-spin shrink-0" />}
                   {isInviting ? 'Inviting...' : 'Invite Member'}
