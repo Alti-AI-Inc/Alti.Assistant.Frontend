@@ -3277,8 +3277,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Hubspot",
-    "description": "",
+    "title": "HubSpot Enterprise",
+    "description": "Growth CRM marketing automation, inbound customer lifecycle leads, and custom deal pipeline tracking.",
     "image": "https://logos.composio.dev/api/hubspot",
     "app_name": "hubspot",
     "isAvailable": true
@@ -5384,8 +5384,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Salesforce",
-    "description": "",
+    "title": "Salesforce Core",
+    "description": "Enterprise CRM client account metrics, customer opportunity pipelines, contact tracking, and sales win ledgers.",
     "image": "https://logos.composio.dev/api/salesforce",
     "app_name": "salesforce",
     "isAvailable": true
@@ -5650,8 +5650,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Servicenow",
-    "description": "",
+    "title": "ServiceNow ITIL",
+    "description": "Enterprise ITSM incident management, corporate helpdesk ticket routing, system logs, and severity escalation pipelines.",
     "image": "https://logos.composio.dev/api/servicenow",
     "app_name": "servicenow",
     "isAvailable": true
@@ -5874,8 +5874,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Snowflake",
-    "description": "",
+    "title": "Snowflake Data",
+    "description": "Cloud data warehouse analytics tables, SQL schema querying, corporate datasets aggregation, and business intelligence integration.",
     "image": "https://logos.composio.dev/api/snowflake",
     "app_name": "snowflake",
     "isAvailable": true
@@ -6854,8 +6854,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Zendesk",
-    "description": "",
+    "title": "Zendesk Enterprise",
+    "description": "Enterprise helpdesk customer support ticketing workflows, helpdesk conversations, and priority ticket escalations.",
     "image": "https://logos.composio.dev/api/zendesk",
     "app_name": "zendesk",
     "isAvailable": true

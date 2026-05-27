@@ -55,7 +55,14 @@ const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bg
 
   // Enterprise ERP
   netsuite: { category: 'Enterprise ERP', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Cloud ERP' },
-  sap: { category: 'Enterprise ERP', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'ERP Ledger' }
+  sap: { category: 'Enterprise ERP', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'ERP Ledger' },
+
+  // Customer & IT Ops
+  salesforce: { category: 'Customer & IT Ops', color: 'border-blue-500/40 text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/20', bgGlow: 'shadow-[0_0_15px_rgba(59,130,246,0.15)]', badge: 'CRM Core' },
+  servicenow: { category: 'Customer & IT Ops', color: 'border-blue-500/40 text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/20', bgGlow: 'shadow-[0_0_15px_rgba(59,130,246,0.15)]', badge: 'ITSM Core' },
+  snowflake: { category: 'Customer & IT Ops', color: 'border-blue-500/40 text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/20', bgGlow: 'shadow-[0_0_15px_rgba(59,130,246,0.15)]', badge: 'Data Lake' },
+  hubspot: { category: 'Customer & IT Ops', color: 'border-blue-500/40 text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/20', bgGlow: 'shadow-[0_0_15px_rgba(59,130,246,0.15)]', badge: 'Growth CRM' },
+  zendesk: { category: 'Customer & IT Ops', color: 'border-blue-500/40 text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/20', bgGlow: 'shadow-[0_0_15px_rgba(59,130,246,0.15)]', badge: 'Helpdesk ERP' }
 };
 
 const AppCard = ({
@@ -132,6 +139,7 @@ const AppCard = ({
             slug.includes('addepar') || slug.includes('carta') || slug.includes('fiserv') || slug.includes('factset') || slug.includes('bloomberg') || slug.includes('sap') || slug.includes('netsuite') ? 'border-emerald-500/60' :
             slug.includes('harvey') || slug.includes('ironclad') || slug.includes('relativity') || slug.includes('onetrust') || slug.includes('lexisnexis') || slug.includes('workday') || slug.includes('adp') || slug.includes('deel') ? 'border-violet-500/60' :
             slug.includes('veevavault') || slug.includes('epic') || slug.includes('athenahealth') || slug.includes('elationhealth') || slug.includes('iqvia') || slug.includes('changehealthcare') ? 'border-rose-500/60' :
+            slug.includes('salesforce') || slug.includes('servicenow') || slug.includes('snowflake') || slug.includes('hubspot') || slug.includes('zendesk') ? 'border-blue-500/60' :
             'border-cyan-500/60'
           )} />
         )}
