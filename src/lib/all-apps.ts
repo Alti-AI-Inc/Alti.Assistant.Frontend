@@ -491,6 +491,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "SAP Ariba",
+    "description": "Global procurement network, corporate supplier bidding, vendor verification, and supply chain tracking.",
+    "image": "https://logos.composio.dev/api/ariba",
+    "app_name": "ariba",
+    "isAvailable": true
+  },
+  {
     "title": "Aryn",
     "description": "",
     "image": "https://logos.composio.dev/api/aryn",
@@ -1654,7 +1661,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Coupa",
-    "description": "",
+    "description": "Enterprise spend management, corporate purchase orders, invoice auditing, and employee business expense logs.",
     "image": "https://logos.composio.dev/api/coupa",
     "app_name": "coupa",
     "isAvailable": true
@@ -2578,7 +2585,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Flexport",
-    "description": "",
+    "description": "International logistics, ocean and air freight shipment tracking, customs filings, and cargo declarations.",
     "image": "https://logos.composio.dev/api/flexport",
     "app_name": "flexport",
     "isAvailable": true
@@ -5413,7 +5420,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Samsara",
-    "description": "",
+    "description": "Industrial Fleet IoT tracking, real-time vehicle GPS locations, driver ELD logs, and dispatcher routing updates.",
     "image": "https://logos.composio.dev/api/samsara",
     "app_name": "samsara",
     "isAvailable": true
