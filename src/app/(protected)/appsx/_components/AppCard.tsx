@@ -251,7 +251,21 @@ const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bg
   braintree: { category: 'Digital Payments', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Braintree', hoverBorder: 'border-emerald-500/60' },
   square: { category: 'Digital Payments', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Square Pay', hoverBorder: 'border-emerald-500/60' },
   quickbooks: { category: 'Digital Payments', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'QuickBooks', hoverBorder: 'border-emerald-500/60' },
-  xero: { category: 'Digital Payments', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Xero Ledger', hoverBorder: 'border-emerald-500/60' }
+  xero: { category: 'Digital Payments', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Xero Ledger', hoverBorder: 'border-emerald-500/60' },
+
+  // Phase 35: Identity & CRM Support (Cyan Glow)
+  auth0: { category: 'Identity & CRM Support', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'CIAM SSO', hoverBorder: 'border-cyan-500/60' },
+  jumpcloud: { category: 'Identity & CRM Support', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Cloud Identity', hoverBorder: 'border-cyan-500/60' },
+  active_campaign: { category: 'Identity & CRM Support', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Growth CRM', hoverBorder: 'border-cyan-500/60' },
+  intercom: { category: 'Identity & CRM Support', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Live Support', hoverBorder: 'border-cyan-500/60' },
+  discord: { category: 'Identity & CRM Support', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Chat Spoke', hoverBorder: 'border-cyan-500/60' },
+
+  // Phase 36: Modern Workspace (Rose Glow)
+  figma: { category: 'Modern Workspace', color: 'border-rose-500/40 text-rose-600 dark:text-rose-450 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'UI Design', hoverBorder: 'border-rose-500/60' },
+  airtable: { category: 'Modern Workspace', color: 'border-rose-500/40 text-rose-600 dark:text-rose-450 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'Data Spoke', hoverBorder: 'border-rose-500/60' },
+  miro: { category: 'Modern Workspace', color: 'border-rose-500/40 text-rose-600 dark:text-rose-450 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'Whiteboard', hoverBorder: 'border-rose-500/60' },
+  wrike: { category: 'Modern Workspace', color: 'border-rose-500/40 text-rose-600 dark:text-rose-450 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'Agile PM', hoverBorder: 'border-rose-500/60' },
+  loomio: { category: 'Modern Workspace', color: 'border-rose-500/40 text-rose-600 dark:text-rose-450 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'Decisions', hoverBorder: 'border-rose-500/60' }
 };
 
 const AppCard = ({
