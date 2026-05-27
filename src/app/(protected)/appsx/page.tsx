@@ -6,16 +6,45 @@ import { allApps, APP } from '@/lib/all-apps';
 import { useSession } from 'next-auth/react';
 import { useMemo, useState } from 'react';
 import AppCard from './_components/AppCard';
+import { Layers, ShieldCheck, Zap, Package, Landmark, Scale, HeartPulse, HardHat, Sparkles } from 'lucide-react';
+
+const CATEGORIES = [
+  { id: 'all', label: 'All Integrations', icon: Layers },
+  { id: 'featured', label: 'Featured Suite', icon: Sparkles },
+  { id: 'logistics', label: 'Procurement & Logistics', icon: Package },
+  { id: 'fintech', label: 'Wealth & FinTech', icon: Landmark },
+  { id: 'healthcare', label: 'Clinical Healthcare', icon: HeartPulse },
+  { id: 'legal', label: 'LegalTech & GRC', icon: Scale },
+  { id: 'aec', label: 'AEC & Real Estate', icon: HardHat }
+];
+
+const STRATEGIC_SLUGS = [
+  'autodesk', 'yardi', 'realpage', 'costar', 'argus',
+  'addepar', 'carta', 'fiserv', 'factset', 'bloomberg',
+  'harvey', 'ironclad', 'relativity', 'onetrust', 'lexisnexis',
+  'veevavault', 'epic', 'athenahealth', 'elationhealth', 'iqvia', 'changehealthcare',
+  'coupa', 'ariba', 'flexport', 'samsara'
+];
+
+const STRATEGIC_MAP: Record<string, string> = {
+  autodesk: 'aec', yardi: 'aec', realpage: 'aec', costar: 'aec', argus: 'aec',
+  addepar: 'fintech', carta: 'fintech', fiserv: 'fintech', factset: 'fintech', bloomberg: 'fintech',
+  harvey: 'legal', ironclad: 'legal', relativity: 'legal', onetrust: 'legal', lexisnexis: 'legal',
+  veevavault: 'healthcare', epic: 'healthcare', athenahealth: 'healthcare', elationhealth: 'healthcare', iqvia: 'healthcare', changehealthcare: 'healthcare',
+  coupa: 'logistics', ariba: 'logistics', flexport: 'logistics', samsara: 'logistics'
+};
 
 export default function AppIntegrationsGrid() {
   const [query, setQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState('all');
   const { data: session } = useSession();
 
   const { data: connections, isLoading } = useConnectionsQuery(
     session?.accessToken,
   );
 
-  const filteredAndSorted = useMemo(() => {
+  // De-duplicate and parse apps
+  const resolvedApps = useMemo(() => {
     const uniqueMap = new Map<string, APP>();
     allApps.forEach(app => {
       if (app.isAvailable && app.app_name) {
@@ -25,37 +54,179 @@ export default function AppIntegrationsGrid() {
         }
       }
     });
-
-    return Array.from(uniqueMap.values())
-      .filter(app => app.title.toLowerCase().includes(query.toLowerCase()))
-      .sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
-  }, [query]);
+    return Array.from(uniqueMap.values());
+  }, []);
 
   const connectedSlugs = useMemo(() => {
-    if (isLoading || !connections?.length) return new Set();
-
+    if (isLoading || !connections?.length) return new Set<string>();
     return new Set(
       connections.filter(c => c.status === 'ACTIVE').map(c => c.toolkit?.slug),
     );
   }, [connections, isLoading]);
 
+  // Categorize, filter, and sort apps
+  const appGroups = useMemo(() => {
+    const filtered = resolvedApps.filter(app => 
+      app.title.toLowerCase().includes(query.toLowerCase())
+    );
+
+    const strategic: APP[] = [];
+    const utility: APP[] = [];
+
+    filtered.forEach(app => {
+      const slug = app.app_name.toLowerCase();
+      const isStrategic = STRATEGIC_SLUGS.includes(slug);
+      const categoryMatch = STRATEGIC_MAP[slug];
+
+      if (activeCategory === 'all') {
+        if (isStrategic) strategic.push(app);
+        else utility.push(app);
+      } else if (activeCategory === 'featured') {
+        if (isStrategic) strategic.push(app);
+      } else {
+        if (isStrategic && categoryMatch === activeCategory) {
+          strategic.push(app);
+        }
+      }
+    });
+
+    const sortFn = (a: APP, b: APP) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
+    
+    return {
+      strategic: strategic.sort(sortFn),
+      utility: utility.sort(sortFn)
+    };
+  }, [resolvedApps, query, activeCategory]);
+
   return (
-    <div className="p-8">
-      <Input
-        value={query}
-        onChange={e => setQuery(e.target.value)}
-        placeholder="Search apps..."
-        className="focus-visible:border-border h-10 max-w-md bg-gray-100 focus-visible:ring-0 focus-visible:ring-offset-0"
-      />
-      <div className="mx-auto mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredAndSorted.map((app: APP) => (
-          <AppCard
-            key={app.app_name}
-            app={app}
-            isAlreadyConnected={connectedSlugs.has(app.app_name)}
-          />
-        ))}
+    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 p-6 md:p-10 space-y-10 relative overflow-hidden transition-colors duration-300">
+      {/* Decorative premium radial mesh overlay */}
+      <div className="absolute top-0 right-0 -z-10 w-[600px] h-[600px] bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 -z-10 w-[500px] h-[500px] bg-gradient-to-tr from-cyan-500/10 via-blue-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+      {/* Glassmorphic Hero Banner */}
+      <div className="relative rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl p-8 md:p-12 shadow-xl overflow-hidden transition-all duration-300">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-slate-100 dark:bg-slate-800/40 rounded-full translate-x-12 -translate-y-12 blur-2xl pointer-events-none" />
+        
+        <div className="relative max-w-3xl space-y-6">
+          <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-slate-800 px-3.5 py-1.5 text-xs font-semibold text-slate-850 dark:text-slate-200 border border-slate-200/55 dark:border-slate-700/60 shadow-sm">
+            <Zap className="size-3.5 text-indigo-500 dark:text-indigo-400 fill-indigo-500/20" />
+            <span>High-Stakes Verticals Authorized</span>
+          </div>
+
+          <div className="space-y-3">
+            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
+              Enterprise Integration <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 dark:from-indigo-400 dark:via-purple-400 dark:to-cyan-400 bg-clip-text text-transparent">Gateway</span>
+            </h1>
+            <p className="text-lg text-slate-550 dark:text-slate-400 leading-relaxed font-medium">
+              Securely orchestrate vertical platforms. Power fully-autonomous swathes across Real Estate, Wealth Portfolios, Legal Compliance, Outpatient Health systems, and Fleet Logistics.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 items-center">
+            {/* Search Input */}
+            <div className="relative w-full max-w-md">
+              <Input
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                placeholder="Search premium applications..."
+                className="h-12 w-full pl-4 pr-10 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white focus-visible:ring-1 focus-visible:ring-indigo-500 dark:focus-visible:ring-indigo-400 focus-visible:border-transparent transition-all shadow-sm"
+              />
+            </div>
+            {/* Stats Indicator */}
+            <div className="flex items-center gap-6 text-sm font-semibold text-slate-500 dark:text-slate-400 border-l border-slate-200 dark:border-slate-800 pl-0 sm:pl-6 h-8">
+              <span>Total Available: <strong className="text-slate-800 dark:text-slate-250">{resolvedApps.length}</strong></span>
+              <span>Connected: <strong className="text-emerald-600 dark:text-emerald-450">{connectedSlugs.size}</strong></span>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* Category Pills Navigation */}
+      <div className="flex flex-wrap gap-2.5 pb-2 border-b border-slate-200/60 dark:border-slate-800/40">
+        {CATEGORIES.map(category => {
+          const Icon = category.icon;
+          const isActive = activeCategory === category.id;
+          return (
+            <button
+              key={category.id}
+              onClick={() => setActiveCategory(category.id)}
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 border shadow-sm ${
+                isActive
+                  ? 'bg-slate-900 dark:bg-slate-50 text-white dark:text-slate-900 border-slate-900 dark:border-slate-50 scale-105'
+                  : 'bg-white/70 dark:bg-slate-900/50 text-slate-650 dark:text-slate-400 border-slate-200 dark:border-slate-850 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <Icon className="size-4" />
+              <span>{category.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Featured Strategic Suite Section */}
+      {appGroups.strategic.length > 0 && (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+                <Sparkles className="size-5 text-indigo-500" />
+                Featured Enterprise Suite
+              </h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+                Strategic vertical portals fortified with PII/PHI redaction masks and synchronous HITL verification gates.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {appGroups.strategic.map((app: APP) => (
+              <AppCard
+                key={app.app_name}
+                app={app}
+                isAlreadyConnected={connectedSlugs.has(app.app_name)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Standard Utilities Section (only visible for All Category search view) */}
+      {activeCategory === 'all' && appGroups.utility.length > 0 && (
+        <div className="space-y-6 pt-6 border-t border-slate-200/60 dark:border-slate-800/40">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+              <Layers className="size-5 text-slate-400" />
+              Standard Integrations
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+              Supplementary tools and utilities to expand your general productivity workflows.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {appGroups.utility.map((app: APP) => (
+              <AppCard
+                key={app.app_name}
+                app={app}
+                isAlreadyConnected={connectedSlugs.has(app.app_name)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Empty State */}
+      {appGroups.strategic.length === 0 && appGroups.utility.length === 0 && (
+        <div className="text-center py-20 bg-white/40 dark:bg-slate-900/30 border border-dashed border-slate-200 dark:border-slate-800 rounded-3xl backdrop-blur-sm">
+          <Layers className="mx-auto size-12 text-slate-350 dark:text-slate-600 animate-pulse" />
+          <h3 className="mt-4 text-lg font-bold text-slate-900 dark:text-white">No applications found</h3>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 max-w-xs mx-auto">
+            Try adjusting your search keywords or switching filters to uncover other integrations.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
+
