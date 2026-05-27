@@ -194,7 +194,7 @@ const LeftSideNavMobile = () => {
       return filteredApps;
     }
     const connected = AVAILABLE_COMPOSIO_APPS.filter(app => connectedAppSlugs.has(app.app_name.toLowerCase()));
-    const nonConnected = AVAILABLE_COMPOSIO_APPS.filter(app => !connectedAppSlugs.has(app.app_name.toLowerCase())).slice(0, 50);
+    const nonConnected = AVAILABLE_COMPOSIO_APPS.filter(app => !connectedAppSlugs.has(app.app_name.toLowerCase()));
     return [...connected, ...nonConnected];
   }, [searchQuery, filteredApps, connectedAppSlugs]);
 
