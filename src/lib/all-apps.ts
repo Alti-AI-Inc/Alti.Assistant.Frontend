@@ -610,6 +610,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Avalara AvaTax",
+    "description": "Avalara AvaTax automated sales tax calculations, dynamic transaction tax determinations, and tax filing management.",
+    "image": "https://logos.composio.dev/api/avalara",
+    "app_name": "avalara",
+    "isAvailable": true
+  },
+  {
     "title": "AWS (Amazon Web Services)",
     "description": "",
     "image": "https://logos.composio.dev/api/aws",
@@ -1346,7 +1353,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Chargebee",
-    "description": "",
+    "description": "Chargebee subscription management, recurring billing automation, customer billing portal, and customer revenue recovery.",
     "image": "https://logos.composio.dev/api/chargebee",
     "app_name": "chargebee",
     "isAvailable": true
@@ -4852,6 +4859,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Thomson Reuters ONESOURCE",
+    "description": "Thomson Reuters ONESOURCE global tax determination, automated VAT calculation engine, and corporate tax compliance filing.",
+    "image": "https://logos.composio.dev/api/onesource",
+    "app_name": "onesource",
+    "isAvailable": true
+  },
+  {
     "title": "OneTrust",
     "description": "Integrate OneTrust to manage enterprise consent records and programmatically submit CCPA/GDPR data subject privacy requests safely.",
     "image": "https://logos.composio.dev/api/onetrust",
@@ -4961,6 +4975,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/owl_protocol",
     "app_name": "owl_protocol",
+    "isAvailable": true
+  },
+  {
+    "title": "Paddle",
+    "description": "Paddle merchant of record subscription billing, global SaaS billing compliance, and subscription cancellation management.",
+    "image": "https://logos.composio.dev/api/paddle",
+    "app_name": "paddle",
     "isAvailable": true
   },
   {
@@ -5542,6 +5563,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/recruitee",
     "app_name": "recruitee",
+    "isAvailable": true
+  },
+  {
+    "title": "Recurly",
+    "description": "Recurly enterprise subscription billing, recurring charge invoicing, card decline retries, and customer account management.",
+    "image": "https://logos.composio.dev/api/recurly",
+    "app_name": "recurly",
     "isAvailable": true
   },
   {
@@ -6364,6 +6392,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Sovos Tax",
+    "description": "Sovos global financial tax compliance, real-time VAT reporting, tax document filing, and tax audit readiness.",
+    "image": "https://logos.composio.dev/api/sovos",
+    "app_name": "sovos",
+    "isAvailable": true
+  },
+  {
     "title": "Splitwise",
     "description": "",
     "image": "https://logos.composio.dev/api/splitwise",
@@ -6504,6 +6539,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Stripe Billing",
+    "description": "Stripe Billing subscription schedules, dynamic usage-based invoicing, invoice creation, and customer refund dispatches.",
+    "image": "https://logos.composio.dev/api/stripe_billing",
+    "app_name": "stripe_billing",
+    "isAvailable": true
+  },
+  {
     "title": "Supabase",
     "description": "",
     "image": "https://logos.composio.dev/api/supabase",
@@ -6637,8 +6679,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Taxjar",
-    "description": "",
+    "title": "TaxJar",
+    "description": "TaxJar sales tax compliance, automated sales tax calculations, multi-state tax reporting, and tax return filing.",
     "image": "https://logos.composio.dev/api/taxjar",
     "app_name": "taxjar",
     "isAvailable": true
@@ -7127,6 +7169,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Vertex Tax",
+    "description": "Vertex enterprise tax software, dynamic sales tax exemption rules, and corporate tax filing automation.",
+    "image": "https://logos.composio.dev/api/vertex",
+    "app_name": "vertex",
+    "isAvailable": true
+  },
+  {
     "title": "Vestaboard",
     "description": "",
     "image": "https://logos.composio.dev/api/vestaboard",
@@ -7523,6 +7572,13 @@ export const allApps: APP[] = [
     "description": "Enterprise cloud firewall gateways, zero-trust secure access service edge (SASE) traffic audit logging, and access control policy schemas.",
     "image": "https://logos.composio.dev/api/zscaler",
     "app_name": "zscaler",
+    "isAvailable": true
+  },
+  {
+    "title": "Zuora",
+    "description": "Zuora subscription billing engine, recurring billing invoicing, subscription lifecycle management, and GAAP revenue recognition.",
+    "image": "https://logos.composio.dev/api/zuora",
+    "app_name": "zuora",
     "isAvailable": true
   },
   {

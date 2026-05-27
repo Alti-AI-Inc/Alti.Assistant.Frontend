@@ -223,7 +223,35 @@ const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bg
   langsmith: { category: 'AI Registry', color: 'border-cyan-500/40 text-cyan-600 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'LangSmith Trace', hoverBorder: 'border-cyan-500/60' },
   mlflow: { category: 'AI Registry', color: 'border-cyan-500/40 text-cyan-600 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'MLflow Registry', hoverBorder: 'border-cyan-500/60' },
   cohere: { category: 'AI Registry', color: 'border-cyan-500/40 text-cyan-600 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Cohere API', hoverBorder: 'border-cyan-500/60' },
-  langchain_hub: { category: 'AI Registry', color: 'border-cyan-500/40 text-cyan-600 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'LangChain Hub', hoverBorder: 'border-cyan-500/60' }
+  langchain_hub: { category: 'AI Registry', color: 'border-cyan-500/40 text-cyan-600 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'LangChain Hub', hoverBorder: 'border-cyan-500/60' },
+
+  // Phase 31: Corporate Tax Compliance & VAT Operations Core (Amber Glow)
+  onesource: { category: 'Corporate Tax', color: 'border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'Tax ERP Core', hoverBorder: 'border-amber-500/60' },
+  avalara: { category: 'Corporate Tax', color: 'border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'Sales Tax', hoverBorder: 'border-amber-500/60' },
+  vertex: { category: 'Corporate Tax', color: 'border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'Tax Rules ERP', hoverBorder: 'border-amber-500/60' },
+  taxjar: { category: 'Corporate Tax', color: 'border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'Tax Reporting', hoverBorder: 'border-amber-500/60' },
+  sovos: { category: 'Corporate Tax', color: 'border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'VAT Compliance', hoverBorder: 'border-amber-500/60' },
+
+  // Phase 32: Subscription Billing & Revenue Operations Core (Emerald Glow)
+  zuora: { category: 'Billing & RevOps', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Subscription ERP', hoverBorder: 'border-emerald-500/60' },
+  chargebee: { category: 'Billing & RevOps', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'RevOps Billing', hoverBorder: 'border-emerald-500/60' },
+  recurly: { category: 'Billing & RevOps', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Billing Portal', hoverBorder: 'border-emerald-500/60' },
+  stripe_billing: { category: 'Billing & RevOps', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Stripe Billing', hoverBorder: 'border-emerald-500/60' },
+  paddle: { category: 'Billing & RevOps', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Merchant Billing', hoverBorder: 'border-emerald-500/60' },
+
+  // Phase 33: Contract Management & Legally Binding e-Signatures (Violet Glow)
+  docusign: { category: 'e-Sign Core', color: 'border-violet-500/40 text-violet-650 dark:text-violet-400 bg-violet-50/50 dark:bg-violet-950/20', bgGlow: 'shadow-[0_0_15px_rgba(139,92,246,0.15)]', badge: 'DocuSign', hoverBorder: 'border-violet-500/60' },
+  dropbox_sign: { category: 'e-Sign Core', color: 'border-violet-500/40 text-violet-650 dark:text-violet-400 bg-violet-50/50 dark:bg-violet-950/20', bgGlow: 'shadow-[0_0_15px_rgba(139,92,246,0.15)]', badge: 'Dropbox Sign', hoverBorder: 'border-violet-500/60' },
+  pandadoc: { category: 'e-Sign Core', color: 'border-violet-500/40 text-violet-650 dark:text-violet-400 bg-violet-50/50 dark:bg-violet-950/20', bgGlow: 'shadow-[0_0_15px_rgba(139,92,246,0.15)]', badge: 'PandaDoc', hoverBorder: 'border-violet-500/60' },
+  esignatures_io: { category: 'e-Sign Core', color: 'border-violet-500/40 text-violet-650 dark:text-violet-400 bg-violet-50/50 dark:bg-violet-950/20', bgGlow: 'shadow-[0_0_15px_rgba(139,92,246,0.15)]', badge: 'eSignatures.io', hoverBorder: 'border-violet-500/60' },
+  signaturely: { category: 'e-Sign Core', color: 'border-violet-500/40 text-violet-650 dark:text-violet-400 bg-violet-50/50 dark:bg-violet-950/20', bgGlow: 'shadow-[0_0_15px_rgba(139,92,246,0.15)]', badge: 'Signaturely', hoverBorder: 'border-violet-500/60' },
+
+  // Phase 34: Digital Payments & Global Ledger Processing (Emerald Glow)
+  stripe: { category: 'Digital Payments', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Stripe Core', hoverBorder: 'border-emerald-500/60' },
+  braintree: { category: 'Digital Payments', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Braintree', hoverBorder: 'border-emerald-500/60' },
+  square: { category: 'Digital Payments', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Square Pay', hoverBorder: 'border-emerald-500/60' },
+  quickbooks: { category: 'Digital Payments', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'QuickBooks', hoverBorder: 'border-emerald-500/60' },
+  xero: { category: 'Digital Payments', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Xero Ledger', hoverBorder: 'border-emerald-500/60' }
 };
 
 const AppCard = ({
