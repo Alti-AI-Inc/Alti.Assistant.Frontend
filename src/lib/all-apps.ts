@@ -99,6 +99,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Adobe Experience Cloud",
+    "description": "Enterprise customer journey analytics, marketing CDP profile synchronization, and asset cloud digital repositories.",
+    "image": "https://logos.composio.dev/api/adobe_experience",
+    "app_name": "adobe_experience",
+    "isAvailable": true
+  },
+  {
     "title": "ADP",
     "description": "Enterprise payroll compliance, workforce tax management, health benefits administration, and labor logging.",
     "image": "https://logos.composio.dev/api/adp",
@@ -1695,6 +1702,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "CrowdStrike Falcon Threat Intel",
+    "description": "Enterprise cloud security diagnostics, active server threat telemetry logs, vulnerability detections, and host containment hooks.",
+    "image": "https://logos.composio.dev/api/crowdstrike",
+    "app_name": "crowdstrike",
+    "isAvailable": true
+  },
+  {
     "title": "Crunchbase Enterprise",
     "description": "",
     "image": "https://logos.composio.dev/api/crunchbase",
@@ -2378,6 +2392,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/exa",
     "app_name": "exa",
+    "isAvailable": true
+  },
+  {
+    "title": "ExactTarget Marketing Cloud",
+    "description": "Enterprise multi-channel marketing campaigns orchestrator, customer journey builder analytics, and subscriber email audits.",
+    "image": "https://logos.composio.dev/api/exacttarget",
+    "app_name": "exacttarget",
     "isAvailable": true
   },
   {
@@ -3298,6 +3319,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Hugging Face Hub",
+    "description": "Enterprise machine learning model repository, neural network tokenizer configs, and cloud inference endpoints.",
+    "image": "https://logos.composio.dev/api/huggingface",
+    "app_name": "huggingface",
+    "isAvailable": true
+  },
+  {
     "title": "Humanitix",
     "description": "",
     "image": "https://logos.composio.dev/api/humanitix",
@@ -4033,6 +4061,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Marketo Automation",
+    "description": "B2B marketing automation pipelines orchestrator, account-based marketing lead scoring, and campaign email triggers.",
+    "image": "https://logos.composio.dev/api/marketo",
+    "app_name": "marketo",
+    "isAvailable": true
+  },
+  {
     "title": "Mboum",
     "description": "",
     "image": "https://logos.composio.dev/api/mboum",
@@ -4453,8 +4488,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Okta",
-    "description": "",
+    "title": "Okta Identity Directory",
+    "description": "Corporate workforce SSO authentication protocol, SAML federation session controls, and automated user provisioning logs.",
     "image": "https://logos.composio.dev/api/okta",
     "app_name": "okta",
     "isAvailable": true
@@ -4537,8 +4572,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Openai",
-    "description": "",
+    "title": "OpenAI Enterprise APIs",
+    "description": "Large language model intelligence engines, custom GPT assistant telemetry, and secure fine-tuning hyperparameters.",
     "image": "https://logos.composio.dev/api/openai",
     "app_name": "openai",
     "isAvailable": true
@@ -4810,10 +4845,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Pinecone Vector DB",
+    "description": "Enterprise vector search database, high-dimensional embedding similarity indexes, and semantic query namespaces.",
+    "image": "https://logos.composio.dev/api/pinecone",
+    "app_name": "pinecone",
+    "isAvailable": true
+  },
+  {
     "title": "Pingdom",
     "description": "",
     "image": "https://logos.composio.dev/api/pingdom",
     "app_name": "pingdom",
+    "isAvailable": true
+  },
+  {
+    "title": "Ping Identity SSO",
+    "description": "Federated single sign-on (SSO) authentication directories, SAML token sessions controller, and secure session revocation.",
+    "image": "https://logos.composio.dev/api/pingidentity",
+    "app_name": "pingidentity",
     "isAvailable": true
   },
   {
@@ -5412,6 +5461,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Amazon SageMaker MLOps",
+    "description": "Enterprise cloud machine learning endpoints orchestrator, model auto-scaling rules, and training pipeline metrics.",
+    "image": "https://logos.composio.dev/api/sagemaker",
+    "app_name": "sagemaker",
+    "isAvailable": true
+  },
+  {
     "title": "Salesforce Core",
     "description": "Enterprise CRM client account metrics, customer opportunity pipelines, contact tracking, and sales win ledgers.",
     "image": "https://logos.composio.dev/api/salesforce",
@@ -5636,6 +5692,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "SentinelOne Threat Remediator",
+    "description": "Enterprise endpoint protection, security threat indicators analytics, file telemetry hashes, and host rollback mitigation.",
+    "image": "https://logos.composio.dev/api/sentinelone",
+    "app_name": "sentinelone",
+    "isAvailable": true
+  },
+  {
     "title": "Sentry",
     "description": "",
     "image": "https://logos.composio.dev/api/sentry",
@@ -5727,8 +5790,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Shopify",
-    "description": "",
+    "title": "Shopify Plus Storefront",
+    "description": "Enterprise digital commerce checkout systems, multi-store product inventory syncing, and global transaction analytics.",
     "image": "https://logos.composio.dev/api/shopify",
     "app_name": "shopify",
     "isAvailable": true
@@ -6469,6 +6532,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Twilio Segment CDP",
+    "description": "Enterprise customer data platform, real-time user event collection analytics, and dynamic audience cohort syncing.",
+    "image": "https://logos.composio.dev/api/twilio_segment",
+    "app_name": "twilio_segment",
+    "isAvailable": true
+  },
+  {
     "title": "Twitch",
     "description": "",
     "image": "https://logos.composio.dev/api/twitch",
@@ -6718,6 +6788,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/webvizio",
     "app_name": "webvizio",
+    "isAvailable": true
+  },
+  {
+    "title": "Weights & Biases MLOps",
+    "description": "Enterprise machine learning experiment tracking, model hyperparameter visualization epoch losses, and runs controls.",
+    "image": "https://logos.composio.dev/api/weights_biases",
+    "app_name": "weights_biases",
     "isAvailable": true
   },
   {
@@ -6991,6 +7068,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/zoominfo",
     "app_name": "zoominfo",
+    "isAvailable": true
+  },
+  {
+    "title": "Zscaler Zero Trust SASE",
+    "description": "Enterprise cloud firewall gateways, zero-trust secure access service edge (SASE) traffic audit logging, and access control policy schemas.",
+    "image": "https://logos.composio.dev/api/zscaler",
+    "app_name": "zscaler",
     "isAvailable": true
   },
   {

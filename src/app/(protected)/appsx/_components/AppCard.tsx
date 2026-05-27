@@ -76,7 +76,28 @@ const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bg
   tableau: { category: 'Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'Visual Analytics' },
   powerbi: { category: 'Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'BI Dashboard' },
   googlebigquery: { category: 'Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'Data Warehouse' },
-  looker: { category: 'Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'Semantic Model' }
+  looker: { category: 'Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'Semantic Model' },
+
+  // MarTech & CX (Amber/Orange Glow)
+  shopify: { category: 'MarTech & CX', color: 'border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'E-Commerce ERP' },
+  adobe_experience: { category: 'MarTech & CX', color: 'border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'Experience CDP' },
+  twilio_segment: { category: 'MarTech & CX', color: 'border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'Data Infrastructure' },
+  marketo: { category: 'MarTech & CX', color: 'border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'B2B Automation' },
+  exacttarget: { category: 'MarTech & CX', color: 'border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'Multi-Channel Ops' },
+
+  // Cybersecurity & IAM (Emerald/Teal Glow)
+  okta: { category: 'Cybersecurity & IAM', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Identity & IAM' },
+  crowdstrike: { category: 'Cybersecurity & IAM', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'XDR & EDR Core' },
+  sentinelone: { category: 'Cybersecurity & IAM', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Endpoint Remediation' },
+  zscaler: { category: 'Cybersecurity & IAM', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Zero Trust SASE' },
+  pingidentity: { category: 'Cybersecurity & IAM', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'SSO Federation' },
+
+  // AI & MLOps (Cyan/Violet Glow)
+  openai: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'LLM API Core' },
+  weights_biases: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'ML Experimentation' },
+  huggingface: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Model Repository' },
+  pinecone: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Vector Database' },
+  sagemaker: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'MLOps Engine' }
 };
 
 const AppCard = ({
@@ -149,13 +170,13 @@ const AppCard = ({
         {strategicStyle && (
           <div className={cn(
             "absolute inset-0 border-[1.5px] rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300",
-            slug.includes('yardi') || slug.includes('autodesk') || slug.includes('realpage') || slug.includes('costar') || slug.includes('argus') ? 'border-amber-500/60' :
-            slug.includes('addepar') || slug.includes('carta') || slug.includes('fiserv') || slug.includes('factset') || slug.includes('bloomberg') || slug.includes('sap') || slug.includes('netsuite') ? 'border-emerald-500/60' :
+            slug.includes('yardi') || slug.includes('autodesk') || slug.includes('realpage') || slug.includes('costar') || slug.includes('argus') || slug.includes('shopify') || slug.includes('adobe_experience') || slug.includes('twilio_segment') || slug.includes('marketo') || slug.includes('exacttarget') ? 'border-amber-500/60' :
+            slug.includes('addepar') || slug.includes('carta') || slug.includes('fiserv') || slug.includes('factset') || slug.includes('bloomberg') || slug.includes('sap') || slug.includes('netsuite') || slug.includes('okta') || slug.includes('crowdstrike') || slug.includes('sentinelone') || slug.includes('zscaler') || slug.includes('pingidentity') ? 'border-emerald-500/60' :
             slug.includes('harvey') || slug.includes('ironclad') || slug.includes('relativity') || slug.includes('onetrust') || slug.includes('lexisnexis') || slug.includes('workday') || slug.includes('adp') || slug.includes('deel') ? 'border-violet-500/60' :
             slug.includes('veevavault') || slug.includes('epic') || slug.includes('athenahealth') || slug.includes('elationhealth') || slug.includes('iqvia') || slug.includes('changehealthcare') ? 'border-rose-500/60' :
             slug.includes('salesforce') || slug.includes('servicenow') || slug.includes('snowflake') || slug.includes('hubspot') || slug.includes('zendesk') ? 'border-blue-500/60' :
             slug.includes('datadog') || slug.includes('pagerduty') || slug.includes('hashicorp_vault') || slug.includes('splunk') || slug.includes('dynatrace') ? 'border-fuchsia-500/60' :
-            slug.includes('databricks') || slug.includes('tableau') || slug.includes('powerbi') || slug.includes('googlebigquery') || slug.includes('looker') ? 'border-indigo-500/60' :
+            slug.includes('databricks') || slug.includes('tableau') || slug.includes('powerbi') || slug.includes('googlebigquery') || slug.includes('looker') || slug.includes('openai') || slug.includes('weights_biases') || slug.includes('huggingface') || slug.includes('pinecone') || slug.includes('sagemaker') ? 'border-cyan-500/60' :
             'border-cyan-500/60'
           )} />
         )}
