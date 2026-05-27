@@ -3123,6 +3123,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Harvey",
+    "description": "Integrate Harvey to analyze case law precedents, verify litigation insights, and perform premium legal research with generative legal intelligence.",
+    "image": "https://logos.composio.dev/api/harvey",
+    "app_name": "harvey",
+    "isAvailable": true
+  },
+  {
     "title": "Hashnode",
     "description": "",
     "image": "https://logos.composio.dev/api/hashnode",
@@ -3470,6 +3477,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/iqair_airvisual",
     "app_name": "iqair_airvisual",
+    "isAvailable": true
+  },
+  {
+    "title": "Ironclad",
+    "description": "Integrate Ironclad to automate contract lifecycles, parse contract metadata, and execute secure legal signature approvals safely.",
+    "image": "https://logos.composio.dev/api/ironclad",
+    "app_name": "ironclad",
     "isAvailable": true
   },
   {
@@ -4439,6 +4453,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "OneTrust",
+    "description": "Integrate OneTrust to manage enterprise consent records and programmatically submit CCPA/GDPR data subject privacy requests safely.",
+    "image": "https://logos.composio.dev/api/onetrust",
+    "app_name": "onetrust",
+    "isAvailable": true
+  },
+  {
     "title": "Open Dental",
     "description": "",
     "image": "https://logos.composio.dev/api/open_dental",
@@ -5101,6 +5122,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/refiner",
     "app_name": "refiner",
+    "isAvailable": true
+  },
+  {
+    "title": "Relativity",
+    "description": "Integrate Relativity to execute litigious e-discovery document reviews, tag sensitive records, and manage privileged files programmatically.",
+    "image": "https://logos.composio.dev/api/relativity",
+    "app_name": "relativity",
     "isAvailable": true
   },
   {
