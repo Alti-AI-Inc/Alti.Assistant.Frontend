@@ -79,7 +79,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Addepar",
-    "description": "",
+    "description": "Enterprise wealth management portal, corporate portfolio asset aggregation, multi-custody reporting, and high-net-worth analytics.",
     "image": "https://logos.composio.dev/api/addepar",
     "app_name": "addepar",
     "isAvailable": true
@@ -492,7 +492,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Argus Enterprise",
-    "description": "",
+    "description": "Commercial real estate valuation modeling, cash flow forecasting, DCF valuation metrics, and portfolio stress testing.",
     "image": "https://logos.composio.dev/api/argus",
     "app_name": "argus",
     "isAvailable": true
@@ -555,7 +555,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Athenahealth",
-    "description": "",
+    "description": "Outpatient clinical EHR EHR systems, patient medical histories, clinical scheduler, and billing adjudication databases.",
     "image": "https://logos.composio.dev/api/athenahealth",
     "app_name": "athenahealth",
     "isAvailable": true
@@ -849,7 +849,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Bloomberg Professional",
-    "description": "",
+    "description": "Real-time institutional market terminal feeds, historical security pricing, macroeconomic tables, and professional trading logs.",
     "image": "https://logos.composio.dev/api/bloomberg",
     "app_name": "bloomberg",
     "isAvailable": true
@@ -1248,7 +1248,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Carta",
-    "description": "",
+    "description": "Enterprise cap table management, equity issuance authorization, private company valuations, and share vesting schedules.",
     "image": "https://logos.composio.dev/api/carta",
     "app_name": "carta",
     "isAvailable": true
@@ -1654,7 +1654,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "CoStar Group",
-    "description": "",
+    "description": "Commercial real estate marketplace intelligence, verified property listing transactions, structural build metrics, and historical lease indices.",
     "image": "https://logos.composio.dev/api/costar",
     "app_name": "costar",
     "isAvailable": true
@@ -2431,7 +2431,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "FactSet",
-    "description": "",
+    "description": "Institutional financial research platforms, fixed income securities data, corporate earnings calendars, and portfolio performance analysis.",
     "image": "https://logos.composio.dev/api/factset",
     "app_name": "factset",
     "isAvailable": true
@@ -3782,7 +3782,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "LexisNexis",
-    "description": "",
+    "description": "Comprehensive legal research archive, statutory law precedents, public records index, and corporate litigation analytics.",
     "image": "https://logos.composio.dev/api/lexisnexis",
     "app_name": "lexisnexis",
     "isAvailable": true
@@ -6820,9 +6820,9 @@ export const allApps: APP[] = [
   },
   {
     "title": "Yardi Systems",
-    "description": "",
+    "description": "Enterprise property tenant rent history, billing balances, and property management ledger updating.",
     "image": "https://logos.composio.dev/api/yardi_systems",
-    "app_name": "yardi_systems",
+    "app_name": "yardi",
     "isAvailable": true
   },
   {
