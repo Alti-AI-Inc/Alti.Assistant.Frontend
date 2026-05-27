@@ -2521,6 +2521,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Fiserv",
+    "description": "Integrate Fiserv commercial banking core system to seamlessly manage cash balances, query ledger accounts, and execute wire transfers directly within Alti.",
+    "image": "https://logos.composio.dev/api/fiserv",
+    "app_name": "fiserv",
+    "isAvailable": true
+  },
+  {
     "title": "Fitbit",
     "description": "",
     "image": "https://logos.composio.dev/api/fitbit",
