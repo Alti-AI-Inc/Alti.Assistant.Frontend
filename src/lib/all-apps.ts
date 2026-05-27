@@ -1793,8 +1793,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Datadog",
-    "description": "",
+    "title": "Datadog APM",
+    "description": "Cloud application performance monitoring, infrastructure telemetry dashboards, and incident alerts.",
     "image": "https://logos.composio.dev/api/datadog",
     "app_name": "datadog",
     "isAvailable": true
@@ -2140,6 +2140,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/dynamics365",
     "app_name": "dynamics365",
+    "isAvailable": true
+  },
+  {
+    "title": "Dynatrace Observability",
+    "description": "Enterprise full-stack infrastructure observability, service flow dependencies mapping, and AI anomaly detection.",
+    "image": "https://logos.composio.dev/api/dynatrace",
+    "app_name": "dynatrace",
     "isAvailable": true
   },
   {
@@ -3162,6 +3169,13 @@ export const allApps: APP[] = [
     "description": "Integrate Harvey to analyze case law precedents, verify litigation insights, and perform premium legal research with generative legal intelligence.",
     "image": "https://logos.composio.dev/api/harvey",
     "app_name": "harvey",
+    "isAvailable": true
+  },
+  {
+    "title": "HashiCorp Vault",
+    "description": "Enterprise credential secret storage, cryptographic dynamic token engine, and access key rotation.",
+    "image": "https://logos.composio.dev/api/hashicorp_vault",
+    "app_name": "hashicorp_vault",
     "isAvailable": true
   },
   {
@@ -4614,8 +4628,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Pagerduty",
-    "description": "",
+    "title": "PagerDuty Incident Ops",
+    "description": "Application incident operations dispatcher, on-call engineer schedules, and critical infrastructure pager alerts.",
     "image": "https://logos.composio.dev/api/pagerduty",
     "app_name": "pagerduty",
     "isAvailable": true
@@ -5899,6 +5913,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/splitwise",
     "app_name": "splitwise",
+    "isAvailable": true
+  },
+  {
+    "title": "Splunk Enterprise",
+    "description": "Machine log search databases, SIEM cybersecurity incident events indexing, and network log search engines.",
+    "image": "https://logos.composio.dev/api/splunk",
+    "app_name": "splunk",
     "isAvailable": true
   },
   {

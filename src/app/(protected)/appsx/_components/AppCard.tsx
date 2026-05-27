@@ -62,7 +62,14 @@ const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bg
   servicenow: { category: 'Customer & IT Ops', color: 'border-blue-500/40 text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/20', bgGlow: 'shadow-[0_0_15px_rgba(59,130,246,0.15)]', badge: 'ITSM Core' },
   snowflake: { category: 'Customer & IT Ops', color: 'border-blue-500/40 text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/20', bgGlow: 'shadow-[0_0_15px_rgba(59,130,246,0.15)]', badge: 'Data Lake' },
   hubspot: { category: 'Customer & IT Ops', color: 'border-blue-500/40 text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/20', bgGlow: 'shadow-[0_0_15px_rgba(59,130,246,0.15)]', badge: 'Growth CRM' },
-  zendesk: { category: 'Customer & IT Ops', color: 'border-blue-500/40 text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/20', bgGlow: 'shadow-[0_0_15px_rgba(59,130,246,0.15)]', badge: 'Helpdesk ERP' }
+  zendesk: { category: 'Customer & IT Ops', color: 'border-blue-500/40 text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/20', bgGlow: 'shadow-[0_0_15px_rgba(59,130,246,0.15)]', badge: 'Helpdesk ERP' },
+
+  // DevOps & SecOps
+  datadog: { category: 'DevOps & SecOps', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'APM Metrics' },
+  pagerduty: { category: 'DevOps & SecOps', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'Incident Ops' },
+  hashicorp_vault: { category: 'DevOps & SecOps', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'Secrets Mgmt' },
+  splunk: { category: 'DevOps & SecOps', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'SIEM Logs' },
+  dynatrace: { category: 'DevOps & SecOps', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'Observability' }
 };
 
 const AppCard = ({
@@ -140,6 +147,7 @@ const AppCard = ({
             slug.includes('harvey') || slug.includes('ironclad') || slug.includes('relativity') || slug.includes('onetrust') || slug.includes('lexisnexis') || slug.includes('workday') || slug.includes('adp') || slug.includes('deel') ? 'border-violet-500/60' :
             slug.includes('veevavault') || slug.includes('epic') || slug.includes('athenahealth') || slug.includes('elationhealth') || slug.includes('iqvia') || slug.includes('changehealthcare') ? 'border-rose-500/60' :
             slug.includes('salesforce') || slug.includes('servicenow') || slug.includes('snowflake') || slug.includes('hubspot') || slug.includes('zendesk') ? 'border-blue-500/60' :
+            slug.includes('datadog') || slug.includes('pagerduty') || slug.includes('hashicorp_vault') || slug.includes('splunk') || slug.includes('dynatrace') ? 'border-fuchsia-500/60' :
             'border-cyan-500/60'
           )} />
         )}
