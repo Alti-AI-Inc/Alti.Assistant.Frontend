@@ -218,6 +218,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Airbyte",
+    "description": "Enterprise ELT pipelines, database replication syncs, and custom data warehouse connectors.",
+    "image": "https://logos.composio.dev/api/airbyte",
+    "app_name": "airbyte",
+    "isAvailable": true
+  },
+  {
     "title": "Airtable",
     "description": "",
     "image": "https://logos.composio.dev/api/airtable",
@@ -229,6 +236,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/aivoov",
     "app_name": "aivoov",
+    "isAvailable": true
+  },
+  {
+    "title": "Akamai",
+    "description": "Enterprise content delivery network (CDN), secure WAF protection, and edge compute services.",
+    "image": "https://logos.composio.dev/api/akamai",
+    "app_name": "akamai",
     "isAvailable": true
   },
   {
@@ -331,7 +345,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Amplitude",
-    "description": "",
+    "description": "Amplitude premium cohort tracking, product analytics, and customer event stream visualization.",
     "image": "https://logos.composio.dev/api/amplitude",
     "app_name": "amplitude",
     "isAvailable": true
@@ -2256,7 +2270,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Elasticsearch",
-    "description": "",
+    "description": "Distributed search and analytics engine for enterprise log search, APM telemetry, and SIEM monitoring.",
     "image": "https://logos.composio.dev/api/elasticsearch",
     "app_name": "elasticsearch",
     "isAvailable": true
@@ -2528,6 +2542,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "F5 BIG-IP",
+    "description": "Enterprise application delivery controller, local and global traffic management, and load balancing services.",
+    "image": "https://logos.composio.dev/api/f5_big_ip",
+    "app_name": "f5_big_ip",
+    "isAvailable": true
+  },
+  {
     "title": "Facebook",
     "description": "",
     "image": "https://logos.composio.dev/api/facebook",
@@ -2560,6 +2581,13 @@ export const allApps: APP[] = [
     "description": "Institutional financial research platforms, fixed income securities data, corporate earnings calendars, and portfolio performance analysis.",
     "image": "https://logos.composio.dev/api/factset",
     "app_name": "factset",
+    "isAvailable": true
+  },
+  {
+    "title": "Fastly",
+    "description": "Real-time edge cloud platform, CDN cache services, image optimization, and edge compute spoke.",
+    "image": "https://logos.composio.dev/api/fastly",
+    "app_name": "fastly",
     "isAvailable": true
   },
   {
@@ -2700,6 +2728,13 @@ export const allApps: APP[] = [
     "description": "Intelligent cloud contact center, outbound predictive dialing campaigns, agent real-time statuses, and campaign routing management.",
     "image": "https://logos.composio.dev/api/five9",
     "app_name": "five9",
+    "isAvailable": true
+  },
+  {
+    "title": "Fivetran",
+    "description": "Fivetran premium data ingestion, automated ELT pipeline orchestration, and cloud warehouse synchronizations.",
+    "image": "https://logos.composio.dev/api/fivetran",
+    "app_name": "fivetran",
     "isAvailable": true
   },
   {
@@ -3235,6 +3270,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Grafana",
+    "description": "Open observability platform, metrics visual dashboard telemetry, and enterprise alert analytics.",
+    "image": "https://logos.composio.dev/api/grafana",
+    "app_name": "grafana",
+    "isAvailable": true
+  },
+  {
     "title": "Grafbase",
     "description": "",
     "image": "https://logos.composio.dev/api/grafbase",
@@ -3305,6 +3347,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Gusto",
+    "description": "Enterprise Gusto payroll automation core, employee dynamic tax calculations, and payroll run spokes.",
+    "image": "https://logos.composio.dev/api/gusto",
+    "app_name": "gusto",
+    "isAvailable": true
+  },
+  {
     "title": "Habitica",
     "description": "",
     "image": "https://logos.composio.dev/api/habitica",
@@ -3358,6 +3407,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/hashnode",
     "app_name": "hashnode",
+    "isAvailable": true
+  },
+  {
+    "title": "Heap",
+    "description": "Heap premium product analytics, autocapture customer session logs, and event definition analysis.",
+    "image": "https://logos.composio.dev/api/heap",
+    "app_name": "heap",
     "isAvailable": true
   },
   {
@@ -3634,6 +3690,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Imperva",
+    "description": "Enterprise cybersecurity protection, web application firewall (WAF) gateway, and DDoS mitigation.",
+    "image": "https://logos.composio.dev/api/imperva",
+    "app_name": "imperva",
+    "isAvailable": true
+  },
+  {
+    "title": "Incapsula",
+    "description": "Cloud-based WAF network, global CDN caching, and enterprise DDoS shield protection.",
+    "image": "https://logos.composio.dev/api/incapsula",
+    "app_name": "incapsula",
+    "isAvailable": true
+  },
+  {
     "title": "Influxdb Cloud",
     "description": "",
     "image": "https://logos.composio.dev/api/influxdb_cloud",
@@ -3771,6 +3841,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/jane_app",
     "app_name": "jane_app",
+    "isAvailable": true
+  },
+  {
+    "title": "JazzHR",
+    "description": "JazzHR premium talent acquisition recruiter, custom candidate pipeline tracking, and recruitment scoring spoke.",
+    "image": "https://logos.composio.dev/api/jazzhr",
+    "app_name": "jazzhr",
     "isAvailable": true
   },
   {
@@ -4159,6 +4236,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Loggly",
+    "description": "Cloud-based log management, enterprise syslog aggregation, and SIEM dashboard analytics.",
+    "image": "https://logos.composio.dev/api/loggly",
+    "app_name": "loggly",
+    "isAvailable": true
+  },
+  {
     "title": "Logo Dev",
     "description": "",
     "image": "https://logos.composio.dev/api/logo_dev",
@@ -4454,7 +4538,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Mixpanel",
-    "description": "",
+    "description": "Mixpanel premium funnel analytics, user cohorts query segmentations, and product engagement reports.",
     "image": "https://logos.composio.dev/api/mixpanel",
     "app_name": "mixpanel",
     "isAvailable": true
@@ -4727,7 +4811,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "New Relic",
-    "description": "",
+    "description": "Enterprise APM cloud platform, full-stack application performance observability, and synthetic monitoring.",
     "image": "https://logos.composio.dev/api/new_relic",
     "app_name": "new_relic",
     "isAvailable": true
@@ -5735,7 +5819,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Rippling",
-    "description": "",
+    "description": "Rippling workforce capital management, employee profile directories, and secure payroll onboarding.",
     "image": "https://logos.composio.dev/api/rippling",
     "app_name": "rippling",
     "isAvailable": true
@@ -6085,7 +6169,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Sentry",
-    "description": "",
+    "description": "Application monitoring platform, real-time error exception tracer, and performance diagnostics.",
     "image": "https://logos.composio.dev/api/sentry",
     "app_name": "sentry",
     "isAvailable": true
@@ -7352,7 +7436,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Workable",
-    "description": "",
+    "description": "Workable premium applicant tracking recruitment core, candidate evaluation ratings, and hiring archiver.",
     "image": "https://logos.composio.dev/api/workable",
     "app_name": "workable",
     "isAvailable": true
@@ -7460,6 +7544,13 @@ export const allApps: APP[] = [
     "description": "Enterprise helpdesk customer support ticketing workflows, helpdesk conversations, and priority ticket escalations.",
     "image": "https://logos.composio.dev/api/zendesk",
     "app_name": "zendesk",
+    "isAvailable": true
+  },
+  {
+    "title": "Zenefits",
+    "description": "Zenefits enterprise benefits portal, automated healthcare tier coverage, and dynamic premiums administration spoke.",
+    "image": "https://logos.composio.dev/api/zenefits",
+    "app_name": "zenefits",
     "isAvailable": true
   },
   {

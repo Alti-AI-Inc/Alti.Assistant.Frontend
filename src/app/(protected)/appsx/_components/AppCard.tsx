@@ -265,7 +265,35 @@ const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bg
   airtable: { category: 'Modern Workspace', color: 'border-rose-500/40 text-rose-600 dark:text-rose-450 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'Data Spoke', hoverBorder: 'border-rose-500/60' },
   miro: { category: 'Modern Workspace', color: 'border-rose-500/40 text-rose-600 dark:text-rose-450 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'Whiteboard', hoverBorder: 'border-rose-500/60' },
   wrike: { category: 'Modern Workspace', color: 'border-rose-500/40 text-rose-600 dark:text-rose-450 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'Agile PM', hoverBorder: 'border-rose-500/60' },
-  loomio: { category: 'Modern Workspace', color: 'border-rose-500/40 text-rose-600 dark:text-rose-450 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'Decisions', hoverBorder: 'border-rose-500/60' }
+  loomio: { category: 'Modern Workspace', color: 'border-rose-500/40 text-rose-600 dark:text-rose-450 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'Decisions', hoverBorder: 'border-rose-500/60' },
+
+  // Phase 37: APM Telemetry & Service Mesh Spoke (Fuchsia Glow)
+  grafana: { category: 'APM Telemetry & Service Mesh', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'Metrics Desk', hoverBorder: 'border-fuchsia-500/60' },
+  new_relic: { category: 'APM Telemetry & Service Mesh', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'APM Cloud', hoverBorder: 'border-fuchsia-500/60' },
+  elasticsearch: { category: 'APM Telemetry & Service Mesh', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'Log Search', hoverBorder: 'border-fuchsia-500/60' },
+  sentry: { category: 'APM Telemetry & Service Mesh', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'Error Tracer', hoverBorder: 'border-fuchsia-500/60' },
+  loggly: { category: 'APM Telemetry & Service Mesh', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'SIEM Log', hoverBorder: 'border-fuchsia-500/60' },
+
+  // Phase 38: Content Delivery CDN & Secure WAF Edge (Red Glow)
+  akamai: { category: 'Content Delivery & Secure Edge WAF', color: 'border-red-500/40 text-red-600 dark:text-red-400 bg-red-50/50 dark:bg-red-950/20', bgGlow: 'shadow-[0_0_15px_rgba(239,68,68,0.15)]', badge: 'CDN Cache', hoverBorder: 'border-red-500/60' },
+  fastly: { category: 'Content Delivery & Secure Edge WAF', color: 'border-red-500/40 text-red-600 dark:text-red-400 bg-red-50/50 dark:bg-red-950/20', bgGlow: 'shadow-[0_0_15px_rgba(239,68,68,0.15)]', badge: 'Edge Spoke', hoverBorder: 'border-red-500/60' },
+  imperva: { category: 'Content Delivery & Secure Edge WAF', color: 'border-red-500/40 text-red-600 dark:text-red-400 bg-red-50/50 dark:bg-red-950/20', bgGlow: 'shadow-[0_0_15px_rgba(239,68,68,0.15)]', badge: 'WAF Gateway', hoverBorder: 'border-red-500/60' },
+  f5_big_ip: { category: 'Content Delivery & Secure Edge WAF', color: 'border-red-500/40 text-red-600 dark:text-red-400 bg-red-50/50 dark:bg-red-950/20', bgGlow: 'shadow-[0_0_15px_rgba(239,68,68,0.15)]', badge: 'Load Balancer', hoverBorder: 'border-red-500/60' },
+  incapsula: { category: 'Content Delivery & Secure Edge WAF', color: 'border-red-500/40 text-red-650 dark:text-red-400 bg-red-50/50 dark:bg-red-950/20', bgGlow: 'shadow-[0_0_15px_rgba(239,68,68,0.15)]', badge: 'DDoS Shield', hoverBorder: 'border-red-500/60' },
+
+  // Phase 39: Enterprise Customer Data Platforms & Analytics (Indigo Glow)
+  amplitude: { category: 'Customer Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'Product Analytics', hoverBorder: 'border-indigo-500/60' },
+  mixpanel: { category: 'Customer Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'Funnel Analytics', hoverBorder: 'border-indigo-500/60' },
+  heap: { category: 'Customer Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'Auto Capture', hoverBorder: 'border-indigo-500/60' },
+  fivetran: { category: 'Customer Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'Data Ingestion', hoverBorder: 'border-indigo-500/60' },
+  airbyte: { category: 'Customer Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'ELT Pipeline', hoverBorder: 'border-indigo-500/60' },
+
+  // Phase 40: Enterprise HRIS & Modern Payroll Spoke (Emerald Glow)
+  rippling: { category: 'HRIS & Enterprise Payroll', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Workforce Platform', hoverBorder: 'border-emerald-500/60' },
+  gusto: { category: 'HRIS & Enterprise Payroll', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Payroll Core', hoverBorder: 'border-emerald-500/60' },
+  zenefits: { category: 'HRIS & Enterprise Payroll', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Benefits Portal', hoverBorder: 'border-emerald-500/60' },
+  workable: { category: 'HRIS & Enterprise Payroll', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'ATS Recruiter', hoverBorder: 'border-emerald-500/60' },
+  jazzhr: { category: 'HRIS & Enterprise Payroll', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Talent Sourcing', hoverBorder: 'border-emerald-500/60' }
 };
 
 const AppCard = ({
