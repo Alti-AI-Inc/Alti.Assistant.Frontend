@@ -575,6 +575,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Autodesk BIM 360",
+    "description": "Integrate Autodesk BIM 360 to seamlessly execute automated workflows, synchronize sheets, coordinate grid models, and manage construction RFIs directly within Alti.",
+    "image": "https://logos.composio.dev/api/autodesk",
+    "app_name": "autodesk",
+    "isAvailable": true
+  },
+  {
     "title": "Autom",
     "description": "",
     "image": "https://logos.composio.dev/api/autom",
@@ -5038,6 +5045,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/re_amaze",
     "app_name": "re_amaze",
+    "isAvailable": true
+  },
+  {
+    "title": "RealPage",
+    "description": "Integrate RealPage to optimize multifamily rent analytics, vacancy availability checkups, and verify leasing compliance lists directly within Alti.",
+    "image": "https://logos.composio.dev/api/realpage",
+    "app_name": "realpage",
     "isAvailable": true
   },
   {
