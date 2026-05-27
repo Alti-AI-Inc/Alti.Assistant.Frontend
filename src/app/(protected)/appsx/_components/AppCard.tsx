@@ -46,7 +46,16 @@ const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bg
   coupa: { category: 'Procurement & Logistics', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Spend Mgmt' },
   ariba: { category: 'Procurement & Logistics', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Sourcing ERP' },
   flexport: { category: 'Procurement & Logistics', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Freight IoT' },
-  samsara: { category: 'Procurement & Logistics', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Fleet IoT' }
+  samsara: { category: 'Procurement & Logistics', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Fleet IoT' },
+
+  // Workforce Capital
+  adp: { category: 'Workforce Capital', color: 'border-violet-500/40 text-violet-650 dark:text-violet-400 bg-violet-50/50 dark:bg-violet-950/20', bgGlow: 'shadow-[0_0_15px_rgba(139,92,246,0.15)]', badge: 'Payroll ERP' },
+  deel: { category: 'Workforce Capital', color: 'border-violet-500/40 text-violet-650 dark:text-violet-400 bg-violet-50/50 dark:bg-violet-950/20', bgGlow: 'shadow-[0_0_15px_rgba(139,92,246,0.15)]', badge: 'Global HCM' },
+  workday: { category: 'Workforce Capital', color: 'border-violet-500/40 text-violet-650 dark:text-violet-400 bg-violet-50/50 dark:bg-violet-950/20', bgGlow: 'shadow-[0_0_15px_rgba(139,92,246,0.15)]', badge: 'Workforce HCM' },
+
+  // Enterprise ERP
+  netsuite: { category: 'Enterprise ERP', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Cloud ERP' },
+  sap: { category: 'Enterprise ERP', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'ERP Ledger' }
 };
 
 const AppCard = ({
@@ -120,8 +129,8 @@ const AppCard = ({
           <div className={cn(
             "absolute inset-0 border-[1.5px] rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300",
             slug.includes('yardi') || slug.includes('autodesk') || slug.includes('realpage') || slug.includes('costar') || slug.includes('argus') ? 'border-amber-500/60' :
-            slug.includes('addepar') || slug.includes('carta') || slug.includes('fiserv') || slug.includes('factset') || slug.includes('bloomberg') ? 'border-emerald-500/60' :
-            slug.includes('harvey') || slug.includes('ironclad') || slug.includes('relativity') || slug.includes('onetrust') || slug.includes('lexisnexis') ? 'border-violet-500/60' :
+            slug.includes('addepar') || slug.includes('carta') || slug.includes('fiserv') || slug.includes('factset') || slug.includes('bloomberg') || slug.includes('sap') || slug.includes('netsuite') ? 'border-emerald-500/60' :
+            slug.includes('harvey') || slug.includes('ironclad') || slug.includes('relativity') || slug.includes('onetrust') || slug.includes('lexisnexis') || slug.includes('workday') || slug.includes('adp') || slug.includes('deel') ? 'border-violet-500/60' :
             slug.includes('veevavault') || slug.includes('epic') || slug.includes('athenahealth') || slug.includes('elationhealth') || slug.includes('iqvia') || slug.includes('changehealthcare') ? 'border-rose-500/60' :
             'border-cyan-500/60'
           )} />

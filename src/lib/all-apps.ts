@@ -99,6 +99,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "ADP",
+    "description": "Enterprise payroll compliance, workforce tax management, health benefits administration, and labor logging.",
+    "image": "https://logos.composio.dev/api/adp",
+    "app_name": "adp",
+    "isAvailable": true
+  },
+  {
     "title": "Adrapid",
     "description": "",
     "image": "https://logos.composio.dev/api/adrapid",
@@ -1815,7 +1822,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Deel",
-    "description": "",
+    "description": "Global workforce compliance, international contractor onboarding, automated invoicing, and multi-currency payroll routing.",
     "image": "https://logos.composio.dev/api/deel",
     "app_name": "deel",
     "isAvailable": true
@@ -4327,8 +4334,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Netsuite",
-    "description": "",
+    "title": "NetSuite",
+    "description": "Enterprise cloud ERP resource planning, corporate general ledgers, purchase order requisitions, and inventory stock tallies.",
     "image": "https://logos.composio.dev/api/netsuite",
     "app_name": "netsuite",
     "isAvailable": true
@@ -5423,6 +5430,13 @@ export const allApps: APP[] = [
     "description": "Industrial Fleet IoT tracking, real-time vehicle GPS locations, driver ELD logs, and dispatcher routing updates.",
     "image": "https://logos.composio.dev/api/samsara",
     "app_name": "samsara",
+    "isAvailable": true
+  },
+  {
+    "title": "SAP S/4HANA",
+    "description": "Enterprise cloud ERP resource planning, corporate general ledgers, financial period postings, and asset management.",
+    "image": "https://logos.composio.dev/api/sap",
+    "app_name": "sap",
     "isAvailable": true
   },
   {
@@ -6743,7 +6757,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Workday",
-    "description": "",
+    "description": "Enterprise human capital management, employee profiles, directory details, and organizational reporting status.",
     "image": "https://logos.composio.dev/api/workday",
     "app_name": "workday",
     "isAvailable": true
