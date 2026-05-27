@@ -1282,6 +1282,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Change Healthcare",
+    "description": "Enterprise medical claims processing, clearinghouse solutions, insurance eligibility validation, and clinical adjudication APIs.",
+    "image": "https://logos.composio.dev/api/changehealthcare",
+    "app_name": "changehealthcare",
+    "isAvailable": true
+  },
+  {
     "title": "Chargebee",
     "description": "",
     "image": "https://logos.composio.dev/api/chargebee",
@@ -2150,6 +2157,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Elation Health",
+    "description": "Clinical EHR for primary care practices, managing patient charts, physician notes, and prescription networks.",
+    "image": "https://logos.composio.dev/api/elationhealth",
+    "app_name": "elationhealth",
+    "isAvailable": true
+  },
+  {
     "title": "Elorus",
     "description": "",
     "image": "https://logos.composio.dev/api/elorus",
@@ -2252,6 +2266,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/epic_systems",
     "app_name": "epic_systems",
+    "isAvailable": true
+  },
+  {
+    "title": "Epic Systems FHIR",
+    "description": "Enterprise EHR clinical systems, patient health summaries, physician notes, and FHIR standard health records.",
+    "image": "https://logos.composio.dev/api/epic",
+    "app_name": "epic",
     "isAvailable": true
   },
   {
@@ -3477,6 +3498,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/iqair_airvisual",
     "app_name": "iqair_airvisual",
+    "isAvailable": true
+  },
+  {
+    "title": "IQVIA",
+    "description": "Life sciences market intelligence, global patient volumes, drug development stats, and therapeutic area analytics.",
+    "image": "https://logos.composio.dev/api/iqvia",
+    "app_name": "iqvia",
     "isAvailable": true
   },
   {
@@ -6487,6 +6515,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/veeva_vault",
     "app_name": "veeva_vault",
+    "isAvailable": true
+  },
+  {
+    "title": "Veeva Vault QMS",
+    "description": "FDA regulated clinical trials, QMS document lifecycle, and pharmaceutical submission workflows.",
+    "image": "https://logos.composio.dev/api/veevavault",
+    "app_name": "veevavault",
     "isAvailable": true
   },
   {
