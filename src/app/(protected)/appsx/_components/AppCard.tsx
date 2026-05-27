@@ -69,7 +69,14 @@ const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bg
   pagerduty: { category: 'DevOps & SecOps', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'Incident Ops' },
   hashicorp_vault: { category: 'DevOps & SecOps', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'Secrets Mgmt' },
   splunk: { category: 'DevOps & SecOps', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'SIEM Logs' },
-  dynatrace: { category: 'DevOps & SecOps', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'Observability' }
+  dynatrace: { category: 'DevOps & SecOps', color: 'border-fuchsia-500/40 text-fuchsia-600 dark:text-fuchsia-400 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'Observability' },
+
+  // Data & Analytics
+  databricks: { category: 'Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'Lakehouse ML' },
+  tableau: { category: 'Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'Visual Analytics' },
+  powerbi: { category: 'Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'BI Dashboard' },
+  googlebigquery: { category: 'Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'Data Warehouse' },
+  looker: { category: 'Data & Analytics', color: 'border-indigo-500/40 text-indigo-650 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'Semantic Model' }
 };
 
 const AppCard = ({
@@ -148,6 +155,7 @@ const AppCard = ({
             slug.includes('veevavault') || slug.includes('epic') || slug.includes('athenahealth') || slug.includes('elationhealth') || slug.includes('iqvia') || slug.includes('changehealthcare') ? 'border-rose-500/60' :
             slug.includes('salesforce') || slug.includes('servicenow') || slug.includes('snowflake') || slug.includes('hubspot') || slug.includes('zendesk') ? 'border-blue-500/60' :
             slug.includes('datadog') || slug.includes('pagerduty') || slug.includes('hashicorp_vault') || slug.includes('splunk') || slug.includes('dynatrace') ? 'border-fuchsia-500/60' :
+            slug.includes('databricks') || slug.includes('tableau') || slug.includes('powerbi') || slug.includes('googlebigquery') || slug.includes('looker') ? 'border-indigo-500/60' :
             'border-cyan-500/60'
           )} />
         )}

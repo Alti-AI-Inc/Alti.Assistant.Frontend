@@ -1786,8 +1786,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Databricks",
-    "description": "",
+    "title": "Databricks Intelligence",
+    "description": "Unified big data lakehouse cluster management, structured Spark SQL analytical models, and MLflow pipeline tracking.",
     "image": "https://logos.composio.dev/api/databricks",
     "app_name": "databricks",
     "isAvailable": true
@@ -2956,7 +2956,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Google BigQuery",
-    "description": "",
+    "description": "Massively parallel cloud data warehouse query optimizer, terabyte-scale SQL analytical databases, and schema catalogs.",
     "image": "https://logos.composio.dev/api/googlebigquery",
     "app_name": "googlebigquery",
     "isAvailable": true
@@ -3890,6 +3890,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/logo_dev",
     "app_name": "logo_dev",
+    "isAvailable": true
+  },
+  {
+    "title": "Looker Semantic BI",
+    "description": "Semantic layer model compiler, LookML business metric definitions explorer, and structured database analytics dashboards.",
+    "image": "https://logos.composio.dev/api/looker",
+    "app_name": "looker",
     "isAvailable": true
   },
   {
@@ -4926,6 +4933,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/postmark",
     "app_name": "postmark",
+    "isAvailable": true
+  },
+  {
+    "title": "Power BI Dashboards",
+    "description": "Enterprise relational database charts builder, Microsoft business intelligence visual analytics, and cache refresh schedules.",
+    "image": "https://logos.composio.dev/api/powerbi",
+    "app_name": "powerbi",
     "isAvailable": true
   },
   {
@@ -6105,8 +6119,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Tableau",
-    "description": "",
+    "title": "Tableau Visual Analytics",
+    "description": "Corporate data analytics visualizer, workbook charts publisher, and interactive metrics dashboard panels.",
     "image": "https://logos.composio.dev/api/tableau",
     "app_name": "tableau",
     "isAvailable": true
