@@ -520,7 +520,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Asana",
-    "description": "",
+    "description": "Strategic workforce task execution, task deadline tracking, project workspace pipelines, and project cleanup workflows.",
     "image": "https://logos.composio.dev/api/asana",
     "app_name": "asana",
     "isAvailable": true
@@ -617,6 +617,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "AWS S3",
+    "description": "Amazon Web Services S3 secure cloud storage, folder bucket access rules, bucket storage telemetry, and bucket removals.",
+    "image": "https://logos.composio.dev/api/aws_s3",
+    "app_name": "aws_s3",
+    "isAvailable": true
+  },
+  {
     "title": "Axonaut",
     "description": "",
     "image": "https://logos.composio.dev/api/axonaut",
@@ -628,6 +635,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/ayrshare",
     "app_name": "ayrshare",
+    "isAvailable": true
+  },
+  {
+    "title": "Azure Blob Storage",
+    "description": "Microsoft Azure blob storage containers, static file assets telemetry, storage account security rules, and container removals.",
+    "image": "https://logos.composio.dev/api/azure_blob",
+    "app_name": "azure_blob",
     "isAvailable": true
   },
   {
@@ -807,7 +821,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Bitbucket",
-    "description": "",
+    "description": "Atlassian Bitbucket secure Git staging, pull request branch controls, build history logs, and repo cleanup workflows.",
     "image": "https://logos.composio.dev/api/bitbucket",
     "app_name": "bitbucket",
     "isAvailable": true
@@ -1380,8 +1394,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Circleci",
-    "description": "",
+    "title": "CircleCI",
+    "description": "Cloud CI/CD build environments, automation pipeline triggers, test execution telemetry, and pipeline runtime controls.",
     "image": "https://logos.composio.dev/api/circleci",
     "app_name": "circleci",
     "isAvailable": true
@@ -1423,7 +1437,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "ClickUp",
-    "description": "",
+    "description": "All-in-one productivity custom lists, sprint planning boards, team assignment schedules, and task space cleanups.",
     "image": "https://logos.composio.dev/api/clickup",
     "app_name": "clickup",
     "isAvailable": true
@@ -1552,6 +1566,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/codereadr",
     "app_name": "codereadr",
+    "isAvailable": true
+  },
+  {
+    "title": "Cohere",
+    "description": "Cohere enterprise LLM deployment, custom text embedding models, and hosted model deployment orchestration.",
+    "image": "https://logos.composio.dev/api/cohere",
+    "app_name": "cohere",
     "isAvailable": true
   },
   {
@@ -2158,7 +2179,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Dropbox",
-    "description": "",
+    "description": "Dropbox cloud file distribution, file access shareable links, version history logs, and folder cleanup operations.",
     "image": "https://logos.composio.dev/api/dropbox",
     "app_name": "dropbox",
     "isAvailable": true
@@ -2196,6 +2217,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/dynamics365",
     "app_name": "dynamics365",
+    "isAvailable": true
+  },
+  {
+    "title": "AWS DynamoDB",
+    "description": "AWS DynamoDB distributed key-value databases, partition key indexing, table read/write metrics, and table drop operations.",
+    "image": "https://logos.composio.dev/api/dynamodb",
+    "app_name": "dynamodb",
     "isAvailable": true
   },
   {
@@ -2500,6 +2528,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Facebook Ads",
+    "description": "Meta advertising campaigns, audience demographics conversion metrics, and visual ad set budget adjustments.",
+    "image": "https://logos.composio.dev/api/facebook_ads",
+    "app_name": "facebook_ads",
+    "isAvailable": true
+  },
+  {
     "title": "Faceup",
     "description": "",
     "image": "https://logos.composio.dev/api/faceup",
@@ -2788,7 +2823,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Freshdesk",
-    "description": "",
+    "description": "Multi-channel customer service tickets, helpdesk conversation summaries, and service level agreement compliance.",
     "image": "https://logos.composio.dev/api/freshdesk",
     "app_name": "freshdesk",
     "isAvailable": true
@@ -2949,14 +2984,14 @@ export const allApps: APP[] = [
   },
   {
     "title": "GitHub",
-    "description": "",
+    "description": "GitHub version control repositories, pull requests review cycles, CI/CD actions telemetry, and repository lifecycle management.",
     "image": "https://logos.composio.dev/api/github",
     "app_name": "github",
     "isAvailable": true
   },
   {
     "title": "GitLab",
-    "description": "",
+    "description": "GitLab continuous integration pipelines, private Git projects orchestration, security scanning jobs, and repository management.",
     "image": "https://logos.composio.dev/api/gitlab",
     "app_name": "gitlab",
     "isAvailable": true
@@ -2991,7 +3026,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Gmail",
-    "description": "",
+    "description": "Enterprise email synchronization, inbox message history retrieval, corporate email communications, and secure email sending.",
     "image": "https://logos.composio.dev/api/gmail",
     "app_name": "gmail",
     "isAvailable": true
@@ -3046,6 +3081,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Google Ads",
+    "description": "Google Ads advertising campaigns, search query analytics, click-through rates tracking, and ad spend budget adjustments.",
+    "image": "https://logos.composio.dev/api/google_ads",
+    "app_name": "google_ads",
+    "isAvailable": true
+  },
+  {
     "title": "Google Analytics",
     "description": "",
     "image": "https://logos.composio.dev/api/google_analytics",
@@ -3067,6 +3109,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Google Drive",
+    "description": "Google Drive cloud document folders, shared drives file hierarchy, doc permissions, and file cleanup operations.",
+    "image": "https://logos.composio.dev/api/google_drive",
+    "app_name": "google_drive",
+    "isAvailable": true
+  },
+  {
     "title": "Google Maps",
     "description": "",
     "image": "https://logos.composio.dev/api/google_maps",
@@ -3078,6 +3127,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/google_search_console",
     "app_name": "google_search_console",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Cloud Storage",
+    "description": "Google Cloud Storage buckets telemetry, raw assets distribution, object lifecycle policies, and bucket removals.",
+    "image": "https://logos.composio.dev/api/google_storage",
+    "app_name": "google_storage",
     "isAvailable": true
   },
   {
@@ -3424,6 +3480,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "HubSpot Feedback",
+    "description": "HubSpot CRM customer feedback submissions, contact lifecycle satisfaction surveys, and feedback registry cleanups.",
+    "image": "https://logos.composio.dev/api/hubspot_feedback",
+    "app_name": "hubspot_feedback",
+    "isAvailable": true
+  },
+  {
     "title": "Hugging Face Hub",
     "description": "Enterprise machine learning model repository, neural network tokenizer configs, and cloud inference endpoints.",
     "image": "https://logos.composio.dev/api/huggingface",
@@ -3704,6 +3767,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Jenkins",
+    "description": "Advanced build automation orchestrator, local build agent servers, scheduled deployment jobs, and target deployment launches.",
+    "image": "https://logos.composio.dev/api/jenkins",
+    "app_name": "jenkins",
+    "isAvailable": true
+  },
+  {
     "title": "Jigsawstack",
     "description": "",
     "image": "https://logos.composio.dev/api/jigsawstack",
@@ -3711,8 +3781,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Jira",
-    "description": "",
+    "title": "Jira Software",
+    "description": "Atlassian Jira agile project boards, backlog issue tracking, sprint velocity graphs, and project lifecycle governance.",
     "image": "https://logos.composio.dev/api/jira",
     "app_name": "jira",
     "isAvailable": true
@@ -3886,6 +3956,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "LangChain Hub",
+    "description": "LangChain Hub system prompt templates, versioned model prompts registry, and prompt cleanup operations.",
+    "image": "https://logos.composio.dev/api/langchain_hub",
+    "app_name": "langchain_hub",
+    "isAvailable": true
+  },
+  {
+    "title": "LangSmith",
+    "description": "LangChain LangSmith LLM trace analysis, model evaluation datasets, prompt latency logs, and project cleanups.",
+    "image": "https://logos.composio.dev/api/langsmith",
+    "app_name": "langsmith",
+    "isAvailable": true
+  },
+  {
     "title": "Lastpass",
     "description": "",
     "image": "https://logos.composio.dev/api/lastpass",
@@ -4012,6 +4096,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "LinkedIn Ads",
+    "description": "B2B enterprise advertising campaigns, targeted ABM campaigns tracking, and ad campaign budget adjustments.",
+    "image": "https://logos.composio.dev/api/linkedin_ads",
+    "app_name": "linkedin_ads",
+    "isAvailable": true
+  },
+  {
     "title": "LinkHut",
     "description": "",
     "image": "https://logos.composio.dev/api/linkhut",
@@ -4132,7 +4223,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Mailchimp",
-    "description": "",
+    "description": "Email marketing audience lists, newsletter delivery analytics, and subscriber broadcast dispatches.",
     "image": "https://logos.composio.dev/api/mailchimp",
     "app_name": "mailchimp",
     "isAvailable": true
@@ -4362,6 +4453,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "MLflow",
+    "description": "MLflow model training experiments, model registry metadata, hyperparameter logging, and training run cleanups.",
+    "image": "https://logos.composio.dev/api/mlflow",
+    "app_name": "mlflow",
+    "isAvailable": true
+  },
+  {
     "title": "Mocean",
     "description": "",
     "image": "https://logos.composio.dev/api/mocean",
@@ -4383,8 +4481,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Monday",
-    "description": "",
+    "title": "Monday.com",
+    "description": "Monday.com custom team boards, real-time project schedules, workplace resource tracking, and board purges.",
     "image": "https://logos.composio.dev/api/monday",
     "app_name": "monday",
     "isAvailable": true
@@ -4394,6 +4492,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/moneybird",
     "app_name": "moneybird",
+    "isAvailable": true
+  },
+  {
+    "title": "MongoDB Atlas",
+    "description": "MongoDB Atlas document databases, collection indexing statistics, session tracking, and high-performance collection pruning.",
+    "image": "https://logos.composio.dev/api/mongodb",
+    "app_name": "mongodb",
     "isAvailable": true
   },
   {
@@ -4460,6 +4565,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Microsoft Teams",
+    "description": "Microsoft Teams chat channel directories, collaborative space feeds, real-time message posting, and channel management.",
+    "image": "https://logos.composio.dev/api/msteams",
+    "app_name": "msteams",
+    "isAvailable": true
+  },
+  {
     "title": "Mural",
     "description": "",
     "image": "https://logos.composio.dev/api/mural",
@@ -4478,6 +4590,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/mx_toolbox",
     "app_name": "mx_toolbox",
+    "isAvailable": true
+  },
+  {
+    "title": "MySQL",
+    "description": "Transactional MySQL relational database structures, table schemas metadata, slow query logs, and secure database updates.",
+    "image": "https://logos.composio.dev/api/mysql",
+    "app_name": "mysql",
     "isAvailable": true
   },
   {
@@ -4825,7 +4944,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Outlook",
-    "description": "",
+    "description": "Microsoft Outlook exchange server logs, business calendars, message search, and scheduled email dispatches.",
     "image": "https://logos.composio.dev/api/outlook",
     "app_name": "outlook",
     "isAvailable": true
@@ -5146,6 +5265,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "PostgreSQL",
+    "description": "Relational PostgreSQL database schemas, operational query statistics, connection pooling telemetry, and query execution audits.",
+    "image": "https://logos.composio.dev/api/postgres",
+    "app_name": "postgres",
+    "isAvailable": true
+  },
+  {
     "title": "Postgrid",
     "description": "",
     "image": "https://logos.composio.dev/api/postgrid",
@@ -5426,6 +5552,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Redis Enterprise",
+    "description": "In-memory Redis database clusters, memory usage telemetry, active session key-value storage, and database flush operations.",
+    "image": "https://logos.composio.dev/api/redis",
+    "app_name": "redis",
+    "isAvailable": true
+  },
+  {
     "title": "Refiner",
     "description": "",
     "image": "https://logos.composio.dev/api/refiner",
@@ -5483,7 +5616,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Replicate",
-    "description": "",
+    "description": "Replicate cloud AI model registry, hosted open-source image generation runs, and inference job cancellation.",
     "image": "https://logos.composio.dev/api/replicate",
     "app_name": "replicate",
     "isAvailable": true
@@ -5755,8 +5888,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Satismeter",
-    "description": "",
+    "title": "SatisMeter",
+    "description": "NPS customer satisfaction monitoring, customer feedback responses, and satisfaction campaign management.",
     "image": "https://logos.composio.dev/api/satismeter",
     "app_name": "satismeter",
     "isAvailable": true
@@ -6413,6 +6546,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "SurveyMonkey",
+    "description": "Corporate customer surveys design, feedback sentiment analysis, responses aggregation, and survey lifecycle management.",
+    "image": "https://logos.composio.dev/api/surveymonkey",
+    "app_name": "surveymonkey",
+    "isAvailable": true
+  },
+  {
     "title": "Svix",
     "description": "",
     "image": "https://logos.composio.dev/api/svix",
@@ -6757,7 +6897,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Trello",
-    "description": "",
+    "description": "Kanban card columns tracking, collaborative task status updates, checklist tracking, and board cleanup workflows.",
     "image": "https://logos.composio.dev/api/trello",
     "app_name": "trello",
     "isAvailable": true
@@ -6840,10 +6980,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Twitter/X",
+    "description": "Real-time Twitter/X feed analytics, public brand communication campaigns, and public announcement updates.",
+    "image": "https://logos.composio.dev/api/twitter_x",
+    "app_name": "twitter_x",
+    "isAvailable": true
+  },
+  {
     "title": "Twocaptcha",
     "description": "",
     "image": "https://logos.composio.dev/api/twocaptcha",
     "app_name": "twocaptcha",
+    "isAvailable": true
+  },
+  {
+    "title": "Typeform",
+    "description": "Conversational forms design, responsive user feedback intake, customer lead tracking, and form cleanup operations.",
+    "image": "https://logos.composio.dev/api/typeform",
+    "app_name": "typeform",
     "isAvailable": true
   },
   {
@@ -7050,8 +7204,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Webex",
-    "description": "",
+    "title": "Cisco Webex",
+    "description": "Cisco Webex collaborative meeting spaces, audio/video conferencing schedules, and scheduled workspace cleanups.",
     "image": "https://logos.composio.dev/api/webex",
     "app_name": "webex",
     "isAvailable": true
@@ -7345,7 +7499,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Zoom",
-    "description": "",
+    "description": "Global remote conferencing scheduling, virtual conference rooms creation, participant logs, and webinar orchestration.",
     "image": "https://logos.composio.dev/api/zoom",
     "app_name": "zoom",
     "isAvailable": true

@@ -167,7 +167,63 @@ const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bg
   persefoni: { category: 'ESG & Sustainability', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Emissions accounting', hoverBorder: 'border-emerald-500/60' },
   sweep: { category: 'ESG & Sustainability', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Decarbon Task', hoverBorder: 'border-emerald-500/60' },
   msci_esg: { category: 'ESG & Sustainability', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'ESG Ratings', hoverBorder: 'border-emerald-500/60' },
-  net_zero_cloud: { category: 'ESG & Sustainability', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Net Zero Cloud', hoverBorder: 'border-emerald-500/60' }
+  net_zero_cloud: { category: 'ESG & Sustainability', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'Net Zero Cloud', hoverBorder: 'border-emerald-500/60' },
+
+  // Phase 23: Business Communication & Email Core (Sky Glow)
+  gmail: { category: 'Business Comm', color: 'border-sky-500/40 text-sky-600 bg-sky-50/50 dark:bg-sky-950/20', bgGlow: 'shadow-[0_0_15px_rgba(14,165,233,0.15)]', badge: 'Gmail Core', hoverBorder: 'border-sky-500/60' },
+  outlook: { category: 'Business Comm', color: 'border-sky-500/40 text-sky-600 bg-sky-50/50 dark:bg-sky-950/20', bgGlow: 'shadow-[0_0_15px_rgba(14,165,233,0.15)]', badge: 'Outlook Core', hoverBorder: 'border-sky-500/60' },
+  zoom: { category: 'Business Comm', color: 'border-sky-500/40 text-sky-600 bg-sky-50/50 dark:bg-sky-950/20', bgGlow: 'shadow-[0_0_15px_rgba(14,165,233,0.15)]', badge: 'Zoom Core', hoverBorder: 'border-sky-500/60' },
+  webex: { category: 'Business Comm', color: 'border-sky-500/40 text-sky-600 bg-sky-50/50 dark:bg-sky-950/20', bgGlow: 'shadow-[0_0_15px_rgba(14,165,233,0.15)]', badge: 'Webex Core', hoverBorder: 'border-sky-500/60' },
+  msteams: { category: 'Business Comm', color: 'border-sky-500/40 text-sky-600 bg-sky-50/50 dark:bg-sky-950/20', bgGlow: 'shadow-[0_0_15px_rgba(14,165,233,0.15)]', badge: 'MS Teams', hoverBorder: 'border-sky-500/60' },
+
+  // Phase 24: Cloud Databases & Data Ingestion (Indigo Glow)
+  mongodb: { category: 'Cloud DB Core', color: 'border-indigo-500/40 text-indigo-650 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'MongoDB Atlas', hoverBorder: 'border-indigo-500/60' },
+  dynamodb: { category: 'Cloud DB Core', color: 'border-indigo-500/40 text-indigo-650 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'DynamoDB', hoverBorder: 'border-indigo-500/60' },
+  postgres: { category: 'Cloud DB Core', color: 'border-indigo-500/40 text-indigo-650 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'PostgreSQL', hoverBorder: 'border-indigo-500/60' },
+  mysql: { category: 'Cloud DB Core', color: 'border-indigo-500/40 text-indigo-650 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'MySQL Core', hoverBorder: 'border-indigo-500/60' },
+  redis: { category: 'Cloud DB Core', color: 'border-indigo-500/40 text-indigo-650 bg-indigo-50/50 dark:bg-indigo-950/20', bgGlow: 'shadow-[0_0_15px_rgba(99,102,241,0.15)]', badge: 'Redis Cache', hoverBorder: 'border-indigo-500/60' },
+
+  // Phase 25: Version Control & DevOps (Fuchsia Glow)
+  github: { category: 'DevOps Core', color: 'border-fuchsia-500/40 text-fuchsia-600 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'GitHub Core', hoverBorder: 'border-fuchsia-500/60' },
+  gitlab: { category: 'DevOps Core', color: 'border-fuchsia-500/40 text-fuchsia-600 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'GitLab CI', hoverBorder: 'border-fuchsia-500/60' },
+  bitbucket: { category: 'DevOps Core', color: 'border-fuchsia-500/40 text-fuchsia-600 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'Bitbucket', hoverBorder: 'border-fuchsia-500/60' },
+  circleci: { category: 'DevOps Core', color: 'border-fuchsia-500/40 text-fuchsia-600 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'CircleCI Build', hoverBorder: 'border-fuchsia-500/60' },
+  jenkins: { category: 'DevOps Core', color: 'border-fuchsia-500/40 text-fuchsia-600 bg-fuchsia-50/50 dark:bg-fuchsia-950/20', bgGlow: 'shadow-[0_0_15px_rgba(217,70,239,0.15)]', badge: 'Jenkins Deploy', hoverBorder: 'border-fuchsia-500/60' },
+
+  // Phase 26: Project Management & Agile (Rose Glow)
+  jira: { category: 'Agile Core', color: 'border-rose-500/40 text-rose-600 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'Jira Board', hoverBorder: 'border-rose-500/60' },
+  asana: { category: 'Agile Core', color: 'border-rose-500/40 text-rose-600 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'Asana Plan', hoverBorder: 'border-rose-500/60' },
+  monday: { category: 'Agile Core', color: 'border-rose-500/40 text-rose-600 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'Monday Board', hoverBorder: 'border-rose-500/60' },
+  trello: { category: 'Agile Core', color: 'border-rose-500/40 text-rose-600 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'Trello Card', hoverBorder: 'border-rose-500/60' },
+  clickup: { category: 'Agile Core', color: 'border-rose-500/40 text-rose-600 bg-rose-50/50 dark:bg-rose-950/20', bgGlow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', badge: 'ClickUp Sprints', hoverBorder: 'border-rose-500/60' },
+
+  // Phase 27: Marketing & Social Platforms (Amber Glow)
+  google_ads: { category: 'Marketing & Ads', color: 'border-amber-500/40 text-amber-600 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'Google Ads', hoverBorder: 'border-amber-500/60' },
+  facebook_ads: { category: 'Marketing & Ads', color: 'border-amber-500/40 text-amber-600 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'Meta Ads', hoverBorder: 'border-amber-500/60' },
+  linkedin_ads: { category: 'Marketing & Ads', color: 'border-amber-500/40 text-amber-600 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'LinkedIn Ads', hoverBorder: 'border-amber-500/60' },
+  twitter_x: { category: 'Marketing & Ads', color: 'border-amber-500/40 text-amber-600 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'Twitter/X', hoverBorder: 'border-amber-500/60' },
+  mailchimp: { category: 'Marketing & Ads', color: 'border-amber-500/40 text-amber-600 bg-amber-50/50 dark:bg-amber-950/20', bgGlow: 'shadow-[0_0_15px_rgba(245,158,11,0.15)]', badge: 'Mailchimp List', hoverBorder: 'border-amber-500/60' },
+
+  // Phase 28: Customer Feedback & Survey (Lime Glow)
+  surveymonkey: { category: 'Feedback Core', color: 'border-lime-500/40 text-lime-650 bg-lime-50/50 dark:bg-lime-950/20', bgGlow: 'shadow-[0_0_15px_rgba(132,204,22,0.15)]', badge: 'SurveyMonkey', hoverBorder: 'border-lime-500/60' },
+  typeform: { category: 'Feedback Core', color: 'border-lime-500/40 text-lime-650 bg-lime-50/50 dark:bg-lime-950/20', bgGlow: 'shadow-[0_0_15px_rgba(132,204,22,0.15)]', badge: 'Typeform Forms', hoverBorder: 'border-lime-500/60' },
+  satismeter: { category: 'Feedback Core', color: 'border-lime-500/40 text-lime-650 bg-lime-50/50 dark:bg-lime-950/20', bgGlow: 'shadow-[0_0_15px_rgba(132,204,22,0.15)]', badge: 'SatisMeter NPS', hoverBorder: 'border-lime-500/60' },
+  freshdesk: { category: 'Feedback Core', color: 'border-lime-500/40 text-lime-650 bg-lime-50/50 dark:bg-lime-950/20', bgGlow: 'shadow-[0_0_15px_rgba(132,204,22,0.15)]', badge: 'Freshdesk Help', hoverBorder: 'border-lime-500/60' },
+  hubspot_feedback: { category: 'Feedback Core', color: 'border-lime-500/40 text-lime-650 bg-lime-50/50 dark:bg-lime-950/20', bgGlow: 'shadow-[0_0_15px_rgba(132,204,22,0.15)]', badge: 'HubSpot NPS', hoverBorder: 'border-lime-500/60' },
+
+  // Phase 29: Cloud Infrastructure & Storage (Slate Glow)
+  aws_s3: { category: 'Cloud Storage', color: 'border-slate-500/40 text-slate-600 bg-slate-50/50 dark:bg-slate-950/20', bgGlow: 'shadow-[0_0_15px_rgba(100,116,139,0.15)]', badge: 'AWS S3 Bucket', hoverBorder: 'border-slate-500/60' },
+  google_storage: { category: 'Cloud Storage', color: 'border-slate-500/40 text-slate-600 bg-slate-50/50 dark:bg-slate-950/20', bgGlow: 'shadow-[0_0_15px_rgba(100,116,139,0.15)]', badge: 'Google Cloud GCS', hoverBorder: 'border-slate-500/60' },
+  azure_blob: { category: 'Cloud Storage', color: 'border-slate-500/40 text-slate-600 bg-slate-50/50 dark:bg-slate-950/20', bgGlow: 'shadow-[0_0_15px_rgba(100,116,139,0.15)]', badge: 'Azure Blob', hoverBorder: 'border-slate-500/60' },
+  dropbox: { category: 'Cloud Storage', color: 'border-slate-500/40 text-slate-600 bg-slate-50/50 dark:bg-slate-950/20', bgGlow: 'shadow-[0_0_15px_rgba(100,116,139,0.15)]', badge: 'Dropbox Folder', hoverBorder: 'border-slate-500/60' },
+  google_drive: { category: 'Cloud Storage', color: 'border-slate-500/40 text-slate-600 bg-slate-50/50 dark:bg-slate-950/20', bgGlow: 'shadow-[0_0_15px_rgba(100,116,139,0.15)]', badge: 'Google Drive', hoverBorder: 'border-slate-500/60' },
+
+  // Phase 30: AI Services & Model Registries (Cyan Glow)
+  replicate: { category: 'AI Registry', color: 'border-cyan-500/40 text-cyan-600 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Replicate AI', hoverBorder: 'border-cyan-500/60' },
+  langsmith: { category: 'AI Registry', color: 'border-cyan-500/40 text-cyan-600 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'LangSmith Trace', hoverBorder: 'border-cyan-500/60' },
+  mlflow: { category: 'AI Registry', color: 'border-cyan-500/40 text-cyan-600 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'MLflow Registry', hoverBorder: 'border-cyan-500/60' },
+  cohere: { category: 'AI Registry', color: 'border-cyan-500/40 text-cyan-600 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Cohere API', hoverBorder: 'border-cyan-500/60' },
+  langchain_hub: { category: 'AI Registry', color: 'border-cyan-500/40 text-cyan-600 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'LangChain Hub', hoverBorder: 'border-cyan-500/60' }
 };
 
 const AppCard = ({
