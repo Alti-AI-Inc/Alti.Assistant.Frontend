@@ -638,8 +638,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Bamboohr",
-    "description": "",
+    "title": "BambooHR",
+    "description": "Workforce directory records, holiday/PTO request processing, employee onboarding checklists, and staff access suspensions.",
     "image": "https://logos.composio.dev/api/bamboohr",
     "app_name": "bamboohr",
     "isAvailable": true
@@ -799,8 +799,8 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Bill",
-    "description": "",
+    "title": "Bill.com",
+    "description": "Accounts payable automated workflows, digital bill invoices processing, vendor payment scheduling, and ledger reconciliations.",
     "image": "https://logos.composio.dev/api/bill",
     "app_name": "bill",
     "isAvailable": true
@@ -859,6 +859,20 @@ export const allApps: APP[] = [
     "description": "Real-time institutional market terminal feeds, historical security pricing, macroeconomic tables, and professional trading logs.",
     "image": "https://logos.composio.dev/api/bloomberg",
     "app_name": "bloomberg",
+    "isAvailable": true
+  },
+  {
+    "title": "Bloomberg FX",
+    "description": "Global financial currency rates terminal, real-time spot FX market tracking, forwards portfolio risk, and rate locking workflows.",
+    "image": "https://logos.composio.dev/api/bloomberg_fx",
+    "app_name": "bloomberg_fx",
+    "isAvailable": true
+  },
+  {
+    "title": "Blue Yonder",
+    "description": "Supply chain demand forecasting, automated replenishment parameters, warehouse inventory controls, and stock planning optimization.",
+    "image": "https://logos.composio.dev/api/blue_yonder",
+    "app_name": "blue_yonder",
     "isAvailable": true
   },
   {
@@ -961,7 +975,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Box",
-    "description": "",
+    "description": "Secure cloud content management, custom file sharing permissions, enterprise metadata tracking, and secure document vaults.",
     "image": "https://logos.composio.dev/api/box",
     "app_name": "box",
     "isAvailable": true
@@ -1233,6 +1247,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "S&P Capital IQ",
+    "description": "",
+    "image": "https://logos.composio.dev/api/capitaliq",
+    "app_name": "capitaliq",
+    "isAvailable": true
+  },
+  {
     "title": "Capsule CRM",
     "description": "",
     "image": "https://logos.composio.dev/api/capsule_crm",
@@ -1464,6 +1485,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Cloudflare Enterprise",
+    "description": "Enterprise network edge protection, WAF firewall configuration rules, zero-trust network boundaries, and network zone blocking.",
+    "image": "https://logos.composio.dev/api/cloudflare_ent",
+    "app_name": "cloudflare_ent",
+    "isAvailable": true
+  },
+  {
     "title": "Cloudinary",
     "description": "",
     "image": "https://logos.composio.dev/api/cloudinary",
@@ -1590,8 +1618,15 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "SAP Concur",
+    "description": "Corporate travel bookings management, employee expense report ingestion, audit trails, and compliance-driven expense approvals.",
+    "image": "https://logos.composio.dev/api/concur",
+    "app_name": "concur",
+    "isAvailable": true
+  },
+  {
     "title": "Confluence",
-    "description": "",
+    "description": "Enterprise knowledge bases, product requirements documents, project spaces management, and collaborative space archiving.",
     "image": "https://logos.composio.dev/api/confluence",
     "app_name": "confluence",
     "isAvailable": true
@@ -1769,6 +1804,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/cutt_ly",
     "app_name": "cutt_ly",
+    "isAvailable": true
+  },
+  {
+    "title": "CyberArk Privilege",
+    "description": "Enterprise privileged access vault, high-stakes infrastructure key rotations, secure credential storage, and session auditing.",
+    "image": "https://logos.composio.dev/api/cyberark",
+    "app_name": "cyberark",
     "isAvailable": true
   },
   {
@@ -2185,17 +2227,17 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Elevenlabs",
-    "description": "",
-    "image": "https://logos.composio.dev/api/elevenlabs",
-    "app_name": "elevenlabs",
-    "isAvailable": true
-  },
-  {
     "title": "Elation Health",
     "description": "Clinical EHR for primary care practices, managing patient charts, physician notes, and prescription networks.",
     "image": "https://logos.composio.dev/api/elationhealth",
     "app_name": "elationhealth",
+    "isAvailable": true
+  },
+  {
+    "title": "Elevenlabs",
+    "description": "",
+    "image": "https://logos.composio.dev/api/elevenlabs",
+    "app_name": "elevenlabs",
     "isAvailable": true
   },
   {
@@ -2276,6 +2318,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Microsoft Entra ID",
+    "description": "Cloud identity directory, workforce group membership control, user privilege levels auditing, and rapid security account suspensions.",
+    "image": "https://logos.composio.dev/api/entra_id",
+    "app_name": "entra_id",
+    "isAvailable": true
+  },
+  {
     "title": "Entrata",
     "description": "",
     "image": "https://logos.composio.dev/api/entrata",
@@ -2290,6 +2339,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Epic Systems FHIR",
+    "description": "Enterprise EHR clinical systems, patient health summaries, physician notes, and FHIR standard health records.",
+    "image": "https://logos.composio.dev/api/epic",
+    "app_name": "epic",
+    "isAvailable": true
+  },
+  {
     "title": "Epic Games",
     "description": "",
     "image": "https://logos.composio.dev/api/epic_games",
@@ -2301,13 +2357,6 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/epic_systems",
     "app_name": "epic_systems",
-    "isAvailable": true
-  },
-  {
-    "title": "Epic Systems FHIR",
-    "description": "Enterprise EHR clinical systems, patient health summaries, physician notes, and FHIR standard health records.",
-    "image": "https://logos.composio.dev/api/epic",
-    "app_name": "epic",
     "isAvailable": true
   },
   {
@@ -2420,6 +2469,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/exist",
     "app_name": "exist",
+    "isAvailable": true
+  },
+  {
+    "title": "Expensify",
+    "description": "Automated receipt scanning, real-time corporate card integrations, reimbursement routing, and expense claim reports tracking.",
+    "image": "https://logos.composio.dev/api/expensify",
+    "app_name": "expensify",
     "isAvailable": true
   },
   {
@@ -2595,6 +2651,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/fitbit",
     "app_name": "fitbit",
+    "isAvailable": true
+  },
+  {
+    "title": "Five9",
+    "description": "Intelligent cloud contact center, outbound predictive dialing campaigns, agent real-time statuses, and campaign routing management.",
+    "image": "https://logos.composio.dev/api/five9",
+    "app_name": "five9",
     "isAvailable": true
   },
   {
@@ -2780,6 +2843,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Google Cloud Storage",
+    "description": "",
+    "image": "https://logos.composio.dev/api/gcs",
+    "app_name": "gcs",
+    "isAvailable": true
+  },
+  {
     "title": "Gemini",
     "description": "",
     "image": "https://logos.composio.dev/api/gemini",
@@ -2808,6 +2878,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Genesys Cloud CX",
+    "description": "Enterprise cloud contact center, customer call analytics, IVR interactive systems, and omni-channel routing rules adjustments.",
+    "image": "https://logos.composio.dev/api/genesys",
+    "app_name": "genesys",
+    "isAvailable": true
+  },
+  {
     "title": "Geoapify",
     "description": "",
     "image": "https://logos.composio.dev/api/geoapify",
@@ -2826,6 +2903,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/geokeo",
     "app_name": "geokeo",
+    "isAvailable": true
+  },
+  {
+    "title": "GEP SMART",
+    "description": "Unified source-to-pay procurement platform, contract repository management, and legal supplier agreement terminations.",
+    "image": "https://logos.composio.dev/api/gep_smart",
+    "app_name": "gep_smart",
     "isAvailable": true
   },
   {
@@ -2962,17 +3046,45 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Google Ads",
-    "description": "",
-    "image": "https://logos.composio.dev/api/googleads",
-    "app_name": "googleads",
-    "isAvailable": true
-  },
-  {
     "title": "Google Analytics",
     "description": "",
     "image": "https://logos.composio.dev/api/google_analytics",
     "app_name": "google_analytics",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Classroom",
+    "description": "",
+    "image": "https://logos.composio.dev/api/google_classroom",
+    "app_name": "google_classroom",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Cloud Vision",
+    "description": "",
+    "image": "https://logos.composio.dev/api/google_cloud_vision",
+    "app_name": "google_cloud_vision",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Maps",
+    "description": "",
+    "image": "https://logos.composio.dev/api/google_maps",
+    "app_name": "google_maps",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Search Console",
+    "description": "",
+    "image": "https://logos.composio.dev/api/google_search_console",
+    "app_name": "google_search_console",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Ads",
+    "description": "",
+    "image": "https://logos.composio.dev/api/googleads",
+    "app_name": "googleads",
     "isAvailable": true
   },
   {
@@ -2990,27 +3102,6 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Google Classroom",
-    "description": "",
-    "image": "https://logos.composio.dev/api/google_classroom",
-    "app_name": "google_classroom",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Cloud Storage",
-    "description": "",
-    "image": "https://logos.composio.dev/api/gcs",
-    "app_name": "gcs",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Cloud Vision",
-    "description": "",
-    "image": "https://logos.composio.dev/api/google_cloud_vision",
-    "app_name": "google_cloud_vision",
-    "isAvailable": true
-  },
-  {
     "title": "Google Docs",
     "description": "",
     "image": "https://logos.composio.dev/api/googledocs",
@@ -3025,13 +3116,6 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Google Maps",
-    "description": "",
-    "image": "https://logos.composio.dev/api/google_maps",
-    "app_name": "google_maps",
-    "isAvailable": true
-  },
-  {
     "title": "Google Meet",
     "description": "",
     "image": "https://logos.composio.dev/api/googlemeet",
@@ -3043,13 +3127,6 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/googlephotos",
     "app_name": "googlephotos",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Search Console",
-    "description": "",
-    "image": "https://logos.composio.dev/api/google_search_console",
-    "app_name": "google_search_console",
     "isAvailable": true
   },
   {
@@ -3109,6 +3186,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Greenhouse",
+    "description": "Strategic recruiting platform, job applicant pipeline tracking, interviewer scorecard collection, and job offers management.",
+    "image": "https://logos.composio.dev/api/greenhouse",
+    "app_name": "greenhouse",
+    "isAvailable": true
+  },
+  {
     "title": "Griptape",
     "description": "",
     "image": "https://logos.composio.dev/api/griptape",
@@ -3127,6 +3211,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/groqcloud",
     "app_name": "groqcloud",
+    "isAvailable": true
+  },
+  {
+    "title": "GTreasury",
+    "description": "Liquidity analysis and cash management platform, corporate cash forecasting, balance sheet reporting, and financial sweep scheduling.",
+    "image": "https://logos.composio.dev/api/gtreasury",
+    "app_name": "gtreasury",
     "isAvailable": true
   },
   {
@@ -3277,6 +3368,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "HireVue",
+    "description": "AI-driven talent screening, video interview recordings management, hiring candidate evaluations, and skills assessments.",
+    "image": "https://logos.composio.dev/api/hirevue",
+    "app_name": "hirevue",
+    "isAvailable": true
+  },
+  {
     "title": "Honeybadger",
     "description": "",
     "image": "https://logos.composio.dev/api/honeybadger",
@@ -3288,6 +3386,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/honeyhive",
     "app_name": "honeyhive",
+    "isAvailable": true
+  },
+  {
+    "title": "Honeywell Forge",
+    "description": "Industrial building analytics, HVAC airflow telemetry logs, facility energy diagnostics, and control setpoint modifications.",
+    "image": "https://logos.composio.dev/api/honeywell_forge",
+    "app_name": "honeywell_forge",
     "isAvailable": true
   },
   {
@@ -3372,6 +3477,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/hystruct",
     "app_name": "hystruct",
+    "isAvailable": true
+  },
+  {
+    "title": "IBM Maximo",
+    "description": "Enterprise asset management (EAM), facility work order scheduling, emergency maintenance routing, and physical asset inventory tracking.",
+    "image": "https://logos.composio.dev/api/ibm_maximo",
+    "app_name": "ibm_maximo",
     "isAvailable": true
   },
   {
@@ -3571,6 +3683,20 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Ivalua",
+    "description": "Strategic sourcing portal, vendor lifecycle compliance, corporate procurement bidding, and sourcing contract reviews.",
+    "image": "https://logos.composio.dev/api/ivalua",
+    "app_name": "ivalua",
+    "isAvailable": true
+  },
+  {
+    "title": "Jaggaer",
+    "description": "Enterprise supplier management, Request for Proposal (RFP) evaluations, supplier onboarding, and sourcing selection compliance.",
+    "image": "https://logos.composio.dev/api/jaggaer",
+    "app_name": "jaggaer",
+    "isAvailable": true
+  },
+  {
     "title": "Jane App",
     "description": "",
     "image": "https://logos.composio.dev/api/jane_app",
@@ -3596,6 +3722,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/jobnimbus",
     "app_name": "jobnimbus",
+    "isAvailable": true
+  },
+  {
+    "title": "Johnson Controls Metasys",
+    "description": "Smart building automation system, environmental sensor diagnostics, equipment health telemetry, and facility lock controls.",
+    "image": "https://logos.composio.dev/api/johnson_metasys",
+    "app_name": "johnson_metasys",
     "isAvailable": true
   },
   {
@@ -3718,6 +3851,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Kyriba",
+    "description": "Global liquidity management system, multi-bank cash balances tracking, automated cash sweeps, and treasury payment wiring.",
+    "image": "https://logos.composio.dev/api/kyriba",
+    "app_name": "kyriba",
+    "isAvailable": true
+  },
+  {
     "title": "L2s",
     "description": "",
     "image": "https://logos.composio.dev/api/l2s",
@@ -3750,6 +3890,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/lastpass",
     "app_name": "lastpass",
+    "isAvailable": true
+  },
+  {
+    "title": "Lattice",
+    "description": "Workforce performance management, 360 review collection, employee goal tracking, and compensation scorecard adjustment.",
+    "image": "https://logos.composio.dev/api/lattice",
+    "app_name": "lattice",
     "isAvailable": true
   },
   {
@@ -3803,7 +3950,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Lever",
-    "description": "",
+    "description": "Talent acquisition suite, candidate relations management, applicant pool screening, and hiring pipeline status transition.",
     "image": "https://logos.composio.dev/api/lever",
     "app_name": "lever",
     "isAvailable": true
@@ -4037,6 +4184,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/make",
     "app_name": "make",
+    "isAvailable": true
+  },
+  {
+    "title": "Manhattan Active WMS",
+    "description": "Advanced warehouse management system, real-time stock levels, bin location allocation, and distribution center order fulfillment.",
+    "image": "https://logos.composio.dev/api/manhattan_wms",
+    "app_name": "manhattan_wms",
     "isAvailable": true
   },
   {
@@ -4292,6 +4446,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "MSCI ESG Manager",
+    "description": "Corporate sustainability and environmental ratings, ESG risk scoring, and portfolio exposure evaluation audits.",
+    "image": "https://logos.composio.dev/api/msci_esg",
+    "app_name": "msci_esg",
+    "isAvailable": true
+  },
+  {
     "title": "Msg91",
     "description": "",
     "image": "https://logos.composio.dev/api/msg91",
@@ -4383,6 +4544,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Salesforce Net Zero Cloud",
+    "description": "Cloud carbon tracking ledger, offset credit allocation monitoring, greenhouse gas emissions scorecards, and sustainability reports.",
+    "image": "https://logos.composio.dev/api/net_zero_cloud",
+    "app_name": "net_zero_cloud",
+    "isAvailable": true
+  },
+  {
     "title": "NetDocuments",
     "description": "",
     "image": "https://logos.composio.dev/api/netdocuments",
@@ -4390,10 +4558,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Netskope SASE",
+    "description": "Cloud security access service edge (SASE), corporate data loss prevention, threat detection alerts, and security incident isolation.",
+    "image": "https://logos.composio.dev/api/netskope",
+    "app_name": "netskope",
+    "isAvailable": true
+  },
+  {
     "title": "NetSuite",
     "description": "Enterprise cloud ERP resource planning, corporate general ledgers, purchase order requisitions, and inventory stock tallies.",
     "image": "https://logos.composio.dev/api/netsuite",
     "app_name": "netsuite",
+    "isAvailable": true
+  },
+  {
+    "title": "NetSuite WMS",
+    "description": "ERP-integrated inventory warehouse management, bin locations tracking, stock reclassifications, and logistics processing.",
+    "image": "https://logos.composio.dev/api/netsuite_wms",
+    "app_name": "netsuite_wms",
     "isAvailable": true
   },
   {
@@ -4461,7 +4643,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Notion",
-    "description": "",
+    "description": "Flexible workspaces, structured team wikis, relational database tracking, and custom page content publishing.",
     "image": "https://logos.composio.dev/api/notion",
     "app_name": "notion",
     "isAvailable": true
@@ -4800,6 +4982,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/perplexityai",
     "app_name": "perplexityai",
+    "isAvailable": true
+  },
+  {
+    "title": "Persefoni",
+    "description": "Financed emissions reporting (PCAF), corporate carbon accounting metrics, carbon offset allocations, and regulatory disclosure reports.",
+    "image": "https://logos.composio.dev/api/persefoni",
+    "app_name": "persefoni",
     "isAvailable": true
   },
   {
@@ -5175,7 +5364,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Ramp",
-    "description": "",
+    "description": "Corporate smart cards issuing, expense control thresholds, real-time transaction tracking, and automated spend limits adjustment.",
     "image": "https://logos.composio.dev/api/ramp",
     "app_name": "ramp",
     "isAvailable": true
@@ -5356,6 +5545,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Reval",
+    "description": "Treasury risk management system, FX currency exposure forecasting, hedging portfolio valuation, and derivative trading compliance.",
+    "image": "https://logos.composio.dev/api/reval",
+    "app_name": "reval",
+    "isAvailable": true
+  },
+  {
     "title": "Revel Systems",
     "description": "",
     "image": "https://logos.composio.dev/api/revel_systems",
@@ -5433,13 +5629,6 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "S&P Capital IQ",
-    "description": "",
-    "image": "https://logos.composio.dev/api/capitaliq",
-    "app_name": "capitaliq",
-    "isAvailable": true
-  },
-  {
     "title": "Sabre GDS",
     "description": "",
     "image": "https://logos.composio.dev/api/sabre",
@@ -5465,6 +5654,13 @@ export const allApps: APP[] = [
     "description": "Enterprise cloud machine learning endpoints orchestrator, model auto-scaling rules, and training pipeline metrics.",
     "image": "https://logos.composio.dev/api/sagemaker",
     "app_name": "sagemaker",
+    "isAvailable": true
+  },
+  {
+    "title": "SailPoint IdentityNow",
+    "description": "Identity governance platform, employee security role mapping, access request reviews, and bulk access deprovisioning.",
+    "image": "https://logos.composio.dev/api/sailpoint",
+    "app_name": "sailpoint",
     "isAvailable": true
   },
   {
@@ -5524,10 +5720,38 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "SAP Asset Manager",
+    "description": "Industrial plant maintenance registry, machinery component diagnostics, and plant maintenance priority allocation.",
+    "image": "https://logos.composio.dev/api/sap_asset_manager",
+    "app_name": "sap_asset_manager",
+    "isAvailable": true
+  },
+  {
+    "title": "SAP Fieldglass",
+    "description": "External workforce vendor management system (VMS), contingent staff logs, contractor onboarding, and project contract suspensions.",
+    "image": "https://logos.composio.dev/api/sap_fieldglass",
+    "app_name": "sap_fieldglass",
+    "isAvailable": true
+  },
+  {
+    "title": "SAP Integrated Business Planning",
+    "description": "Enterprise cloud sales and operations planning (S&OP), supply chain planning models, and global distribution network optimization.",
+    "image": "https://logos.composio.dev/api/sap_ibp",
+    "app_name": "sap_ibp",
+    "isAvailable": true
+  },
+  {
     "title": "Sap Successfactors",
     "description": "",
     "image": "https://logos.composio.dev/api/sap_successfactors",
     "app_name": "sap_successfactors",
+    "isAvailable": true
+  },
+  {
+    "title": "SAP Treasury Management",
+    "description": "Enterprise cash management, interest rate and liquidity risk analysis, debt instrument portfolios, and investment liquidations.",
+    "image": "https://logos.composio.dev/api/sap_treasury",
+    "app_name": "sap_treasury",
     "isAvailable": true
   },
   {
@@ -5769,6 +5993,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "SharePoint",
+    "description": "Enterprise document libraries, document permissions governance, SharePoint folder management, and corporate intranet hierarchies.",
+    "image": "https://logos.composio.dev/api/sharepoint",
+    "app_name": "sharepoint",
+    "isAvailable": true
+  },
+  {
     "title": "ShipBob",
     "description": "",
     "image": "https://logos.composio.dev/api/shipbob",
@@ -5846,6 +6077,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Siemens Desigo",
+    "description": "Building management station, smart facility critical alarms registry, HVAC controls override, and temperature calibration.",
+    "image": "https://logos.composio.dev/api/siemens_desigo",
+    "app_name": "siemens_desigo",
+    "isAvailable": true
+  },
+  {
     "title": "Signaturely",
     "description": "",
     "image": "https://logos.composio.dev/api/signaturely",
@@ -5920,6 +6158,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/slack",
     "app_name": "slack",
+    "isAvailable": true
+  },
+  {
+    "title": "Slack Enterprise",
+    "description": "Real-time workforce collaboration grids, chat channel history auditing, multi-workspace communication channels, and secure messaging controls.",
+    "image": "https://logos.composio.dev/api/slack_enterprise",
+    "app_name": "slack_enterprise",
     "isAvailable": true
   },
   {
@@ -6025,6 +6270,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/spotlightr",
     "app_name": "spotlightr",
+    "isAvailable": true
+  },
+  {
+    "title": "SPS Commerce",
+    "description": "Retail EDI compliance network, purchase order processing, automated shipping notices, and vendor transaction approvals.",
+    "image": "https://logos.composio.dev/api/sps_commerce",
+    "app_name": "sps_commerce",
     "isAvailable": true
   },
   {
@@ -6168,6 +6420,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Sweep",
+    "description": "Strategic decarbonization software, carbon reduction action plans tracking, corporate emission audits, and green operations tasks.",
+    "image": "https://logos.composio.dev/api/sweep",
+    "app_name": "sweep",
+    "isAvailable": true
+  },
+  {
     "title": "Sympla",
     "description": "",
     "image": "https://logos.composio.dev/api/sympla",
@@ -6200,6 +6459,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/talenthr",
     "app_name": "talenthr",
+    "isAvailable": true
+  },
+  {
+    "title": "Talkdesk",
+    "description": "Cloud contact center suite, live support queue metrics, telephony recording management, and live agent line controls.",
+    "image": "https://logos.composio.dev/api/talkdesk",
+    "app_name": "talkdesk",
     "isAvailable": true
   },
   {
@@ -6385,6 +6651,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Tinypng",
+    "description": "",
+    "image": "https://logos.composio.dev/api/tinypng",
+    "app_name": "tinypng",
+    "isAvailable": true
+  },
+  {
     "title": "Tiny URL",
     "description": "",
     "image": "https://logos.composio.dev/api/tinyurl",
@@ -6392,10 +6665,10 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Tinypng",
-    "description": "",
-    "image": "https://logos.composio.dev/api/tinypng",
-    "app_name": "tinypng",
+    "title": "Tipalti",
+    "description": "Global accounts payable automation, supplier onboarding and compliance, multi-currency vendor payments, and tax reconciliation.",
+    "image": "https://logos.composio.dev/api/tipalti",
+    "app_name": "tipalti",
     "isAvailable": true
   },
   {
@@ -6529,6 +6802,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/twilio",
     "app_name": "twilio",
+    "isAvailable": true
+  },
+  {
+    "title": "Twilio Flex",
+    "description": "Programmable cloud contact center platform, real-time interaction flows, chat channels orchestration, and flexible routing control.",
+    "image": "https://logos.composio.dev/api/twilio_flex",
+    "app_name": "twilio_flex",
     "isAvailable": true
   },
   {
@@ -6739,6 +7019,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/wakatime",
     "app_name": "wakatime",
+    "isAvailable": true
+  },
+  {
+    "title": "Watershed",
+    "description": "Enterprise carbon footprint accounting, supply chain greenhouse gas audits, carbon offset reporting, and ESG report publications.",
+    "image": "https://logos.composio.dev/api/watershed",
+    "app_name": "watershed",
     "isAvailable": true
   },
   {
@@ -7064,6 +7351,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Zoom Phone",
+    "description": "Enterprise cloud VoIP systems, business call recordings registry, virtual phone directories, and communication license revocation.",
+    "image": "https://logos.composio.dev/api/zoom_phone",
+    "app_name": "zoom_phone",
+    "isAvailable": true
+  },
+  {
     "title": "Zoominfo",
     "description": "",
     "image": "https://logos.composio.dev/api/zoominfo",
@@ -7075,6 +7369,13 @@ export const allApps: APP[] = [
     "description": "Enterprise cloud firewall gateways, zero-trust secure access service edge (SASE) traffic audit logging, and access control policy schemas.",
     "image": "https://logos.composio.dev/api/zscaler",
     "app_name": "zscaler",
+    "isAvailable": true
+  },
+  {
+    "title": "Zycus",
+    "description": "Cognitive source-to-pay suite, automated contract processing, procurement catalogs tracking, and vendor registration reviews.",
+    "image": "https://logos.composio.dev/api/zycus",
+    "app_name": "zycus",
     "isAvailable": true
   },
   {
