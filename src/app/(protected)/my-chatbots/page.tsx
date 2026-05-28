@@ -403,8 +403,8 @@ function MyChatbotsContent() {
                           {instructionsList.length > 0 && (
                             <>
                               {/* Scrollable list area, fixed height */}
-                              <div className="absolute top-0 left-0 w-full pt-4">
-                                <div className="space-y-3 h-[260px] overflow-y-auto pr-1 pb-2">
+                              <div className="absolute top-0 left-0 w-full mt-3">
+                                <div className="space-y-3 h-[180px] overflow-y-auto pr-1 pb-2 custom-scrollbar">
                                   {instructionsList.map((item) => (
                                     <div
                                       key={item.id}
@@ -438,7 +438,7 @@ function MyChatbotsContent() {
                               </div>
 
                               {/* Next Step Button below fixed list */}
-                              <div className="absolute top-[276px] left-0 w-full flex justify-center mt-2">
+                              <div className="absolute top-[200px] left-0 w-full flex justify-center">
                                 <button
                                   type="button"
                                   onClick={() => setCurrentStep(3)}
