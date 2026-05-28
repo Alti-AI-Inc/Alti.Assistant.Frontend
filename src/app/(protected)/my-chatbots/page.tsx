@@ -194,7 +194,7 @@ function MyChatbotsContent() {
   // Render Focused Projects Workspace Dashboard (when no active bot)
   if (!activeBot) {
     return (
-      <div className="flex-grow w-full bg-[#FCFCFC] dark:bg-zinc-950 h-full flex flex-col items-center justify-center p-6 relative animate-in fade-in duration-500 overflow-y-auto">
+      <div className="flex-grow w-full bg-[#FCFCFC] dark:bg-zinc-950 h-full flex flex-col relative animate-in fade-in duration-500 overflow-y-auto">
         
         {/* Stepper Progress Bar */}
         <div className="absolute top-6 left-1/2 -translate-x-1/2 w-full max-w-[600px] select-none px-4 z-20">
@@ -272,8 +272,8 @@ function MyChatbotsContent() {
         </div>
 
         <div className={cn(
-          "flex-1 flex flex-col items-center justify-center w-full px-4 pt-20 pb-16 transition-all duration-300",
-          currentStep === 1 ? "max-w-[796px]" : "max-w-[640px]"
+          "flex-1 flex flex-col w-full transition-all duration-300",
+          currentStep === 1 ? "items-center justify-center relative z-10" : "items-center justify-center max-w-[640px] mx-auto px-4 pt-20 pb-16"
         )}>
           {error && (
             <p className="w-full text-xs font-semibold text-red-500 bg-red-500/10 border border-red-500/20 p-2.5 rounded-xl mb-4 animate-in slide-in-from-top-1 duration-150 text-center">
@@ -282,52 +282,58 @@ function MyChatbotsContent() {
           )}
 
           {/* Form Step Cards */}
-          <div className="w-full mt-4">
+          <div className={cn("w-full", currentStep !== 1 && "mt-4")}>
             {/* Step 1: Project Name */}
             {currentStep === 1 && (
-              <div className="w-full flex flex-col items-center justify-center animate-in fade-in slide-in-from-right-4 duration-300">
+              <>
                 <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center select-none">
                   Enter Project Name
                 </h1>
-                
-                <div className="mx-auto w-full max-w-[796px] px-0 w-full">
-                  <div className="flex flex-col rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/90 px-3 shadow-sm sm:px-4">
-                    <div className="relative flex items-center gap-2 py-2">
-                      <Textarea
-                        name="projectName"
-                        value={projectName}
-                        onChange={(e) => {
-                          setProjectName(e.target.value);
-                          setError('');
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && !e.shiftKey && projectName.trim()) {
-                            e.preventDefault();
-                            setCurrentStep(2);
-                          }
-                        }}
-                        placeholder="e.g. Q3 Sales Expansion, Contract Review Pipeline"
-                        className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-800 dark:text-zinc-100 text-sm focus:outline-none"
-                        autoFocus
-                      />
 
-                      <ArrowUp
-                        onClick={() => {
-                          if (projectName.trim()) {
-                            setCurrentStep(2);
-                          }
-                        }}
-                        className={cn(
-                          "size-7 flex-shrink-0 rounded-lg border-2 p-1 transition-all flex-none",
-                          projectName.trim()
-                            ? "border-gray-300 bg-black text-white cursor-pointer hover:bg-gray-800 dark:border-zinc-700 dark:bg-zinc-100 dark:text-black dark:hover:bg-zinc-200"
-                            : "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-650"
-                        )}
-                      />
+                <div className="flex w-full flex-col">
+                  <div className="sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8 py-4 bg-transparent border-t-0">
+                    <div className="mx-auto w-full max-w-[796px]">
+                      <div className="mx-auto w-full max-w-[796px] space-y-6 px-0">
+                        <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
+                          <div className="relative flex items-center gap-2 py-2">
+                            <Textarea
+                              name="projectName"
+                              value={projectName}
+                              onChange={(e) => {
+                                setProjectName(e.target.value);
+                                setError('');
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' && !e.shiftKey && projectName.trim()) {
+                                  e.preventDefault();
+                                  setCurrentStep(2);
+                                }
+                              }}
+                              placeholder="e.g. Q3 Sales Expansion, Contract Review Pipeline"
+                              className="min-h-[44px] w-full resize-none border-none bg-transparent px-2 py-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-800 text-sm focus:outline-none"
+                              autoFocus
+                            />
+
+                            <ArrowUp
+                              onClick={() => {
+                                if (projectName.trim()) {
+                                  setCurrentStep(2);
+                                }
+                              }}
+                              className={cn(
+                                "size-8 flex-shrink-0 rounded-lg p-1.5 transition-all flex-none",
+                                projectName.trim()
+                                  ? "bg-black text-white cursor-pointer hover:bg-gray-800"
+                                  : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                              )}
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </>
             )}
 
             {/* Step 2: System Instructions */}
