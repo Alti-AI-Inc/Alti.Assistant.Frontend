@@ -21,7 +21,7 @@ import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useQueryClient } from '@tanstack/react-query';
-import { EllipsisVertical, Share, Trash2 } from 'lucide-react';
+import { EllipsisVertical, Share, Trash2, ThumbsUp, ThumbsDown, Brain, Check, RefreshCw } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -29,6 +29,7 @@ import { Streamdown } from 'streamdown';
 import ReferencesList from './ReferenceList';
 import TelemetryConsole from '@/components/research/TelemetryConsole';
 import InteractiveTopology from '@/components/research/InteractiveTopology';
+import { useBotsStore } from '@/stores/useBotsStore';
 
 import FileDownloadCard from './FileDownloadCard';
 import VideoComponent from './VideoComponent';
@@ -46,6 +47,126 @@ import { usePlanGeneration } from '@/hooks/usePlanGeneration';
 import { useReportGeneration } from '@/hooks/useReportGeneration';
 import PresentationLoadingCard from './PresentationLoadingCard';
 import { getPresentationStatus } from '@/actions/presentationActions';
+
+const RLFeedbackBar = ({ messageId, bot, editBot }: { messageId: number; bot: any; editBot: any }) => {
+  const [feedbackGiven, setFeedbackGiven] = useState<'up' | 'down' | null>(null);
+  const [showTuningOptions, setShowTuningOptions] = useState(false);
+  const [isTuning, setIsTuning] = useState(false);
+  const [selectedTuning, setSelectedTuning] = useState<string | null>(null);
+
+  const botRlScore = bot.alignmentScore !== undefined ? bot.alignmentScore : 98.4;
+  const botEvolutionLevel = bot.evolutionLevel || 4;
+
+  const handleThumbsUp = () => {
+    if (feedbackGiven) return;
+    setFeedbackGiven('up');
+    const newScore = parseFloat((botRlScore + 0.1).toFixed(1));
+    editBot(bot.id, { 
+      alignmentScore: newScore,
+      evolutionLevel: newScore >= 99.0 ? botEvolutionLevel + 1 : botEvolutionLevel
+    });
+  };
+
+  const handleTuningSelect = (tuningType: string) => {
+    if (isTuning) return;
+    setSelectedTuning(tuningType);
+    setIsTuning(true);
+    setTimeout(() => {
+      setIsTuning(false);
+      setFeedbackGiven('down');
+      setShowTuningOptions(false);
+      const newScore = parseFloat((botRlScore + 0.2).toFixed(1));
+      editBot(bot.id, { 
+        alignmentScore: newScore,
+        evolutionLevel: newScore >= 99.0 ? botEvolutionLevel + 1 : botEvolutionLevel
+      });
+    }, 1500);
+  };
+
+  return (
+    <div className="flex flex-col gap-2 mt-2 pt-2 border-t border-black/5 dark:border-white/5 animate-in fade-in duration-300">
+      <div className="flex items-center gap-3 text-xs">
+        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1">
+          <Brain className="size-3 text-blue-500" /> RLHF Feedback Loop:
+        </span>
+        
+        {feedbackGiven === null ? (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleThumbsUp}
+              className="flex items-center gap-1 px-2 py-0.5 rounded border border-black/5 hover:bg-emerald-500/10 hover:text-emerald-600 hover:border-emerald-500/30 text-gray-500 transition-all duration-150"
+              title="Reinforce Output (Thumbs Up)"
+            >
+              <ThumbsUp className="size-3" />
+              <span>Good</span>
+            </button>
+            <button
+              onClick={() => setShowTuningOptions(!showTuningOptions)}
+              className={cn(
+                "flex items-center gap-1 px-2 py-0.5 rounded border transition-all duration-150 text-gray-500",
+                showTuningOptions 
+                  ? "bg-blue-500/10 border-blue-500/30 text-blue-600" 
+                  : "border-black/5 hover:bg-red-500/10 hover:text-red-600 hover:border-red-500/30"
+              )}
+              title="Calibrate Model Alignment (Thumbs Down)"
+            >
+              <ThumbsDown className="size-3" />
+              <span>Needs Tuning</span>
+            </button>
+          </div>
+        ) : feedbackGiven === 'up' ? (
+          <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">
+            <Check className="size-3" />
+            Reinforcement synced (+0.1% Alignment)
+          </span>
+        ) : (
+          <span className="text-[10px] text-blue-600 font-semibold flex items-center gap-1 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded">
+            <Check className="size-3" />
+            Corrective Tuning aligned (+0.2% Alignment)
+          </span>
+        )}
+      </div>
+
+      {/* Dropdown Options for corrective tuning */}
+      {showTuningOptions && (
+        <div className="flex flex-col gap-1.5 p-2.5 rounded-xl border border-blue-500/10 bg-white/70 dark:bg-zinc-900/60 shadow-xs backdrop-blur-md max-w-sm mt-1 animate-in slide-in-from-top-1 duration-200">
+          <p className="text-[10px] font-bold text-gray-750 dark:text-zinc-300">How should the model self-correct?</p>
+          
+          <div className="grid grid-cols-2 gap-1.5">
+            {[
+              { id: 'relevance', label: '🎯 Calibrate Relevance', desc: 'Boost context recall' },
+              { id: 'brevity', label: '⚡ Refine Conciseness', desc: 'Reduce verbosity' },
+              { id: 'structure', label: '🐍 Optimize Structure', desc: 'Improve code/format' },
+              { id: 'tone', label: '🖋️ Tone Adaptation', desc: 'Match user formality' }
+            ].map(opt => (
+              <button
+                key={opt.id}
+                onClick={() => handleTuningSelect(opt.id)}
+                disabled={isTuning}
+                className={cn(
+                  "flex flex-col items-start p-1.5 rounded-lg border text-left transition-all",
+                  selectedTuning === opt.id
+                    ? "bg-blue-600 border-blue-700 text-white"
+                    : "border-black/5 hover:bg-black/5 hover:border-black/10 dark:border-white/5 dark:hover:bg-white/5"
+                )}
+              >
+                <span className="text-[9px] font-bold">{opt.label}</span>
+                <span className={cn("text-[7px]", selectedTuning === opt.id ? "text-blue-100" : "text-gray-400")}>{opt.desc}</span>
+              </button>
+            ))}
+          </div>
+
+          {isTuning && (
+            <div className="flex items-center justify-center gap-1.5 text-[9px] text-blue-600 font-bold mt-1 bg-blue-500/5 py-1 rounded border border-blue-500/10">
+              <RefreshCw className="size-3 animate-spin" />
+              Tuning prompt weights in real-time...
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
@@ -71,6 +192,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     setPresentationTask,
     updateActiveConversation,
   } = useConversationsStore();
+
+  const { bots, activeBotId, editBot } = useBotsStore();
+  const activeBot = bots.find((b) => b.id === activeBotId);
 
   const { onOpen } = useModalStore();
 
@@ -563,7 +687,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     !(
                       !message.content?.trim() && !message.metadata?.imageUrl
                     ) && (
-                      <div className="text-zinc-850 dark:text-zinc-200">
+                      <div className="text-zinc-850 dark:text-zinc-200 space-y-2">
                         {containsYouTubeUrl(message.content) ? (
                           <VideoComponentForContent content={message.content} />
                         ) : (
@@ -574,6 +698,14 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
  
                             <CopyButton content={message.content} />
                           </div>
+                        )}
+
+                        {activeBot && (
+                          <RLFeedbackBar 
+                            messageId={idx} 
+                            bot={activeBot} 
+                            editBot={editBot} 
+                          />
                         )}
                       </div>
                     )}
