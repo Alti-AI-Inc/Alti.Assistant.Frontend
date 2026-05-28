@@ -179,6 +179,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const activeConnectorId = searchParams?.get('connector') || 'file';
 
   const [connectedAppSlugs, setConnectedAppSlugs] = useState<Set<string>>(new Set());
+  const [appsFilterTab, setAppsFilterTab] = useState<'all' | 'connected'>('all');
 
   const { data: connections } = useConnectionsQuery(
     data?.accessToken,
@@ -201,13 +202,20 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   }, [searchQuery]);
 
   const displayedApps = useMemo(() => {
-    if (searchQuery.trim() !== '') {
-      return filteredApps;
+    const baseList = searchQuery.trim() !== '' ? filteredApps : AVAILABLE_COMPOSIO_APPS;
+    
+    if (appsFilterTab === 'connected') {
+      return baseList.filter(app => connectedAppSlugs.has(app.app_name.toLowerCase()));
     }
-    const connected = AVAILABLE_COMPOSIO_APPS.filter(app => connectedAppSlugs.has(app.app_name.toLowerCase()));
-    const nonConnected = AVAILABLE_COMPOSIO_APPS.filter(app => !connectedAppSlugs.has(app.app_name.toLowerCase()));
-    return [...connected, ...nonConnected];
-  }, [searchQuery, filteredApps, connectedAppSlugs]);
+    
+    if (searchQuery.trim() === '') {
+      const connected = AVAILABLE_COMPOSIO_APPS.filter(app => connectedAppSlugs.has(app.app_name.toLowerCase()));
+      const nonConnected = AVAILABLE_COMPOSIO_APPS.filter(app => !connectedAppSlugs.has(app.app_name.toLowerCase()));
+      return [...connected, ...nonConnected];
+    }
+    
+    return baseList;
+  }, [searchQuery, filteredApps, connectedAppSlugs, appsFilterTab]);
 
   useEffect(() => {
     if (pathname === '/apps') {
@@ -631,9 +639,43 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             </div>
           ) : activeTab === 'apps' ? (
             <div className="mt-2 space-y-1 py-1 pb-4">
+              {/* Premium Apps Filter Toggle Button Bar */}
+              <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 mb-3.5 mx-0.5 select-none">
+                <button
+                  type="button"
+                  onClick={() => setAppsFilterTab('all')}
+                  className={cn(
+                    "flex-1 py-1.5 px-3 text-[11px] font-bold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
+                    appsFilterTab === 'all'
+                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
+                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-350"
+                  )}
+                >
+                  All
+                  <span className="text-[10px] opacity-60 font-medium px-1 bg-black/[0.06] dark:bg-white/[0.06] rounded">
+                    {AVAILABLE_COMPOSIO_APPS.length}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAppsFilterTab('connected')}
+                  className={cn(
+                    "flex-1 py-1.5 px-3 text-[11px] font-bold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
+                    appsFilterTab === 'connected'
+                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
+                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-350"
+                  )}
+                >
+                  Connected
+                  <span className="text-[10px] opacity-60 font-medium px-1 bg-black/[0.06] dark:bg-white/[0.06] rounded">
+                    {connectedAppSlugs.size}
+                  </span>
+                </button>
+              </div>
+
               {displayedApps.length === 0 ? (
                 <div className="py-4 text-center text-xs text-gray-500">
-                  No integrations found.
+                  {appsFilterTab === 'connected' ? "No connected integrations found." : "No integrations found."}
                 </div>
               ) : (
                 <>
