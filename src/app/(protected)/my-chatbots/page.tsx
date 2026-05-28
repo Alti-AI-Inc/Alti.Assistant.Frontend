@@ -271,8 +271,10 @@ function MyChatbotsContent() {
           </div>
         </div>
 
-        {/* Centered Main Form Container */}
-        <div className="flex-1 flex flex-col items-center justify-center w-full max-w-[640px] px-4 pb-16">
+        <div className={cn(
+          "flex-1 flex flex-col items-center justify-center w-full px-4 pb-16 transition-all duration-300",
+          currentStep === 1 ? "max-w-[796px]" : "max-w-[640px]"
+        )}>
           {error && (
             <p className="w-full text-xs font-semibold text-red-500 bg-red-500/10 border border-red-500/20 p-2.5 rounded-xl mb-4 animate-in slide-in-from-top-1 duration-150 text-center">
               {error}
@@ -283,49 +285,40 @@ function MyChatbotsContent() {
           <div className="w-full mt-4">
             {/* Step 1: Project Name */}
             {currentStep === 1 && (
-              <div className="w-full flex flex-col rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/90 p-6 shadow-md transition-all duration-300 animate-in fade-in slide-in-from-right-4 duration-300">
-                <div className="flex items-center gap-2 mb-3">
-                  <User className="size-5 text-blue-600 dark:text-blue-500" />
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-zinc-100">Name your Project Workspace</h2>
-                </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">
-                  Choose a clear and unique title for your isolated project. This helps categorize conversations, document indices, and prompt guidelines.
-                </p>
+              <div className="w-full flex flex-col items-center justify-center animate-in fade-in slide-in-from-right-4 duration-300">
+                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-zinc-50 tracking-tight text-center select-none">
+                  Enter Project Name
+                </h1>
                 
-                <div className="relative flex items-center h-12 rounded-xl border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 transition-all focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 dark:focus-within:ring-blue-900/50">
-                  <input
-                    type="text"
-                    placeholder="e.g. Q3 Sales Expansion, Contract Review Pipeline"
-                    value={projectName}
-                    onChange={(e) => {
-                      setProjectName(e.target.value);
-                      setError('');
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && projectName.trim()) {
-                        e.preventDefault();
-                        setCurrentStep(2);
-                      }
-                    }}
-                    className="w-full bg-transparent text-sm text-gray-800 dark:text-zinc-100 outline-none placeholder:text-gray-400 focus:outline-none focus:ring-0"
-                    autoFocus
-                  />
-                </div>
-
-                <div className="flex justify-end mt-6">
-                  <button
-                    type="button"
-                    disabled={!projectName.trim()}
-                    onClick={() => setCurrentStep(2)}
-                    className={cn(
-                      "flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-semibold shadow-sm transition-all duration-200 text-white",
-                      projectName.trim()
-                        ? "bg-blue-600 hover:bg-blue-700 cursor-pointer"
-                        : "bg-gray-300 dark:bg-zinc-800 text-gray-400 dark:text-zinc-600 cursor-not-allowed opacity-50"
+                <div className="w-full flex flex-col rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 sm:px-4 py-2 shadow-sm transition-all focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 dark:focus-within:ring-blue-900/50">
+                  <div className="relative flex items-center gap-2 py-2 w-full">
+                    <input
+                      type="text"
+                      placeholder="e.g. Q3 Sales Expansion, Contract Review Pipeline"
+                      value={projectName}
+                      onChange={(e) => {
+                        setProjectName(e.target.value);
+                        setError('');
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && projectName.trim()) {
+                          e.preventDefault();
+                          setCurrentStep(2);
+                        }
+                      }}
+                      className="h-10 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-gray-400 focus:outline-none focus:ring-0 text-gray-800 dark:text-zinc-100 text-base"
+                      autoFocus
+                    />
+                    {projectName.trim() && (
+                      <button
+                        type="button"
+                        onClick={() => setCurrentStep(2)}
+                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-black dark:bg-zinc-950 text-white transition-opacity hover:opacity-85"
+                      >
+                        <ArrowUp className="size-4 text-white" />
+                      </button>
                     )}
-                  >
-                    Next Step <ChevronRight className="size-3.5" />
-                  </button>
+                  </div>
                 </div>
               </div>
             )}
