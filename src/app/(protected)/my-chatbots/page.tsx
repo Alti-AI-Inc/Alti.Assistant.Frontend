@@ -661,10 +661,12 @@ function MyChatbotsContent() {
                             />
 
                             <button
+                              type="button"
                               onClick={() => fileInputRef.current?.click()}
-                              className="flex flex-shrink-0 items-center justify-center rounded-lg border-2 border-gray-300 bg-black text-white hover:bg-gray-800 p-1 transition-all"
+                              className="flex cursor-pointer items-center focus:outline-none"
+                              aria-label="Upload"
                             >
-                              <Paperclip className="size-5" />
+                              <Paperclip className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
                             </button>
                           </div>
                         </div>
