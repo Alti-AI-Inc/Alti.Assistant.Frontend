@@ -644,7 +644,7 @@ function MyChatbotsContent() {
                                 }
                               }}
                             >
-                              {isDragActive ? "Drop files here..." : "Click or drag & drop files here... (Optional)"}
+                              {isDragActive ? "Drop files here..." : "Click or drag & drop files here..."}
                             </div>
                             
                             <input
