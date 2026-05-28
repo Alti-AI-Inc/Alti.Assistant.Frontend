@@ -446,7 +446,7 @@ function MyChatbotsContent() {
                               </div>
 
                               {/* Next Step Button below fixed list */}
-                              <div className="absolute top-[200px] left-0 w-full flex justify-center">
+                              <div className="absolute top-[224px] left-0 w-full flex justify-center">
                                 <button
                                   type="button"
                                   onClick={() => setCurrentStep(3)}
