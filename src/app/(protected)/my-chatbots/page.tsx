@@ -22,6 +22,7 @@ import {
   Loader2,
   User, 
   FileText, 
+  Terminal,
   Shield, 
   Upload, 
   ChevronLeft, 
@@ -82,6 +83,7 @@ function MyChatbotsContent() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [projectName, setProjectName] = useState('');
   const [instructions, setInstructions] = useState('');
+  const [instructionsList, setInstructionsList] = useState<{ id: string; text: string; timestamp: string }[]>([]);
   const [guardrails, setGuardrails] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isCreating, setIsCreating] = useState(false);
@@ -138,7 +140,7 @@ function MyChatbotsContent() {
       const newBot = addBot({
         name: projectName,
         description: `Custom Project Workspace: ${projectName}`,
-        instructions: instructions,
+        instructions: instructionsList.length > 0 ? instructionsList.map(i => i.text).join('\n\n') : instructions,
         model: 'Gemini 1.5 Pro',
         avatar: '🤖',
         guardrails: guardrails,
@@ -172,9 +174,10 @@ function MyChatbotsContent() {
       }
 
 
-      // Reset Wizard
+      setIsCreating(false);
       setProjectName('');
       setInstructions('');
+      setInstructionsList([]);
       setGuardrails('');
       setSelectedFiles([]);
       setCurrentStep(1);
@@ -189,6 +192,15 @@ function MyChatbotsContent() {
     } finally {
       setIsCreating(false);
     }
+  };
+
+  const handleAddInstruction = () => {
+    if (!instructions.trim()) return;
+    setInstructionsList([
+      ...instructionsList,
+      { id: Date.now().toString(), text: instructions, timestamp: new Date().toISOString() }
+    ]);
+    setInstructions('');
   };
 
   // Render Focused Projects Workspace Dashboard (when no active bot)
@@ -221,22 +233,25 @@ function MyChatbotsContent() {
                   <button
                     type="button"
                     onClick={() => {
-                      // Only allow clicking completed steps or the next one if valid
-                      if (step < currentStep) {
-                        setCurrentStep(step);
-                      } else if (step === 2 && projectName.trim()) {
-                        setCurrentStep(2);
-                      } else if (step === 3 && projectName.trim() && instructions.trim()) {
-                        setCurrentStep(3);
-                      } else if (step === 4 && projectName.trim() && instructions.trim()) {
-                        setCurrentStep(4);
+                      if (step === 2 && !projectName.trim()) {
+                        setError('Please enter a project name first.');
+                        return;
+                      } else if (step === 3 && !projectName.trim()) {
+                        setError('Please complete the previous steps.');
+                        return;
+                      } else if (step === 4 && !projectName.trim()) {
+                        setError('Please complete the previous steps.');
+                        return;
                       }
+                      setError('');
+                      setCurrentStep(step);
                     }}
-                    disabled={step > currentStep && (
+                    disabled={
+                      isCreating ||
                       (step === 2 && !projectName.trim()) ||
-                      (step === 3 && (!projectName.trim() || !instructions.trim())) ||
-                      (step === 4 && (!projectName.trim() || !instructions.trim()))
-                    )}
+                      (step === 3 && (!projectName.trim())) ||
+                      (step === 4 && (!projectName.trim()))
+                    }
                     className={cn(
                       "flex h-9 w-9 items-center justify-center rounded-full border-2 transition-all duration-300 shadow-sm",
                       isCompleted
@@ -359,7 +374,7 @@ function MyChatbotsContent() {
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter' && !e.shiftKey && instructions.trim()) {
                                   e.preventDefault();
-                                  setCurrentStep(3);
+                                  handleAddInstruction();
                                 }
                               }}
                               placeholder="Enter instructions here..."
@@ -370,7 +385,7 @@ function MyChatbotsContent() {
                             <ArrowUp
                               onClick={() => {
                                 if (instructions.trim()) {
-                                  setCurrentStep(3);
+                                  handleAddInstruction();
                                 }
                               }}
                               className={cn(
@@ -382,6 +397,54 @@ function MyChatbotsContent() {
                             />
                           </div>
                         </div>
+
+                        {/* Dynamic List Section */}
+                        {instructionsList.length > 0 && (
+                          <div className="space-y-3 max-h-[450px] overflow-y-auto pr-1 mt-6">
+                            {instructionsList.map((item) => (
+                              <div
+                                key={item.id}
+                                className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-indigo-50/20 dark:hover:bg-indigo-950/10"
+                              >
+                                <div className="flex items-center gap-3 min-w-0 pr-3 flex-1">
+                                  <div className="h-7 w-7 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
+                                    <Terminal className="h-4 w-4" />
+                                  </div>
+                                  <div className="min-w-0 flex-1">
+                                    <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed" title={item.text}>
+                                      {item.text}
+                                    </p>
+                                    <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                                      Prompt Rule • {new Date(item.timestamp).toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <button
+                                  type="button"
+                                  onClick={() => setInstructionsList(instructionsList.filter(i => i.id !== item.id))}
+                                  className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none ml-2 flex items-center justify-center"
+                                  title="Delete Custom Prompt"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Next Step Button below list */}
+                        {instructionsList.length > 0 && (
+                          <div className="flex justify-center mt-6">
+                            <button
+                              type="button"
+                              onClick={() => setCurrentStep(3)}
+                              className="flex items-center gap-1.5 px-6 py-3 rounded-full text-sm font-semibold bg-black hover:bg-gray-800 text-white shadow-sm transition-all duration-200 cursor-pointer"
+                            >
+                              Next Step <ChevronRight className="size-4" />
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
