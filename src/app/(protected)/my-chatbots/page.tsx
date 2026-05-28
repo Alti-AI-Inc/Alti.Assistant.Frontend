@@ -35,7 +35,8 @@ import {
   FileType,
   Image as ImageIcon,
   Presentation,
-  File
+  File,
+  Paperclip
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
