@@ -578,7 +578,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               type="button"
               onClick={() => setAppsFilterTab('all')}
               className={cn(
-                "flex-1 py-1.5 px-3 text-[11px] font-bold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
+                "flex-1 py-1.5 px-3 text-[11px] font-normal rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
                 appsFilterTab === 'all'
                   ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
                   : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
@@ -590,7 +590,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               type="button"
               onClick={() => setAppsFilterTab('connected')}
               className={cn(
-                "flex-1 py-1.5 px-3 text-[11px] font-bold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
+                "flex-1 py-1.5 px-3 text-[11px] font-normal rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
                 appsFilterTab === 'connected'
                   ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
                   : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
@@ -624,7 +624,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     <div
                       key={bot.id}
                       className={cn(
-                        "group flex h-9 w-full items-center justify-between rounded-md text-xs font-semibold text-black text-left transition-all",
+                        "group flex h-9 w-full items-center justify-between rounded-md text-xs font-normal text-black text-left transition-all",
                         isSelected 
                           ? "bg-black/10" 
                           : "hover:bg-black/5"
@@ -702,18 +702,18 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                                 className="h-full w-full object-contain"
                                 onError={(e) => {
                                   e.currentTarget.style.display = 'none';
-                                  e.currentTarget.parentElement!.innerHTML = `<span class="text-xs font-semibold text-blue-600">${app.title.charAt(0)}</span>`;
+                                  e.currentTarget.parentElement!.innerHTML = `<span class="text-xs font-normal text-blue-600">${app.title.charAt(0)}</span>`;
                                 }}
                               />
                             ) : (
-                              <span className="text-xs font-semibold text-blue-600">{app.title.charAt(0)}</span>
+                              <span className="text-xs font-normal text-blue-600">{app.title.charAt(0)}</span>
                             )}
                           </div>
    
                           <div className="min-w-0">
                             <h4 className={cn(
-                              "text-xs font-semibold truncate",
-                              isSelected ? "text-blue-600 font-bold" : "text-gray-950"
+                              "text-xs font-normal truncate",
+                              isSelected ? "text-blue-600 font-medium" : "text-gray-950"
                             )}>
                               {app.title}
                             </h4>
@@ -752,7 +752,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   <div
                     key={wf.id}
                     className={cn(
-                      "group flex h-9 w-full items-center justify-between rounded-md text-xs font-semibold text-black text-left transition-all",
+                      "group flex h-9 w-full items-center justify-between rounded-md text-xs font-normal text-black text-left transition-all",
                       isSelected 
                         ? "bg-black/10" 
                         : "hover:bg-black/5"
