@@ -124,7 +124,7 @@ function MyChatbotsContent() {
 
   // Form Submission
   const handleCreateProject = async () => {
-    if (!projectName.trim() || !instructions.trim()) return;
+    if (!projectName.trim() || (!instructions.trim() && instructionsList.length === 0)) return;
 
     setIsCreating(true);
     setError('');
