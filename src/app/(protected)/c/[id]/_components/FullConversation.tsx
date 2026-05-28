@@ -608,7 +608,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   )}
                   {!!message.metadata?.reference?.length && (
                     <>
-                      <ReferencesList references={message.metadata.reference} />
+                      <ReferencesList 
+                        references={message.metadata.reference} 
+                        webSearchQueries={(message.metadata as any).webSearchQueries}
+                        searchEntryPoint={(message.metadata as any).searchEntryPoint}
+                      />
                       <InteractiveTopology sources={message.metadata.reference} knowledgeGraph={(message.metadata as any).knowledgeGraph} />
                     </>
                   )}

@@ -9,9 +9,11 @@ import Link from 'next/link';
 
 interface ReferencesProps {
   references: Reference[];
+  webSearchQueries?: string[];
+  searchEntryPoint?: any;
 }
 
-export default function ReferencesList({ references }: ReferencesProps) {
+export default function ReferencesList({ references, webSearchQueries, searchEntryPoint }: ReferencesProps) {
   if (!references || references.length === 0) return null;
 
   const getDomain = (urlStr: string) => {
@@ -28,30 +30,66 @@ export default function ReferencesList({ references }: ReferencesProps) {
       <Accordion type="single" collapsible className="border-none">
         <AccordionItem value="references" className="border-none">
           <AccordionTrigger className="flex items-center gap-2 py-2.5 px-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 dark:bg-zinc-900/50 dark:border-zinc-800 dark:hover:bg-zinc-900/80 transition-all duration-300 text-sm font-semibold tracking-wide text-zinc-300 dark:text-zinc-200 focus-visible:ring-0 focus-visible:ring-offset-0 focus:no-underline hover:no-underline">
-            <div className="flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-primary animate-pulse"
-              >
-                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
-                <path d="M2 12h20" />
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-              </svg>
-              <span>Sources & Intelligence Grounding</span>
-              <span className="ml-1 text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary-light font-bold dark:bg-emerald-500/10 dark:text-emerald-400 border border-primary/20 dark:border-emerald-500/20">
-                {references.length} verified
-              </span>
+            <div className="flex items-center justify-between w-full pr-4">
+              <div className="flex items-center gap-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-primary animate-pulse"
+                >
+                  <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+                  <path d="M2 12h20" />
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+                <span>Sources & Intelligence Grounding</span>
+                <span className="ml-1 text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary-light font-bold dark:bg-emerald-500/10 dark:text-emerald-400 border border-primary/20 dark:border-emerald-500/20">
+                  {references.length} verified
+                </span>
+              </div>
             </div>
           </AccordionTrigger>
           <AccordionContent className="pt-3 pb-1">
+            {/* Active Search Intent pills */}
+            {webSearchQueries && webSearchQueries.length > 0 && (
+              <div className="flex flex-col gap-2 mb-4 px-1">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 flex items-center gap-1.5 dark:text-zinc-400">
+                  <span className="h-1.5 w-1.5 rounded-full bg-teal-500 animate-pulse" />
+                  Active Search Grounding Queries
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {webSearchQueries.map((query, qIdx) => (
+                    <div
+                      key={qIdx}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100 border border-black/5 dark:bg-zinc-900/60 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-xs backdrop-blur-md transition-all duration-300 hover:border-teal-500/30"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="text-teal-600 dark:text-teal-400"
+                      >
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                      </svg>
+                      <span>{query}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               {references.map((ref, index) => {
                 const domain = ref.domain || getDomain(ref.url);

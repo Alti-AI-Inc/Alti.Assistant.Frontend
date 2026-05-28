@@ -1237,6 +1237,12 @@ const ChatInput = ({
               className="min-h-8 w-full flex-1 resize-none border-none px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
               autoFocus
             />
+            {selectedOption === OPTIONS.RESEARCH && (
+              <PreFlightPanel
+                settings={researchSettings}
+                onSettingsChange={setResearchSettings}
+              />
+            )}
             {message && !isAudioRecording ? (
               <ArrowUp
                 onClick={handleSubmit}
