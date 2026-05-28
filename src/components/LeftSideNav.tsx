@@ -371,7 +371,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       <div className="pt-0 pb-2 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300">
         <div
           className={cn(
-            'sticky top-0 z-30 flex items-center justify-between border-b border-black/10 dark:border-zinc-800/80 px-4 pt-4 pb-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300',
+            'sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300',
             hideSidebar && 'justify-center',
             side === 'right' && 'flex-row-reverse',
           )}
@@ -422,7 +422,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         </div>
         {/* Enclosed Search & Actions Row */}
         {!hideSidebar && (
-          <div className="flex items-center justify-between gap-2 border-b border-black/10 dark:border-zinc-800/80 px-4 py-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-all duration-300">
+          <div className="h-[52px] flex items-center justify-between gap-2 border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-all duration-300">
             {/* Search Bar Input */}
             <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 dark:border-zinc-800/80 bg-white dark:bg-zinc-800/50 px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 dark:focus-within:ring-white/10">
               <Search className="size-3.5 flex-none text-zinc-500 dark:text-zinc-400" />
@@ -485,8 +485,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
       {/* Chat / Research / Agents / Data / Apps icon row toggle */}
       {!hideSidebar && isLoggedIn && side !== 'right' && (
-        <div className="border-b border-black/10 px-4 pt-0 pb-2" style={{ backgroundColor: '#F2F3F5' }}>
-          <div className="flex bg-black/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03]">
+        <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300">
+          <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
@@ -574,7 +574,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
       {/* Fixed Apps Filter Toggle Button Bar */}
       {!hideSidebar && isLoggedIn && activeTab === 'apps' && (
-        <div className="px-4 pt-1 pb-3 border-b border-black/10 dark:border-zinc-800/80 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors select-none flex-none">
+        <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors select-none flex-none">
           <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full">
             <button
               type="button"
