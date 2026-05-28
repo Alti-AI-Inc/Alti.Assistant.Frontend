@@ -298,7 +298,7 @@ function MyChatbotsContent() {
 
         <div className={cn(
           "flex-1 flex flex-col w-full transition-all duration-300",
-          (currentStep === 1 || currentStep === 2 || currentStep === 3) ? "items-center justify-center relative z-10" : "items-center justify-center max-w-[640px] mx-auto px-4 pt-20 pb-16"
+          (currentStep === 1 || currentStep === 2 || currentStep === 3 || currentStep === 4) ? "items-center justify-center relative z-10" : "items-center justify-center max-w-[640px] mx-auto px-4 pt-20 pb-16"
         )}>
           {error && (
             <p className="w-full text-xs font-semibold text-red-500 bg-red-500/10 border border-red-500/20 p-2.5 rounded-xl mb-4 animate-in slide-in-from-top-1 duration-150 text-center">
@@ -307,7 +307,7 @@ function MyChatbotsContent() {
           )}
 
           {/* Form Step Cards */}
-          <div className={cn("w-full", (currentStep !== 1 && currentStep !== 2 && currentStep !== 3) && "mt-4")}>
+          <div className={cn("w-full", (currentStep !== 1 && currentStep !== 2 && currentStep !== 3 && currentStep !== 4) && "mt-4")}>
             {/* Step 1: Project Name */}
             {currentStep === 1 && (
               <>
@@ -603,131 +603,127 @@ function MyChatbotsContent() {
 
             {/* Step 4: Data Ingestion */}
             {currentStep === 4 && (
-              <div className="w-full flex flex-col rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/90 p-6 shadow-md transition-all duration-300 animate-in fade-in slide-in-from-right-4 duration-300">
-                <div className="flex items-center gap-2 mb-3">
-                  <Upload className="size-5 text-blue-600 dark:text-blue-500" />
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-zinc-100">Ingest Reference Data (Optional)</h2>
-                </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">
-                  Drop spreadsheets, contracts, research articles, or reference PDFs here. Your workspace will search, extract, and ground responses using this custom knowledge base.
-                </p>
-                
-                {/* Drag and Drop Box */}
-                <div
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    setIsDragActive(true);
-                  }}
-                  onDragLeave={() => setIsDragActive(false)}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    setIsDragActive(false);
-                    if (e.dataTransfer.files) {
-                      const filesArray = Array.from(e.dataTransfer.files);
-                      setSelectedFiles((prev) => [...prev, ...filesArray]);
-                    }
-                  }}
-                  onClick={() => fileInputRef.current?.click()}
-                  className={cn(
-                    "border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all duration-300",
-                    isDragActive
-                      ? "border-blue-500 bg-blue-50/50 dark:bg-blue-950/20"
-                      : "border-gray-300 dark:border-zinc-700 hover:border-blue-500 dark:hover:border-zinc-500 bg-gray-50/30 dark:bg-zinc-950/10"
-                  )}
-                >
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    multiple
-                    onChange={(e) => {
-                      if (e.target.files) {
-                        const filesArray = Array.from(e.target.files);
-                        setSelectedFiles((prev) => [...prev, ...filesArray]);
-                      }
-                    }}
-                    className="hidden"
-                  />
-                  
-                  <div className="p-3 bg-white dark:bg-zinc-900 rounded-full border border-gray-200 dark:border-zinc-800 shadow-xs">
-                    <Upload className="h-6 w-6 text-gray-500 dark:text-zinc-400" />
-                  </div>
-                  
-                  <div className="text-center">
-                    <span className="text-xs font-semibold text-gray-800 dark:text-zinc-200">
-                      Click to upload or drag & drop files
-                    </span>
-                    <p className="text-[10px] text-gray-400 dark:text-zinc-500 mt-1">
-                      Supports PDF, TXT, CSV, DOCX, XLSX up to 10MB
-                    </p>
-                  </div>
-                </div>
+              <>
+                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
+                  Upload Data
+                </h1>
 
-                {/* Selected Files List */}
-                {selectedFiles.length > 0 && (
-                  <div className="mt-5 space-y-2 border-t border-black/5 dark:border-zinc-800 pt-4">
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                      Selected Documents ({selectedFiles.length})
-                    </span>
-                    <div className="max-h-36 overflow-y-auto space-y-1.5 pr-1">
-                      {selectedFiles.map((file, idx) => (
-                        <div 
-                          key={idx} 
-                          className="flex items-center justify-between p-2 rounded-xl bg-gray-50 dark:bg-zinc-950 border border-gray-150 dark:border-zinc-900 animate-in slide-in-from-top-1 duration-150"
-                        >
-                          <div className="flex items-center gap-2 truncate flex-1 mr-2">
-                            {getFileIcon(file.name)}
-                            <div className="flex flex-col truncate">
-                              <span className="text-xs font-semibold text-gray-800 dark:text-zinc-200 truncate">{file.name}</span>
-                              <span className="text-[9px] text-gray-400">
-                                {getFileExtension(file.name)} • {(file.size / 1024 / 1024).toFixed(2)} MB
-                              </span>
+                <div className="flex w-full flex-col">
+                  <div className="sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8 py-4 bg-transparent border-t-0">
+                    <div className="mx-auto w-full max-w-[796px]">
+                      <div className="mx-auto w-full max-w-[796px] space-y-6 px-0">
+                        <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
+                          <div className="relative flex items-center gap-2 py-2">
+                            <button
+                              type="button"
+                              onClick={() => setCurrentStep(3)}
+                              className="flex cursor-pointer items-center focus:outline-none"
+                              aria-label="Back"
+                            >
+                              <ChevronLeft className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                            </button>
+                            
+                            <div 
+                              className={cn(
+                                "min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none text-sm cursor-pointer transition-colors flex items-center",
+                                isDragActive ? "text-blue-500 bg-blue-50/50 rounded-lg" : "text-gray-400 hover:text-gray-600"
+                              )}
+                              onClick={() => fileInputRef.current?.click()}
+                              onDragOver={(e) => {
+                                e.preventDefault();
+                                setIsDragActive(true);
+                              }}
+                              onDragLeave={() => setIsDragActive(false)}
+                              onDrop={(e) => {
+                                e.preventDefault();
+                                setIsDragActive(false);
+                                if (e.dataTransfer.files) {
+                                  const filesArray = Array.from(e.dataTransfer.files);
+                                  setSelectedFiles((prev) => [...prev, ...filesArray]);
+                                }
+                              }}
+                            >
+                              {isDragActive ? "Drop files here..." : "Click or drag & drop files here... (Optional)"}
                             </div>
+                            
+                            <input
+                              type="file"
+                              ref={fileInputRef}
+                              multiple
+                              onChange={(e) => {
+                                if (e.target.files) {
+                                  const filesArray = Array.from(e.target.files);
+                                  setSelectedFiles((prev) => [...prev, ...filesArray]);
+                                }
+                              }}
+                              className="hidden"
+                            />
+
+                            <button
+                              onClick={() => fileInputRef.current?.click()}
+                              className="flex flex-shrink-0 items-center justify-center rounded-lg border-2 border-gray-200 bg-gray-100 text-gray-400 p-1 transition-all hover:border-gray-300 hover:bg-black hover:text-white"
+                            >
+                              <Paperclip className="size-5" />
+                            </button>
                           </div>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedFiles((prev) => prev.filter((_, i) => i !== idx));
-                            }}
-                            className="p-1 rounded-lg hover:bg-red-500/10 hover:text-red-500 text-gray-400 transition-colors cursor-pointer"
-                          >
-                            <Trash2 className="size-4" />
-                          </button>
                         </div>
-                      ))}
+
+                        {/* Zero-height wrapper to completely fix title and prompt box layout */}
+                        <div className="h-0 w-full relative z-10 !mt-0">
+                          {selectedFiles.length > 0 && (
+                            <div className="absolute top-0 left-0 w-full mt-3">
+                              <div className="space-y-3 h-[180px] overflow-y-auto pr-1 pb-2 custom-scrollbar">
+                                {selectedFiles.map((file, idx) => (
+                                  <div
+                                    key={idx}
+                                    className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-blue-50/20 dark:hover:bg-blue-950/10"
+                                  >
+                                    <div className="flex items-center gap-3 min-w-0 pr-3 flex-1">
+                                      <div className="h-7 w-7 rounded-lg bg-blue-50 dark:bg-blue-955/40 text-blue-650 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
+                                        <FileText className="h-4 w-4" />
+                                      </div>
+                                      <div className="min-w-0 flex-1">
+                                        <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed" title={file.name}>
+                                          {file.name}
+                                        </p>
+                                        <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                                          {(file.size / 1024 / 1024).toFixed(2)} MB • {getFileExtension(file.name) || "Document"}
+                                        </span>
+                                      </div>
+                                    </div>
+
+                                    <button
+                                      type="button"
+                                      onClick={() => setSelectedFiles(selectedFiles.filter((_, i) => i !== idx))}
+                                      className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none ml-2 flex items-center justify-center"
+                                      title="Remove File"
+                                    >
+                                      <Trash2 className="h-3.5 w-3.5" />
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Create Project Button below fixed list area */}
+                          <div className="absolute top-[224px] left-0 w-full flex justify-center">
+                            <button
+                              type="button"
+                              onClick={() => handleCreateProject()}
+                              disabled={isCreating}
+                              className="flex items-center gap-1.5 px-6 py-3 rounded-full text-sm font-semibold bg-black hover:bg-gray-800 text-white shadow-sm transition-all duration-200 cursor-pointer disabled:opacity-50"
+                            >
+                              {isCreating ? <Loader2 className="size-4 animate-spin" /> : null}
+                              {isCreating ? "Creating..." : "Create Workspace"}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                )}
-
-                <div className="flex justify-between mt-6">
-                  <button
-                    type="button"
-                    disabled={isCreating}
-                    onClick={() => setCurrentStep(3)}
-                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-semibold border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-gray-700 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
-                  >
-                    <ChevronLeft className="size-3.5" /> Back
-                  </button>
-                  
-                  <button
-                    type="button"
-                    disabled={isCreating}
-                    onClick={() => handleCreateProject()}
-                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-sm transition-all duration-200 disabled:opacity-85 cursor-pointer"
-                  >
-                    {isCreating ? (
-                      <>
-                        <Loader2 className="h-3.5 w-3.5 animate-spin mr-1 text-white" />
-                        Creating...
-                      </>
-                    ) : (
-                      <>
-                        Create Project Workspace <ChevronRight className="size-3.5" />
-                      </>
-                    )}
-                  </button>
                 </div>
-              </div>
+              </>
             )}
           </div>
 
