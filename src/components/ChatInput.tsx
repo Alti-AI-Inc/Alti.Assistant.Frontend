@@ -34,6 +34,7 @@ import {
   ROLES,
   useConversationsStore,
 } from '@/stores/useConverstionsStore';
+import { useBotsStore } from '@/stores/useBotsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { createFileChangeHandler } from '@/utils/fileChangeHandler';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -149,6 +150,9 @@ const ChatInput = ({
     setUserMessage: setMessage,
     setShowStartLastMessage,
   } = useConversationsStore();
+
+  const { bots, activeBotId } = useBotsStore();
+  const activeBot = bots.find((b) => b.id === activeBotId);
 
   // Custom files state for docs (controlled or uncontrolled)
   const [internalSelectedFiles, setInternalSelectedFiles] = useState<File[]>([]);
@@ -543,14 +547,19 @@ const ChatInput = ({
         if (convId) formData.append('conversationId', convId);
         return await PostConversationWithFile(formData, data.accessToken);
       }
+      const targetApiUrl = activeBot?.data 
+        ? `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/chat` 
+        : apiUrl;
+      const targetKbId = activeBot?.data || activeConversation?.knowledgebaseId;
+
       return await PostConversation(
-        apiUrl,
+        targetApiUrl,
         userMessage,
         data.accessToken,
         conversationId === 'new-chat'
           ? activeConversation?.conversationId || undefined
           : conversationId,
-        activeConversation?.knowledgebaseId,
+        targetKbId,
         selectedOption === OPTIONS.RESEARCH ? researchSettings : undefined
       );
     },
@@ -606,7 +615,7 @@ const ChatInput = ({
       console.log('full response', response);
       // Determine the appropriate response text based on the context
       const getResponseText = () => {
-        if (activeConversation?.knowledgebaseId) {
+        if (activeConversation?.knowledgebaseId || activeBot?.data) {
           return response.data?.message;
         }
 
