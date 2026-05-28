@@ -13,16 +13,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogClose,
+} from '@/components/ui/dialog';
 import { 
   createKnowledgeBaseAction, 
   uploadfileToKnowledgeBaseAction 
@@ -462,8 +457,8 @@ function MyChatbotsContent() {
                                         </div>
                                       </div>
 
-                                      <AlertDialog>
-                                        <AlertDialogTrigger asChild>
+                                      <Dialog>
+                                        <DialogTrigger asChild>
                                           <button
                                             type="button"
                                             className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none ml-2 flex items-center justify-center cursor-pointer"
@@ -471,25 +466,33 @@ function MyChatbotsContent() {
                                           >
                                             <Trash2 className="h-3.5 w-3.5" />
                                           </button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                          <AlertDialogHeader>
-                                            <AlertDialogTitle>Delete Instruction</AlertDialogTitle>
-                                            <AlertDialogDescription>
+                                        </DialogTrigger>
+                                        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[270px] sm:max-w-[270px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+                                          <div className="px-5 pt-5 pb-4 text-center">
+                                            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                                              Delete Instruction
+                                            </h2>
+                                            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
                                               Are you sure you want to remove this instruction?
-                                            </AlertDialogDescription>
-                                          </AlertDialogHeader>
-                                          <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction 
-                                              onClick={() => setInstructionsList(instructionsList.filter(i => i.id !== item.id))}
-                                              className="bg-red-600 hover:bg-red-700 text-white border-0"
-                                            >
-                                              Delete
-                                            </AlertDialogAction>
-                                          </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                      </AlertDialog>
+                                            </p>
+                                          </div>
+                                          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+                                            <DialogClose asChild>
+                                              <button className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none">
+                                                Cancel
+                                              </button>
+                                            </DialogClose>
+                                            <DialogClose asChild>
+                                              <button 
+                                                onClick={() => setInstructionsList(instructionsList.filter(i => i.id !== item.id))}
+                                                className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none"
+                                              >
+                                                Delete
+                                              </button>
+                                            </DialogClose>
+                                          </div>
+                                        </DialogContent>
+                                      </Dialog>
                                     </div>
                                   ))}
                                 </div>
@@ -600,8 +603,8 @@ function MyChatbotsContent() {
                                         </div>
                                       </div>
 
-                                      <AlertDialog>
-                                        <AlertDialogTrigger asChild>
+                                      <Dialog>
+                                        <DialogTrigger asChild>
                                           <button
                                             type="button"
                                             className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none ml-2 flex items-center justify-center cursor-pointer"
@@ -609,25 +612,33 @@ function MyChatbotsContent() {
                                           >
                                             <Trash2 className="h-3.5 w-3.5" />
                                           </button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                          <AlertDialogHeader>
-                                            <AlertDialogTitle>Delete Guardrail</AlertDialogTitle>
-                                            <AlertDialogDescription>
+                                        </DialogTrigger>
+                                        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[270px] sm:max-w-[270px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+                                          <div className="px-5 pt-5 pb-4 text-center">
+                                            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                                              Delete Guardrail
+                                            </h2>
+                                            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
                                               Are you sure you want to remove this guardrail?
-                                            </AlertDialogDescription>
-                                          </AlertDialogHeader>
-                                          <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction 
-                                              onClick={() => setGuardrailsList(guardrailsList.filter(i => i.id !== item.id))}
-                                              className="bg-red-600 hover:bg-red-700 text-white border-0"
-                                            >
-                                              Delete
-                                            </AlertDialogAction>
-                                          </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                      </AlertDialog>
+                                            </p>
+                                          </div>
+                                          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+                                            <DialogClose asChild>
+                                              <button className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none">
+                                                Cancel
+                                              </button>
+                                            </DialogClose>
+                                            <DialogClose asChild>
+                                              <button 
+                                                onClick={() => setGuardrailsList(guardrailsList.filter(i => i.id !== item.id))}
+                                                className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none"
+                                              >
+                                                Delete
+                                              </button>
+                                            </DialogClose>
+                                          </div>
+                                        </DialogContent>
+                                      </Dialog>
                                     </div>
                                   ))}
                                 </div>
@@ -746,8 +757,8 @@ function MyChatbotsContent() {
                                       </div>
                                     </div>
 
-                                    <AlertDialog>
-                                      <AlertDialogTrigger asChild>
+                                    <Dialog>
+                                      <DialogTrigger asChild>
                                         <button
                                           type="button"
                                           className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none ml-2 flex items-center justify-center cursor-pointer"
@@ -755,25 +766,33 @@ function MyChatbotsContent() {
                                         >
                                           <Trash2 className="h-3.5 w-3.5" />
                                         </button>
-                                      </AlertDialogTrigger>
-                                      <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                          <AlertDialogTitle>Delete Data</AlertDialogTitle>
-                                          <AlertDialogDescription>
+                                      </DialogTrigger>
+                                      <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[270px] sm:max-w-[270px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+                                        <div className="px-5 pt-5 pb-4 text-center">
+                                          <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                                            Delete Data
+                                          </h2>
+                                          <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
                                             Are you sure you want to remove this data?
-                                          </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                          <AlertDialogAction 
-                                            onClick={() => setSelectedFiles(selectedFiles.filter((_, i) => i !== idx))}
-                                            className="bg-red-600 hover:bg-red-700 text-white border-0"
-                                          >
-                                            Delete
-                                          </AlertDialogAction>
-                                        </AlertDialogFooter>
-                                      </AlertDialogContent>
-                                    </AlertDialog>
+                                          </p>
+                                        </div>
+                                        <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+                                          <DialogClose asChild>
+                                            <button className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none">
+                                              Cancel
+                                            </button>
+                                          </DialogClose>
+                                          <DialogClose asChild>
+                                            <button 
+                                              onClick={() => setSelectedFiles(selectedFiles.filter((_, i) => i !== idx))}
+                                              className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none"
+                                            >
+                                              Delete
+                                            </button>
+                                          </DialogClose>
+                                        </div>
+                                      </DialogContent>
+                                    </Dialog>
                                   </div>
                                 ))}
                               </div>
