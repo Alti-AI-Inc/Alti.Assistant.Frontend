@@ -194,86 +194,85 @@ function MyChatbotsContent() {
   // Render Focused Projects Workspace Dashboard (when no active bot)
   if (!activeBot) {
     return (
-      <div className="flex-grow overflow-y-auto w-full bg-[#FCFCFC] dark:bg-zinc-950 h-full flex flex-col items-center justify-start py-16 px-4 sm:px-6 lg:px-8 animate-in fade-in duration-500">
-        <div className="mx-auto w-full max-w-[640px] px-4 flex flex-col items-center">
-          
+      <div className="flex-grow w-full bg-[#FCFCFC] dark:bg-zinc-950 h-full flex flex-col items-center justify-start p-6 animate-in fade-in duration-500 overflow-y-auto">
+        
+        {/* Stepper Progress Bar */}
+        <div className="w-full max-w-[600px] select-none px-2 pt-4 pb-8 flex-none">
+          <div className="relative flex items-center justify-between">
+            {/* Background track line */}
+            <div className="absolute left-0 right-0 top-1/2 h-0.5 -translate-y-1/2 bg-gray-200 dark:bg-zinc-800 z-0" />
+            
+            {/* Active track pipeline line */}
+            <div 
+              className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 bg-gradient-to-r from-blue-600 to-indigo-600 transition-all duration-500 z-0"
+              style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
+            />
 
-
-          {/* Stepper Progress Bar */}
-          <div className="w-full mb-10 select-none px-2">
-            <div className="relative flex items-center justify-between">
-              {/* Background track line */}
-              <div className="absolute left-0 right-0 top-1/2 h-0.5 -translate-y-1/2 bg-gray-200 dark:bg-zinc-800 z-0" />
-              
-              {/* Active track pipeline line */}
-              <div 
-                className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 bg-gradient-to-r from-blue-600 to-indigo-600 transition-all duration-500 z-0"
-                style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
-              />
-
-              {[
-                { step: 1, label: 'Name', icon: User },
-                { step: 2, label: 'Instructions', icon: FileText },
-                { step: 3, label: 'Guardrails', icon: Shield },
-                { step: 4, label: 'Data', icon: Upload },
-              ].map(({ step, label, icon: Icon }) => {
-                const isCompleted = currentStep > step;
-                const isActive = currentStep === step;
-                return (
-                  <div key={step} className="relative z-10 flex flex-col items-center">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        // Only allow clicking completed steps or the next one if valid
-                        if (step < currentStep) {
-                          setCurrentStep(step);
-                        } else if (step === 2 && projectName.trim()) {
-                          setCurrentStep(2);
-                        } else if (step === 3 && projectName.trim() && instructions.trim()) {
-                          setCurrentStep(3);
-                        } else if (step === 4 && projectName.trim() && instructions.trim()) {
-                          setCurrentStep(4);
-                        }
-                      }}
-                      disabled={step > currentStep && (
-                        (step === 2 && !projectName.trim()) ||
-                        (step === 3 && (!projectName.trim() || !instructions.trim())) ||
-                        (step === 4 && (!projectName.trim() || !instructions.trim()))
-                      )}
-                      className={cn(
-                        "flex h-9 w-9 items-center justify-center rounded-full border-2 transition-all duration-300 shadow-sm",
-                        isCompleted
-                          ? "bg-gradient-to-r from-blue-600 to-indigo-600 border-indigo-600 text-white hover:scale-105"
-                          : isActive
-                          ? "bg-white dark:bg-zinc-900 border-blue-600 text-blue-600 dark:text-blue-500 ring-4 ring-blue-100 dark:ring-blue-950/50 scale-110 font-bold"
-                          : "bg-gray-50 dark:bg-zinc-900 border-gray-300 dark:border-zinc-800 text-gray-400 dark:text-zinc-500 cursor-not-allowed"
-                      )}
-                      title={`Step ${step}: ${label}`}
-                    >
-                      {isCompleted ? (
-                        <Check className="h-4 w-4" />
-                      ) : (
-                        <Icon className="h-4 w-4" />
-                      )}
-                    </button>
-                    <span 
-                      className={cn(
-                        "absolute top-11 text-[10px] font-bold uppercase tracking-wider transition-colors duration-300 whitespace-nowrap",
-                        isActive 
-                          ? "text-blue-600 dark:text-blue-500 font-extrabold" 
-                          : isCompleted 
-                          ? "text-gray-800 dark:text-zinc-200" 
-                          : "text-gray-400 dark:text-zinc-500"
-                      )}
-                    >
-                      {label}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+            {[
+              { step: 1, label: 'Name', icon: User },
+              { step: 2, label: 'Instructions', icon: FileText },
+              { step: 3, label: 'Guardrails', icon: Shield },
+              { step: 4, label: 'Data', icon: Upload },
+            ].map(({ step, label, icon: Icon }) => {
+              const isCompleted = currentStep > step;
+              const isActive = currentStep === step;
+              return (
+                <div key={step} className="relative z-10 flex flex-col items-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Only allow clicking completed steps or the next one if valid
+                      if (step < currentStep) {
+                        setCurrentStep(step);
+                      } else if (step === 2 && projectName.trim()) {
+                        setCurrentStep(2);
+                      } else if (step === 3 && projectName.trim() && instructions.trim()) {
+                        setCurrentStep(3);
+                      } else if (step === 4 && projectName.trim() && instructions.trim()) {
+                        setCurrentStep(4);
+                      }
+                    }}
+                    disabled={step > currentStep && (
+                      (step === 2 && !projectName.trim()) ||
+                      (step === 3 && (!projectName.trim() || !instructions.trim())) ||
+                      (step === 4 && (!projectName.trim() || !instructions.trim()))
+                    )}
+                    className={cn(
+                      "flex h-9 w-9 items-center justify-center rounded-full border-2 transition-all duration-300 shadow-sm",
+                      isCompleted
+                        ? "bg-gradient-to-r from-blue-600 to-indigo-600 border-indigo-600 text-white hover:scale-105"
+                        : isActive
+                        ? "bg-white dark:bg-zinc-900 border-blue-600 text-blue-600 dark:text-blue-500 ring-4 ring-blue-100 dark:ring-blue-950/50 scale-110 font-bold"
+                        : "bg-gray-50 dark:bg-zinc-900 border-gray-300 dark:border-zinc-800 text-gray-400 dark:text-zinc-500 cursor-not-allowed"
+                    )}
+                    title={`Step ${step}: ${label}`}
+                  >
+                    {isCompleted ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <Icon className="h-4 w-4" />
+                    )}
+                  </button>
+                  <span 
+                    className={cn(
+                      "absolute top-11 text-[10px] font-bold uppercase tracking-wider transition-colors duration-300 whitespace-nowrap",
+                      isActive 
+                        ? "text-blue-600 dark:text-blue-500 font-extrabold" 
+                        : isCompleted 
+                        ? "text-gray-800 dark:text-zinc-200" 
+                        : "text-gray-400 dark:text-zinc-500"
+                    )}
+                  >
+                    {label}
+                  </span>
+                </div>
+              );
+            })}
           </div>
+        </div>
 
+        {/* Centered Main Form Container */}
+        <div className="flex-1 flex flex-col items-center justify-center w-full max-w-[640px] px-4 pb-16">
           {error && (
             <p className="w-full text-xs font-semibold text-red-500 bg-red-500/10 border border-red-500/20 p-2.5 rounded-xl mb-4 animate-in slide-in-from-top-1 duration-150 text-center">
               {error}
