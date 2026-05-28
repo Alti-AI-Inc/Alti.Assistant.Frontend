@@ -368,120 +368,117 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
   return (
     <>
-      <div className="pt-0 pb-2 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300">
+      <div
+        className={cn(
+          'sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300 flex-none',
+          hideSidebar && 'justify-center',
+          side === 'right' && 'flex-row-reverse',
+        )}
+      >
         <div
           className={cn(
-            'sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300',
-            hideSidebar && 'justify-center',
-            side === 'right' && 'flex-row-reverse',
+            'flex flex-none items-center justify-center transition-all duration-300',
           )}
+          onMouseEnter={handleLogoMouseEnter}
+          onMouseLeave={() => setLogoHovered(false)}
         >
-          <div
-            className={cn(
-              'flex flex-none items-center justify-center transition-all duration-300',
-            )}
-            onMouseEnter={handleLogoMouseEnter}
-            onMouseLeave={() => setLogoHovered(false)}
-          >
-            {logoHovered && hideSidebar ? (
-              <PanelLeftClose
-                className={cn(
-                  'size-[21px] cursor-pointer text-gray-600 dark:text-zinc-400 transition-transform duration-300',
-                )}
-                onClick={side === 'right' ? toggleRightSidebar : toggleLeftSidebar}
-              />
-            ) : (
-              <Link href="/">
-                <Image
-                  src="/assets/logo-icon.png"
-                  alt="logo"
-                  height={20}
-                  width={20}
-                />
-              </Link>
-            )}
-          </div>
-
-          {side === 'right' ? (
-            <PanelRightClose
-              className={cn(
-                'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
-                hideSidebar && 'hidden',
-              )}
-              onClick={toggleRightSidebar}
-            />
-          ) : (
+          {logoHovered && hideSidebar ? (
             <PanelLeftClose
               className={cn(
-                'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
-                hideSidebar && 'hidden',
+                'size-[21px] cursor-pointer text-gray-600 dark:text-zinc-400 transition-transform duration-300',
               )}
-              onClick={toggleLeftSidebar}
+              onClick={side === 'right' ? toggleRightSidebar : toggleLeftSidebar}
             />
+          ) : (
+            <Link href="/">
+              <Image
+                src="/assets/logo-icon.png"
+                alt="logo"
+                height={20}
+                width={20}
+              />
+            </Link>
           )}
         </div>
-        {/* Enclosed Search & Actions Row */}
-        {!hideSidebar && (
-          <div className="h-[52px] flex items-center justify-between gap-2 border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-all duration-300">
-            {/* Search Bar Input */}
-            <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 dark:border-zinc-800/80 bg-white dark:bg-zinc-800/50 px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 dark:focus-within:ring-white/10">
-              <Search className="size-3.5 flex-none text-zinc-500 dark:text-zinc-400" />
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent text-xs text-black dark:text-zinc-100 outline-none placeholder:text-zinc-500 dark:placeholder:text-zinc-400"
-              />
-            </div>
 
-            {/* Action Buttons to the right */}
-            {((activeTab !== 'apps') || plusProps.visible) && (
-              <div className="flex flex-none items-center gap-1.5">
-                {activeTab !== 'apps' && (
+        {side === 'right' ? (
+          <PanelRightClose
+            className={cn(
+              'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
+              hideSidebar && 'hidden',
+            )}
+            onClick={toggleRightSidebar}
+          />
+        ) : (
+          <PanelLeftClose
+            className={cn(
+              'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
+              hideSidebar && 'hidden',
+            )}
+            onClick={toggleLeftSidebar}
+          />
+        )}
+      </div>
+      {/* Enclosed Search & Actions Row */}
+      {!hideSidebar && (
+        <div className="h-[52px] flex items-center justify-between gap-2 border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-all duration-300 flex-none">
+          {/* Search Bar Input */}
+          <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 dark:border-zinc-800/80 bg-white dark:bg-zinc-800/50 px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 dark:focus-within:ring-white/10">
+            <Search className="size-3.5 flex-none text-zinc-500 dark:text-zinc-400" />
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-transparent text-xs text-black dark:text-zinc-100 outline-none placeholder:text-zinc-500 dark:placeholder:text-zinc-400"
+            />
+          </div>
+
+          {/* Action Buttons to the right */}
+          {((activeTab !== 'apps') || plusProps.visible) && (
+            <div className="flex flex-none items-center gap-1.5">
+              {activeTab !== 'apps' && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 transition-all duration-200 focus:outline-none select-none"
+                      onClick={() => handleTabChange('apps')}
+                    >
+                      <LayoutGrid className="size-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>Apps Workspace</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+
+              {plusProps.visible && (
+                <div className="animate-in fade-in zoom-in duration-200">
+                  {/* Plus for Dynamic Tab Action */}
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
                         variant="outline"
                         size="icon"
-                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 transition-all duration-200 focus:outline-none select-none"
-                        onClick={() => handleTabChange('apps')}
+                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black"
+                        onClick={plusProps.onClick}
                       >
-                        <LayoutGrid className="size-4" />
+                        <Plus className="size-4 text-black" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom">
-                      <p>Apps Workspace</p>
+                      <p>{plusProps.tooltip}</p>
                     </TooltipContent>
                   </Tooltip>
-                )}
-
-                {plusProps.visible && (
-                  <div className="animate-in fade-in zoom-in duration-200">
-                    {/* Plus for Dynamic Tab Action */}
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black"
-                          onClick={plusProps.onClick}
-                        >
-                          <Plus className="size-4 text-black" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side="bottom">
-                        <p>{plusProps.tooltip}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-{' '}
-      </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Chat / Research / Agents / Data / Apps icon row toggle */}
       {!hideSidebar && isLoggedIn && side !== 'right' && (
