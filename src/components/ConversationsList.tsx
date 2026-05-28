@@ -180,11 +180,11 @@ export default function ConversationsList({
       )}
       {filteredConversations.map(chat => (
         <div
-          className="group flex h-9 w-full items-center justify-between rounded-md text-xs font-semibold text-black hover:bg-black/5"
+          className="group flex h-9 w-full items-center justify-between rounded-md text-xs font-normal text-black hover:bg-black/5"
           key={chat._id}
         >
           <span
-            className="flex-1 cursor-pointer truncate px-3 py-2 text-xs font-semibold flex items-center gap-2.5"
+            className="flex-1 cursor-pointer truncate px-3 py-2 text-xs font-normal flex items-center gap-2.5"
             onClick={() => handleConversationClick(chat.conversationId)}
           >
             {getDisplayIcon(chat.title)}
