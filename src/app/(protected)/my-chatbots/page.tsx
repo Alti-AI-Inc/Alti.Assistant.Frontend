@@ -197,8 +197,8 @@ function MyChatbotsContent() {
   const handleAddInstruction = () => {
     if (!instructions.trim()) return;
     setInstructionsList([
-      ...instructionsList,
-      { id: Date.now().toString(), text: instructions, timestamp: new Date().toISOString() }
+      { id: Date.now().toString(), text: instructions, timestamp: new Date().toISOString() },
+      ...instructionsList
     ]);
     setInstructions('');
   };
