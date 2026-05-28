@@ -197,10 +197,7 @@ function MyChatbotsContent() {
       <div className="flex-grow overflow-y-auto w-full bg-[#FCFCFC] dark:bg-zinc-950 h-full flex flex-col items-center justify-start py-16 px-4 sm:px-6 lg:px-8 animate-in fade-in duration-500">
         <div className="mx-auto w-full max-w-[640px] px-4 flex flex-col items-center">
           
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 mb-8 text-center select-none flex items-center gap-2">
-            <Sparkles className="size-6 text-blue-600 dark:text-blue-500 animate-pulse" />
-            Create Project Workspace
-          </h1>
+
 
           {/* Stepper Progress Bar */}
           <div className="w-full mb-10 select-none px-2">
