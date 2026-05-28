@@ -638,39 +638,36 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               )}
             </div>
           ) : activeTab === 'apps' ? (
-            <div className="mt-2 space-y-1 py-1 pb-4">
+            <div className="mt-2 space-y-1 py-1 pb-4 relative">
               {/* Premium Apps Filter Toggle Button Bar */}
-              <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 mb-3.5 mx-0.5 select-none">
-                <button
-                  type="button"
-                  onClick={() => setAppsFilterTab('all')}
-                  className={cn(
-                    "flex-1 py-1.5 px-3 text-[11px] font-bold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
-                    appsFilterTab === 'all'
-                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
-                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-350"
-                  )}
-                >
-                  All
-                  <span className="text-[10px] opacity-60 font-medium px-1 bg-black/[0.06] dark:bg-white/[0.06] rounded">
-                    {AVAILABLE_COMPOSIO_APPS.length}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAppsFilterTab('connected')}
-                  className={cn(
-                    "flex-1 py-1.5 px-3 text-[11px] font-bold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
-                    appsFilterTab === 'connected'
-                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
-                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-350"
-                  )}
-                >
-                  Connected
-                  <span className="text-[10px] opacity-60 font-medium px-1 bg-black/[0.06] dark:bg-white/[0.06] rounded">
-                    {connectedAppSlugs.size}
-                  </span>
-                </button>
+              <div className="sticky top-0 bg-[#F2F3F5] dark:bg-zinc-900 pt-1 pb-3 z-10 select-none">
+                <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 mx-0.5">
+                  <button
+                    type="button"
+                    onClick={() => setAppsFilterTab('all')}
+                    className={cn(
+                      "flex-1 py-1.5 px-3 text-[11px] font-bold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
+                      appsFilterTab === 'all'
+                        ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
+                        : "text-gray-500 hover:text-gray-955 dark:hover:text-zinc-300"
+                    )}
+                  >
+                    All
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAppsFilterTab('connected')}
+                    className={cn(
+                      "flex-1 py-1.5 px-3 text-[11px] font-bold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
+                      appsFilterTab === 'connected'
+                        ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
+                        : "text-gray-500 hover:text-gray-955 dark:hover:text-zinc-300"
+                    )}
+                  >
+                    Connected
+                  </button>
+                </div>
+                <div className="mt-3 border-b border-black/10 dark:border-zinc-800/80 mx-0.5" />
               </div>
 
               {displayedApps.length === 0 ? (
