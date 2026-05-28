@@ -286,38 +286,46 @@ function MyChatbotsContent() {
             {/* Step 1: Project Name */}
             {currentStep === 1 && (
               <div className="w-full flex flex-col items-center justify-center animate-in fade-in slide-in-from-right-4 duration-300">
-                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-zinc-50 tracking-tight text-center select-none">
+                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center select-none">
                   Enter Project Name
                 </h1>
                 
-                <div className="w-full flex flex-col rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 sm:px-4 py-2 shadow-sm transition-all focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 dark:focus-within:ring-blue-900/50">
-                  <div className="relative flex items-center gap-2 py-2 w-full">
-                    <input
-                      type="text"
-                      placeholder="e.g. Q3 Sales Expansion, Contract Review Pipeline"
-                      value={projectName}
-                      onChange={(e) => {
-                        setProjectName(e.target.value);
-                        setError('');
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && projectName.trim()) {
-                          e.preventDefault();
-                          setCurrentStep(2);
-                        }
-                      }}
-                      className="h-10 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-gray-400 focus:outline-none focus:ring-0 text-gray-800 dark:text-zinc-100 text-base"
-                      autoFocus
-                    />
-                    {projectName.trim() && (
+                <div className="mx-auto w-full max-w-[796px] px-0 w-full">
+                  <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
+                    <div className="relative flex items-center gap-2 py-2">
                       <button
                         type="button"
-                        onClick={() => setCurrentStep(2)}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-black dark:bg-zinc-950 text-white transition-opacity hover:opacity-85"
+                        className="flex cursor-pointer items-center focus:outline-none flex-none"
+                        aria-label="Actions"
                       >
-                        <ArrowUp className="size-4 text-white" />
+                        <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
                       </button>
-                    )}
+
+                      <Textarea
+                        name="projectName"
+                        value={projectName}
+                        onChange={(e) => {
+                          setProjectName(e.target.value);
+                          setError('');
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey && projectName.trim()) {
+                            e.preventDefault();
+                            setCurrentStep(2);
+                          }
+                        }}
+                        placeholder="e.g. Q3 Sales Expansion, Contract Review Pipeline"
+                        className="min-h-8 w-full flex-1 resize-none border-none px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-800 dark:text-zinc-100 text-sm focus:outline-none"
+                        autoFocus
+                      />
+
+                      {projectName.trim() && (
+                        <ArrowUp
+                          onClick={() => setCurrentStep(2)}
+                          className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1 text-white transition-opacity cursor-pointer flex-none"
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
