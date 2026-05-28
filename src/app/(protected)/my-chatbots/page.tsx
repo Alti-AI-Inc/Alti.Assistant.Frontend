@@ -214,7 +214,7 @@ function MyChatbotsContent() {
                 setError('');
               }}
               placeholder="Define your agent's specialized role, system instructions, and knowledge scope for this project..."
-              className="min-h-[120px] rounded-xl border-gray-200 dark:border-zinc-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-zinc-950/40 text-xs leading-relaxed transition-all duration-200"
+              className="h-32 resize-none rounded-xl border-gray-200 dark:border-zinc-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-zinc-950/40 text-xs leading-relaxed transition-all duration-200"
             />
           </div>
 
@@ -226,7 +226,7 @@ function MyChatbotsContent() {
               value={guardrails}
               onChange={(e) => setGuardrails(e.target.value)}
               placeholder="Specify boundary safety limits, restricted topics, or PII redaction requirements..."
-              className="min-h-[90px] rounded-xl border-gray-200 dark:border-zinc-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-zinc-950/40 text-xs leading-relaxed transition-all duration-200"
+              className="h-32 resize-none rounded-xl border-gray-200 dark:border-zinc-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-zinc-950/40 text-xs leading-relaxed transition-all duration-200"
             />
           </div>
 
