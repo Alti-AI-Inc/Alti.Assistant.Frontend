@@ -311,7 +311,7 @@ function MyChatbotsContent() {
             {/* Step 1: Project Name */}
             {currentStep === 1 && (
               <>
-                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center select-none">
+                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
                   Enter Project Name
                 </h1>
 
@@ -337,21 +337,25 @@ function MyChatbotsContent() {
                               placeholder="Enter project name..."
                               className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
                               autoFocus
+                              rows={1}
                             />
 
-                            <ArrowUp
+                            <button
                               onClick={() => {
                                 if (projectName.trim()) {
                                   setCurrentStep(2);
                                 }
                               }}
+                              disabled={!projectName.trim()}
                               className={cn(
-                                "size-7 flex-shrink-0 rounded-lg border-2 p-1 transition-all",
+                                "flex flex-shrink-0 items-center justify-center rounded-lg border-2 p-1 transition-all",
                                 projectName.trim()
-                                  ? "border-gray-300 bg-black text-white cursor-pointer hover:bg-gray-800"
-                                  : "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-50"
+                                  ? "border-gray-300 bg-black text-white hover:bg-gray-800"
+                                  : "border-gray-200 bg-gray-100 text-gray-400"
                               )}
-                            />
+                            >
+                              <ArrowUp className="size-5" />
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -364,7 +368,7 @@ function MyChatbotsContent() {
             {/* Step 2: System Instructions */}
             {currentStep === 2 && (
               <>
-                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center select-none">
+                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
                   Enter Instructions
                 </h1>
 
@@ -398,21 +402,25 @@ function MyChatbotsContent() {
                               placeholder="Enter instructions here..."
                               className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
                               autoFocus
+                              rows={1}
                             />
 
-                            <ArrowUp
+                            <button
                               onClick={() => {
                                 if (instructions.trim()) {
                                   handleAddInstruction();
                                 }
                               }}
+                              disabled={!instructions.trim()}
                               className={cn(
-                                "size-7 flex-shrink-0 rounded-lg border-2 p-1 transition-all",
+                                "flex flex-shrink-0 items-center justify-center rounded-lg border-2 p-1 transition-all",
                                 instructions.trim()
-                                  ? "border-gray-300 bg-black text-white cursor-pointer hover:bg-gray-800"
-                                  : "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-50"
+                                  ? "border-gray-300 bg-black text-white hover:bg-gray-800"
+                                  : "border-gray-200 bg-gray-100 text-gray-400"
                               )}
-                            />
+                            >
+                              <ArrowUp className="size-5" />
+                            </button>
                           </div>
                         </div>
 
@@ -478,7 +486,7 @@ function MyChatbotsContent() {
             {/* Step 3: Guardrails */}
             {currentStep === 3 && (
               <>
-                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center select-none">
+                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
                   Enter Guardrails
                 </h1>
 
@@ -512,21 +520,25 @@ function MyChatbotsContent() {
                               placeholder="Enter guardrails here..."
                               className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
                               autoFocus
+                              rows={1}
                             />
 
-                            <ArrowUp
+                            <button
                               onClick={() => {
                                 if (guardrails.trim()) {
                                   handleAddGuardrail();
                                 }
                               }}
+                              disabled={!guardrails.trim()}
                               className={cn(
-                                "size-7 flex-shrink-0 rounded-lg border-2 p-1 transition-all",
+                                "flex flex-shrink-0 items-center justify-center rounded-lg border-2 p-1 transition-all",
                                 guardrails.trim()
-                                  ? "border-gray-300 bg-black text-white cursor-pointer hover:bg-gray-800"
-                                  : "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-50"
+                                  ? "border-gray-300 bg-black text-white hover:bg-gray-800"
+                                  : "border-gray-200 bg-gray-100 text-gray-400"
                               )}
-                            />
+                            >
+                              <ArrowUp className="size-5" />
+                            </button>
                           </div>
                         </div>
 
