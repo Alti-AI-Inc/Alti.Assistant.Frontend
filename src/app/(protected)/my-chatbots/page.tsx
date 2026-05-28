@@ -364,6 +364,14 @@ function MyChatbotsContent() {
                       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0">
                         <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
                           <div className="relative flex items-center gap-2 py-2">
+                            <button
+                              type="button"
+                              onClick={() => setCurrentStep(1)}
+                              className="flex cursor-pointer items-center focus:outline-none"
+                              aria-label="Back"
+                            >
+                              <ChevronLeft className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                            </button>
                             <Textarea
                               name="instructions"
                               value={instructions}
@@ -399,7 +407,7 @@ function MyChatbotsContent() {
                         </div>
 
                         {/* Zero-height wrapper to completely fix title and prompt box layout */}
-                        <div className="h-0 w-full relative z-10">
+                        <div className="h-0 w-full relative z-10 !mt-0">
                           {instructionsList.length > 0 && (
                             <>
                               {/* Scrollable list area, fixed height */}
