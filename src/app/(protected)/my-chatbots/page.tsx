@@ -662,7 +662,7 @@ function MyChatbotsContent() {
 
                             <button
                               onClick={() => fileInputRef.current?.click()}
-                              className="flex flex-shrink-0 items-center justify-center rounded-lg border-2 border-gray-200 bg-gray-100 text-gray-400 p-1 transition-all hover:border-gray-300 hover:bg-black hover:text-white"
+                              className="flex flex-shrink-0 items-center justify-center rounded-lg border-2 border-gray-300 bg-black text-white hover:bg-gray-800 p-1 transition-all"
                             >
                               <Paperclip className="size-5" />
                             </button>
