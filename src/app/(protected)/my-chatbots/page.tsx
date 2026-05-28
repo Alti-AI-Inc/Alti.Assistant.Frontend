@@ -398,53 +398,58 @@ function MyChatbotsContent() {
                           </div>
                         </div>
 
-                        {/* Dynamic List Section */}
-                        {instructionsList.length > 0 && (
-                          <div className="space-y-3 max-h-[450px] overflow-y-auto pr-1 mt-6">
-                            {instructionsList.map((item) => (
-                              <div
-                                key={item.id}
-                                className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-indigo-50/20 dark:hover:bg-indigo-950/10"
-                              >
-                                <div className="flex items-center gap-3 min-w-0 pr-3 flex-1">
-                                  <div className="h-7 w-7 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
-                                    <Terminal className="h-4 w-4" />
-                                  </div>
-                                  <div className="min-w-0 flex-1">
-                                    <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed" title={item.text}>
-                                      {item.text}
-                                    </p>
-                                    <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
-                                      Prompt Rule • {new Date(item.timestamp).toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}
-                                    </span>
-                                  </div>
-                                </div>
+                        {/* Zero-height wrapper to completely fix title and prompt box layout */}
+                        <div className="h-0 w-full relative z-10">
+                          {instructionsList.length > 0 && (
+                            <>
+                              {/* Scrollable list area, fixed height */}
+                              <div className="absolute top-0 left-0 w-full pt-4">
+                                <div className="space-y-3 h-[260px] overflow-y-auto pr-1 pb-2">
+                                  {instructionsList.map((item) => (
+                                    <div
+                                      key={item.id}
+                                      className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-indigo-50/20 dark:hover:bg-indigo-950/10"
+                                    >
+                                      <div className="flex items-center gap-3 min-w-0 pr-3 flex-1">
+                                        <div className="h-7 w-7 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
+                                          <Terminal className="h-4 w-4" />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                          <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed" title={item.text}>
+                                            {item.text}
+                                          </p>
+                                          <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                                            Prompt Rule • {new Date(item.timestamp).toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}
+                                          </span>
+                                        </div>
+                                      </div>
 
+                                      <button
+                                        type="button"
+                                        onClick={() => setInstructionsList(instructionsList.filter(i => i.id !== item.id))}
+                                        className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none ml-2 flex items-center justify-center"
+                                        title="Delete Custom Prompt"
+                                      >
+                                        <Trash2 className="h-3.5 w-3.5" />
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Next Step Button below fixed list */}
+                              <div className="absolute top-[276px] left-0 w-full flex justify-center mt-2">
                                 <button
                                   type="button"
-                                  onClick={() => setInstructionsList(instructionsList.filter(i => i.id !== item.id))}
-                                  className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none ml-2 flex items-center justify-center"
-                                  title="Delete Custom Prompt"
+                                  onClick={() => setCurrentStep(3)}
+                                  className="flex items-center gap-1.5 px-6 py-3 rounded-full text-sm font-semibold bg-black hover:bg-gray-800 text-white shadow-sm transition-all duration-200 cursor-pointer"
                                 >
-                                  <Trash2 className="h-3.5 w-3.5" />
+                                  Next Step <ChevronRight className="size-4" />
                                 </button>
                               </div>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* Next Step Button below list */}
-                        {instructionsList.length > 0 && (
-                          <div className="flex justify-center mt-6">
-                            <button
-                              type="button"
-                              onClick={() => setCurrentStep(3)}
-                              className="flex items-center gap-1.5 px-6 py-3 rounded-full text-sm font-semibold bg-black hover:bg-gray-800 text-white shadow-sm transition-all duration-200 cursor-pointer"
-                            >
-                              Next Step <ChevronRight className="size-4" />
-                            </button>
-                          </div>
-                        )}
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
