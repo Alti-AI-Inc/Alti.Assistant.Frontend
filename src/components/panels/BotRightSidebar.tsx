@@ -77,7 +77,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
         />
 
         {!hideSidebar && (
-          <span className="text-sm font-bold text-gray-850 dark:text-gray-200">
+          <span className="text-sm font-normal text-gray-850 dark:text-gray-200">
             {bot.name}
           </span>
         )}
