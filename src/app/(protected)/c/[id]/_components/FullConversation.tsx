@@ -86,24 +86,19 @@ const RLFeedbackBar = ({ messageId, bot, editBot }: { messageId: number; bot: an
   return (
     <div className="flex flex-col gap-2 mt-2 pt-2 border-t border-black/5 dark:border-white/5 animate-in fade-in duration-300">
       <div className="flex items-center gap-3 text-xs">
-        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1">
-          <Brain className="size-3 text-blue-500" /> RLHF Feedback Loop:
-        </span>
-        
         {feedbackGiven === null ? (
           <div className="flex items-center gap-2">
             <button
               onClick={handleThumbsUp}
-              className="flex items-center gap-1 px-2 py-0.5 rounded border border-black/5 hover:bg-emerald-500/10 hover:text-emerald-600 hover:border-emerald-500/30 text-gray-500 transition-all duration-150"
+              className="flex items-center gap-1 px-2 py-1 rounded border border-black/5 hover:bg-emerald-500/10 hover:text-emerald-600 hover:border-emerald-500/30 text-gray-500 transition-all duration-150"
               title="Reinforce Output (Thumbs Up)"
             >
               <ThumbsUp className="size-3" />
-              <span>Good</span>
             </button>
             <button
               onClick={() => setShowTuningOptions(!showTuningOptions)}
               className={cn(
-                "flex items-center gap-1 px-2 py-0.5 rounded border transition-all duration-150 text-gray-500",
+                "flex items-center gap-1 px-2 py-1 rounded border transition-all duration-150 text-gray-500",
                 showTuningOptions 
                   ? "bg-blue-500/10 border-blue-500/30 text-blue-600" 
                   : "border-black/5 hover:bg-red-500/10 hover:text-red-600 hover:border-red-500/30"
@@ -111,7 +106,6 @@ const RLFeedbackBar = ({ messageId, bot, editBot }: { messageId: number; bot: an
               title="Calibrate Model Alignment (Thumbs Down)"
             >
               <ThumbsDown className="size-3" />
-              <span>Needs Tuning</span>
             </button>
           </div>
         ) : feedbackGiven === 'up' ? (
