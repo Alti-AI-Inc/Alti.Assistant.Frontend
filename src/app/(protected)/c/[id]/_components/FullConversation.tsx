@@ -649,6 +649,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                             <CopyButton content={message.content} />
                           </div>
                         )}
+                        {activeBot && (
+                          <RLFeedbackBar messageId={idx} bot={activeBot} editBot={editBot} />
+                        )}
                       </div>
                     )}
  
