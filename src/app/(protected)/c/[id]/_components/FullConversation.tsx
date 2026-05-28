@@ -589,50 +589,6 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         isLoading && activeConversation?.messages?.length && 'h-[calc(100vh-70px)] lg:h-screen',
       )}
     >
-      <div
-        className={cn(
-          'sticky top-2 right-4 z-10 flex items-center justify-end pr-4',
-          (pathname === '/' || pathname === '/assistant' || pathname.startsWith('/my-chatbots') || pathname.startsWith('/workflows')) && 'hidden',
-        )}
-      >
-        <Button
-          onClick={() =>
-            onOpen({
-              type: 'share-conversation',
-              actionId: queryConversation._id,
-            })
-          }
-          variant="ghost"
-          className="bg-white/80 dark:bg-zinc-900/80 border border-black/5 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800/95 transition-all shadow-sm rounded-xl font-semibold gap-1.5"
-        >
-          <Share className="size-4" /> Share
-        </Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger className="outline-hidden p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-all">
-            <EllipsisVertical className="size-5 rotate-90 text-zinc-600 dark:text-zinc-400" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="mr-5 rounded-2xl backdrop-blur-xl bg-white/90 dark:bg-zinc-900/90 border border-black/10 dark:border-zinc-800 shadow-xl">
-            {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
- 
-            {/* <DropdownMenuSeparator /> */}
- 
-            <DropdownMenuItem
-              className="rounded-xl focus:bg-red-500/10 focus:text-red-600 dark:focus:bg-red-500/20 dark:focus:text-red-400"
-              onClick={() => {
-                if (queryConversation?._id) {
-                  onOpen({
-                    type: 'delete-conversation',
-                    actionId: queryConversation._id,
-                  });
-                }
-              }}
-            >
-              <Trash2 className="size-4 text-red-500 dark:text-red-400" />{' '}
-              <span className="text-red-500 dark:text-red-400 font-medium">Delete</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
       {/* Messages container - takes remaining space and scrolls */}
       {/* {!!activeConversation?.messages.length && ( */}
       {(!!activeConversation?.messages.length ||
@@ -692,14 +648,6 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
  
                             <CopyButton content={message.content} />
                           </div>
-                        )}
-
-                        {activeBot && (
-                          <RLFeedbackBar 
-                            messageId={idx} 
-                            bot={activeBot} 
-                            editBot={editBot} 
-                          />
                         )}
                       </div>
                     )}

@@ -8,6 +8,7 @@ import { useEffect, Suspense } from 'react';
 import { useBotsStore } from '@/stores/useBotsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
+import { useConversationsStore } from '@/stores/useConverstionsStore';
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
 import BotRightSidebar from '@/components/panels/BotRightSidebar';
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,7 @@ function MyChatbotsContent() {
   const { onOpen } = useModalStore();
 
   const { bots, activeBotId, activeBotThreadId, setActiveBotId, setActiveBotThreadId } = useBotsStore();
+  const { setActiveConversation } = useConversationsStore();
 
   // Read URL params
   const botParam = searchParams?.get('bot');
@@ -40,8 +42,9 @@ function MyChatbotsContent() {
       setActiveBotThreadId(threadParam);
     } else {
       setActiveBotThreadId(null);
+      setActiveConversation(null);
     }
-  }, [botParam, threadParam, setActiveBotId, setActiveBotThreadId]);
+  }, [botParam, threadParam, setActiveBotId, setActiveBotThreadId, setActiveConversation]);
 
   const activeBot = bots.find((b) => b.id === activeBotId);
 
