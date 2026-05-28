@@ -233,7 +233,7 @@ function MyChatbotsContent() {
             
             {/* Active track pipeline line */}
             <div 
-              className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 bg-gradient-to-r from-blue-600 to-indigo-600 transition-all duration-500 z-0"
+              className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 bg-black dark:bg-white transition-all duration-500 z-0"
               style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
             />
 
@@ -272,9 +272,9 @@ function MyChatbotsContent() {
                     className={cn(
                       "flex h-9 w-9 items-center justify-center rounded-full border-2 transition-all duration-300 shadow-sm",
                       isCompleted
-                        ? "bg-gradient-to-r from-blue-600 to-indigo-600 border-indigo-600 text-white hover:scale-105"
+                        ? "bg-black dark:bg-white border-black dark:border-white text-white dark:text-black hover:scale-105"
                         : isActive
-                        ? "bg-white dark:bg-zinc-900 border-blue-600 text-blue-600 dark:text-blue-500 ring-4 ring-blue-100 dark:ring-blue-950/50 scale-110 font-bold"
+                        ? "bg-white dark:bg-zinc-900 border-black dark:border-white text-black dark:text-white ring-4 ring-gray-200 dark:ring-zinc-800 scale-110 font-bold"
                         : "bg-gray-50 dark:bg-zinc-900 border-gray-300 dark:border-zinc-800 text-gray-400 dark:text-zinc-500 cursor-not-allowed"
                     )}
                     title={`Step ${step}: ${label}`}
@@ -289,7 +289,7 @@ function MyChatbotsContent() {
                     className={cn(
                       "absolute top-11 text-[10px] font-normal uppercase tracking-wider transition-colors duration-300 whitespace-nowrap",
                       isActive 
-                        ? "text-blue-600 dark:text-blue-500 font-medium" 
+                        ? "text-black dark:text-white font-medium" 
                         : isCompleted 
                         ? "text-gray-800 dark:text-zinc-200" 
                         : "text-gray-400 dark:text-zinc-500"
