@@ -194,10 +194,10 @@ function MyChatbotsContent() {
   // Render Focused Projects Workspace Dashboard (when no active bot)
   if (!activeBot) {
     return (
-      <div className="flex-grow w-full bg-[#FCFCFC] dark:bg-zinc-950 h-full flex flex-col items-center justify-start p-6 animate-in fade-in duration-500 overflow-y-auto">
+      <div className="flex-grow w-full bg-[#FCFCFC] dark:bg-zinc-950 h-full flex flex-col items-center justify-center p-6 relative animate-in fade-in duration-500 overflow-y-auto">
         
         {/* Stepper Progress Bar */}
-        <div className="w-full max-w-[600px] select-none px-2 pt-4 pb-8 flex-none">
+        <div className="absolute top-6 left-1/2 -translate-x-1/2 w-full max-w-[600px] select-none px-4 z-20">
           <div className="relative flex items-center justify-between">
             {/* Background track line */}
             <div className="absolute left-0 right-0 top-1/2 h-0.5 -translate-y-1/2 bg-gray-200 dark:bg-zinc-800 z-0" />
@@ -272,7 +272,7 @@ function MyChatbotsContent() {
         </div>
 
         <div className={cn(
-          "flex-1 flex flex-col items-center justify-center w-full px-4 pb-16 transition-all duration-300",
+          "flex-1 flex flex-col items-center justify-center w-full px-4 pt-20 pb-16 transition-all duration-300",
           currentStep === 1 ? "max-w-[796px]" : "max-w-[640px]"
         )}>
           {error && (
@@ -291,16 +291,8 @@ function MyChatbotsContent() {
                 </h1>
                 
                 <div className="mx-auto w-full max-w-[796px] px-0 w-full">
-                  <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
+                  <div className="flex flex-col rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/90 px-3 shadow-sm sm:px-4">
                     <div className="relative flex items-center gap-2 py-2">
-                      <button
-                        type="button"
-                        className="flex cursor-pointer items-center focus:outline-none flex-none"
-                        aria-label="Actions"
-                      >
-                        <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
-                      </button>
-
                       <Textarea
                         name="projectName"
                         value={projectName}
@@ -315,16 +307,23 @@ function MyChatbotsContent() {
                           }
                         }}
                         placeholder="e.g. Q3 Sales Expansion, Contract Review Pipeline"
-                        className="min-h-8 w-full flex-1 resize-none border-none px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-800 dark:text-zinc-100 text-sm focus:outline-none"
+                        className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-800 dark:text-zinc-100 text-sm focus:outline-none"
                         autoFocus
                       />
 
-                      {projectName.trim() && (
-                        <ArrowUp
-                          onClick={() => setCurrentStep(2)}
-                          className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1 text-white transition-opacity cursor-pointer flex-none"
-                        />
-                      )}
+                      <ArrowUp
+                        onClick={() => {
+                          if (projectName.trim()) {
+                            setCurrentStep(2);
+                          }
+                        }}
+                        className={cn(
+                          "size-7 flex-shrink-0 rounded-lg border-2 p-1 transition-all flex-none",
+                          projectName.trim()
+                            ? "border-gray-300 bg-black text-white cursor-pointer hover:bg-gray-800 dark:border-zinc-700 dark:bg-zinc-100 dark:text-black dark:hover:bg-zinc-200"
+                            : "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-650"
+                        )}
+                      />
                     </div>
                   </div>
                 </div>
