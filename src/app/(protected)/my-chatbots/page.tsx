@@ -309,8 +309,8 @@ function MyChatbotsContent() {
                                   setCurrentStep(2);
                                 }
                               }}
-                              placeholder="e.g. Q3 Sales Expansion, Contract Review Pipeline"
-                              className="min-h-[44px] w-full resize-none border-none bg-transparent px-2 py-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-800 text-sm focus:outline-none"
+                              placeholder="Enter project name..."
+                              className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
                               autoFocus
                             />
 
@@ -321,10 +321,10 @@ function MyChatbotsContent() {
                                 }
                               }}
                               className={cn(
-                                "size-8 flex-shrink-0 rounded-lg p-1.5 transition-all flex-none",
+                                "size-7 flex-shrink-0 rounded-lg border-2 p-1 transition-all",
                                 projectName.trim()
-                                  ? "bg-black text-white cursor-pointer hover:bg-gray-800"
-                                  : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                  ? "border-gray-300 bg-black text-white cursor-pointer hover:bg-gray-800"
+                                  : "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-50"
                               )}
                             />
                           </div>
