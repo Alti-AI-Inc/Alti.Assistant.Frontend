@@ -171,7 +171,6 @@ function MyChatbotsContent() {
         });
       }
 
-      toast.success('Project Workspace successfully initialized!');
 
       // Reset Wizard
       setProjectName('');
