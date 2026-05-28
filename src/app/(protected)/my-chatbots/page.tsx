@@ -18,17 +18,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { 
-  Sparkles, 
   Plus, 
-  ArrowRight, 
-  Bot, 
-  PanelLeft, 
-  PanelLeftClose, 
-  FolderPlus, 
   Upload, 
   Trash2, 
   FileText, 
-  Check, 
   Loader2 
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -38,7 +31,6 @@ function MyChatbotsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session } = useSession();
-  const { onOpen } = useModalStore();
 
   const { bots, activeBotId, activeBotThreadId, setActiveBotId, setActiveBotThreadId, addBot } = useBotsStore();
   const { setActiveConversation } = useConversationsStore();
@@ -184,146 +176,138 @@ function MyChatbotsContent() {
     }
   };
 
-  // Render Focused Projects Workspace Dashboard (when no bot is active)
+  // Render Focused Projects Workspace Dashboard (when no active bot)
   if (!activeBot) {
     return (
-      <div className="flex-grow overflow-y-auto w-full bg-[#FCFCFC] dark:bg-zinc-950 h-full flex flex-col items-center justify-start relative py-12 px-4 sm:px-6 lg:px-8 animate-in fade-in duration-500">
-        
-        {/* Soft elegant ambient light blobs */}
-        <div className="absolute -top-40 right-20 w-[500px] h-[500px] bg-gradient-to-tr from-blue-500/10 to-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-40 left-20 w-[500px] h-[500px] bg-gradient-to-tr from-purple-500/10 to-pink-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="flex-grow overflow-y-auto w-full bg-[#FCFCFC] dark:bg-zinc-950 h-full flex flex-col items-center justify-start py-12 px-4 sm:px-6 lg:px-8 animate-in fade-in duration-500">
+        <form onSubmit={handleCreateProject} className="w-full max-w-2xl space-y-6">
+          
+          {error && (
+            <p className="text-xs font-semibold text-red-500 bg-red-500/10 border border-red-500/20 p-2.5 rounded-xl animate-in slide-in-from-top-1 duration-150">
+              {error}
+            </p>
+          )}
 
-        {/* Central Card Form */}
-        <div className="w-full max-w-2xl bg-white/70 dark:bg-zinc-900/60 border border-black/5 dark:border-zinc-800/80 shadow-xl backdrop-blur-md rounded-2xl p-8 z-10 space-y-6">
-          <div className="flex items-center gap-3 border-b border-black/5 dark:border-white/5 pb-4">
-            <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-500">
-              <FolderPlus className="h-5 w-5" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-gray-950 dark:text-gray-55 tracking-tight">Create Isolated Project Workspace</h2>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Configure your specialized, secure project sandbox environment.</p>
-            </div>
+          {/* Section 1: Project Name */}
+          <div className="bg-white dark:bg-zinc-900/60 border border-black/5 dark:border-zinc-800/80 shadow-xs hover:shadow-md transition-all duration-300 rounded-2xl p-6 space-y-2">
+            <Label htmlFor="projectName" className="text-xs font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider">Project Name</Label>
+            <Input
+              id="projectName"
+              value={projectName}
+              onChange={(e) => {
+                setProjectName(e.target.value);
+                setError('');
+              }}
+              placeholder="e.g. Q1 Financial Audit, Code Quality Sandbox"
+              className="rounded-xl border-gray-200 dark:border-zinc-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-zinc-950/40 text-sm h-11 transition-all duration-200"
+            />
           </div>
 
-          <form onSubmit={handleCreateProject} className="space-y-5">
-            {error && <p className="text-xs font-semibold text-red-500 bg-red-500/10 border border-red-500/20 p-2.5 rounded-xl">{error}</p>}
+          {/* Section 2: Instructions */}
+          <div className="bg-white dark:bg-zinc-900/60 border border-black/5 dark:border-zinc-800/80 shadow-xs hover:shadow-md transition-all duration-300 rounded-2xl p-6 space-y-2">
+            <Label htmlFor="instructions" className="text-xs font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider">Instructions</Label>
+            <Textarea
+              id="instructions"
+              value={instructions}
+              onChange={(e) => {
+                setInstructions(e.target.value);
+                setError('');
+              }}
+              placeholder="Define your agent's specialized role, system instructions, and knowledge scope for this project..."
+              className="min-h-[120px] rounded-xl border-gray-200 dark:border-zinc-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-zinc-950/40 text-xs leading-relaxed transition-all duration-200"
+            />
+          </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="projectName" className="text-xs font-bold text-gray-700 dark:text-zinc-300 uppercase tracking-wider">Project Name</Label>
-              <Input
-                id="projectName"
-                value={projectName}
-                onChange={(e) => {
-                  setProjectName(e.target.value);
-                  setError('');
-                }}
-                placeholder="e.g. Q1 Financial Audit, Code Quality Sandbox"
-                className="rounded-xl border-gray-200 dark:border-zinc-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-zinc-950 text-sm h-10"
-              />
-            </div>
+          {/* Section 3: Guardrails */}
+          <div className="bg-white dark:bg-zinc-900/60 border border-black/5 dark:border-zinc-800/80 shadow-xs hover:shadow-md transition-all duration-300 rounded-2xl p-6 space-y-2">
+            <Label htmlFor="guardrails" className="text-xs font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider">Guardrails</Label>
+            <Textarea
+              id="guardrails"
+              value={guardrails}
+              onChange={(e) => setGuardrails(e.target.value)}
+              placeholder="Specify boundary safety limits, restricted topics, or PII redaction requirements..."
+              className="min-h-[90px] rounded-xl border-gray-200 dark:border-zinc-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-zinc-950/40 text-xs leading-relaxed transition-all duration-200"
+            />
+          </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="instructions" className="text-xs font-bold text-gray-700 dark:text-zinc-300 uppercase tracking-wider">Instructions / System Prompt</Label>
-              <Textarea
-                id="instructions"
-                value={instructions}
-                onChange={(e) => {
-                  setInstructions(e.target.value);
-                  setError('');
-                }}
-                placeholder="Define your agent's specialized role, system instructions, and knowledge scope for this project..."
-                className="min-h-[100px] rounded-xl border-gray-200 dark:border-zinc-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-zinc-950 text-xs leading-relaxed"
-              />
-            </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="guardrails" className="text-xs font-bold text-gray-700 dark:text-zinc-300 uppercase tracking-wider">Guardrails & Safety Rules (Optional)</Label>
-              <Textarea
-                id="guardrails"
-                value={guardrails}
-                onChange={(e) => setGuardrails(e.target.value)}
-                placeholder="Specify boundary safety limits, restricted topics, or PII redaction requirements..."
-                className="min-h-[70px] rounded-xl border-gray-200 dark:border-zinc-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-zinc-950 text-xs leading-relaxed"
-              />
-            </div>
-
-            <div className="grid gap-2">
-              <Label className="text-xs font-bold text-gray-700 dark:text-zinc-300 uppercase tracking-wider">Project Data (Files)</Label>
-              <div
-                onDragEnter={handleDrag}
-                onDragOver={handleDrag}
-                onDragLeave={handleDrag}
-                onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
-                className={cn(
-                  "border-2 border-dashed rounded-2xl p-6 flex flex-col items-center justify-center gap-2 cursor-pointer transition-all hover:bg-black/[0.01] dark:hover:bg-white/[0.01]",
-                  isDragActive
-                    ? "border-blue-500 bg-blue-500/5"
-                    : "border-gray-200 dark:border-zinc-800 bg-transparent"
-                )}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  multiple
-                  onChange={handleFileSelect}
-                  className="hidden"
-                />
-                <Upload className="h-6 w-6 text-gray-400 dark:text-zinc-505" />
-                <span className="text-xs font-semibold text-gray-700 dark:text-zinc-300">Drag & drop files here, or click to browse</span>
-                <span className="text-[10px] text-gray-400">Supports PDF, TXT, DOCX, CSV, Excel (up to 100MB per file)</span>
-              </div>
-
-              {/* Selected Files List */}
-              {selectedFiles.length > 0 && (
-                <div className="space-y-1.5 pt-2 max-h-40 overflow-y-auto">
-                  {selectedFiles.map((file, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-center justify-between border border-black/5 dark:border-zinc-800 bg-black/[0.01] dark:bg-white/[0.01] rounded-xl px-3.5 py-2.5 animate-in slide-in-from-top-1 duration-150"
-                    >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <FileText className="h-4 w-4 text-blue-500 flex-shrink-0" />
-                        <span className="text-xs font-medium text-gray-800 dark:text-zinc-300 truncate max-w-xs">{file.name}</span>
-                        <span className="text-[10px] text-gray-400 flex-shrink-0">({(file.size / 1024).toFixed(1)} KB)</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRemoveFile(idx);
-                        }}
-                        className="text-gray-400 hover:text-red-500 transition-colors p-1"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
+          {/* Section 4: Data */}
+          <div className="bg-white dark:bg-zinc-900/60 border border-black/5 dark:border-zinc-800/80 shadow-xs hover:shadow-md transition-all duration-300 rounded-2xl p-6 space-y-4">
+            <Label className="text-xs font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider">Data</Label>
+            <div
+              onDragEnter={handleDrag}
+              onDragOver={handleDrag}
+              onDragLeave={handleDrag}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current?.click()}
+              className={cn(
+                "border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center gap-2 cursor-pointer transition-all hover:bg-black/[0.01] dark:hover:bg-white/[0.01]",
+                isDragActive
+                  ? "border-blue-500 bg-blue-500/5"
+                  : "border-gray-200 dark:border-zinc-800 bg-transparent"
               )}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                onChange={handleFileSelect}
+                className="hidden"
+              />
+              <Upload className="h-6 w-6 text-gray-400 dark:text-zinc-500" />
+              <span className="text-xs font-semibold text-gray-700 dark:text-zinc-300">Drag & drop files here, or click to browse</span>
+              <span className="text-[10px] text-gray-400">Supports PDF, TXT, DOCX, CSV, Excel (up to 100MB per file)</span>
             </div>
 
-            <div className="pt-4 border-t border-black/5 dark:border-white/5 flex justify-end items-center gap-3">
-              <Button
-                type="submit"
-                disabled={isCreating}
-                className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-6 h-11 text-xs font-bold shadow-lg shadow-blue-500/10 flex items-center gap-2 select-none"
-              >
-                {isCreating ? (
-                  <>
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                    {uploadProgress || 'Creating Project Workspace...'}
-                  </>
-                ) : (
-                  <>
-                    <Plus className="h-4 w-4" />
-                    Create Project Workspace
-                  </>
-                )}
-              </Button>
-            </div>
-          </form>
-        </div>
+            {/* Selected Files List */}
+            {selectedFiles.length > 0 && (
+              <div className="space-y-1.5 pt-2 max-h-40 overflow-y-auto">
+                {selectedFiles.map((file, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between border border-black/5 dark:border-zinc-800 bg-black/[0.01] dark:bg-white/[0.01] rounded-xl px-3.5 py-2.5 animate-in slide-in-from-top-1 duration-150"
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <FileText className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                      <span className="text-xs font-medium text-gray-800 dark:text-zinc-350 truncate max-w-xs">{file.name}</span>
+                      <span className="text-[10px] text-gray-400 flex-shrink-0">({(file.size / 1024).toFixed(1)} KB)</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveFile(idx);
+                      }}
+                      className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Floating Action Bar */}
+          <div className="flex justify-end items-center pt-2">
+            <Button
+              type="submit"
+              disabled={isCreating}
+              className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-8 h-12 text-xs font-bold shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 flex items-center gap-2 select-none hover:scale-[1.01] transition-all duration-200"
+            >
+              {isCreating ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  {uploadProgress || 'Creating Project Workspace...'}
+                </>
+              ) : (
+                <>
+                  <Plus className="h-4 w-4" />
+                  Create Project Workspace
+                </>
+              )}
+            </Button>
+          </div>
+        </form>
       </div>
     );
   }
