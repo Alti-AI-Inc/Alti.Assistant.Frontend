@@ -85,6 +85,7 @@ function MyChatbotsContent() {
   const [instructions, setInstructions] = useState('');
   const [instructionsList, setInstructionsList] = useState<{ id: string; text: string; timestamp: string }[]>([]);
   const [guardrails, setGuardrails] = useState('');
+  const [guardrailsList, setGuardrailsList] = useState<{ id: string; text: string; timestamp: string }[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState('');
@@ -143,7 +144,7 @@ function MyChatbotsContent() {
         instructions: instructionsList.length > 0 ? instructionsList.map(i => i.text).join('\n\n') : instructions,
         model: 'Gemini 1.5 Pro',
         avatar: '🤖',
-        guardrails: guardrails,
+        guardrails: guardrailsList.length > 0 ? guardrailsList.map(g => g.text).join('\n\n') : guardrails,
         data: backendId || undefined, // Save the backend knowledgebase ID in the 'data' field!
       });
 
@@ -201,6 +202,15 @@ function MyChatbotsContent() {
       ...instructionsList
     ]);
     setInstructions('');
+  };
+
+  const handleAddGuardrail = () => {
+    if (!guardrails.trim()) return;
+    setGuardrailsList([
+      { id: Date.now().toString(), text: guardrails, timestamp: new Date().toISOString() },
+      ...guardrailsList
+    ]);
+    setGuardrails('');
   };
 
   // Render Focused Projects Workspace Dashboard (when no active bot)
@@ -467,42 +477,116 @@ function MyChatbotsContent() {
 
             {/* Step 3: Guardrails */}
             {currentStep === 3 && (
-              <div className="w-full flex flex-col rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/90 p-6 shadow-md transition-all duration-300 animate-in fade-in slide-in-from-right-4 duration-300">
-                <div className="flex items-center gap-2 mb-3">
-                  <Shield className="size-5 text-blue-600 dark:text-blue-500" />
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-zinc-100">Add Safety Guardrails (Optional)</h2>
-                </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">
-                  Define negative guidelines, restricted topics, or strict styling rules. Guardrails ensure that your AI assistant stays inside its designated boundary.
-                </p>
-                
-                <div className="relative flex flex-col rounded-xl border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-2 transition-all focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 dark:focus-within:ring-blue-900/50">
-                  <Textarea
-                    placeholder="e.g. Never discuss pricing structures of competitors. If asked about competitor fees, politely redirect to our pricing page. Do not write codes or scripts under any circumstances."
-                    value={guardrails}
-                    onChange={(e) => setGuardrails(e.target.value)}
-                    className="min-h-[140px] w-full resize-none border-none bg-transparent px-1 py-1 shadow-none outline-none placeholder:text-xs text-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus:ring-0 text-gray-800 dark:text-zinc-100"
-                    autoFocus
-                  />
-                </div>
+              <>
+                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center select-none">
+                  Enter Guardrails
+                </h1>
 
-                <div className="flex justify-between mt-6">
-                  <button
-                    type="button"
-                    onClick={() => setCurrentStep(2)}
-                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-semibold border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-gray-700 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors shadow-sm cursor-pointer"
-                  >
-                    <ChevronLeft className="size-3.5" /> Back
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setCurrentStep(4)}
-                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-all duration-200 cursor-pointer"
-                  >
-                    Next Step <ChevronRight className="size-3.5" />
-                  </button>
+                <div className="flex w-full flex-col">
+                  <div className="sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8 py-4 bg-transparent border-t-0">
+                    <div className="mx-auto w-full max-w-[796px]">
+                      <div className="mx-auto w-full max-w-[796px] space-y-6 px-0">
+                        <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
+                          <div className="relative flex items-center gap-2 py-2">
+                            <button
+                              type="button"
+                              onClick={() => setCurrentStep(2)}
+                              className="flex cursor-pointer items-center focus:outline-none"
+                              aria-label="Back"
+                            >
+                              <ChevronLeft className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                            </button>
+                            <Textarea
+                              name="guardrails"
+                              value={guardrails}
+                              onChange={(e) => {
+                                setGuardrails(e.target.value);
+                                setError('');
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' && !e.shiftKey && guardrails.trim()) {
+                                  e.preventDefault();
+                                  handleAddGuardrail();
+                                }
+                              }}
+                              placeholder="Enter guardrails here..."
+                              className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+                              autoFocus
+                            />
+
+                            <ArrowUp
+                              onClick={() => {
+                                if (guardrails.trim()) {
+                                  handleAddGuardrail();
+                                }
+                              }}
+                              className={cn(
+                                "size-7 flex-shrink-0 rounded-lg border-2 p-1 transition-all",
+                                guardrails.trim()
+                                  ? "border-gray-300 bg-black text-white cursor-pointer hover:bg-gray-800"
+                                  : "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-50"
+                              )}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Zero-height wrapper to completely fix title and prompt box layout */}
+                        <div className="h-0 w-full relative z-10 !mt-0">
+                          {guardrailsList.length > 0 && (
+                            <>
+                              {/* Scrollable list area, fixed height */}
+                              <div className="absolute top-0 left-0 w-full mt-3">
+                                <div className="space-y-3 h-[180px] overflow-y-auto pr-1 pb-2 custom-scrollbar">
+                                  {guardrailsList.map((item) => (
+                                    <div
+                                      key={item.id}
+                                      className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-indigo-50/20 dark:hover:bg-indigo-950/10"
+                                    >
+                                      <div className="flex items-center gap-3 min-w-0 pr-3 flex-1">
+                                        <div className="h-7 w-7 rounded-lg bg-red-50 dark:bg-red-955/40 text-red-650 dark:text-red-400 flex items-center justify-center flex-shrink-0">
+                                          <Shield className="h-4 w-4" />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                          <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed" title={item.text}>
+                                            {item.text}
+                                          </p>
+                                          <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                                            Guardrail Rule • {new Date(item.timestamp).toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}
+                                          </span>
+                                        </div>
+                                      </div>
+
+                                      <button
+                                        type="button"
+                                        onClick={() => setGuardrailsList(guardrailsList.filter(i => i.id !== item.id))}
+                                        className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none ml-2 flex items-center justify-center"
+                                        title="Delete Guardrail"
+                                      >
+                                        <Trash2 className="h-3.5 w-3.5" />
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Next Step Button below fixed list */}
+                              <div className="absolute top-[224px] left-0 w-full flex justify-center">
+                                <button
+                                  type="button"
+                                  onClick={() => setCurrentStep(4)}
+                                  className="flex items-center gap-1.5 px-6 py-3 rounded-full text-sm font-semibold bg-black hover:bg-gray-800 text-white shadow-sm transition-all duration-200 cursor-pointer"
+                                >
+                                  Next Step <ChevronRight className="size-4" />
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </>
             )}
 
             {/* Step 4: Data Ingestion */}
