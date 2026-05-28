@@ -572,6 +572,38 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         </div>
       )}
 
+      {/* Fixed Apps Filter Toggle Button Bar */}
+      {!hideSidebar && isLoggedIn && activeTab === 'apps' && (
+        <div className="px-4 pt-1 pb-3 border-b border-black/10 dark:border-zinc-800/80 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors select-none flex-none">
+          <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full">
+            <button
+              type="button"
+              onClick={() => setAppsFilterTab('all')}
+              className={cn(
+                "flex-1 py-1.5 px-3 text-[11px] font-bold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
+                appsFilterTab === 'all'
+                  ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
+                  : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
+              )}
+            >
+              All
+            </button>
+            <button
+              type="button"
+              onClick={() => setAppsFilterTab('connected')}
+              className={cn(
+                "flex-1 py-1.5 px-3 text-[11px] font-bold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
+                appsFilterTab === 'connected'
+                  ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
+                  : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
+              )}
+            >
+              Connected
+            </button>
+          </div>
+        </div>
+      )}
+
       {isLoggedIn && (
         <div
           className={cn(
@@ -638,38 +670,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               )}
             </div>
           ) : activeTab === 'apps' ? (
-            <div className="mt-2 space-y-1 py-1 pb-4 relative">
-              {/* Premium Apps Filter Toggle Button Bar */}
-              <div className="sticky top-0 bg-[#F2F3F5] dark:bg-zinc-900 pt-1 pb-3 z-10 select-none">
-                <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 mx-0.5">
-                  <button
-                    type="button"
-                    onClick={() => setAppsFilterTab('all')}
-                    className={cn(
-                      "flex-1 py-1.5 px-3 text-[11px] font-bold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
-                      appsFilterTab === 'all'
-                        ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
-                        : "text-gray-500 hover:text-gray-955 dark:hover:text-zinc-300"
-                    )}
-                  >
-                    All
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setAppsFilterTab('connected')}
-                    className={cn(
-                      "flex-1 py-1.5 px-3 text-[11px] font-bold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
-                      appsFilterTab === 'connected'
-                        ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
-                        : "text-gray-500 hover:text-gray-955 dark:hover:text-zinc-300"
-                    )}
-                  >
-                    Connected
-                  </button>
-                </div>
-                <div className="mt-3 border-b border-black/10 dark:border-zinc-800/80 mx-0.5" />
-              </div>
-
+            <div className="mt-2 space-y-1 py-1 pb-4">
               {displayedApps.length === 0 ? (
                 <div className="py-4 text-center text-xs text-gray-500">
                   {appsFilterTab === 'connected' ? "No connected integrations found." : "No integrations found."}
