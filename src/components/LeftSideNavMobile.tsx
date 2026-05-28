@@ -485,7 +485,7 @@ const LeftSideNavMobile = () => {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Assistant</p>
+                <p>Tasks</p>
               </TooltipContent>
             </Tooltip>
 

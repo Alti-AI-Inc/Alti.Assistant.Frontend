@@ -39,7 +39,7 @@ function AssistantWorkspaceContent() {
       <div className="flex h-full w-full flex-1 flex-col items-center justify-center relative z-10">
         {!hasMessages && (
           <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
-            Alti Assistant
+            How can I help you?
           </h1>
         )}
 
@@ -55,7 +55,7 @@ function AssistantWorkspace() {
       <div className="flex-1 bg-gray-50/50 dark:bg-gray-900/50 min-h-screen flex items-center justify-center">
         <div className="flex items-center gap-2 text-gray-500 font-semibold text-sm">
           <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
-          Loading Assistant Workspace...
+          Loading Tasks Workspace...
         </div>
       </div>
     }>
