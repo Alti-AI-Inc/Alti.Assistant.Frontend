@@ -338,51 +338,55 @@ function MyChatbotsContent() {
 
             {/* Step 2: System Instructions */}
             {currentStep === 2 && (
-              <div className="w-full flex flex-col rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/90 p-6 shadow-md transition-all duration-300 animate-in fade-in slide-in-from-right-4 duration-300">
-                <div className="flex items-center gap-2 mb-3">
-                  <FileText className="size-5 text-blue-600 dark:text-blue-500" />
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-zinc-100">Set System Instructions</h2>
-                </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">
-                  Define the specialized personality, role constraints, and prompt objectives for this AI workspace. This functions as the core directive for the model.
-                </p>
-                
-                <div className="relative flex flex-col rounded-xl border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-2 transition-all focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500 dark:focus-within:ring-blue-900/50">
-                  <Textarea
-                    placeholder="e.g. You are a Senior Financial Copywriter. Analyze our Q3 reports and write high-impact marketing slogans. Maintain a highly professional tone and always emphasize compliance and growth metrics."
-                    value={instructions}
-                    onChange={(e) => {
-                      setInstructions(e.target.value);
-                      setError('');
-                    }}
-                    className="min-h-[140px] w-full resize-none border-none bg-transparent px-1 py-1 shadow-none outline-none placeholder:text-xs text-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus:ring-0 text-gray-800 dark:text-zinc-100"
-                    autoFocus
-                  />
-                </div>
+              <>
+                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center select-none">
+                  Enter Instructions
+                </h1>
 
-                <div className="flex justify-between mt-6">
-                  <button
-                    type="button"
-                    onClick={() => setCurrentStep(1)}
-                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-semibold border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-gray-700 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors shadow-sm cursor-pointer"
-                  >
-                    <ChevronLeft className="size-3.5" /> Back
-                  </button>
-                  <button
-                    type="button"
-                    disabled={!instructions.trim()}
-                    onClick={() => setCurrentStep(3)}
-                    className={cn(
-                      "flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-semibold shadow-sm transition-all duration-200 text-white",
-                      instructions.trim()
-                        ? "bg-blue-600 hover:bg-blue-700 cursor-pointer"
-                        : "bg-gray-300 dark:bg-zinc-800 text-gray-400 dark:text-zinc-650 cursor-not-allowed opacity-50"
-                    )}
-                  >
-                    Next Step <ChevronRight className="size-3.5" />
-                  </button>
+                <div className="flex w-full flex-col">
+                  <div className="sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8 py-4 bg-transparent border-t-0">
+                    <div className="mx-auto w-full max-w-[796px]">
+                      <div className="mx-auto w-full max-w-[796px] space-y-6 px-0">
+                        <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
+                          <div className="relative flex items-center gap-2 py-2">
+                            <Textarea
+                              name="instructions"
+                              value={instructions}
+                              onChange={(e) => {
+                                setInstructions(e.target.value);
+                                setError('');
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' && !e.shiftKey && instructions.trim()) {
+                                  e.preventDefault();
+                                  setCurrentStep(3);
+                                }
+                              }}
+                              placeholder="Enter instructions here..."
+                              className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+                              autoFocus
+                            />
+
+                            <ArrowUp
+                              onClick={() => {
+                                if (instructions.trim()) {
+                                  setCurrentStep(3);
+                                }
+                              }}
+                              className={cn(
+                                "size-7 flex-shrink-0 rounded-lg border-2 p-1 transition-all",
+                                instructions.trim()
+                                  ? "border-gray-300 bg-black text-white cursor-pointer hover:bg-gray-800"
+                                  : "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-50"
+                              )}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </>
             )}
 
             {/* Step 3: Guardrails */}
