@@ -287,9 +287,9 @@ function MyChatbotsContent() {
                   </button>
                   <span 
                     className={cn(
-                      "absolute top-11 text-[10px] font-bold uppercase tracking-wider transition-colors duration-300 whitespace-nowrap",
+                      "absolute top-11 text-[10px] font-normal uppercase tracking-wider transition-colors duration-300 whitespace-nowrap",
                       isActive 
-                        ? "text-blue-600 dark:text-blue-500 font-extrabold" 
+                        ? "text-blue-600 dark:text-blue-500 font-medium" 
                         : isCompleted 
                         ? "text-gray-800 dark:text-zinc-200" 
                         : "text-gray-400 dark:text-zinc-500"
