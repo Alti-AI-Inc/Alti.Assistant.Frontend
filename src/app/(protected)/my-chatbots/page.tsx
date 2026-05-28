@@ -467,7 +467,7 @@ function MyChatbotsContent() {
                                             <Trash2 className="h-3.5 w-3.5" />
                                           </button>
                                         </DialogTrigger>
-                                        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[320px] sm:max-w-[320px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+                                        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
                                           <div className="px-5 pt-5 pb-4 text-center">
                                             <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
                                               Delete Instruction
@@ -613,7 +613,7 @@ function MyChatbotsContent() {
                                             <Trash2 className="h-3.5 w-3.5" />
                                           </button>
                                         </DialogTrigger>
-                                        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[320px] sm:max-w-[320px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+                                        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
                                           <div className="px-5 pt-5 pb-4 text-center">
                                             <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
                                               Delete Guardrail
@@ -767,7 +767,7 @@ function MyChatbotsContent() {
                                           <Trash2 className="h-3.5 w-3.5" />
                                         </button>
                                       </DialogTrigger>
-                                      <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[320px] sm:max-w-[320px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+                                      <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
                                         <div className="px-5 pt-5 pb-4 text-center">
                                           <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
                                             Delete Data
