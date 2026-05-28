@@ -359,14 +359,14 @@ function MyChatbotsContent() {
                                 }
                               }}
                               disabled={!projectName.trim()}
-                              className={cn(
-                                "flex flex-shrink-0 items-center justify-center rounded-lg border-2 p-1 transition-all",
+                              className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default"
+                            >
+                              <ArrowUp className={cn(
+                                "size-7 flex-shrink-0 rounded-lg border-2 p-1.5 transition-colors",
                                 projectName.trim()
                                   ? "border-gray-300 bg-black text-white hover:bg-gray-800"
                                   : "border-gray-200 bg-gray-100 text-gray-400"
-                              )}
-                            >
-                              <ArrowUp className="size-5" />
+                              )} />
                             </button>
                           </div>
                         </div>
@@ -424,14 +424,14 @@ function MyChatbotsContent() {
                                 }
                               }}
                               disabled={!instructions.trim()}
-                              className={cn(
-                                "flex flex-shrink-0 items-center justify-center rounded-lg border-2 p-1 transition-all",
+                              className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default"
+                            >
+                              <ArrowUp className={cn(
+                                "size-7 flex-shrink-0 rounded-lg border-2 p-1.5 transition-colors",
                                 instructions.trim()
                                   ? "border-gray-300 bg-black text-white hover:bg-gray-800"
                                   : "border-gray-200 bg-gray-100 text-gray-400"
-                              )}
-                            >
-                              <ArrowUp className="size-5" />
+                              )} />
                             </button>
                           </div>
                         </div>
@@ -562,14 +562,14 @@ function MyChatbotsContent() {
                                 }
                               }}
                               disabled={!guardrails.trim()}
-                              className={cn(
-                                "flex flex-shrink-0 items-center justify-center rounded-lg border-2 p-1 transition-all",
+                              className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default"
+                            >
+                              <ArrowUp className={cn(
+                                "size-7 flex-shrink-0 rounded-lg border-2 p-1.5 transition-colors",
                                 guardrails.trim()
                                   ? "border-gray-300 bg-black text-white hover:bg-gray-800"
                                   : "border-gray-200 bg-gray-100 text-gray-400"
-                              )}
-                            >
-                              <ArrowUp className="size-5" />
+                              )} />
                             </button>
                           </div>
                         </div>
