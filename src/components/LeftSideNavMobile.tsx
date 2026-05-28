@@ -304,7 +304,8 @@ const LeftSideNavMobile = () => {
           visible: true,
           label: 'New Project',
           onClick: () => {
-            onOpen({ type: 'add-chatbot' });
+            setActiveBotId(null);
+            router.push('/my-chatbots');
             close();
           },
         };

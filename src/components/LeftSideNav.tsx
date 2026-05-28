@@ -318,7 +318,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           visible: true,
           tooltip: 'New Project',
           onClick: () => {
-            onOpen({ type: 'add-chatbot' });
+            setActiveBotId(null);
+            router.push('/my-chatbots');
           },
         };
       case 'workflows':
