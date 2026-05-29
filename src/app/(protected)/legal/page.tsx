@@ -611,7 +611,7 @@ export default function page() {
     <SpacesLayout showColumnPanels={false}>
       <Tabs defaultValue="privacyPolicy" className="h-full flex flex-col gap-0 bg-white dark:bg-gray-950 overflow-hidden">
         {/* Dynamic Header */}
-        <div className="h-[53px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-white dark:bg-gray-950">
+        <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-white dark:bg-gray-950">
           <h1 className="text-base font-semibold text-gray-900 dark:text-white">
             Legal Documents
           </h1>

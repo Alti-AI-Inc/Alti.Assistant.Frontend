@@ -380,7 +380,7 @@ export function OrganizationTenantOverview({
       ) : selectedTenantId ? (
         <>
           {/* Permanent Invite Member Form Box */}
-          <div className="rounded-lg border border-black/10 bg-zinc-50 dark:bg-zinc-900/50 p-6 shadow-xs space-y-4">
+          <div className="rounded-xl bg-white dark:bg-zinc-950 p-6 shadow-xl shadow-black/5 border border-black/5 space-y-4">
             <div>
               <h3 className="text-sm font-semibold text-black dark:text-white">Invite Team Member</h3>
               <p className="text-xs text-gray-500 mt-0.5">

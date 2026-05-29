@@ -103,7 +103,7 @@ export const SettingsSidebar = ({
     >
       <div
         className={cn(
-          'sticky top-0 z-30 flex h-[53px] items-center justify-between border-b border-black/10 px-4 py-3 transition-colors duration-300',
+          'sticky top-0 z-30 flex h-[52px] items-center justify-between border-b border-black/10 px-4 py-3 transition-colors duration-300',
           hideSidebar ? 'justify-center bg-[#F2F3F5] dark:bg-gray-900' : 'bg-white dark:bg-gray-955',
         )}
       >
