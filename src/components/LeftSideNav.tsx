@@ -619,7 +619,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             <div className="mt-4 space-y-1">
               {[
                 { name: 'Billing', href: '/admin/billing', icon: CreditCard },
-                { name: 'Members', href: '/admin/members', icon: Users },
+                { name: 'Invite', href: '/admin/members', icon: Users },
                 { name: 'Data', href: '/admin/data', icon: Database },
                 { name: 'Instructions', href: '/admin/instructions', icon: FileText },
                 { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },

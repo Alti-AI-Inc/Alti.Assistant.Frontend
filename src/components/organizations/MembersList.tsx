@@ -116,11 +116,7 @@ function MembersListComponent({
   };
 
   if (members.length === 0) {
-    return (
-      <div className="text-muted-foreground py-8 text-center text-xs">
-        No members found
-      </div>
-    );
+    return null;
   }
 
   return (

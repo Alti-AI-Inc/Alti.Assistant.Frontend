@@ -456,7 +456,7 @@ export function OrganizationTenantOverview({
 
           {/* Unified Team Members List Table */}
           <div className="space-y-2 pt-4">
-            <h3 className="text-sm font-semibold text-black px-1">Team Members</h3>
+
             <MembersList
               members={combinedMembers}
               tenantId={selectedTenantId}
