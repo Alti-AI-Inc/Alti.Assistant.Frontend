@@ -380,7 +380,7 @@ export function OrganizationTenantOverview({
       ) : selectedTenantId ? (
         <>
           {/* Permanent Invite Member Form Box */}
-          <div className="rounded-xl bg-white dark:bg-zinc-950 p-6 shadow-xl shadow-black/5 border border-black/5 space-y-4">
+          <div className="space-y-4 pt-2">
             <div>
               <h3 className="text-sm font-semibold text-black dark:text-white">Invite Team Member</h3>
               <p className="text-xs text-gray-500 mt-0.5">
@@ -396,7 +396,7 @@ export function OrganizationTenantOverview({
                 placeholder="Enter First Name"
                 value={inviteFirstName}
                 onChange={(e) => setInviteFirstName(e.target.value)}
-                className="h-9 text-xs md:text-sm border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
+                className="h-10 text-xs md:text-sm border-transparent bg-black/[0.03] dark:bg-white/[0.03] focus-visible:bg-white dark:focus-visible:bg-zinc-900 focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
                 disabled={isInviting}
               />
               <Input
@@ -405,7 +405,7 @@ export function OrganizationTenantOverview({
                 placeholder="Enter Last Name"
                 value={inviteLastName}
                 onChange={(e) => setInviteLastName(e.target.value)}
-                className="h-9 text-xs md:text-sm border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
+                className="h-10 text-xs md:text-sm border-transparent bg-black/[0.03] dark:bg-white/[0.03] focus-visible:bg-white dark:focus-visible:bg-zinc-900 focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
                 disabled={isInviting}
               />
             </div>
@@ -418,7 +418,7 @@ export function OrganizationTenantOverview({
                 placeholder="Enter Email Address"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
-                className="h-9 text-xs md:text-sm border-black/10 focus-visible:ring-black bg-white dark:bg-zinc-950"
+                className="h-10 text-xs md:text-sm border-transparent bg-black/[0.03] dark:bg-white/[0.03] focus-visible:bg-white dark:focus-visible:bg-zinc-900 focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
                 disabled={isInviting}
               />
               <Select
@@ -426,7 +426,7 @@ export function OrganizationTenantOverview({
                 onValueChange={setInviteRole}
                 disabled={isInviting}
               >
-                <SelectTrigger id="invite-role" className="h-9 text-xs md:text-sm border-black/10 focus:ring-black bg-white dark:bg-zinc-950 w-full">
+                <SelectTrigger id="invite-role" className="h-10 text-xs md:text-sm border-transparent bg-black/[0.03] dark:bg-white/[0.03] focus:ring-1 focus:ring-black/20 rounded-lg w-full">
                   <SelectValue placeholder="Select Role" />
                 </SelectTrigger>
                 <SelectContent className="border-black/10">
@@ -437,7 +437,7 @@ export function OrganizationTenantOverview({
               </Select>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2 border-t border-black/5">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4 border-t border-black/5">
               <div className="text-[10px] text-gray-500 max-w-none">
                 <span className="font-semibold text-black dark:text-gray-300">Billing notice:</span> Adding a new team member adds an active seat to your plan at $25.00/month.
               </div>
@@ -445,7 +445,7 @@ export function OrganizationTenantOverview({
                 <Button
                   onClick={handleSendInvite}
                   disabled={isInviting || !inviteEmail.trim()}
-                  className="bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 text-xs h-9 px-5 shrink-0"
+                  className="bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 text-xs h-10 px-6 rounded-lg shadow-md hover:shadow-lg transition-all shrink-0"
                 >
                   {isInviting && <Loader2 className="mr-2 size-4 animate-spin shrink-0" />}
                   {isInviting ? 'Inviting...' : 'Invite Member'}
