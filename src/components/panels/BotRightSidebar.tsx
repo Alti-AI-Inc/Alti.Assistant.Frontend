@@ -9,6 +9,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { getFileIconComponent } from './ProjectEditors';
 
 interface BotRightSidebarProps {
   botId: string;
@@ -357,14 +358,16 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     );
                   }
 
-                  return files.map((file, idx) => (
-                    <div key={idx} className="group flex h-9 w-full items-center justify-between rounded-md text-sm font-normal text-black text-left transition-all hover:bg-black/5">
-                      <span
-                        className="flex-1 cursor-pointer truncate px-1 py-2"
-                        onClick={() => handleTabChange('data')}
-                      >
-                        {file.name}
-                      </span>
+                  return files.map((file, idx) => {
+                    const IconComponent = getFileIconComponent(file.name);
+                    return (
+                      <div key={idx} className="group flex h-9 w-full items-center justify-between rounded-md text-sm font-normal text-black text-left transition-all hover:bg-black/5">
+                        <div className="flex items-center flex-1 min-w-0 px-1 py-2 cursor-pointer" onClick={() => handleTabChange('data')}>
+                          <IconComponent className="size-3.5 mr-2 flex-shrink-0 text-blue-600 opacity-70" />
+                          <span className="truncate">
+                            {file.name}
+                          </span>
+                        </div>
                       
                       <button
                         onClick={(e) => {
@@ -382,7 +385,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                         <Trash2 className="size-3.5 text-black" />
                       </button>
                     </div>
-                  ));
+                    );
+                  });
                 })()
               ) : (
                 <div className="py-4 text-center text-xs text-gray-400">

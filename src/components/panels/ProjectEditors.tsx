@@ -4,13 +4,20 @@ import { useState, useRef } from 'react';
 import { useBotsStore, Chatbot } from '@/stores/useBotsStore';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { ArrowUp, Terminal, Trash2, Shield, Upload, ChevronLeft, Paperclip, FileText } from 'lucide-react';
+import { ArrowUp, Terminal, Trash2, Shield, Upload, ChevronLeft, Paperclip, FileText, FileAudio, FileVideo, FileImage } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
-// Helper to get file extension
-function getFileExtension(filename: string) {
+export function getFileExtension(filename: string) {
   return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+}
+
+export function getFileIconComponent(filename: string) {
+  const ext = getFileExtension(filename).toLowerCase();
+  if (['mp3', 'wav', 'm4a', 'aac', 'ogg'].includes(ext)) return FileAudio;
+  if (['mp4', 'mov', 'avi', 'mkv', 'webm'].includes(ext)) return FileVideo;
+  if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'].includes(ext)) return FileImage;
+  return FileText;
 }
 
 interface EditorProps {
@@ -325,24 +332,26 @@ export function DataEditor({ bot }: EditorProps) {
       </div>
 
       <div className="flex-1 overflow-y-auto pr-1 pb-4 custom-scrollbar space-y-3 relative z-10 !mt-0">
-        {selectedFiles.map((file, idx) => (
-          <div
-            key={idx}
-            className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-blue-50/20 dark:hover:bg-blue-950/10"
-          >
-            <div className="flex items-center gap-3 min-w-0 pr-3 flex-1">
-              <div className="h-7 w-7 rounded-lg bg-blue-50 dark:bg-blue-955/40 text-blue-650 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
-                <FileText className="h-4 w-4" />
+        {selectedFiles.map((file, idx) => {
+          const IconComponent = getFileIconComponent(file.name);
+          return (
+            <div
+              key={idx}
+              className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-blue-50/20 dark:hover:bg-blue-950/10"
+            >
+              <div className="flex items-center gap-3 min-w-0 pr-3 flex-1">
+                <div className="h-7 w-7 rounded-lg bg-blue-50 dark:bg-blue-955/40 text-blue-650 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
+                  <IconComponent className="h-4 w-4" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed" title={file.name}>
+                    {file.name}
+                  </p>
+                  <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                    {(file.size / 1024 / 1024).toFixed(2)} MB • {getFileExtension(file.name) || "Document"}
+                  </span>
+                </div>
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed" title={file.name}>
-                  {file.name}
-                </p>
-                <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
-                  {(file.size / 1024 / 1024).toFixed(2)} MB • {getFileExtension(file.name) || "Document"}
-                </span>
-              </div>
-            </div>
 
             <Dialog>
               <DialogTrigger asChild>
@@ -381,7 +390,8 @@ export function DataEditor({ bot }: EditorProps) {
               </DialogContent>
             </Dialog>
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
