@@ -682,15 +682,15 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             </div>
           ) : activeTab === 'bots' ? (
             <div className="mt-2 space-y-1 py-1 pb-4">
-              <div className="flex w-full items-center justify-between rounded-lg bg-gray-100 p-0.5 mb-2 dark:bg-zinc-800/50 select-none">
+              <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full mb-2 select-none">
                 <button
                   type="button"
                   onClick={() => setProjectTab('my')}
                   className={cn(
-                    'flex-1 rounded-md px-3 py-1.5 text-xs font-medium transition-all cursor-pointer',
+                    "flex-1 py-1.5 px-3 text-[11px] font-normal rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
                     projectTab === 'my'
-                      ? 'bg-white text-black shadow-sm dark:bg-zinc-700 dark:text-white'
-                      : 'text-gray-500 hover:text-black dark:text-zinc-400 dark:hover:text-white'
+                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
+                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
                   )}
                 >
                   My Projects
@@ -699,15 +699,16 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   type="button"
                   onClick={() => setProjectTab('team')}
                   className={cn(
-                    'flex-1 rounded-md px-3 py-1.5 text-xs font-medium transition-all cursor-pointer',
+                    "flex-1 py-1.5 px-3 text-[11px] font-normal rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
                     projectTab === 'team'
-                      ? 'bg-white text-black shadow-sm dark:bg-zinc-700 dark:text-white'
-                      : 'text-gray-500 hover:text-black dark:text-zinc-400 dark:hover:text-white'
+                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
+                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
                   )}
                 >
                   Team Projects
                 </button>
               </div>
+              <div className="my-3 h-px bg-black/10 dark:bg-white/10" />
 
               {bots
                 .filter(bot =>
