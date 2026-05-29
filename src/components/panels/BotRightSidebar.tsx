@@ -141,7 +141,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
 
           {/* Toggle with 4 icons */}
-          {basePath !== '/admin/projects' && (
+          {basePath !== '/admin/projects' && !bot.isShared && (
             <div className="h-10 mt-1 flex items-center bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300 w-full">
               <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
               <Tooltip>
