@@ -46,7 +46,6 @@ import {
   File,
   Paperclip,
   PanelLeftClose,
-  Search,
   Folder,
 } from 'lucide-react';
 import Link from 'next/link';
