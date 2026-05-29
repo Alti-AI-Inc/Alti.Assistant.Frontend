@@ -11,6 +11,7 @@ export interface Chatbot {
   createdAt: string;
   data?: string;
   guardrails?: string;
+  isShared?: boolean;
 }
 
 export interface BotThread {

@@ -176,6 +176,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const [logoHovered, setLogoHovered] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<SidebarTab>('chat');
+  const [projectTab, setProjectTab] = useState<'my' | 'team'>('my');
 
   const isAdminMode = pathname.startsWith('/admin');
 
@@ -657,6 +658,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   { name: 'Data', href: '/admin/data', icon: Database },
                   { name: 'Instructions', href: '/admin/instructions', icon: FileText },
                   { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
+                  { name: 'Projects', href: '/admin/projects', icon: Folder },
                 ].map((item) => {
                   const isActive = pathname.startsWith(item.href);
                   const Icon = item.icon;
@@ -680,10 +682,38 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             </div>
           ) : activeTab === 'bots' ? (
             <div className="mt-2 space-y-1 py-1 pb-4">
+              <div className="flex w-full items-center justify-between rounded-lg bg-gray-100 p-0.5 mb-2 dark:bg-zinc-800/50 select-none">
+                <button
+                  type="button"
+                  onClick={() => setProjectTab('my')}
+                  className={cn(
+                    'flex-1 rounded-md px-3 py-1.5 text-xs font-medium transition-all cursor-pointer',
+                    projectTab === 'my'
+                      ? 'bg-white text-black shadow-sm dark:bg-zinc-700 dark:text-white'
+                      : 'text-gray-500 hover:text-black dark:text-zinc-400 dark:hover:text-white'
+                  )}
+                >
+                  My Projects
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setProjectTab('team')}
+                  className={cn(
+                    'flex-1 rounded-md px-3 py-1.5 text-xs font-medium transition-all cursor-pointer',
+                    projectTab === 'team'
+                      ? 'bg-white text-black shadow-sm dark:bg-zinc-700 dark:text-white'
+                      : 'text-gray-500 hover:text-black dark:text-zinc-400 dark:hover:text-white'
+                  )}
+                >
+                  Team Projects
+                </button>
+              </div>
+
               {bots
                 .filter(bot =>
-                  bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                  bot.description.toLowerCase().includes(searchQuery.toLowerCase())
+                  (bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  bot.description.toLowerCase().includes(searchQuery.toLowerCase())) &&
+                  (projectTab === 'my' ? !bot.isShared : !!bot.isShared)
                 )
                 .map(bot => {
                   const isSelected = activeBotId === bot.id && pathname === '/my-chatbots';
@@ -726,8 +756,9 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   );
                 })}
               {bots.filter(bot =>
-                bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                bot.description.toLowerCase().includes(searchQuery.toLowerCase())
+                (bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                bot.description.toLowerCase().includes(searchQuery.toLowerCase())) &&
+                (projectTab === 'my' ? !bot.isShared : !!bot.isShared)
               ).length === 0 && (
                 <div className="py-4 text-center text-xs text-gray-500">
                   No projects found.
