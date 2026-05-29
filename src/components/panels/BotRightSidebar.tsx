@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogTrigger, DialogClose } from '@/components/
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { Plus, Trash2, PanelLeftClose, Search, MessageSquare, FileText, Shield, Upload } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { getFileIconComponent } from './ProjectEditors';
@@ -22,6 +22,8 @@ type TabType = 'history' | 'instructions' | 'guardrails' | 'data';
 export default function BotRightSidebar({ botId, activeThreadId }: BotRightSidebarProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const basePath = pathname?.startsWith('/admin') ? '/admin/projects' : '/my-chatbots';
   const { bots, threads, deleteThread, setActiveBotThreadId, editBot } = useBotsStore();
   const { setActiveConversation } = useConversationsStore();
   const { isRightSidebarOpen, toggleRightSidebar } = useSidebarStore();
@@ -37,9 +39,9 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   const handleTabChange = (tab: TabType) => {
     // If selecting history, clear the view parameter so it shows the chat
     if (tab === 'history') {
-      router.push(`/my-chatbots?bot=${botId}`);
+      router.push(`${basePath}?bot=${botId}`);
     } else {
-      router.push(`/my-chatbots?bot=${botId}&view=${tab}`);
+      router.push(`${basePath}?bot=${botId}&view=${tab}`);
     }
   };
 
@@ -52,19 +54,19 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   const handleNewChat = () => {
     setActiveBotThreadId(null);
     setActiveConversation(null);
-    router.push(`/my-chatbots?bot=${botId}`);
+    router.push(`${basePath}?bot=${botId}`);
   };
 
   const handleThreadSelect = (threadId: string) => {
     setActiveBotThreadId(threadId);
-    router.push(`/my-chatbots?bot=${botId}&thread=${threadId}`);
+    router.push(`${basePath}?bot=${botId}&thread=${threadId}`);
   };
 
   const handleThreadDelete = (e: React.MouseEvent, threadId: string) => {
     e.stopPropagation();
     deleteThread(threadId);
     if (activeThreadId === threadId) {
-      router.push(`/my-chatbots?bot=${botId}`);
+      router.push(`${basePath}?bot=${botId}`);
     }
   };
 

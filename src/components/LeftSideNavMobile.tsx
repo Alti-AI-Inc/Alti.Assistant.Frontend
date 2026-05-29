@@ -310,7 +310,7 @@ const LeftSideNavMobile = () => {
         };
       case 'bots':
         return {
-          visible: true,
+          visible: projectTab === 'my',
           label: 'New Project',
           onClick: () => {
             setActiveBotId(null);
@@ -615,23 +615,49 @@ const LeftSideNavMobile = () => {
                   { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
                   { name: 'Projects', href: '/admin/projects', icon: Folder },
                 ].map((item) => {
-                  const isActive = pathname.startsWith(item.href);
+                  const isActive = pathname === item.href || (item.name === 'Projects' && pathname.startsWith('/admin/projects'));
                   const Icon = item.icon;
                   return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      onClick={() => close()}
-                      className={cn(
-                        'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                        isActive
-                          ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
-                          : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                    <div key={item.name}>
+                      <Link
+                        href={item.href}
+                        onClick={() => close()}
+                        className={cn(
+                          'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                          isActive
+                            ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
+                            : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                        )}
+                      >
+                        <Icon className="w-4 h-4" />
+                        {item.name}
+                      </Link>
+                      {item.name === 'Projects' && (
+                        <div className="mt-1 flex flex-col pl-9 pr-2">
+                          {bots.filter(b => b.isShared).map(bot => {
+                            const isSelected = activeBotId === bot.id && pathname.startsWith('/admin/projects');
+                            return (
+                              <Link
+                                key={bot.id}
+                                href={`/admin/projects?bot=${bot.id}`}
+                                onClick={() => {
+                                  setActiveBotId(bot.id);
+                                  close();
+                                }}
+                                className={cn(
+                                  "flex h-8 w-full items-center truncate rounded-md px-2 text-xs font-normal transition-all text-left",
+                                  isSelected
+                                    ? "bg-black/10 text-black dark:bg-white/10 dark:text-white font-medium"
+                                    : "text-gray-500 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white"
+                                )}
+                              >
+                                {bot.name}
+                              </Link>
+                            )
+                          })}
+                        </div>
                       )}
-                    >
-                      <Icon className="w-4 h-4" />
-                      {item.name}
-                    </Link>
+                    </div>
                   );
                 })}
               </div>
