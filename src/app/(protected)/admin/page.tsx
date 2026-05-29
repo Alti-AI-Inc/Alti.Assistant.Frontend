@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { AdminDashboardMonthCharts } from '@/components/admin/AdminDashboardMonthCharts';
@@ -81,21 +82,16 @@ export default function AdminDashboardPage() {
   });
   const [apiError, setApiError] = useState<string | null>(null);
 
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status !== 'loading' && !isSuperAdmin) {
+      router.replace('/admin/members');
+    }
+  }, [status, isSuperAdmin, router]);
+
   if (status !== 'loading' && !isSuperAdmin) {
-    return (
-      <div className="bg-background min-h-screen">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 md:px-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Access Restricted</CardTitle>
-              <CardDescription>
-                The admin dashboard is available only for `super_admin` users.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </div>
-      </div>
-    );
+    return null; // The useEffect will redirect
   }
 
   useEffect(() => {
