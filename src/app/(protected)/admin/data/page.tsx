@@ -1,10 +1,21 @@
 'use client';
 
+import { AdminDataEditor } from '@/components/admin/AdminEditors';
+
 export default function AdminDataPage() {
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Data</h1>
-      <p className="text-gray-600 dark:text-gray-400">Manage organizational data sources and knowledgebases here.</p>
+    <div className="h-full flex flex-col bg-white dark:bg-gray-950 overflow-hidden">
+      {/* Dynamic Header */}
+      <div className="h-[53px] border-b border-black/10 dark:border-white/10 flex items-center px-8 flex-none bg-white dark:bg-gray-950">
+        <h1 className="text-base font-semibold text-gray-900 dark:text-white">
+          Organization Data
+        </h1>
+      </div>
+
+      {/* Main Workspace Body */}
+      <div className="flex-1 overflow-y-auto min-h-0">
+        <AdminDataEditor />
+      </div>
     </div>
   );
 }
