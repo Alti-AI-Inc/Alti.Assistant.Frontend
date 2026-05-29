@@ -113,7 +113,7 @@ export function StripeCardForm({
             'bg-background'
           )}
         >
-          <div className="flex-1 px-3 py-3">
+          <div className="flex-1 pl-1 pr-3 py-3">
             <CardNumberElement
               id="card-number-element"
               options={{ ...baseElementOptions, showIcon: true, placeholder: 'Card Number' }}
