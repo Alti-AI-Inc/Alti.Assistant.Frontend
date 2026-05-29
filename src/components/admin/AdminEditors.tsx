@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { useAdminStore } from '@/stores/useAdminStore';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { ArrowUp, Terminal, Trash2, Shield, Upload, ChevronLeft, Paperclip, FileText, FileAudio, FileVideo, FileImage } from 'lucide-react';
+import { ArrowUp, Terminal, Trash2, Shield, Upload, ChevronLeft, Paperclip, FileText, FileAudio, FileVideo, FileImage, Search } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import { getFileExtension, getFileIconComponent } from '@/components/panels/ProjectEditors';
@@ -12,6 +12,7 @@ import { getFileExtension, getFileIconComponent } from '@/components/panels/Proj
 export function AdminInstructionsEditor() {
   const { instructions, setInstructions } = useAdminStore();
   const [inputValue, setInputValue] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   
   const instructionsList = instructions ? instructions.split('\n\n').filter(Boolean) : [];
 
@@ -29,7 +30,7 @@ export function AdminInstructionsEditor() {
 
   return (
     <div className="flex flex-col w-full h-full p-8 max-w-[796px] mx-auto pt-16 animate-in fade-in zoom-in-95 duration-200">
-      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
+      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-4">
         <div className="relative flex items-center gap-2 py-2">
           <Textarea
             value={inputValue}
@@ -60,8 +61,24 @@ export function AdminInstructionsEditor() {
         </div>
       </div>
 
+      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
+        <div className="relative flex items-center gap-2 py-2">
+          <Search className="size-5 text-gray-400 flex-shrink-0 ml-1" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search instructions..."
+            className="min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+          />
+        </div>
+      </div>
+
       <div className="flex-1 overflow-y-auto pr-1 pb-4 custom-scrollbar space-y-3 relative z-10 !mt-0">
-        {instructionsList.map((item, idx) => (
+        {instructionsList
+          .map((item, i) => ({ item, originalIndex: i }))
+          .filter(({ item }) => item.toLowerCase().includes(searchQuery.toLowerCase()))
+          .map(({ item, originalIndex: idx }) => (
           <div
             key={idx}
             className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-indigo-50/20 dark:hover:bg-indigo-950/10"
@@ -126,6 +143,7 @@ export function AdminInstructionsEditor() {
 export function AdminGuardrailsEditor() {
   const { guardrails, setGuardrails } = useAdminStore();
   const [inputValue, setInputValue] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   
   const guardrailsList = guardrails ? guardrails.split('\n\n').filter(Boolean) : [];
 
@@ -143,7 +161,7 @@ export function AdminGuardrailsEditor() {
 
   return (
     <div className="flex flex-col w-full h-full p-8 max-w-[796px] mx-auto pt-16 animate-in fade-in zoom-in-95 duration-200">
-      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
+      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-4">
         <div className="relative flex items-center gap-2 py-2">
           <Textarea
             value={inputValue}
@@ -174,8 +192,24 @@ export function AdminGuardrailsEditor() {
         </div>
       </div>
 
+      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
+        <div className="relative flex items-center gap-2 py-2">
+          <Search className="size-5 text-gray-400 flex-shrink-0 ml-1" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search guardrails..."
+            className="min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+          />
+        </div>
+      </div>
+
       <div className="flex-1 overflow-y-auto pr-1 pb-4 custom-scrollbar space-y-3 relative z-10 !mt-0">
-        {guardrailsList.map((item, idx) => (
+        {guardrailsList
+          .map((item, i) => ({ item, originalIndex: i }))
+          .filter(({ item }) => item.toLowerCase().includes(searchQuery.toLowerCase()))
+          .map(({ item, originalIndex: idx }) => (
           <div
             key={idx}
             className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-red-50/20 dark:hover:bg-red-950/10"
@@ -241,6 +275,7 @@ export function AdminDataEditor() {
   const { files: selectedFiles, setFiles } = useAdminStore();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragActive, setIsDragActive] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const addFiles = (newFiles: File[]) => {
     const newItems = newFiles.map(f => ({ id: Date.now().toString() + Math.random().toString(), name: f.name, size: f.size.toString(), url: '' }));
@@ -255,7 +290,7 @@ export function AdminDataEditor() {
 
   return (
     <div className="flex flex-col w-full h-full p-8 max-w-[796px] mx-auto pt-16 animate-in fade-in zoom-in-95 duration-200">
-      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
+      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-4">
         <div className="relative flex items-center gap-2 py-2">
           
           <button
@@ -305,8 +340,24 @@ export function AdminDataEditor() {
         </div>
       </div>
 
+      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
+        <div className="relative flex items-center gap-2 py-2">
+          <Search className="size-5 text-gray-400 flex-shrink-0 ml-1" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search files..."
+            className="min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+          />
+        </div>
+      </div>
+
       <div className="flex-1 overflow-y-auto pr-1 pb-4 custom-scrollbar space-y-3 relative z-10 !mt-0">
-        {selectedFiles.map((file, idx) => {
+        {selectedFiles
+          .map((file, i) => ({ file, originalIndex: i }))
+          .filter(({ file }) => file.name.toLowerCase().includes(searchQuery.toLowerCase()))
+          .map(({ file, originalIndex: idx }) => {
           const IconComponent = getFileIconComponent(file.name);
           return (
             <div
