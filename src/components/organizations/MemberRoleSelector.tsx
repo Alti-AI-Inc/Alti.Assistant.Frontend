@@ -86,14 +86,8 @@ export function MemberRoleSelector({
     ? normalizedRole
     : 'member';
 
-  // Non-owners see a static badge for tenant owners/admins (only an org owner may change roles)
-  if ((normalizedRole === 'owner' || normalizedRole === 'admin') && !viewerIsOwner) {
-    return (
-      <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed capitalize">
-        {normalizedRole}
-      </p>
-    );
-  }
+  // We removed the restriction that only owners can edit admins/owners.
+  // The backend will enforce actual permissions.
 
   const formatRoleLabel = (role: string) => {
     if (role.toLowerCase() === 'member') return 'user';
@@ -126,16 +120,12 @@ export function MemberRoleSelector({
           <SelectItem value={TenantRole.MEMBER}>
             <span className="capitalize">User</span>
           </SelectItem>
-          {viewerIsOwner && (
-            <>
-              <SelectItem value={TenantRole.ADMIN}>
-                <span className="capitalize">Admin</span>
-              </SelectItem>
-              <SelectItem value={TenantRole.OWNER}>
-                <span className="capitalize">Owner</span>
-              </SelectItem>
-            </>
-          )}
+          <SelectItem value={TenantRole.ADMIN}>
+            <span className="capitalize">Admin</span>
+          </SelectItem>
+          <SelectItem value={TenantRole.OWNER}>
+            <span className="capitalize">Owner</span>
+          </SelectItem>
         </SelectContent>
       </Select>
 

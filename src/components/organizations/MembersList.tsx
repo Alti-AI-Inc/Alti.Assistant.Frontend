@@ -74,8 +74,9 @@ function MembersListComponent({
   );
   const currentUserRole = tenantMembership?.role?.toLowerCase();
 
-  /** Only organization owners may remove members or change roles (admins/members cannot). */
+  /** Organization owners and admins may remove members or change roles. */
   const isTenantOwner = currentUserRole === 'owner';
+  const isTenantAdminOrOwner = isTenantOwner || currentUserRole === 'admin';
 
   const handleRemoveMember = async () => {
     if (!memberToRemove || !session?.accessToken) return;
@@ -166,7 +167,7 @@ function MembersListComponent({
               <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Role Type</span>
             </div>
           </div>
-          {isTenantOwner && <div className="flex-none ml-2 w-7"></div>}
+          {isTenantAdminOrOwner && <div className="flex-none ml-2 w-7"></div>}
         </div>
 
         {displayMembers
@@ -185,7 +186,7 @@ function MembersListComponent({
             const firstName = member.firstName || nameInfo.firstName || (isCurrentUser ? session?.user?.name?.split(' ')[0] : '') || '—';
             const lastName = member.lastName || nameInfo.lastName || (isCurrentUser ? session?.user?.name?.split(' ').slice(1).join(' ') : '') || '—';
             
-            const canModify = isTenantOwner && !isCurrentUser && !isInvitation;
+            const canModify = isTenantAdminOrOwner && !isCurrentUser;
 
             return (
               <div
@@ -225,7 +226,7 @@ function MembersListComponent({
                         <MemberRoleSelector
                           currentRole={memberRole}
                           memberId={userId}
-                          viewerIsOwner
+                          viewerIsOwner={isTenantOwner}
                           onUpdate={onUpdate}
                         />
                       ) : (
@@ -237,7 +238,7 @@ function MembersListComponent({
                   </div>
                 </div>
 
-                {isTenantOwner && (
+                {isTenantAdminOrOwner && (
                   <div className="flex-none ml-2">
                     {!isCurrentUser && (
                       <button
