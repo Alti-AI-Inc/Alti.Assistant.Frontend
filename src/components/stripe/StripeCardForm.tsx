@@ -179,7 +179,7 @@ export function useCardValidation() {
       return false;
     }
 
-    const cardElement = elements.getElement(CardElement);
+    const cardElement = elements.getElement(CardNumberElement);
     if (!cardElement) {
       setError('Card input not found');
       return false;
