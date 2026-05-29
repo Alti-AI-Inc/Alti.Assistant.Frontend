@@ -197,24 +197,28 @@ export default function ConversationsList({
             </DropdownMenuTrigger>
             <DropdownMenuContent className="rounded-2xl">
               <DropdownMenuItem
-                onClick={() =>
-                  onOpen({
-                    type: 'share-conversation',
-                    actionId: chat._id,
-                  })
-                }
+                onClick={() => {
+                  setTimeout(() => {
+                    onOpen({
+                      type: 'share-conversation',
+                      actionId: chat._id,
+                    });
+                  }, 0);
+                }}
               >
                 <Share className="text-black" /> Share
               </DropdownMenuItem>
 
               <DropdownMenuItem
-                onClick={() =>
-                  onOpen({
-                    type: 'rename-chat',
-                    actionId: chat.conversationId,
-                    title: formatConversationTitle(chat.title),
-                  })
-                }
+                onClick={() => {
+                  setTimeout(() => {
+                    onOpen({
+                      type: 'rename-chat',
+                      actionId: chat.conversationId,
+                      title: formatConversationTitle(chat.title),
+                    });
+                  }, 0);
+                }}
               >
                 <Pencil className="text-black" /> Rename
               </DropdownMenuItem>
@@ -222,12 +226,14 @@ export default function ConversationsList({
               <DropdownMenuSeparator />
 
               <DropdownMenuItem
-                onClick={() =>
-                  onOpen({
-                    type: 'delete-conversation',
-                    actionId: chat._id,
-                  })
-                }
+                onClick={() => {
+                  setTimeout(() => {
+                    onOpen({
+                      type: 'delete-conversation',
+                      actionId: chat._id,
+                    });
+                  }, 0);
+                }}
               >
                 <Trash2 className="text-black" />
                 <span className="text-black">Delete</span>

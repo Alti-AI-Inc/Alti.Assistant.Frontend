@@ -16,7 +16,7 @@ const OrganizationMembersPageContent = ({ tenantId }: { tenantId: string }) => {
 
       {/* Main Workspace Body */}
       <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
-        <OrganizationTenantOverview fixedTenantId={tenantId} />
+        <OrganizationTenantOverview fixedTenantId={tenantId} view="invite" />
       </div>
     </div>
   );

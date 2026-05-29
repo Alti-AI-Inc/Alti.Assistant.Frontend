@@ -40,6 +40,8 @@ export interface OrganizationTenantOverviewProps {
   organizations?: UserTenant[];
   /** Lock to one tenant (no switcher). Use on `/organizations/[tenantId]/members`. */
   fixedTenantId?: string;
+  /** View mode to show only form, only list, or both */
+  view?: 'invite' | 'members' | 'both';
 }
 
 /** Handles `{ data: Tenant }` or `{ data: { tenant: Tenant } }` from the API */
@@ -61,6 +63,7 @@ function normalizeTenantPayload(data: unknown): Tenant | null {
 export function OrganizationTenantOverview({
   organizations = [],
   fixedTenantId,
+  view = 'both',
 }: OrganizationTenantOverviewProps) {
   const { data: session, status: sessionStatus } = useSession();
   const { mode, currentTenant, switchToTenantMode } = useTenant();
@@ -380,6 +383,7 @@ export function OrganizationTenantOverview({
       ) : selectedTenantId ? (
         <>
           {/* Permanent Invite Member Form Box */}
+          {(view === 'both' || view === 'invite') && (
           <div className="space-y-4 pt-2">
             <div>
               <h3 className="text-sm font-semibold text-black dark:text-white">Invite Team Member</h3>
@@ -453,8 +457,10 @@ export function OrganizationTenantOverview({
               )}
             </div>
           </div>
+          )}
 
           {/* Unified Team Members List Table */}
+          {(view === 'both' || view === 'members') && (
           <div className="space-y-2 pt-4">
 
             <MembersList
@@ -463,6 +469,7 @@ export function OrganizationTenantOverview({
               onUpdate={reloadDashboard}
             />
           </div>
+          )}
         </>
       ) : (
         <p className="text-gray-500 text-xs">

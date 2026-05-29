@@ -574,6 +574,7 @@ const LeftSideNavMobile = () => {
               {[
                 { name: 'Billing', href: '/admin/billing', icon: CreditCard },
                 { name: 'Invite', href: '/admin/members', icon: Users },
+                { name: 'Members', href: '/admin/team-members', icon: Users },
                 { name: 'Data', href: '/admin/data', icon: Database },
                 { name: 'Instructions', href: '/admin/instructions', icon: FileText },
                 { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },

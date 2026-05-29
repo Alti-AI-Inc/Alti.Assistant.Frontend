@@ -121,60 +121,73 @@ function MembersListComponent({
 
   return (
     <>
-      <div className="rounded-lg border border-black/10 bg-white overflow-hidden">
-        <Table>
-          <TableHeader className="bg-black/[0.02]">
-            <TableRow className="border-black/5">
-              <TableHead className="text-black font-semibold text-xs py-3">First Name</TableHead>
-              <TableHead className="text-black font-semibold text-xs py-3">Last Name</TableHead>
-              <TableHead className="text-black font-semibold text-xs py-3">Email Address</TableHead>
-              <TableHead className="text-black font-semibold text-xs py-3">User Role</TableHead>
-              {isTenantOwner && <TableHead className="w-[50px] py-3"></TableHead>}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {members
-              .filter(member => member?.userId?._id)
-              .map(member => {
-                const userId = member.userId._id;
-                const email = member.userId.email;
-                const isCurrentUser = userId === session?.user?.id;
-                const isInvitation = member.isInvitation || member.status === 'pending';
-                const memberRole = String(
-                  member.tenantRole ?? member.role ?? 'member',
-                ).toLowerCase();
-                
-                // Retrieve names with lookups
-                const nameInfo = getInvitedName(email);
-                const firstName = member.firstName || nameInfo.firstName || (isCurrentUser ? session?.user?.name?.split(' ')[0] : '') || '—';
-                const lastName = member.lastName || nameInfo.lastName || (isCurrentUser ? session?.user?.name?.split(' ').slice(1).join(' ') : '') || '—';
-                
-                const canModify = isTenantOwner && !isCurrentUser && !isInvitation;
+      <div className="flex-1 overflow-y-auto pr-1 pb-4 custom-scrollbar space-y-3 relative z-10 !mt-0">
+        {members
+          .filter(member => member?.userId?._id)
+          .map(member => {
+            const userId = member.userId._id;
+            const email = member.userId.email;
+            const isCurrentUser = userId === session?.user?.id;
+            const isInvitation = member.isInvitation || member.status === 'pending';
+            const memberRole = String(
+              member.tenantRole ?? member.role ?? 'member',
+            ).toLowerCase();
+            
+            // Retrieve names with lookups
+            const nameInfo = getInvitedName(email);
+            const firstName = member.firstName || nameInfo.firstName || (isCurrentUser ? session?.user?.name?.split(' ')[0] : '') || '—';
+            const lastName = member.lastName || nameInfo.lastName || (isCurrentUser ? session?.user?.name?.split(' ').slice(1).join(' ') : '') || '—';
+            
+            const canModify = isTenantOwner && !isCurrentUser && !isInvitation;
 
-                return (
-                  <TableRow key={member._id} className="border-black/5 hover:bg-black/[0.01] transition-colors">
-                    <TableCell className="font-medium text-xs text-black py-3">
+            return (
+              <div
+                key={member._id}
+                className="group flex flex-col md:flex-row md:items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-black/5 dark:hover:bg-white/5 gap-4"
+              >
+                <div className="flex flex-col md:flex-row md:items-center gap-4 flex-1">
+                  {/* First Name */}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed">
                       {firstName}
-                    </TableCell>
-                    <TableCell className="font-medium text-xs text-black py-3">
+                    </p>
+                    <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                      First Name
+                    </span>
+                  </div>
+                  {/* Last Name */}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed">
                       {lastName}
-                    </TableCell>
-                    <TableCell className="text-xs text-gray-500 py-3">
-                      <div className="flex items-center gap-2">
-                        <span>{email}</span>
-                        {isCurrentUser && (
-                          <span className="text-[10px] bg-black/5 text-black px-1.5 py-0.5 rounded-full font-medium shrink-0">
-                            You
-                          </span>
-                        )}
-                        {isInvitation && (
-                          <span className="text-[10px] bg-amber-50 text-amber-600 border border-amber-200/50 px-1.5 py-0.5 rounded-full font-medium shrink-0">
-                            Pending
-                          </span>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell className="py-3">
+                    </p>
+                    <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                      Last Name
+                    </span>
+                  </div>
+                  {/* Email */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed">
+                        {email}
+                      </p>
+                      {isCurrentUser && (
+                        <span className="text-[10px] bg-black/5 text-black px-1.5 py-0.5 rounded-full font-medium shrink-0">
+                          You
+                        </span>
+                      )}
+                      {isInvitation && (
+                        <span className="text-[10px] bg-amber-50 text-amber-600 border border-amber-200/50 px-1.5 py-0.5 rounded-full font-medium shrink-0">
+                          Pending
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                      Email Address
+                    </span>
+                  </div>
+                  {/* Role */}
+                  <div className="flex-1 min-w-0">
+                    <div className="h-full flex items-center">
                       {canModify ? (
                         <MemberRoleSelector
                           currentRole={memberRole}
@@ -190,38 +203,30 @@ function MembersListComponent({
                           {memberRole === 'member' ? 'user' : memberRole}
                         </Badge>
                       )}
-                    </TableCell>
-                    {isTenantOwner && (
-                      <TableCell className="py-3">
-                        {!isCurrentUser && (
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="size-8 hover:bg-black/5 rounded-md"
-                              >
-                                <MoreVertical className="size-4 text-gray-400" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="border-black/10">
-                              <DropdownMenuItem
-                                className="text-red-600 focus:text-red-600 focus:bg-red-50 text-xs cursor-pointer"
-                                onClick={() => setMemberToRemove(member)}
-                              >
-                                <Trash2 className="mr-2 size-4" />
-                                {isInvitation ? 'Cancel Invitation' : 'Remove Member'}
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        )}
-                      </TableCell>
+                    </div>
+                    <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                      Role Type
+                    </span>
+                  </div>
+                </div>
+
+                {isTenantOwner && (
+                  <div className="flex-none ml-2">
+                    {!isCurrentUser && (
+                      <button
+                        type="button"
+                        onClick={() => setMemberToRemove(member)}
+                        className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 transition-colors duration-150 flex items-center justify-center cursor-pointer"
+                        title={isInvitation ? "Cancel Invitation" : "Remove Member"}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
                     )}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
+                  </div>
+                )}
+              </div>
+            );
+          })}
       </div>
 
       <AlertDialog
