@@ -360,14 +360,10 @@ export function PaymentConfirmationModal({
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-2xl shadow-2xl">
-        <DialogHeader className="space-y-1.5 pb-2 text-center sm:text-left">
-          <DialogTitle className="text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 flex items-center justify-center sm:justify-start gap-2">
-            <Sparkles className="size-5 text-indigo-500 animate-pulse" />
+        <DialogHeader className="text-center sm:text-left">
+          <DialogTitle className="text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 flex items-center justify-center sm:justify-start">
             Secure Checkout
           </DialogTitle>
-          <DialogDescription className="text-zinc-500 dark:text-zinc-400 text-sm">
-            Activate your premium capabilities for {plan.name}
-          </DialogDescription>
         </DialogHeader>
 
         {/* Plan Summary Card - High-Fidelity Glassmorphism */}
@@ -391,7 +387,7 @@ export function PaymentConfirmationModal({
         </div>
 
         {/* Main Content Wrapper - relative positioning for overlay */}
-        <div className="relative min-h-[160px] flex flex-col justify-center">
+        <div className="relative min-h-[140px] flex flex-col justify-center mt-3">
           <AnimatePresence mode="wait">
             {/* Loading State */}
             {step === 'loading' && (
@@ -401,7 +397,7 @@ export function PaymentConfirmationModal({
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.2 }}
-                className="flex flex-col items-center justify-center py-8 space-y-3"
+                className="flex flex-col items-center justify-center py-4 space-y-3"
               >
                 <Loader2 className="text-indigo-500 h-8 w-8 animate-spin" />
                 <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium animate-pulse">
@@ -418,7 +414,7 @@ export function PaymentConfirmationModal({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
-                className="space-y-4 py-2"
+                className="space-y-2"
               >
                 <PaymentMethodList
                   paymentMethods={paymentMethods as unknown as PaymentMethod[]}
@@ -437,7 +433,7 @@ export function PaymentConfirmationModal({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
-                className="relative space-y-4 py-2"
+                className="relative space-y-2"
               >
                 {paymentMethods.length > 0 && (
                   <Button
@@ -527,18 +523,18 @@ export function PaymentConfirmationModal({
 
         {/* Action Buttons */}
         {step !== 'loading' && step !== 'processing' && step !== 'success' && (
-          <div className="flex gap-4 pt-3 border-t border-zinc-100 dark:border-zinc-900/40 mt-2">
+          <div className="flex gap-4 pt-3 border-t border-zinc-100 dark:border-zinc-900/40 mt-1">
             <Button
               variant="outline"
               onClick={handleClose}
-              className="flex-1 py-5 rounded-xl border-zinc-250 dark:border-zinc-800 font-bold text-zinc-500 dark:text-zinc-400"
+              className="flex-1 py-4 rounded-xl border-zinc-250 dark:border-zinc-800 font-bold text-zinc-500 dark:text-zinc-400"
             >
               Cancel
             </Button>
             <Button
               onClick={handleConfirm}
               className={cn(
-                "flex-1 py-5 rounded-xl font-bold transition-all duration-300 text-white border-none shadow-md",
+                "flex-1 py-4 rounded-xl font-bold transition-all duration-300 text-white border-none shadow-md",
                 canConfirm
                   ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-blue-500/10 hover:shadow-indigo-500/20 hover:scale-[1.01]"
                   : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-900 dark:text-zinc-600 shadow-none"
