@@ -556,6 +556,7 @@ const LeftSideNavMobile = () => {
                   className="w-full bg-transparent text-[11px] text-black outline-none placeholder:text-gray-500"
                 />
               </div>
+            ) : activeTab === 'bots' ? null : (
               <Search
                 onClick={() => {
                   onOpen({
