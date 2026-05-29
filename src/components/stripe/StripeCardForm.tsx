@@ -66,6 +66,7 @@ export function StripeCardForm({
         iconColor: 'hsl(var(--primary))',
       },
     },
+    disableLink: true,
   };
 
   const handleError = (error?: { message: string }) => {
@@ -125,7 +126,7 @@ export function StripeCardForm({
               onBlur={() => setFocusedField(null)}
             />
           </div>
-          <div className="w-[85px] px-3 py-3 border-l border-input">
+          <div className="w-[85px] px-3 py-3">
             <CardExpiryElement
               id="card-expiry-element"
               options={baseElementOptions}
@@ -137,7 +138,7 @@ export function StripeCardForm({
               onBlur={() => setFocusedField(null)}
             />
           </div>
-          <div className="w-[80px] px-3 py-3 border-l border-input">
+          <div className="w-[80px] px-3 py-3">
             <CardCvcElement
               id="card-cvc-element"
               options={baseElementOptions}
