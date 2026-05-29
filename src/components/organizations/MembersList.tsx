@@ -115,16 +115,63 @@ function MembersListComponent({
     }
   };
 
-  if (members.length === 0) {
+  const displayMembers = members.length > 0 ? members : [
+    {
+      _id: 'dummy1',
+      userId: { _id: 'dummy1_user', email: 'john.doe@example.com' },
+      firstName: 'John',
+      lastName: 'Doe',
+      role: 'admin',
+      isInvitation: false,
+    },
+    {
+      _id: 'dummy2',
+      userId: { _id: 'dummy2_user', email: 'jane.smith@example.com' },
+      firstName: 'Jane',
+      lastName: 'Smith',
+      role: 'member',
+      isInvitation: true,
+      status: 'pending'
+    },
+    {
+      _id: 'dummy3',
+      userId: { _id: 'dummy3_user', email: 'mike.ross@example.com' },
+      firstName: 'Mike',
+      lastName: 'Ross',
+      role: 'member',
+      isInvitation: false,
+    }
+  ] as any;
+
+  if (displayMembers.length === 0) {
     return null;
   }
 
   return (
     <>
       <div className="flex-1 overflow-y-auto pr-1 pb-4 custom-scrollbar space-y-3 relative z-10 !mt-0">
-        {members
-          .filter(member => member?.userId?._id)
-          .map(member => {
+        {/* Title Bar */}
+        <div className="hidden md:flex items-center justify-between py-2 px-4 gap-4 sticky top-0 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md z-20 border-b border-black/10 dark:border-white/10 mb-4 rounded-t-lg">
+          <div className="flex items-center gap-4 flex-1">
+            <div className="flex-1 min-w-0">
+              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">First Name</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Last Name</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Email Address</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Role Type</span>
+            </div>
+          </div>
+          {isTenantOwner && <div className="flex-none ml-2 w-7"></div>}
+        </div>
+
+        {displayMembers
+          .filter((member: any) => member?.userId?._id)
+          .map((member: any) => {
             const userId = member.userId._id;
             const email = member.userId.email;
             const isCurrentUser = userId === session?.user?.id;
@@ -151,18 +198,12 @@ function MembersListComponent({
                     <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed">
                       {firstName}
                     </p>
-                    <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
-                      First Name
-                    </span>
                   </div>
                   {/* Last Name */}
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed">
                       {lastName}
                     </p>
-                    <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
-                      Last Name
-                    </span>
                   </div>
                   {/* Email */}
                   <div className="flex-1 min-w-0">
@@ -181,9 +222,6 @@ function MembersListComponent({
                         </span>
                       )}
                     </div>
-                    <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
-                      Email Address
-                    </span>
                   </div>
                   {/* Role */}
                   <div className="flex-1 min-w-0">
@@ -204,9 +242,6 @@ function MembersListComponent({
                         </Badge>
                       )}
                     </div>
-                    <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
-                      Role Type
-                    </span>
                   </div>
                 </div>
 

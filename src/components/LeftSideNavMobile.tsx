@@ -25,6 +25,7 @@ import {
   Settings,
   SquarePen,
   User,
+  UserPlus,
   Users,
   ChevronRight,
   Plus,
@@ -573,7 +574,7 @@ const LeftSideNavMobile = () => {
             <div className="space-y-1 py-1 pb-4 mt-2">
               {[
                 { name: 'Billing', href: '/admin/billing', icon: CreditCard },
-                { name: 'Invite', href: '/admin/members', icon: Users },
+                { name: 'Invite', href: '/admin/members', icon: UserPlus },
                 { name: 'Members', href: '/admin/team-members', icon: Users },
                 { name: 'Data', href: '/admin/data', icon: Database },
                 { name: 'Instructions', href: '/admin/instructions', icon: FileText },
