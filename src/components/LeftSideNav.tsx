@@ -675,28 +675,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         <Icon className="w-4 h-4" />
                         {item.name}
                       </Link>
-                      {item.name === 'Projects' && (
-                        <div className="mt-1 flex flex-col pl-9 pr-2">
-                          {bots.filter(b => b.isShared).map(bot => {
-                            const isSelected = activeBotId === bot.id && pathname.startsWith('/admin/projects');
-                            return (
-                              <Link
-                                key={bot.id}
-                                href={`/admin/projects?bot=${bot.id}`}
-                                onClick={() => setActiveBotId(bot.id)}
-                                className={cn(
-                                  "flex h-8 w-full items-center truncate rounded-md px-2 text-xs font-normal transition-all text-left",
-                                  isSelected
-                                    ? "bg-black/10 text-black dark:bg-white/10 dark:text-white font-medium"
-                                    : "text-gray-500 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white"
-                                )}
-                              >
-                                {bot.name}
-                              </Link>
-                            )
-                          })}
-                        </div>
-                      )}
                     </div>
                   );
                 })}

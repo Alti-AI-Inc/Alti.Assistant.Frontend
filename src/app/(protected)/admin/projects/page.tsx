@@ -43,8 +43,12 @@ import {
   Image as ImageIcon,
   Presentation,
   File,
-  Paperclip
+  Paperclip,
+  PanelLeftClose,
+  Search,
+  Folder,
 } from 'lucide-react';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
 // Helper functions for file previews
@@ -108,8 +112,8 @@ function MyChatbotsContent() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragActive, setIsDragActive] = useState(false);
 
-
-
+  const [isProjectsSidebarOpen, setIsProjectsSidebarOpen] = useState(true);
+  const [projectsSearch, setProjectsSearch] = useState('');
   // Sync state with URL params
   useEffect(() => {
     if (botParam) {
@@ -227,10 +231,113 @@ function MyChatbotsContent() {
     setGuardrails('');
   };
 
+  const sharedBots = bots.filter(b => b.isShared && b.name.toLowerCase().includes(projectsSearch.toLowerCase()));
+
+  // The Projects Sidebar
+  const renderProjectsSidebar = () => {
+    return (
+      <aside
+        className={cn(
+          "flex-none flex flex-col border-r border-black/10 h-full overflow-hidden transition-all duration-300",
+          !isProjectsSidebarOpen ? "w-10" : "w-68"
+        )}
+        style={{ backgroundColor: '#F2F3F5' }}
+      >
+        <header
+          className={cn(
+            "sticky top-0 z-30 flex items-center justify-between border-b border-black/10 pt-4 pb-4 flex-none",
+            !isProjectsSidebarOpen ? "px-0 justify-center" : "px-4"
+          )}
+          style={{ backgroundColor: '#F2F3F5' }}
+        >
+          {!isProjectsSidebarOpen ? (
+            <PanelLeftClose
+              className="size-5 cursor-pointer text-gray-600 transition-transform duration-300 flex-none scale-x-[-1]"
+              onClick={() => setIsProjectsSidebarOpen(true)}
+            />
+          ) : (
+            <>
+              <span className="text-sm font-normal text-gray-850 dark:text-gray-200">
+                Projects
+              </span>
+              <PanelLeftClose
+                className="size-5 cursor-pointer text-gray-600 transition-transform duration-300 flex-none"
+                onClick={() => setIsProjectsSidebarOpen(false)}
+              />
+            </>
+          )}
+        </header>
+
+        {isProjectsSidebarOpen && (
+          <div
+            className="flex flex-col gap-2 border-b border-black/10 px-4 py-4 transition-all duration-300 flex-none"
+            style={{ backgroundColor: '#F2F3F5' }}
+          >
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-white px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">
+                <Search className="size-3.5 flex-none text-black" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={projectsSearch}
+                  onChange={(e) => setProjectsSearch(e.target.value)}
+                  className="w-full bg-transparent text-xs text-black outline-none placeholder:text-gray-500"
+                />
+              </div>
+
+              <button
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black flex-none"
+                onClick={() => {
+                  setActiveBotId(null);
+                  router.push('/admin/projects');
+                }}
+                title="New Project"
+              >
+                <Plus className="size-4 text-black" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {isProjectsSidebarOpen && (
+          <div className="flex flex-1 flex-col overflow-y-auto px-4 pb-4 pt-4 space-y-1">
+            {sharedBots.length === 0 ? (
+              <div className="py-4 text-center text-xs text-gray-400">
+                No projects found.
+              </div>
+            ) : (
+              sharedBots.map((bot) => {
+                const isSelected = activeBotId === bot.id;
+                return (
+                  <Link
+                    key={bot.id}
+                    href={`/admin/projects?bot=${bot.id}`}
+                    onClick={() => setActiveBotId(bot.id)}
+                    className={cn(
+                      "flex h-9 w-full items-center truncate rounded-md px-2 text-sm font-normal transition-all text-left",
+                      isSelected
+                        ? "bg-black/10 font-medium text-black dark:bg-white/10 dark:text-white"
+                        : "text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white"
+                    )}
+                  >
+                    <Folder className="size-4 mr-2 flex-shrink-0 text-gray-500 opacity-70" />
+                    <span className="truncate">{bot.name}</span>
+                  </Link>
+                );
+              })
+            )}
+          </div>
+        )}
+      </aside>
+    );
+  };
+
   // Render Focused Projects Workspace Dashboard (when no active bot)
   if (!activeBot) {
     return (
-      <div className="flex-grow w-full bg-[#FCFCFC] dark:bg-zinc-950 h-full flex flex-col relative animate-in fade-in duration-500 overflow-y-auto">
+      <div className="flex h-full w-full bg-[#FCFCFC] dark:bg-gray-950 overflow-hidden">
+        {renderProjectsSidebar()}
+        <div className="flex-grow w-full bg-[#FCFCFC] dark:bg-zinc-950 h-full flex flex-col relative animate-in fade-in duration-500 overflow-y-auto">
         
         {/* Stepper Progress Bar */}
         <div className="absolute top-6 left-1/2 -translate-x-1/2 w-full max-w-[600px] select-none px-4 z-20">
@@ -829,12 +936,14 @@ function MyChatbotsContent() {
 
         </div>
       </div>
+      </div>
     );
   }
 
   // Render 3-Column Chatbot Workspace
   return (
     <div className="flex h-full w-full bg-[#FCFCFC] dark:bg-gray-950 overflow-hidden">
+      {renderProjectsSidebar()}
       {/* Center Panel (Conversation / Interface) */}
       <div
         className="flex-1 flex flex-col min-w-0 h-full relative"
