@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { useBotsStore, Chatbot } from '@/stores/useBotsStore';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { ArrowUp, Terminal, Trash2, Shield, Upload, ChevronLeft, Paperclip, FileText, FileAudio, FileVideo, FileImage } from 'lucide-react';
+import { ArrowUp, Terminal, Trash2, Shield, Upload, ChevronLeft, Paperclip, FileText, FileAudio, FileVideo, FileImage, Search } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
@@ -27,8 +27,10 @@ interface EditorProps {
 export function InstructionsEditor({ bot }: EditorProps) {
   const { editBot } = useBotsStore();
   const [inputValue, setInputValue] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   
-  const instructionsList = bot.instructions ? bot.instructions.split('\n\n').filter(Boolean) : [];
+  const allInstructions = bot.instructions ? bot.instructions.split('\n\n').filter(Boolean) : [];
+  const instructionsList = allInstructions.filter(item => item.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const handleAdd = () => {
     if (!inputValue.trim()) return;
@@ -38,13 +40,18 @@ export function InstructionsEditor({ bot }: EditorProps) {
   };
 
   const handleDelete = (index: number) => {
-    const newList = instructionsList.filter((_, i) => i !== index);
-    editBot(bot.id, { instructions: newList.join('\n\n') });
+    // We need to find the real index in allInstructions since instructionsList is filtered
+    const itemToDelete = instructionsList[index];
+    const realIndex = allInstructions.findIndex(item => item === itemToDelete);
+    if (realIndex !== -1) {
+      const newList = allInstructions.filter((_, i) => i !== realIndex);
+      editBot(bot.id, { instructions: newList.join('\n\n') });
+    }
   };
 
   return (
     <div className="flex flex-col w-full h-full p-8 max-w-[796px] mx-auto pt-16 animate-in fade-in zoom-in-95 duration-200">
-      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
+      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-4">
         <div className="relative flex items-center gap-2 py-2">
           <Textarea
             value={inputValue}
@@ -72,6 +79,19 @@ export function InstructionsEditor({ bot }: EditorProps) {
                 : "border-gray-200 bg-gray-100 text-gray-400"
             )} />
           </button>
+        </div>
+      </div>
+
+      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
+        <div className="relative flex items-center gap-2 py-2">
+          <Search className="size-5 text-gray-400 flex-shrink-0 ml-1" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search instructions..."
+            className="min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+          />
         </div>
       </div>
 
@@ -141,8 +161,10 @@ export function InstructionsEditor({ bot }: EditorProps) {
 export function GuardrailsEditor({ bot }: EditorProps) {
   const { editBot } = useBotsStore();
   const [inputValue, setInputValue] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   
-  const guardrailsList = bot.guardrails ? bot.guardrails.split('\n\n').filter(Boolean) : [];
+  const allGuardrails = bot.guardrails ? bot.guardrails.split('\n\n').filter(Boolean) : [];
+  const guardrailsList = allGuardrails.filter(item => item.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const handleAdd = () => {
     if (!inputValue.trim()) return;
@@ -152,13 +174,17 @@ export function GuardrailsEditor({ bot }: EditorProps) {
   };
 
   const handleDelete = (index: number) => {
-    const newList = guardrailsList.filter((_, i) => i !== index);
-    editBot(bot.id, { guardrails: newList.join('\n\n') });
+    const itemToDelete = guardrailsList[index];
+    const realIndex = allGuardrails.findIndex(item => item === itemToDelete);
+    if (realIndex !== -1) {
+      const newList = allGuardrails.filter((_, i) => i !== realIndex);
+      editBot(bot.id, { guardrails: newList.join('\n\n') });
+    }
   };
 
   return (
     <div className="flex flex-col w-full h-full p-8 max-w-[796px] mx-auto pt-16 animate-in fade-in zoom-in-95 duration-200">
-      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
+      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-4">
         <div className="relative flex items-center gap-2 py-2">
           <Textarea
             value={inputValue}
@@ -186,6 +212,19 @@ export function GuardrailsEditor({ bot }: EditorProps) {
                 : "border-gray-200 bg-gray-100 text-gray-400"
             )} />
           </button>
+        </div>
+      </div>
+
+      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
+        <div className="relative flex items-center gap-2 py-2">
+          <Search className="size-5 text-gray-400 flex-shrink-0 ml-1" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search guardrails..."
+            className="min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+          />
         </div>
       </div>
 
@@ -256,32 +295,39 @@ export function DataEditor({ bot }: EditorProps) {
   const { editBot } = useBotsStore();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragActive, setIsDragActive] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  let selectedFiles: { name: string; size: number }[] = [];
+  let allFiles: { name: string; size: number }[] = [];
   try {
-    selectedFiles = bot.data ? JSON.parse(bot.data) : [];
+    allFiles = bot.data ? JSON.parse(bot.data) : [];
   } catch (e) {
-    selectedFiles = bot.data ? [{ name: bot.data, size: 0 }] : [];
+    allFiles = bot.data ? [{ name: bot.data, size: 0 }] : [];
   }
+  
+  const selectedFiles = allFiles.filter(file => file.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const addFiles = (newFiles: File[]) => {
     const newItems = newFiles.map(f => ({ name: f.name, size: f.size }));
-    const merged = [...selectedFiles, ...newItems];
+    const merged = [...allFiles, ...newItems];
     editBot(bot.id, { data: JSON.stringify(merged) });
   };
 
   const removeFile = (idx: number) => {
-    const merged = selectedFiles.filter((_, i) => i !== idx);
-    if (merged.length === 0) {
-      editBot(bot.id, { data: undefined });
-    } else {
-      editBot(bot.id, { data: JSON.stringify(merged) });
+    const fileToDelete = selectedFiles[idx];
+    const realIndex = allFiles.findIndex(f => f.name === fileToDelete.name && f.size === fileToDelete.size);
+    if (realIndex !== -1) {
+      const merged = allFiles.filter((_, i) => i !== realIndex);
+      if (merged.length === 0) {
+        editBot(bot.id, { data: undefined });
+      } else {
+        editBot(bot.id, { data: JSON.stringify(merged) });
+      }
     }
   };
 
   return (
     <div className="flex flex-col w-full h-full p-8 max-w-[796px] mx-auto pt-16 animate-in fade-in zoom-in-95 duration-200">
-      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
+      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-4">
         <div className="relative flex items-center gap-2 py-2">
           
           <button
@@ -327,6 +373,19 @@ export function DataEditor({ bot }: EditorProps) {
               }
             }}
             className="hidden"
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
+        <div className="relative flex items-center gap-2 py-2">
+          <Search className="size-5 text-gray-400 flex-shrink-0 ml-1" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search data..."
+            className="min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
           />
         </div>
       </div>
