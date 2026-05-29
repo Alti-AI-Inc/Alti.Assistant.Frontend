@@ -810,8 +810,18 @@ const LeftSideNavMobile = () => {
             </Button>
           </div>
         ) : (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+          <div className="flex flex-col gap-2 w-full">
+            {isAdminMode && (
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2"
+                onClick={() => { router.push('/'); close(); }}
+              >
+                <ArrowLeft className="w-4 h-4" /> Return to App
+              </Button>
+            )}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
               <Button variant="outline" className="w-full">
                 My Account
               </Button>
@@ -828,11 +838,7 @@ const LeftSideNavMobile = () => {
                   <Orbit className="text-black" /> Plans
                 </DropdownMenuItem>
                 <DropdownMenuGroup>
-                  {isAdminMode ? (
-                    <DropdownMenuItem onClick={() => { router.push('/'); close(); }}>
-                      <ArrowLeft className="text-black" /> Return to App
-                    </DropdownMenuItem>
-                  ) : (
+                  {!isAdminMode && (
                     <DropdownMenuItem onClick={() => { router.push('/admin/members'); close(); }}>
                       <Shield className="text-black" /> Admin
                     </DropdownMenuItem>
@@ -867,6 +873,7 @@ const LeftSideNavMobile = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          </div>
         )}
       </div>
     </div>
