@@ -102,6 +102,10 @@ function MyChatbotsContent() {
   const [guardrailsList, setGuardrailsList] = useState<{ id: string; text: string; timestamp: string }[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   
+  const [instructionsSearch, setInstructionsSearch] = useState('');
+  const [guardrailsSearch, setGuardrailsSearch] = useState('');
+  const [dataSearch, setDataSearch] = useState('');
+  
   const botParam = searchParams?.get('bot');
   const threadParam = searchParams?.get('thread');
   const viewParam = searchParams?.get('view');
@@ -545,6 +549,20 @@ function MyChatbotsContent() {
                           </div>
                         </div>
 
+                        {/* Search Bar */}
+                        <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
+                          <div className="relative flex items-center gap-2 py-2">
+                            <Search className="size-5 text-gray-400 flex-shrink-0 ml-1" />
+                            <input
+                              type="text"
+                              value={instructionsSearch}
+                              onChange={(e) => setInstructionsSearch(e.target.value)}
+                              placeholder="Search instructions..."
+                              className="min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+                            />
+                          </div>
+                        </div>
+
                         {/* Zero-height wrapper to completely fix title and prompt box layout */}
                         <div className="h-0 w-full relative z-10 !mt-0">
                           {instructionsList.length > 0 && (
@@ -552,7 +570,9 @@ function MyChatbotsContent() {
                               {/* Scrollable list area, fixed height */}
                               <div className="absolute top-0 left-0 w-full mt-3">
                                 <div className="space-y-3 h-[180px] overflow-y-auto pr-1 pb-2 custom-scrollbar">
-                                  {instructionsList.map((item) => (
+                                  {instructionsList
+                                    .filter(item => item.text.toLowerCase().includes(instructionsSearch.toLowerCase()))
+                                    .map((item) => (
                                     <div
                                       key={item.id}
                                       className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-indigo-50/20 dark:hover:bg-indigo-950/10"
@@ -691,6 +711,20 @@ function MyChatbotsContent() {
                           </div>
                         </div>
 
+                        {/* Search Bar */}
+                        <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
+                          <div className="relative flex items-center gap-2 py-2">
+                            <Search className="size-5 text-gray-400 flex-shrink-0 ml-1" />
+                            <input
+                              type="text"
+                              value={guardrailsSearch}
+                              onChange={(e) => setGuardrailsSearch(e.target.value)}
+                              placeholder="Search guardrails..."
+                              className="min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+                            />
+                          </div>
+                        </div>
+
                         {/* Zero-height wrapper to completely fix title and prompt box layout */}
                         <div className="h-0 w-full relative z-10 !mt-0">
                           {guardrailsList.length > 0 && (
@@ -698,7 +732,9 @@ function MyChatbotsContent() {
                               {/* Scrollable list area, fixed height */}
                               <div className="absolute top-0 left-0 w-full mt-3">
                                 <div className="space-y-3 h-[180px] overflow-y-auto pr-1 pb-2 custom-scrollbar">
-                                  {guardrailsList.map((item) => (
+                                  {guardrailsList
+                                    .filter(item => item.text.toLowerCase().includes(guardrailsSearch.toLowerCase()))
+                                    .map((item) => (
                                     <div
                                       key={item.id}
                                       className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-indigo-50/20 dark:hover:bg-indigo-950/10"
@@ -847,12 +883,29 @@ function MyChatbotsContent() {
                           </div>
                         </div>
 
+                        {/* Search Bar */}
+                        <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mt-4">
+                          <div className="relative flex items-center gap-2 py-2">
+                            <Search className="size-5 text-gray-400 flex-shrink-0 ml-1" />
+                            <input
+                              type="text"
+                              value={dataSearch}
+                              onChange={(e) => setDataSearch(e.target.value)}
+                              placeholder="Search files..."
+                              className="min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+                            />
+                          </div>
+                        </div>
+
                         {/* Zero-height wrapper to completely fix title and prompt box layout */}
                         <div className="h-0 w-full relative z-10 !mt-0">
                           {selectedFiles.length > 0 && (
                             <div className="absolute top-0 left-0 w-full mt-3">
                               <div className="space-y-3 h-[180px] overflow-y-auto pr-1 pb-2 custom-scrollbar">
-                                {selectedFiles.map((file, idx) => (
+                                {selectedFiles
+                                  .map((f, i) => ({ file: f, originalIndex: i }))
+                                  .filter(item => item.file.name.toLowerCase().includes(dataSearch.toLowerCase()))
+                                  .map(({ file, originalIndex: idx }) => (
                                   <div
                                     key={idx}
                                     className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-blue-50/20 dark:hover:bg-blue-950/10"

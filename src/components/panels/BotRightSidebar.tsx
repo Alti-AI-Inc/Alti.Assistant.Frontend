@@ -138,7 +138,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
               </Button>
             )}
           </div>
-          </div>
+
 
           {/* Toggle with 4 icons */}
           {basePath !== '/admin/projects' && (
@@ -164,7 +164,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 </TooltipContent>
               </Tooltip>
 
-              {(!bot.isShared || basePath === '/admin/projects') && (
+              {!bot.isShared && (
                 <>
                   <Tooltip>
                     <TooltipTrigger asChild>
