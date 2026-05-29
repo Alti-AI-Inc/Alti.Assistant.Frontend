@@ -459,7 +459,7 @@ function MyChatbotsContent() {
                               value={instructionsSearch}
                               onChange={(e) => setInstructionsSearch(e.target.value)}
                               placeholder="Search instructions..."
-                              className="min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+                              className="h-8 w-full flex-1 border-none bg-transparent px-2 py-0 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
                             />
                           </div>
                         </div>
@@ -621,7 +621,7 @@ function MyChatbotsContent() {
                               value={guardrailsSearch}
                               onChange={(e) => setGuardrailsSearch(e.target.value)}
                               placeholder="Search guardrails..."
-                              className="min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+                              className="h-8 w-full flex-1 border-none bg-transparent px-2 py-0 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
                             />
                           </div>
                         </div>
@@ -793,7 +793,7 @@ function MyChatbotsContent() {
                               value={dataSearch}
                               onChange={(e) => setDataSearch(e.target.value)}
                               placeholder="Search files..."
-                              className="min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+                              className="h-8 w-full flex-1 border-none bg-transparent px-2 py-0 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
                             />
                           </div>
                         </div>
