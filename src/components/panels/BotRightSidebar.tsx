@@ -149,7 +149,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     type="button"
                     onClick={() => setActiveTab('history')}
                     className={cn(
-                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none flex-1',
+                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
                       activeTab === 'history'
                         ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                         : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
@@ -169,7 +169,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     type="button"
                     onClick={() => setActiveTab('instructions')}
                     className={cn(
-                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none flex-1',
+                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
                       activeTab === 'instructions'
                         ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                         : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
@@ -189,7 +189,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     type="button"
                     onClick={() => setActiveTab('guardrails')}
                     className={cn(
-                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none flex-1',
+                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
                       activeTab === 'guardrails'
                         ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                         : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
@@ -209,7 +209,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     type="button"
                     onClick={() => setActiveTab('data')}
                     className={cn(
-                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none flex-1',
+                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
                       activeTab === 'data'
                         ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                         : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
@@ -235,12 +235,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
         >
           {activeTab === 'history' && (
             <>
-              <div className="mt-4 mb-2 px-1 flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                  Chat History
-                </span>
-              </div>
-              <div className="flex-1 space-y-1 py-1 pb-4">
+              <div className="flex-1 space-y-1 py-1 pb-4 pt-4">
                 {filteredThreads.length === 0 ? (
                   <div className="py-4 text-center text-xs text-gray-400">
                     {searchQuery ? 'No matching chats.' : 'No conversations yet. Start a new chat!'}
@@ -280,11 +275,6 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
           {activeTab === 'instructions' && (
             <div className="flex flex-col h-full mt-4 animate-in fade-in zoom-in-95 duration-200">
-              <div className="mb-3 px-1">
-                <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                  Edit Instructions
-                </span>
-              </div>
               <Textarea 
                 value={instructionsText}
                 onChange={(e) => setInstructionsText(e.target.value)}
@@ -302,11 +292,6 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
           {activeTab === 'guardrails' && (
             <div className="flex flex-col h-full mt-4 animate-in fade-in zoom-in-95 duration-200">
-              <div className="mb-3 px-1">
-                <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                  Edit Guardrails
-                </span>
-              </div>
               <Textarea 
                 value={guardrailsText}
                 onChange={(e) => setGuardrailsText(e.target.value)}
@@ -324,11 +309,6 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
           {activeTab === 'data' && (
             <div className="flex flex-col h-full mt-4 animate-in fade-in zoom-in-95 duration-200">
-              <div className="mb-3 px-1">
-                <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-                  Project Data
-                </span>
-              </div>
               <div className="flex flex-col items-center justify-center flex-1 min-h-[300px] rounded-xl border border-dashed border-black/20 bg-black/5 p-6 text-center">
                 <Upload className="size-8 text-gray-400 mb-3" />
                 <h3 className="text-sm font-semibold text-gray-800 mb-1">Knowledge Base</h3>
