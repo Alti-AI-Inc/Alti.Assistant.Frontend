@@ -571,34 +571,68 @@ const LeftSideNavMobile = () => {
           </div>
           )}
           {isAdminMode ? (
-            <div className="space-y-1 py-1 pb-4 mt-2">
-              {[
-                { name: 'Billing', href: '/admin/billing', icon: CreditCard },
-                { name: 'Invite', href: '/admin/members', icon: UserPlus },
-                { name: 'Members', href: '/admin/team-members', icon: Users },
-                { name: 'Data', href: '/admin/data', icon: Database },
-                { name: 'Instructions', href: '/admin/instructions', icon: FileText },
-                { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
-              ].map((item) => {
-                const isActive = pathname.startsWith(item.href);
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => close()}
-                    className={cn(
-                      'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                      isActive
-                        ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
-                        : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
-                    )}
-                  >
-                    <Icon className="w-4 h-4" />
-                    {item.name}
-                  </Link>
-                );
-              })}
+            <div className="mt-2 space-y-6">
+              {/* First Section */}
+              <div className="space-y-1">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
+                  Workspace
+                </div>
+                {[
+                  { name: 'Billing', href: '/admin/billing', icon: CreditCard },
+                  { name: 'Invite', href: '/admin/members', icon: UserPlus },
+                  { name: 'Members', href: '/admin/team-members', icon: Users },
+                ].map((item) => {
+                  const isActive = pathname.startsWith(item.href);
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => close()}
+                      className={cn(
+                        'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                        isActive
+                          ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
+                          : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                      )}
+                    >
+                      <Icon className="w-4 h-4" />
+                      {item.name}
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Second Section */}
+              <div className="space-y-1">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
+                  Configuration
+                </div>
+                {[
+                  { name: 'Data', href: '/admin/data', icon: Database },
+                  { name: 'Instructions', href: '/admin/instructions', icon: FileText },
+                  { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
+                ].map((item) => {
+                  const isActive = pathname.startsWith(item.href);
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => close()}
+                      className={cn(
+                        'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                        isActive
+                          ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
+                          : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                      )}
+                    >
+                      <Icon className="w-4 h-4" />
+                      {item.name}
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           ) : activeTab === 'bots' ? (
             <div className="space-y-1 py-1 pb-4 mt-2">
