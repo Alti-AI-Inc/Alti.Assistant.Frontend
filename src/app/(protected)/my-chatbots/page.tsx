@@ -84,7 +84,7 @@ function MyChatbotsContent() {
   const { data: session } = useSession();
   const queryClient = useQueryClient();
 
-  const { bots, activeBotId, activeBotThreadId, setActiveBotId, setActiveBotThreadId, addBot } = useBotsStore();
+  const { bots, activeBotId, activeBotThreadId, setActiveBotId, setActiveBotThreadId, addBot, projectTab } = useBotsStore();
   const { setActiveConversation, activeConversation } = useConversationsStore();
 
   const hasMessages = !!activeConversation?.messages?.length;
@@ -228,6 +228,14 @@ function MyChatbotsContent() {
 
   // Render Focused Projects Workspace Dashboard (when no active bot)
   if (!activeBot) {
+    if (projectTab === 'team') {
+      return (
+        <div className="flex-grow w-full bg-[#FCFCFC] dark:bg-zinc-950 h-full flex items-center justify-center relative animate-in fade-in duration-500 overflow-y-auto">
+          <p className="text-gray-400 dark:text-zinc-500 text-sm">Select a Team Project from the left sidebar to view it.</p>
+        </div>
+      );
+    }
+
     return (
       <div className="flex-grow w-full bg-[#FCFCFC] dark:bg-zinc-950 h-full flex flex-col relative animate-in fade-in duration-500 overflow-y-auto">
         

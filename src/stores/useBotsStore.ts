@@ -26,6 +26,7 @@ interface BotsState {
   threads: BotThread[];
   activeBotId: string | null;
   activeBotThreadId: string | null;
+  projectTab: 'my' | 'team';
   
   // Actions
   addBot: (bot: Omit<Chatbot, 'id' | 'createdAt'>) => Chatbot;
@@ -36,6 +37,7 @@ interface BotsState {
   addThread: (botId: string, threadId: string, title: string) => void;
   deleteThread: (threadId: string) => void;
   setActiveBotThreadId: (threadId: string | null) => void;
+  setProjectTab: (tab: 'my' | 'team') => void;
   
   // Async initialization
   fetchBots: () => Promise<void>;
@@ -89,6 +91,7 @@ export const useBotsStore = create<BotsState>()(
       threads: [],
       activeBotId: null,
       activeBotThreadId: null,
+      projectTab: 'my',
 
       addBot: (newBotData) => {
         const id = `bot_${Date.now()}`;
@@ -176,9 +179,9 @@ export const useBotsStore = create<BotsState>()(
         }));
       },
 
-      setActiveBotThreadId: (threadId) => {
-        set({ activeBotThreadId: threadId });
-      },
+      setActiveBotThreadId: (threadId) => set({ activeBotThreadId: threadId }),
+
+      setProjectTab: (tab) => set({ projectTab: tab }),
 
       fetchBots: async () => {
         try {

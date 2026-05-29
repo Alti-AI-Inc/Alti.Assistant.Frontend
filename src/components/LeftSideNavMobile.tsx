@@ -168,9 +168,8 @@ const LeftSideNavMobile = () => {
   } = useConversationsStore();
 
   const isLoggedIn = data?.accessToken;
-  const { bots, activeBotId, setActiveBotId } = useBotsStore();
+  const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab } = useBotsStore();
   const [activeTab, setActiveTab] = useState<SidebarTab>('chat');
-  const [projectTab, setProjectTab] = useState<'my' | 'team'>('my');
   const [searchQuery, setSearchQuery] = useState('');
   const searchParams = useSearchParams();
   const activeAppSlug = searchParams?.get('app');

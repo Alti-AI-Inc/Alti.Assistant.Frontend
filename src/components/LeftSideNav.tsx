@@ -168,7 +168,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     setUserMessage,
   } = useConversationsStore();
   const { isLeftSidebarOpen, toggleLeftSidebar, isRightSidebarOpen, toggleRightSidebar } = useSidebarStore();
-  const { bots, activeBotId, setActiveBotId } = useBotsStore();
+  const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab } = useBotsStore();
 
   const hideSidebar = side === 'right' ? !isRightSidebarOpen : !isLeftSidebarOpen;
   const isLoggedIn = data?.accessToken;
@@ -176,7 +176,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const [logoHovered, setLogoHovered] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<SidebarTab>('chat');
-  const [projectTab, setProjectTab] = useState<'my' | 'team'>('my');
 
   const isAdminMode = pathname.startsWith('/admin');
 
