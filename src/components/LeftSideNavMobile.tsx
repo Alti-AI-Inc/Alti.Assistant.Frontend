@@ -830,15 +830,7 @@ const LeftSideNavMobile = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuGroup>
-                {/* Plans dropdown menu item */}
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push('/upgrade');
-                    close();
-                  }}
-                >
-                  <Orbit className="text-black" /> Plans
-                </DropdownMenuItem>
+
                 <DropdownMenuGroup>
                   {!isAdminMode && (
                     <DropdownMenuItem onClick={() => { router.push('/admin/members'); close(); }}>

@@ -881,10 +881,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       <Shield className="text-black" /> Admin
                     </DropdownMenuItem>
                   )}
-                  {/* Plans dropdown menu item */}
-                  <DropdownMenuItem onClick={() => router.push('/upgrade')}>
-                    <Orbit className="text-black" /> Plans
-                  </DropdownMenuItem>
+
                   <DropdownMenuItem onClick={() => router.push('/legal')}>
                     <Scale className="text-black" /> Legal
                   </DropdownMenuItem>
