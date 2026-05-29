@@ -162,9 +162,11 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 </TooltipContent>
               </Tooltip>
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
+              {(!bot.isShared || basePath === '/admin/projects') && (
+                <>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
                     type="button"
                     onClick={() => handleTabChange('instructions')}
                     className={cn(
@@ -221,6 +223,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   <p>Data</p>
                 </TooltipContent>
               </Tooltip>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -100,7 +100,7 @@ export default function ProtectedLayoutClient({
         {/* Left Sidebar - Desktop */}
         <div
           className={cn(
-            'sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out sm:hidden md:flex',
+            'sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out sm:hidden md:flex border-r border-black/10',
             isLeftSidebarOpen ? 'w-68' : 'w-10',
           )}
           style={{ backgroundColor: '#F2F3F5' }}
