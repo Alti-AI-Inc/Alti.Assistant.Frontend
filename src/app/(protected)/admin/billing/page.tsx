@@ -251,14 +251,28 @@ export default function AdminBillingPage() {
       <div className="container mx-auto max-w-6xl px-4 py-8">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Billing & Usage</h1>
+            <h1 className="text-3xl font-bold">
+              {planName.toLowerCase() === 'free' ? 'Pricing Plans' : 'Billing & Usage'}
+            </h1>
             <p className="text-muted-foreground mt-1">
-              Manage your subscription and view usage statistics
+              {planName.toLowerCase() === 'free' 
+                ? 'Select the perfect plan for your organization' 
+                : 'Manage your subscription and view usage statistics'}
             </p>
           </div>
         </div>
 
-        <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+        {planName.toLowerCase() === 'free' ? (
+          <div className="mt-8">
+            <OrganizationPricingCards
+              currentPlanId={subscription?.plan?.toLowerCase()}
+              onSelectPlan={handleSelectPlan}
+              showContactSales={true}
+            />
+          </div>
+        ) : (
+          <>
+            <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* Current Plan */}
           <Card>
             <CardHeader>
@@ -588,8 +602,9 @@ export default function AdminBillingPage() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Pricing Plans Modal */}
+      </>
+      )}
+      {/* Pricing Plans Modal */}
         {showPricingPlans && (
           <div className="bg-background/80 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
             <div className="bg-background relative max-h-[90vh] w-full max-w-7xl overflow-auto rounded-lg shadow-lg">
