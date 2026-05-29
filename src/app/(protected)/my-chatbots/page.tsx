@@ -85,7 +85,9 @@ function MyChatbotsContent() {
   const queryClient = useQueryClient();
 
   const { bots, activeBotId, activeBotThreadId, setActiveBotId, setActiveBotThreadId, addBot } = useBotsStore();
-  const { setActiveConversation } = useConversationsStore();
+  const { setActiveConversation, activeConversation } = useConversationsStore();
+
+  const hasMessages = !!activeConversation?.messages?.length;
 
   // Wizard States
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -838,7 +840,7 @@ function MyChatbotsContent() {
         style={{ backgroundColor: '#FCFCFC' }}
       >
         {/* Chatbot Content Body */}
-        <div className="flex-1 flex flex-col overflow-hidden relative">
+        <div className="flex-1 flex flex-col items-center justify-center overflow-hidden relative">
           {viewParam === 'instructions' ? (
             <InstructionsEditor bot={activeBot} />
           ) : viewParam === 'guardrails' ? (
@@ -846,7 +848,15 @@ function MyChatbotsContent() {
           ) : viewParam === 'data' ? (
             <DataEditor bot={activeBot} />
           ) : (
-            <FullConversation conversationId={activeBotThreadId || 'new-chat'} />
+            <>
+              {!hasMessages && (
+                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
+                  {activeBot.name}
+                </h1>
+              )}
+
+              <FullConversation conversationId={activeBotThreadId || 'new-chat'} />
+            </>
           )}
         </div>
       </div>
