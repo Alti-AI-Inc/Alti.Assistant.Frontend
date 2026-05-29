@@ -1,8 +1,8 @@
 'use client';
 
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import { CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useState, useEffect } from 'react';
-import type { StripeCardElementChangeEvent } from '@stripe/stripe-js';
+import type { StripeCardNumberElementChangeEvent, StripeCardExpiryElementChangeEvent, StripeCardCvcElementChangeEvent } from '@stripe/stripe-js';
 import { AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -30,11 +30,21 @@ export function StripeCardForm({
   const elements = useElements();
 
   const [cardError, setCardError] = useState<string>('');
-  const [isCardComplete, setIsCardComplete] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
+  
+  const [numberComplete, setNumberComplete] = useState(false);
+  const [expiryComplete, setExpiryComplete] = useState(false);
+  const [cvcComplete, setCvcComplete] = useState(false);
+  
+  const isCardComplete = numberComplete && expiryComplete && cvcComplete;
+  const [focusedField, setFocusedField] = useState<string | null>(null);
+
+  // Notify parent on completion change
+  useEffect(() => {
+    onCardComplete?.(isCardComplete);
+  }, [isCardComplete, onCardComplete]);
 
   // CardElement styling options
-  const cardElementOptions = {
+  const baseElementOptions = {
     style: {
       base: {
         fontSize: '16px',
@@ -42,7 +52,8 @@ export function StripeCardForm({
         fontFamily: 'system-ui, -apple-system, sans-serif',
         fontSmoothing: 'antialiased',
         '::placeholder': {
-          color: 'transparent',
+          color: 'hsl(var(--muted-foreground))',
+          fontWeight: '300',
         },
         iconColor: 'hsl(var(--muted-foreground))',
       },
@@ -55,30 +66,20 @@ export function StripeCardForm({
         iconColor: 'hsl(var(--primary))',
       },
     },
-    hidePostalCode: !showPostalCode,
-    disableLink: true,
   };
 
-  // Handle card element changes
-  const handleCardChange = (event: StripeCardElementChangeEvent) => {
-    // Update error state
-    if (event.error) {
-      const errorMessage = event.error.message || 'Invalid card details';
-      setCardError(errorMessage);
-      onError?.(errorMessage);
+  const handleError = (error?: { message: string }) => {
+    if (error) {
+      setCardError(error.message);
+      onError?.(error.message);
     } else {
       setCardError('');
       onError?.('');
     }
-
-    // Update completion state
-    setIsCardComplete(event.complete);
-    onCardComplete?.(event.complete);
   };
 
   // Handle card element ready event
   const handleCardReady = () => {
-    // Add a small delay to ensure the element is truly ready for data extraction
     setTimeout(() => {
       onReady?.();
     }, 100);
@@ -91,6 +92,8 @@ export function StripeCardForm({
       onError?.(message);
     }
   }, [stripe, elements, onError]);
+
+  const isFocused = focusedField !== null;
 
   return (
     <div className={cn('space-y-1', className)}>
@@ -109,17 +112,41 @@ export function StripeCardForm({
             'bg-background'
           )}
         >
-          <div className="pl-3 pr-2 py-3 bg-zinc-50 dark:bg-zinc-900/50 border-r border-zinc-200 dark:border-zinc-800 text-sm font-bold text-zinc-900 dark:text-zinc-50 shrink-0">
-            Card Number
-          </div>
-          <div className="flex-1 px-3 py-3 relative">
-            <CardElement
-              id="card-element"
-              options={cardElementOptions}
-              onChange={handleCardChange}
+          <div className="flex-1 px-3 py-3">
+            <CardNumberElement
+              id="card-number-element"
+              options={{ ...baseElementOptions, showIcon: true, placeholder: 'Card Number' }}
+              onChange={(e: StripeCardNumberElementChangeEvent) => {
+                handleError(e.error);
+                setNumberComplete(e.complete);
+              }}
               onReady={handleCardReady}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
+              onFocus={() => setFocusedField('number')}
+              onBlur={() => setFocusedField(null)}
+            />
+          </div>
+          <div className="w-[85px] px-3 py-3 border-l border-input">
+            <CardExpiryElement
+              id="card-expiry-element"
+              options={baseElementOptions}
+              onChange={(e: StripeCardExpiryElementChangeEvent) => {
+                handleError(e.error);
+                setExpiryComplete(e.complete);
+              }}
+              onFocus={() => setFocusedField('expiry')}
+              onBlur={() => setFocusedField(null)}
+            />
+          </div>
+          <div className="w-[80px] px-3 py-3 border-l border-input">
+            <CardCvcElement
+              id="card-cvc-element"
+              options={baseElementOptions}
+              onChange={(e: StripeCardCvcElementChangeEvent) => {
+                handleError(e.error);
+                setCvcComplete(e.complete);
+              }}
+              onFocus={() => setFocusedField('cvc')}
+              onBlur={() => setFocusedField(null)}
             />
           </div>
         </div>
