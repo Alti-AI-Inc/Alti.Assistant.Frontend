@@ -26,12 +26,12 @@ import {
   Scale,
   Search,
   Settings,
-  SquarePen,
-  User,
+  Shield,
+  FileText,
+  ArrowLeft,
   Users,
   ChevronRight,
   MessageSquare,
-  Shield,
   Globe,
   Folder,
   Database,
@@ -41,6 +41,7 @@ import {
   Cpu,
   Sparkles,
   EllipsisVertical,
+  CreditCard,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -174,6 +175,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const [logoHovered, setLogoHovered] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<SidebarTab>('chat');
+
+  const isAdminMode = pathname.startsWith('/admin');
 
   const searchParams = useSearchParams();
   const activeAppSlug = searchParams?.get('app');
@@ -483,7 +486,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       )}
 
       {/* Chat / Research / Agents / Data / Apps icon row toggle */}
-      {!hideSidebar && isLoggedIn && side !== 'right' && (
+      {!hideSidebar && isLoggedIn && side !== 'right' && !isAdminMode && (
         <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300">
           <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
             <Tooltip>
@@ -612,7 +615,35 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           )}
         >
 
-          {activeTab === 'bots' ? (
+          {isAdminMode ? (
+            <div className="mt-4 space-y-1">
+              {[
+                { name: 'Members', href: '/admin/members', icon: Users },
+                { name: 'Billing', href: '/admin/billing', icon: CreditCard },
+                { name: 'Data', href: '/admin/data', icon: Database },
+                { name: 'Instructions', href: '/admin/instructions', icon: FileText },
+                { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
+              ].map((item) => {
+                const isActive = pathname.startsWith(item.href);
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={cn(
+                      'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                      isActive
+                        ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
+                        : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                    )}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </div>
+          ) : activeTab === 'bots' ? (
             <div className="mt-2 space-y-1 py-1 pb-4">
               {bots
                 .filter(bot =>
@@ -833,9 +864,15 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 align="start"
               >
                 <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={() => router.push('/admin')}>
-                    <Shield className="text-black" /> Admin
-                  </DropdownMenuItem>
+                  {isAdminMode ? (
+                    <DropdownMenuItem onClick={() => router.push('/')}>
+                      <ArrowLeft className="text-black" /> Return to App
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem onClick={() => router.push('/admin/members')}>
+                      <Shield className="text-black" /> Admin
+                    </DropdownMenuItem>
+                  )}
                   {/* Plans dropdown menu item */}
                   <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                     <Orbit className="text-black" /> Plans

@@ -39,9 +39,13 @@ import {
   Sparkles,
   EllipsisVertical,
   Shield,
+  FileText,
+  CreditCard,
+  ArrowLeft,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { useState, useEffect, useMemo } from 'react';
 import ConversationsList from './ConversationsList';
 import { TenantModeSwitcher } from './TenantModeSwitcher';
@@ -148,6 +152,8 @@ const LeftSideNavMobile = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { close } = useDrawerStore();
+
+  const isAdminMode = pathname.startsWith('/admin');
   const { mode, currentTenant } = useTenant();
 
   const { onOpen } = useModalStore();
@@ -426,7 +432,7 @@ const LeftSideNavMobile = () => {
       </div>
 
       {/* Chat / Research / Agents / Data / Apps icon row toggle */}
-      {isLoggedIn && (
+      {isLoggedIn && !isAdminMode && (
         <div className="border-b border-black/5 px-4 py-2 bg-secondary">
           <div className="flex bg-black/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03]">
             <Tooltip>
@@ -561,7 +567,36 @@ const LeftSideNavMobile = () => {
               />
             )}
           </div>
-          {activeTab === 'bots' ? (
+          {isAdminMode ? (
+            <div className="space-y-1 py-1 pb-4 mt-2">
+              {[
+                { name: 'Members', href: '/admin/members', icon: Users },
+                { name: 'Billing', href: '/admin/billing', icon: CreditCard },
+                { name: 'Data', href: '/admin/data', icon: Database },
+                { name: 'Instructions', href: '/admin/instructions', icon: FileText },
+                { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
+              ].map((item) => {
+                const isActive = pathname.startsWith(item.href);
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={() => close()}
+                    className={cn(
+                      'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                      isActive
+                        ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
+                        : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                    )}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </div>
+          ) : activeTab === 'bots' ? (
             <div className="space-y-1 py-1 pb-4 mt-2">
               {bots
                 .filter(bot =>
@@ -790,15 +825,17 @@ const LeftSideNavMobile = () => {
                 >
                   <Orbit className="text-black" /> Plans
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push('/admin');
-                    close();
-                  }}
-                >
-                  <Shield className="text-black" /> Admin
-                </DropdownMenuItem>
-
+                <DropdownMenuGroup>
+                  {isAdminMode ? (
+                    <DropdownMenuItem onClick={() => { router.push('/'); close(); }}>
+                      <ArrowLeft className="text-black" /> Return to App
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem onClick={() => { router.push('/admin/members'); close(); }}>
+                      <Shield className="text-black" /> Admin
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuGroup>
                 <DropdownMenuItem
                   onClick={() => {
                     router.push(
