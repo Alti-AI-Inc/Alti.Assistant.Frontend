@@ -9,6 +9,7 @@ import { useBotsStore } from '@/stores/useBotsStore';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
 import BotRightSidebar from '@/components/panels/BotRightSidebar';
+import { InstructionsEditor, GuardrailsEditor, DataEditor } from '@/components/panels/ProjectEditors';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
@@ -94,15 +95,18 @@ function MyChatbotsContent() {
   const [guardrails, setGuardrails] = useState('');
   const [guardrailsList, setGuardrailsList] = useState<{ id: string; text: string; timestamp: string }[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  
+  const botParam = searchParams?.get('bot');
+  const threadParam = searchParams?.get('thread');
+  const viewParam = searchParams?.get('view');
+  
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState('');
   
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragActive, setIsDragActive] = useState(false);
 
-  // Read URL params
-  const botParam = searchParams?.get('bot');
-  const threadParam = searchParams?.get('thread');
+
 
   // Sync state with URL params
   useEffect(() => {
@@ -835,18 +839,28 @@ function MyChatbotsContent() {
       >
         {/* Chatbot Content Body */}
         <div className="flex-1 flex flex-col items-center justify-center overflow-hidden relative">
-          {!activeBotThreadId && (
-            <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
-              {activeBot.name}
-            </h1>
-          )}
+          {viewParam === 'instructions' ? (
+            <InstructionsEditor bot={activeBot} />
+          ) : viewParam === 'guardrails' ? (
+            <GuardrailsEditor bot={activeBot} />
+          ) : viewParam === 'data' ? (
+            <DataEditor bot={activeBot} />
+          ) : (
+            <>
+              {!activeBotThreadId && (
+                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
+                  {activeBot.name}
+                </h1>
+              )}
 
-          <FullConversation conversationId={activeBotThreadId || 'new-chat'} />
+              <FullConversation conversationId={activeBotThreadId || 'new-chat'} />
 
-          {!activeBotThreadId && (
-            <p className="absolute bottom-3 text-xs text-neutral-500">
-              We don&apos;t train on your data. Your chats stay private.
-            </p>
+              {!activeBotThreadId && (
+                <p className="absolute bottom-3 text-xs text-neutral-500">
+                  We don't train on your data. Your chats stay private.
+                </p>
+              )}
+            </>
           )}
         </div>
       </div>

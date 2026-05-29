@@ -6,10 +6,9 @@ import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { Plus, Trash2, PanelLeftClose, Search, MessageSquare, FileText, Shield, Upload } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Textarea } from '@/components/ui/textarea';
 
 interface BotRightSidebarProps {
   botId: string;
@@ -20,6 +19,7 @@ type TabType = 'history' | 'instructions' | 'guardrails' | 'data';
 
 export default function BotRightSidebar({ botId, activeThreadId }: BotRightSidebarProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { bots, threads, deleteThread, setActiveBotThreadId, editBot } = useBotsStore();
   const { setActiveConversation } = useConversationsStore();
   const { isRightSidebarOpen, toggleRightSidebar } = useSidebarStore();
@@ -29,19 +29,17 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
   const [searchQuery, setSearchQuery] = useState('');
   
-  // Tab State
-  const [activeTab, setActiveTab] = useState<TabType>('history');
+  // Tab State is now derived from URL
+  const activeTab = (searchParams.get('view') as TabType) || 'history';
   
-  // Editor State
-  const [instructionsText, setInstructionsText] = useState(bot?.instructions || '');
-  const [guardrailsText, setGuardrailsText] = useState(bot?.guardrails || '');
-
-  useEffect(() => {
-    if (bot) {
-      setInstructionsText(bot.instructions || '');
-      setGuardrailsText(bot.guardrails || '');
+  const handleTabChange = (tab: TabType) => {
+    // If selecting history, clear the view parameter so it shows the chat
+    if (tab === 'history') {
+      router.push(`/my-chatbots?bot=${botId}`);
+    } else {
+      router.push(`/my-chatbots?bot=${botId}&view=${tab}`);
     }
-  }, [bot]);
+  };
 
   const filteredThreads = botThreads.filter((t) =>
     (t.title || 'Untitled Chat').toLowerCase().includes(searchQuery.toLowerCase())
@@ -70,13 +68,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
   const hideSidebar = !isRightSidebarOpen;
 
-  const handleSaveInstructions = () => {
-    editBot(botId, { instructions: instructionsText });
-  };
-
-  const handleSaveGuardrails = () => {
-    editBot(botId, { guardrails: guardrailsText });
-  };
+  const parsedInstructions = bot.instructions ? bot.instructions.split('\n\n').filter(Boolean) : [];
+  const parsedGuardrails = bot.guardrails ? bot.guardrails.split('\n\n').filter(Boolean) : [];
 
   return (
     <aside
@@ -147,7 +140,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => setActiveTab('history')}
+                    onClick={() => handleTabChange('history')}
                     className={cn(
                       'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
                       activeTab === 'history'
@@ -167,7 +160,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => setActiveTab('instructions')}
+                    onClick={() => handleTabChange('instructions')}
                     className={cn(
                       'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
                       activeTab === 'instructions'
@@ -187,7 +180,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => setActiveTab('guardrails')}
+                    onClick={() => handleTabChange('guardrails')}
                     className={cn(
                       'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
                       activeTab === 'guardrails'
@@ -207,7 +200,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => setActiveTab('data')}
+                    onClick={() => handleTabChange('data')}
                     className={cn(
                       'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
                       activeTab === 'data'
@@ -234,88 +227,142 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
           style={{ backgroundColor: '#F2F3F5' }}
         >
           {activeTab === 'history' && (
-            <>
-              <div className="flex-1 space-y-1 py-1 pb-4 pt-4">
-                {filteredThreads.length === 0 ? (
-                  <div className="py-4 text-center text-xs text-gray-400">
-                    {searchQuery ? 'No matching chats.' : 'No conversations yet. Start a new chat!'}
-                  </div>
-                ) : (
-                  filteredThreads.map((thread) => {
-                    const isSelected = activeThreadId === thread.id;
-                    return (
-                      <div
-                        key={thread.id}
-                        className={cn(
-                          "group flex h-9 w-full items-center justify-between rounded-md text-sm font-normal text-black text-left transition-all",
-                          isSelected ? "bg-black/10 font-medium" : "hover:bg-black/5"
-                        )}
+            <div className="flex-1 space-y-1 py-1 pb-4 pt-4">
+              {filteredThreads.length === 0 ? (
+                <div className="py-4 text-center text-xs text-gray-400">
+                  {searchQuery ? 'No matching chats.' : 'No conversations yet. Start a new chat!'}
+                </div>
+              ) : (
+                filteredThreads.map((thread) => {
+                  const isSelected = activeThreadId === thread.id;
+                  return (
+                    <div
+                      key={thread.id}
+                      className={cn(
+                        "group flex h-9 w-full items-center justify-between rounded-md text-sm font-normal text-black text-left transition-all",
+                        isSelected ? "bg-black/10 font-medium" : "hover:bg-black/5"
+                      )}
+                    >
+                      <span
+                        className="flex-1 cursor-pointer truncate px-1 py-2"
+                        onClick={() => handleThreadSelect(thread.id)}
                       >
-                        <span
-                          className="flex-1 cursor-pointer truncate px-1 py-2"
-                          onClick={() => handleThreadSelect(thread.id)}
-                        >
-                          {thread.title || 'Untitled Chat'}
-                        </span>
-                        
-                        <button
-                          onClick={(e) => handleThreadDelete(e, thread.id)}
-                          className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
-                          title="Delete Thread"
-                        >
-                          <Trash2 className="size-3.5 text-black" />
-                        </button>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            </>
+                        {thread.title || 'Untitled Chat'}
+                      </span>
+                      
+                      <button
+                        onClick={(e) => handleThreadDelete(e, thread.id)}
+                        className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
+                        title="Delete Thread"
+                      >
+                        <Trash2 className="size-3.5 text-black" />
+                      </button>
+                    </div>
+                  );
+                })
+              )}
+            </div>
           )}
 
           {activeTab === 'instructions' && (
-            <div className="flex flex-col h-full mt-4 animate-in fade-in zoom-in-95 duration-200">
-              <Textarea 
-                value={instructionsText}
-                onChange={(e) => setInstructionsText(e.target.value)}
-                className="flex-1 min-h-[300px] resize-none bg-white border-black/10 text-sm p-3 shadow-xs focus-visible:ring-1 focus-visible:ring-black/20 rounded-xl"
-                placeholder="Enter system instructions for this project..."
-              />
-              <Button 
-                onClick={handleSaveInstructions}
-                className="mt-4 w-full bg-black text-white hover:bg-black/90 rounded-xl py-5 shadow-sm"
-              >
-                Save Instructions
-              </Button>
+            <div className="flex-1 space-y-1 py-1 pb-4 pt-4 animate-in fade-in zoom-in-95 duration-200">
+              {parsedInstructions.length === 0 ? (
+                <div className="py-4 text-center text-xs text-gray-400">
+                  No instructions added yet.
+                </div>
+              ) : (
+                parsedInstructions.map((inst, index) => (
+                  <div
+                    key={index}
+                    className="group flex h-9 w-full items-center justify-between rounded-md text-sm font-normal text-black text-left transition-all hover:bg-black/5"
+                  >
+                    <span
+                      className="flex-1 cursor-pointer truncate px-1 py-2"
+                      onClick={() => handleTabChange('instructions')}
+                    >
+                      {inst.length > 30 ? inst.slice(0, 30) + '...' : inst}
+                    </span>
+                    
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const newList = parsedInstructions.filter((_, i) => i !== index);
+                        editBot(botId, { instructions: newList.join('\n\n') });
+                      }}
+                      className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
+                      title="Delete Instruction"
+                    >
+                      <Trash2 className="size-3.5 text-black" />
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
           )}
 
           {activeTab === 'guardrails' && (
-            <div className="flex flex-col h-full mt-4 animate-in fade-in zoom-in-95 duration-200">
-              <Textarea 
-                value={guardrailsText}
-                onChange={(e) => setGuardrailsText(e.target.value)}
-                className="flex-1 min-h-[300px] resize-none bg-white border-black/10 text-sm p-3 shadow-xs focus-visible:ring-1 focus-visible:ring-black/20 rounded-xl"
-                placeholder="Define rules and constraints..."
-              />
-              <Button 
-                onClick={handleSaveGuardrails}
-                className="mt-4 w-full bg-black text-white hover:bg-black/90 rounded-xl py-5 shadow-sm"
-              >
-                Save Guardrails
-              </Button>
+            <div className="flex-1 space-y-1 py-1 pb-4 pt-4 animate-in fade-in zoom-in-95 duration-200">
+              {parsedGuardrails.length === 0 ? (
+                <div className="py-4 text-center text-xs text-gray-400">
+                  No guardrails added yet.
+                </div>
+              ) : (
+                parsedGuardrails.map((guard, index) => (
+                  <div
+                    key={index}
+                    className="group flex h-9 w-full items-center justify-between rounded-md text-sm font-normal text-black text-left transition-all hover:bg-black/5"
+                  >
+                    <span
+                      className="flex-1 cursor-pointer truncate px-1 py-2"
+                      onClick={() => handleTabChange('guardrails')}
+                    >
+                      {guard.length > 30 ? guard.slice(0, 30) + '...' : guard}
+                    </span>
+                    
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const newList = parsedGuardrails.filter((_, i) => i !== index);
+                        editBot(botId, { guardrails: newList.join('\n\n') });
+                      }}
+                      className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
+                      title="Delete Guardrail"
+                    >
+                      <Trash2 className="size-3.5 text-black" />
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
           )}
 
           {activeTab === 'data' && (
-            <div className="flex flex-col h-full mt-4 animate-in fade-in zoom-in-95 duration-200">
-              <div className="flex flex-col items-center justify-center flex-1 min-h-[300px] rounded-xl border border-dashed border-black/20 bg-black/5 p-6 text-center">
-                <Upload className="size-8 text-gray-400 mb-3" />
-                <h3 className="text-sm font-semibold text-gray-800 mb-1">Knowledge Base</h3>
-                <p className="text-xs text-gray-500">
-                  Data uploaded during project creation is active. Editing or uploading new files directly from the sidebar is coming soon!
-                </p>
-              </div>
+            <div className="flex-1 space-y-1 py-1 pb-4 pt-4 animate-in fade-in zoom-in-95 duration-200">
+              {bot.data ? (
+                <div className="group flex h-9 w-full items-center justify-between rounded-md text-sm font-normal text-black text-left transition-all hover:bg-black/5">
+                  <span
+                    className="flex-1 cursor-pointer truncate px-1 py-2"
+                    onClick={() => handleTabChange('data')}
+                  >
+                    Backend Knowledge Base Connected
+                  </span>
+                  
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      editBot(botId, { data: undefined });
+                    }}
+                    className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
+                    title="Disconnect Data"
+                  >
+                    <Trash2 className="size-3.5 text-black" />
+                  </button>
+                </div>
+              ) : (
+                <div className="py-4 text-center text-xs text-gray-400">
+                  No data connected.
+                </div>
+              )}
             </div>
           )}
 
