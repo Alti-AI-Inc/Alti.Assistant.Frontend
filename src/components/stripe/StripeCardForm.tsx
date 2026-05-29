@@ -93,7 +93,7 @@ export function StripeCardForm({
   }, [stripe, elements, onError]);
 
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn('space-y-1', className)}>
       {/* Card Input Section */}
       <div>
         <div

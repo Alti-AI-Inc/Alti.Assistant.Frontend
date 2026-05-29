@@ -366,9 +366,8 @@ export function PaymentConfirmationModal({
           </DialogTitle>
         </DialogHeader>
 
-        {/* Plan Summary Card - High-Fidelity Glassmorphism */}
-        <div className="relative overflow-hidden rounded-2xl border border-blue-500/20 bg-gradient-to-tr from-blue-600/10 via-indigo-600/5 to-purple-600/10 p-5 dark:border-blue-500/30">
-          <div className="absolute inset-0 bg-white/20 dark:bg-zinc-950/20 backdrop-blur-xs pointer-events-none" />
+        {/* Plan Summary Card */}
+        <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900 shadow-sm">
           <div className="relative z-10 flex items-center justify-between">
             <div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Selected Option</span>
@@ -387,7 +386,7 @@ export function PaymentConfirmationModal({
         </div>
 
         {/* Main Content Wrapper - relative positioning for overlay */}
-        <div className="relative min-h-[140px] flex flex-col justify-center mt-3">
+        <div className="relative flex flex-col justify-center mt-1">
           <AnimatePresence mode="wait">
             {/* Loading State */}
             {step === 'loading' && (
@@ -433,7 +432,7 @@ export function PaymentConfirmationModal({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
-                className="relative space-y-2"
+                className="relative space-y-1"
               >
                 {paymentMethods.length > 0 && (
                   <Button
@@ -523,18 +522,18 @@ export function PaymentConfirmationModal({
 
         {/* Action Buttons */}
         {step !== 'loading' && step !== 'processing' && step !== 'success' && (
-          <div className="flex gap-4 pt-3 border-t border-zinc-100 dark:border-zinc-900/40 mt-1">
+          <div className="flex gap-3 pt-2 border-t border-zinc-100 dark:border-zinc-900/40 mt-1">
             <Button
               variant="outline"
               onClick={handleClose}
-              className="flex-1 py-4 rounded-xl border-zinc-250 dark:border-zinc-800 font-bold text-zinc-500 dark:text-zinc-400"
+              className="flex-1 py-3 rounded-xl border-zinc-250 dark:border-zinc-800 font-bold text-zinc-500 dark:text-zinc-400"
             >
               Cancel
             </Button>
             <Button
               onClick={handleConfirm}
               className={cn(
-                "flex-1 py-4 rounded-xl font-bold transition-all duration-300 text-white border-none shadow-md",
+                "flex-1 py-3 rounded-xl font-bold transition-all duration-300 text-white border-none shadow-md",
                 canConfirm
                   ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-blue-500/10 hover:shadow-indigo-500/20 hover:scale-[1.01]"
                   : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-900 dark:text-zinc-600 shadow-none"
