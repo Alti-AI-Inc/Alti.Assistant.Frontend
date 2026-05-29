@@ -375,11 +375,8 @@ export function PaymentConfirmationModal({
                 Billed {plan.interval === 'month' ? 'Monthly' : plan.interval === 'year' ? 'Yearly' : plan.interval || 'Monthly'}
               </p>
             </div>
-            <div className="text-right">
+            <div className="text-right flex items-center">
               <div className="text-3xl font-extrabold text-zinc-900 dark:text-white tracking-tight">${plan.price}</div>
-              <div className="text-zinc-500 dark:text-zinc-450 text-[10px] font-bold uppercase tracking-wider mt-0.5">
-                per {plan.interval || 'month'}
-              </div>
             </div>
           </div>
         </div>

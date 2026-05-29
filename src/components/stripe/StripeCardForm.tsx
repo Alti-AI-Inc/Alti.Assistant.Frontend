@@ -95,7 +95,8 @@ export function StripeCardForm({
   return (
     <div className={cn('space-y-1', className)}>
       {/* Card Input Section */}
-      <div>
+      <div className="flex flex-col">
+        <label htmlFor="card-element" className="text-sm font-bold text-zinc-900 dark:text-zinc-50 mb-1 ml-0 text-left">Card Number</label>
         <div
           className={cn(
             'relative rounded-md border-2 transition-colors',
