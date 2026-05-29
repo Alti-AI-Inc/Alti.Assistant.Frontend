@@ -597,12 +597,12 @@ const ChatInput = ({
           : conversationId;
 
       if (conversationId === 'new-chat' && response.data.conversationId) {
-        // updateActiveConversation(
-        //   userMessage,
-        //   ROLES.USER,
-        //   response.data.conversationId,
-        // );
-        router.replace(`/c/${response.data.conversationId}`);
+        if (activeBotId && pathname.startsWith('/my-chatbots')) {
+          useBotsStore.getState().addThread(activeBotId, response.data.conversationId, userMessage.slice(0, 50) || 'New Chat');
+          router.replace(`/my-chatbots?bot=${activeBotId}&thread=${response.data.conversationId}`);
+        } else {
+          router.replace(`/c/${response.data.conversationId}`);
+        }
       }
 
       const images = response.data?.responseMessage?.images;
