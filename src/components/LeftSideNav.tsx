@@ -877,18 +877,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                     <Orbit className="text-black" /> Plans
                   </DropdownMenuItem>
-
-                  <DropdownMenuItem
-                    onClick={() =>
-                      router.push(
-                        mode === UserMode.TENANT && currentTenant
-                          ? `/organizations/${currentTenant.id}/members`
-                          : '/organizations',
-                      )
-                    }
-                  >
-                    <Users className="text-black" /> Members
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/legal')}>
                     <Scale className="text-black" /> Legal
                   </DropdownMenuItem>

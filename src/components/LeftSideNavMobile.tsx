@@ -838,18 +838,6 @@ const LeftSideNavMobile = () => {
                 </DropdownMenuGroup>
                 <DropdownMenuItem
                   onClick={() => {
-                    router.push(
-                      mode === UserMode.TENANT && currentTenant
-                        ? `/organizations/${currentTenant.id}/members`
-                        : '/organizations',
-                    );
-                    close();
-                  }}
-                >
-                  <Users className="text-black" /> Members
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
                     router.push('/settings');
                     close();
                   }}
