@@ -790,10 +790,10 @@ const LeftSideNavMobile = () => {
           <div className="flex h-20 w-full items-center justify-center border-t border-black/10 p-4">
             <Button
               variant="outline"
-              className="w-full justify-start gap-2"
+              className="w-full justify-center gap-2"
               onClick={() => { router.push('/'); close(); }}
             >
-              <ArrowLeft className="w-4 h-4" /> Return to App
+              Return to App
             </Button>
           </div>
         )}
