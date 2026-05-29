@@ -339,25 +339,49 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
           {activeTab === 'data' && (
             <div className="flex-1 space-y-1 py-1 pb-4 pt-4 animate-in fade-in zoom-in-95 duration-200">
               {bot.data ? (
-                <div className="group flex h-9 w-full items-center justify-between rounded-md text-sm font-normal text-black text-left transition-all hover:bg-black/5">
-                  <span
-                    className="flex-1 cursor-pointer truncate px-1 py-2"
-                    onClick={() => handleTabChange('data')}
-                  >
-                    Backend Knowledge Base Connected
-                  </span>
+                (() => {
+                  let files: { name: string, size: number }[] = [];
+                  try {
+                    files = JSON.parse(bot.data);
+                  } catch (e) {
+                    files = [{ name: bot.data, size: 0 }];
+                  }
                   
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      editBot(botId, { data: undefined });
-                    }}
-                    className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
-                    title="Disconnect Data"
-                  >
-                    <Trash2 className="size-3.5 text-black" />
-                  </button>
-                </div>
+                  if (files.length === 0) {
+                    return (
+                      <div className="py-4 text-center text-xs text-gray-400">
+                        No data connected.
+                      </div>
+                    );
+                  }
+
+                  return files.map((file, idx) => (
+                    <div key={idx} className="group flex h-9 w-full items-center justify-between rounded-md text-sm font-normal text-black text-left transition-all hover:bg-black/5">
+                      <span
+                        className="flex-1 cursor-pointer truncate px-1 py-2"
+                        onClick={() => handleTabChange('data')}
+                      >
+                        {file.name}
+                      </span>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const merged = files.filter((_, i) => i !== idx);
+                          if (merged.length === 0) {
+                            editBot(botId, { data: undefined });
+                          } else {
+                            editBot(botId, { data: JSON.stringify(merged) });
+                          }
+                        }}
+                        className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
+                        title="Disconnect Data"
+                      >
+                        <Trash2 className="size-3.5 text-black" />
+                      </button>
+                    </div>
+                  ));
+                })()
               ) : (
                 <div className="py-4 text-center text-xs text-gray-400">
                   No data connected.

@@ -1,12 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useBotsStore, Chatbot } from '@/stores/useBotsStore';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { ArrowUp, Terminal, Trash2, Shield, Upload } from 'lucide-react';
+import { ArrowUp, Terminal, Trash2, Shield, Upload, ChevronLeft, Paperclip, FileText } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
+
+// Helper to get file extension
+function getFileExtension(filename: string) {
+  return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+}
 
 interface EditorProps {
   bot: Chatbot;
@@ -31,11 +36,7 @@ export function InstructionsEditor({ bot }: EditorProps) {
   };
 
   return (
-    <div className="flex flex-col w-full h-full p-8 max-w-[796px] mx-auto pt-24 animate-in fade-in zoom-in-95 duration-200">
-      <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
-        Edit Instructions
-      </h1>
-
+    <div className="flex flex-col w-full h-full p-8 max-w-[796px] mx-auto pt-16 animate-in fade-in zoom-in-95 duration-200">
       <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
         <div className="relative flex items-center gap-2 py-2">
           <Textarea
@@ -67,7 +68,7 @@ export function InstructionsEditor({ bot }: EditorProps) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pr-1 pb-4 custom-scrollbar space-y-3">
+      <div className="flex-1 overflow-y-auto pr-1 pb-4 custom-scrollbar space-y-3 relative z-10 !mt-0">
         {instructionsList.map((item, idx) => (
           <div
             key={idx}
@@ -149,11 +150,7 @@ export function GuardrailsEditor({ bot }: EditorProps) {
   };
 
   return (
-    <div className="flex flex-col w-full h-full p-8 max-w-[796px] mx-auto pt-24 animate-in fade-in zoom-in-95 duration-200">
-      <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
-        Edit Guardrails
-      </h1>
-
+    <div className="flex flex-col w-full h-full p-8 max-w-[796px] mx-auto pt-16 animate-in fade-in zoom-in-95 duration-200">
       <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
         <div className="relative flex items-center gap-2 py-2">
           <Textarea
@@ -185,7 +182,7 @@ export function GuardrailsEditor({ bot }: EditorProps) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pr-1 pb-4 custom-scrollbar space-y-3">
+      <div className="flex-1 overflow-y-auto pr-1 pb-4 custom-scrollbar space-y-3 relative z-10 !mt-0">
         {guardrailsList.map((item, idx) => (
           <div
             key={idx}
@@ -250,30 +247,141 @@ export function GuardrailsEditor({ bot }: EditorProps) {
 
 export function DataEditor({ bot }: EditorProps) {
   const { editBot } = useBotsStore();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isDragActive, setIsDragActive] = useState(false);
+
+  let selectedFiles: { name: string; size: number }[] = [];
+  try {
+    selectedFiles = bot.data ? JSON.parse(bot.data) : [];
+  } catch (e) {
+    selectedFiles = bot.data ? [{ name: bot.data, size: 0 }] : [];
+  }
+
+  const addFiles = (newFiles: File[]) => {
+    const newItems = newFiles.map(f => ({ name: f.name, size: f.size }));
+    const merged = [...selectedFiles, ...newItems];
+    editBot(bot.id, { data: JSON.stringify(merged) });
+  };
+
+  const removeFile = (idx: number) => {
+    const merged = selectedFiles.filter((_, i) => i !== idx);
+    if (merged.length === 0) {
+      editBot(bot.id, { data: undefined });
+    } else {
+      editBot(bot.id, { data: JSON.stringify(merged) });
+    }
+  };
 
   return (
-    <div className="flex flex-col w-full h-full p-8 max-w-[796px] mx-auto pt-24 animate-in fade-in zoom-in-95 duration-200">
-      <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
-        Project Data
-      </h1>
+    <div className="flex flex-col w-full h-full p-8 max-w-[796px] mx-auto pt-16 animate-in fade-in zoom-in-95 duration-200">
+      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
+        <div className="relative flex items-center gap-2 py-2">
+          
+          <div 
+            className={cn(
+              "min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none text-sm cursor-pointer transition-colors flex items-center",
+              isDragActive ? "text-blue-500 bg-blue-50/50 rounded-lg" : "text-gray-400 hover:text-gray-600"
+            )}
+            onClick={() => fileInputRef.current?.click()}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDragActive(true);
+            }}
+            onDragLeave={() => setIsDragActive(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setIsDragActive(false);
+              if (e.dataTransfer.files) {
+                const filesArray = Array.from(e.dataTransfer.files);
+                addFiles(filesArray);
+              }
+            }}
+          >
+            {isDragActive ? "Drop files here..." : "Click or drag & drop files here..."}
+          </div>
+          
+          <input
+            type="file"
+            ref={fileInputRef}
+            multiple
+            onChange={(e) => {
+              if (e.target.files) {
+                const filesArray = Array.from(e.target.files);
+                addFiles(filesArray);
+              }
+            }}
+            className="hidden"
+          />
 
-      <div className="flex-1 flex flex-col items-center justify-center text-center">
-        <Upload className="size-16 text-gray-300 mb-4" />
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">Knowledge Base</h2>
-        {bot.data ? (
-          <>
-            <p className="text-sm text-gray-500 max-w-sm mb-6">
-              Your project is connected to a Knowledge Base backend. Modifying files here is currently restricted.
-            </p>
-            <Button variant="destructive" onClick={() => editBot(bot.id, { data: undefined })}>
-              Disconnect Knowledge Base
-            </Button>
-          </>
-        ) : (
-          <p className="text-sm text-gray-500 max-w-sm">
-            This project has no active data connections.
-          </p>
-        )}
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="flex cursor-pointer items-center focus:outline-none"
+            aria-label="Upload"
+          >
+            <Paperclip className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+          </button>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto pr-1 pb-4 custom-scrollbar space-y-3 relative z-10 !mt-0">
+        {selectedFiles.map((file, idx) => (
+          <div
+            key={idx}
+            className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-blue-50/20 dark:hover:bg-blue-950/10"
+          >
+            <div className="flex items-center gap-3 min-w-0 pr-3 flex-1">
+              <div className="h-7 w-7 rounded-lg bg-blue-50 dark:bg-blue-955/40 text-blue-650 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
+                <FileText className="h-4 w-4" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed" title={file.name}>
+                  {file.name}
+                </p>
+                <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                  {(file.size / 1024 / 1024).toFixed(2)} MB • {getFileExtension(file.name) || "Document"}
+                </span>
+              </div>
+            </div>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <button
+                  type="button"
+                  className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none ml-2 flex items-center justify-center cursor-pointer"
+                  title="Remove File"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </DialogTrigger>
+              <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+                <div className="px-5 pt-5 pb-4 text-center">
+                  <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                    Delete Data
+                  </h2>
+                  <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+                    Are you sure you want to remove this data?
+                  </p>
+                </div>
+                <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+                  <DialogClose asChild>
+                    <button className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none">
+                      Cancel
+                    </button>
+                  </DialogClose>
+                  <DialogClose asChild>
+                    <button 
+                      onClick={() => removeFile(idx)}
+                      className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none"
+                    >
+                      Delete
+                    </button>
+                  </DialogClose>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        ))}
       </div>
     </div>
   );
