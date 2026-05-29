@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
-import { CircleUserRound, LogOut, ReceiptText, Settings } from 'lucide-react';
+import { CircleUserRound, LogOut, ReceiptText, Settings, Shield } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -104,6 +104,9 @@ const DashboardLeftSideNav = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="start">
                 <DropdownMenuGroup>
+                  <DropdownMenuItem onClick={() => router.push('/admin')}>
+                    <Shield className="text-black" /> Admin
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/settings')}>
                     <Settings className="text-black" /> Settings
                   </DropdownMenuItem>

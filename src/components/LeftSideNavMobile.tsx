@@ -38,6 +38,7 @@ import {
   Cpu,
   Sparkles,
   EllipsisVertical,
+  Shield,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -789,16 +790,14 @@ const LeftSideNavMobile = () => {
                 >
                   <Orbit className="text-black" /> Plans
                 </DropdownMenuItem>
-                {data?.user?.role === 'super_admin' && (
-                  <DropdownMenuItem
-                    onClick={() => {
-                      router.push('/admin');
-                      close();
-                    }}
-                  >
-                    <LayoutDashboard className="text-black" /> Dashboard
-                  </DropdownMenuItem>
-                )}
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push('/admin');
+                    close();
+                  }}
+                >
+                  <Shield className="text-black" /> Admin
+                </DropdownMenuItem>
 
                 <DropdownMenuItem
                   onClick={() => {

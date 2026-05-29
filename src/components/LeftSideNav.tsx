@@ -31,6 +31,7 @@ import {
   Users,
   ChevronRight,
   MessageSquare,
+  Shield,
   Globe,
   Folder,
   Database,
@@ -832,11 +833,9 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 align="start"
               >
                 <DropdownMenuGroup>
-                  {data?.user?.role === 'super_admin' && (
-                    <DropdownMenuItem onClick={() => router.push('/admin')}>
-                      <LayoutDashboard className="text-black" /> Dashboard
-                    </DropdownMenuItem>
-                  )}
+                  <DropdownMenuItem onClick={() => router.push('/admin')}>
+                    <Shield className="text-black" /> Admin
+                  </DropdownMenuItem>
                   {/* Plans dropdown menu item */}
                   <DropdownMenuItem onClick={() => router.push('/upgrade')}>
                     <Orbit className="text-black" /> Plans
