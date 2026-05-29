@@ -425,7 +425,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         )}
       </div>
       {/* Enclosed Search & Actions Row */}
-      {!hideSidebar && (
+      {!hideSidebar && !isAdminMode && (
         <div className="h-[52px] flex items-center justify-between gap-2 border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-all duration-300 flex-none">
           {/* Search Bar Input */}
           <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 dark:border-zinc-800/80 bg-white dark:bg-zinc-800/50 px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 dark:focus-within:ring-white/10">

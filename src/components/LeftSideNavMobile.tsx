@@ -363,7 +363,7 @@ const LeftSideNavMobile = () => {
       {/* Sticky nav buttons */}
       <div className="bg-secondary sticky top-0 z-10">
         <div className="space-y-0.5 px-2 py-2">
-          {plusProps.visible && (
+          {plusProps.visible && !isAdminMode && (
             <Button
               onClick={plusProps.onClick}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 animate-in fade-in zoom-in duration-200"
@@ -373,7 +373,7 @@ const LeftSideNavMobile = () => {
             </Button>
           )}
 
-          {isLoggedIn && (
+          {isLoggedIn && !isAdminMode && (
             <>
               {/* <Button
                 disabled={pathname === '/workspaces'}
@@ -523,6 +523,7 @@ const LeftSideNavMobile = () => {
       {/* Scrollable conversation list */}
       {isLoggedIn && (
         <div className="flex-1 overflow-y-auto px-4 pb-4">
+          {!isAdminMode && (
           <div className="mt-3 mb-2 flex items-center justify-between px-1">
             <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-zinc-400">
               {activeTab !== 'apps' && activeTab !== 'bots' && mode === UserMode.TENANT && currentTenant && (
@@ -555,7 +556,6 @@ const LeftSideNavMobile = () => {
                   className="w-full bg-transparent text-[11px] text-black outline-none placeholder:text-gray-500"
                 />
               </div>
-            ) : activeTab === 'bots' ? null : (
               <Search
                 onClick={() => {
                   onOpen({
@@ -567,6 +567,7 @@ const LeftSideNavMobile = () => {
               />
             )}
           </div>
+          )}
           {isAdminMode ? (
             <div className="space-y-1 py-1 pb-4 mt-2">
               {[
