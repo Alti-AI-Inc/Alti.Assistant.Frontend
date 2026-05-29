@@ -370,10 +370,9 @@ export function PaymentConfirmationModal({
         <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900 shadow-sm">
           <div className="relative z-10 flex items-center justify-between">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Selected Option</span>
-              <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-50 mt-0.5">{plan.name} Plan</h3>
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-50">{plan.name} Plan</h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-450 mt-1 leading-snug">
-                Billed {plan.interval || 'monthly'}
+                Billed {plan.interval === 'month' ? 'Monthly' : plan.interval === 'year' ? 'Yearly' : plan.interval || 'Monthly'}
               </p>
             </div>
             <div className="text-right">
