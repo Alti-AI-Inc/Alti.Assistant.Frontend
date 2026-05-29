@@ -23,7 +23,7 @@ export default function AdminLayout({
   return (
     <div className="flex w-full h-full bg-[#FCFCFC] dark:bg-zinc-950 overflow-hidden">
       {/* Secondary Sidebar */}
-      <aside className="w-64 flex-none border-r border-black/10 bg-[#F2F3F5] dark:bg-zinc-900 flex flex-col h-full">
+      <aside className="w-64 flex-none border-l border-r border-black/10 dark:border-white/10 bg-[#F2F3F5] dark:bg-zinc-900 flex flex-col h-full">
         <div className="p-4 border-b border-black/10">
           <h2 className="text-sm font-semibold text-gray-800 dark:text-gray-200">Admin</h2>
         </div>
