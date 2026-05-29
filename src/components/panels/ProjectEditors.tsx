@@ -284,6 +284,15 @@ export function DataEditor({ bot }: EditorProps) {
       <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
         <div className="relative flex items-center gap-2 py-2">
           
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="flex cursor-pointer items-center focus:outline-none"
+            aria-label="Upload"
+          >
+            <Paperclip className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+          </button>
+
           <div 
             className={cn(
               "min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none text-sm cursor-pointer transition-colors flex items-center",
@@ -319,15 +328,6 @@ export function DataEditor({ bot }: EditorProps) {
             }}
             className="hidden"
           />
-
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="flex cursor-pointer items-center focus:outline-none"
-            aria-label="Upload"
-          >
-            <Paperclip className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
-          </button>
         </div>
       </div>
 
