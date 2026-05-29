@@ -18,16 +18,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { MoreVertical, Trash2 } from 'lucide-react';
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { MoreVertical, Trash2, LoaderCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { memo, useState } from 'react';
 import { toast } from 'sonner';
@@ -257,32 +253,40 @@ function MembersListComponent({
           })}
       </div>
 
-      <AlertDialog
+      <Dialog
         open={!!memberToRemove}
         onOpenChange={open => !open && setMemberToRemove(null)}
       >
-        <AlertDialogContent className="border-black/10">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-black font-semibold">
+        <DialogContent className="border-none ring-0 outline-none sm:max-w-[480px]">
+          <DialogHeader>
+            <DialogTitle>
               {memberToRemove?.isInvitation ? 'Cancel Invitation' : 'Remove Member'}
-            </AlertDialogTitle>
-            <AlertDialogDescription className="text-gray-500 text-xs">
+            </DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 pt-4">
+            <h1 className="">
               Are you sure you want to {memberToRemove?.isInvitation ? 'cancel the invitation for' : 'remove'} {memberToRemove?.userId.email}?
               {!memberToRemove?.isInvitation && ' They will lose access to this organization immediately.'}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isRemoving} className="text-xs">Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleRemoveMember}
-              disabled={isRemoving}
-              className="bg-red-600 hover:bg-red-700 text-white text-xs font-medium"
-            >
-              {isRemoving ? 'Processing...' : (memberToRemove?.isInvitation ? 'Cancel Invitation' : 'Remove Member')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+            </h1>
+            <div className="mt-4 flex w-full justify-end gap-4">
+              <Button
+                variant="outline"
+                className="focus-visible:ring-0"
+                onClick={() => setMemberToRemove(null)}
+                disabled={isRemoving}
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleRemoveMember} disabled={isRemoving}>
+                {isRemoving && (
+                  <LoaderCircle className="animate-spin mr-2 h-4 w-4" />
+                )}
+                {memberToRemove?.isInvitation ? 'Cancel Invitation' : 'Remove Member'}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
