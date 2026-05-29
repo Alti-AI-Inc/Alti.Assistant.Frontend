@@ -34,7 +34,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   const [searchQuery, setSearchQuery] = useState('');
   
   // Tab State is now derived from URL
-  const activeTab = (searchParams.get('view') as TabType) || 'history';
+  const activeTab = basePath === '/admin/projects' ? 'history' : ((searchParams.get('view') as TabType) || 'history');
   
   const handleTabChange = (tab: TabType) => {
     // If selecting history, clear the view parameter so it shows the chat
@@ -138,10 +138,12 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
               </Button>
             )}
           </div>
+          </div>
 
           {/* Toggle with 4 icons */}
-          <div className="h-10 mt-1 flex items-center bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300 w-full">
-            <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
+          {basePath !== '/admin/projects' && (
+            <div className="h-10 mt-1 flex items-center bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300 w-full">
+              <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
@@ -227,6 +229,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
               )}
             </div>
           </div>
+          )}
         </div>
       )}
 
