@@ -206,7 +206,7 @@ export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
                   <Pencil className="mr-2 h-5 w-5 text-black" /> Rename
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onOpen({ type: 'delete-conversation', actionId: chat.id.toString() })}>
                   <Trash2 className="mr-2 h-5 w-5 text-black" />
                   <span className="text-black">Delete</span>
                 </DropdownMenuItem>

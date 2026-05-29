@@ -1,8 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { FileIcon, Trash2, Upload } from 'lucide-react';
+import { Trash2, Upload } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { getFileIconComponent } from './ProjectEditors';
 
 export interface UploadedFile {
   id: string;
@@ -138,13 +139,15 @@ export const DataRoom = ({
           <></>
         ) : (
           <div className="space-y-2">
-            {matterFiles.map(file => (
+            {matterFiles.map(file => {
+              const IconComponent = getFileIconComponent(file.name);
+              return (
               <div
                 key={file.id}
                 className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-gray-950"
               >
                 <div className="flex min-w-0 items-center gap-3">
-                  <FileIcon className="h-4 w-4 flex-shrink-0 text-gray-400 dark:text-gray-600" />
+                  <IconComponent className="h-4 w-4 flex-shrink-0 text-blue-600 opacity-70" />
                   <div className="min-w-0">
                     <p className="truncate text-xs font-medium text-gray-900 dark:text-gray-100">
                       {file.name}
@@ -164,7 +167,8 @@ export const DataRoom = ({
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

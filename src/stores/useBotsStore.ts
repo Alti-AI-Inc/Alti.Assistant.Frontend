@@ -35,7 +35,12 @@ interface BotsState {
   addThread: (botId: string, threadId: string, title: string) => void;
   deleteThread: (threadId: string) => void;
   setActiveBotThreadId: (threadId: string | null) => void;
+  
+  // Async initialization
+  fetchBots: () => Promise<void>;
 }
+
+const getApiUrl = () => process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
 
 const PRELOADED_BOTS: Chatbot[] = [
   {
@@ -93,7 +98,18 @@ export const useBotsStore = create<BotsState>()(
         };
         set((state) => ({
           bots: [...state.bots, newBot],
+          activeBotId: id,
         }));
+        
+        // Sync with backend asynchronously
+        fetch(`${getApiUrl()}/chatbots`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newBot),
+        }).catch((err) => console.error('Failed to sync addBot to backend', err));
+        
         return newBot;
       },
 
@@ -103,6 +119,14 @@ export const useBotsStore = create<BotsState>()(
             bot.id === id ? { ...bot, ...updatedData } : bot
           ),
         }));
+        // Sync with backend asynchronously
+        fetch(`${getApiUrl()}/chatbots/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedData),
+        }).catch((err) => console.error('Failed to sync editBot to backend', err));
       },
 
       deleteBot: (id) => {
@@ -115,6 +139,10 @@ export const useBotsStore = create<BotsState>()(
           // Clean up threads associated with the deleted bot
           threads: state.threads.filter((t) => t.botId !== id),
         }));
+        // Sync with backend
+        fetch(`${getApiUrl()}/chatbots/${id}`, {
+          method: 'DELETE',
+        }).catch((err) => console.error('Failed to sync deleteBot to backend', err));
       },
 
       setActiveBotId: (id) => {
@@ -149,6 +177,20 @@ export const useBotsStore = create<BotsState>()(
 
       setActiveBotThreadId: (threadId) => {
         set({ activeBotThreadId: threadId });
+      },
+
+      fetchBots: async () => {
+        try {
+          const res = await fetch(`${getApiUrl()}/chatbots`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data?.data && Array.isArray(data.data)) {
+              set({ bots: data.data });
+            }
+          }
+        } catch (error) {
+          console.error('Failed to fetch bots from backend', error);
+        }
       },
     }),
     {

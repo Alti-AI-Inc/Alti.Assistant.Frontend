@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { useBotsStore } from '@/stores/useBotsStore';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { Dialog, DialogContent, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { Plus, Trash2, PanelLeftClose, Search, MessageSquare, FileText, Shield, Upload } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -253,13 +254,42 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                         {thread.title || 'Untitled Chat'}
                       </span>
                       
-                      <button
-                        onClick={(e) => handleThreadDelete(e, thread.id)}
-                        className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
-                        title="Delete Thread"
-                      >
-                        <Trash2 className="size-3.5 text-black" />
-                      </button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <button
+                            onClick={(e) => e.stopPropagation()}
+                            className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
+                            title="Delete Thread"
+                          >
+                            <Trash2 className="size-3.5 text-black" />
+                          </button>
+                        </DialogTrigger>
+                        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+                          <div className="px-5 pt-5 pb-4 text-center">
+                            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                              Delete Thread
+                            </h2>
+                            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+                              Are you sure you want to delete this thread?
+                            </p>
+                          </div>
+                          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+                            <DialogClose asChild>
+                              <button className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none">
+                                Cancel
+                              </button>
+                            </DialogClose>
+                            <DialogClose asChild>
+                              <button 
+                                onClick={(e) => handleThreadDelete(e, thread.id)}
+                                className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none"
+                              >
+                                Delete
+                              </button>
+                            </DialogClose>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                     </div>
                   );
                 })
@@ -286,17 +316,46 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                       {inst.length > 30 ? inst.slice(0, 30) + '...' : inst}
                     </span>
                     
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const newList = parsedInstructions.filter((_, i) => i !== index);
-                        editBot(botId, { instructions: newList.join('\n\n') });
-                      }}
-                      className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
-                      title="Delete Instruction"
-                    >
-                      <Trash2 className="size-3.5 text-black" />
-                    </button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button
+                          onClick={(e) => e.stopPropagation()}
+                          className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
+                          title="Delete Instruction"
+                        >
+                          <Trash2 className="size-3.5 text-black" />
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+                        <div className="px-5 pt-5 pb-4 text-center">
+                          <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                            Delete Instruction
+                          </h2>
+                          <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+                            Are you sure you want to remove this instruction?
+                          </p>
+                        </div>
+                        <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+                          <DialogClose asChild>
+                            <button className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none">
+                              Cancel
+                            </button>
+                          </DialogClose>
+                          <DialogClose asChild>
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const newList = parsedInstructions.filter((_, i) => i !== index);
+                                editBot(botId, { instructions: newList.join('\n\n') });
+                              }}
+                              className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none"
+                            >
+                              Delete
+                            </button>
+                          </DialogClose>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 ))
               )}
@@ -322,17 +381,46 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                       {guard.length > 30 ? guard.slice(0, 30) + '...' : guard}
                     </span>
                     
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const newList = parsedGuardrails.filter((_, i) => i !== index);
-                        editBot(botId, { guardrails: newList.join('\n\n') });
-                      }}
-                      className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
-                      title="Delete Guardrail"
-                    >
-                      <Trash2 className="size-3.5 text-black" />
-                    </button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button
+                          onClick={(e) => e.stopPropagation()}
+                          className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
+                          title="Delete Guardrail"
+                        >
+                          <Trash2 className="size-3.5 text-black" />
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+                        <div className="px-5 pt-5 pb-4 text-center">
+                          <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                            Delete Guardrail
+                          </h2>
+                          <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+                            Are you sure you want to remove this constraint?
+                          </p>
+                        </div>
+                        <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+                          <DialogClose asChild>
+                            <button className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none">
+                              Cancel
+                            </button>
+                          </DialogClose>
+                          <DialogClose asChild>
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const newList = parsedGuardrails.filter((_, i) => i !== index);
+                                editBot(botId, { guardrails: newList.join('\n\n') });
+                              }}
+                              className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none"
+                            >
+                              Delete
+                            </button>
+                          </DialogClose>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 ))
               )}
@@ -369,21 +457,50 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                           </span>
                         </div>
                       
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          const merged = files.filter((_, i) => i !== idx);
-                          if (merged.length === 0) {
-                            editBot(botId, { data: undefined });
-                          } else {
-                            editBot(botId, { data: JSON.stringify(merged) });
-                          }
-                        }}
-                        className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
-                        title="Disconnect Data"
-                      >
-                        <Trash2 className="size-3.5 text-black" />
-                      </button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <button
+                            onClick={(e) => e.stopPropagation()}
+                            className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
+                            title="Disconnect Data"
+                          >
+                            <Trash2 className="size-3.5 text-black" />
+                          </button>
+                        </DialogTrigger>
+                        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+                          <div className="px-5 pt-5 pb-4 text-center">
+                            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                              Disconnect Data
+                            </h2>
+                            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+                              Are you sure you want to remove this data file?
+                            </p>
+                          </div>
+                          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+                            <DialogClose asChild>
+                              <button className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none">
+                                Cancel
+                              </button>
+                            </DialogClose>
+                            <DialogClose asChild>
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  const merged = files.filter((_, i) => i !== idx);
+                                  if (merged.length === 0) {
+                                    editBot(botId, { data: undefined });
+                                  } else {
+                                    editBot(botId, { data: JSON.stringify(merged) });
+                                  }
+                                }}
+                                className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none"
+                              >
+                                Delete
+                              </button>
+                            </DialogClose>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                     </div>
                     );
                   });
