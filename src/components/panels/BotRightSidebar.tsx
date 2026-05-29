@@ -122,15 +122,17 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
             </div>
 
             {/* Action Button: New Chat */}
-            <Button
-              variant="outline"
-              size="icon"
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black flex-none"
-              onClick={handleNewChat}
-              title="New Conversation"
-            >
-              <Plus className="size-4 text-black" />
-            </Button>
+            {activeTab === 'history' && (
+              <Button
+                variant="outline"
+                size="icon"
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black flex-none"
+                onClick={handleNewChat}
+                title="New Conversation"
+              >
+                <Plus className="size-4 text-black" />
+              </Button>
+            )}
           </div>
 
           {/* Toggle with 4 icons */}
