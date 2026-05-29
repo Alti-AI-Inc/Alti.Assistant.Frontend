@@ -36,6 +36,7 @@ import {
   ChevronRight, 
   Check, 
   Trash2, 
+  Search,
   Sparkles, 
   AlertCircle,
   FileSpreadsheet,
