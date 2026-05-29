@@ -526,14 +526,14 @@ export function PaymentConfirmationModal({
             >
               Cancel
             </Button>
-            <Button
-              onClick={handleConfirm}
-              className={cn(
-                "flex-1 py-3 rounded-xl font-bold transition-all duration-300 text-white border-none shadow-md",
-                canConfirm
-                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-blue-500/10 hover:shadow-indigo-500/20 hover:scale-[1.01]"
-                  : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-900 dark:text-zinc-600 shadow-none"
-              )}
+              <Button
+                onClick={handleConfirm}
+                className={cn(
+                  "flex-1 py-3 rounded-xl font-bold transition-all duration-300 text-white dark:text-zinc-900 border-none shadow-md",
+                  canConfirm
+                    ? "bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 shadow-sm hover:scale-[1.01]"
+                    : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-900 dark:text-zinc-600 shadow-none"
+                )}
               disabled={!canConfirm}
             >
               Confirm Checkout - ${plan.price}

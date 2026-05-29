@@ -42,7 +42,7 @@ export function StripeCardForm({
         fontFamily: 'system-ui, -apple-system, sans-serif',
         fontSmoothing: 'antialiased',
         '::placeholder': {
-          color: 'hsl(var(--muted-foreground))',
+          color: 'transparent',
         },
         iconColor: 'hsl(var(--muted-foreground))',
       },
@@ -96,10 +96,9 @@ export function StripeCardForm({
     <div className={cn('space-y-1', className)}>
       {/* Card Input Section */}
       <div className="flex flex-col">
-        <label htmlFor="card-element" className="text-sm font-bold text-zinc-900 dark:text-zinc-50 mb-1 ml-0 text-left">Card Number</label>
         <div
           className={cn(
-            'relative rounded-md border-2 transition-colors',
+            'relative flex items-center rounded-md border-2 transition-colors overflow-hidden',
             isFocused
               ? 'border-primary ring-primary/20 ring-2'
               : cardError
@@ -107,17 +106,22 @@ export function StripeCardForm({
                 : isCardComplete
                   ? 'border-green-500'
                   : 'border-input',
-            'bg-background pl-1 pr-3 py-3',
+            'bg-background'
           )}
         >
-          <CardElement
-            id="card-element"
-            options={cardElementOptions}
-            onChange={handleCardChange}
-            onReady={handleCardReady}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-          />
+          <div className="pl-3 pr-2 py-3 bg-zinc-50 dark:bg-zinc-900/50 border-r border-zinc-200 dark:border-zinc-800 text-sm font-bold text-zinc-900 dark:text-zinc-50 shrink-0">
+            Card Number
+          </div>
+          <div className="flex-1 px-3 py-3 relative">
+            <CardElement
+              id="card-element"
+              options={cardElementOptions}
+              onChange={handleCardChange}
+              onReady={handleCardReady}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+            />
+          </div>
         </div>
 
         {/* Error Message */}
