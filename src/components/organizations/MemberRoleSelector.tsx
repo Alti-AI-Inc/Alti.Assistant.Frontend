@@ -89,12 +89,9 @@ export function MemberRoleSelector({
   // Non-owners see a static badge for tenant owners/admins (only an org owner may change roles)
   if ((normalizedRole === 'owner' || normalizedRole === 'admin') && !viewerIsOwner) {
     return (
-      <Badge
-        variant={getRoleBadgeVariant(normalizedRole)}
-        className="capitalize"
-      >
+      <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed capitalize">
         {normalizedRole}
-      </Badge>
+      </p>
     );
   }
 
@@ -114,9 +111,9 @@ export function MemberRoleSelector({
         }}
         disabled={isChanging}
       >
-        <SelectTrigger className="h-7 w-[96px] text-xs">
+        <SelectTrigger className="h-auto p-0 border-0 bg-transparent shadow-none hover:bg-transparent focus:ring-0 focus:outline-none focus:border-none focus:ring-offset-0 focus-visible:ring-0 w-auto gap-1">
           <SelectValue>
-            <span className="capitalize">
+            <span className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed capitalize">
               {formatRoleLabel(
                 supportedTenantRoles.has(normalizedRole)
                   ? normalizedRole

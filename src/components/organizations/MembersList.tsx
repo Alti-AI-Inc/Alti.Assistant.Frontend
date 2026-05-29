@@ -216,11 +216,6 @@ function MembersListComponent({
                           You
                         </span>
                       )}
-                      {isInvitation && (
-                        <span className="text-[10px] bg-amber-50 text-amber-600 border border-amber-200/50 px-1.5 py-0.5 rounded-full font-medium shrink-0">
-                          Pending
-                        </span>
-                      )}
                     </div>
                   </div>
                   {/* Role */}
@@ -234,12 +229,9 @@ function MembersListComponent({
                           onUpdate={onUpdate}
                         />
                       ) : (
-                        <Badge
-                          variant={getRoleBadgeVariant(memberRole)}
-                          className="capitalize text-[10px] px-2 py-0.5"
-                        >
+                        <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed capitalize">
                           {memberRole === 'member' ? 'user' : memberRole}
-                        </Badge>
+                        </p>
                       )}
                     </div>
                   </div>
