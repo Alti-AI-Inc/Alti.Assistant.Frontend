@@ -828,11 +828,23 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {side !== 'right' && (
         <div
           className={cn(
-            'sticky bottom-0 z-30 flex h-20 items-center justify-center border-t border-black/10 p-4 py-1.5',
+            'sticky bottom-0 z-30 flex flex-col w-full',
             hideSidebar && 'hidden',
           )}
           style={{ backgroundColor: '#F2F3F5' }}
         >
+          {isAdminMode && (
+            <div className="flex h-20 w-full items-center justify-center border-t border-black/10 p-4 py-1.5">
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2"
+                onClick={() => router.push('/')}
+              >
+                <ArrowLeft className="w-4 h-4" /> Return to App
+              </Button>
+            </div>
+          )}
+          <div className="flex h-20 w-full items-center justify-center border-t border-black/10 p-4 py-1.5">
           {!isLoggedIn ? (
             <div className="flex w-full items-center gap-2">
               <Button
@@ -853,18 +865,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </Button>
             </div>
           ) : (
-            <div className="flex flex-col gap-2 w-full">
-              {isAdminMode && (
-                <Button
-                  variant="outline"
-                  className="w-full justify-start gap-2"
-                  onClick={() => router.push('/')}
-                >
-                  <ArrowLeft className="w-4 h-4" /> Return to App
-                </Button>
-              )}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="w-full">
                   My Account
                 </Button>
@@ -904,8 +906,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            </div>
           )}
+          </div>
         </div>
       )}
     </>

@@ -785,7 +785,19 @@ const LeftSideNavMobile = () => {
       )}
 
       {/* Footer fixed at bottom */}
-      <div className="bg-secondary sticky bottom-0 flex h-20 items-center justify-center p-4">
+      <div className="bg-secondary sticky bottom-0 flex flex-col w-full">
+        {isAdminMode && (
+          <div className="flex h-20 w-full items-center justify-center border-t border-black/10 p-4">
+            <Button
+              variant="outline"
+              className="w-full justify-start gap-2"
+              onClick={() => { router.push('/'); close(); }}
+            >
+              <ArrowLeft className="w-4 h-4" /> Return to App
+            </Button>
+          </div>
+        )}
+        <div className="flex h-20 w-full items-center justify-center border-t border-black/10 p-4">
         {!isLoggedIn ? (
           <div className="flex w-full items-center gap-2">
             <Button
@@ -810,18 +822,8 @@ const LeftSideNavMobile = () => {
             </Button>
           </div>
         ) : (
-          <div className="flex flex-col gap-2 w-full">
-            {isAdminMode && (
-              <Button
-                variant="outline"
-                className="w-full justify-start gap-2"
-                onClick={() => { router.push('/'); close(); }}
-              >
-                <ArrowLeft className="w-4 h-4" /> Return to App
-              </Button>
-            )}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
               <Button variant="outline" className="w-full">
                 My Account
               </Button>
@@ -873,8 +875,8 @@ const LeftSideNavMobile = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          </div>
         )}
+        </div>
       </div>
     </div>
   );
