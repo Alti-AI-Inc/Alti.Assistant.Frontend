@@ -275,7 +275,7 @@ function InboxClient() {
       ) : totalRuns === 0 ? (
         /* Empty State: Only the Centered Inbox is Empty Box, No Navbar, No Welcome Text, No Cards */
         <div className="flex-1 flex items-center justify-center p-8 relative z-10 select-none">
-          <div className="rounded-xl border border-black/10 dark:border-zinc-800/80 bg-white/50 dark:bg-zinc-900/30 p-12 flex flex-col items-center justify-center text-center space-y-4 max-w-sm">
+          <div className="rounded-xl border border-black/10 dark:border-zinc-800/80 bg-white/50 dark:bg-zinc-900/30 p-12 flex flex-col items-center justify-center text-center space-y-4 max-w-md">
             <div className="h-16 w-16 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center">
               <Inbox className="h-8 w-8 text-zinc-400" />
             </div>
@@ -375,7 +375,7 @@ function InboxClient() {
               <div className="h-16 w-16 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center">
                 <Inbox className="h-8 w-8 text-zinc-400" />
               </div>
-              <div className="space-y-1.5 max-w-sm select-none">
+              <div className="space-y-1.5 max-w-md select-none">
                 <h3 className="text-md font-semibold text-gray-900 dark:text-white">
                   Select an output to view report
                 </h3>
