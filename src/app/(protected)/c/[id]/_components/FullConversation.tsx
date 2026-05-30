@@ -178,6 +178,21 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     if (/clinical|fda|drug|trials/i.test(query)) {
       sources.push({ name: 'ClinicalTrials & openFDA', domain: 'clinicaltrials.gov', status: 'idle' });
     }
+    if (/opencorporates|corporate\s+registry|company\s+lookup|business\s+registry/i.test(query)) {
+      sources.push({ name: 'OpenCorporates Registry', domain: 'opencorporates.com', status: 'idle' });
+    }
+    if (/nhtsa|vehicle\s+recall|vin|crash\s+rating|car\s+recall|defect/i.test(query)) {
+      sources.push({ name: 'NHTSA Vehicle Safety', domain: 'vpic.nhtsa.dot.gov', status: 'idle' });
+    }
+    if (/fbi\s+crime|crime\s+stats|arrest\s+rates|regional\s+safety|crime\s+explorer/i.test(query)) {
+      sources.push({ name: 'FBI Crime Data Explorer', domain: 'cde.ucr.cgis.fbi.gov', status: 'idle' });
+    }
+    if (/cpsc|product\s+recall|toy\s+recall|appliance\s+warning|hazard\s+recall/i.test(query)) {
+      sources.push({ name: 'CPSC Product Safety', domain: 'cpsc.gov/recalls', status: 'idle' });
+    }
+    if (/nsf\s+award|nsf\s+grant|science\s+funding|research\s+grant|technology\s+award/i.test(query)) {
+      sources.push({ name: 'NSF Award Index', domain: 'nsf.gov/awards', status: 'idle' });
+    }
 
     if (sources.length === 0) {
       sources.push({ name: 'Google Cloud Grounding', domain: 'googleapis.com', status: 'idle' });
