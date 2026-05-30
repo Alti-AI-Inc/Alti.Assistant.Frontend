@@ -45,46 +45,12 @@ import InteractiveTableWidget from './InteractiveTableWidget';
 import UniversalChartWidget from './UniversalChartWidget';
 import InteractiveFormWidget from './InteractiveFormWidget';
 import ReportData from './ReportData';
-import { LineChart, Table, Network, FileText, Settings } from 'lucide-react';
 import { useBrainstorm } from '@/hooks/useBrainstorm';
 import { useContractReview } from '@/hooks/useContractReview';
 import { usePlanGeneration } from '@/hooks/usePlanGeneration';
 import { useReportGeneration } from '@/hooks/useReportGeneration';
 import PresentationLoadingCard from './PresentationLoadingCard';
 import { getPresentationStatus } from '@/actions/presentationActions';
-
-const SIMULATION_CHIPS = [
-  {
-    title: 'Market Report & Charts',
-    description: 'Simulate live stock trading visual area charts & fundamentals grid.',
-    prompt: '📈 Generate Real-Time Market Report for NVDA with interactive charts',
-    icon: <LineChart className="h-4 w-4" />,
-  },
-  {
-    title: 'Sales Analytics & Grid',
-    description: 'Simulate paginated searchable data table & SVG area growth curve.',
-    prompt: '📊 Analyze Q2 regional sales performance metrics in a searchable grid',
-    icon: <Table className="h-4 w-4" />,
-  },
-  {
-    title: 'Cluster Topic Topology',
-    description: 'Simulate interactive reference topological network map.',
-    prompt: '🕸️ Generate interactive topic topology map from Kubernetes microservices',
-    icon: <Network className="h-4 w-4" />,
-  },
-  {
-    title: 'Business Printable Report',
-    description: 'Simulate multisection printable report with dynamic client PDF export.',
-    prompt: '📄 Generate comprehensive business executive summary with printable PDF download',
-    icon: <FileText className="h-4 w-4" />,
-  },
-  {
-    title: 'Interactive Settings Form',
-    description: 'Simulate form config widget that saves agent variables in chat bubble.',
-    prompt: '🛠️ Configure dedicated agent variables with interactive settings form',
-    icon: <Settings className="h-4 w-4" />,
-  },
-];
 
 const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const { data } = useSession();
@@ -142,162 +108,6 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       default:
         return 'alti is thinking...';
     }
-  };
-
-  const handleSendMockPrompt = (prompt: string) => {
-    updateActiveConversation(prompt, 'user' as any);
-    setLoadingResponse(true);
-
-    setTimeout(() => {
-      let mockExtras: any = {};
-      let mockAnswerText = '';
-
-      if (prompt.includes('Market Report')) {
-        mockAnswerText = "### Market Analysis: NVDA Real-Time Analytical Feed\n\nI have fetched the real-time tick feeds and technical summaries for **NVDA**. Technical indicators show a strong bullish reversal pattern (golden cross) on the daily timeframe, supported by high relative volume. Below is the interactive live chart widget and fundamental metrics grid for detailed audit.";
-        mockExtras = {
-          financialTicker: { symbol: 'NVDA', type: 'stock' },
-          price: 135.42,
-          bid: 135.40,
-          ask: 135.45,
-          volume: 48920150,
-          source: 'NASDAQ Real-Time Tick'
-        };
-      } else if (prompt.includes('Sales Analytics')) {
-        mockAnswerText = "### Sales Analytics: Q2 Performance Audit\n\nI have consolidated the regional sales performance metrics for Q2. Global revenue increased by **18.4%** quarter-over-quarter, driven primarily by the Enterprise Cloud segment. Below is the fully interactive searchable dataset table and the consolidated SVG performance chart.";
-        mockExtras = {
-          tableData: {
-            title: 'Q2 Regional Revenue Breakdown',
-            columns: [
-              { key: 'region', label: 'Region' },
-              { key: 'revenue', label: 'Revenue ($)' },
-              { key: 'growth', label: 'Growth' },
-              { key: 'agents', label: 'Active Agents' }
-            ],
-            rows: [
-              { region: 'North America', revenue: 4500000, growth: '+22.4%', agents: 44 },
-              { region: 'Europe (EMEA)', revenue: 3100000, growth: '+14.2%', agents: 32 },
-              { region: 'Asia Pacific', revenue: 2800000, growth: '+28.1%', agents: 28 },
-              { region: 'Latin America', revenue: 1200000, growth: '+8.6%', agents: 15 }
-            ]
-          },
-          chartData: {
-            title: 'Monthly Growth Curve (USD Millions)',
-            type: 'area',
-            series: [
-              { label: 'Jan', value: 2.1 },
-              { label: 'Feb', value: 2.5 },
-              { label: 'Mar', value: 3.4 },
-              { label: 'Apr', value: 3.8 },
-              { label: 'May', value: 4.5 },
-              { label: 'Jun', value: 5.2 }
-            ],
-            yLabel: 'Revenue ($M)'
-          }
-        };
-      } else if (prompt.includes('Infrastructure Graph')) {
-        mockAnswerText = "### System Infrastructure Topology Map\n\nI have generated the interactive network diagram mapped from your Kubernetes microservice cluster. Click on any node in the reference visualizer on the right side to inspect service health indices, active connections, and latency metrics.";
-        mockExtras = {
-          reference: [
-            { title: 'api-gateway', url: '#', snippet: 'Entrypoint router. Health: 100%. Latency: 12ms.' },
-            { title: 'auth-service', url: '#', snippet: 'JWT Token compiler. Health: 100%. Latency: 25ms.' },
-            { title: 'payment-engine', url: '#', snippet: 'Stripe transaction hub. Health: 99.4%. Latency: 42ms.' },
-            { title: 'mongodb-cluster', url: '#', snippet: 'Atlas Sharded replica. Health: 100%. Latency: 8ms.' }
-          ],
-          knowledgeGraph: {
-            nodes: [
-              { id: 'center', label: 'API Gateway', type: 'theme', score: 100 },
-              { id: 'src-0', label: 'Auth Service', type: 'source', score: 100, snippet: 'JWT Token compiler. Latency: 25ms.' },
-              { id: 'src-1', label: 'Payment Engine', type: 'source', score: 99, snippet: 'Stripe transaction hub. Latency: 42ms.' },
-              { id: 'src-2', label: 'MongoDB Replica', type: 'source', score: 100, snippet: 'Atlas Sharded replica. Latency: 8ms.' }
-            ],
-            links: [
-              { source: 'center', target: 'src-0' },
-              { source: 'center', target: 'src-1' },
-              { source: 'center', target: 'src-2' }
-            ]
-          }
-        };
-      } else if (prompt.includes('Executive Summary')) {
-        mockAnswerText = "### Business Executive Summary: Platform Operations Report\n\nHere is the multi-section business operational report summarizing Q1 results, strategic milestones, and capital allocations. Below, you can explore the report section-by-section and trigger high-fidelity client-side PDF downloads.";
-        mockExtras = {
-          reportData: {
-            reportId: 'rep-q1-2026',
-            title: 'Q1 2026 Strategic Operational Audit',
-            outputFormat: 'pdf',
-            filePath: '/reports/q1_2026.pdf',
-            downloadUrl: '#',
-            publicUrl: '#',
-            gcsPath: '',
-            sections: [
-              {
-                title: '1. Executive Summary',
-                content: 'In Q1 2026, Alti Platform completed its core infrastructure overhaul, achieving a sustained 35% reduction in API response latency across sharded MongoDB Atlas query loops. SaaS subscription conversion increased by 14.8% following Stripe integration, matching executive expectations. Enterprise churn remains sub-1%, validating product-market fit.'
-              },
-              {
-                title: '2. Strategic Operational Milestones',
-                content: 'Key operational achievements include the completion of the unified inbox architecture, deployment of sharded user notification feeds, and rollout of client-side dynamic visualization widgets. Submodule tracking remote branches have been consolidated, ensuring seamless CI/CD synchronization.'
-              },
-              {
-                title: '3. Financial & Capital Allocations',
-                content: 'A total of $1.2M in capital was allocated during the quarter, divided into Research & Development (45%), Cloud Infrastructure (30%), and Go-To-Market Operations (25%). The business maintained a positive free cash flow, ending the quarter with $4.6M in liquid reserves.'
-              }
-            ],
-            metadata: {
-              reportType: 'executive_summary',
-              tone: 'Professional & Analytical',
-              generatedAt: new Date().toISOString()
-            }
-          }
-        };
-      } else if (prompt.includes('Configuration Form')) {
-        mockAnswerText = "### Interactive Configuration Questionnaire\n\nTo align on custom workspace settings and security guardrails for your dedicated agents, please fill out the interactive configuration form widget below. Submitting the form will immediately sync parameters with active agents.";
-        mockExtras = {
-          formData: {
-            title: 'Agent Persona Custom Configuration',
-            description: 'Define cognitive variables and execution parameters for workspace workflows.',
-            submitLabel: 'Compile Workspace Settings',
-            fields: [
-              {
-                id: 'agent_name',
-                label: 'Cognitive Agent Name',
-                type: 'text',
-                placeholder: 'e.g. Alti Business Analyst',
-                required: true
-              },
-              {
-                id: 'execution_model',
-                label: 'Execution Model Foundation',
-                type: 'select',
-                options: ['Gemini 1.5 Pro (Autonomous)', 'GPT-4o (Complex Tasks)', 'Claude 3.5 Sonnet (Coding)'],
-                required: true
-              },
-              {
-                id: 'temperature',
-                label: 'Creativity Scale (Temperature)',
-                type: 'radio',
-                options: ['0.0 (Precise)', '0.5 (Balanced)', '1.0 (Creative)'],
-                required: true
-              },
-              {
-                id: 'features',
-                label: 'Permitted Skill Operations',
-                type: 'checkbox',
-                options: ['Web Browsing', 'Code Sandbox', 'RAG Search', 'Stripe Ledger Sync'],
-                required: false
-              }
-            ]
-          }
-        };
-      }
-
-      updateActiveConversation(
-        mockAnswerText,
-        'assistant' as any,
-        activeConversation?.conversationId || 'mock-chat-id',
-        mockExtras
-      );
-      setLoadingResponse(false);
-    }, 1200);
   };
 
   // Sync query result into Zustand
@@ -891,33 +701,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         </div>
       )}
 
-      {!hasMessages && !isLoading && (
-        <div className="flex-grow flex flex-col items-center justify-center px-4 py-8 relative z-20">
-          <div className="mx-auto w-full max-w-[796px] text-center space-y-6">
-            <p className="text-xs font-bold text-zinc-450 dark:text-zinc-500 max-w-md mx-auto">
-              Select a task chip below to immediately experience and test every advanced interactive output format:
-            </p>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto px-4">
-              {SIMULATION_CHIPS.map((chip, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => handleSendMockPrompt(chip.prompt)}
-                  className="flex items-center space-x-3.5 p-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-850/40 hover:border-zinc-350 dark:hover:border-zinc-700 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 text-left shadow-xs group cursor-pointer"
-                >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-950/30 text-indigo-650 dark:text-indigo-400 font-bold group-hover:scale-105 transition-transform">
-                    {chip.icon}
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200 block leading-tight">{chip.title}</span>
-                    <span className="text-[10px] text-zinc-450 dark:text-zinc-500 block mt-1">{chip.description}</span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+
  
       {/* {error && !isHomePage && (
         <div className="my-6 text-center">{error.message}</div>
