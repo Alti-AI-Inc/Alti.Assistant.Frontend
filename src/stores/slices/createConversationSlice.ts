@@ -45,7 +45,7 @@ export interface ConversationSlice {
       reference?: Reference[];
       document?: GeneratedDocument;
       brainstormData?: BrainstormData;
-      metadata?: BrainstormMetadata; // This name conflicts slightly with 'metadata' property in message but let's see how it's used
+      metadata?: BrainstormMetadata;
       ideaAnalysis?: IdeaAnalysis;
       // Plan generation extras
       planStage?: PlanStage;
@@ -63,6 +63,11 @@ export interface ConversationSlice {
       reportSections?: ReportSection[];
       needsMoreInfo?: boolean;
       missingParams?: string[];
+      // New interactive widget extras
+      tableData?: any;
+      chartData?: any;
+      formData?: any;
+      reportData?: any;
     },
   ) => void;
   setLoadingActiveConversation: (loading: boolean) => void;
@@ -100,6 +105,50 @@ export const createConversationSlice: StateCreator<
 
   updateActiveConversation: (message, role, conversationId, extras) =>
     set(state => {
+      const compileMetadata = () => {
+        if (!extras) return undefined;
+        const meta: Record<string, any> = {
+          ...(extras.images && { images: extras.images }),
+          ...(extras.imageUrl && { imageUrl: extras.imageUrl }),
+          ...(extras.videoName && { video: { name: extras.videoName } }),
+          ...(extras.reference && { reference: extras.reference }),
+          ...(extras.document && { document: extras.document }),
+          ...(extras.brainstormData && {
+            brainstormData: extras.brainstormData,
+            brainstormMetadata: extras.metadata,
+            ideaAnalysis: extras.ideaAnalysis,
+          }),
+          ...(extras.planStage && {
+            planStage: extras.planStage,
+            hasAnalysis: extras.hasAnalysis,
+            hasBrainstorm: extras.hasBrainstorm,
+            hasPlan: extras.hasPlan,
+          }),
+          ...(extras.planData && {
+            planAnalysis: extras.planAnalysis,
+            planBrainstorm: extras.planBrainstorm,
+            planData: extras.planData,
+          }),
+          ...(extras.contractInfo && {
+            contractInfo: extras.contractInfo,
+            reviewParams: extras.reviewParams,
+          }),
+          ...(extras.report && {
+            report: extras.report,
+            reportSections: extras.reportSections,
+            needsMoreInfo: extras.needsMoreInfo,
+            missingParams: extras.missingParams,
+          }),
+          ...(extras.tableData && { tableData: extras.tableData }),
+          ...(extras.chartData && { chartData: extras.chartData }),
+          ...(extras.formData && { formData: extras.formData }),
+          ...(extras.reportData && { reportData: extras.reportData }),
+        };
+        return Object.keys(meta).length > 0 ? meta : undefined;
+      };
+
+      const meta = compileMetadata();
+
       if (!state.activeConversation) {
         // brand new conversation
         return {
@@ -110,41 +159,7 @@ export const createConversationSlice: StateCreator<
               {
                 role,
                 content: message,
-                ...(extras?.images && { metadata: { images: extras.images } }),
-                ...(extras?.imageUrl && {
-                  metadata: { imageUrl: extras.imageUrl },
-                }),
-                ...(extras?.videoName && {
-                  metadata: { video: { name: extras.videoName } },
-                }),
-                ...(extras?.reference && {
-                  metadata: { reference: extras.reference },
-                }),
-                ...(extras?.document && {
-                  metadata: { document: extras.document },
-                }),
-                ...(extras?.brainstormData && {
-                  metadata: {
-                    brainstormData: extras.brainstormData,
-                    brainstormMetadata: extras.metadata,
-                    ideaAnalysis: extras.ideaAnalysis,
-                  },
-                }),
-                ...(extras?.planStage && {
-                  metadata: {
-                    planStage: extras.planStage,
-                    hasAnalysis: extras.hasAnalysis,
-                    hasBrainstorm: extras.hasBrainstorm,
-                    hasPlan: extras.hasPlan,
-                  },
-                }),
-                ...(extras?.planData && {
-                  metadata: {
-                    planAnalysis: extras.planAnalysis,
-                    planBrainstorm: extras.planBrainstorm,
-                    planData: extras.planData,
-                  },
-                }),
+                ...(meta && { metadata: meta }),
                 timestamp: new Date().toISOString(),
               },
             ],
@@ -159,53 +174,7 @@ export const createConversationSlice: StateCreator<
         {
           role,
           content: message,
-          ...(extras?.images && { metadata: { images: extras.images } }),
-          ...(extras?.imageUrl && { metadata: { imageUrl: extras.imageUrl } }),
-          ...(extras?.videoName && {
-            metadata: { video: { name: extras.videoName } },
-          }),
-          ...(extras?.document && {
-            metadata: { document: extras.document },
-          }),
-          ...(extras?.brainstormData && {
-            metadata: {
-              brainstormData: extras.brainstormData,
-              brainstormMetadata: extras.metadata,
-              ideaAnalysis: extras.ideaAnalysis,
-            },
-          }),
-          ...(extras?.reference && {
-            metadata: { reference: extras.reference },
-          }),
-          ...(extras?.planStage && {
-            metadata: {
-              planStage: extras.planStage,
-              hasAnalysis: extras.hasAnalysis,
-              hasBrainstorm: extras.hasBrainstorm,
-              hasPlan: extras.hasPlan,
-            },
-          }),
-          ...(extras?.planData && {
-            metadata: {
-              planAnalysis: extras.planAnalysis,
-              planBrainstorm: extras.planBrainstorm,
-              planData: extras.planData,
-            },
-          }),
-          ...(extras?.contractInfo && {
-            metadata: {
-              contractInfo: extras.contractInfo,
-              reviewParams: extras.reviewParams,
-            },
-          }),
-          ...(extras?.report && {
-            metadata: {
-              report: extras.report,
-              reportSections: extras.reportSections,
-              needsMoreInfo: extras.needsMoreInfo,
-              missingParams: extras.missingParams,
-            },
-          }),
+          ...(meta && { metadata: meta }),
           timestamp,
         },
       ];

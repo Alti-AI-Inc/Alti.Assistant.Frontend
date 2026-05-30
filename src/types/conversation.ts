@@ -113,6 +113,10 @@ export type ConversationMessage = {
       symbol: string;
       type: 'stock' | 'crypto' | 'forex';
     };
+    tableData?: any;
+    chartData?: any;
+    formData?: any;
+    reportData?: any;
   };
 };
 
