@@ -193,6 +193,21 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     if (/nsf\s+award|nsf\s+grant|science\s+funding|research\s+grant|technology\s+award/i.test(query)) {
       sources.push({ name: 'NSF Award Index', domain: 'nsf.gov/awards', status: 'idle' });
     }
+    if (/eu\s+tender|european\s+tender|eu\s+procurement|ted\s+procurement/i.test(query)) {
+      sources.push({ name: 'EU TED Procurement', domain: 'ted.europa.eu', status: 'idle' });
+    }
+    if (/usda\s+fas|crop\s+production|agricultural\s+export|agricultural\s+trade|usda\s+export|agricultural\s+supply/i.test(query)) {
+      sources.push({ name: 'USDA FAS Global Trade', domain: 'apps.fas.usda.gov', status: 'idle' });
+    }
+    if (/ntsb|carol|aviation\s+accident|flight\s+crash|aviation\s+safety|ntsb\s+report/i.test(query)) {
+      sources.push({ name: 'NTSB CAROL Registry', domain: 'carol.ntsb.gov', status: 'idle' });
+    }
+    if (/cfpb\s+enforcement|cfpb\s+suit|cfpb\s+penalty|consent\s+order|predatory\s+lending|financial\s+settlement/i.test(query)) {
+      sources.push({ name: 'CFPB Enforcement Actions', domain: 'consumerfinance.gov/enforcement', status: 'idle' });
+    }
+    if (/epa\s+iris|iris|toxicology|carcinogen|chemical\s+hazard|epa\s+hazard/i.test(query)) {
+      sources.push({ name: 'EPA IRIS Toxicity DB', domain: 'epa.gov/iris', status: 'idle' });
+    }
 
     if (sources.length === 0) {
       sources.push({ name: 'Google Cloud Grounding', domain: 'googleapis.com', status: 'idle' });
