@@ -272,8 +272,25 @@ function InboxClient() {
             </div>
           </div>
         </div>
+      ) : totalRuns === 0 ? (
+        /* Empty State: Only the Centered Inbox is Empty Box, No Navbar, No Welcome Text, No Cards */
+        <div className="flex-1 flex items-center justify-center p-8 relative z-10 select-none">
+          <div className="rounded-xl border border-black/10 dark:border-zinc-800/80 bg-white/50 dark:bg-zinc-900/30 p-12 flex flex-col items-center justify-center text-center space-y-4 max-w-sm">
+            <div className="h-16 w-16 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center">
+              <Inbox className="h-8 w-8 text-zinc-400" />
+            </div>
+            <div className="space-y-1.5 select-none">
+              <h3 className="text-md font-semibold text-gray-900 dark:text-white">
+                Inbox is empty
+              </h3>
+              <p className="text-xs text-gray-500 dark:text-zinc-400">
+                Once you trigger an autonomous background task or run an automation workflow, the completed reports will arrive here.
+              </p>
+            </div>
+          </div>
+        </div>
       ) : (
-        /* Default State: Summary Dashboard Landing */
+        /* Default State: Summary Dashboard Landing when totalRuns > 0 but no item selected */
         <div className="flex-1 flex flex-col h-full overflow-hidden relative z-10">
           {/* Header Bar */}
           <div className="h-[52px] border-b border-black/10 dark:border-zinc-800/80 px-6 flex items-center justify-between bg-white/70 dark:bg-zinc-900/50 backdrop-blur-md flex-none select-none">
@@ -360,13 +377,10 @@ function InboxClient() {
               </div>
               <div className="space-y-1.5 max-w-sm select-none">
                 <h3 className="text-md font-semibold text-gray-900 dark:text-white">
-                  {totalRuns > 0 ? 'Select an output to view report' : 'Inbox is empty'}
+                  Select an output to view report
                 </h3>
                 <p className="text-xs text-gray-500 dark:text-zinc-400">
-                  {totalRuns > 0 
-                    ? 'Click any completed automation run or task execution in the sidebar to review its rich logs and compiled summaries.'
-                    : 'Once you trigger an autonomous background task or run an automation workflow, the completed reports will arrive here.'
-                  }
+                  Click any completed automation run or task execution in the sidebar to review its rich logs and compiled summaries.
                 </p>
               </div>
             </div>
