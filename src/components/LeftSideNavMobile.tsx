@@ -43,6 +43,7 @@ import {
   FileText,
   CreditCard,
   ArrowLeft,
+  Inbox,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -57,6 +58,7 @@ import { allApps, APP } from '@/lib/all-apps';
 import { apiClientJson, buildApiUrl } from '@/lib/api-client';
 import { useBotsStore } from '@/stores/useBotsStore';
 import { useConnectionsQuery } from '@/hooks/useConnectApps';
+import { useInboxQuery } from '@/hooks/useInbox';
 
 interface DataConnector {
   id: string;
@@ -132,7 +134,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'research' | 'bots' | 'assistant' | 'apps' | 'workflows';
+type SidebarTab = 'chat' | 'research' | 'bots' | 'assistant' | 'apps' | 'workflows' | 'inbox';
 
 const AVAILABLE_COMPOSIO_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -169,6 +171,16 @@ const LeftSideNavMobile = () => {
 
   const isLoggedIn = data?.accessToken;
   const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab } = useBotsStore();
+  
+  const { data: inboxItems = [] } = useInboxQuery(
+    data?.user?.id,
+    undefined,
+    false,
+    data?.accessToken
+  );
+  
+  const unreadInboxCount = inboxItems.filter(item => !item.isRead).length;
+
   const [activeTab, setActiveTab] = useState<SidebarTab>('chat');
   const [searchQuery, setSearchQuery] = useState('');
   const searchParams = useSearchParams();
@@ -215,6 +227,8 @@ const LeftSideNavMobile = () => {
       setActiveTab('workflows');
     } else if (pathname === '/assistant' || pathname.startsWith('/assistant')) {
       setActiveTab('assistant');
+    } else if (pathname === '/inbox' || pathname.startsWith('/inbox')) {
+      setActiveTab('inbox');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       setActiveTab('chat');
     }
@@ -263,6 +277,9 @@ const LeftSideNavMobile = () => {
       close();
     } else if (tab === 'assistant') {
       router.push('/assistant');
+      close();
+    } else if (tab === 'inbox') {
+      router.push('/inbox');
       close();
     } else if (tab === 'research') {
       setSelectedOption(OPTIONS.RESEARCH);
@@ -515,6 +532,31 @@ const LeftSideNavMobile = () => {
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Workflows</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('inbox')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none relative',
+                    activeTab === 'inbox'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Inbox className="size-4" />
+                  {unreadInboxCount > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-medium text-white ring-2 ring-[#F2F3F5] dark:ring-zinc-900 animate-pulse">
+                      {unreadInboxCount}
+                    </span>
+                  )}
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Inbox</p>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -870,6 +912,60 @@ const LeftSideNavMobile = () => {
                   </div>
                 );
               })}
+            </div>
+          ) : activeTab === 'inbox' ? (
+            <div className="mt-2 space-y-1 py-1 pb-4">
+              {inboxItems
+                .filter(item => 
+                  item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  item.description.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map(item => {
+                  const isSelected = pathname === '/inbox' && searchParams?.get('id') === item._id;
+                  const isSuccess = item.payload?.status === 'success';
+                  const isFailed = item.payload?.status === 'failed';
+                  
+                  return (
+                    <div
+                      key={item._id}
+                      className={cn(
+                        "group flex h-11 w-full items-center justify-between rounded-md text-xs font-semibold text-black text-left transition-all border border-transparent px-2.5",
+                        isSelected 
+                          ? "bg-black/10 dark:bg-white/10 border-black/5 dark:border-white/5" 
+                          : "hover:bg-black/5 dark:hover:bg-white/5"
+                      )}
+                    >
+                      <span
+                        className="flex-1 cursor-pointer truncate py-1.5 flex flex-col justify-center min-w-0"
+                        onClick={() => {
+                          router.push(`/inbox?id=${item._id}`);
+                          close();
+                        }}
+                      >
+                        <div className="flex items-center gap-1.5 truncate">
+                          <span className={cn(
+                            "h-1.5 w-1.5 rounded-full flex-shrink-0",
+                            isSuccess ? "bg-emerald-500 shadow-[0_0_6px_#10b981]" :
+                            isFailed ? "bg-rose-500 shadow-[0_0_6px_#f43f5e]" :
+                            "bg-amber-500 shadow-[0_0_6px_#f59e0b]"
+                          )} />
+                          <span className="truncate">{item.title}</span>
+                          {!item.isRead && (
+                            <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse flex-shrink-0" />
+                          )}
+                        </div>
+                        <span className="text-[10px] text-gray-500 dark:text-zinc-400 truncate mt-0.5 ml-3 font-normal">
+                          {item.description}
+                        </span>
+                      </span>
+                    </div>
+                  );
+                })}
+              {inboxItems.length === 0 && (
+                <div className="py-8 text-center text-xs text-gray-500 dark:text-zinc-400">
+                  Your Inbox is empty.
+                </div>
+              )}
             </div>
           ) : (
             <ConversationsList activeTab={activeTab === 'assistant' ? 'assistant' : activeTab as any} />
