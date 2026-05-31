@@ -731,7 +731,7 @@ const LeftSideNavMobile = () => {
                   Team Projects
                 </button>
               </div>
-              <div className="my-3 h-px bg-black/10 dark:bg-white/10" />
+              <div className="my-3 h-px bg-black/10 dark:bg-white/10 -mx-4" />
 
               {bots
                 .filter(bot =>
