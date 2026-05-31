@@ -98,7 +98,7 @@ const DashboardLeftSideNav = () => {
           ) : (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full bg-[#F5F5F7] hover:bg-[#EAEAEB] dark:bg-zinc-800 dark:hover:bg-zinc-700/80">
                   My Account
                 </Button>
               </DropdownMenuTrigger>

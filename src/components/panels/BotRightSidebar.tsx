@@ -113,8 +113,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
           style={{ backgroundColor: '#FFFFFF' }}
         >
           <div className="flex items-center justify-between gap-2">
-            {/* Search Bar Input */}
-            <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-white px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">
+             {/* Search Bar Input */}
+            <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-[#F5F5F7] px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">
               <Search className="size-3.5 flex-none text-black" />
               <input
                 type="text"
@@ -130,7 +130,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
               <Button
                 variant="outline"
                 size="icon"
-                className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-white text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black flex-none"
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#F5F5F7] text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black flex-none dark:bg-zinc-800/50 dark:text-white"
                 onClick={handleNewChat}
                 title="New Conversation"
               >

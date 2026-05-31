@@ -589,7 +589,7 @@ const LeftSideNavMobile = () => {
               )}
             </div>
             {activeTab === 'apps' ? (
-              <div className="flex h-7 flex-1 items-center gap-1.5 rounded-lg border border-black/10 bg-white px-2 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 ml-4 max-w-[150px]">
+              <div className="flex h-7 flex-1 items-center gap-1.5 rounded-lg border border-black/10 bg-[#F5F5F7] px-2 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 ml-4 max-w-[150px]">
                 <Search className="size-3 text-black" />
                 <input
                   type="text"
@@ -1013,7 +1013,7 @@ const LeftSideNavMobile = () => {
         ) : (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full bg-[#F5F5F7] hover:bg-[#EAEAEB] dark:bg-zinc-800 dark:hover:bg-zinc-700/80">
                 My Account
               </Button>
             </DropdownMenuTrigger>
