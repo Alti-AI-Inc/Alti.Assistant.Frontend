@@ -508,7 +508,7 @@ export const LlamaIndexChat = () => {
   }, [showDiagnostics]);
 
   return (
-    <div className="w-full flex-1 flex flex-col h-[calc(100vh-53px)] bg-white dark:bg-gray-950 overflow-hidden relative">
+    <div className="w-full flex-1 flex flex-col h-[calc(100vh-53px)] bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden relative">
       
       {/* Diagnostics Panel overlay */}
       <AnimatePresence>
@@ -693,7 +693,7 @@ export const LlamaIndexChat = () => {
               className={`w-full relative group cursor-pointer border-2 border-dashed rounded-3xl py-10 px-10 flex flex-col items-center text-center transition-all duration-300 ${
                 dragActive 
                   ? "border-blue-500 bg-blue-50/40 dark:bg-blue-955/20" 
-                  : "border-gray-250 bg-gray-50/50 hover:bg-gray-50/80 dark:border-gray-800 dark:bg-gray-900/30 dark:hover:bg-gray-900/50"
+                  : "border-gray-200 bg-white hover:bg-white/90 dark:border-gray-800 dark:bg-gray-900/30 dark:hover:bg-gray-900/50"
               }`}
             >
               <input 
@@ -752,12 +752,12 @@ export const LlamaIndexChat = () => {
                 placeholder="Search vault files..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-11 text-sm rounded-xl bg-gray-50 border-gray-200 dark:border-gray-800 dark:bg-gray-950 focus-visible:ring-1 focus-visible:ring-blue-500/30 focus-visible:border-blue-500"
+                className="w-full h-11 text-sm rounded-xl bg-white border-gray-200 dark:border-gray-800 dark:bg-gray-950 focus-visible:ring-1 focus-visible:ring-blue-500/30 focus-visible:border-blue-500"
               />
 
               {/* Minimal Results List (Only displayed when files exist in vault) */}
               {vaultFiles.length > 0 && (
-                <div className="w-full bg-white/40 dark:bg-gray-900/10 border border-gray-150 dark:border-gray-800/80 backdrop-blur-xl rounded-2xl overflow-hidden p-2 text-left">
+                <div className="w-full bg-white dark:bg-gray-900/10 border border-gray-150 dark:border-gray-800/80 backdrop-blur-xl rounded-2xl overflow-hidden p-2 text-left">
                   {(() => {
                     const filtered = vaultFiles.filter(f =>
                       f.fileName.toLowerCase().includes(searchQuery.toLowerCase())

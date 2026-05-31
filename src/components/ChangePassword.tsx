@@ -101,7 +101,7 @@ export default function ChangePassword() {
                           type="password"
                           id="password"
                           placeholder="Old Password"
-                          className="max-w-md h-10 rounded-lg border border-black/10 dark:border-white/10 bg-gray-50/50 dark:bg-gray-900/30 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
+                          className="max-w-md h-10 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
                         />
                       </FormControl>
                       <FormMessage />
@@ -119,7 +119,7 @@ export default function ChangePassword() {
                           type="password"
                           id="password"
                           placeholder="New Password"
-                          className="max-w-md h-10 rounded-lg border border-black/10 dark:border-white/10 bg-gray-50/50 dark:bg-gray-900/30 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
+                          className="max-w-md h-10 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
                         />
                       </FormControl>
                       <FormMessage />
@@ -137,7 +137,7 @@ export default function ChangePassword() {
                           type="password"
                           id="new-password"
                           placeholder="Confirm New Password"
-                          className="max-w-md h-10 rounded-lg border border-black/10 dark:border-white/10 bg-gray-50/50 dark:bg-gray-900/30 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
+                          className="max-w-md h-10 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
                         />
                       </FormControl>
                       <FormMessage />

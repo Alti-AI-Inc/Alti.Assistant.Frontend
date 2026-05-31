@@ -106,10 +106,10 @@ const Memory = () => {
 
   return (
     <div className="max-w-4xl pt-2">
-      <div className="relative bg-gray-50/50 dark:bg-gray-900/30 p-1 rounded-2xl flex w-full max-w-3xl border border-black/10 dark:border-white/10 shadow-xs select-none">
+      <div className="relative bg-white dark:bg-gray-900/30 p-1 rounded-2xl flex w-full max-w-3xl border border-black/10 dark:border-white/10 shadow-xs select-none">
         {/* Dynamic sliding highlight block */}
         <div
-          className="absolute top-1 bottom-1 rounded-xl bg-white dark:bg-zinc-800 shadow-sm transition-all duration-300 ease-out border border-black/5 dark:border-white/5"
+          className="absolute top-1 bottom-1 rounded-xl bg-[#F5F5F7] dark:bg-zinc-800 shadow-sm transition-all duration-300 ease-out border border-black/5 dark:border-white/5"
           style={{
             left: `calc(${activeIndex * 20}% + 4px)`,
             width: `calc(20% - 8px)`,
@@ -218,7 +218,7 @@ const Instructions = () => {
   return (
     <div className="max-w-4xl space-y-6">
       {/* Top Add Instruction Prompter (Integrated Chat-Style Input Box) */}
-      <div className="flex items-center rounded-2xl border border-black/10 dark:border-white/10 bg-gray-50/50 dark:bg-gray-900/30 px-3.5 py-1.5 shadow-xs transition-all focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
+      <div className="flex items-center rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 px-3.5 py-1.5 shadow-xs transition-all focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
         <input
           placeholder="Enter instruction here..."
           value={inputVal}
@@ -255,7 +255,7 @@ const Instructions = () => {
             placeholder="Search instructions..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-11 pl-9 text-sm rounded-xl bg-gray-50/50 border-gray-200 dark:border-gray-800 dark:bg-gray-900/30 text-gray-800 dark:text-gray-100 placeholder-gray-400 placeholder:text-gray-400 dark:placeholder-gray-400 focus-visible:ring-1 focus-visible:ring-indigo-500/30 focus-visible:border-indigo-500"
+            className="w-full h-11 pl-9 text-sm rounded-xl bg-white border-gray-200 dark:border-gray-800 dark:bg-gray-900/30 text-gray-800 dark:text-gray-100 placeholder-gray-400 placeholder:text-gray-400 dark:placeholder-gray-400 focus-visible:ring-1 focus-visible:ring-indigo-500/30 focus-visible:border-indigo-500"
           />
         </div>
 
@@ -427,7 +427,7 @@ const Guardrails = () => {
   return (
     <div className="max-w-4xl space-y-6">
       {/* Top Add Guardrail Prompter (Integrated Chat-Style Input Box) */}
-      <div className="flex items-center rounded-2xl border border-black/10 dark:border-white/10 bg-gray-50/50 dark:bg-gray-900/30 px-3.5 py-1.5 shadow-xs transition-all focus-within:border-rose-500 focus-within:ring-1 focus-within:ring-rose-500">
+      <div className="flex items-center rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 px-3.5 py-1.5 shadow-xs transition-all focus-within:border-rose-500 focus-within:ring-1 focus-within:ring-rose-500">
         <input
           placeholder="Enter guardrail here..."
           value={inputVal}
@@ -464,7 +464,7 @@ const Guardrails = () => {
             placeholder="Search guardrails..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-11 pl-9 text-sm rounded-xl bg-gray-50/50 border-gray-200 dark:border-gray-800 dark:bg-gray-900/30 text-gray-800 dark:text-gray-100 placeholder-gray-400 placeholder:text-gray-400 dark:placeholder-gray-400 focus-visible:ring-1 focus-visible:ring-rose-500/30 focus-visible:border-rose-500"
+            className="w-full h-11 pl-9 text-sm rounded-xl bg-white border-gray-200 dark:border-gray-800 dark:bg-gray-900/30 text-gray-800 dark:text-gray-100 placeholder-gray-400 placeholder:text-gray-400 dark:placeholder-gray-400 focus-visible:ring-1 focus-visible:ring-rose-500/30 focus-visible:border-rose-500"
           />
         </div>
 
@@ -567,7 +567,7 @@ const Invite = () => {
           value={email}
           onChange={e => setEmail(e.target.value)}
           placeholder="Enter email address"
-          className="w-full h-10 rounded-lg border border-black/10 bg-gray-50/50 px-4 pr-32 text-sm text-gray-800 placeholder-gray-400 shadow-inner focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 outline-none transition-all"
+          className="w-full h-10 rounded-lg border border-black/10 bg-white px-4 pr-32 text-sm text-gray-800 placeholder-gray-400 shadow-inner focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 outline-none transition-all"
         />
         <div className="absolute right-1">
           <SendInviteButton
