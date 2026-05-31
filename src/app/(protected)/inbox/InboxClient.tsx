@@ -100,7 +100,7 @@ function InboxClient() {
   const remainingMinutes = timeSavedMinutes % 60;
 
   return (
-    <div className="flex h-full w-full overflow-hidden bg-[#FCFCFC] dark:bg-gray-950 relative">
+    <div className="flex h-full w-full overflow-hidden bg-[#F5F5F7] dark:bg-zinc-950 relative">
       {/* Background blobs for premium glassmorphism */}
       <div className="absolute -top-40 right-20 w-[500px] h-[500px] bg-indigo-500/5 dark:bg-indigo-500/2 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-10 left-20 w-[500px] h-[500px] bg-emerald-500/5 dark:bg-emerald-500/2 rounded-full blur-3xl pointer-events-none" />

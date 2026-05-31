@@ -30,7 +30,7 @@ function AssistantWorkspaceContent() {
   const hasMessages = !!activeConversation?.messages?.length;
 
   return (
-    <div className="flex h-full w-full overflow-hidden bg-[#FCFCFC] dark:bg-gray-950 relative">
+    <div className="flex h-full w-full overflow-hidden bg-[#F5F5F7] dark:bg-zinc-950 relative">
       {/* Background blobs for premium glassmorphism */}
       <div className="absolute -top-40 right-20 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-10 left-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -52,7 +52,7 @@ function AssistantWorkspaceContent() {
 function AssistantWorkspace() {
   return (
     <Suspense fallback={
-      <div className="flex-1 bg-gray-50/50 dark:bg-gray-900/50 min-h-screen flex items-center justify-center">
+      <div className="flex-1 bg-[#F5F5F7] dark:bg-zinc-950 min-h-screen flex items-center justify-center">
         <div className="flex items-center gap-2 text-gray-500 font-semibold text-sm">
           <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
           Loading Tasks Workspace...

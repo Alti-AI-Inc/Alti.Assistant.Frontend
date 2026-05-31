@@ -663,7 +663,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         selectedOption === OPTIONS.REVIEW_CONTRACT ||
         selectedOption === OPTIONS.GENERATE_REPORT) && (
         <div
-          className="flex-grow overflow-y-auto px-4 sm:px-6 lg:px-8 bg-zinc-50/50 dark:bg-zinc-950/20 transition-colors duration-300"
+          className="flex-grow overflow-y-auto px-4 sm:px-6 lg:px-8 bg-transparent transition-colors duration-300"
           ref={messagesContainerRef}
         >
           <div
@@ -953,7 +953,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       {isLoading && (
         <div
           className={cn(
-            'flex h-[calc()100vh_-110px] flex-grow items-center justify-center py-4 bg-zinc-50/50 dark:bg-zinc-950/20',
+            'flex h-[calc()100vh_-110px] flex-grow items-center justify-center py-4 bg-transparent',
           )}
         >
           <div className="flex items-center space-x-2.5 text-zinc-500 dark:text-zinc-400">
@@ -975,7 +975,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         className={cn(
           'sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8',
           hasMessages
-            ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-800/80 backdrop-blur-xl bg-[#FCFCFC]/70 dark:bg-zinc-950/70'
+            ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-800/80 backdrop-blur-xl bg-[#F5F5F7]/70 dark:bg-zinc-950/70'
             : 'py-4 bg-transparent border-t-0',
         )}
       >
