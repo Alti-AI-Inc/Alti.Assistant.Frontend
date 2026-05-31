@@ -72,7 +72,7 @@ const DashboardLeftSideNav = () => {
             'sticky bottom-0 z-30 flex h-20 items-center justify-center p-4 py-1.5',
             // hideSidebar && 'hidden',
           )}
-          style={{ backgroundColor: '#F2F3F5' }}
+          style={{ backgroundColor: '#FFFFFF' }}
         >
           {!isLoggedIn ? (
             <div className="flex w-full items-center gap-2">

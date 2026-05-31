@@ -245,14 +245,14 @@ function MyChatbotsContent() {
           "flex-none flex flex-col border-r border-black/10 h-full overflow-hidden transition-all duration-300",
           !isProjectsSidebarOpen ? "w-10" : "w-68"
         )}
-        style={{ backgroundColor: '#F2F3F5' }}
+        style={{ backgroundColor: '#FFFFFF' }}
       >
         <header
           className={cn(
             "sticky top-0 z-30 flex items-center justify-between border-b border-black/10 pt-4 pb-4 flex-none",
             !isProjectsSidebarOpen ? "px-0 justify-center" : "px-4"
           )}
-          style={{ backgroundColor: '#F2F3F5' }}
+          style={{ backgroundColor: '#FFFFFF' }}
         >
           {!isProjectsSidebarOpen ? (
             <PanelLeftClose
@@ -275,7 +275,7 @@ function MyChatbotsContent() {
         {isProjectsSidebarOpen && (
           <div
             className="flex flex-col gap-2 border-b border-black/10 px-4 py-4 transition-all duration-300 flex-none"
-            style={{ backgroundColor: '#F2F3F5' }}
+            style={{ backgroundColor: '#FFFFFF' }}
           >
             <div className="flex items-center justify-between gap-2">
               <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-white px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">

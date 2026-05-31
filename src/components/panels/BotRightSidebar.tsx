@@ -81,7 +81,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
         "flex-none flex flex-col border-l border-black/10 h-full overflow-hidden transition-all duration-300",
         hideSidebar ? "w-10" : "w-68"
       )}
-      style={{ backgroundColor: '#F2F3F5' }}
+      style={{ backgroundColor: '#FFFFFF' }}
     >
       {/* Header matching left side menu */}
       <header
@@ -89,7 +89,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
           "sticky top-0 z-30 flex items-center justify-between border-b border-black/10 pt-4 pb-4 flex-none",
           hideSidebar ? "px-0 justify-center" : "px-4"
         )}
-        style={{ backgroundColor: '#F2F3F5' }}
+        style={{ backgroundColor: '#FFFFFF' }}
       >
         <PanelLeftClose
           className={cn(
@@ -110,7 +110,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
       {!hideSidebar && (
         <div
           className="flex flex-col gap-2 border-b border-black/10 px-4 py-4 transition-all duration-300 flex-none"
-          style={{ backgroundColor: '#F2F3F5' }}
+          style={{ backgroundColor: '#FFFFFF' }}
         >
           <div className="flex items-center justify-between gap-2">
             {/* Search Bar Input */}
@@ -144,7 +144,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
           {(basePath === '/admin/projects' || !bot.isShared) && (
             <>
               <div className="h-px w-[calc(100%+2rem)] -ml-4 bg-black/10 mt-2" />
-              <div className="h-10 mt-2 flex items-center bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300 w-full">
+              <div className="h-10 mt-2 flex items-center bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300 w-full">
                 <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -240,7 +240,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
       {!hideSidebar && (
         <div
           className="flex flex-1 flex-col overflow-y-auto px-4 pb-4"
-          style={{ backgroundColor: '#F2F3F5' }}
+          style={{ backgroundColor: '#FFFFFF' }}
         >
           {activeTab === 'history' && (
             <div className="flex-1 space-y-1 py-1 pb-4 pt-4">

@@ -549,7 +549,7 @@ const LeftSideNavMobile = () => {
                 >
                   <Inbox className="size-4" />
                   {unreadInboxCount > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-medium text-white ring-2 ring-[#F2F3F5] dark:ring-zinc-900 animate-pulse">
+                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-medium text-white ring-2 ring-[#FFFFFF] dark:ring-zinc-900 animate-pulse">
                       {unreadInboxCount}
                     </span>
                   )}

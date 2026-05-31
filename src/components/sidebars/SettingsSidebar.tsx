@@ -98,13 +98,13 @@ export const SettingsSidebar = ({
         'flex h-full flex-col border-r border-black/10 transition-all duration-300 ease-in-out',
         isSettingsSidebarOpen
           ? 'w-64 bg-white dark:bg-gray-950'
-          : 'w-20 items-center bg-[#F2F3F5] dark:bg-gray-900',
+          : 'w-20 items-center bg-white dark:bg-gray-900',
       )}
     >
       <div
         className={cn(
           'sticky top-0 z-30 flex h-[52px] items-center justify-between border-b border-black/10 px-4 py-3 transition-colors duration-300',
-          hideSidebar ? 'justify-center bg-[#F2F3F5] dark:bg-gray-900' : 'bg-white dark:bg-gray-955',
+          hideSidebar ? 'justify-center bg-white dark:bg-gray-900' : 'bg-white dark:bg-gray-955',
         )}
       >
         {!hideSidebar ? (

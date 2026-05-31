@@ -1116,7 +1116,7 @@ const ChatInput = ({
                 <div 
                   key={index}
                   className="inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs animate-in fade-in duration-200"
-                  style={{ backgroundColor: '#F2F3F5' }}
+                  style={{ backgroundColor: '#FFFFFF' }}
                 >
                   {/* File Type Icon */}
                   <FileText className="size-4 flex-shrink-0 text-gray-500" />

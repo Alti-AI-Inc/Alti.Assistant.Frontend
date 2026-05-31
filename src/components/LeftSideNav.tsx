@@ -391,7 +391,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     <>
       <div
         className={cn(
-          'sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300 flex-none',
+          'sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300 flex-none',
           hideSidebar && 'justify-center',
           side === 'right' && 'flex-row-reverse',
         )}
@@ -442,7 +442,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       </div>
       {/* Enclosed Search & Actions Row */}
       {!hideSidebar && !isAdminMode && (
-        <div className="h-[52px] flex items-center justify-between gap-2 border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-all duration-300 flex-none">
+        <div className="h-[52px] flex items-center justify-between gap-2 border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-all duration-300 flex-none">
           {/* Search Bar Input */}
           <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 dark:border-zinc-800/80 bg-white dark:bg-zinc-800/50 px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 dark:focus-within:ring-white/10">
             <Search className="size-3.5 flex-none text-zinc-500 dark:text-zinc-400" />
@@ -503,7 +503,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
       {/* Chat / Research / Agents / Data / Apps icon row toggle */}
       {!hideSidebar && isLoggedIn && side !== 'right' && !isAdminMode && (
-        <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300">
+        <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300">
           <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
             <Tooltip>
               <TooltipTrigger asChild>
@@ -601,7 +601,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 >
                   <Inbox className="size-4" />
                   {unreadInboxCount > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-medium text-white ring-2 ring-[#F2F3F5] dark:ring-zinc-900 animate-pulse">
+                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-medium text-white ring-2 ring-[#FFFFFF] dark:ring-zinc-900 animate-pulse">
                       {unreadInboxCount}
                     </span>
                   )}
@@ -617,7 +617,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
       {/* Fixed Apps Filter Toggle Button Bar */}
       {!hideSidebar && isLoggedIn && activeTab === 'apps' && (
-        <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors select-none flex-none">
+        <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors select-none flex-none">
           <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full">
             <button
               type="button"
@@ -650,7 +650,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {isLoggedIn && (
         <div
           className={cn(
-            'flex flex-1 flex-col overflow-y-scroll px-4 bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300',
+            'flex flex-1 flex-col overflow-y-scroll px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300',
             hideSidebar && 'hidden',
             side === 'right' && 'pb-8',
           )}
@@ -983,7 +983,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         </div>
       )}
 
-      {!isLoggedIn && <div className="flex flex-1 flex-col bg-[#F2F3F5] dark:bg-zinc-900 transition-colors duration-300"></div>}
+      {!isLoggedIn && <div className="flex flex-1 flex-col bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300"></div>}
 
       {side !== 'right' && (
         <div
@@ -991,7 +991,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             'sticky bottom-0 z-30 flex flex-col w-full',
             hideSidebar && 'hidden',
           )}
-          style={{ backgroundColor: '#F2F3F5' }}
+          style={{ backgroundColor: '#FFFFFF' }}
         >
           {isAdminMode && (
             <div className="flex h-20 w-full items-center justify-center border-t border-black/10 p-4 py-1.5">
