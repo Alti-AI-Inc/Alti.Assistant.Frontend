@@ -31,10 +31,6 @@ function AssistantWorkspaceContent() {
 
   return (
     <div className="flex h-full w-full overflow-hidden bg-[#F5F5F7] dark:bg-zinc-950 relative">
-      {/* Background blobs for premium glassmorphism */}
-      <div className="absolute -top-40 right-20 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 left-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
-
       {/* Middle Interactive Workspace */}
       <div className={cn(
         "flex h-full w-full flex-1 flex-col items-center justify-center relative z-10",

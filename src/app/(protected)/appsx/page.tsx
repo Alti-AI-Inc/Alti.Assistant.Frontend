@@ -45,11 +45,7 @@ export default function AppIntegrationsGrid() {
   }, [resolvedApps, query]);
 
   return (
-    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 p-6 md:p-10 space-y-10 relative overflow-hidden transition-colors duration-300">
-      {/* Decorative premium radial mesh overlay */}
-      <div className="absolute top-0 right-0 -z-10 w-[600px] h-[600px] bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 -z-10 w-[500px] h-[500px] bg-gradient-to-tr from-cyan-500/10 via-blue-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-
+    <div className="min-h-screen bg-[#F5F5F7] dark:bg-zinc-950 p-6 md:p-10 space-y-10 relative overflow-hidden transition-colors duration-300">
       {/* Glassmorphic Hero Banner */}
       <div className="relative rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl p-8 md:p-12 shadow-xl overflow-hidden transition-all duration-300">
         <div className="absolute top-0 right-0 w-64 h-64 bg-slate-100 dark:bg-slate-800/40 rounded-full translate-x-12 -translate-y-12 blur-2xl pointer-events-none" />
