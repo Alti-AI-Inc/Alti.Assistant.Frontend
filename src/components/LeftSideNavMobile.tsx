@@ -231,7 +231,7 @@ const LeftSideNavMobile = () => {
       setActiveTab('inbox');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       setActiveTab('chat');
-    } else if (pathname === '/settings' || pathname.startsWith('/settings') || pathname.startsWith('/admin') || pathname.startsWith('/knowledge')) {
+    } else if (pathname === '/settings' || pathname.startsWith('/settings') || pathname.startsWith('/admin') || pathname.startsWith('/knowledge') || pathname === '/legal' || pathname.startsWith('/legal')) {
       setActiveTab('none');
     }
   }, [pathname]);
