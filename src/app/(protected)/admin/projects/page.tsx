@@ -1003,7 +1003,10 @@ function MyChatbotsContent() {
         style={{ backgroundColor: '#F5F5F7' }}
       >
         {/* Chatbot Content Body */}
-        <div className="flex-1 flex flex-col items-center justify-center overflow-hidden relative">
+        <div className={cn(
+          "flex-1 flex flex-col items-center justify-center overflow-hidden relative",
+          viewParam !== 'instructions' && viewParam !== 'guardrails' && viewParam !== 'data' && !hasMessages && "pb-20"
+        )}>
           {viewParam === 'instructions' ? (
             <InstructionsEditor bot={activeBot} />
           ) : viewParam === 'guardrails' ? (

@@ -36,7 +36,10 @@ function AssistantWorkspaceContent() {
       <div className="absolute bottom-10 left-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Middle Interactive Workspace */}
-      <div className="flex h-full w-full flex-1 flex-col items-center justify-center relative z-10">
+      <div className={cn(
+        "flex h-full w-full flex-1 flex-col items-center justify-center relative z-10",
+        !hasMessages && "pb-20"
+      )}>
         {!hasMessages && (
           <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
             How can I help you?

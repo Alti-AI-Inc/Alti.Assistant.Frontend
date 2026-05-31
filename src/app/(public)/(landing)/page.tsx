@@ -30,6 +30,7 @@ function App() {
     <div
       className={cn(
         'flex h-full w-full flex-1 flex-col items-center justify-center',
+        !activeConversation && 'pb-20',
       )}
       style={{ backgroundColor: '#F5F5F7' }}
     >
