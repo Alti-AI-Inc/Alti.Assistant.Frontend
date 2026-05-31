@@ -35,7 +35,7 @@ const Page = () => {
   const [selectedOption, setSelectedOption] = useState('memory');
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-white dark:bg-gray-900">
+    <div className="flex h-screen w-full overflow-hidden bg-[#F5F5F7] dark:bg-gray-900">
       {/* Settings Sidebar */}
       <div className="relative">
         <SettingsSidebar
@@ -45,9 +45,9 @@ const Page = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col h-full overflow-hidden bg-white dark:bg-gray-955">
+      <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#F5F5F7] dark:bg-gray-955">
         {/* Dynamic Settings Top Navbar (Header) */}
-        <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center px-8 flex-none bg-white dark:bg-gray-955 justify-between">
+        <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center px-8 flex-none bg-[#F5F5F7] dark:bg-gray-955 justify-between">
           <h1 className="text-base font-semibold text-gray-900 dark:text-white">
             {selectedOption === 'memory' && 'Chat Memory'}
             {selectedOption === 'data' && 'Data Vault'}
@@ -60,7 +60,7 @@ const Page = () => {
 
         {/* Workspace Body */}
         {selectedOption === 'data' ? (
-          <div className="flex-1 min-h-0 overflow-hidden bg-white dark:bg-gray-955">
+          <div className="flex-1 min-h-0 overflow-hidden bg-[#F5F5F7] dark:bg-gray-955">
             <LlamaIndexChat />
           </div>
         ) : (
