@@ -28,12 +28,6 @@ function WorkflowsClient() {
       )}
 
       <FullConversation conversationId="new-chat" />
-
-      {!activeConversation && (
-        <p className="absolute bottom-3 text-xs text-neutral-500">
-          Describe your automation in plain English to create a new workflow.
-        </p>
-      )}
     </div>
   );
 }
