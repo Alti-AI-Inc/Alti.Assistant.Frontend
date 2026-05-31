@@ -112,7 +112,7 @@ export default function ProtectedLayoutClient({
 
         {/* Main content */}
         <main
-          className="bg-background w-full flex-1 overflow-y-auto"
+          className="bg-background w-full flex-1 overflow-hidden"
           style={{ backgroundColor: '#F5F5F7' }}
         >
           {children}

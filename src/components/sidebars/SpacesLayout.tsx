@@ -17,8 +17,8 @@ export const SpacesLayout = ({
       {/* Main Content Area with Column Panels */}
       <main
         className={cn(
-          'flex flex-1 flex-col overflow-auto transition-all duration-300 ease-in-out',
-          'bg-white dark:bg-gray-950',
+          'flex flex-1 flex-col overflow-hidden transition-all duration-300 ease-in-out',
+          'bg-white dark:bg-gray-955',
         )}
       >
         {showColumnPanels ? (
@@ -26,7 +26,7 @@ export const SpacesLayout = ({
           <ColumnPanelsContainer />
         ) : (
           // Regular Content Layout
-          <div className="flex-1 overflow-auto">{children}</div>
+          <div className="flex-1 flex flex-col min-h-0 overflow-hidden">{children}</div>
         )}
       </main>
     </div>
