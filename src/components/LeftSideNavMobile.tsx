@@ -134,7 +134,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'research' | 'bots' | 'assistant' | 'apps' | 'workflows' | 'inbox';
+type SidebarTab = 'chat' | 'research' | 'bots' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'none';
 
 const AVAILABLE_COMPOSIO_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -231,6 +231,8 @@ const LeftSideNavMobile = () => {
       setActiveTab('inbox');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       setActiveTab('chat');
+    } else if (pathname === '/settings' || pathname.startsWith('/settings') || pathname.startsWith('/admin') || pathname.startsWith('/knowledge')) {
+      setActiveTab('none');
     }
   }, [pathname]);
 
@@ -569,7 +571,7 @@ const LeftSideNavMobile = () => {
           {!isAdminMode && (
           <div className="mt-3 mb-2 flex items-center justify-between px-1">
             <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-zinc-400">
-              {activeTab !== 'apps' && activeTab !== 'bots' && mode === UserMode.TENANT && currentTenant && (
+              {activeTab !== 'apps' && activeTab !== 'bots' && activeTab !== 'none' && mode === UserMode.TENANT && currentTenant && (
                 <Badge
                   variant="outline"
                   className="h-4 px-1.5 text-[9px] font-normal border-gray-400 text-gray-500 bg-transparent"
@@ -578,7 +580,7 @@ const LeftSideNavMobile = () => {
                   {currentTenant.name}
                 </Badge>
               )}
-              {activeTab !== 'apps' && activeTab !== 'bots' && mode === UserMode.PERSONAL && (
+              {activeTab !== 'apps' && activeTab !== 'bots' && activeTab !== 'none' && mode === UserMode.PERSONAL && (
                 <Badge
                   variant="outline"
                   className="h-4 px-1.5 text-[9px] font-normal border-gray-400 text-gray-500 bg-transparent"
@@ -967,9 +969,9 @@ const LeftSideNavMobile = () => {
                 </div>
               )}
             </div>
-          ) : (
+          ) : activeTab === 'chat' || activeTab === 'assistant' ? (
             <ConversationsList activeTab={activeTab === 'assistant' ? 'assistant' : activeTab as any} />
-          )}
+          ) : null}
         </div>
       )}
 

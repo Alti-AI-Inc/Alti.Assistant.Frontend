@@ -134,7 +134,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'research' | 'bots' | 'assistant' | 'apps' | 'workflows' | 'inbox';
+type SidebarTab = 'chat' | 'research' | 'bots' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'none';
 
 const AVAILABLE_COMPOSIO_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -246,6 +246,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       setActiveTab('inbox');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       setActiveTab('chat');
+    } else if (pathname === '/settings' || pathname.startsWith('/settings') || pathname.startsWith('/admin') || pathname.startsWith('/knowledge')) {
+      setActiveTab('none');
     }
   }, [pathname]);
 
@@ -977,9 +979,9 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </div>
               )}
             </div>
-          ) : (
+          ) : activeTab === 'chat' || activeTab === 'assistant' ? (
             <ConversationsList searchQuery={searchQuery} activeTab={activeTab === 'assistant' ? 'assistant' : activeTab as any} />
-          )}
+          ) : null}
         </div>
       )}
 
