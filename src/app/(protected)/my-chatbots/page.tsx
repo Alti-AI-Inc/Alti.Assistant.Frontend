@@ -324,7 +324,7 @@ function MyChatbotsContent() {
 
         <div className={cn(
           "flex-1 flex flex-col w-full transition-all duration-300",
-          (currentStep === 1 || currentStep === 2 || currentStep === 3 || currentStep === 4) ? "items-center justify-center relative z-10" : "items-center justify-center max-w-[640px] mx-auto px-4 pt-20 pb-16"
+          (currentStep === 1 || currentStep === 2 || currentStep === 3 || currentStep === 4) ? "items-center justify-center relative z-10 pb-20" : "items-center justify-center max-w-[640px] mx-auto px-4 pt-20 pb-16"
         )}>
           {error && (
             <p className="w-full text-xs font-semibold text-red-500 bg-red-500/10 border border-red-500/20 p-2.5 rounded-xl mb-4 animate-in slide-in-from-top-1 duration-150 text-center">
