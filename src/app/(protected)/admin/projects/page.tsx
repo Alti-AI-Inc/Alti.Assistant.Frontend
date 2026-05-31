@@ -344,7 +344,7 @@ function MyChatbotsContent() {
         <div className="flex-grow w-full bg-[#F5F5F7] dark:bg-zinc-950 h-full flex flex-col relative animate-in fade-in duration-500 overflow-y-auto">
         
         {/* Stepper Progress Bar */}
-        <div className="absolute top-6 left-1/2 -translate-x-1/2 w-full max-w-[600px] select-none px-4 z-20">
+        <div className="absolute top-10 left-1/2 -translate-x-1/2 w-full max-w-[600px] select-none px-4 z-20">
           <div className="relative flex items-center justify-between">
             {/* Background track line */}
             <div className="absolute left-0 right-0 top-1/2 h-0.5 -translate-y-1/2 bg-gray-200 dark:bg-zinc-800 z-0" />
