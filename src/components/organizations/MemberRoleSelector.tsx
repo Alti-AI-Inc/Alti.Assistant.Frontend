@@ -9,16 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { TenantRole } from '@/types/tenant';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -131,27 +122,52 @@ export function MemberRoleSelector({
         </SelectContent>
       </Select>
 
-      <AlertDialog
+      <Dialog
         open={!!pendingRole}
         onOpenChange={open => !open && setPendingRole(null)}
       >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Change Member Role</AlertDialogTitle>
-            <AlertDialogDescription>
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[350px] sm:max-w-[350px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+          {/* Centered Content Section */}
+          <div className="px-5 pt-5 pb-4 text-center">
+            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+              Change Member Role
+            </h2>
+            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
               Are you sure you want to change this member&apos;s role to{' '}
-              <span className="font-semibold capitalize">{pendingRole}</span>?
-              This will change their permissions immediately.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isChanging}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleRoleChange} disabled={isChanging}>
-              {isChanging ? 'Updating...' : 'Change Role'}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+              <span className="font-semibold capitalize text-black dark:text-white">
+                {pendingRole ? formatRoleLabel(pendingRole) : ''}
+              </span>?
+            </p>
+          </div>
+
+          {/* Extended Border & iOS Layout Action Buttons */}
+          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+            {/* Cancel Option */}
+            <button
+              type="button"
+              disabled={isChanging}
+              onClick={() => setPendingRole(null)}
+              className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none"
+            >
+              Cancel
+            </button>
+            
+            {/* Confirm Option */}
+            <button
+              type="button"
+              disabled={isChanging}
+              onClick={handleRoleChange}
+              className="flex-1 text-[15px] font-medium text-primary hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center disabled:opacity-50 outline-none"
+            >
+              {isChanging ? (
+                <span className="size-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+              ) : (
+                'Change'
+              )}
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
