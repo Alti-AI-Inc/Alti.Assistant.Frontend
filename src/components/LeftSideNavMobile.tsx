@@ -1025,9 +1025,14 @@ const LeftSideNavMobile = () => {
 
                 <DropdownMenuGroup>
                   {!isAdminMode && (
-                    <DropdownMenuItem onClick={() => { router.push('/admin/members'); close(); }}>
-                      <Shield className="text-black" /> Admin
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem onClick={() => { router.push('/admin/members'); close(); }}>
+                        <Shield className="text-black" /> Admin
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => { router.push('/admin/data'); close(); }}>
+                        <LayoutDashboard className="text-black" /> Manager
+                      </DropdownMenuItem>
+                    </>
                   )}
                 </DropdownMenuGroup>
                 <DropdownMenuItem

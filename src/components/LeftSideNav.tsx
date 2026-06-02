@@ -1045,9 +1045,14 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               >
                 <DropdownMenuGroup>
                   {!isAdminMode && (
-                    <DropdownMenuItem onClick={() => router.push('/admin/members')}>
-                      <Shield className="text-black" /> Admin
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem onClick={() => router.push('/admin/members')}>
+                        <Shield className="text-black" /> Admin
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => router.push('/admin/data')}>
+                        <LayoutDashboard className="text-black" /> Manager
+                      </DropdownMenuItem>
+                    </>
                   )}
 
                   <DropdownMenuItem onClick={() => router.push('/legal')}>
