@@ -674,6 +674,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   { name: 'Invite', href: '/admin/members', icon: UserPlus },
                   { name: 'Members', href: '/admin/team-members', icon: Users },
                   { name: 'Billing', href: '/admin/billing', icon: CreditCard },
+                  { name: 'Invoices', href: '/admin/invoices', icon: FileText },
                 ].map((item) => {
                   const isActive = pathname.startsWith(item.href);
                   const Icon = item.icon;
