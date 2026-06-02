@@ -157,6 +157,11 @@ const LeftSideNavMobile = () => {
   const { close } = useDrawerStore();
 
   const isAdminMode = pathname.startsWith('/admin');
+  const isManagerSection = pathname.startsWith('/admin/data') || 
+                           pathname.startsWith('/admin/instructions') || 
+                           pathname.startsWith('/admin/guardrails') || 
+                           pathname.startsWith('/admin/projects');
+  const isAdminSection = !isManagerSection && isAdminMode;
   const { mode, currentTenant } = useTenant();
 
   const { onOpen } = useModalStore();
@@ -617,53 +622,22 @@ const LeftSideNavMobile = () => {
           {isAdminMode ? (
             <div className="mt-2 space-y-6">
               {/* First Section */}
-              <div className="space-y-1">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
-                  Admin
-                </div>
-                {[
-                  { name: 'Invite', href: '/admin/members', icon: UserPlus },
-                  { name: 'Members', href: '/admin/team-members', icon: Users },
-                  { name: 'Billing', href: '/admin/billing', icon: CreditCard },
-                  { name: 'Invoices', href: '/admin/invoices', icon: FileText },
-                ].map((item) => {
-                  const isActive = pathname.startsWith(item.href);
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      onClick={() => close()}
-                      className={cn(
-                        'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                        isActive
-                          ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
-                          : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
-                      )}
-                    >
-                      <Icon className="w-4 h-4" />
-                      {item.name}
-                    </Link>
-                  );
-                })}
-              </div>
-
-              {/* Second Section */}
-              <div className="space-y-1">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
-                  Manager
-                </div>
-                {[
-                  { name: 'Data', href: '/admin/data', icon: Database },
-                  { name: 'Instructions', href: '/admin/instructions', icon: FileText },
-                  { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
-                  { name: 'Projects', href: '/admin/projects', icon: Folder },
-                ].map((item) => {
-                  const isActive = pathname === item.href || (item.name === 'Projects' && pathname.startsWith('/admin/projects'));
-                  const Icon = item.icon;
-                  return (
-                    <div key={item.name}>
+              {isAdminSection && (
+                <div className="space-y-1">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
+                    Admin
+                  </div>
+                  {[
+                    { name: 'Invite', href: '/admin/members', icon: UserPlus },
+                    { name: 'Members', href: '/admin/team-members', icon: Users },
+                    { name: 'Billing', href: '/admin/billing', icon: CreditCard },
+                    { name: 'Invoices', href: '/admin/invoices', icon: FileText },
+                  ].map((item) => {
+                    const isActive = pathname.startsWith(item.href);
+                    const Icon = item.icon;
+                    return (
                       <Link
+                        key={item.name}
                         href={item.href}
                         onClick={() => close()}
                         className={cn(
@@ -676,35 +650,70 @@ const LeftSideNavMobile = () => {
                         <Icon className="w-4 h-4" />
                         {item.name}
                       </Link>
-                      {item.name === 'Projects' && (
-                        <div className="mt-1 flex flex-col pl-9 pr-2">
-                          {bots.filter(b => b.isShared).map(bot => {
-                            const isSelected = activeBotId === bot.id && pathname.startsWith('/admin/projects');
-                            return (
-                              <Link
-                                key={bot.id}
-                                href={`/admin/projects?bot=${bot.id}`}
-                                onClick={() => {
-                                  setActiveBotId(bot.id);
-                                  close();
-                                }}
-                                className={cn(
-                                  "flex h-8 w-full items-center truncate rounded-md px-2 text-xs font-normal transition-all text-left",
-                                  isSelected
-                                    ? "bg-black/10 text-black dark:bg-white/10 dark:text-white font-medium"
-                                    : "text-gray-500 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white"
-                                )}
-                              >
-                                {bot.name}
-                              </Link>
-                            )
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Second Section */}
+              {isManagerSection && (
+                <div className="space-y-1">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
+                    Manager
+                  </div>
+                  {[
+                    { name: 'Data', href: '/admin/data', icon: Database },
+                    { name: 'Instructions', href: '/admin/instructions', icon: FileText },
+                    { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
+                    { name: 'Projects', href: '/admin/projects', icon: Folder },
+                  ].map((item) => {
+                    const isActive = pathname === item.href || (item.name === 'Projects' && pathname.startsWith('/admin/projects'));
+                    const Icon = item.icon;
+                    return (
+                      <div key={item.name}>
+                        <Link
+                          href={item.href}
+                          onClick={() => close()}
+                          className={cn(
+                            'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                            isActive
+                              ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
+                              : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                          )}
+                        >
+                          <Icon className="w-4 h-4" />
+                          {item.name}
+                        </Link>
+                        {item.name === 'Projects' && (
+                          <div className="mt-1 flex flex-col pl-9 pr-2">
+                            {bots.filter(b => b.isShared).map(bot => {
+                              const isSelected = activeBotId === bot.id && pathname.startsWith('/admin/projects');
+                              return (
+                                <Link
+                                  key={bot.id}
+                                  href={`/admin/projects?bot=${bot.id}`}
+                                  onClick={() => {
+                                    setActiveBotId(bot.id);
+                                    close();
+                                  }}
+                                  className={cn(
+                                    "flex h-8 w-full items-center truncate rounded-md px-2 text-xs font-normal transition-all text-left",
+                                    isSelected
+                                      ? "bg-black/10 text-black dark:bg-white/10 dark:text-white font-medium"
+                                      : "text-gray-500 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white"
+                                  )}
+                                >
+                                  {bot.name}
+                                </Link>
+                              )
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           ) : activeTab === 'bots' ? (
             <div className="space-y-1 py-1 pb-4 mt-2">
@@ -1021,19 +1030,13 @@ const LeftSideNavMobile = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
-              <DropdownMenuGroup>
-
                 <DropdownMenuGroup>
-                  {!isAdminMode && (
-                    <>
-                      <DropdownMenuItem onClick={() => { router.push('/admin/members'); close(); }}>
-                        <Shield className="text-black" /> Admin
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => { router.push('/admin/data'); close(); }}>
-                        <LayoutDashboard className="text-black" /> Manager
-                      </DropdownMenuItem>
-                    </>
-                  )}
+                  <DropdownMenuItem onClick={() => { router.push('/admin/members'); close(); }}>
+                    <Shield className="text-black" /> Admin
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => { router.push('/admin/data'); close(); }}>
+                    <LayoutDashboard className="text-black" /> Manager
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuItem
                   onClick={() => {
