@@ -622,9 +622,9 @@ const LeftSideNavMobile = () => {
                   Workspace
                 </div>
                 {[
-                  { name: 'Billing', href: '/admin/billing', icon: CreditCard },
                   { name: 'Invite', href: '/admin/members', icon: UserPlus },
                   { name: 'Members', href: '/admin/team-members', icon: Users },
+                  { name: 'Billing', href: '/admin/billing', icon: CreditCard },
                 ].map((item) => {
                   const isActive = pathname.startsWith(item.href);
                   const Icon = item.icon;
