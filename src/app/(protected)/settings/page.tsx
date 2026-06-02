@@ -35,9 +35,9 @@ const Page = () => {
   const [selectedOption, setSelectedOption] = useState('memory');
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#F5F5F7] dark:bg-gray-900">
+    <div className="flex h-full w-full overflow-hidden bg-[#F5F5F7] dark:bg-gray-900">
       {/* Settings Sidebar */}
-      <div className="relative">
+      <div className="relative shrink-0">
         <SettingsSidebar
           selectedOption={selectedOption}
           onSelectOption={setSelectedOption}

@@ -40,6 +40,29 @@ export const AppsPanelsContainer = () => {
 
   const [connectedAppSlugs, setConnectedAppSlugs] = useState<Set<string>>(new Set());
 
+  const MCP_SERVERS_REQUIRED_KEYS: Record<string, string[]> = {
+    'google-maps': ['MAPS_API_KEY'],
+    'slack': ['SLACK_BOT_TOKEN'],
+    'linear': ['LINEAR_API_KEY'],
+    'gcal': ['GOOGLE_CALENDAR_CREDENTIALS'],
+    'brave-search': ['BRAVE_API_KEY'],
+    'evernote': ['EVERNOTE_API_KEY'],
+    'postgres': ['databaseUrl'],
+    'postgresql': ['databaseUrl'],
+    'katzilla': ['KATZILLA_API_KEY'],
+    'imagen': ['GOOGLE_MAPS_API_KEY'],
+    'spotify-bulk': ['SPOTIFY_CLIENT_ID', 'SPOTIFY_CLIENT_SECRET'],
+    'github': ['GITHUB_PERSONAL_ACCESS_TOKEN'],
+    'gitlab': ['GITLAB_PERSONAL_ACCESS_TOKEN'],
+    'sentry': ['SENTRY_AUTH_TOKEN'],
+    'redis': ['REDIS_URL'],
+    'everart': ['EVERART_API_KEY'],
+    'aws-kb-retrieval': ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_REGION'],
+    'google-drive': ['GOOGLE_CALENDAR_CREDENTIALS']
+  };
+
+  const [mcpInputs, setMcpInputs] = useState<Record<string, string>>({});
+
   useEffect(() => {
     if (connections) {
       const activeSlugs = new Set(
@@ -48,6 +71,30 @@ export const AppsPanelsContainer = () => {
       setConnectedAppSlugs(activeSlugs);
     }
   }, [connections]);
+
+  useEffect(() => {
+    const fetchMcpStatus = async () => {
+      if (!session?.accessToken) return;
+      const res = await apiClientJson<{ servers: { id: string; status: string }[] }>(
+        buildApiUrl('/mcp_toolbox/servers/status'),
+        {
+          headers: { 'Authorization': `Bearer ${session.accessToken}` }
+        }
+      );
+      if (res.success && res.data?.servers) {
+        setConnectedAppSlugs(prev => {
+          const next = new Set(prev);
+          res.data!.servers.forEach(server => {
+            if (server.status === 'active') {
+              next.add(server.id.toLowerCase());
+            }
+          });
+          return next;
+        });
+      }
+    };
+    fetchMcpStatus();
+  }, [session, connections]);
 
   const [isConnecting, setIsConnecting] = useState(false);
   const [connectionError, setConnectionError] = useState<string | null>(null);
@@ -61,6 +108,8 @@ export const AppsPanelsContainer = () => {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setMcpInputs({});
+    setConnectionError(null);
     if (activeAppSlug) {
       const match = allApps.find(app => app.app_name.toLowerCase() === activeAppSlug.toLowerCase() && app.isAvailable);
       if (match) {
@@ -80,9 +129,74 @@ export const AppsPanelsContainer = () => {
 
 
 
+  // --- Connect flow for custom stdio MCP servers ---
+  const handleConnectMcpServer = async (app: APP) => {
+    if (!app.app_name) return;
+    setIsConnecting(true);
+    setConnectionError(null);
+
+    const requiredKeys = MCP_SERVERS_REQUIRED_KEYS[app.app_name] || [];
+    const env: Record<string, string> = {};
+    let databaseUrl = '';
+
+    for (const key of requiredKeys) {
+      const val = mcpInputs[key];
+      if (!val || !val.trim()) {
+        setIsConnecting(false);
+        setConnectionError(`Please provide a valid value for ${key.replace(/_/g, ' ')}.`);
+        return;
+      }
+      if (key === 'databaseUrl') {
+        databaseUrl = val.trim();
+      } else {
+        env[key] = val.trim();
+      }
+    }
+
+    const response = await apiClientJson<{ success: boolean; message?: string }>(
+      buildApiUrl('/mcp_toolbox/install-app'),
+      {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.accessToken}`
+        },
+        body: JSON.stringify({
+          appId: app.app_name,
+          env,
+          databaseUrl
+        }),
+      }
+    );
+
+    if (response.success) {
+      setIsConnecting(false);
+      setConnectedAppSlugs(prev => {
+        const next = new Set(prev);
+        next.add(app.app_name.toLowerCase());
+        return next;
+      });
+      queryClient.invalidateQueries({ queryKey: ['connections'] });
+    } else {
+      setIsConnecting(false);
+      setConnectionError(response.debugMessage || 'Failed to install and connect MCP application.');
+    }
+  };
+
   // --- Connect/OAuth flow for standard Composio apps ---
   const handleConnectApp = async (app: APP) => {
     if (!app.app_name) return;
+
+    // Check if it is a standard stdio open-source MCP server
+    const isMcp = !!app.isMcp || [
+      'filesystem', 'google-maps', 'slack', 'linear', 'gcal',
+      'brave-search', 'postgres', 'sqlite', 'playwright', 'fetch', 'evernote'
+    ].includes(app.app_name);
+
+    if (isMcp) {
+      return handleConnectMcpServer(app);
+    }
+
     setIsConnecting(true);
     setConnectionError(null);
 
@@ -335,6 +449,30 @@ export const AppsPanelsContainer = () => {
                   </div>
                 )}
 
+                {/* Dynamically render credential setup inputs for stdio MCP integrations */}
+                {(() => {
+                  const requiredKeys = MCP_SERVERS_REQUIRED_KEYS[selectedApp.app_name] || [];
+                  if (requiredKeys.length === 0) return null;
+                  return (
+                    <div className="w-full space-y-4 pt-2">
+                      {requiredKeys.map((key) => (
+                        <div key={key} className="w-full text-left space-y-2">
+                          <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider block">
+                            {key === 'databaseUrl' ? 'PostgreSQL Database URL' : key.replace(/_/g, ' ')}
+                          </label>
+                          <Input
+                            type={key.toLowerCase().includes('key') || key.toLowerCase().includes('token') || key.toLowerCase().includes('credentials') ? 'password' : 'text'}
+                            placeholder={key === 'databaseUrl' ? 'postgresql://username:password@localhost:5432/dbname' : `Enter your ${key.replace(/_/g, ' ')}...`}
+                            value={mcpInputs[key] || ''}
+                            onChange={(e) => setMcpInputs(prev => ({ ...prev, [key]: e.target.value }))}
+                            className="h-10 text-sm rounded-lg bg-gray-50 border-gray-200 dark:border-gray-800 dark:bg-gray-950 focus-visible:ring-1 focus-visible:ring-blue-500/30"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })()}
+
                 <div className="w-full pt-2">
                   <Button
                     onClick={() => handleConnectApp(selectedApp)}
@@ -358,7 +496,14 @@ export const AppsPanelsContainer = () => {
 
                 <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-500 pt-2 border-t border-gray-100 dark:border-gray-800 w-full justify-center">
                   <Shield className="h-3.5 w-3.5" />
-                  <span>Authenticated securely via Composio protocol</span>
+                  <span>
+                    {(() => {
+                      const isMcp = !!selectedApp.isMcp || ['filesystem', 'google-maps', 'slack', 'linear', 'gcal', 'brave-search', 'postgres', 'sqlite', 'playwright', 'fetch', 'evernote'].includes(selectedApp.app_name);
+                      return isMcp 
+                        ? 'Authenticated securely via sandboxed stdio protocol'
+                        : 'Authenticated securely via Composio protocol';
+                    })()}
+                  </span>
                 </div>
               </div>
             </div>

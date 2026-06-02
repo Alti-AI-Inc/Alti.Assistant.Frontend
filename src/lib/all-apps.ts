@@ -4,6 +4,7 @@ export type APP = {
   image: string;
   app_name: string;
   isAvailable: boolean;
+  isMcp?: boolean;
 };
 
 export const allApps: APP[] = [
@@ -316,6 +317,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Amazon SageMaker MLOps",
+    "description": "Enterprise cloud machine learning endpoints orchestrator, model auto-scaling rules, and training pipeline metrics.",
+    "image": "https://logos.composio.dev/api/sagemaker",
+    "app_name": "sagemaker",
+    "isAvailable": true
+  },
+  {
     "title": "Amazon Seller Central",
     "description": "",
     "image": "https://logos.composio.dev/api/amazon_seller",
@@ -519,13 +527,6 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "SAP Ariba",
-    "description": "Global procurement network, corporate supplier bidding, vendor verification, and supply chain tracking.",
-    "image": "https://logos.composio.dev/api/ariba",
-    "app_name": "ariba",
-    "isAvailable": true
-  },
-  {
     "title": "Aryn",
     "description": "",
     "image": "https://logos.composio.dev/api/aryn",
@@ -566,6 +567,14 @@ export const allApps: APP[] = [
     "image": "https://logos.composio.dev/api/astica_ai",
     "app_name": "astica_ai",
     "isAvailable": true
+  },
+  {
+    "title": "Astronomy Oracle",
+    "description": "Accurate astronomical catalog data and observing session planner (13,000+ deep-sky objects from OpenNGC with visibility and rise/transit/set calculations).",
+    "image": "https://logos.composio.dev/api/astronomy-oracle",
+    "app_name": "astronomy-oracle",
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "Async Interview",
@@ -636,6 +645,21 @@ export const allApps: APP[] = [
     "image": "https://logos.composio.dev/api/aws",
     "app_name": "aws",
     "isAvailable": true
+  },
+  {
+    "title": "AWS DynamoDB",
+    "description": "AWS DynamoDB distributed key-value databases, partition key indexing, table read/write metrics, and table drop operations.",
+    "image": "https://logos.composio.dev/api/dynamodb",
+    "app_name": "dynamodb",
+    "isAvailable": true
+  },
+  {
+    "title": "AWS KB Retrieval Integration",
+    "description": "Retrieval from AWS Knowledge Base using Bedrock Agent Runtime.",
+    "image": "https://logos.composio.dev/api/aws-kb-retrieval",
+    "app_name": "aws-kb-retrieval",
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "AWS S3",
@@ -890,17 +914,17 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Bloomberg Professional",
-    "description": "Real-time institutional market terminal feeds, historical security pricing, macroeconomic tables, and professional trading logs.",
-    "image": "https://logos.composio.dev/api/bloomberg",
-    "app_name": "bloomberg",
-    "isAvailable": true
-  },
-  {
     "title": "Bloomberg FX",
     "description": "Global financial currency rates terminal, real-time spot FX market tracking, forwards portfolio risk, and rate locking workflows.",
     "image": "https://logos.composio.dev/api/bloomberg_fx",
     "app_name": "bloomberg_fx",
+    "isAvailable": true
+  },
+  {
+    "title": "Bloomberg Professional",
+    "description": "Real-time institutional market terminal feeds, historical security pricing, macroeconomic tables, and professional trading logs.",
+    "image": "https://logos.composio.dev/api/bloomberg",
+    "app_name": "bloomberg",
     "isAvailable": true
   },
   {
@@ -1035,6 +1059,14 @@ export const allApps: APP[] = [
     "image": "https://logos.composio.dev/api/brandfetch",
     "app_name": "brandfetch",
     "isAvailable": true
+  },
+  {
+    "title": "Brave Web Grounding",
+    "description": "Real-time, zero-latency Brave Search Web grounding to fetch clean snippets and context without external web scrapers.",
+    "image": "https://logos.composio.dev/api/brave-search",
+    "app_name": "brave-search",
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "Breeze",
@@ -1282,13 +1314,6 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "S&P Capital IQ",
-    "description": "",
-    "image": "https://logos.composio.dev/api/capitaliq",
-    "app_name": "capitaliq",
-    "isAvailable": true
-  },
-  {
     "title": "Capsule CRM",
     "description": "",
     "image": "https://logos.composio.dev/api/capsule_crm",
@@ -1419,6 +1444,13 @@ export const allApps: APP[] = [
     "description": "Cloud CI/CD build environments, automation pipeline triggers, test execution telemetry, and pipeline runtime controls.",
     "image": "https://logos.composio.dev/api/circleci",
     "app_name": "circleci",
+    "isAvailable": true
+  },
+  {
+    "title": "Cisco Webex",
+    "description": "Cisco Webex collaborative meeting spaces, audio/video conferencing schedules, and scheduled workspace cleanups.",
+    "image": "https://logos.composio.dev/api/webex",
+    "app_name": "webex",
     "isAvailable": true
   },
   {
@@ -1657,13 +1689,6 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/composio_search",
     "app_name": "composio_search",
-    "isAvailable": true
-  },
-  {
-    "title": "SAP Concur",
-    "description": "Corporate travel bookings management, employee expense report ingestion, audit trails, and compliance-driven expense approvals.",
-    "image": "https://logos.composio.dev/api/concur",
-    "app_name": "concur",
     "isAvailable": true
   },
   {
@@ -2241,13 +2266,6 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "AWS DynamoDB",
-    "description": "AWS DynamoDB distributed key-value databases, partition key indexing, table read/write metrics, and table drop operations.",
-    "image": "https://logos.composio.dev/api/dynamodb",
-    "app_name": "dynamodb",
-    "isAvailable": true
-  },
-  {
     "title": "Dynatrace Observability",
     "description": "Enterprise full-stack infrastructure observability, service flow dependencies mapping, and AI anomaly detection.",
     "image": "https://logos.composio.dev/api/dynatrace",
@@ -2367,13 +2385,6 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Microsoft Entra ID",
-    "description": "Cloud identity directory, workforce group membership control, user privilege levels auditing, and rapid security account suspensions.",
-    "image": "https://logos.composio.dev/api/entra_id",
-    "app_name": "entra_id",
-    "isAvailable": true
-  },
-  {
     "title": "Entrata",
     "description": "",
     "image": "https://logos.composio.dev/api/entrata",
@@ -2388,13 +2399,6 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Epic Systems FHIR",
-    "description": "Enterprise EHR clinical systems, patient health summaries, physician notes, and FHIR standard health records.",
-    "image": "https://logos.composio.dev/api/epic",
-    "app_name": "epic",
-    "isAvailable": true
-  },
-  {
     "title": "Epic Games",
     "description": "",
     "image": "https://logos.composio.dev/api/epic_games",
@@ -2406,6 +2410,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/epic_systems",
     "app_name": "epic_systems",
+    "isAvailable": true
+  },
+  {
+    "title": "Epic Systems FHIR",
+    "description": "Enterprise EHR clinical systems, patient health summaries, physician notes, and FHIR standard health records.",
+    "image": "https://logos.composio.dev/api/epic",
+    "app_name": "epic",
     "isAvailable": true
   },
   {
@@ -2472,6 +2483,14 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "EverArt Integration",
+    "description": "AI image generation using various models.",
+    "image": "https://logos.composio.dev/api/everart",
+    "app_name": "everart",
+    "isAvailable": true,
+    "isMcp": true
+  },
+  {
     "title": "Everhour",
     "description": "",
     "image": "https://logos.composio.dev/api/everhour",
@@ -2479,11 +2498,27 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Evernote Notes Integration",
+    "description": "Access, search, and manage Evernote notes, folders, and notebooks programmatically inside your chat sessions.",
+    "image": "https://logos.composio.dev/api/evernote",
+    "app_name": "evernote",
+    "isAvailable": true,
+    "isMcp": true
+  },
+  {
     "title": "Eversign",
     "description": "",
     "image": "https://logos.composio.dev/api/eversign",
     "app_name": "eversign",
     "isAvailable": true
+  },
+  {
+    "title": "Everything Integration",
+    "description": "Reference / test server with prompts, resources, and tools.",
+    "image": "https://logos.composio.dev/api/everything",
+    "app_name": "everything",
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "Exa",
@@ -2631,6 +2666,14 @@ export const allApps: APP[] = [
     "image": "https://logos.composio.dev/api/files_com",
     "app_name": "files_com",
     "isAvailable": true
+  },
+  {
+    "title": "Filesystem Interface",
+    "description": "Secure, local filesystem access to read and write files within pre-approved workspace directories.",
+    "image": "https://logos.composio.dev/api/filesystem",
+    "app_name": "filesystem",
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "Filevine",
@@ -2920,13 +2963,6 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Google Cloud Storage",
-    "description": "",
-    "image": "https://logos.composio.dev/api/gcs",
-    "app_name": "gcs",
-    "isAvailable": true
-  },
-  {
     "title": "Gemini",
     "description": "",
     "image": "https://logos.composio.dev/api/gemini",
@@ -3025,18 +3061,28 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Git Integration",
+    "description": "Tools to read, search, and manipulate Git repositories.",
+    "image": "https://logos.composio.dev/api/git",
+    "app_name": "git",
+    "isAvailable": true,
+    "isMcp": true
+  },
+  {
     "title": "GitHub",
     "description": "GitHub version control repositories, pull requests review cycles, CI/CD actions telemetry, and repository lifecycle management.",
     "image": "https://logos.composio.dev/api/github",
     "app_name": "github",
-    "isAvailable": true
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "GitLab",
     "description": "GitLab continuous integration pipelines, private Git projects orchestration, security scanning jobs, and repository management.",
     "image": "https://logos.composio.dev/api/gitlab",
     "app_name": "gitlab",
-    "isAvailable": true
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "Givebutter",
@@ -3130,59 +3176,17 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Google Analytics",
-    "description": "",
-    "image": "https://logos.composio.dev/api/google_analytics",
-    "app_name": "google_analytics",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Classroom",
-    "description": "",
-    "image": "https://logos.composio.dev/api/google_classroom",
-    "app_name": "google_classroom",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Cloud Vision",
-    "description": "",
-    "image": "https://logos.composio.dev/api/google_cloud_vision",
-    "app_name": "google_cloud_vision",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Drive",
-    "description": "Google Drive cloud document folders, shared drives file hierarchy, doc permissions, and file cleanup operations.",
-    "image": "https://logos.composio.dev/api/google_drive",
-    "app_name": "google_drive",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Maps",
-    "description": "",
-    "image": "https://logos.composio.dev/api/google_maps",
-    "app_name": "google_maps",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Search Console",
-    "description": "",
-    "image": "https://logos.composio.dev/api/google_search_console",
-    "app_name": "google_search_console",
-    "isAvailable": true
-  },
-  {
-    "title": "Google Cloud Storage",
-    "description": "Google Cloud Storage buckets telemetry, raw assets distribution, object lifecycle policies, and bucket removals.",
-    "image": "https://logos.composio.dev/api/google_storage",
-    "app_name": "google_storage",
-    "isAvailable": true
-  },
-  {
     "title": "Google Ads",
     "description": "",
     "image": "https://logos.composio.dev/api/googleads",
     "app_name": "googleads",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Analytics",
+    "description": "",
+    "image": "https://logos.composio.dev/api/google_analytics",
+    "app_name": "google_analytics",
     "isAvailable": true
   },
   {
@@ -3200,6 +3204,42 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Google Calendar Integration",
+    "description": "Access, schedule, and sync events inside Google Calendar accounts securely.",
+    "image": "https://logos.composio.dev/api/gcal",
+    "app_name": "gcal",
+    "isAvailable": true,
+    "isMcp": true
+  },
+  {
+    "title": "Google Classroom",
+    "description": "",
+    "image": "https://logos.composio.dev/api/google_classroom",
+    "app_name": "google_classroom",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Cloud Storage",
+    "description": "",
+    "image": "https://logos.composio.dev/api/gcs",
+    "app_name": "gcs",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Cloud Storage",
+    "description": "Google Cloud Storage buckets telemetry, raw assets distribution, object lifecycle policies, and bucket removals.",
+    "image": "https://logos.composio.dev/api/google_storage",
+    "app_name": "google_storage",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Cloud Vision",
+    "description": "",
+    "image": "https://logos.composio.dev/api/google_cloud_vision",
+    "app_name": "google_cloud_vision",
+    "isAvailable": true
+  },
+  {
     "title": "Google Docs",
     "description": "",
     "image": "https://logos.composio.dev/api/googledocs",
@@ -3208,10 +3248,40 @@ export const allApps: APP[] = [
   },
   {
     "title": "Google Drive",
+    "description": "Google Drive cloud document folders, shared drives file hierarchy, doc permissions, and file cleanup operations.",
+    "image": "https://logos.composio.dev/api/google_drive",
+    "app_name": "google_drive",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Drive",
     "description": "",
     "image": "https://logos.composio.dev/api/googledrive",
     "app_name": "googledrive",
     "isAvailable": true
+  },
+  {
+    "title": "Google Drive Integration",
+    "description": "File access and search capabilities for Google Drive.",
+    "image": "https://logos.composio.dev/api/google-drive",
+    "app_name": "google-drive",
+    "isAvailable": true,
+    "isMcp": true
+  },
+  {
+    "title": "Google Maps",
+    "description": "",
+    "image": "https://logos.composio.dev/api/google_maps",
+    "app_name": "google_maps",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Maps Platform",
+    "description": "Integrates Google Maps API to search places, compute transit routes, calculate travel times, and view geocoding data.",
+    "image": "https://logos.composio.dev/api/google-maps",
+    "app_name": "google-maps",
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "Google Meet",
@@ -3225,6 +3295,13 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/googlephotos",
     "app_name": "googlephotos",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Search Console",
+    "description": "",
+    "image": "https://logos.composio.dev/api/google_search_console",
+    "app_name": "google_search_console",
     "isAvailable": true
   },
   {
@@ -3655,6 +3732,14 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Imagen AI Graphic Engine",
+    "description": "High-fidelity AI image generation from text prompts using Google's Imagen 3.0 API with professional camera, lighting, and style controls.",
+    "image": "https://logos.composio.dev/api/imagen",
+    "app_name": "imagen",
+    "isAvailable": true,
+    "isMcp": true
+  },
+  {
     "title": "Imagior",
     "description": "",
     "image": "https://logos.composio.dev/api/imagior",
@@ -3928,6 +4013,14 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Katzilla Data API",
+    "description": "Access 300+ free, public, and government datasets (economic data from FRED/BLS, health from CDC/FDA, science from NASA/arXiv, environmental from EPA/NOAA) behind a single API key.",
+    "image": "https://logos.composio.dev/api/katzilla",
+    "app_name": "katzilla",
+    "isAvailable": true,
+    "isMcp": true
+  },
+  {
     "title": "Keap",
     "description": "",
     "image": "https://logos.composio.dev/api/keap",
@@ -4163,7 +4256,8 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/linear",
     "app_name": "linear",
-    "isAvailable": true
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "Linguapop",
@@ -4453,6 +4547,14 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Memory Integration",
+    "description": "Knowledge graph-based persistent memory system.",
+    "image": "https://logos.composio.dev/api/memory",
+    "app_name": "memory",
+    "isAvailable": true,
+    "isMcp": true
+  },
+  {
     "title": "Metaads",
     "description": "",
     "image": "https://logos.composio.dev/api/metaads",
@@ -4488,10 +4590,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Microsoft Entra ID",
+    "description": "Cloud identity directory, workforce group membership control, user privilege levels auditing, and rapid security account suspensions.",
+    "image": "https://logos.composio.dev/api/entra_id",
+    "app_name": "entra_id",
+    "isAvailable": true
+  },
+  {
     "title": "Microsoft Teams",
     "description": "",
     "image": "https://logos.composio.dev/api/microsoft_teams",
     "app_name": "microsoft_teams",
+    "isAvailable": true
+  },
+  {
+    "title": "Microsoft Teams",
+    "description": "Microsoft Teams chat channel directories, collaborative space feeds, real-time message posting, and channel management.",
+    "image": "https://logos.composio.dev/api/msteams",
+    "app_name": "msteams",
     "isAvailable": true
   },
   {
@@ -4656,13 +4772,6 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Microsoft Teams",
-    "description": "Microsoft Teams chat channel directories, collaborative space feeds, real-time message posting, and channel management.",
-    "image": "https://logos.composio.dev/api/msteams",
-    "app_name": "msteams",
-    "isAvailable": true
-  },
-  {
     "title": "Mural",
     "description": "",
     "image": "https://logos.composio.dev/api/mural",
@@ -4682,6 +4791,14 @@ export const allApps: APP[] = [
     "image": "https://logos.composio.dev/api/mx_toolbox",
     "app_name": "mx_toolbox",
     "isAvailable": true
+  },
+  {
+    "title": "MyInstants Soundboard",
+    "description": "Meme soundboard integration to search, browse, and play millions of meme sounds from myinstants.com.",
+    "image": "https://logos.composio.dev/api/myinstants",
+    "app_name": "myinstants",
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "MySQL",
@@ -4751,13 +4868,6 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/neon",
     "app_name": "neon",
-    "isAvailable": true
-  },
-  {
-    "title": "Salesforce Net Zero Cloud",
-    "description": "Cloud carbon tracking ledger, offset credit allocation monitoring, greenhouse gas emissions scorecards, and sustainability reports.",
-    "image": "https://logos.composio.dev/api/net_zero_cloud",
-    "app_name": "net_zero_cloud",
     "isAvailable": true
   },
   {
@@ -4940,13 +5050,6 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/onesignal_user_auth",
     "app_name": "onesignal_user_auth",
-    "isAvailable": true
-  },
-  {
-    "title": "Thomson Reuters ONESOURCE",
-    "description": "Thomson Reuters ONESOURCE global tax determination, automated VAT calculation engine, and corporate tax compliance filing.",
-    "image": "https://logos.composio.dev/api/onesource",
-    "app_name": "onesource",
     "isAvailable": true
   },
   {
@@ -5265,17 +5368,17 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Pingdom",
-    "description": "",
-    "image": "https://logos.composio.dev/api/pingdom",
-    "app_name": "pingdom",
-    "isAvailable": true
-  },
-  {
     "title": "Ping Identity SSO",
     "description": "Federated single sign-on (SSO) authentication directories, SAML token sessions controller, and secure session revocation.",
     "image": "https://logos.composio.dev/api/pingidentity",
     "app_name": "pingidentity",
+    "isAvailable": true
+  },
+  {
+    "title": "Pingdom",
+    "description": "",
+    "image": "https://logos.composio.dev/api/pingdom",
+    "app_name": "pingdom",
     "isAvailable": true
   },
   {
@@ -5342,6 +5445,14 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Playwright Web Automation",
+    "description": "Playwright headless browser automation, form-filling, clicking, and full single-page application (SPA) interaction.",
+    "image": "https://logos.composio.dev/api/playwright",
+    "app_name": "playwright",
+    "isAvailable": true,
+    "isMcp": true
+  },
+  {
     "title": "Plisio",
     "description": "",
     "image": "https://logos.composio.dev/api/plisio",
@@ -5374,7 +5485,16 @@ export const allApps: APP[] = [
     "description": "Relational PostgreSQL database schemas, operational query statistics, connection pooling telemetry, and query execution audits.",
     "image": "https://logos.composio.dev/api/postgres",
     "app_name": "postgres",
-    "isAvailable": true
+    "isAvailable": true,
+    "isMcp": true
+  },
+  {
+    "title": "PostgreSQL Integration",
+    "description": "Read-only database access with schema inspection.",
+    "image": "https://logos.composio.dev/api/postgresql",
+    "app_name": "postgresql",
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "Postgrid",
@@ -5524,6 +5644,14 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Puppeteer Integration",
+    "description": "Browser automation and web scraping.",
+    "image": "https://logos.composio.dev/api/puppeteer",
+    "app_name": "puppeteer",
+    "isAvailable": true,
+    "isMcp": true
+  },
+  {
     "title": "Pushbullet",
     "description": "",
     "image": "https://logos.composio.dev/api/pushbullet",
@@ -5668,7 +5796,8 @@ export const allApps: APP[] = [
     "description": "In-memory Redis database clusters, memory usage telemetry, active session key-value storage, and database flush operations.",
     "image": "https://logos.composio.dev/api/redis",
     "app_name": "redis",
-    "isAvailable": true
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "Refiner",
@@ -5874,6 +6003,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "S&P Capital IQ",
+    "description": "",
+    "image": "https://logos.composio.dev/api/capitaliq",
+    "app_name": "capitaliq",
+    "isAvailable": true
+  },
+  {
     "title": "Sabre GDS",
     "description": "",
     "image": "https://logos.composio.dev/api/sabre",
@@ -5895,24 +6031,10 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Amazon SageMaker MLOps",
-    "description": "Enterprise cloud machine learning endpoints orchestrator, model auto-scaling rules, and training pipeline metrics.",
-    "image": "https://logos.composio.dev/api/sagemaker",
-    "app_name": "sagemaker",
-    "isAvailable": true
-  },
-  {
     "title": "SailPoint IdentityNow",
     "description": "Identity governance platform, employee security role mapping, access request reviews, and bulk access deprovisioning.",
     "image": "https://logos.composio.dev/api/sailpoint",
     "app_name": "sailpoint",
-    "isAvailable": true
-  },
-  {
-    "title": "Salesforce Core",
-    "description": "Enterprise CRM client account metrics, customer opportunity pipelines, contact tracking, and sales win ledgers.",
-    "image": "https://logos.composio.dev/api/salesforce",
-    "app_name": "salesforce",
     "isAvailable": true
   },
   {
@@ -5923,10 +6045,24 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Salesforce Core",
+    "description": "Enterprise CRM client account metrics, customer opportunity pipelines, contact tracking, and sales win ledgers.",
+    "image": "https://logos.composio.dev/api/salesforce",
+    "app_name": "salesforce",
+    "isAvailable": true
+  },
+  {
     "title": "Salesforce Marketing Cloud",
     "description": "",
     "image": "https://logos.composio.dev/api/salesforce_marketing_cloud",
     "app_name": "salesforce_marketing_cloud",
+    "isAvailable": true
+  },
+  {
+    "title": "Salesforce Net Zero Cloud",
+    "description": "Cloud carbon tracking ledger, offset credit allocation monitoring, greenhouse gas emissions scorecards, and sustainability reports.",
+    "image": "https://logos.composio.dev/api/net_zero_cloud",
+    "app_name": "net_zero_cloud",
     "isAvailable": true
   },
   {
@@ -5958,10 +6094,10 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "SAP S/4HANA",
-    "description": "Enterprise cloud ERP resource planning, corporate general ledgers, financial period postings, and asset management.",
-    "image": "https://logos.composio.dev/api/sap",
-    "app_name": "sap",
+    "title": "SAP Ariba",
+    "description": "Global procurement network, corporate supplier bidding, vendor verification, and supply chain tracking.",
+    "image": "https://logos.composio.dev/api/ariba",
+    "app_name": "ariba",
     "isAvailable": true
   },
   {
@@ -5969,6 +6105,13 @@ export const allApps: APP[] = [
     "description": "Industrial plant maintenance registry, machinery component diagnostics, and plant maintenance priority allocation.",
     "image": "https://logos.composio.dev/api/sap_asset_manager",
     "app_name": "sap_asset_manager",
+    "isAvailable": true
+  },
+  {
+    "title": "SAP Concur",
+    "description": "Corporate travel bookings management, employee expense report ingestion, audit trails, and compliance-driven expense approvals.",
+    "image": "https://logos.composio.dev/api/concur",
+    "app_name": "concur",
     "isAvailable": true
   },
   {
@@ -5983,6 +6126,13 @@ export const allApps: APP[] = [
     "description": "Enterprise cloud sales and operations planning (S&OP), supply chain planning models, and global distribution network optimization.",
     "image": "https://logos.composio.dev/api/sap_ibp",
     "app_name": "sap_ibp",
+    "isAvailable": true
+  },
+  {
+    "title": "SAP S/4HANA",
+    "description": "Enterprise cloud ERP resource planning, corporate general ledgers, financial period postings, and asset management.",
+    "image": "https://logos.composio.dev/api/sap",
+    "app_name": "sap",
     "isAvailable": true
   },
   {
@@ -6172,7 +6322,8 @@ export const allApps: APP[] = [
     "description": "Application monitoring platform, real-time error exception tracer, and performance diagnostics.",
     "image": "https://logos.composio.dev/api/sentry",
     "app_name": "sentry",
-    "isAvailable": true
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "Seqera",
@@ -6180,6 +6331,14 @@ export const allApps: APP[] = [
     "image": "https://logos.composio.dev/api/seqera",
     "app_name": "seqera",
     "isAvailable": true
+  },
+  {
+    "title": "Sequential Thinking Integration",
+    "description": "Dynamic and reflective problem-solving through thought sequences.",
+    "image": "https://logos.composio.dev/api/sequential-thinking",
+    "app_name": "sequential-thinking",
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "SerpApi",
@@ -6403,6 +6562,14 @@ export const allApps: APP[] = [
     "description": "",
     "image": "https://logos.composio.dev/api/slack",
     "app_name": "slack",
+    "isAvailable": true,
+    "isMcp": true
+  },
+  {
+    "title": "Slack Bot",
+    "description": "",
+    "image": "https://logos.composio.dev/api/slackbot",
+    "app_name": "slackbot",
     "isAvailable": true
   },
   {
@@ -6410,13 +6577,6 @@ export const allApps: APP[] = [
     "description": "Real-time workforce collaboration grids, chat channel history auditing, multi-workspace communication channels, and secure messaging controls.",
     "image": "https://logos.composio.dev/api/slack_enterprise",
     "app_name": "slack_enterprise",
-    "isAvailable": true
-  },
-  {
-    "title": "Slack Bot",
-    "description": "",
-    "image": "https://logos.composio.dev/api/slackbot",
-    "app_name": "slackbot",
     "isAvailable": true
   },
   {
@@ -6455,17 +6615,17 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Snowflake Data",
-    "description": "Cloud data warehouse analytics tables, SQL schema querying, corporate datasets aggregation, and business intelligence integration.",
-    "image": "https://logos.composio.dev/api/snowflake",
-    "app_name": "snowflake",
-    "isAvailable": true
-  },
-  {
     "title": "Snowflake Basic",
     "description": "",
     "image": "https://logos.composio.dev/api/snowflake_basic",
     "app_name": "snowflake_basic",
+    "isAvailable": true
+  },
+  {
+    "title": "Snowflake Data",
+    "description": "Cloud data warehouse analytics tables, SQL schema querying, corporate datasets aggregation, and business intelligence integration.",
+    "image": "https://logos.composio.dev/api/snowflake",
+    "app_name": "snowflake",
     "isAvailable": true
   },
   {
@@ -6518,6 +6678,14 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Spotify Bulk Planner",
+    "description": "Advanced bulk Spotify operations with confidence-scored song matching, library exports, and batch playlist generators.",
+    "image": "https://logos.composio.dev/api/spotify-bulk",
+    "app_name": "spotify-bulk",
+    "isAvailable": true,
+    "isMcp": true
+  },
+  {
     "title": "Spotlightr",
     "description": "",
     "image": "https://logos.composio.dev/api/spotlightr",
@@ -6530,6 +6698,14 @@ export const allApps: APP[] = [
     "image": "https://logos.composio.dev/api/sps_commerce",
     "app_name": "sps_commerce",
     "isAvailable": true
+  },
+  {
+    "title": "SQLite Relational Sandbox",
+    "description": "Local, high-performance SQLite relational database engine, isolated cleanly inside the user's workspace sandbox.",
+    "image": "https://logos.composio.dev/api/sqlite",
+    "app_name": "sqlite",
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "Square",
@@ -6861,6 +7037,13 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
+    "title": "Thomson Reuters ONESOURCE",
+    "description": "Thomson Reuters ONESOURCE global tax determination, automated VAT calculation engine, and corporate tax compliance filing.",
+    "image": "https://logos.composio.dev/api/onesource",
+    "app_name": "onesource",
+    "isAvailable": true
+  },
+  {
     "title": "Ticketmaster",
     "description": "",
     "image": "https://logos.composio.dev/api/ticketmaster",
@@ -6880,6 +7063,14 @@ export const allApps: APP[] = [
     "image": "https://logos.composio.dev/api/tiktok",
     "app_name": "tiktok",
     "isAvailable": true
+  },
+  {
+    "title": "Time Integration",
+    "description": "Time and timezone conversion capabilities.",
+    "image": "https://logos.composio.dev/api/time",
+    "app_name": "time",
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "Timecamp",
@@ -6917,17 +7108,17 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Tinypng",
-    "description": "",
-    "image": "https://logos.composio.dev/api/tinypng",
-    "app_name": "tinypng",
-    "isAvailable": true
-  },
-  {
     "title": "Tiny URL",
     "description": "",
     "image": "https://logos.composio.dev/api/tinyurl",
     "app_name": "tinyurl",
+    "isAvailable": true
+  },
+  {
+    "title": "Tinypng",
+    "description": "",
+    "image": "https://logos.composio.dev/api/tinypng",
+    "app_name": "tinypng",
     "isAvailable": true
   },
   {
@@ -7337,11 +7528,12 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Cisco Webex",
-    "description": "Cisco Webex collaborative meeting spaces, audio/video conferencing schedules, and scheduled workspace cleanups.",
-    "image": "https://logos.composio.dev/api/webex",
-    "app_name": "webex",
-    "isAvailable": true
+    "title": "Web Fetch Markdown Scraper",
+    "description": "Direct read, write, and search capabilities on web domains, fetching clean parsed Markdown content from any URL.",
+    "image": "https://logos.composio.dev/api/fetch",
+    "app_name": "fetch",
+    "isAvailable": true,
+    "isMcp": true
   },
   {
     "title": "Webflow",

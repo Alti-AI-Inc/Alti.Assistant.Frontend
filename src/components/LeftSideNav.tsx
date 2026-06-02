@@ -270,7 +270,12 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           pathname !== '/assistant' &&
           !pathname.startsWith('/assistant') &&
           pathname !== '/knowledge' &&
-          !pathname.startsWith('/knowledge')
+          !pathname.startsWith('/knowledge') &&
+          pathname !== '/settings' &&
+          !pathname.startsWith('/settings') &&
+          pathname !== '/legal' &&
+          !pathname.startsWith('/legal') &&
+          !pathname.startsWith('/admin')
         ) {
           setActiveTab('chat');
           if (selectedOption === OPTIONS.RESEARCH) {

@@ -39,9 +39,9 @@ export default function ProtectedLayoutClient({
   } = useConversationsStore();
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex h-screen h-[100dvh] flex-col overflow-hidden">
       {/* Header - Mobile only */}
-      <header className="bg-secondary text-foreground sticky top-0 z-50 flex items-center justify-between px-4 py-3 md:hidden">
+      <header className="bg-secondary text-foreground sticky top-0 z-50 flex shrink-0 items-center justify-between px-4 py-3 md:hidden">
         {/* Left Sidebar Mobile Drawer */}
         <Sheet
           open={drawerOpen}
@@ -96,11 +96,11 @@ export default function ProtectedLayoutClient({
       </header>
 
       {/* Body */}
-      <div className="relative flex flex-1">
+      <div className="relative flex flex-1 min-h-0 overflow-hidden">
         {/* Left Sidebar - Desktop */}
         <div
           className={cn(
-            'sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out sm:hidden md:flex border-r border-black/10',
+            'sticky top-0 left-0 hidden h-full flex-col transition-all duration-300 ease-in-out sm:hidden md:flex border-r border-black/10 shrink-0',
             isLeftSidebarOpen ? 'w-68' : 'w-10',
           )}
           style={{ backgroundColor: '#FFFFFF' }}
@@ -112,7 +112,7 @@ export default function ProtectedLayoutClient({
 
         {/* Main content */}
         <main
-          className="bg-background w-full flex-1 overflow-hidden"
+          className="bg-background w-full flex-1 min-w-0 overflow-hidden flex flex-col"
           style={{ backgroundColor: '#F5F5F7' }}
         >
           {children}
