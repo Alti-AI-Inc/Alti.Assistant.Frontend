@@ -159,7 +159,7 @@ function MembersListComponent({
             <div className="flex-1 min-w-0">
               <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Email Address</span>
             </div>
-            <div className="flex-1 min-w-0 md:pl-20">
+            <div className="flex-1 min-w-0 md:pl-28">
               <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Role Type</span>
             </div>
           </div>
@@ -216,7 +216,7 @@ function MembersListComponent({
                     </div>
                   </div>
                   {/* Role */}
-                  <div className="flex-1 min-w-0 md:pl-20">
+                  <div className="flex-1 min-w-0 md:pl-28">
                     <div className="h-full flex items-center">
                       {canModify ? (
                         <MemberRoleSelector
