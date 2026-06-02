@@ -164,12 +164,13 @@ const LeftSideNavMobile = () => {
                            pathname.startsWith('/admin/projects');
   const isAdminSection = !isManagerSection && isAdminMode;
 
-  const currentUserRole = mode === 'tenant' && currentTenant
-    ? currentTenant.role
-    : data?.user?.role;
+  const userEmail = data?.user?.email?.toLowerCase();
+  const isGlobalAdmin = data?.user?.role === 'admin' || data?.user?.role === 'super_admin';
+  const isTenantOwner = mode === 'tenant' && currentTenant?.role === 'owner';
+  const isTenantAdmin = mode === 'tenant' && currentTenant?.role === 'admin';
 
-  const isAdmin = currentUserRole === 'admin' || currentUserRole === 'super_admin';
-  const isManager = currentUserRole === 'owner' || currentUserRole === 'manager';
+  const isAdmin = userEmail === 'meram.michael@gmail.com' || isGlobalAdmin || isTenantOwner;
+  const isManager = isTenantAdmin;
 
   const { onOpen } = useModalStore();
   const {
