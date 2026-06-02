@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import type { StripeCardNumberElementChangeEvent, StripeCardExpiryElementChangeEvent, StripeCardCvcElementChangeEvent } from '@stripe/stripe-js';
 import { AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 /**
  * Stripe Card Form Component
@@ -17,6 +19,8 @@ interface StripeCardFormProps {
   onReady?: () => void;
   className?: string;
   showPostalCode?: boolean;
+  onCardholderNameChange?: (name: string) => void;
+  disabled?: boolean;
 }
 
 export function StripeCardForm({
@@ -25,23 +29,31 @@ export function StripeCardForm({
   onReady,
   className,
   showPostalCode = false,
+  onCardholderNameChange,
+  disabled = false,
 }: StripeCardFormProps) {
   const stripe = useStripe();
   const elements = useElements();
 
   const [cardError, setCardError] = useState<string>('');
+  const [cardholderName, setCardholderName] = useState('');
   
   const [numberComplete, setNumberComplete] = useState(false);
   const [expiryComplete, setExpiryComplete] = useState(false);
   const [cvcComplete, setCvcComplete] = useState(false);
   
-  const isCardComplete = numberComplete && expiryComplete && cvcComplete;
+  const isCardComplete = numberComplete && expiryComplete && cvcComplete && cardholderName.trim().length > 0;
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
   // Notify parent on completion change
   useEffect(() => {
     onCardComplete?.(isCardComplete);
   }, [isCardComplete, onCardComplete]);
+
+  // Notify parent on cardholder name change
+  useEffect(() => {
+    onCardholderNameChange?.(cardholderName);
+  }, [cardholderName, onCardholderNameChange]);
 
   // CardElement styling options
   const baseElementOptions = {
@@ -97,58 +109,103 @@ export function StripeCardForm({
   const isFocused = focusedField !== null;
 
   return (
-    <div className={cn('space-y-1', className)}>
-      {/* Card Input Section */}
-      <div className="flex flex-col">
-        <div
-          className={cn(
-            'relative flex items-center rounded-md border-2 transition-colors overflow-hidden',
-            isFocused
-              ? 'border-primary ring-primary/20 ring-2'
-              : cardError
-                ? 'border-destructive'
-                : isCardComplete
-                  ? 'border-green-500'
-                  : 'border-input',
-            'bg-background'
-          )}
-        >
-          <div className="flex-1 pl-1 pr-3 py-3">
-            <CardNumberElement
-              id="card-number-element"
-              options={{ ...baseElementOptions, showIcon: true, placeholder: 'Card Number' }}
-              onChange={(e: StripeCardNumberElementChangeEvent) => {
-                handleError(e.error);
-                setNumberComplete(e.complete);
-              }}
-              onReady={handleCardReady}
-              onFocus={() => setFocusedField('number')}
-              onBlur={() => setFocusedField(null)}
-            />
+    <div className={cn('space-y-4 py-2', className)}>
+      <div className="space-y-4">
+        {/* Cardholder Name Field */}
+        <div className="space-y-2">
+          <Label htmlFor="cardholder-name">Cardholder Name *</Label>
+          <Input
+            id="cardholder-name"
+            type="text"
+            value={cardholderName}
+            onChange={(e) => setCardholderName(e.target.value)}
+            placeholder="John Doe"
+            disabled={disabled}
+            className="h-9"
+          />
+        </div>
+
+        {/* Card Number Field */}
+        <div className="space-y-2">
+          <Label htmlFor="card-number">Card Number *</Label>
+          <div
+            className={cn(
+              "flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none md:text-sm items-center",
+              focusedField === 'number'
+                ? "border-primary ring-primary/20 ring-2"
+                : cardError && focusedField === null
+                  ? "border-destructive"
+                  : isCardComplete
+                    ? "border-green-500"
+                    : "border-input"
+            )}
+          >
+            <div className="flex-1">
+              <CardNumberElement
+                id="card-number"
+                options={{ ...baseElementOptions, showIcon: true, placeholder: '•••• •••• •••• ••••' }}
+                onChange={(e: StripeCardNumberElementChangeEvent) => {
+                  handleError(e.error);
+                  setNumberComplete(e.complete);
+                }}
+                onReady={handleCardReady}
+                onFocus={() => setFocusedField('number')}
+                onBlur={() => setFocusedField(null)}
+              />
+            </div>
           </div>
-          <div className="w-[85px] px-3 py-3">
-            <CardExpiryElement
-              id="card-expiry-element"
-              options={baseElementOptions}
-              onChange={(e: StripeCardExpiryElementChangeEvent) => {
-                handleError(e.error);
-                setExpiryComplete(e.complete);
-              }}
-              onFocus={() => setFocusedField('expiry')}
-              onBlur={() => setFocusedField(null)}
-            />
+        </div>
+
+        {/* Expiration Date and CCV Grid */}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="card-expiry">Expiration Date *</Label>
+            <div
+              className={cn(
+                "flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none md:text-sm items-center",
+                focusedField === 'expiry'
+                  ? "border-primary ring-primary/20 ring-2"
+                  : "border-input"
+              )}
+            >
+              <div className="flex-1">
+                <CardExpiryElement
+                  id="card-expiry"
+                  options={baseElementOptions}
+                  onChange={(e: StripeCardExpiryElementChangeEvent) => {
+                    handleError(e.error);
+                    setExpiryComplete(e.complete);
+                  }}
+                  onFocus={() => setFocusedField('expiry')}
+                  onBlur={() => setFocusedField(null)}
+                />
+              </div>
+            </div>
           </div>
-          <div className="w-[80px] px-3 py-3">
-            <CardCvcElement
-              id="card-cvc-element"
-              options={baseElementOptions}
-              onChange={(e: StripeCardCvcElementChangeEvent) => {
-                handleError(e.error);
-                setCvcComplete(e.complete);
-              }}
-              onFocus={() => setFocusedField('cvc')}
-              onBlur={() => setFocusedField(null)}
-            />
+
+          <div className="space-y-2">
+            <Label htmlFor="card-cvc">CCV *</Label>
+            <div
+              className={cn(
+                "flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none md:text-sm items-center",
+                focusedField === 'cvc'
+                  ? "border-primary ring-primary/20 ring-2"
+                  : "border-input"
+              )}
+            >
+              <div className="flex-1">
+                <CardCvcElement
+                  id="card-cvc"
+                  options={baseElementOptions}
+                  onChange={(e: StripeCardCvcElementChangeEvent) => {
+                    handleError(e.error);
+                    setCvcComplete(e.complete);
+                  }}
+                  onFocus={() => setFocusedField('cvc')}
+                  onBlur={() => setFocusedField(null)}
+                />
+              </div>
+            </div>
           </div>
         </div>
 

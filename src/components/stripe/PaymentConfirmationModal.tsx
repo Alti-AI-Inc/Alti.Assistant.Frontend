@@ -80,6 +80,7 @@ export function PaymentConfirmationModal({
   const [cardError, setCardError] = useState('');
   const [error, setError] = useState('');
   const [processingMessage, setProcessingMessage] = useState('');
+  const [cardholderName, setCardholderName] = useState('');
 
   // Fetch payment methods on mount
   const fetchPaymentMethods = useCallback(async () => {
@@ -226,6 +227,9 @@ export function PaymentConfirmationModal({
         await stripe.createPaymentMethod({
           type: 'card',
           card: cardElement,
+          billing_details: {
+            name: cardholderName.trim() || session?.user?.name || undefined,
+          },
         });
 
       if (pmError) {
@@ -347,6 +351,7 @@ export function PaymentConfirmationModal({
     setSelectedMethodId('');
     setIsCardComplete(false);
     setIsCardReady(false);
+    setCardholderName('');
     setCardError('');
     setError('');
     setProcessingMessage('');
@@ -446,6 +451,8 @@ export function PaymentConfirmationModal({
                   onCardComplete={setIsCardComplete}
                   onError={setCardError}
                   onReady={() => setIsCardReady(true)}
+                  onCardholderNameChange={setCardholderName}
+                  disabled={step === 'processing'}
                 />
               </motion.div>
             )}
