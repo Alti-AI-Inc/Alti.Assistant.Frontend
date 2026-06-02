@@ -125,7 +125,7 @@ export default function AdminBillingPage() {
 
         {/* Main Workspace Body */}
         <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
-          <div className="max-w-5xl mx-auto mt-4">
+          <div className="mt-4">
             <BillingFormContent />
           </div>
         </div>

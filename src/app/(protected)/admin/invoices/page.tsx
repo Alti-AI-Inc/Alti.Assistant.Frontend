@@ -141,7 +141,7 @@ export default function AdminInvoicesPage() {
 
       {/* Main Container */}
       <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
-        <div className="max-w-5xl mx-auto space-y-4">
+        <div className="space-y-4">
 
           {/* Unified Invoice List Table */}
           <div className="flex flex-col space-y-3 relative z-10 !mt-0">
