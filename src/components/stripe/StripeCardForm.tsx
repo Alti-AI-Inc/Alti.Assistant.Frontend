@@ -77,21 +77,21 @@ export function StripeCardForm({
     style: {
       base: {
         fontSize: '14px', // matches text-sm exactly on all viewports
-        color: isDark ? '#f4f4f5' : '#18181b', // zinc-100 in dark, zinc-900 in light
-        fontFamily: '"Exo 2", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        color: isDark ? '#fafafa' : '#09090b', // zinc-50 in dark, zinc-955 in light
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
         fontSmoothing: 'antialiased',
         '::placeholder': {
-          color: isDark ? '#71717a' : '#9ca3af', // zinc-500 in dark, gray-400 in light
+          color: isDark ? '#a1a1aa' : '#71717a', // zinc-400 in dark, zinc-500 in light
           fontWeight: '400',
         },
-        iconColor: isDark ? '#71717a' : '#9ca3af',
+        iconColor: isDark ? '#a1a1aa' : '#71717a',
       },
       invalid: {
         color: '#ef4444', // destructive red-500
         iconColor: '#ef4444',
       },
       complete: {
-        color: isDark ? '#f4f4f5' : '#18181b',
+        color: isDark ? '#fafafa' : '#09090b',
         iconColor: '#10b981', // emerald-500 (emerald green)
       },
     },
@@ -138,7 +138,7 @@ export function StripeCardForm({
             onChange={(e) => setCardholderName(e.target.value)}
             placeholder="Enter Cardholder Name"
             disabled={disabled}
-            className="h-10 text-sm border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-black/20 focus:shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
+            className="h-10 text-sm font-sans text-[#09090b] dark:text-[#fafafa] placeholder:text-[#71717a] dark:placeholder:text-[#a1a1aa] border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-black/20 focus:shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
           />
 
           <div
