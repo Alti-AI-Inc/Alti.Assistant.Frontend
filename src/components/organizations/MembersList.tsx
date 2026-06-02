@@ -227,7 +227,7 @@ function MembersListComponent({
                         />
                       ) : (
                         <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed capitalize">
-                          {memberRole === 'member' ? 'user' : memberRole}
+                          {memberRole === 'member' ? 'user' : memberRole === 'owner' ? 'manager' : memberRole}
                         </p>
                       )}
                     </div>

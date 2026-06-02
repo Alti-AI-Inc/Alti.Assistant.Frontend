@@ -90,8 +90,10 @@ export function MemberRoleSelector({
   // The backend will enforce actual permissions.
 
   const formatRoleLabel = (role: string) => {
-    if (role.toLowerCase() === 'member') return 'user';
-    return role;
+    const r = role.toLowerCase();
+    if (r === 'member') return 'user';
+    if (r === 'owner') return 'manager';
+    return r;
   };
 
   return (
@@ -110,8 +112,8 @@ export function MemberRoleSelector({
             <span className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed capitalize">
               {formatRoleLabel(
                 supportedTenantRoles.has(normalizedRole)
-                  ? normalizedRole
-                  : selectValue
+                   ? normalizedRole
+                   : selectValue
               )}
             </span>
           </SelectValue>
@@ -120,11 +122,11 @@ export function MemberRoleSelector({
           <SelectItem value={TenantRole.MEMBER}>
             <span className="capitalize">User</span>
           </SelectItem>
+          <SelectItem value={TenantRole.OWNER}>
+            <span className="capitalize">Manager</span>
+          </SelectItem>
           <SelectItem value={TenantRole.ADMIN}>
             <span className="capitalize">Admin</span>
-          </SelectItem>
-          <SelectItem value={TenantRole.OWNER}>
-            <span className="capitalize">Owner</span>
           </SelectItem>
         </SelectContent>
       </Select>
