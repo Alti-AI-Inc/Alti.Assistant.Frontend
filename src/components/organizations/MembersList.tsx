@@ -159,7 +159,7 @@ function MembersListComponent({
             <div className="flex-1 min-w-0">
               <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Email Address</span>
             </div>
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 md:pl-8">
               <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Role Type</span>
             </div>
           </div>
@@ -187,8 +187,10 @@ function MembersListComponent({
             return (
               <div
                 key={member._id}
-                className="group flex flex-col md:flex-row md:items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-black/5 dark:hover:bg-white/5 gap-4"
+                className="group relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs hover:bg-primary/[0.04] dark:hover:bg-primary/[0.08] hover:border-primary/30 dark:hover:border-primary/45 hover:shadow-md hover:shadow-primary/5 hover:scale-[1.012] transition-all duration-300 ease-out gap-4"
               >
+                {/* Dynamic highlight bubble/indicator */}
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-center rounded-r-md" />
                 <div className="flex flex-col md:flex-row md:items-center gap-4 flex-1">
                   {/* First Name */}
                   <div className="flex-1 min-w-0">
@@ -216,7 +218,7 @@ function MembersListComponent({
                     </div>
                   </div>
                   {/* Role */}
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 md:pl-8">
                     <div className="h-full flex items-center">
                       {canModify ? (
                         <MemberRoleSelector
@@ -257,33 +259,43 @@ function MembersListComponent({
         open={!!memberToRemove}
         onOpenChange={open => !open && setMemberToRemove(null)}
       >
-        <DialogContent className="border-none ring-0 outline-none sm:max-w-[480px]">
-          <DialogHeader>
-            <DialogTitle>
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[270px] sm:max-w-[270px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+          {/* Centered Content Section */}
+          <div className="px-5 pt-5 pb-4 text-center">
+            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
               {memberToRemove?.isInvitation ? 'Cancel Invitation' : 'Remove Member'}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 pt-4">
-            <h1 className="">
-              Are you sure you want to {memberToRemove?.isInvitation ? 'cancel the invitation for' : 'remove'} {memberToRemove?.userId.email}?
-              {!memberToRemove?.isInvitation && ' They will lose access to this organization immediately.'}
-            </h1>
-            <div className="mt-4 flex w-full justify-end gap-4">
-              <Button
-                variant="outline"
-                className="focus-visible:ring-0"
-                onClick={() => setMemberToRemove(null)}
-                disabled={isRemoving}
-              >
-                Cancel
-              </Button>
-              <Button onClick={handleRemoveMember} disabled={isRemoving}>
-                {isRemoving && (
-                  <LoaderCircle className="animate-spin mr-2 h-4 w-4" />
-                )}
-                {memberToRemove?.isInvitation ? 'Cancel Invitation' : 'Remove Member'}
-              </Button>
-            </div>
+            </h2>
+            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+              Are you sure you want to {memberToRemove?.isInvitation ? 'cancel the invitation for' : 'remove'} {memberToRemove?.userId?.email}?
+              {!memberToRemove?.isInvitation && ' They will lose access immediately.'}
+            </p>
+          </div>
+
+          {/* Extended Border & iOS Layout Action Buttons */}
+          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+            {/* Cancel Option */}
+            <button
+              type="button"
+              disabled={isRemoving}
+              onClick={() => setMemberToRemove(null)}
+              className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none"
+            >
+              Cancel
+            </button>
+            
+            {/* Confirm Option */}
+            <button
+              type="button"
+              disabled={isRemoving}
+              onClick={handleRemoveMember}
+              className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center disabled:opacity-50 outline-none"
+            >
+              {isRemoving ? (
+                <span className="size-4 animate-spin rounded-full border-2 border-red-500 border-t-transparent" />
+              ) : (
+                memberToRemove?.isInvitation ? 'Cancel' : 'Remove'
+              )}
+            </button>
           </div>
         </DialogContent>
       </Dialog>
