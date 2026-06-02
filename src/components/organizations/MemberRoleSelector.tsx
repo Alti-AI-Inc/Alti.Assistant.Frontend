@@ -126,17 +126,14 @@ export function MemberRoleSelector({
         open={!!pendingRole}
         onOpenChange={open => !open && setPendingRole(null)}
       >
-        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[350px] sm:max-w-[350px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[270px] sm:max-w-[270px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
           {/* Centered Content Section */}
           <div className="px-5 pt-5 pb-4 text-center">
             <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
-              Change Member Role
+              Change Role
             </h2>
-            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
-              Are you sure you want to change this member&apos;s role to{' '}
-              <span className="font-semibold capitalize text-black dark:text-white">
-                {pendingRole ? formatRoleLabel(pendingRole) : ''}
-              </span>?
+            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1 whitespace-nowrap">
+              Are you sure you want to change role?
             </p>
           </div>
 
