@@ -2,8 +2,8 @@
 
 import { useTenant } from '@/contexts/TenantContext';
 import { Button } from '@/components/ui/button';
-import { Search, Download } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { Download } from 'lucide-react';
+import { useState } from 'react';
 import { jsPDF } from 'jspdf';
 import { toast } from 'sonner';
 
@@ -20,16 +20,7 @@ const INVOICES = [
 
 export default function AdminInvoicesPage() {
   const { currentTenant } = useTenant();
-  const [searchQuery, setSearchQuery] = useState('');
   const [isGenerating, setIsGenerating] = useState<string | null>(null);
-
-  const filteredInvoices = useMemo(() => {
-    return INVOICES.filter(
-      (inv) =>
-        inv.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        inv.month.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [searchQuery]);
 
   const handleDownloadPDF = async (invoice: typeof INVOICES[0]) => {
     setIsGenerating(invoice.id);
@@ -151,24 +142,12 @@ export default function AdminInvoicesPage() {
       {/* Main Container */}
       <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
         <div className="max-w-5xl mx-auto space-y-4">
-          
-          {/* Search bar matching main page look */}
-          <div className="flex h-10 max-w-md items-center gap-2 rounded-lg border border-black/10 dark:border-zinc-800 bg-[#FFFFFF] dark:bg-zinc-900 px-3 shadow-xs focus-within:ring-1 focus-within:ring-black/20 dark:focus-within:ring-white/10">
-            <Search className="size-4 flex-none text-zinc-500 dark:text-zinc-400" />
-            <input
-              type="text"
-              placeholder="Search by Invoice ID or Month..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-transparent text-xs md:text-sm text-black dark:text-zinc-100 outline-none placeholder:text-zinc-500 dark:placeholder:text-zinc-400"
-            />
-          </div>
 
           {/* Unified Invoice List Table */}
-          <div className="flex flex-col space-y-3 relative z-10 !mt-6">
+          <div className="flex flex-col space-y-3 relative z-10 !mt-0">
             
             {/* Desktop Table Headers */}
-            <div className="hidden md:flex items-center justify-between py-2 px-4 gap-4 sticky top-0 bg-[#F5F5F7]/80 dark:bg-gray-950/80 backdrop-blur-md z-20 border-b border-black/10 dark:border-white/10 mb-2">
+            <div className="hidden md:flex items-center justify-between py-2 px-4 gap-4 sticky top-0 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md z-20 border-b border-black/10 dark:border-white/10 mb-4 rounded-t-lg">
               <div className="flex items-center gap-4 flex-1">
                 <div className="flex-1 min-w-0">
                   <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Invoice ID</span>
@@ -186,7 +165,7 @@ export default function AdminInvoicesPage() {
             </div>
 
             {/* List Rows */}
-            {filteredInvoices.map((invoice) => (
+            {INVOICES.map((invoice) => (
               <div
                 key={invoice.id}
                 className="group flex flex-col md:flex-row md:items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs gap-4 hover:border-black/20 dark:hover:border-white/20 transition-all duration-150"
@@ -240,12 +219,6 @@ export default function AdminInvoicesPage() {
                 </div>
               </div>
             ))}
-
-            {filteredInvoices.length === 0 && (
-              <div className="py-12 text-center text-xs text-gray-500 dark:text-zinc-400">
-                No invoices found matching "{searchQuery}".
-              </div>
-            )}
 
           </div>
 
