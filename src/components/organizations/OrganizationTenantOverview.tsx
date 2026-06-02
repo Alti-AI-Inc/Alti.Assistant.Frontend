@@ -382,16 +382,8 @@ export function OrganizationTenantOverview({
         </div>
       ) : selectedTenantId ? (
         <>
-          {/* Permanent Invite Member Form Box */}
           {(view === 'both' || view === 'invite') && (
           <div className="space-y-4 pt-2">
-            <div>
-              <h3 className="text-sm font-semibold text-black dark:text-white">Invite Team Member</h3>
-              <p className="text-xs text-gray-500 mt-0.5">
-                Add a new member to your team. They will receive an invitation email.
-              </p>
-            </div>
-            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Row 1: First Name & Last Name */}
               <Input
@@ -400,7 +392,7 @@ export function OrganizationTenantOverview({
                 placeholder="Enter First Name"
                 value={inviteFirstName}
                 onChange={(e) => setInviteFirstName(e.target.value)}
-                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus-visible:bg-white dark:focus-visible:bg-zinc-900 focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
+                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:bg-white dark:focus:bg-zinc-900 focus-visible:bg-white dark:focus-visible:bg-zinc-900 active:bg-white dark:active:bg-zinc-900 autofill:bg-white dark:autofill:bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
                 disabled={isInviting}
               />
               <Input
@@ -409,7 +401,7 @@ export function OrganizationTenantOverview({
                 placeholder="Enter Last Name"
                 value={inviteLastName}
                 onChange={(e) => setInviteLastName(e.target.value)}
-                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus-visible:bg-white dark:focus-visible:bg-zinc-900 focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
+                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:bg-white dark:focus:bg-zinc-900 focus-visible:bg-white dark:focus-visible:bg-zinc-900 active:bg-white dark:active:bg-zinc-900 autofill:bg-white dark:autofill:bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
                 disabled={isInviting}
               />
             </div>
@@ -422,7 +414,7 @@ export function OrganizationTenantOverview({
                 placeholder="Enter Email Address"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
-                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus-visible:bg-white dark:focus-visible:bg-zinc-900 focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
+                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:bg-white dark:focus:bg-zinc-900 focus-visible:bg-white dark:focus-visible:bg-zinc-900 active:bg-white dark:active:bg-zinc-900 autofill:bg-white dark:autofill:bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
                 disabled={isInviting}
               />
               <Select
