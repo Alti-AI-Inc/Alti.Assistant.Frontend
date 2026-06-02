@@ -89,6 +89,11 @@ export function StripeProvider({ children }: StripeProviderProps) {
     <Elements
       stripe={stripe}
       options={{
+        fonts: [
+          {
+            cssSrc: 'https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap',
+          },
+        ],
         appearance: {
           theme: 'stripe',
           variables: {
@@ -96,7 +101,7 @@ export function StripeProvider({ children }: StripeProviderProps) {
             colorBackground: '#ffffff',
             colorText: '#30313d',
             colorDanger: '#df1b41',
-            fontFamily: 'system-ui, sans-serif',
+            fontFamily: '"Exo 2", system-ui, sans-serif',
             spacingUnit: '4px',
             borderRadius: '6px',
           },

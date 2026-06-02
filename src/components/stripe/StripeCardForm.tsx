@@ -43,6 +43,24 @@ export function StripeCardForm({
   
   const isCardComplete = numberComplete && expiryComplete && cvcComplete && cardholderName.trim().length > 0;
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [isDark, setIsDark] = useState(false);
+
+  // Detect and track application dark mode theme
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const checkDark = () => {
+        setIsDark(document.documentElement.classList.contains('dark'));
+      };
+      checkDark();
+      
+      const observer = new MutationObserver(checkDark);
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class'],
+      });
+      return () => observer.disconnect();
+    }
+  }, []);
 
   // Notify parent on completion change
   useEffect(() => {
@@ -54,27 +72,30 @@ export function StripeCardForm({
     onCardholderNameChange?.(cardholderName);
   }, [cardholderName, onCardholderNameChange]);
 
-  // CardElement styling options
+  // CardElement styling options - dynamic hex fallback since iframe cannot access parent document css variables
   const baseElementOptions = {
     style: {
       base: {
-        fontSize: '16px',
-        color: 'hsl(var(--foreground))',
-        fontFamily: 'system-ui, -apple-system, sans-serif',
+        fontSize: '12px',
+        color: isDark ? '#f4f4f5' : '#18181b', // zinc-100 in dark, zinc-900 in light
+        fontFamily: '"Exo 2", system-ui, -apple-system, sans-serif',
         fontSmoothing: 'antialiased',
         '::placeholder': {
-          color: 'hsl(var(--muted-foreground))',
-          fontWeight: '300',
+          color: isDark ? '#71717a' : '#9ca3af', // zinc-500 in dark, gray-400 in light
+          fontWeight: '400',
         },
-        iconColor: 'hsl(var(--muted-foreground))',
+        iconColor: isDark ? '#71717a' : '#9ca3af',
+        '@media (min-width: 768px)': {
+          fontSize: '14px', // matches md:text-sm exactly on desktop viewports
+        },
       },
       invalid: {
-        color: 'hsl(var(--destructive))',
-        iconColor: 'hsl(var(--destructive))',
+        color: '#ef4444', // destructive red-500
+        iconColor: '#ef4444',
       },
       complete: {
-        color: 'hsl(var(--foreground))',
-        iconColor: 'hsl(var(--primary))',
+        color: isDark ? '#f4f4f5' : '#18181b',
+        iconColor: '#10b981', // emerald-500 (emerald green)
       },
     },
     disableLink: true,
@@ -138,7 +159,7 @@ export function StripeCardForm({
             <div className="flex-1">
               <CardNumberElement
                 id="card-number"
-                options={{ ...baseElementOptions, showIcon: true, placeholder: 'Enter Card Number' }}
+                options={{ ...baseElementOptions, showIcon: false, placeholder: 'Enter Card Number' }}
                 onChange={(e: StripeCardNumberElementChangeEvent) => {
                   handleError(e.error);
                   setNumberComplete(e.complete);
