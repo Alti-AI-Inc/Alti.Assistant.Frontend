@@ -392,7 +392,7 @@ export function OrganizationTenantOverview({
                 placeholder="Enter First Name"
                 value={inviteFirstName}
                 onChange={(e) => setInviteFirstName(e.target.value)}
-                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
+                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-black/20 focus:shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
                 disabled={isInviting}
               />
               <Input
@@ -401,7 +401,7 @@ export function OrganizationTenantOverview({
                 placeholder="Enter Last Name"
                 value={inviteLastName}
                 onChange={(e) => setInviteLastName(e.target.value)}
-                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
+                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-black/20 focus:shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
                 disabled={isInviting}
               />
             </div>
@@ -414,7 +414,7 @@ export function OrganizationTenantOverview({
                 placeholder="Enter Email Address"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
-                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
+                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-black/20 focus:shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
                 disabled={isInviting}
               />
               <Select
@@ -422,7 +422,7 @@ export function OrganizationTenantOverview({
                 onValueChange={setInviteRole}
                 disabled={isInviting}
               >
-                <SelectTrigger id="invite-role" className="!h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:ring-1 focus:ring-black/20 rounded-lg w-full">
+                <SelectTrigger id="invite-role" className="!h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-black/20 rounded-lg w-full">
                   <SelectValue placeholder="Select Role Type" />
                 </SelectTrigger>
                 <SelectContent className="border-black/10">
