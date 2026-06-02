@@ -668,7 +668,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               {/* First Section */}
               <div className="space-y-1">
                 <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
-                  Workspace
+                  Admin
                 </div>
                 {[
                   { name: 'Invite', href: '/admin/members', icon: UserPlus },
@@ -699,7 +699,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               {/* Second Section */}
               <div className="space-y-1">
                 <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
-                  Configuration
+                  Manager
                 </div>
                 {[
                   { name: 'Data', href: '/admin/data', icon: Database },
