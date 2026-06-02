@@ -155,6 +155,7 @@ const LeftSideNavMobile = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { close } = useDrawerStore();
+  const { mode, currentTenant } = useTenant();
 
   const isAdminMode = pathname.startsWith('/admin');
   const isManagerSection = pathname.startsWith('/admin/data') || 
@@ -162,7 +163,13 @@ const LeftSideNavMobile = () => {
                            pathname.startsWith('/admin/guardrails') || 
                            pathname.startsWith('/admin/projects');
   const isAdminSection = !isManagerSection && isAdminMode;
-  const { mode, currentTenant } = useTenant();
+
+  const currentUserRole = mode === 'tenant' && currentTenant
+    ? currentTenant.role
+    : data?.user?.role;
+
+  const isAdmin = currentUserRole === 'admin' || currentUserRole === 'super_admin';
+  const isManager = currentUserRole === 'owner' || currentUserRole === 'manager';
 
   const { onOpen } = useModalStore();
   const {
@@ -1031,12 +1038,16 @@ const LeftSideNavMobile = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
                 <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={() => { router.push('/admin/members'); close(); }}>
-                    <Shield className="text-black" /> Admin
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => { router.push('/admin/data'); close(); }}>
-                    <LayoutDashboard className="text-black" /> Manager
-                  </DropdownMenuItem>
+                  {isAdmin && (
+                    <DropdownMenuItem onClick={() => { router.push('/admin/members'); close(); }}>
+                      <Shield className="text-black" /> Admin
+                    </DropdownMenuItem>
+                  )}
+                  {(isAdmin || isManager) && (
+                    <DropdownMenuItem onClick={() => { router.push('/admin/data'); close(); }}>
+                      <LayoutDashboard className="text-black" /> Manager
+                    </DropdownMenuItem>
+                  )}
                 <DropdownMenuItem
                   onClick={() => {
                     router.push('/settings');

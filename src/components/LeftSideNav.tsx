@@ -195,6 +195,13 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                            pathname.startsWith('/admin/projects');
   const isAdminSection = !isManagerSection && isAdminMode;
 
+  const currentUserRole = mode === 'tenant' && currentTenant
+    ? currentTenant.role
+    : data?.user?.role;
+
+  const isAdmin = currentUserRole === 'admin' || currentUserRole === 'super_admin';
+  const isManager = currentUserRole === 'owner' || currentUserRole === 'manager';
+
   const searchParams = useSearchParams();
   const activeAppSlug = searchParams?.get('app');
   const activeConnectorId = searchParams?.get('connector') || 'file';
@@ -1053,12 +1060,16 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 align="start"
               >
                 <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={() => router.push('/admin/members')}>
-                    <Shield className="text-black" /> Admin
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push('/admin/data')}>
-                    <LayoutDashboard className="text-black" /> Manager
-                  </DropdownMenuItem>
+                  {isAdmin && (
+                    <DropdownMenuItem onClick={() => router.push('/admin/members')}>
+                      <Shield className="text-black" /> Admin
+                    </DropdownMenuItem>
+                  )}
+                  {(isAdmin || isManager) && (
+                    <DropdownMenuItem onClick={() => router.push('/admin/data')}>
+                      <LayoutDashboard className="text-black" /> Manager
+                    </DropdownMenuItem>
+                  )}
 
                   <DropdownMenuItem onClick={() => router.push('/legal')}>
                     <Scale className="text-black" /> Legal
