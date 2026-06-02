@@ -159,7 +159,7 @@ function MembersListComponent({
             <div className="flex-1 min-w-0">
               <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Email Address</span>
             </div>
-            <div className="flex-1 min-w-0 md:pl-16">
+            <div className="flex-1 min-w-0 md:pl-20">
               <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Role Type</span>
             </div>
           </div>
@@ -187,10 +187,8 @@ function MembersListComponent({
             return (
               <div
                 key={member._id}
-                className="group relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs hover:bg-primary/[0.04] dark:hover:bg-primary/[0.08] hover:border-primary/30 dark:hover:border-primary/45 hover:shadow-md hover:shadow-primary/5 hover:scale-[1.012] transition-all duration-300 ease-out gap-4"
+                className="group flex flex-col md:flex-row md:items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs gap-4"
               >
-                {/* Dynamic highlight bubble/indicator */}
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-center rounded-r-md" />
                 <div className="flex flex-col md:flex-row md:items-center gap-4 flex-1">
                   {/* First Name */}
                   <div className="flex-1 min-w-0">
@@ -218,7 +216,7 @@ function MembersListComponent({
                     </div>
                   </div>
                   {/* Role */}
-                  <div className="flex-1 min-w-0 md:pl-16">
+                  <div className="flex-1 min-w-0 md:pl-20">
                     <div className="h-full flex items-center">
                       {canModify ? (
                         <MemberRoleSelector
@@ -242,7 +240,7 @@ function MembersListComponent({
                       <button
                         type="button"
                         onClick={() => setMemberToRemove(member)}
-                        className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 transition-colors duration-150 flex items-center justify-center cursor-pointer"
+                        className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 transition-all duration-150 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100"
                         title={isInvitation ? "Cancel Invitation" : "Remove Member"}
                       >
                         <Trash2 className="h-4 w-4" />
