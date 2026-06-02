@@ -1037,7 +1037,6 @@ const LeftSideNavMobile = () => {
                   <DropdownMenuItem onClick={() => { router.push('/admin/data'); close(); }}>
                     <LayoutDashboard className="text-black" /> Manager
                   </DropdownMenuItem>
-                </DropdownMenuGroup>
                 <DropdownMenuItem
                   onClick={() => {
                     router.push('/settings');
