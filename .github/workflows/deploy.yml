@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - prod
+  workflow_dispatch:
 
 env:
   PROJECT_ID: alti-assistant-prod
