@@ -217,7 +217,7 @@ export default function TeamMembersPage() {
           ) : (
             <div className="flex-1 min-h-0 flex flex-col gap-4">
               {/* Account Creator / Admin (Top Row, styled exactly as Team rows) */}
-              <div className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center flex-none">
+              <div className="grid grid-cols-12 gap-4 px-6 h-12 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center flex-none">
                 <div className="col-span-10 flex items-center gap-2.5 min-w-0">
                   <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate select-all">
@@ -263,7 +263,7 @@ export default function TeamMembersPage() {
                       return (
                         <div
                           key={member._id}
-                          className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center"
+                          className="grid grid-cols-12 gap-4 px-6 h-12 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center"
                         >
                           <div className="col-span-12 flex items-center gap-2.5 min-w-0">
                             <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
