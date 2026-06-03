@@ -172,8 +172,8 @@ export default function TeamMembersPage() {
     <div className="h-full flex flex-col bg-[#F5F5F7] dark:bg-zinc-950 overflow-hidden">
       {/* Header */}
       <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-[#F5F5F7] dark:bg-zinc-950">
-        <h1 className="text-base font-semibold text-gray-900 dark:text-white">
-          Team Members
+        <h1 className="text-base font-semibold text-gray-900 dark:text-white truncate">
+          Team Members {detail?.name ? `— ${detail.name}` : ''}
         </h1>
         <Button asChild variant="outline" size="sm">
           <Link href="/admin/metrics/active-organizations">
@@ -184,37 +184,28 @@ export default function TeamMembersPage() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto px-8 py-6 flex justify-center">
-        <div className="w-full max-w-md bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-2xl shadow-sm p-6 self-start flex flex-col gap-5">
-          <div className="border-b border-black/5 dark:border-white/5 pb-4">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-              {detail?.name ?? 'Loading...'}
-            </h2>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Workspace users and members roster
-            </p>
-          </div>
-
+      <div className="flex-1 min-h-0 px-8 py-6 overflow-hidden flex flex-col">
+        <div className="mx-auto flex w-full max-w-7xl flex-1 min-h-0 flex-col gap-6">
           {loading ? (
-            <div className="flex justify-center py-12">
+            <div className="flex-1 flex items-center justify-center">
               <Spinner className="h-8 w-8" />
             </div>
           ) : error ? (
             <p className="text-destructive text-sm text-center py-4">{error}</p>
           ) : (
-            <div className="flex flex-col gap-5">
-              {/* Account Creator / Admin (Top Row) */}
-              <div className="flex flex-col gap-1.5">
-                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pl-1">
-                  Account Creator
-                </span>
-                <div className="flex items-center justify-between px-4 py-3.5 bg-[#F5F5F7] dark:bg-zinc-950 border border-black/5 dark:border-white/5 rounded-xl shadow-xs">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <User className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                    <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate select-all">
-                      {ownerEmail}
-                    </span>
-                  </div>
+            <div className="flex-1 min-h-0 flex flex-col gap-4">
+              {/* Account Creator / Admin (Top Row, styled exactly as Team rows) */}
+              <div className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center flex-none">
+                <div className="col-span-4 flex items-center gap-2.5 min-w-0">
+                  <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                  <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate select-all">
+                    {ownerEmail}
+                  </span>
+                </div>
+                <div className="col-span-6 text-sm text-gray-500 dark:text-gray-400 truncate">
+                  Account Creator & Owner
+                </div>
+                <div className="col-span-2 flex justify-end">
                   <Badge className="bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 text-[10px] px-2.5 py-0.5 rounded-full font-bold">
                     Admin
                   </Badge>
@@ -222,24 +213,21 @@ export default function TeamMembersPage() {
               </div>
 
               {/* Search Bar */}
-              <div className="relative w-full">
+              <div className="relative w-full flex-none">
                 <Search className="text-muted-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
                 <Input
                   placeholder="Search other team users..."
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
-                  className="pl-12 pr-4 h-12 w-full text-base rounded-xl border-black/10 dark:border-white/10 bg-[#F5F5F7] dark:bg-zinc-950 shadow-sm focus-visible:ring-1 focus-visible:ring-primary"
+                  className="pl-12 pr-4 h-12 w-full text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-1 focus-visible:ring-primary"
                 />
               </div>
 
-              {/* Team Members List */}
-              <div className="flex flex-col gap-1.5">
-                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pl-1">
-                  Team Users ({filteredMembers.length})
-                </span>
-                <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto pr-1">
+              {/* Team Users List (styled exactly as Team rows) */}
+              <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+                <div className="flex flex-col gap-2 pb-4">
                   {filteredMembers.length === 0 ? (
-                    <div className="text-center py-8 border border-dashed border-black/10 dark:border-white/10 rounded-xl text-muted-foreground text-sm bg-[#F5F5F7] dark:bg-zinc-950">
+                    <div className="text-center p-8 border border-dashed rounded-lg text-muted-foreground text-sm bg-white dark:bg-gray-900">
                       {searchTerm.trim() ? 'No matching users found' : 'No other users on this team'}
                     </div>
                   ) : (
@@ -249,17 +237,22 @@ export default function TeamMembersPage() {
                       return (
                         <div
                           key={member._id}
-                          className="flex items-center justify-between px-4 py-3 bg-[#F5F5F7]/50 dark:bg-zinc-950/50 border border-black/5 dark:border-white/5 rounded-xl shadow-xs hover:shadow-sm transition-all duration-150"
+                          className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center"
                         >
-                          <div className="flex items-center gap-3 min-w-0">
+                          <div className="col-span-4 flex items-center gap-2.5 min-w-0">
                             <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                             <span className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate select-all">
                               {email}
                             </span>
                           </div>
-                          <Badge variant="secondary" className="capitalize text-[10px] px-2 py-0.5 rounded-md font-semibold bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 text-gray-600 dark:text-gray-400">
-                            {role}
-                          </Badge>
+                          <div className="col-span-6 text-sm text-gray-500 dark:text-gray-400 truncate">
+                            Team User
+                          </div>
+                          <div className="col-span-2 flex justify-end">
+                            <Badge variant="secondary" className="capitalize text-[10px] px-2 py-0.5 rounded-md font-semibold bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400">
+                              {role}
+                            </Badge>
+                          </div>
                         </div>
                       );
                     })
