@@ -3,7 +3,7 @@
 import { TenantProvider } from '@/contexts/TenantContext';
 import { useContextSwitch } from '@/hooks/useContextSwitch';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { SessionProvider, useSession } from 'next-auth/react';
+import { SessionProvider, signOut, useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import { ThemeProvider } from 'next-themes';
 import { usePathname, useRouter } from 'next/navigation';
@@ -104,7 +104,7 @@ function AuthWatcher({ children }: { children: React.ReactNode }) {
 
     if (session?.accessToken && session?.isTokenExpired) {
       console.log('isTokenExpired', session?.isTokenExpired);
-      router.push('/');
+      signOut({ redirect: true, callbackUrl: '/' });
     }
   }, [pathname, session, status, router, publicPaths]);
 
