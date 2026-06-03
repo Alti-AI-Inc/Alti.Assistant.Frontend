@@ -37,8 +37,8 @@ export default function TeamMembersPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [teamPricing, setTeamPricing] = useState<string>('$20');
-  const [selectedPrice, setSelectedPrice] = useState<string>('$20');
+  const [teamPricing, setTeamPricing] = useState<string>('$25');
+  const [selectedPrice, setSelectedPrice] = useState<string>('$25');
   const [isEditingPrice, setIsEditingPrice] = useState(false);
 
   useEffect(() => {
@@ -157,7 +157,7 @@ export default function TeamMembersPage() {
       if (stored) {
         setTeamPricing(stored);
       } else {
-        setTeamPricing('$20');
+        setTeamPricing('$25');
       }
     }
   }, [tenantId]);
@@ -218,16 +218,13 @@ export default function TeamMembersPage() {
             <div className="flex-1 min-h-0 flex flex-col gap-4">
               {/* Account Creator / Admin (Top Row, styled exactly as Team rows) */}
               <div className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center flex-none">
-                <div className="col-span-9 flex items-center gap-2.5 min-w-0">
+                <div className="col-span-10 flex items-center gap-2.5 min-w-0">
                   <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate select-all">
                     {ownerEmail}
                   </span>
                 </div>
-                <div className="col-span-3 flex items-center justify-end gap-3.5">
-                  <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                    {teamPricing}
-                  </span>
+                <div className="col-span-2 flex items-center justify-end">
                   <Button
                     variant="ghost"
                     size="icon"
