@@ -202,13 +202,8 @@ export default function TeamMembersPage() {
                     {ownerEmail}
                   </span>
                 </div>
-                <div className="col-span-6 text-sm text-gray-500 dark:text-gray-400 truncate">
+                <div className="col-span-8 text-sm text-gray-500 dark:text-gray-400 truncate">
                   Account Creator & Owner
-                </div>
-                <div className="col-span-2 flex justify-end">
-                  <Badge className="bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 text-[10px] px-2.5 py-0.5 rounded-full font-bold">
-                    Admin
-                  </Badge>
                 </div>
               </div>
 
