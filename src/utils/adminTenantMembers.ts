@@ -184,8 +184,8 @@ export function adminTenantOwnerAsMember(
       _id: `owner-${ownerId}`,
       userId: { _id: ownerId, email: ownerId },
       tenantId,
-      role: 'owner',
-      tenantRole: 'owner',
+      role: 'admin',
+      tenantRole: 'admin',
     };
   }
 
@@ -202,8 +202,8 @@ export function adminTenantOwnerAsMember(
       email: ownerId.email || id,
     },
     tenantId,
-    role: 'owner',
-    tenantRole: 'owner',
+    role: 'admin',
+    tenantRole: 'admin',
   };
 }
 

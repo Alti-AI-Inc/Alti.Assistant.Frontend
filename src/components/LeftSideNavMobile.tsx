@@ -166,11 +166,11 @@ const LeftSideNavMobile = () => {
 
   const userEmail = data?.user?.email?.toLowerCase();
   const isGlobalAdmin = data?.user?.role === 'admin' || data?.user?.role === 'super_admin';
-  const isTenantOwner = mode === 'tenant' && currentTenant?.role === 'owner';
-  const isTenantAdmin = mode === 'tenant' && currentTenant?.role === 'admin';
+  const isTenantOwner = mode === 'tenant' && currentTenant?.role === 'admin';
+  const isTenantAdmin = mode === 'tenant' && currentTenant?.role === 'manager';
 
   const isAdmin = userEmail === 'meram.michael@gmail.com' || isGlobalAdmin || isTenantOwner;
-  const isManager = isTenantAdmin;
+  const isManager = isGlobalAdmin || isTenantOwner || isTenantAdmin;
 
   const { onOpen } = useModalStore();
   const {

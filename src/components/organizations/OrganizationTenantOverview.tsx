@@ -283,7 +283,7 @@ export function OrganizationTenantOverview({
     const role = session?.user?.tenants?.find(
       t => t.id === selectedTenantId,
     )?.role;
-    return role === 'owner' || role === 'admin';
+    return role === 'admin' || role === 'manager';
   }, [session?.user?.tenants, selectedTenantId]);
 
   const reloadDashboard = useCallback((): Promise<void> => {
@@ -427,8 +427,8 @@ export function OrganizationTenantOverview({
                 </SelectTrigger>
                 <SelectContent className="border-black/10">
                   <SelectItem value="member" className="text-xs">User</SelectItem>
-                  <SelectItem value="owner" className="text-xs">Manager</SelectItem>
-                  <SelectItem value="admin" className="text-xs">Admin</SelectItem>
+                  <SelectItem value="owner" className="text-xs">Admin</SelectItem>
+                  <SelectItem value="admin" className="text-xs">Manager</SelectItem>
                 </SelectContent>
               </Select>
             </div>

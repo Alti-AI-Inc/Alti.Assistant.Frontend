@@ -1,9 +1,9 @@
 // Tenant Management Types
 
 export enum TenantRole {
-  OWNER = 'owner',
   ADMIN = 'admin',
-  MEMBER = 'member',
+  MANAGER = 'manager',
+  USER = 'user',
 }
 
 export enum UserMode {

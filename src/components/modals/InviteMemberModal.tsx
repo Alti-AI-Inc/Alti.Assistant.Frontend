@@ -34,7 +34,7 @@ export function InviteMemberModal() {
   const { isOpen, type, actionId, onClose, onConfirm } = useModalStore();
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [role, setRole] = useState<string>(TenantRole.MEMBER);
+  const [role, setRole] = useState<string>(TenantRole.USER);
   const [isInviting, setIsInviting] = useState(false);
   const [successInvitation, setSuccessInvitation] =
     useState<TenantInvitation | null>(null);
@@ -45,7 +45,7 @@ export function InviteMemberModal() {
   const handleClose = () => {
     setEmail('');
     setMessage('');
-    setRole(TenantRole.MEMBER);
+    setRole(TenantRole.USER);
     setSuccessInvitation(null);
     onClose();
   };
@@ -213,7 +213,7 @@ export function InviteMemberModal() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={TenantRole.MEMBER}>
+                    <SelectItem value={TenantRole.USER}>
                       <div>
                         <div className="font-medium">
                           User
@@ -223,20 +223,20 @@ export function InviteMemberModal() {
                         </div>
                       </div>
                     </SelectItem>
-                    <SelectItem value={TenantRole.ADMIN}>
+                    <SelectItem value={TenantRole.MANAGER}>
                       <div>
                         <div className="font-medium">
-                          Admin
+                          Manager
                         </div>
                         <div className="text-muted-foreground text-xs">
                           Can manage members and billing settings
                         </div>
                       </div>
                     </SelectItem>
-                    <SelectItem value={TenantRole.OWNER}>
+                    <SelectItem value={TenantRole.ADMIN}>
                       <div>
                         <div className="font-medium">
-                          Owner
+                          Admin
                         </div>
                         <div className="text-muted-foreground text-xs">
                           Full control of the organization and billing

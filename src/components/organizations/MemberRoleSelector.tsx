@@ -60,31 +60,27 @@ export function MemberRoleSelector({
   };
 
   const getRoleBadgeVariant = (role: string) => {
-    switch (role.toLowerCase()) {
-      case 'owner':
-        return 'default';
-      case 'admin':
-        return 'secondary';
-      default:
-        return 'outline';
-    }
+    const r = role.toLowerCase();
+    if (r === 'admin' || r === 'owner') return 'default';
+    if (r === 'manager') return 'secondary';
+    return 'outline';
   };
 
-  const normalizedRole = String(currentRole ?? 'member').toLowerCase();
-  /** Tenant supports owner + admin + member; legacy values map to member for the control. */
-  const supportedTenantRoles = new Set(['owner', 'admin', 'member']);
+  let normalizedRole = String(currentRole ?? 'user').toLowerCase();
+  if (normalizedRole === 'owner') normalizedRole = 'admin';
+  if (normalizedRole === 'member') normalizedRole = 'user';
+
+  /** Tenant supports admin + manager + user; legacy values map to user for the control. */
+  const supportedTenantRoles = new Set(['admin', 'manager', 'user']);
   const selectValue = supportedTenantRoles.has(normalizedRole)
     ? normalizedRole
-    : 'member';
+    : 'user';
 
   // We removed the restriction that only owners can edit admins/owners.
   // The backend will enforce actual permissions.
 
   const formatRoleLabel = (role: string) => {
-    const r = role.toLowerCase();
-    if (r === 'member') return 'user';
-    if (r === 'owner') return 'manager';
-    return r;
+    return role;
   };
 
   return (
@@ -110,14 +106,14 @@ export function MemberRoleSelector({
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value={TenantRole.MEMBER}>
+          <SelectItem value={TenantRole.USER}>
             <span className="capitalize">User</span>
-          </SelectItem>
-          <SelectItem value={TenantRole.OWNER}>
-            <span className="capitalize">Manager</span>
           </SelectItem>
           <SelectItem value={TenantRole.ADMIN}>
             <span className="capitalize">Admin</span>
+          </SelectItem>
+          <SelectItem value={TenantRole.MANAGER}>
+            <span className="capitalize">Manager</span>
           </SelectItem>
         </SelectContent>
       </Select>

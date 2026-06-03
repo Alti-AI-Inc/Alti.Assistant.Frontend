@@ -71,8 +71,8 @@ function MembersListComponent({
   const currentUserRole = tenantMembership?.role?.toLowerCase();
 
   /** Organization owners and admins may remove members or change roles. */
-  const isTenantOwner = currentUserRole === 'owner';
-  const isTenantAdminOrOwner = isTenantOwner || currentUserRole === 'admin';
+  const isTenantOwner = currentUserRole === 'admin';
+  const isTenantAdminOrOwner = isTenantOwner || currentUserRole === 'manager';
 
   const handleRemoveMember = async () => {
     if (!memberToRemove || !session?.accessToken) return;
@@ -103,9 +103,9 @@ function MembersListComponent({
 
   const getRoleBadgeVariant = (role: string) => {
     switch (role.toLowerCase()) {
-      case 'owner':
-        return 'default';
       case 'admin':
+        return 'default';
+      case 'manager':
         return 'secondary';
       default:
         return 'outline';
@@ -227,7 +227,7 @@ function MembersListComponent({
                         />
                       ) : (
                         <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed capitalize">
-                          {memberRole === 'member' ? 'user' : memberRole === 'owner' ? 'manager' : memberRole}
+                          {memberRole}
                         </p>
                       )}
                     </div>
