@@ -232,80 +232,20 @@ export function MetricTenantsTableSection() {
                   typeof t.ownerId === 'object' && t.ownerId !== null
                     ? t.ownerId.email
                     : '—';
+                const userCount = t.usage?.usersCount ?? t.memberCount ?? 1;
                 return (
                   <div
                     key={t._id}
                     className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 items-center cursor-pointer"
                     onClick={() => openDetail(t._id)}
                   >
-                    <div className="col-span-5 flex items-center gap-2.5 min-w-0">
-                      <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                    <div className="col-span-9 flex items-center min-w-0">
                       <span className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate select-all">
                         {ownerEmail}
                       </span>
                     </div>
-                    <div className="col-span-3 flex justify-center" onClick={e => e.stopPropagation()}>
-                      <TenantStatusBadge status={t.status} />
-                    </div>
-                    <div className="col-span-2 text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize text-right truncate">
-                      {t.plan || '—'}
-                    </div>
-                    <div className="col-span-2 flex items-center justify-end" onClick={e => e.stopPropagation()}>
-                      <DropdownMenu modal={false}>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
-                            aria-label="Open tenant actions"
-                          >
-                            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56 rounded-2xl">
-                          <DropdownMenuItem
-                            onClick={() =>
-                              openAdministration({
-                                tenantId: t._id,
-                                tenantName: t.name || t.subdomain || t._id,
-                              })
-                            }
-                          >
-                            <Shield className="mr-2 h-4 w-4 opacity-70 text-black" />
-                            Administration
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem onClick={() => openDetail(t._id)}>
-                            View details…
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-amber-600 focus:text-amber-600"
-                            onClick={() =>
-                              handleTenantStatusIntent({
-                                tenantId: t._id,
-                                tenantName: t.name || t.subdomain || t._id,
-                                status: 'suspended',
-                              })
-                            }
-                          >
-                            Suspend Team
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            className="text-red-600 focus:text-red-600"
-                            onClick={() =>
-                              handleTenantStatusIntent({
-                                tenantId: t._id,
-                                tenantName: t.name || t.subdomain || t._id,
-                                status: 'cancelled',
-                              })
-                            }
-                          >
-                            Cancel Team
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                    <div className="col-span-3 text-sm font-semibold text-gray-900 dark:text-gray-100 text-right">
+                      {userCount} {userCount === 1 ? 'user' : 'users'}
                     </div>
                   </div>
                 );
