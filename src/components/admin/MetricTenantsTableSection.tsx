@@ -11,7 +11,7 @@ import {
 } from '@/components/admin/AdminPaginatedDatasetHelpers';
 import { TenantStatusBadge } from '@/components/admin/TenantStatusBadge';
 import { TenantAdministrationDialog } from '@/components/admin/TenantAdministrationDialog';
-import { TenantDetailDialog } from '@/components/admin/TenantDetailDialog';
+import { useRouter } from 'next/navigation';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -48,14 +48,13 @@ type StatusConfirm = {
 export function MetricTenantsTableSection() {
   const { data: session } = useSession();
   const accessToken = session?.accessToken as string | undefined;
+  const router = useRouter();
 
   const [tenants, setTenants] = useState<AdminTenantListItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   const pendingTableRefreshRef = useRef(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [detailTenantId, setDetailTenantId] = useState<string | null>(null);
-  const [detailOpen, setDetailOpen] = useState(false);
 
   const [adminTenantId, setAdminTenantId] = useState<string | null>(null);
   const [adminTenantLabel, setAdminTenantLabel] = useState('');
@@ -106,9 +105,8 @@ export function MetricTenantsTableSection() {
   }, [loadTenants]);
 
   const openDetail = useCallback((tenantId: string) => {
-    setDetailTenantId(tenantId);
-    setDetailOpen(true);
-  }, []);
+    router.push(`/admin/metrics/active-organizations/${tenantId}`);
+  }, [router]);
 
   const openAdministration = useCallback(
     (args: { tenantId: string; tenantName: string }) => {
@@ -255,15 +253,7 @@ export function MetricTenantsTableSection() {
         </div>
       )}
 
-      <TenantDetailDialog
-        open={detailOpen}
-        onOpenChange={open => {
-          setDetailOpen(open);
-          if (!open) setDetailTenantId(null);
-        }}
-        tenantId={detailTenantId}
-        accessToken={accessToken}
-      />
+      {/* Details modal removed, routing directly to the members page instead */}
 
       <TenantAdministrationDialog
         open={adminOpen}
