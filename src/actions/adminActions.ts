@@ -147,6 +147,11 @@ export interface AdminTenantListItem {
   status: string;
   plan: string;
   createdAt: string;
+  usage?: {
+    usersCount?: number;
+  };
+  memberCount?: number;
+  ownerId?: { _id: string; email: string; name?: string } | string | null;
 }
 
 export interface AllTenantsResponse {

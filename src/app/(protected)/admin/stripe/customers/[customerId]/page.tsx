@@ -144,20 +144,20 @@ export default function CustomerDetailPage() {
   }
 
   return (
-    <div className="container mx-auto max-w-5xl space-y-6 px-4 py-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="h-full flex flex-col bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden">
+      {/* Dynamic Header */}
+      <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-[#F5F5F7] dark:bg-gray-955">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => router.push('/admin/stripe')}>
+          <Button variant="outline" size="sm" onClick={() => router.push('/admin/stripe')}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back
           </Button>
           <Separator orientation="vertical" className="h-6" />
-          <div>
-            <h1 className="text-2xl font-bold">
+          <div className="flex items-center gap-2">
+            <h1 className="text-base font-semibold text-gray-900 dark:text-white">
               {customer.name || 'Unnamed Customer'}
             </h1>
-            <Badge variant="secondary" className="mt-1 font-mono text-xs">
+            <Badge variant="secondary" className="font-mono text-[10px] h-5 py-0 flex items-center">
               {customer.id}
             </Badge>
           </div>
@@ -167,21 +167,27 @@ export default function CustomerDetailPage() {
             variant="outline"
             size="icon"
             onClick={() => setIsEditOpen(true)}
+            className="h-9 w-9"
           >
             <Edit className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="icon" onClick={loadData}>
+          <Button variant="outline" size="icon" onClick={loadData} className="h-9 w-9">
             <RefreshCw className="h-4 w-4" />
           </Button>
           <Button
             variant="destructive"
             size="icon"
             onClick={() => setIsDeleteOpen(true)}
+            className="h-9 w-9"
           >
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       </div>
+
+      {/* Main Workspace Body */}
+      <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Customer Info */}
@@ -365,6 +371,8 @@ export default function CustomerDetailPage() {
         customer={customer}
         onSuccess={loadData}
       />
+      </div>
+      </div>
     </div>
   );
 }

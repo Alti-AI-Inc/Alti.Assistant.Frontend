@@ -17,6 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { DUMMY_USERS, DUMMY_TENANTS } from '@/utils/dummyData';
 
 type MetricKey = 'total-users' | 'active-organizations' | 'monthly-revenue';
 
@@ -129,8 +130,8 @@ const metricConfigs: Record<MetricKey, MetricConfig> = {
     ],
   },
   'active-organizations': {
-    title: 'Active Organizations',
-    subtitle: 'Month-wise active organization count for the last 6 months.',
+    title: 'Total Teams',
+    subtitle: 'Month-wise total teams trend for the last 6 months.',
     unit: 'count',
     monthlyData: [
       { month: 'Jan', value: 341 },
@@ -206,6 +207,18 @@ export default async function MetricDetailsPage({
   let totalSubscriptionsFromApi = 0;
   let totalRevenueFromApi = 0;
 
+  let totalUsersFromList = 0;
+  let newUsersToday = 0;
+  let newUsersThisWeek = 0;
+  let newUsersThisMonth = 0;
+  let paidUsersCount = 0;
+  let freeUsersCount = 0;
+
+  let newTeamsToday = 0;
+  let newTeamsThisWeek = 0;
+  let newTeamsThisMonth = 0;
+  let totalTeamsCount = 0;
+
   if (metricKey === 'monthly-revenue') {
     try {
       const subsRes = await getAllSubscriptions(accessToken);
@@ -254,16 +267,59 @@ export default async function MetricDetailsPage({
 
   if (metricKey === 'active-organizations') {
     const tenantsRes = await getTenants(accessToken, { page: 1, limit: 5000 });
-    const tenantsPayload = normalizeTenantsPayload(
-      tenantsRes?.data ?? tenantsRes,
-    );
     const tenantsList = normalizeTenantsList(tenantsRes?.data ?? tenantsRes);
 
-    totalOrganizationsFromApi = Number(
-      tenantsPayload.meta?.total ?? tenantsList.length,
+    // Combine real tenants and dummy tenants, avoiding duplicate subdomains or names
+    const combinedList = [...tenantsList];
+    DUMMY_TENANTS.forEach(dummy => {
+      if (
+        !combinedList.some(
+          t =>
+            (t.subdomain || '').toLowerCase() === dummy.subdomain.toLowerCase() ||
+            (t.name || '').toLowerCase() === dummy.name.toLowerCase()
+        )
+      ) {
+        combinedList.push(dummy);
+      }
+    });
+
+    const teamsList = combinedList.filter(
+      tenant => (tenant.usage?.usersCount ?? tenant.memberCount ?? 1) >= 2,
     );
-    activeOrganizationsFromApi = tenantsList.filter(
-      tenant => tenant.status?.toLowerCase() === 'active',
+    totalTeamsCount = teamsList.length;
+
+    const now = new Date();
+
+    // Today
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    newTeamsToday = teamsList.filter(t => {
+      if (!t.createdAt) return false;
+      const d = new Date(t.createdAt);
+      return d >= todayStart;
+    }).length;
+
+    // This Week
+    const sunday = new Date(now);
+    sunday.setDate(now.getDate() - now.getDay());
+    sunday.setHours(0, 0, 0, 0);
+    newTeamsThisWeek = teamsList.filter(t => {
+      if (!t.createdAt) return false;
+      const d = new Date(t.createdAt);
+      return d >= sunday;
+    }).length;
+
+    // This Month
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    newTeamsThisMonth = teamsList.filter(t => {
+      if (!t.createdAt) return false;
+      const d = new Date(t.createdAt);
+      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+    }).length;
+
+    totalOrganizationsFromApi = totalTeamsCount;
+    activeOrganizationsFromApi = combinedList.filter(
+      tenant => (tenant.usage?.usersCount ?? tenant.memberCount ?? 1) === 1,
     ).length;
 
     const months = getLastNMonths(6);
@@ -271,27 +327,71 @@ export default async function MetricDetailsPage({
       m =>
         `${m.year}-${String(new Date(`${m.month} 1`).getMonth() + 1).padStart(2, '0')}`,
     );
-    const activeCounts: Record<string, number> = {};
-    monthKeys.forEach(k => (activeCounts[k] = 0));
+    const teamCounts: Record<string, number> = {};
+    monthKeys.forEach(k => (teamCounts[k] = 0));
 
-    tenantsList.forEach(tenant => {
-      if (!tenant.createdAt || tenant.status?.toLowerCase() !== 'active')
-        return;
+    combinedList.forEach(tenant => {
+      if (!tenant.createdAt) return;
+      const isTeam = (tenant.usage?.usersCount ?? tenant.memberCount ?? 1) >= 2;
+      if (!isTeam) return;
+
       const date = new Date(tenant.createdAt);
       const key = monthKeyFromDate(date);
-      if (!(key in activeCounts)) return;
-      activeCounts[key] = (activeCounts[key] || 0) + 1;
+      if (!(key in teamCounts)) return;
+      teamCounts[key] = (teamCounts[key] || 0) + 1;
     });
 
     monthlyData = monthKeys.map(k => ({
       month: monthLabelFromKey(k),
-      value: activeCounts[k] || 0,
+      value: teamCounts[k] || 0,
     }));
   }
 
   if (metricKey === 'total-users') {
     const usersRes = await getAllUsers(accessToken);
     const usersList = normalizeUsersPayload(usersRes?.data ?? usersRes);
+
+    // Combine real users and dummy users, avoiding duplicate emails
+    const combinedUsers = [...usersList];
+    DUMMY_USERS.forEach(dummy => {
+      if (!combinedUsers.some(u => (u.email || '').toLowerCase() === dummy.email.toLowerCase())) {
+        combinedUsers.push(dummy);
+      }
+    });
+
+    totalUsersFromList = combinedUsers.length;
+
+    const now = new Date();
+
+    // Today
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    newUsersToday = combinedUsers.filter(u => {
+      if (!u.createdAt) return false;
+      const d = new Date(u.createdAt);
+      return d >= todayStart;
+    }).length;
+
+    // This Week
+    const sunday = new Date(now);
+    sunday.setDate(now.getDate() - now.getDay());
+    sunday.setHours(0, 0, 0, 0);
+    newUsersThisWeek = combinedUsers.filter(u => {
+      if (!u.createdAt) return false;
+      const d = new Date(u.createdAt);
+      return d >= sunday;
+    }).length;
+
+    // This Month
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    newUsersThisMonth = combinedUsers.filter(u => {
+      if (!u.createdAt) return false;
+      const d = new Date(u.createdAt);
+      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+    }).length;
+
+    paidUsersCount = combinedUsers.filter(u => u.isSubscribed).length;
+    freeUsersCount = combinedUsers.filter(u => !u.isSubscribed).length;
 
     const months = getLastNMonths(6);
     const monthKeys = months.map(
@@ -302,7 +402,7 @@ export default async function MetricDetailsPage({
     const counts: Record<string, number> = {};
     monthKeys.forEach(k => (counts[k] = 0));
 
-    usersList.forEach(u => {
+    combinedUsers.forEach(u => {
       const date = u.createdAt ? new Date(u.createdAt) : null;
       if (!date) return;
       const key = monthKeyFromDate(date);
@@ -326,12 +426,20 @@ export default async function MetricDetailsPage({
     metricKey === 'active-organizations'
       ? [
           {
-            title: 'Total Organizations',
-            value: String(totalOrganizationsFromApi),
+            title: 'Today',
+            value: String(newTeamsToday),
           },
           {
-            title: 'Active Organizations',
-            value: String(activeOrganizationsFromApi),
+            title: 'This Week',
+            value: String(newTeamsThisWeek),
+          },
+          {
+            title: 'This Month',
+            value: String(newTeamsThisMonth),
+          },
+          {
+            title: 'Total Teams',
+            value: String(totalTeamsCount),
           },
         ]
       : metricKey === 'monthly-revenue'
@@ -350,63 +458,106 @@ export default async function MetricDetailsPage({
               isGrowth: true,
             },
           ]
-        : [
-            {
-              title: 'Month-over-Month Growth',
-              value: `+${growth}%`,
-              isGrowth: true,
-            },
-          ];
+          : [
+              {
+                title: 'Month-over-Month Growth',
+                value: `+${growth}%`,
+                isGrowth: true,
+              },
+            ];
 
   return (
-    <div className="bg-background min-h-screen">
-      <div className="container mx-auto max-w-7xl px-4 py-8">
-        <div className="flex items-center justify-between gap-3">
-          <div className="space-y-1">
-            <h1 className="text-foreground text-3xl font-bold tracking-tight">
-              {config.title}
-            </h1>
-            <p className="text-muted-foreground">{config.subtitle}</p>
-          </div>
-          <Button asChild variant="outline">
-            <Link href="/admin">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Dashboard
-            </Link>
-          </Button>
-        </div>
+    <div className="h-full flex flex-col bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden">
+      {/* Dynamic Header */}
+      <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-[#F5F5F7] dark:bg-gray-955">
+        <h1 className="text-base font-semibold text-gray-900 dark:text-white">
+          {config.title}
+        </h1>
+        <Button asChild variant="outline" size="sm">
+          <Link href="/admin">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Dashboard
+          </Link>
+        </Button>
+      </div>
 
-        <section
-          className={`grid gap-4 ${
-            summaryCards.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3'
-          }`}
-        >
-          {summaryCards.map(card => (
-            <Card key={card.title}>
-              <CardHeader className={card.isGrowth ? undefined : 'pb-2'}>
-                <CardTitle className="text-sm font-medium">
-                  {card.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent
-                className={
-                  card.isGrowth ? 'flex items-center gap-2' : undefined
-                }
-              >
-                {card.isGrowth && (
-                  <TrendingUp className="h-4 w-4 text-emerald-600" />
-                )}
-                <div
-                  className={`text-2xl font-bold ${
-                    card.isGrowth ? 'text-emerald-600' : ''
-                  }`}
+      {/* Main Workspace Body */}
+      <div className={`flex-1 min-h-0 px-8 py-6 ${metricKey === 'total-users' || metricKey === 'active-organizations' ? 'overflow-hidden flex flex-col' : 'overflow-y-auto'}`}>
+        <div className={`mx-auto flex w-full max-w-7xl flex-col gap-6 ${metricKey === 'total-users' || metricKey === 'active-organizations' ? 'flex-1 min-h-0' : ''}`}>
+
+        {metricKey === 'total-users' ? (
+          <div className="flex flex-col gap-6 flex-none">
+            <div className="grid gap-4 sm:grid-cols-3">
+              {[
+                { title: 'Today', value: String(newUsersToday) },
+                { title: 'This Week', value: String(newUsersThisWeek) },
+                { title: 'This Month', value: String(newUsersThisMonth) },
+              ].map(card => (
+                <Card key={card.title}>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{card.value}</div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-3">
+              {[
+                { title: 'Free Users', value: String(freeUsersCount) },
+                { title: 'Paid Users', value: String(paidUsersCount) },
+                { title: 'Total Users', value: String(totalUsersFromList) },
+              ].map(card => (
+                <Card key={card.title}>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{card.value}</div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <section
+            className={`grid gap-4 flex-none ${
+              summaryCards.length === 2 
+                ? 'sm:grid-cols-2' 
+                : summaryCards.length === 4 
+                  ? 'sm:grid-cols-4' 
+                  : 'sm:grid-cols-3'
+            }`}
+          >
+            {summaryCards.map(card => (
+              <Card key={card.title}>
+                <CardHeader className={card.isGrowth ? undefined : 'pb-2'}>
+                  <CardTitle className="text-sm font-medium">
+                    {card.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent
+                  className={
+                    card.isGrowth ? 'flex items-center gap-2' : undefined
+                  }
                 >
-                  {card.value}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </section>
+                  {card.isGrowth && (
+                    <TrendingUp className="h-4 w-4 text-emerald-600" />
+                  )}
+                  <div
+                    className={`text-2xl font-bold ${
+                      card.isGrowth ? 'text-emerald-600' : ''
+                    }`}
+                  >
+                    {card.value}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </section>
+        )}
 
         {metricKey === 'total-users' && <MetricTotalUsersTableSection />}
 
@@ -414,6 +565,7 @@ export default async function MetricDetailsPage({
           <MetricMonthlyRevenuePaymentsTableSection />
         )}
         {metricKey === 'active-organizations' && <MetricTenantsTableSection />}
+      </div>
       </div>
     </div>
   );

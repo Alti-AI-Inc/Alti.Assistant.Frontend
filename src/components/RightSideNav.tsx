@@ -14,16 +14,9 @@ import {
   Search,
   SquarePen,
   Trash2,
-  Building2,
-  Users,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
-import { TenantModeSwitcher } from './TenantModeSwitcher';
-import { useTenant } from '@/contexts/TenantContext';
-import { UserMode } from '@/types/tenant';
-import { Badge } from './ui/badge';
-import { Card } from './ui/card';
 
 const previousChatHistory = [
   {
@@ -106,7 +99,6 @@ const previousChatHistory = [
 export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
   const router = useRouter();
   const { onOpen } = useModalStore();
-  const { mode, currentTenant } = useTenant();
 
   if (!isOpen) {
     // Collapsed → only icons
@@ -125,46 +117,6 @@ export default function RightSideNav({ isOpen }: { isOpen: boolean }) {
   // Expanded → full view
   return (
     <nav className="h-full overflow-y-auto px-2 pt-8">
-      {/* TenantModeSwitcher at the top */}
-      <div className="mb-4 px-1">
-        <TenantModeSwitcher />
-      </div>
-
-      {/* Organization Info Card when in tenant mode */}
-      {mode === UserMode.TENANT && currentTenant && (
-        <Card className="mb-4 p-3">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <div className="flex items-center gap-2">
-                <Building2 className="size-4 text-gray-600" />
-                <h3 className="text-sm font-medium">{currentTenant.name}</h3>
-              </div>
-              <p className="mt-1 text-xs text-gray-500">
-                {currentTenant.subdomain}.alti.app
-              </p>
-              {currentTenant.memberCount !== undefined && (
-                <div className="mt-2 flex items-center gap-1 text-xs text-gray-500">
-                  <Users className="size-3" />
-                  <span>
-                    {currentTenant.memberCount} member
-                    {currentTenant.memberCount !== 1 ? 's' : ''}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="mt-3">
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => router.push(`/organizations/${currentTenant.id}`)}
-              className="h-8 text-xs w-full"
-            >
-              Dashboard
-            </Button>
-          </div>
-        </Card>
-      )}
 
       {/* Header actions */}
       <div className="bg-secondary sticky top-0 z-30 pb-2">

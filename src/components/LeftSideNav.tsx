@@ -29,8 +29,10 @@ import {
   Shield,
   FileText,
   ArrowLeft,
+  User,
   Users,
   UserPlus,
+  UsersRound,
   ChevronRight,
   MessageSquare,
   Globe,
@@ -202,6 +204,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
   const isAdmin = userEmail === 'meram.michael@gmail.com' || isGlobalAdmin || isTenantOwner;
   const isManager = isGlobalAdmin || isTenantOwner || isTenantAdmin;
+  const isSuperAdmin = data?.user?.role === 'super_admin';
 
   const searchParams = useSearchParams();
   const activeAppSlug = searchParams?.get('app');
@@ -678,8 +681,44 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
           {isAdminMode ? (
             <div className="mt-4 space-y-6">
+              {/* Platform Owner Section (for super_admin) */}
+              {isSuperAdmin && (
+                <div className="space-y-1">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
+                    Platform Owner
+                  </div>
+                  {[
+                    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
+                    { name: 'Users', href: '/admin/metrics/total-users', icon: User },
+                    { name: 'Teams', href: '/admin/metrics/active-organizations', icon: UsersRound },
+                    { name: 'Payments', href: '/admin/metrics/monthly-revenue', icon: CreditCard },
+                    { name: 'Billing Console', href: '/admin/stripe', icon: ReceiptText },
+                  ].map((item) => {
+                    const isActive = item.exact 
+                      ? pathname === item.href 
+                      : pathname.startsWith(item.href);
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className={cn(
+                          'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                          isActive
+                            ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
+                            : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                        )}
+                      >
+                        <Icon className="w-4 h-4" />
+                        {item.name}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+
               {/* First Section */}
-              {isAdminSection && (
+              {isAdminSection && !isSuperAdmin && (
                 <div className="space-y-1">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
                     Admin
@@ -712,7 +751,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               )}
 
               {/* Second Section */}
-              {isManagerSection && (
+              {isManagerSection && !isSuperAdmin && (
                 <div className="space-y-1">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
                     Manager
@@ -1018,7 +1057,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           )}
           style={{ backgroundColor: '#FFFFFF' }}
         >
-          {isAdminMode && (
+          {isAdminMode && !isSuperAdmin && (
             <div className="flex h-20 w-full items-center justify-center border-t border-black/10 p-4 py-1.5">
               <Button
                 variant="outline"
@@ -1035,18 +1074,16 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               <Button
                 variant="default"
                 className="flex-1 bg-black px-0 text-white hover:bg-black/90"
-                onClick={() => onOpen({ type: 'auth-modal', actionId: 'login' })}
+                asChild
               >
-                Login
+                <Link href="/login">Login</Link>
               </Button>
               <Button
                 variant="default"
                 className="flex-1 bg-black px-0 text-white hover:bg-black/90"
-                onClick={() =>
-                  onOpen({ type: 'auth-modal', actionId: 'register' })
-                }
+                asChild
               >
-                Register
+                <Link href="/register">Register</Link>
               </Button>
             </div>
           ) : (
@@ -1061,23 +1098,32 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 align="start"
               >
                 <DropdownMenuGroup>
-                  {isAdmin && (
+                  {isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => router.push('/admin')}>
+                      <Shield className="text-black" /> Owner Dashboard
+                    </DropdownMenuItem>
+                  )}
+                  {isAdmin && !isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/admin/members')}>
                       <Shield className="text-black" /> Admin
                     </DropdownMenuItem>
                   )}
-                  {(isAdmin || isManager) && (
+                  {(isAdmin || isManager) && !isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/admin/data')}>
                       <LayoutDashboard className="text-black" /> Manager
                     </DropdownMenuItem>
                   )}
 
-                  <DropdownMenuItem onClick={() => router.push('/legal')}>
-                    <Scale className="text-black" /> Legal
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push('/settings')}>
-                    <Settings className="text-black" /> Settings
-                  </DropdownMenuItem>
+                  {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => router.push('/legal')}>
+                      <Scale className="text-black" /> Legal
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => router.push('/settings')}>
+                      <Settings className="text-black" /> Settings
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
 

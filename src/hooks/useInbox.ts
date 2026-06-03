@@ -45,7 +45,7 @@ export function useInboxQuery(userId?: string, category?: string, archived?: boo
       
       const categoryParam = category ? `&category=${category}` : '';
       const archivedParam = archived !== undefined ? `&archived=${archived}` : '&archived=false';
-      const url = buildApiUrl(`/api/v1/notification/user/${userId}/inbox?${categoryParam}${archivedParam}`);
+      const url = buildApiUrl(`/notification/user/${userId}/inbox?${categoryParam}${archivedParam}`);
       
       const response = await apiClientJson<InboxItem[]>(url, {
         headers: {
@@ -81,7 +81,7 @@ export function useArchiveInboxItemMutation() {
       archived?: boolean;
       accessToken: string;
     }) => {
-      const url = buildApiUrl(`/api/v1/notification/archive/${notificationId}`);
+      const url = buildApiUrl(`/notification/archive/${notificationId}`);
       
       const response = await apiClientJson(url, {
         method: 'PUT',

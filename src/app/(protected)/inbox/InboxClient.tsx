@@ -296,16 +296,6 @@ function InboxClient() {
               Unified Intelligence Inbox
             </h2>
             <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-zinc-400">
-              {mode === UserMode.TENANT && currentTenant && (
-                <Badge variant="outline" className="h-5 px-2 text-[10px] font-normal border-gray-400 text-gray-500 bg-transparent flex gap-1 items-center">
-                  <Building2 className="h-3 w-3" /> {currentTenant.name}
-                </Badge>
-              )}
-              {mode === UserMode.PERSONAL && (
-                <Badge variant="outline" className="h-5 px-2 text-[10px] font-normal border-gray-400 text-gray-500 bg-transparent flex gap-1 items-center">
-                  <User className="h-3 w-3" /> Personal Mode
-                </Badge>
-              )}
             </div>
           </div>
 

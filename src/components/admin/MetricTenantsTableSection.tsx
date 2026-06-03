@@ -7,13 +7,11 @@ import {
   type TenantLifecycleStatus,
 } from '@/actions/adminActions';
 import {
-  paginationLabel,
   parseAdminListPayload,
-  type SortOrder,
 } from '@/components/admin/AdminPaginatedDatasetHelpers';
+import { TenantStatusBadge } from '@/components/admin/TenantStatusBadge';
 import { TenantAdministrationDialog } from '@/components/admin/TenantAdministrationDialog';
 import { TenantDetailDialog } from '@/components/admin/TenantDetailDialog';
-import { TenantsTable } from '@/components/admin/TenantsTable';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,21 +23,21 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
-import { RefreshCw, Search } from 'lucide-react';
+import { Building2, Mail, MoreHorizontal, Search, Shield } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { DUMMY_TENANTS } from '@/utils/dummyData';
 import { toast } from 'sonner';
-
-const PAGE_SIZE = 10;
 
 type StatusConfirm = {
   tenantId: string;
@@ -52,18 +50,10 @@ export function MetricTenantsTableSection() {
   const accessToken = session?.accessToken as string | undefined;
 
   const [tenants, setTenants] = useState<AdminTenantListItem[]>([]);
-  const [meta, setMeta] = useState<{
-    total?: number;
-    page?: number;
-    limit?: number;
-  }>();
   const [isLoading, setIsLoading] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   const pendingTableRefreshRef = useRef(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
-  const [sortBy, setSortBy] = useState('name');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [detailTenantId, setDetailTenantId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
 
@@ -76,40 +66,32 @@ export function MetricTenantsTableSection() {
   );
   const [statusConfirmBusy, setStatusConfirmBusy] = useState(false);
 
-  useEffect(() => {
-    setPage(1);
-  }, [searchTerm, sortBy, sortOrder]);
-
   const loadTenants = useCallback(async () => {
     if (!accessToken) return;
     setIsLoading(true);
     try {
       const res = await getTenants(accessToken, {
-        page,
-        limit: PAGE_SIZE,
-        searchTerm: searchTerm.trim() || undefined,
-        sortBy,
-        sortOrder,
+        page: 1,
+        limit: 5000,
+        sortBy: 'name',
+        sortOrder: 'asc',
       });
       if (res.success && res.data !== undefined && res.data !== null) {
-        const { list, meta: m } = parseAdminListPayload<AdminTenantListItem>(
+        const { list } = parseAdminListPayload<AdminTenantListItem>(
           res.data,
         );
         setTenants(list);
-        setMeta(m);
       } else {
         setTenants([]);
-        setMeta(undefined);
       }
     } catch (e) {
       console.error(e);
       setTenants([]);
-      setMeta(undefined);
     } finally {
       setIsLoading(false);
       setHasLoaded(true);
     }
-  }, [accessToken, page, searchTerm, sortBy, sortOrder]);
+  }, [accessToken]);
 
   const scheduleTableRefresh = useCallback(() => {
     if (adminOpen) {
@@ -122,17 +104,6 @@ export function MetricTenantsTableSection() {
   useEffect(() => {
     loadTenants();
   }, [loadTenants]);
-
-  const handleSortField = useCallback((field: string) => {
-    setSortBy(prev => {
-      if (prev === field) {
-        setSortOrder(o => (o === 'asc' ? 'desc' : 'asc'));
-        return prev;
-      }
-      setSortOrder('asc');
-      return field;
-    });
-  }, []);
 
   const openDetail = useCallback((tenantId: string) => {
     setDetailTenantId(tenantId);
@@ -190,110 +161,159 @@ export function MetricTenantsTableSection() {
     if (s === 'suspended') {
       return 'Suspended tenants keep data but should lose access until reactivated.';
     }
-    return 'Cancelled is typically irreversible for billing and access. Confirm only if you intend to close this organization.';
+    return 'Cancelled is typically irreversible for billing and access. Confirm only if you intend to close this team.';
   };
 
-  const pagination = paginationLabel(meta, tenants.length, PAGE_SIZE);
-  const totalPages =
-    pagination.total <= 0
-      ? 1
-      : Math.max(1, Math.ceil(pagination.total / pagination.limit));
+  // Combine real tenants and dummy tenants, avoiding duplicate subdomains or names
+  const combinedTenants = [...tenants];
+  DUMMY_TENANTS.forEach(dummy => {
+    if (
+      !combinedTenants.some(
+        t =>
+          (t.subdomain || '').toLowerCase() === dummy.subdomain.toLowerCase() ||
+          (t.name || '').toLowerCase() === dummy.name.toLowerCase()
+      )
+    ) {
+      combinedTenants.push(dummy);
+    }
+  });
+
+  const filteredTenants = combinedTenants
+    .filter(t => {
+      const term = searchTerm.toLowerCase().trim();
+      const ownerEmail =
+        typeof t.ownerId === 'object' && t.ownerId !== null ? t.ownerId.email : '';
+      return (
+        (t.name || '').toLowerCase().includes(term) ||
+        (t.subdomain || '').toLowerCase().includes(term) ||
+        ownerEmail.toLowerCase().includes(term)
+      );
+    })
+    .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
   if (!accessToken) {
     return (
       <Card className="mt-4">
-        <CardHeader>
-          <CardTitle>All tenants</CardTitle>
-          <CardDescription>Sign in to load organizations.</CardDescription>
-        </CardHeader>
+        <CardContent className="p-6 text-center text-muted-foreground">
+          Sign in to load teams.
+        </CardContent>
       </Card>
     );
   }
 
   return (
-    <>
-      <Card className="mt-4">
-        <CardHeader className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-          <div>
-            <CardTitle>All tenants</CardTitle>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="relative min-w-[200px] md:w-64">
-              <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-              <Input
-                placeholder="Search name or subdomain…"
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => void loadTenants()}
-            >
-              <RefreshCw
-                className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
-              />
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {!hasLoaded && isLoading ? (
-            <div className="flex min-h-[40vh] items-center justify-center">
-              <Spinner className="h-8 w-8" />
+    <div className="flex-1 min-h-0 flex flex-col gap-4">
+      {/* Full-width Search Bar */}
+      <div className="relative w-full flex-none">
+        <Search className="text-muted-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
+        <Input
+          placeholder="Search team creator email addresses..."
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+          className="pl-12 pr-4 h-12 w-full text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-1 focus-visible:ring-primary"
+        />
+      </div>
+
+      {/* Structured Teams Grid List */}
+      {isLoading && tenants.length === 0 ? (
+        <div className="flex-1 flex items-center justify-center">
+          <Spinner className="h-8 w-8" />
+        </div>
+      ) : (
+        <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+          {filteredTenants.length === 0 ? (
+            <div className="text-center p-8 border border-dashed rounded-lg text-muted-foreground text-sm bg-white dark:bg-gray-900">
+              No matching teams found
             </div>
           ) : (
-            <div
-              className={
-                isLoading && hasLoaded
-                  ? 'pointer-events-none space-y-4 opacity-60'
-                  : 'space-y-4'
-              }
-            >
-              <TenantsTable
-                tenants={tenants}
-                sortable={{
-                  sortBy,
-                  sortOrder,
-                  onSort: handleSortField,
-                }}
-                onRowClick={openDetail}
-                onTenantStatusIntent={handleTenantStatusIntent}
-                onOpenAdministration={openAdministration}
-              />
-              <div className="flex flex-col gap-3 border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-muted-foreground text-sm">
-                  {pagination.total === 0
-                    ? 'No rows'
-                    : `Showing ${pagination.from}–${pagination.to} of ${pagination.total}`}{' '}
-                  (page {pagination.page} / {totalPages})
-                </p>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={page <= 1 || isLoading}
-                    onClick={() => setPage(p => Math.max(1, p - 1))}
+            <div className="flex flex-col gap-2 pb-4">
+              {filteredTenants.map(t => {
+                const ownerEmail =
+                  typeof t.ownerId === 'object' && t.ownerId !== null
+                    ? t.ownerId.email
+                    : '—';
+                return (
+                  <div
+                    key={t._id}
+                    className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 items-center cursor-pointer"
+                    onClick={() => openDetail(t._id)}
                   >
-                    Previous
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={
-                      isLoading || page >= totalPages || pagination.total === 0
-                    }
-                    onClick={() => setPage(p => p + 1)}
-                  >
-                    Next
-                  </Button>
-                </div>
-              </div>
+                    <div className="col-span-5 flex items-center gap-2.5 min-w-0">
+                      <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      <span className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate select-all">
+                        {ownerEmail}
+                      </span>
+                    </div>
+                    <div className="col-span-3 flex justify-center" onClick={e => e.stopPropagation()}>
+                      <TenantStatusBadge status={t.status} />
+                    </div>
+                    <div className="col-span-2 text-sm font-semibold text-gray-900 dark:text-gray-100 capitalize text-right truncate">
+                      {t.plan || '—'}
+                    </div>
+                    <div className="col-span-2 flex items-center justify-end" onClick={e => e.stopPropagation()}>
+                      <DropdownMenu modal={false}>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
+                            aria-label="Open tenant actions"
+                          >
+                            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-56 rounded-2xl">
+                          <DropdownMenuItem
+                            onClick={() =>
+                              openAdministration({
+                                tenantId: t._id,
+                                tenantName: t.name || t.subdomain || t._id,
+                              })
+                            }
+                          >
+                            <Shield className="mr-2 h-4 w-4 opacity-70 text-black" />
+                            Administration
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem onClick={() => openDetail(t._id)}>
+                            View details…
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            className="text-amber-600 focus:text-amber-600"
+                            onClick={() =>
+                              handleTenantStatusIntent({
+                                tenantId: t._id,
+                                tenantName: t.name || t.subdomain || t._id,
+                                status: 'suspended',
+                              })
+                            }
+                          >
+                            Suspend Team
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-red-600 focus:text-red-600"
+                            onClick={() =>
+                              handleTenantStatusIntent({
+                                tenantId: t._id,
+                                tenantName: t.name || t.subdomain || t._id,
+                                status: 'cancelled',
+                              })
+                            }
+                          >
+                            Cancel Team
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      )}
 
       <TenantDetailDialog
         open={detailOpen}
@@ -377,6 +397,6 @@ export function MetricTenantsTableSection() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </>
+    </div>
   );
 }

@@ -4,14 +4,13 @@ import {
   ArrowUpRight,
   BriefcaseBusiness,
   CreditCard,
-  Users,
+  User,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { AdminDashboardMonthCharts } from '@/components/admin/AdminDashboardMonthCharts';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -78,7 +77,7 @@ export default function AdminDashboardPage() {
     freeUser: 0,
     monthlyRevenue: '0.00',
     unverifyUsers: 0,
-    activeOrganizations: 0,
+    totalTeams: 0,
   });
   const [apiError, setApiError] = useState<string | null>(null);
 
@@ -193,7 +192,7 @@ export default function AdminDashboardPage() {
             ? Number(subsPayload.totalRevenue)
             : undefined;
 
-        // active organizations: tenants with status "active" (same as metrics page)
+        // total teams: tenants with 2 or more members
         const tenantsPayload = tenantsRes.ok
           ? (tenantsJson.data ?? tenantsJson)
           : [];
@@ -202,9 +201,9 @@ export default function AdminDashboardPage() {
           : Array.isArray(tenantsPayload?.data)
             ? tenantsPayload.data
             : [];
-        const activeOrganizations = tenantsList.filter(
-          (t: { status?: string }) =>
-            String(t.status ?? '').toLowerCase() === 'active',
+        const totalTeams = tenantsList.filter(
+          (t: { usage?: { usersCount?: number }; memberCount?: number }) =>
+            (t.usage?.usersCount ?? t.memberCount ?? 1) >= 2,
         ).length;
 
         // total revenue from subscriptions: try productId.price (assumed dollars) or fallback to payments
@@ -250,7 +249,7 @@ export default function AdminDashboardPage() {
           freeUser,
           monthlyRevenue: (totalRevenueCents / 100).toFixed(2),
           unverifyUsers,
-          activeOrganizations,
+          totalTeams,
         });
         setApiError(null);
       } catch (err: any) {
@@ -266,17 +265,17 @@ export default function AdminDashboardPage() {
       title: 'Total Users',
       value: String(kpis.totalUsers),
       delta: `${kpis.paidUser} paid • ${kpis.freeUser} free`,
-      icon: Users,
+      icon: User,
       href: '/admin/metrics/total-users',
       linkLabel: 'View all of the users',
     },
     {
-      title: 'Active Organizations',
-      value: String(kpis.activeOrganizations ?? 0),
+      title: 'Total Teams',
+      value: String(kpis.totalTeams ?? 0),
       delta: '+ realtime',
       icon: BriefcaseBusiness,
       href: '/admin/metrics/active-organizations',
-      linkLabel: 'View all of the Organizations',
+      linkLabel: 'View all of the teams',
     },
     {
       title: 'Total Revenue',
@@ -284,44 +283,32 @@ export default function AdminDashboardPage() {
       delta: `${kpis.unverifyUsers} unverified users`,
       icon: CreditCard,
       href: '/admin/metrics/monthly-revenue',
-      linkLabel: 'View all of the Payments',
+      linkLabel: 'View all of the payments',
     },
   ];
 
   return (
-    <div className="bg-background min-h-screen">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 md:px-6">
-        <section className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="space-y-1">
-            <h1 className="text-foreground text-3xl font-bold tracking-tight">
-              Dashboard
-            </h1>
-            <p className="text-muted-foreground">
-              Central overview of your platform, customers, billing, and growth.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Button asChild variant="outline">
-              <Link href="/admin/stripe">
-                Open Billing Console
-                <ArrowUpRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </section>
+    <div className="h-full flex flex-col bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden">
+      {/* Dynamic Header */}
+      <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-[#F5F5F7] dark:bg-gray-955">
+        <h1 className="text-base font-semibold text-gray-900 dark:text-white">
+          Owner Dashboard
+        </h1>
+        <div className="flex items-center gap-2">
+          <Button asChild variant="outline" size="sm">
+            <Link href="/admin/stripe">
+              Open Billing Console
+              <ArrowUpRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+      </div>
 
-        {/* Show API errors if any */}
-        {apiError && (
-          <Card>
-            <CardHeader>
-              <CardTitle>API Error</CardTitle>
-              <CardDescription>Failed to load admin API data.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-destructive text-sm">{apiError}</div>
-            </CardContent>
-          </Card>
-        )}
+      {/* Main Workspace Body */}
+      <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
+
+
 
         <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {kpiCards.map(card => {
@@ -352,8 +339,7 @@ export default function AdminDashboardPage() {
             );
           })}
         </section>
-
-        <AdminDashboardMonthCharts accessToken={token} />
+      </div>
       </div>
     </div>
   );

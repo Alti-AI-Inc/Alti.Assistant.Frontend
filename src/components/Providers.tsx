@@ -92,7 +92,7 @@ function AuthWatcher({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const pathname = usePathname();
-  const publicPaths = useMemo(() => ['/', '/accept-invite'], []);
+  const publicPaths = useMemo(() => ['/', '/accept-invite', '/login', '/register'], []);
 
   // Listen for context switches and clear stores
   useContextSwitch();

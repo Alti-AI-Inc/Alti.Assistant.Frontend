@@ -158,6 +158,12 @@ export function TenantProvider({ children }: { children: ReactNode }) {
           if (hasChanged) {
             setTenants(storeTenants);
           }
+
+          // Auto-switch to default workspace tenant if not already active
+          if (storeTenants.length > 0 && (!activeTenantId || mode !== 'tenant')) {
+            console.log('Auto-switching to default tenant:', storeTenants[0].id);
+            await switchToTenantMode(storeTenants[0].id);
+          }
         }
       } catch (error) {
         console.error('Failed to fetch tenant details:', error);
@@ -166,7 +172,7 @@ export function TenantProvider({ children }: { children: ReactNode }) {
 
     fetchTenantDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session?.accessToken, isHydrated, session?.user?.tenants?.length]);
+  }, [session?.accessToken, isHydrated, session?.user?.tenants?.length, activeTenantId, mode, switchToTenantMode]);
 
   const value = useMemo<TenantContextValue>(
     () => ({

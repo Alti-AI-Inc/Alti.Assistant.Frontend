@@ -30,12 +30,10 @@ export const ModalProvider = () => {
 
   useEffect(() => {
     // Close modal and restore body settings when route changes
-    if (isOpen) {
-      onClose();
-    }
+    onClose();
     document.body.style.pointerEvents = '';
     document.body.style.overflow = '';
-  }, [pathname, onClose, isOpen]);
+  }, [pathname, onClose]);
 
   useEffect(() => {
     if (!isOpen) {

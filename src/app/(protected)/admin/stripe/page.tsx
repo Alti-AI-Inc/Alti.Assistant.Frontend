@@ -116,34 +116,34 @@ export default function StripeAdminDashboard() {
   }
 
   return (
-    <div className="container mx-auto max-w-7xl space-y-8 px-4 py-8">
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Stripe Dashboard
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Manage customers, subscriptions, and payments for all organizations
-          </p>
-        </div>
+    <div className="h-full flex flex-col bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden">
+      {/* Dynamic Header */}
+      <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-[#F5F5F7] dark:bg-gray-955">
+        <h1 className="text-base font-semibold text-gray-900 dark:text-white">
+          Stripe Dashboard
+        </h1>
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="icon"
             onClick={loadData}
             disabled={isLoading}
+            className="h-9 w-9"
           >
             <RefreshCw
               className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
             />
           </Button>
-          <Button onClick={() => setCreateCustomerOpen(true)}>
+          <Button size="sm" onClick={() => setCreateCustomerOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             Add Customer
           </Button>
         </div>
       </div>
+
+      {/* Main Workspace Body */}
+      <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
 
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -270,6 +270,8 @@ export default function StripeAdminDashboard() {
         onOpenChange={setCreateCustomerOpen}
         onSuccess={handleCustomerCreated}
       />
+      </div>
+      </div>
     </div>
   );
 }

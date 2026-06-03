@@ -23,6 +23,8 @@ const DashboardLeftSideNav = () => {
   const { onOpen } = useModalStore();
 
   const isLoggedIn = data?.accessToken;
+  const isSuperAdmin = data?.user?.role === 'super_admin';
+  const isAdmin = data?.user?.role === 'admin' || isSuperAdmin;
 
   return (
     <>
@@ -79,20 +81,16 @@ const DashboardLeftSideNav = () => {
               <Button
                 variant="default"
                 className="flex-1 bg-black px-0 text-white hover:bg-black/90"
-                onClick={() =>
-                  onOpen({ type: 'auth-modal', actionId: 'login' })
-                }
+                asChild
               >
-                Login
+                <Link href="/login">Login</Link>
               </Button>
               <Button
                 variant="default"
                 className="flex-1 bg-black px-0 text-white hover:bg-black/90"
-                onClick={() =>
-                  onOpen({ type: 'auth-modal', actionId: 'register' })
-                }
+                asChild
               >
-                Register
+                <Link href="/register">Register</Link>
               </Button>
             </div>
           ) : (
@@ -104,12 +102,21 @@ const DashboardLeftSideNav = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="start">
                 <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={() => router.push('/admin')}>
-                    <Shield className="text-black" /> Admin
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push('/settings')}>
-                    <Settings className="text-black" /> Settings
-                  </DropdownMenuItem>
+                  {isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => router.push('/admin')}>
+                      <Shield className="text-black" /> Owner Dashboard
+                    </DropdownMenuItem>
+                  )}
+                  {isAdmin && !isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => router.push('/admin')}>
+                      <Shield className="text-black" /> Admin
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => router.push('/settings')}>
+                      <Settings className="text-black" /> Settings
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
 

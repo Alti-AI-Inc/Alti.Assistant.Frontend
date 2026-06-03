@@ -6,7 +6,7 @@ export default auth(async function middleware(req) {
   const session = (req as any).auth;
 
   // Public routes that don't require authentication
-  const publicRoutes = ['/accept-invite', '/auth', '/'];
+  const publicRoutes = ['/accept-invite', '/auth', '/login', '/register', '/'];
   const isPublicRoute = publicRoutes.some(route =>
     route === '/'
       ? nextUrl.pathname === '/'

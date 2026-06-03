@@ -475,7 +475,7 @@ const ChatInput = ({
       if (!accessToken) {
         if (!isHomePage) {
           console.error('No access token');
-          onOpen({ type: 'auth-modal', actionId: 'login' });
+          router.push('/login');
           return null;
         }
 
@@ -484,7 +484,7 @@ const ChatInput = ({
         );
 
         if (currentPromptCount >= ANONYMOUS_PROMPT_LIMIT) {
-          onOpen({ type: 'auth-modal', actionId: 'register' });
+          router.push('/register');
           return {
             success: false,
             message:

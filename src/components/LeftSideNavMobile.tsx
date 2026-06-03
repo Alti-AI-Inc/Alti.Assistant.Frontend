@@ -13,7 +13,6 @@ import { cn } from '@/lib/utils';
 import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
-import { UserMode } from '@/types/tenant';
 import {
   Building2,
   LayoutDashboard,
@@ -26,6 +25,7 @@ import {
   SquarePen,
   User,
   UserPlus,
+  UsersRound,
   Users,
   ChevronRight,
   Plus,
@@ -50,7 +50,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect, useMemo } from 'react';
 import ConversationsList from './ConversationsList';
-import { TenantModeSwitcher } from './TenantModeSwitcher';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
@@ -171,6 +170,7 @@ const LeftSideNavMobile = () => {
 
   const isAdmin = userEmail === 'meram.michael@gmail.com' || isGlobalAdmin || isTenantOwner;
   const isManager = isGlobalAdmin || isTenantOwner || isTenantAdmin;
+  const isSuperAdmin = data?.user?.role === 'super_admin';
 
   const { onOpen } = useModalStore();
   const {
@@ -386,13 +386,6 @@ const LeftSideNavMobile = () => {
 
   return (
     <div className="bg-secondary flex h-full flex-col">
-      {/* TenantModeSwitcher at top */}
-      {isLoggedIn && (
-        <div className="px-2 pt-4 pb-2">
-          <TenantModeSwitcher />
-        </div>
-      )}
-
       {/* Sticky nav buttons */}
       <div className="bg-secondary sticky top-0 z-10">
         <div className="space-y-0.5 px-2 py-2">
@@ -584,24 +577,6 @@ const LeftSideNavMobile = () => {
           {!isAdminMode && (
           <div className="mt-3 mb-2 flex items-center justify-between px-1">
             <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-zinc-400">
-              {activeTab !== 'apps' && activeTab !== 'bots' && activeTab !== 'none' && mode === UserMode.TENANT && currentTenant && (
-                <Badge
-                  variant="outline"
-                  className="h-4 px-1.5 text-[9px] font-normal border-gray-400 text-gray-500 bg-transparent"
-                >
-                  <Building2 className="mr-0.5 size-2" />
-                  {currentTenant.name}
-                </Badge>
-              )}
-              {activeTab !== 'apps' && activeTab !== 'bots' && activeTab !== 'none' && mode === UserMode.PERSONAL && (
-                <Badge
-                  variant="outline"
-                  className="h-4 px-1.5 text-[9px] font-normal border-gray-400 text-gray-500 bg-transparent"
-                >
-                  <User className="mr-0.5 size-2" />
-                  Personal
-                </Badge>
-              )}
             </div>
             {activeTab === 'apps' ? (
               <div className="flex h-7 flex-1 items-center gap-1.5 rounded-lg border border-black/10 bg-[#F5F5F7] px-2 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 ml-4 max-w-[150px]">
@@ -629,8 +604,45 @@ const LeftSideNavMobile = () => {
           )}
           {isAdminMode ? (
             <div className="mt-2 space-y-6">
+              {/* Platform Owner Section (for super_admin) */}
+              {isSuperAdmin && (
+                <div className="space-y-1">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
+                    Platform Owner
+                  </div>
+                  {[
+                    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
+                    { name: 'Users', href: '/admin/metrics/total-users', icon: User },
+                    { name: 'Teams', href: '/admin/metrics/active-organizations', icon: UsersRound },
+                    { name: 'Payments', href: '/admin/metrics/monthly-revenue', icon: CreditCard },
+                    { name: 'Billing Console', href: '/admin/stripe', icon: ReceiptText },
+                  ].map((item) => {
+                    const isActive = item.exact 
+                      ? pathname === item.href 
+                      : pathname.startsWith(item.href);
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => close()}
+                        className={cn(
+                          'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                          isActive
+                            ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
+                            : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                        )}
+                      >
+                        <Icon className="w-4 h-4" />
+                        {item.name}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+
               {/* First Section */}
-              {isAdminSection && (
+              {isAdminSection && !isSuperAdmin && (
                 <div className="space-y-1">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
                     Admin
@@ -664,7 +676,7 @@ const LeftSideNavMobile = () => {
               )}
 
               {/* Second Section */}
-              {isManagerSection && (
+              {isManagerSection && !isSuperAdmin && (
                 <div className="space-y-1">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
                     Manager
@@ -995,7 +1007,7 @@ const LeftSideNavMobile = () => {
 
       {/* Footer fixed at bottom */}
       <div className="bg-secondary sticky bottom-0 flex flex-col w-full">
-        {isAdminMode && (
+        {isAdminMode && !isSuperAdmin && (
           <div className="flex h-20 w-full items-center justify-center border-t border-black/10 p-4">
             <Button
               variant="outline"
@@ -1012,22 +1024,16 @@ const LeftSideNavMobile = () => {
             <Button
               variant="default"
               className="flex-1 bg-black px-0 text-white hover:bg-black/90"
-              onClick={() => {
-                onOpen({ type: 'auth-modal', actionId: 'login' });
-                close();
-              }}
+              asChild
             >
-              Login
+              <Link href="/login" onClick={() => close()}>Login</Link>
             </Button>
             <Button
               variant="default"
               className="flex-1 bg-black px-0 text-white hover:bg-black/90"
-              onClick={() => {
-                onOpen({ type: 'auth-modal', actionId: 'register' });
-                close();
-              }}
+              asChild
             >
-              Register
+              <Link href="/register" onClick={() => close()}>Register</Link>
             </Button>
           </div>
         ) : (
@@ -1039,32 +1045,41 @@ const LeftSideNavMobile = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
                 <DropdownMenuGroup>
-                  {isAdmin && (
+                  {isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => { router.push('/admin'); close(); }}>
+                      <Shield className="text-black" /> Owner Dashboard
+                    </DropdownMenuItem>
+                  )}
+                  {isAdmin && !isSuperAdmin && (
                     <DropdownMenuItem onClick={() => { router.push('/admin/members'); close(); }}>
                       <Shield className="text-black" /> Admin
                     </DropdownMenuItem>
                   )}
-                  {(isAdmin || isManager) && (
+                  {(isAdmin || isManager) && !isSuperAdmin && (
                     <DropdownMenuItem onClick={() => { router.push('/admin/data'); close(); }}>
                       <LayoutDashboard className="text-black" /> Manager
                     </DropdownMenuItem>
                   )}
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push('/settings');
-                    close();
-                  }}
-                >
-                  <Settings className="text-black" /> Settings
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push('/legal');
-                    close();
-                  }}
-                >
-                  <Scale className="text-black" /> Legal
-                </DropdownMenuItem>
+                {!isSuperAdmin && (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      router.push('/settings');
+                      close();
+                    }}
+                  >
+                    <Settings className="text-black" /> Settings
+                  </DropdownMenuItem>
+                )}
+                {!isSuperAdmin && (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      router.push('/legal');
+                      close();
+                    }}
+                  >
+                    <Scale className="text-black" /> Legal
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem
