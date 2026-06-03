@@ -12,11 +12,19 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { type ReactNode, useEffect, useState, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
-import { Search, Mail, User, ArrowLeft } from 'lucide-react';
+import { Search, Mail, User, ArrowLeft, Pencil } from 'lucide-react';
 import { DUMMY_TENANTS } from '@/utils/dummyData';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useParams } from 'next/navigation';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 export default function TeamMembersPage() {
   const params = useParams();
@@ -29,6 +37,9 @@ export default function TeamMembersPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [teamPricing, setTeamPricing] = useState<string>('$20');
+  const [selectedPrice, setSelectedPrice] = useState<string>('$20');
+  const [isEditingPrice, setIsEditingPrice] = useState(false);
 
   useEffect(() => {
     if (!tenantId) return;
@@ -140,6 +151,17 @@ export default function TeamMembersPage() {
     };
   }, [tenantId, accessToken]);
 
+  useEffect(() => {
+    if (tenantId && typeof window !== 'undefined') {
+      const stored = localStorage.getItem(`team_price_${tenantId}`);
+      if (stored) {
+        setTeamPricing(stored);
+      } else {
+        setTeamPricing('$20');
+      }
+    }
+  }, [tenantId]);
+
   const ownerEmail = useMemo(() => {
     if (!detail) return '—';
     if (typeof detail.ownerId === 'object' && detail.ownerId !== null) {
@@ -196,11 +218,27 @@ export default function TeamMembersPage() {
             <div className="flex-1 min-h-0 flex flex-col gap-4">
               {/* Account Creator / Admin (Top Row, styled exactly as Team rows) */}
               <div className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center flex-none">
-                <div className="col-span-12 flex items-center gap-2.5 min-w-0">
+                <div className="col-span-9 flex items-center gap-2.5 min-w-0">
                   <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate select-all">
                     {ownerEmail}
                   </span>
+                </div>
+                <div className="col-span-3 flex items-center justify-end gap-3.5">
+                  <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                    {teamPricing}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 rounded-md"
+                    onClick={() => {
+                      setSelectedPrice(teamPricing);
+                      setIsEditingPrice(true);
+                    }}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
 
@@ -242,6 +280,60 @@ export default function TeamMembersPage() {
                   )}
                 </div>
               </div>
+
+              {/* Pricing Edit Dialog */}
+              <Dialog open={isEditingPrice} onOpenChange={setIsEditingPrice}>
+                <DialogContent className="max-w-md rounded-2xl border border-black/10 dark:border-white/10 bg-[#F5F5F7] dark:bg-zinc-950 p-6 flex flex-col gap-4">
+                  <DialogHeader>
+                    <DialogTitle className="text-lg font-semibold text-gray-900 dark:text-white">
+                      Edit Team Pricing
+                    </DialogTitle>
+                    <DialogDescription className="text-sm text-muted-foreground">
+                      Update the subscription pricing tier for this entire team (all members).
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className="py-2 flex flex-col gap-2">
+                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pl-1">
+                      Price per user / month
+                    </label>
+                    <select
+                      value={selectedPrice}
+                      onChange={e => setSelectedPrice(e.target.value)}
+                      className="w-full h-11 px-3.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-sm font-medium text-gray-900 dark:text-gray-100 shadow-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer animate-none"
+                    >
+                      <option value="$25">$25 / mo</option>
+                      <option value="$20">$20 / mo</option>
+                      <option value="$15">$15 / mo</option>
+                      <option value="$10">$10 / mo</option>
+                      <option value="$5">$5 / mo</option>
+                      <option value="$0">$0 (Free)</option>
+                    </select>
+                  </div>
+
+                  <DialogFooter className="flex gap-2 justify-end mt-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsEditingPrice(false)}
+                      className="rounded-lg border-black/10 dark:border-white/10"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setTeamPricing(selectedPrice);
+                        if (tenantId) {
+                          localStorage.setItem(`team_price_${tenantId}`, selectedPrice);
+                        }
+                        setIsEditingPrice(false);
+                      }}
+                      className="rounded-lg bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90"
+                    >
+                      Save
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           )}
         </div>
