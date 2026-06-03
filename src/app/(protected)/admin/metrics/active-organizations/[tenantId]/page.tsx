@@ -196,14 +196,11 @@ export default function TeamMembersPage() {
             <div className="flex-1 min-h-0 flex flex-col gap-4">
               {/* Account Creator / Admin (Top Row, styled exactly as Team rows) */}
               <div className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center flex-none">
-                <div className="col-span-4 flex items-center gap-2.5 min-w-0">
+                <div className="col-span-12 flex items-center gap-2.5 min-w-0">
                   <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate select-all">
                     {ownerEmail}
                   </span>
-                </div>
-                <div className="col-span-8 text-sm text-gray-500 dark:text-gray-400 truncate">
-                  Account Creator & Owner
                 </div>
               </div>
 
@@ -228,25 +225,16 @@ export default function TeamMembersPage() {
                   ) : (
                     filteredMembers.map(member => {
                       const email = member.userId?.email || '—';
-                      const role = member.role || member.tenantRole || 'member';
                       return (
                         <div
                           key={member._id}
                           className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center"
                         >
-                          <div className="col-span-4 flex items-center gap-2.5 min-w-0">
+                          <div className="col-span-12 flex items-center gap-2.5 min-w-0">
                             <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                             <span className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate select-all">
                               {email}
                             </span>
-                          </div>
-                          <div className="col-span-6 text-sm text-gray-500 dark:text-gray-400 truncate">
-                            Team User
-                          </div>
-                          <div className="col-span-2 flex justify-end">
-                            <Badge variant="secondary" className="capitalize text-[10px] px-2 py-0.5 rounded-md font-semibold bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400">
-                              {role}
-                            </Badge>
                           </div>
                         </div>
                       );
