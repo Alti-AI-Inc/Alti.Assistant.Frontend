@@ -245,11 +245,11 @@ export function MetricTotalUsersTableSection() {
                   onChange={e => handleAmountChange(e.target.value)}
                   className="w-full h-10 px-3 py-2 text-sm rounded-md border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
                 >
-                  <option value="$20">$20.00 / month</option>
-                  <option value="$15">$15.00 / month</option>
-                  <option value="$10">$10.00 / month</option>
-                  <option value="$5">$5.00 / month</option>
-                  <option value="$0">$0.00 (Free)</option>
+                  <option value="$20">$20 / month</option>
+                  <option value="$15">$15 / month</option>
+                  <option value="$10">$10 / month</option>
+                  <option value="$5">$5 / month</option>
+                  <option value="$0">$0 (Free)</option>
                 </select>
               </div>
             </div>
