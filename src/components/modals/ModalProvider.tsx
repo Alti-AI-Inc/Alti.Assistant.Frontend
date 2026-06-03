@@ -1,5 +1,6 @@
 'use client';
 import { useModalStore } from '@/stores/useModalStore';
+import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { AddChatbotModal } from './AddChatbotModal';
 import { AddModelModal } from './AddModelModal';
@@ -24,7 +25,17 @@ import SearchWorkflows from './SearchWorkflows';
 import { ShareConversationModal } from './ShareConversationModal';
 
 export const ModalProvider = () => {
-  const { type, isOpen } = useModalStore();
+  const pathname = usePathname();
+  const { type, isOpen, onClose } = useModalStore();
+
+  useEffect(() => {
+    // Close modal and restore body settings when route changes
+    if (isOpen) {
+      onClose();
+    }
+    document.body.style.pointerEvents = '';
+    document.body.style.overflow = '';
+  }, [pathname, onClose, isOpen]);
 
   useEffect(() => {
     if (!isOpen) {
