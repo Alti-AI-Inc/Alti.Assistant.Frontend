@@ -891,7 +891,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   </div>
 
                   {/* Terminal Log Console */}
-                  <div className="bg-zinc-950/95 dark:bg-black/90 rounded-xl p-3.5 border border-zinc-850 shadow-inner h-28 overflow-y-auto font-mono text-[10px] leading-relaxed flex flex-col gap-1.5 text-zinc-300 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent mt-4">
+                  <div className="bg-zinc-100/80 dark:bg-zinc-900/60 rounded-xl p-3.5 border border-zinc-200/80 dark:border-zinc-800/80 shadow-inner h-28 overflow-y-auto font-mono text-[10px] leading-relaxed flex flex-col gap-1.5 text-zinc-700 dark:text-zinc-300 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-800 scrollbar-track-transparent mt-4">
                     {logs.map((log, idx) => {
                       let type = 'system';
                       let msg = log;
@@ -903,26 +903,26 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                         }
                       }
 
-                      let typeColor = 'text-zinc-500 border-zinc-800 bg-zinc-900/20';
-                      let msgColor = 'text-zinc-300';
+                      let typeColor = 'text-zinc-500 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/20';
+                      let msgColor = 'text-zinc-650 dark:text-zinc-300';
                       if (type === 'dns') {
-                        typeColor = 'text-cyan-400 bg-cyan-950/20 border-cyan-900/30';
+                        typeColor = 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/20 border-cyan-200 dark:border-cyan-900/30';
                       } else if (type === 'fetch') {
-                        typeColor = 'text-purple-400 bg-purple-950/20 border-purple-900/30';
+                        typeColor = 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-900/30';
                       } else if (type === 'status') {
-                        typeColor = 'text-emerald-400 bg-emerald-950/20 border-emerald-900/30 font-bold';
-                        msgColor = 'text-emerald-300 font-medium';
+                        typeColor = 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-900/30 font-bold';
+                        msgColor = 'text-emerald-600 dark:text-emerald-300 font-medium';
                       } else if (type === 'parse') {
-                        typeColor = 'text-blue-400 bg-blue-950/20 border-blue-900/30';
+                        typeColor = 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900/30';
                       } else if (type === 'consensus') {
-                        typeColor = 'text-amber-400 bg-amber-950/20 border-amber-900/30 font-bold';
-                        msgColor = 'text-zinc-100';
+                        typeColor = 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/30 font-bold';
+                        msgColor = 'text-zinc-800 dark:text-zinc-150';
                       } else if (type === 'grounding') {
-                        typeColor = 'text-teal-400 bg-teal-950/20 border-teal-900/30 font-bold';
-                        msgColor = 'text-teal-200';
+                        typeColor = 'text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/20 border-teal-200 dark:border-teal-900/30 font-bold';
+                        msgColor = 'text-teal-600 dark:text-teal-350';
                       } else if (type === 'synthesis') {
-                        typeColor = 'text-pink-400 bg-pink-950/20 border-pink-900/30 font-bold';
-                        msgColor = 'text-pink-100';
+                        typeColor = 'text-pink-600 dark:text-pink-400 bg-pink-50 dark:bg-pink-950/20 border-pink-200 dark:border-pink-900/30 font-bold';
+                        msgColor = 'text-pink-600 dark:text-pink-350';
                       }
 
                       return (

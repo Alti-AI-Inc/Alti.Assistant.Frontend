@@ -98,33 +98,33 @@ export default function TelemetryConsole({ conversationId, active, onComplete }:
   if (!active) return null;
 
   return (
-    <div className="w-full rounded-2xl border border-teal-500/20 bg-slate-950 p-6 font-mono text-teal-400 shadow-2xl relative overflow-hidden my-4 min-h-[400px] flex flex-col justify-between">
+    <div className="w-full rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/20 backdrop-blur-md p-6 font-mono text-zinc-700 dark:text-zinc-300 shadow-xl relative overflow-hidden my-4 min-h-[400px] flex flex-col justify-between transition-colors duration-300">
       {/* Decorative cyber grid background lines */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:1.5rem_1.5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20 pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:1.5rem_1.5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30 pointer-events-none" />
 
       {/* Terminal Header */}
-      <div className="flex items-center justify-between border-b border-teal-500/20 pb-3 relative z-10">
+      <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800/50 pb-3 relative z-10">
         <div className="flex items-center gap-2">
-          <Terminal className="size-5 animate-pulse text-teal-500" />
-          <span className="text-xs font-bold uppercase tracking-wider text-teal-500">DEEP_RESEARCH_TELEMETRY_PIPELINE v1.6.3</span>
+          <Terminal className="size-5 animate-pulse text-indigo-500 dark:text-indigo-400" />
+          <span className="text-xs font-bold uppercase tracking-wider text-zinc-800 dark:text-zinc-200">DEEP_RESEARCH_TELEMETRY_PIPELINE v1.6.3</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-teal-500 animate-ping" />
-          <span className="text-[10px] text-teal-500 font-semibold tracking-widest uppercase">Streaming LIVE</span>
+          <span className="h-2 w-2 rounded-full bg-indigo-500 animate-ping" />
+          <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold tracking-widest uppercase">Streaming LIVE</span>
         </div>
       </div>
 
       {/* Progress Core */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-6 items-center relative z-10 flex-1">
         {/* Glowing Dial Column */}
-        <div className="flex flex-col items-center justify-center col-span-1 border-r border-teal-500/10 pr-0 md:pr-6">
-          <div className="relative size-32 flex items-center justify-center rounded-full border border-teal-500/20 bg-teal-950/20 shadow-[0_0_20px_rgba(15,118,110,0.1)]">
+        <div className="flex flex-col items-center justify-center col-span-1 border-r border-zinc-200 dark:border-zinc-800/50 pr-0 md:pr-6">
+          <div className="relative size-32 flex items-center justify-center rounded-full border border-indigo-500/20 bg-indigo-500/5 dark:bg-indigo-500/10 shadow-[0_0_20px_rgba(99,102,241,0.05)]">
             {/* Spinning loader */}
-            <div className="absolute inset-0 rounded-full border-t-2 border-teal-400 animate-spin" style={{ animationDuration: '3s' }} />
+            <div className="absolute inset-0 rounded-full border-t-2 border-indigo-500 dark:border-indigo-400 animate-spin" style={{ animationDuration: '3s' }} />
             
             <div className="text-center">
-              <span className="text-3xl font-extrabold tracking-tighter text-white">{percentage}%</span>
-              <p className="text-[9px] uppercase tracking-widest text-teal-500/80 mt-0.5">COMPLETED</p>
+              <span className="text-3xl font-extrabold tracking-tighter text-zinc-900 dark:text-white">{percentage}%</span>
+              <p className="text-[9px] uppercase tracking-widest text-indigo-600 dark:text-indigo-400/80 mt-0.5 font-bold">COMPLETED</p>
             </div>
           </div>
         </div>
@@ -132,35 +132,35 @@ export default function TelemetryConsole({ conversationId, active, onComplete }:
         {/* Current Activity Message Column */}
         <div className="col-span-2 space-y-4">
           <div className="space-y-1">
-            <span className="text-[10px] uppercase tracking-wider text-teal-500/60 font-bold">Node Step</span>
+            <span className="text-[10px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-bold">Node Step</span>
             <div className="flex items-center gap-2">
-              <Shield className="size-4 text-emerald-400 flex-shrink-0" />
-              <h3 className="text-sm font-bold text-white uppercase tracking-wide">{currentStep.replace(/_/g, ' ')}</h3>
+              <Shield className="size-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" />
+              <h3 className="text-sm font-bold text-zinc-800 dark:text-white uppercase tracking-wide">{currentStep.replace(/_/g, ' ')}</h3>
             </div>
           </div>
 
           <div className="space-y-1">
-            <span className="text-[10px] uppercase tracking-wider text-teal-500/60 font-bold">Operation Target Status</span>
-            <div className="p-3 rounded-lg border border-teal-500/10 bg-teal-950/10 min-h-[50px] flex items-center gap-2.5">
-              <Loader2 className="size-4 animate-spin text-teal-400 flex-shrink-0" />
-              <p className="text-xs text-teal-100 leading-relaxed font-semibold">{currentMessage}</p>
+            <span className="text-[10px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-bold">Operation Target Status</span>
+            <div className="p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-950/20 min-h-[50px] flex items-center gap-2.5">
+              <Loader2 className="size-4 animate-spin text-indigo-500 dark:text-indigo-400 flex-shrink-0" />
+              <p className="text-xs text-zinc-700 dark:text-zinc-200 leading-relaxed font-semibold">{currentMessage}</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Log Console Output Area */}
-      <div className="border border-teal-500/10 rounded-lg p-3 bg-slate-950/90 h-[180px] overflow-y-auto flex flex-col justify-between relative z-10">
+      <div className="border border-zinc-200 dark:border-zinc-800/80 rounded-lg p-3 bg-zinc-100/50 dark:bg-zinc-950/30 h-[180px] overflow-y-auto flex flex-col justify-between relative z-10 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-800 scrollbar-track-transparent">
         <div className="space-y-1 text-[11px] leading-relaxed">
           {logs.map((log) => {
-            let textColor = 'text-teal-300';
-            if (log.type === 'success') textColor = 'text-emerald-400 font-bold';
-            if (log.type === 'warn') textColor = 'text-amber-400';
+            let textColor = 'text-zinc-650 dark:text-zinc-300';
+            if (log.type === 'success') textColor = 'text-emerald-600 dark:text-emerald-400 font-bold';
+            if (log.type === 'warn') textColor = 'text-amber-600 dark:text-amber-400 font-semibold';
 
             return (
               <div key={log.id} className="flex gap-2.5 items-start">
-                <span className="text-teal-500/50 flex-shrink-0">[{log.timestamp}]</span>
-                <span className="text-emerald-500/70 flex-shrink-0 uppercase font-bold text-[9px] border border-emerald-500/20 px-1 rounded-sm">{log.step}</span>
+                <span className="text-zinc-400 dark:text-zinc-500 flex-shrink-0">[{log.timestamp}]</span>
+                <span className="text-indigo-600 dark:text-indigo-400 flex-shrink-0 uppercase font-bold text-[9px] border border-indigo-500/20 px-1 rounded-sm">{log.step}</span>
                 <span className={`${textColor}`}>{log.message}</span>
               </div>
             );
