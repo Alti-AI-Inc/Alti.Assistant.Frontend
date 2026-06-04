@@ -30,6 +30,7 @@ import { useAdminStore } from '@/stores/useAdminStore';
 export default function AdminInstructionsPage() {
   const { instructions, setInstructions } = useAdminStore();
   const [searchTerm, setSearchTerm] = useState('');
+  const [secondarySearchTerm, setSecondarySearchTerm] = useState('');
 
   // Dialog state for adding
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -79,7 +80,8 @@ export default function AdminInstructionsPage() {
   const filteredInstructions = instructionsList
     .map((text, index) => ({ text, index }))
     .filter(({ text }) =>
-      text.toLowerCase().includes(searchTerm.toLowerCase().trim()),
+      text.toLowerCase().includes(searchTerm.toLowerCase().trim()) &&
+      text.toLowerCase().includes(secondarySearchTerm.toLowerCase().trim()),
     );
 
   return (
@@ -144,6 +146,17 @@ export default function AdminInstructionsPage() {
                 placeholder="Search instructions..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
+                className="pl-12 pr-4 h-12 w-full text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-1 focus-visible:ring-primary"
+              />
+            </div>
+
+            {/* Second Full-width Search Bar */}
+            <div className="relative w-full flex-none">
+              <Search className="text-muted-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
+              <Input
+                placeholder="Search instructions secondary..."
+                value={secondarySearchTerm}
+                onChange={e => setSecondarySearchTerm(e.target.value)}
                 className="pl-12 pr-4 h-12 w-full text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-1 focus-visible:ring-primary"
               />
             </div>
