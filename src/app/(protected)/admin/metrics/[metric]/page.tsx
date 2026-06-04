@@ -1,15 +1,10 @@
 import {
   AdminTenantListItem,
   AdminUser,
-  getAllPayments,
-  getAllSubscriptions,
   getAllUsers,
   getTenants,
-  PaymentRecord,
-  SubscriptionRecord,
 } from '@/actions/adminActions';
 import { auth } from '@/auth';
-import { MetricMonthlyRevenuePaymentsTableSection } from '@/components/admin/MetricMonthlyRevenuePaymentsTableSection';
 import { MetricTenantsTableSection } from '@/components/admin/MetricTenantsTableSection';
 import { MetricTotalUsersTableSection } from '@/components/admin/MetricTotalUsersTableSection';
 import { Button } from '@/components/ui/button';
@@ -19,7 +14,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { DUMMY_USERS, DUMMY_TENANTS } from '@/utils/dummyData';
 
-type MetricKey = 'total-users' | 'active-organizations' | 'monthly-revenue';
+type MetricKey = 'total-users' | 'active-organizations';
 
 type MonthlyPoint = {
   month: string;
@@ -42,45 +37,12 @@ type TenantsPayload = {
   };
 };
 
-type SubscriptionTotalsPayload = {
-  totalSubscriptions?: number;
-  totalRevenue?: number;
-  subscriptions?: SubscriptionRecord[];
-  data?: SubscriptionRecord[];
-};
-
 function normalizeTenantsPayload(payload: unknown): TenantsPayload {
   if (!payload || typeof payload !== 'object') {
     return {};
   }
 
   return payload as TenantsPayload;
-}
-
-function normalizeSubscriptionTotalsPayload(
-  payload: unknown,
-): SubscriptionTotalsPayload {
-  if (!payload || typeof payload !== 'object') {
-    return {};
-  }
-
-  return payload as SubscriptionTotalsPayload;
-}
-
-function normalizePaymentsPayload(payload: unknown): PaymentRecord[] {
-  if (Array.isArray(payload)) {
-    return payload as PaymentRecord[];
-  }
-
-  if (
-    payload &&
-    typeof payload === 'object' &&
-    Array.isArray((payload as { data?: unknown }).data)
-  ) {
-    return (payload as { data: PaymentRecord[] }).data;
-  }
-
-  return [];
 }
 
 function normalizeUsersPayload(payload: unknown): AdminUser[] {
@@ -140,19 +102,6 @@ const metricConfigs: Record<MetricKey, MetricConfig> = {
       { month: 'Apr', value: 395 },
       { month: 'May', value: 410 },
       { month: 'Jun', value: 428 },
-    ],
-  },
-  'monthly-revenue': {
-    title: 'Monthly Revenue',
-    subtitle: 'Month-wise revenue trend for the last 6 months.',
-    unit: 'currency',
-    monthlyData: [
-      { month: 'Jan', value: 35200 },
-      { month: 'Feb', value: 37850 },
-      { month: 'Mar', value: 40560 },
-      { month: 'Apr', value: 42940 },
-      { month: 'May', value: 45680 },
-      { month: 'Jun', value: 48920 },
     ],
   },
 };
@@ -215,8 +164,6 @@ export default async function MetricDetailsPage({
     }
   } else if (metricKey === 'active-organizations') {
     pageTitle = 'Team Plans';
-  } else if (metricKey === 'monthly-revenue') {
-    pageTitle = 'Payments';
   }
 
   let monthlyData = config.monthlyData;
@@ -238,51 +185,7 @@ export default async function MetricDetailsPage({
   let newTeamsThisMonth = 0;
   let totalTeamsCount = 0;
 
-  if (metricKey === 'monthly-revenue') {
-    try {
-      const subsRes = await getAllSubscriptions(accessToken);
-      const subsPayload = normalizeSubscriptionTotalsPayload(
-        subsRes?.data ?? subsRes,
-      );
 
-      totalSubscriptionsFromApi = Number(subsPayload.totalSubscriptions ?? 0);
-      totalRevenueFromApi = Number(subsPayload.totalRevenue ?? 0);
-    } catch {
-      totalSubscriptionsFromApi = 0;
-      totalRevenueFromApi = 0;
-    }
-  }
-
-  if (metricKey === 'monthly-revenue') {
-    // fetch payments for monthly trend
-    const paymentsRes = await getAllPayments(accessToken);
-    const paymentsList = normalizePaymentsPayload(
-      paymentsRes?.data ?? paymentsRes,
-    );
-
-    const months = getLastNMonths(6);
-    const monthKeys = months.map(
-      m =>
-        `${m.year}-${String(new Date(`${m.month} 1`).getMonth() + 1).padStart(2, '0')}`,
-    );
-
-    const sums: Record<string, number> = {};
-    monthKeys.forEach(k => (sums[k] = 0));
-
-    paymentsList.forEach(p => {
-      const date = p.createdAt ? new Date(p.createdAt) : null;
-      if (!date) return;
-      const key = monthKeyFromDate(date);
-      if (key in sums) {
-        sums[key] = (sums[key] || 0) + (p.price || 0);
-      }
-    });
-
-    monthlyData = monthKeys.map(k => ({
-      month: monthLabelFromKey(k),
-      value: Math.round((sums[k] || 0) / 100),
-    }));
-  }
 
   if (metricKey === 'active-organizations') {
     const tenantsRes = await getTenants(accessToken, { page: 1, limit: 5000 });
@@ -441,7 +344,7 @@ export default async function MetricDetailsPage({
   const growth =
     previous > 0 ? (((latest - previous) / previous) * 100).toFixed(1) : '0.0';
 
-  const summaryCards =
+  const summaryCards: { title: string; value: string; isGrowth?: boolean }[] =
     metricKey === 'active-organizations'
       ? [
           {
@@ -461,29 +364,13 @@ export default async function MetricDetailsPage({
             value: String(totalTeamsCount),
           },
         ]
-      : metricKey === 'monthly-revenue'
-        ? [
-            {
-              title: 'Total Subscriptions',
-              value: String(totalSubscriptionsFromApi),
-            },
-            {
-              title: 'Total Revenue',
-              value: formatValue(totalRevenueFromApi, 'currency'),
-            },
-            {
-              title: 'Month-over-Month Growth',
-              value: `+${growth}%`,
-              isGrowth: true,
-            },
-          ]
-          : [
-              {
-                title: 'Month-over-Month Growth',
-                value: `+${growth}%`,
-                isGrowth: true,
-              },
-            ];
+      : [
+          {
+            title: 'Month-over-Month Growth',
+            value: `+${growth}%`,
+            isGrowth: true,
+          },
+        ];
 
   return (
     <div className="h-full flex flex-col bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden">
@@ -562,9 +449,6 @@ export default async function MetricDetailsPage({
 
         {metricKey === 'total-users' && <MetricTotalUsersTableSection />}
 
-        {metricKey === 'monthly-revenue' && (
-          <MetricMonthlyRevenuePaymentsTableSection />
-        )}
         {metricKey === 'active-organizations' && <MetricTenantsTableSection />}
       </div>
       </div>

@@ -5,7 +5,7 @@ import {
   type StripeProduct,
 } from '@/actions/stripeActions';
 
-export type StripeAdminTab = 'payments' | 'customers' | 'subscriptions' | 'products';
+export type StripeAdminTab = 'customers' | 'subscriptions' | 'products';
 
 export interface StripeAdminSlice {
   // Data
@@ -50,7 +50,7 @@ const initialState = {
   products: [] as StripeProduct[],
   isLoading: true,
   searchTerm: '',
-  activeTab: 'payments' as StripeAdminTab,
+  activeTab: 'customers' as StripeAdminTab,
   isCreateCustomerOpen: false,
 };
 
