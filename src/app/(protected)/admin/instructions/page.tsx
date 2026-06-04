@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -15,7 +15,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Dialog,
   DialogContent,
@@ -32,9 +31,10 @@ export default function AdminInstructionsPage() {
   const [newInstruction, setNewInstruction] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Dialog state for editing
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Index of instruction being edited
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [editValue, setEditValue] = useState('');
 
   // Dialog state for deleting
   const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
@@ -43,26 +43,32 @@ export default function AdminInstructionsPage() {
     ? instructions.split('\n\n').filter(Boolean)
     : [];
 
-  const handleAdd = () => {
+  const handleSendOrSave = () => {
     if (!newInstruction.trim()) return;
-    const newList = [newInstruction.trim(), ...instructionsList];
-    setInstructions(newList.join('\n\n'));
+    if (editingIndex !== null) {
+      const newList = instructionsList.map((item, idx) =>
+        idx === editingIndex ? newInstruction.trim() : item,
+      );
+      setInstructions(newList.join('\n\n'));
+      setEditingIndex(null);
+    } else {
+      const newList = [newInstruction.trim(), ...instructionsList];
+      setInstructions(newList.join('\n\n'));
+    }
     setNewInstruction('');
   };
 
   const handleStartEdit = (index: number, val: string) => {
     setEditingIndex(index);
-    setEditValue(val);
+    setNewInstruction(val);
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 50);
   };
 
-  const handleSaveEdit = () => {
-    if (editingIndex === null || !editValue.trim()) return;
-    const newList = instructionsList.map((item, idx) =>
-      idx === editingIndex ? editValue.trim() : item,
-    );
-    setInstructions(newList.join('\n\n'));
+  const handleCancelEdit = () => {
     setEditingIndex(null);
-    setEditValue('');
+    setNewInstruction('');
   };
 
   const handleDelete = () => {
@@ -103,24 +109,35 @@ export default function AdminInstructionsPage() {
             {/* Prompt Box to Enter New Instructions */}
             <div className="relative w-full flex-none flex items-center gap-2 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-lg shadow-sm pr-2">
               <Input
+                ref={inputRef}
                 placeholder="Enter new instruction"
                 value={newInstruction}
                 onChange={e => setNewInstruction(e.target.value)}
                 onKeyDown={e => {
                   if (e.key === 'Enter' && newInstruction.trim()) {
                     e.preventDefault();
-                    handleAdd();
+                    handleSendOrSave();
                   }
                 }}
                 className="px-4 h-12 w-full text-base border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none bg-transparent flex-1"
               />
+              {editingIndex !== null && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={handleCancelEdit}
+                  className="h-8 px-3 rounded-md text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white"
+                >
+                  Cancel
+                </Button>
+              )}
               <Button
                 size="sm"
-                onClick={handleAdd}
+                onClick={handleSendOrSave}
                 disabled={!newInstruction.trim()}
                 className="h-8 px-4 rounded-md"
               >
-                Send
+                {editingIndex !== null ? 'Save' : 'Send'}
               </Button>
             </div>
 
@@ -167,53 +184,14 @@ export default function AdminInstructionsPage() {
 
                       {/* Actions columns */}
                       <div className="col-span-2 flex items-center justify-end gap-2">
-                        {/* Edit Dialog */}
-                        <Dialog
-                          open={editingIndex === index}
-                          onOpenChange={open => {
-                            if (!open) {
-                              setEditingIndex(null);
-                              setEditValue('');
-                            }
-                          }}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 rounded-lg text-gray-400 hover:text-black dark:hover:text-white"
+                          onClick={() => handleStartEdit(index, text)}
                         >
-                          <DialogTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 rounded-lg text-gray-400 hover:text-black dark:hover:text-white"
-                              onClick={() => handleStartEdit(index, text)}
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-lg rounded-[20px] bg-white dark:bg-zinc-900 border-none shadow-xl">
-                            <DialogHeader>
-                              <DialogTitle>Edit Instruction Rule</DialogTitle>
-                            </DialogHeader>
-                            <div className="py-4">
-                              <Textarea
-                                placeholder="Edit the instruction rule..."
-                                value={editValue}
-                                onChange={e => setEditValue(e.target.value)}
-                                rows={4}
-                                className="w-full resize-none border-black/10 dark:border-white/10 rounded-lg focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
-                                autoFocus
-                              />
-                            </div>
-                            <DialogFooter>
-                              <DialogClose asChild>
-                                <Button variant="outline">Cancel</Button>
-                              </DialogClose>
-                              <Button
-                                onClick={handleSaveEdit}
-                                disabled={!editValue.trim()}
-                              >
-                                Save Changes
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
+                          <Pencil className="h-4 w-4" />
+                        </Button>
 
                         {/* Delete Dialog */}
                         <Dialog
