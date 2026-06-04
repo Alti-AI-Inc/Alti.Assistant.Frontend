@@ -167,7 +167,7 @@ export default function AdminInstructionsPage() {
                       className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 items-center animate-in fade-in-50 duration-150"
                     >
                       {/* Left Icon (Terminal) & Content column merged */}
-                      <div className="col-span-10 flex items-center gap-3.5 min-w-0">
+                      <div className="col-span-10 flex items-center gap-5 min-w-0">
                         <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-none">
                           <Terminal className="h-4 w-4" />
                         </div>
