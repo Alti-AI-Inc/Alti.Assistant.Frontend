@@ -148,10 +148,10 @@ export function MetricTotalUsersTableSection() {
     .sort((a, b) => (a.email || '').localeCompare(b.email || ''));
 
   const placeholderText = planFilter === 'free'
-    ? 'Search free users...'
+    ? 'Search free users'
     : planFilter === 'paid'
-      ? 'Search paid users...'
-      : 'Search user email addresses...';
+      ? 'Search paid users'
+      : 'Search user email addresses';
 
   if (!accessToken) {
     return (

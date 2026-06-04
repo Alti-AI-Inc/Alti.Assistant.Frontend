@@ -57,7 +57,7 @@ export function UsersClientSection() {
           <div className="relative w-64">
             <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <Input
-              placeholder="Search email or name..."
+              placeholder="Search email or name"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               className="pl-10"
