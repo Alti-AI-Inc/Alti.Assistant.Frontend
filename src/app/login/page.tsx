@@ -82,7 +82,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@altihq.com"
-              className="w-full rounded-xl border-none bg-gray-100 p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10"
+              className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10"
             />
           </div>
 
@@ -101,7 +101,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-xl border-none bg-gray-100 p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10"
+                className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10"
               />
               <button
                 type="button"
