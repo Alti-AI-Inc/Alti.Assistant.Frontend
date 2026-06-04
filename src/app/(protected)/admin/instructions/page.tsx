@@ -29,12 +29,8 @@ import { useAdminStore } from '@/stores/useAdminStore';
 
 export default function AdminInstructionsPage() {
   const { instructions, setInstructions } = useAdminStore();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [secondarySearchTerm, setSecondarySearchTerm] = useState('');
-
-  // Dialog state for adding
-  const [isAddOpen, setIsAddOpen] = useState(false);
   const [newInstruction, setNewInstruction] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Dialog state for editing
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -52,7 +48,6 @@ export default function AdminInstructionsPage() {
     const newList = [newInstruction.trim(), ...instructionsList];
     setInstructions(newList.join('\n\n'));
     setNewInstruction('');
-    setIsAddOpen(false);
   };
 
   const handleStartEdit = (index: number, val: string) => {
@@ -80,8 +75,7 @@ export default function AdminInstructionsPage() {
   const filteredInstructions = instructionsList
     .map((text, index) => ({ text, index }))
     .filter(({ text }) =>
-      text.toLowerCase().includes(searchTerm.toLowerCase().trim()) &&
-      text.toLowerCase().includes(secondarySearchTerm.toLowerCase().trim()),
+      text.toLowerCase().includes(searchTerm.toLowerCase().trim()),
     );
 
   return (
@@ -92,39 +86,6 @@ export default function AdminInstructionsPage() {
           Instructions
         </h1>
         <div className="flex items-center gap-2">
-          {/* Add Instruction Button */}
-          <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-            <DialogTrigger asChild>
-              <Button size="sm">
-                <Plus className="mr-2 h-4 w-4" />
-                Add Instruction
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-lg rounded-[20px] bg-white dark:bg-zinc-900 border-none shadow-xl">
-              <DialogHeader>
-                <DialogTitle>Add System Instruction</DialogTitle>
-              </DialogHeader>
-              <div className="py-4">
-                <Textarea
-                  placeholder="Enter the system instruction rule here..."
-                  value={newInstruction}
-                  onChange={e => setNewInstruction(e.target.value)}
-                  rows={4}
-                  className="w-full resize-none border-black/10 dark:border-white/10 rounded-lg"
-                  autoFocus
-                />
-              </div>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button variant="outline">Cancel</Button>
-                </DialogClose>
-                <Button onClick={handleAdd} disabled={!newInstruction.trim()}>
-                  Save Rule
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-
           <Button asChild variant="outline" size="sm">
             <Link href="/admin">
               <ArrowLeft className="mr-2 h-4 w-4" />
@@ -139,15 +100,28 @@ export default function AdminInstructionsPage() {
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 flex-1 min-h-0">
 
           <div className="flex-1 min-h-0 flex flex-col gap-4">
-            {/* Full-width Search Bar */}
-            <div className="relative w-full flex-none">
-              <Search className="text-muted-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
+            {/* Prompt Box to Enter New Instructions */}
+            <div className="relative w-full flex-none flex items-center gap-2 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-lg shadow-sm focus-within:ring-1 focus-within:ring-primary pr-2">
               <Input
-                placeholder="Search instructions..."
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-                className="pl-12 pr-4 h-12 w-full text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-1 focus-visible:ring-primary"
+                placeholder="Enter instruction..."
+                value={newInstruction}
+                onChange={e => setNewInstruction(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && newInstruction.trim()) {
+                    e.preventDefault();
+                    handleAdd();
+                  }
+                }}
+                className="px-4 h-12 w-full text-base border-none shadow-none focus-visible:ring-0 bg-transparent flex-1"
               />
+              <Button
+                size="sm"
+                onClick={handleAdd}
+                disabled={!newInstruction.trim()}
+                className="h-8 px-4 rounded-md"
+              >
+                Send
+              </Button>
             </div>
 
             {/* Second Full-width Search Bar */}
@@ -155,8 +129,8 @@ export default function AdminInstructionsPage() {
               <Search className="text-muted-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
               <Input
                 placeholder="Search instructions..."
-                value={secondarySearchTerm}
-                onChange={e => setSecondarySearchTerm(e.target.value)}
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="pl-12 pr-4 h-12 w-full text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-1 focus-visible:ring-primary"
               />
             </div>
