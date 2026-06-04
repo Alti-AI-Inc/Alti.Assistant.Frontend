@@ -1242,9 +1242,12 @@ const ChatInput = ({
                   : activeConversation?.knowledgebaseId &&
                       activeKnowledgeBaseName
                     ? `Chat with ${activeKnowledgeBaseName}`
-                    : 'Enter prompt here...'
+                    : (pathname === '/workflows' || pathname?.startsWith('/workflows')
+                      ? 'Describe your workflow...'
+                      : 'Enter prompt here...')
               }
-              className="min-h-8 w-full flex-1 resize-none border-none px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+              style={{ backgroundColor: '#FFFFFF' }}
+              className="min-h-8 w-full flex-1 resize-none border-none bg-white px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
               autoFocus
             />
             {selectedOption === OPTIONS.RESEARCH && (

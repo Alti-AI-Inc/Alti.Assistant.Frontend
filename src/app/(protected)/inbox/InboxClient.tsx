@@ -112,47 +112,18 @@ function InboxClient() {
       ) : activeItem ? (
         /* Selected State: Output Viewer Workspace */
         <div className="flex-1 flex flex-col h-full overflow-hidden relative z-10">
-          {/* Header Bar */}
-          <div className="h-[52px] border-b border-black/10 dark:border-zinc-800/80 px-6 flex items-center justify-between bg-white/70 dark:bg-zinc-900/50 backdrop-blur-md flex-none">
-            <div className="flex items-center gap-3">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg md:hidden"
-                onClick={() => router.push('/inbox')}
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-              <h2 className="text-sm font-semibold text-gray-900 dark:text-white truncate">
-                {activeItem.title}
-              </h2>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 gap-1.5 rounded-lg text-xs"
-                onClick={() => handleCopy(activeItem.payload?.summary || activeItem.description)}
-              >
-                {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
-                {copied ? 'Copied' : 'Copy'}
-              </Button>
-              
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 gap-1.5 rounded-lg text-xs hover:bg-rose-500/10 hover:text-rose-600 dark:hover:bg-rose-500/20"
-                onClick={() => handleArchive(activeItem._id)}
-              >
-                <Archive className="h-3.5 w-3.5" />
-                Archive
-              </Button>
-            </div>
-          </div>
-
           {/* Reader Body */}
           <div className="flex-1 overflow-y-auto px-8 py-8 space-y-6">
+            {/* Mobile Back Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 gap-1 rounded-lg text-xs md:hidden self-start px-2 -ml-2 text-zinc-500 hover:text-zinc-800"
+              onClick={() => router.push('/inbox')}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Inbox
+            </Button>
             {/* Status overview metadata card */}
             <div className="rounded-xl border border-black/10 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="space-y-1">
@@ -192,7 +163,7 @@ function InboxClient() {
                   </div>
                 )}
                 
-                <div className="flex items-center gap-1.5 pr-1">
+                <div className="flex items-center gap-1.5 border-r border-black/10 dark:border-white/10 pr-5">
                   <Calendar className="h-3.5 w-3.5 text-zinc-400" />
                   <div>
                     <p className="text-[10px] text-zinc-400 uppercase tracking-wider font-bold">Executed</p>
@@ -205,6 +176,28 @@ function InboxClient() {
                       })}
                     </p>
                   </div>
+                </div>
+
+                <div className="flex items-center gap-2 pl-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 gap-1.5 rounded-lg text-xs bg-white dark:bg-zinc-900"
+                    onClick={() => handleCopy(activeItem.payload?.summary || activeItem.description)}
+                  >
+                    {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
+                    {copied ? 'Copied' : 'Copy'}
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 gap-1.5 rounded-lg text-xs bg-white dark:bg-zinc-900 hover:bg-rose-500/10 hover:text-rose-600 dark:hover:bg-rose-500/20"
+                    onClick={() => handleArchive(activeItem._id)}
+                  >
+                    <Archive className="h-3.5 w-3.5" />
+                    Archive
+                  </Button>
                 </div>
               </div>
             </div>
@@ -289,16 +282,6 @@ function InboxClient() {
       ) : (
         /* Default State: Summary Dashboard Landing when totalRuns > 0 but no item selected */
         <div className="flex-1 flex flex-col h-full overflow-hidden relative z-10">
-          {/* Header Bar */}
-          <div className="h-[52px] border-b border-black/10 dark:border-zinc-800/80 px-6 flex items-center justify-between bg-white/70 dark:bg-zinc-900/50 backdrop-blur-md flex-none select-none">
-            <h2 className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-              <Inbox className="h-4 w-4 text-gray-500" />
-              Unified Intelligence Inbox
-            </h2>
-            <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-zinc-400">
-            </div>
-          </div>
-
           {/* Dashboard Panel */}
           <div className="flex-1 overflow-y-auto px-8 py-8 space-y-8 max-w-5xl mx-auto w-full">
             <div className="space-y-1.5 select-none">
