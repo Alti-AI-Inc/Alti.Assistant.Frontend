@@ -17,10 +17,13 @@ import { Search, Mail, Pencil } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
 import { DUMMY_USERS } from '@/utils/dummyData';
+import { useSearchParams } from 'next/navigation';
 
 export function MetricTotalUsersTableSection() {
   const { data: session } = useSession();
   const accessToken = session?.accessToken as string | undefined;
+  const searchParams = useSearchParams();
+  const planFilter = searchParams ? searchParams.get('plan') : null;
 
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -128,7 +131,20 @@ export function MetricTotalUsersTableSection() {
   });
 
   const filteredUsers = combinedUsers
-    .filter(u => (u.email || '').toLowerCase().includes(searchTerm.toLowerCase().trim()))
+    .filter(u => {
+      const matchesSearch = (u.email || '').toLowerCase().includes(searchTerm.toLowerCase().trim());
+      if (!matchesSearch) return false;
+      
+      const custom = getUserPlanAndAmount(u);
+      const isPaid = custom.isSubscribed;
+      if (planFilter === 'free') {
+        return !isPaid;
+      }
+      if (planFilter === 'paid') {
+        return isPaid;
+      }
+      return true;
+    })
     .sort((a, b) => (a.email || '').localeCompare(b.email || ''));
 
   if (!accessToken) {

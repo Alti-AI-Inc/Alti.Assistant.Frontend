@@ -44,6 +44,7 @@ import {
   CreditCard,
   ArrowLeft,
   Inbox,
+  UserCheck,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -612,14 +613,20 @@ const LeftSideNavMobile = () => {
                   </div>
                   {[
                     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
-                    { name: 'Users', href: '/admin/metrics/total-users', icon: User },
-                    { name: 'Teams', href: '/admin/metrics/active-organizations', icon: UsersRound },
+                    { name: 'Free Users', href: '/admin/metrics/total-users?plan=free', icon: User },
+                    { name: 'Paid Users', href: '/admin/metrics/total-users?plan=paid', icon: UserCheck },
+                    { name: 'Team Plans', href: '/admin/metrics/active-organizations', icon: UsersRound },
                     { name: 'Payments', href: '/admin/metrics/monthly-revenue', icon: CreditCard },
                     { name: 'Billing Console', href: '/admin/stripe', icon: ReceiptText },
                   ].map((item) => {
+                    const currentPlan = searchParams?.get('plan');
                     const isActive = item.exact 
                       ? pathname === item.href 
-                      : pathname.startsWith(item.href);
+                      : item.href.includes('?plan=free')
+                        ? pathname === '/admin/metrics/total-users' && currentPlan === 'free'
+                        : item.href.includes('?plan=paid')
+                          ? pathname === '/admin/metrics/total-users' && currentPlan === 'paid'
+                          : pathname.startsWith(item.href);
                     const Icon = item.icon;
                     return (
                       <Link
