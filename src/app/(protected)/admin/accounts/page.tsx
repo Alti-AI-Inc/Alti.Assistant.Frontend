@@ -265,18 +265,31 @@ export default function AdminAccountsPage() {
                         <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-none">
                           <KeyRound className="h-4 w-4" />
                         </div>
-                        <div className="flex flex-col justify-center min-w-0">
-                          <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 leading-normal break-words">
-                            {item.name}
-                          </span>
-                          {item.username && (
-                            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium block mt-0.5">
-                              {item.username}
+                        <div className="flex-1 flex items-center gap-8 min-w-0">
+                          <div className="w-[180px] min-w-0">
+                            <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
+                              Account Name
                             </span>
-                          )}
-                          <span className="text-[9px] text-gray-450 dark:text-gray-400 font-medium block mt-0.5 font-mono tracking-wider">
-                            {revealedIndices[index] ? (item.password || 'None') : (item.password ? '••••••••' : 'None')}
-                          </span>
+                            <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate block">
+                              {item.name}
+                            </span>
+                          </div>
+                          <div className="w-[180px] min-w-0">
+                            <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
+                              Username
+                            </span>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate block">
+                              {item.username || 'None'}
+                            </span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
+                              Password
+                            </span>
+                            <span className="text-xs font-mono font-medium text-gray-500 dark:text-gray-400 block mt-0.5 tracking-wider">
+                              {revealedIndices[index] ? (item.password || 'None') : (item.password ? '••••••••' : 'None')}
+                            </span>
+                          </div>
                         </div>
                       </div>
 
