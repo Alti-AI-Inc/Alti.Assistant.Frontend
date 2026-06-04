@@ -286,7 +286,7 @@ export default function AdminPartnersPage() {
                         <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-none">
                           <Database className="h-4 w-4" />
                         </div>
-                        <div className="flex-1 flex items-center gap-6 min-w-0">
+                        <div className="flex-1 grid grid-cols-4 gap-8 min-w-0">
                           <div className="flex-1 min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Data Name
