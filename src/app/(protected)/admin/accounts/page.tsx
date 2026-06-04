@@ -1,13 +1,12 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft,
   Wallet,
   Trash2,
   Pencil,
-  Plus,
   Search,
 } from 'lucide-react';
 
@@ -31,10 +30,12 @@ export default function AdminAccountsPage() {
   const [newAccount, setNewAccount] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  // Dialog state for creating
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  // Index of account being edited
+  // Dialog state for editing
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editValue, setEditValue] = useState('');
 
   // Dialog state for deleting
   const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
@@ -43,32 +44,27 @@ export default function AdminAccountsPage() {
     ? accounts.split('\n\n').filter(Boolean)
     : [];
 
-  const handleSendOrSave = () => {
+  const handleCreate = () => {
     if (!newAccount.trim()) return;
-    if (editingIndex !== null) {
-      const newList = accountsList.map((item, idx) =>
-        idx === editingIndex ? newAccount.trim() : item,
-      );
-      setAccounts(newList.join('\n\n'));
-      setEditingIndex(null);
-    } else {
-      const newList = [newAccount.trim(), ...accountsList];
-      setAccounts(newList.join('\n\n'));
-    }
+    const newList = [newAccount.trim(), ...accountsList];
+    setAccounts(newList.join('\n\n'));
     setNewAccount('');
+    setIsCreateOpen(false);
   };
 
   const handleStartEdit = (index: number, val: string) => {
     setEditingIndex(index);
-    setNewAccount(val);
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 50);
+    setEditValue(val);
   };
 
-  const handleCancelEdit = () => {
+  const handleSaveEdit = () => {
+    if (editingIndex === null || !editValue.trim()) return;
+    const newList = accountsList.map((item, idx) =>
+      idx === editingIndex ? editValue.trim() : item,
+    );
+    setAccounts(newList.join('\n\n'));
     setEditingIndex(null);
-    setNewAccount('');
+    setEditValue('');
   };
 
   const handleDelete = () => {
@@ -106,39 +102,58 @@ export default function AdminAccountsPage() {
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 flex-1 min-h-0">
 
           <div className="flex-1 min-h-0 flex flex-col gap-4">
-            {/* Prompt Box to Enter New Accounts */}
-            <div className="relative w-full flex-none flex items-center gap-2 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-lg shadow-sm pr-2">
-              <Input
-                ref={inputRef}
-                placeholder="Enter new account"
-                value={newAccount}
-                onChange={e => setNewAccount(e.target.value)}
-                onKeyDown={e => {
-                  if (e.key === 'Enter' && newAccount.trim()) {
-                    e.preventDefault();
-                    handleSendOrSave();
+            {/* Top Bar Create Button */}
+            <div className="flex-none flex justify-center w-full">
+              <Dialog
+                open={isCreateOpen}
+                onOpenChange={open => {
+                  setIsCreateOpen(open);
+                  if (!open) {
+                    setNewAccount('');
                   }
                 }}
-                className="px-4 h-12 w-full text-base border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none bg-transparent flex-1"
-              />
-              {editingIndex !== null && (
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={handleCancelEdit}
-                  className="h-8 px-3 rounded-md text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white"
-                >
-                  Cancel
-                </Button>
-              )}
-              <Button
-                size="sm"
-                onClick={handleSendOrSave}
-                disabled={!newAccount.trim()}
-                className="h-8 px-4 rounded-md"
               >
-                {editingIndex !== null ? 'Save' : 'Send'}
-              </Button>
+                <DialogTrigger asChild>
+                  <Button className="w-full h-12 bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/90 rounded-lg font-medium text-base shadow-sm border border-black/10 cursor-pointer">
+                    Create New Account
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-lg rounded-[20px] bg-white dark:bg-zinc-900 border-none shadow-xl">
+                  <DialogHeader>
+                    <DialogTitle>Create New Account</DialogTitle>
+                    <DialogDescription className="text-gray-500 dark:text-gray-400 text-sm">
+                      Enter the name or detail of the new account below.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="py-4">
+                    <Input
+                      placeholder="Enter account name"
+                      value={newAccount}
+                      onChange={e => setNewAccount(e.target.value)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' && newAccount.trim()) {
+                          e.preventDefault();
+                          handleCreate();
+                        }
+                      }}
+                      className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+                      autoFocus
+                    />
+                  </div>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button
+                      onClick={handleCreate}
+                      disabled={!newAccount.trim()}
+                      className="bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/95"
+                    >
+                      Create
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
 
             {/* Second Full-width Search Bar */}
@@ -184,14 +199,62 @@ export default function AdminAccountsPage() {
 
                       {/* Actions columns */}
                       <div className="col-span-2 flex items-center justify-end gap-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 rounded-lg text-gray-400 hover:text-black dark:hover:text-white"
-                          onClick={() => handleStartEdit(index, text)}
+                        {/* Edit Dialog */}
+                        <Dialog
+                          open={editingIndex === index}
+                          onOpenChange={open => {
+                            if (!open) {
+                              setEditingIndex(null);
+                              setEditValue('');
+                            }
+                          }}
                         >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 rounded-lg text-gray-400 hover:text-black dark:hover:text-white"
+                              onClick={() => handleStartEdit(index, text)}
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-lg rounded-[20px] bg-white dark:bg-zinc-900 border-none shadow-xl">
+                            <DialogHeader>
+                              <DialogTitle>Edit Account</DialogTitle>
+                              <DialogDescription className="text-gray-500 dark:text-gray-400 text-sm">
+                                Make changes to the account detail below.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="py-4">
+                              <Input
+                                placeholder="Enter account name"
+                                value={editValue}
+                                onChange={e => setEditValue(e.target.value)}
+                                onKeyDown={e => {
+                                  if (e.key === 'Enter' && editValue.trim()) {
+                                    e.preventDefault();
+                                    handleSaveEdit();
+                                  }
+                                }}
+                                className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+                                autoFocus
+                              />
+                            </div>
+                            <DialogFooter>
+                              <DialogClose asChild>
+                                <Button variant="outline">Cancel</Button>
+                              </DialogClose>
+                              <Button
+                                onClick={handleSaveEdit}
+                                disabled={!editValue.trim()}
+                                className="bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/95"
+                              >
+                                Save Changes
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
 
                         {/* Delete Dialog */}
                         <Dialog
