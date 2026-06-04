@@ -25,9 +25,15 @@ import {
 } from '@/components/ui/dialog';
 import { useAdminStore } from '@/stores/useAdminStore';
 
+interface AccountEntry {
+  name: string;
+  password?: string;
+}
+
 export default function AdminAccountsPage() {
   const { accounts, setAccounts } = useAdminStore();
   const [newAccount, setNewAccount] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   // Dialog state for creating
@@ -36,48 +42,64 @@ export default function AdminAccountsPage() {
   // Dialog state for editing
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState('');
+  const [editPassword, setEditPassword] = useState('');
 
   // Dialog state for deleting
   const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
 
-  const accountsList = accounts
-    ? accounts.split('\n\n').filter(Boolean)
+  const accountsList: AccountEntry[] = accounts
+    ? accounts.split('\n\n').filter(Boolean).map(item => {
+        try {
+          return JSON.parse(item);
+        } catch (e) {
+          return { name: item, password: '' };
+        }
+      })
     : [];
 
   const handleCreate = () => {
     if (!newAccount.trim()) return;
-    const newList = [newAccount.trim(), ...accountsList];
-    setAccounts(newList.join('\n\n'));
+    const newEntry: AccountEntry = {
+      name: newAccount.trim(),
+      password: newPassword,
+    };
+    const newList = [newEntry, ...accountsList];
+    setAccounts(newList.map(item => JSON.stringify(item)).join('\n\n'));
     setNewAccount('');
+    setNewPassword('');
     setIsCreateOpen(false);
   };
 
-  const handleStartEdit = (index: number, val: string) => {
+  const handleStartEdit = (index: number, val: AccountEntry) => {
     setEditingIndex(index);
-    setEditValue(val);
+    setEditValue(val.name);
+    setEditPassword(val.password || '');
   };
 
   const handleSaveEdit = () => {
     if (editingIndex === null || !editValue.trim()) return;
     const newList = accountsList.map((item, idx) =>
-      idx === editingIndex ? editValue.trim() : item,
+      idx === editingIndex
+        ? { name: editValue.trim(), password: editPassword }
+        : item,
     );
-    setAccounts(newList.join('\n\n'));
+    setAccounts(newList.map(item => JSON.stringify(item)).join('\n\n'));
     setEditingIndex(null);
     setEditValue('');
+    setEditPassword('');
   };
 
   const handleDelete = () => {
     if (deletingIndex === null) return;
     const newList = accountsList.filter((_, idx) => idx !== deletingIndex);
-    setAccounts(newList.join('\n\n'));
+    setAccounts(newList.map(item => JSON.stringify(item)).join('\n\n'));
     setDeletingIndex(null);
   };
 
   const filteredAccounts = accountsList
-    .map((text, index) => ({ text, index }))
-    .filter(({ text }) =>
-      text.toLowerCase().includes(searchTerm.toLowerCase().trim()),
+    .map((item, index) => ({ item, index }))
+    .filter(({ item }) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase().trim()),
     );
 
   return (
@@ -110,6 +132,7 @@ export default function AdminAccountsPage() {
                   setIsCreateOpen(open);
                   if (!open) {
                     setNewAccount('');
+                    setNewPassword('');
                   }
                 }}
               >
@@ -118,27 +141,40 @@ export default function AdminAccountsPage() {
                     Create New Account
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-lg rounded-[20px] bg-[#F5F5F7] dark:bg-zinc-900 border-none shadow-xl">
+                <DialogContent className="max-w-lg rounded-[20px] bg-[#F5F5F7] dark:bg-zinc-900 border-none shadow-xl animate-in fade-in-50 duration-150">
                   <DialogHeader>
                     <DialogTitle>Create New Account</DialogTitle>
                     <DialogDescription className="text-gray-500 dark:text-gray-400 text-sm">
-                      Enter the name or detail of the new account below.
+                      Enter the name and password details for the new account below.
                     </DialogDescription>
                   </DialogHeader>
-                  <div className="py-4">
-                    <Input
-                      placeholder="Enter account name"
-                      value={newAccount}
-                      onChange={e => setNewAccount(e.target.value)}
-                      onKeyDown={e => {
-                        if (e.key === 'Enter' && newAccount.trim()) {
-                          e.preventDefault();
-                          handleCreate();
-                        }
-                      }}
-                      className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
-                      autoFocus
-                    />
+                  <div className="py-4 flex flex-col gap-3">
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Account Name</label>
+                      <Input
+                        placeholder="Enter account name"
+                        value={newAccount}
+                        onChange={e => setNewAccount(e.target.value)}
+                        className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+                        autoFocus
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Account Password</label>
+                      <Input
+                        type="password"
+                        placeholder="Enter account password"
+                        value={newPassword}
+                        onChange={e => setNewPassword(e.target.value)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter' && newAccount.trim()) {
+                            e.preventDefault();
+                            handleCreate();
+                          }
+                        }}
+                        className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+                      />
+                    </div>
                   </div>
                   <DialogFooter>
                     <DialogClose asChild>
@@ -175,7 +211,7 @@ export default function AdminAccountsPage() {
                 </div>
               ) : (
                 <div className="flex flex-col gap-2 pb-4">
-                  {filteredAccounts.map(({ text, index }) => (
+                  {filteredAccounts.map(({ item, index }) => (
                     <div
                       key={index}
                       className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 items-center animate-in fade-in-50 duration-150"
@@ -190,10 +226,10 @@ export default function AdminAccountsPage() {
                       {/* Content column */}
                       <div className="col-span-9 flex flex-col justify-center min-w-0">
                         <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 leading-normal break-words">
-                          {text}
+                          {item.name}
                         </span>
-                        <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
-                          Account
+                        <span className="text-[9px] text-gray-450 dark:text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                          Password: {item.password || 'None'}
                         </span>
                       </div>
 
@@ -206,6 +242,7 @@ export default function AdminAccountsPage() {
                             if (!open) {
                               setEditingIndex(null);
                               setEditValue('');
+                              setEditPassword('');
                             }
                           }}
                         >
@@ -214,32 +251,45 @@ export default function AdminAccountsPage() {
                               variant="ghost"
                               size="icon"
                               className="h-8 w-8 rounded-lg text-gray-400 hover:text-black dark:hover:text-white"
-                              onClick={() => handleStartEdit(index, text)}
+                              onClick={() => handleStartEdit(index, item)}
                             >
                               <Pencil className="h-4 w-4" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-lg rounded-[20px] bg-[#F5F5F7] dark:bg-zinc-900 border-none shadow-xl">
+                          <DialogContent className="max-w-lg rounded-[20px] bg-[#F5F5F7] dark:bg-zinc-900 border-none shadow-xl animate-in fade-in-50 duration-150">
                             <DialogHeader>
                               <DialogTitle>Edit Account</DialogTitle>
                               <DialogDescription className="text-gray-500 dark:text-gray-400 text-sm">
-                                Make changes to the account detail below.
+                                Make changes to the account details below.
                               </DialogDescription>
                             </DialogHeader>
-                            <div className="py-4">
-                              <Input
-                                placeholder="Enter account name"
-                                value={editValue}
-                                onChange={e => setEditValue(e.target.value)}
-                                onKeyDown={e => {
-                                  if (e.key === 'Enter' && editValue.trim()) {
-                                    e.preventDefault();
-                                    handleSaveEdit();
-                                  }
-                                }}
-                                className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
-                                autoFocus
-                              />
+                            <div className="py-4 flex flex-col gap-3">
+                              <div>
+                                <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Account Name</label>
+                                <Input
+                                  placeholder="Enter account name"
+                                  value={editValue}
+                                  onChange={e => setEditValue(e.target.value)}
+                                  className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+                                  autoFocus
+                                />
+                              </div>
+                              <div>
+                                <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Account Password</label>
+                                <Input
+                                  type="password"
+                                  placeholder="Enter account password"
+                                  value={editPassword}
+                                  onChange={e => setEditPassword(e.target.value)}
+                                  onKeyDown={e => {
+                                    if (e.key === 'Enter' && editValue.trim()) {
+                                      e.preventDefault();
+                                      handleSaveEdit();
+                                    }
+                                  }}
+                                  className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+                                />
+                              </div>
                             </div>
                             <DialogFooter>
                               <DialogClose asChild>
