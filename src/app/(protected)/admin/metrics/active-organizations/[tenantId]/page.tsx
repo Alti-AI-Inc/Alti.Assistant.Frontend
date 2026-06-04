@@ -299,12 +299,12 @@ export default function TeamMembersPage() {
                       onChange={e => setSelectedPrice(e.target.value)}
                       className="w-full h-11 px-3.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-sm font-medium text-gray-900 dark:text-gray-100 shadow-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer animate-none"
                     >
-                      <option value="$25">$25 / mo</option>
-                      <option value="$20">$20 / mo</option>
-                      <option value="$15">$15 / mo</option>
-                      <option value="$10">$10 / mo</option>
-                      <option value="$5">$5 / mo</option>
-                      <option value="$0">$0 (Free)</option>
+                      <option value="$25">$25</option>
+                      <option value="$20">$20</option>
+                      <option value="$15">$15</option>
+                      <option value="$10">$10</option>
+                      <option value="$5">$5</option>
+                      <option value="$0">$0</option>
                     </select>
                   </div>
 
