@@ -130,7 +130,7 @@ const metricConfigs: Record<MetricKey, MetricConfig> = {
     ],
   },
   'active-organizations': {
-    title: 'Total Teams',
+    title: 'Team Plans',
     subtitle: 'Month-wise total teams trend for the last 6 months.',
     unit: 'count',
     monthlyData: [
@@ -187,17 +187,36 @@ function formatValue(value: number, unit: MetricConfig['unit']) {
 
 export default async function MetricDetailsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ metric: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const session = await auth();
   const accessToken = session?.accessToken;
   const { metric } = await params;
+  const { plan } = await searchParams;
+  const planStr = typeof plan === 'string' ? plan : undefined;
   const metricKey = metric as MetricKey;
   const config = metricConfigs[metricKey];
 
   if (!config) {
     notFound();
+  }
+
+  let pageTitle = config.title;
+  if (metricKey === 'total-users') {
+    if (planStr === 'free') {
+      pageTitle = 'Free Users';
+    } else if (planStr === 'paid') {
+      pageTitle = 'Paid Users';
+    } else {
+      pageTitle = 'Total Users';
+    }
+  } else if (metricKey === 'active-organizations') {
+    pageTitle = 'Team Plans';
+  } else if (metricKey === 'monthly-revenue') {
+    pageTitle = 'Payments';
   }
 
   let monthlyData = config.monthlyData;
@@ -471,7 +490,7 @@ export default async function MetricDetailsPage({
       {/* Dynamic Header */}
       <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-[#F5F5F7] dark:bg-gray-955">
         <h1 className="text-base font-semibold text-gray-900 dark:text-white">
-          {config.title}
+          {pageTitle}
         </h1>
         <Button asChild variant="outline" size="sm">
           <Link href="/admin">
@@ -486,40 +505,22 @@ export default async function MetricDetailsPage({
         <div className={`mx-auto flex w-full max-w-7xl flex-col gap-6 ${metricKey === 'total-users' || metricKey === 'active-organizations' ? 'flex-1 min-h-0' : ''}`}>
 
         {metricKey === 'total-users' ? (
-          <div className="flex flex-col gap-6 flex-none">
-            <div className="grid gap-4 sm:grid-cols-3">
-              {[
-                { title: 'Today', value: String(newUsersToday) },
-                { title: 'This Week', value: String(newUsersThisWeek) },
-                { title: 'This Month', value: String(newUsersThisMonth) },
-              ].map(card => (
-                <Card key={card.title}>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{card.value}</div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-3">
-              {[
-                { title: 'Free Users', value: String(freeUsersCount) },
-                { title: 'Paid Users', value: String(paidUsersCount) },
-                { title: 'Total Users', value: String(totalUsersFromList) },
-              ].map(card => (
-                <Card key={card.title}>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{card.value}</div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 flex-none">
+            {[
+              { title: 'Today', value: String(newUsersToday) },
+              { title: 'This Week', value: String(newUsersThisWeek) },
+              { title: 'This Month', value: String(newUsersThisMonth) },
+              { title: 'Total Users', value: String(totalUsersFromList) },
+            ].map(card => (
+              <Card key={card.title}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{card.value}</div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         ) : (
           <section

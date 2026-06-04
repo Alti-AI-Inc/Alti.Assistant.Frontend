@@ -314,7 +314,7 @@ export default function AdminDashboardPage() {
       {/* Dynamic Header */}
       <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-[#F5F5F7] dark:bg-gray-955">
         <h1 className="text-base font-semibold text-gray-900 dark:text-white">
-          Owner Dashboard
+          Dashboard
         </h1>
         <div className="flex items-center gap-2">
           <Button asChild variant="outline" size="sm">
