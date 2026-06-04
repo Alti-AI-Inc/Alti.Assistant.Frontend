@@ -154,7 +154,7 @@ export default function AdminInstructionsPage() {
             <div className="relative w-full flex-none">
               <Search className="text-muted-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
               <Input
-                placeholder="Search instructions secondary..."
+                placeholder="Search instructions..."
                 value={secondarySearchTerm}
                 onChange={e => setSecondarySearchTerm(e.target.value)}
                 className="pl-12 pr-4 h-12 w-full text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-1 focus-visible:ring-primary"
