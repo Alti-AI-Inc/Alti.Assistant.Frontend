@@ -13,7 +13,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { Search, Mail, Pencil } from 'lucide-react';
+import { Search, Mail, Pencil, ChevronDown } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
 import { DUMMY_USERS } from '@/utils/dummyData';
@@ -248,17 +248,20 @@ export function MetricTotalUsersTableSection() {
 
               <div className="space-y-1">
                 <label className="text-xs text-muted-foreground uppercase font-semibold">Custom Pricing Amount</label>
-                <select
-                  value={editAmount}
-                  onChange={e => handleAmountChange(e.target.value)}
-                  className="w-full h-10 px-3 py-2 text-sm rounded-md border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
-                >
-                  <option value="$20">$20</option>
-                  <option value="$15">$15</option>
-                  <option value="$10">$10</option>
-                  <option value="$5">$5</option>
-                  <option value="$0">$0</option>
-                </select>
+                <div className="relative">
+                  <select
+                    value={editAmount}
+                    onChange={e => handleAmountChange(e.target.value)}
+                    className="w-full h-10 pl-3 pr-12 py-2 text-sm rounded-md border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 appearance-none focus:outline-none focus:ring-0 focus:border-black/10 dark:focus:border-white/10 focus-visible:outline-none focus-visible:ring-0 outline-none ring-0 cursor-pointer"
+                  >
+                    <option value="$20">$20</option>
+                    <option value="$15">$15</option>
+                    <option value="$10">$10</option>
+                    <option value="$5">$5</option>
+                    <option value="$0">$0</option>
+                  </select>
+                  <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-gray-400 pointer-events-none" />
+                </div>
               </div>
             </div>
           )}

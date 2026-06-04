@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { type ReactNode, useEffect, useState, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
-import { Search, Mail, User, ArrowLeft, Pencil } from 'lucide-react';
+import { Search, Mail, User, ArrowLeft, Pencil, ChevronDown } from 'lucide-react';
 import { DUMMY_TENANTS } from '@/utils/dummyData';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
@@ -297,18 +297,21 @@ export default function TeamMembersPage() {
                     <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pl-1">
                       Price per user / month
                     </label>
-                    <select
-                      value={selectedPrice}
-                      onChange={e => setSelectedPrice(e.target.value)}
-                      className="w-full h-11 px-3.5 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-sm font-medium text-gray-900 dark:text-gray-100 shadow-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer animate-none"
-                    >
-                      <option value="$25">$25</option>
-                      <option value="$20">$20</option>
-                      <option value="$15">$15</option>
-                      <option value="$10">$10</option>
-                      <option value="$5">$5</option>
-                      <option value="$0">$0</option>
-                    </select>
+                    <div className="relative">
+                      <select
+                        value={selectedPrice}
+                        onChange={e => setSelectedPrice(e.target.value)}
+                        className="w-full h-11 pl-4 pr-12 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 text-sm font-medium text-gray-900 dark:text-gray-100 shadow-sm appearance-none focus:outline-none focus:ring-0 focus:border-black/10 dark:focus:border-white/10 focus-visible:outline-none focus-visible:ring-0 outline-none ring-0 cursor-pointer animate-none"
+                      >
+                        <option value="$25">$25</option>
+                        <option value="$20">$20</option>
+                        <option value="$15">$15</option>
+                        <option value="$10">$10</option>
+                        <option value="$5">$5</option>
+                        <option value="$0">$0</option>
+                      </select>
+                      <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-gray-400 pointer-events-none" />
+                    </div>
                   </div>
 
                   <DialogFooter className="flex gap-2 justify-end mt-2">
