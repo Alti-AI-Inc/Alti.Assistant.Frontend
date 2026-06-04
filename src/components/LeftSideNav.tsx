@@ -687,47 +687,71 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             <div className="mt-4 space-y-6">
               {/* Platform Owner Section (for super_admin) */}
               {isSuperAdmin && (
-                <div className="space-y-1">
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
-                    Platform Owner
-                  </div>
+                <div className="space-y-4">
                   {[
-                    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
-                    { name: 'My Accounts', href: '/admin/accounts', icon: KeyRound },
-                    { name: 'Email Accounts', href: '/admin/emails', icon: Mail },
-                    { name: 'Data Partners', href: '/admin/partners', icon: Database },
-                    { name: 'API Keys', href: '/admin/apikeys', icon: Key },
-                    { name: 'Free Users', href: '/admin/metrics/total-users?plan=free', icon: User },
-                    { name: 'Paid Users', href: '/admin/metrics/total-users?plan=paid', icon: UserCheck },
-                    { name: 'Team Plans', href: '/admin/metrics/active-organizations', icon: UsersRound },
-                    { name: 'Instructions', href: '/admin/instructions', icon: FileText },
-                    { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
-                  ].map((item) => {
-                    const currentPlan = searchParams?.get('plan');
-                    const isActive = item.exact 
-                      ? pathname === item.href 
-                      : item.href.includes('?plan=free')
-                        ? pathname === '/admin/metrics/total-users' && currentPlan === 'free'
-                        : item.href.includes('?plan=paid')
-                          ? pathname === '/admin/metrics/total-users' && currentPlan === 'paid'
-                          : pathname.startsWith(item.href);
-                    const Icon = item.icon;
-                    return (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className={cn(
-                          'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                          isActive
-                            ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
-                            : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
-                        )}
-                      >
-                        <Icon className="w-4 h-4" />
-                        {item.name}
-                      </Link>
-                    );
-                  })}
+                    {
+                      groupName: 'Platform Owner',
+                      items: [
+                        { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true }
+                      ]
+                    },
+                    {
+                      groupName: 'Credentials',
+                      items: [
+                        { name: 'My Accounts', href: '/admin/accounts', icon: KeyRound },
+                        { name: 'Email Accounts', href: '/admin/emails', icon: Mail },
+                        { name: 'Data Partners', href: '/admin/partners', icon: Database },
+                        { name: 'API Keys', href: '/admin/apikeys', icon: Key },
+                      ]
+                    },
+                    {
+                      groupName: 'Users & Teams',
+                      items: [
+                        { name: 'Free Users', href: '/admin/metrics/total-users?plan=free', icon: User },
+                        { name: 'Paid Users', href: '/admin/metrics/total-users?plan=paid', icon: UserCheck },
+                        { name: 'Team Plans', href: '/admin/metrics/active-organizations', icon: UsersRound },
+                      ]
+                    },
+                    {
+                      groupName: 'Configuration',
+                      items: [
+                        { name: 'Instructions', href: '/admin/instructions', icon: FileText },
+                        { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
+                      ]
+                    }
+                  ].map((group) => (
+                    <div key={group.groupName} className="space-y-1">
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
+                        {group.groupName}
+                      </div>
+                      {group.items.map((item: { name: string; href: string; icon: any; exact?: boolean }) => {
+                        const currentPlan = searchParams?.get('plan');
+                        const isActive = item.exact 
+                          ? pathname === item.href 
+                          : item.href.includes('?plan=free')
+                            ? pathname === '/admin/metrics/total-users' && currentPlan === 'free'
+                            : item.href.includes('?plan=paid')
+                              ? pathname === '/admin/metrics/total-users' && currentPlan === 'paid'
+                              : pathname.startsWith(item.href);
+                        const Icon = item.icon;
+                        return (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            className={cn(
+                              'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                              isActive
+                                ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
+                                : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                            )}
+                          >
+                            <Icon className="w-4 h-4" />
+                            {item.name}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  ))}
                 </div>
               )}
 
