@@ -29,12 +29,14 @@ import { useAdminStore } from '@/stores/useAdminStore';
 
 interface AccountEntry {
   name: string;
+  username?: string;
   password?: string;
 }
 
 export default function AdminAccountsPage() {
   const { accounts, setAccounts } = useAdminStore();
   const [newAccount, setNewAccount] = useState('');
+  const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -44,6 +46,7 @@ export default function AdminAccountsPage() {
   // Dialog state for editing
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState('');
+  const [editUsername, setEditUsername] = useState('');
   const [editPassword, setEditPassword] = useState('');
 
   // Dialog state for deleting
@@ -68,7 +71,7 @@ export default function AdminAccountsPage() {
         try {
           return JSON.parse(item);
         } catch (e) {
-          return { name: item, password: '' };
+          return { name: item, username: '', password: '' };
         }
       })
     : [];
@@ -77,11 +80,13 @@ export default function AdminAccountsPage() {
     if (!newAccount.trim()) return;
     const newEntry: AccountEntry = {
       name: newAccount.trim(),
+      username: newUsername.trim(),
       password: newPassword,
     };
     const newList = [newEntry, ...accountsList];
     setAccounts(newList.map(item => JSON.stringify(item)).join('\n\n'));
     setNewAccount('');
+    setNewUsername('');
     setNewPassword('');
     setIsCreateOpen(false);
   };
@@ -89,6 +94,7 @@ export default function AdminAccountsPage() {
   const handleStartEdit = (index: number, val: AccountEntry) => {
     setEditingIndex(index);
     setEditValue(val.name);
+    setEditUsername(val.username || '');
     setEditPassword(val.password || '');
   };
 
@@ -96,12 +102,13 @@ export default function AdminAccountsPage() {
     if (editingIndex === null || !editValue.trim()) return;
     const newList = accountsList.map((item, idx) =>
       idx === editingIndex
-        ? { name: editValue.trim(), password: editPassword }
+        ? { name: editValue.trim(), username: editUsername.trim(), password: editPassword }
         : item,
     );
     setAccounts(newList.map(item => JSON.stringify(item)).join('\n\n'));
     setEditingIndex(null);
     setEditValue('');
+    setEditUsername('');
     setEditPassword('');
   };
 
@@ -147,6 +154,7 @@ export default function AdminAccountsPage() {
                 onOpenChange={open => {
                   setIsCreateOpen(open);
                   setNewAccount('');
+                  setNewUsername('');
                   setNewPassword('');
                   setShowCreatePassword(false);
                 }}
@@ -175,6 +183,15 @@ export default function AdminAccountsPage() {
                       />
                     </div>
                     <div>
+                      <Input
+                        placeholder="Enter account username"
+                        value={newUsername}
+                        onChange={e => setNewUsername(e.target.value)}
+                        autoComplete="new-password"
+                        className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+                      />
+                    </div>
+                    <div>
                       <div className="relative">
                         <Input
                           type={showCreatePassword ? "text" : "password"}
@@ -183,7 +200,7 @@ export default function AdminAccountsPage() {
                           onChange={e => setNewPassword(e.target.value)}
                           autoComplete="new-password"
                           onKeyDown={e => {
-                            if (e.key === 'Enter' && newAccount.trim()) {
+                            if (e.key === 'Enter' && newAccount.trim() && newUsername.trim() && newPassword.trim()) {
                               e.preventDefault();
                               handleCreate();
                             }
@@ -206,8 +223,8 @@ export default function AdminAccountsPage() {
                     </DialogClose>
                     <Button
                       onClick={handleCreate}
-                      disabled={!newAccount.trim() || !newPassword.trim()}
-                      className={(!newAccount.trim() || !newPassword.trim())
+                      disabled={!newAccount.trim() || !newUsername.trim() || !newPassword.trim()}
+                      className={(!newAccount.trim() || !newUsername.trim() || !newPassword.trim())
                         ? "bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 cursor-not-allowed"
                         : "bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/95"
                       }
@@ -252,6 +269,11 @@ export default function AdminAccountsPage() {
                           <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 leading-normal break-words">
                             {item.name}
                           </span>
+                          {item.username && (
+                            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium block mt-0.5">
+                              {item.username}
+                            </span>
+                          )}
                           <span className="text-[9px] text-gray-450 dark:text-gray-400 font-medium block mt-0.5 font-mono tracking-wider">
                             {revealedIndices[index] ? (item.password || 'None') : (item.password ? '••••••••' : 'None')}
                           </span>
@@ -281,6 +303,7 @@ export default function AdminAccountsPage() {
                             if (!open) {
                               setEditingIndex(null);
                               setEditValue('');
+                              setEditUsername('');
                               setEditPassword('');
                               setShowEditPassword(false);
                             }
@@ -315,6 +338,15 @@ export default function AdminAccountsPage() {
                                 />
                               </div>
                               <div>
+                                <Input
+                                  placeholder="Enter account username"
+                                  value={editUsername}
+                                  onChange={e => setEditUsername(e.target.value)}
+                                  autoComplete="new-password"
+                                  className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+                                />
+                              </div>
+                              <div>
                                 <div className="relative">
                                   <Input
                                     type={showEditPassword ? "text" : "password"}
@@ -323,7 +355,7 @@ export default function AdminAccountsPage() {
                                     onChange={e => setEditPassword(e.target.value)}
                                     autoComplete="new-password"
                                     onKeyDown={e => {
-                                      if (e.key === 'Enter' && editValue.trim()) {
+                                      if (e.key === 'Enter' && editValue.trim() && editUsername.trim() && editPassword.trim()) {
                                         e.preventDefault();
                                         handleSaveEdit();
                                       }
@@ -346,8 +378,8 @@ export default function AdminAccountsPage() {
                               </DialogClose>
                               <Button
                                 onClick={handleSaveEdit}
-                                disabled={!editValue.trim() || !editPassword.trim()}
-                                className={(!editValue.trim() || !editPassword.trim())
+                                disabled={!editValue.trim() || !editUsername.trim() || !editPassword.trim()}
+                                className={(!editValue.trim() || !editUsername.trim() || !editPassword.trim())
                                   ? "bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 cursor-not-allowed"
                                   : "bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/95"
                                 }
