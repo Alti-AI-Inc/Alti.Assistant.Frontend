@@ -54,7 +54,7 @@ export default function LoginPage() {
             />
           </Link>
           <h2 className="text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">
-            Welcome Back
+            Login
           </h2>
         </div>
 
@@ -72,7 +72,7 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email Address"
-            className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
+            className="w-full rounded-xl border-none bg-[#F5F5F7] bg-auth-input p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
           />
 
           <div className="relative">
@@ -83,7 +83,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
-              className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
+              className="w-full rounded-xl border-none bg-[#F5F5F7] bg-auth-input p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
             />
             <button
               type="button"
@@ -106,7 +106,7 @@ export default function LoginPage() {
             {loading ? (
               <span className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-current border-r-transparent"></span>
             ) : null}
-            Sign In
+            Login
           </button>
         </form>
       </div>

@@ -157,6 +157,22 @@ select:-webkit-autofill:active {
   -webkit-text-fill-color: white !important;
 }
 
+/* Gray input fields autofill override */
+.bg-auth-input:-webkit-autofill,
+.bg-auth-input:-webkit-autofill:hover,
+.bg-auth-input:-webkit-autofill:focus,
+.bg-auth-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #F5F5F7 inset !important;
+}
+
+.dark .bg-auth-input:-webkit-autofill,
+.dark .bg-auth-input:-webkit-autofill:hover,
+.dark .bg-auth-input:-webkit-autofill:focus,
+.dark .bg-auth-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #27272a inset !important;
+  -webkit-text-fill-color: white !important;
+}
+
 /* Webkit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
   width: 12px; /* Width of the entire scrollbar */

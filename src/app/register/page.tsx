@@ -112,7 +112,7 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email Address"
-                className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
+                className="w-full rounded-xl border-none bg-[#F5F5F7] bg-auth-input p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
               />
 
               <div className="relative">
@@ -123,7 +123,7 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
-                  className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
+                  className="w-full rounded-xl border-none bg-[#F5F5F7] bg-auth-input p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
                 />
                 <button
                   type="button"
@@ -146,7 +146,7 @@ export default function RegisterPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm Password"
-                  className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
+                  className="w-full rounded-xl border-none bg-[#F5F5F7] bg-auth-input p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
                 />
                 <button
                   type="button"
@@ -164,7 +164,7 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex w-full items-center justify-center rounded-xl bg-black py-3 text-sm font-medium text-white transition hover:bg-black/90 active:scale-[0.99] disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-white/90"
+                className="mt-2 flex w-full items-center justify-center rounded-xl bg-black py-3 text-sm font-medium text-white transition hover:bg-black/90 active:scale-[0.99] disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-white/90"
               >
                 {loading ? (
                   <span className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-current border-r-transparent"></span>
@@ -197,7 +197,7 @@ export default function RegisterPage() {
                 value={verifyCode}
                 onChange={(e) => setVerifyCode(e.target.value)}
                 placeholder="6-Digit Verification Code"
-                className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 text-center text-lg font-bold tracking-widest text-black outline-none placeholder:text-zinc-400 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-500 dark:focus:ring-white/10 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
+                className="w-full rounded-xl border-none bg-[#F5F5F7] bg-auth-input p-3 text-center text-lg font-bold tracking-widest text-black outline-none placeholder:text-zinc-400 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-500 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
               />
 
               <button
