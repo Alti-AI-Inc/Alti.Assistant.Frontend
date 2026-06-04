@@ -118,7 +118,7 @@ export default function AdminAccountsPage() {
                     Create New Account
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-lg rounded-[20px] bg-white dark:bg-zinc-900 border-none shadow-xl">
+                <DialogContent className="max-w-lg rounded-[20px] bg-[#F5F5F7] dark:bg-zinc-900 border-none shadow-xl">
                   <DialogHeader>
                     <DialogTitle>Create New Account</DialogTitle>
                     <DialogDescription className="text-gray-500 dark:text-gray-400 text-sm">
@@ -219,7 +219,7 @@ export default function AdminAccountsPage() {
                               <Pencil className="h-4 w-4" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-lg rounded-[20px] bg-white dark:bg-zinc-900 border-none shadow-xl">
+                          <DialogContent className="max-w-lg rounded-[20px] bg-[#F5F5F7] dark:bg-zinc-900 border-none shadow-xl">
                             <DialogHeader>
                               <DialogTitle>Edit Account</DialogTitle>
                               <DialogDescription className="text-gray-500 dark:text-gray-400 text-sm">
