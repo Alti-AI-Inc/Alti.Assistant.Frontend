@@ -286,7 +286,7 @@ export default function TeamMembersPage() {
                       Edit Team Pricing
                     </DialogTitle>
                     <DialogDescription className="text-sm text-muted-foreground">
-                      Update the subscription pricing tier for this entire team (all members).
+                      Update the subscription pricing tier for this entire team.
                     </DialogDescription>
                   </DialogHeader>
 
