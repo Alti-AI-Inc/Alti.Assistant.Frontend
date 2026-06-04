@@ -155,7 +155,6 @@ export default function AdminAccountsPage() {
                   </DialogHeader>
                   <div className="py-4 flex flex-col gap-3">
                     <div>
-                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Account Name</label>
                       <Input
                         placeholder="Enter account name"
                         value={newAccount}
@@ -166,7 +165,6 @@ export default function AdminAccountsPage() {
                       />
                     </div>
                     <div>
-                      <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Account Password</label>
                       <div className="relative">
                         <Input
                           type={showCreatePassword ? "text" : "password"}
@@ -282,7 +280,6 @@ export default function AdminAccountsPage() {
                             </DialogHeader>
                             <div className="py-4 flex flex-col gap-3">
                               <div>
-                                <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Account Name</label>
                                 <Input
                                   placeholder="Enter account name"
                                   value={editValue}
@@ -293,7 +290,6 @@ export default function AdminAccountsPage() {
                                 />
                               </div>
                               <div>
-                                <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Account Password</label>
                                 <div className="relative">
                                   <Input
                                     type={showEditPassword ? "text" : "password"}

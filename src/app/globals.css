@@ -204,3 +204,9 @@ html {
     scrollbar-color: #0000001a transparent;
   }
 }
+
+/* Disable Edge's native password reveal/clear buttons to prevent "two eyes" */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
