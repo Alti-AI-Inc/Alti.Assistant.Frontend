@@ -54,11 +54,8 @@ export default function LoginPage() {
             />
           </Link>
           <h2 className="text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">
-            Welcome back
+            Welcome Back
           </h2>
-          <p className="text-sm text-gray-500 dark:text-zinc-400">
-            Log in to manage your platform and customers
-          </p>
         </div>
 
         {error && (
