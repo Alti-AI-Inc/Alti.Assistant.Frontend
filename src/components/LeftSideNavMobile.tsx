@@ -47,6 +47,7 @@ import {
   UserCheck,
   KeyRound,
   Mail,
+  Key,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -618,6 +619,7 @@ const LeftSideNavMobile = () => {
                     { name: 'My Accounts', href: '/admin/accounts', icon: KeyRound },
                     { name: 'Email Accounts', href: '/admin/emails', icon: Mail },
                     { name: 'Data Partners', href: '/admin/partners', icon: Database },
+                    { name: 'API Keys', href: '/admin/apikeys', icon: Key },
                     { name: 'Free Users', href: '/admin/metrics/total-users?plan=free', icon: User },
                     { name: 'Paid Users', href: '/admin/metrics/total-users?plan=paid', icon: UserCheck },
                     { name: 'Team Plans', href: '/admin/metrics/active-organizations', icon: UsersRound },
