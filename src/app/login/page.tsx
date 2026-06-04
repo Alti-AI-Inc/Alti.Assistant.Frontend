@@ -109,6 +109,13 @@ export default function LoginPage() {
             Login
           </button>
         </form>
+
+        <div className="text-center text-sm text-gray-500 dark:text-zinc-400">
+          Don&apos;t have an account?{' '}
+          <Link href="/register" className="font-semibold text-black hover:underline dark:text-white">
+            Register
+          </Link>
+        </div>
       </div>
     </div>
   );
