@@ -286,8 +286,8 @@ export default function AdminPartnersPage() {
                         <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-none">
                           <Database className="h-4 w-4" />
                         </div>
-                        <div className="flex-1 grid grid-cols-4 gap-8 min-w-0">
-                          <div className="flex-1 min-w-0">
+                        <div className="flex-1 flex justify-between items-center min-w-0">
+                          <div className="w-[18%] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Data Name
                             </span>
@@ -295,7 +295,7 @@ export default function AdminPartnersPage() {
                               {item.name}
                             </span>
                           </div>
-                          <div className="flex-1 min-w-0">
+                          <div className="w-[22%] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Data Website
                             </span>
@@ -303,7 +303,7 @@ export default function AdminPartnersPage() {
                               {item.website || 'None'}
                             </span>
                           </div>
-                          <div className="flex-1 min-w-0">
+                          <div className="w-[28%] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Email Address
                             </span>
@@ -311,7 +311,7 @@ export default function AdminPartnersPage() {
                               {item.email || 'None'}
                             </span>
                           </div>
-                          <div className="flex-1 min-w-0">
+                          <div className="w-[18%] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Password
                             </span>
