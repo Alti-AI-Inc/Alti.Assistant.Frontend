@@ -105,84 +105,60 @@ export default function RegisterPage() {
             )}
 
             <form onSubmit={handleRegisterSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <label
-                  htmlFor="email"
-                  className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-zinc-500"
-                >
-                  Email address
-                </label>
+              <input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email Address"
+                className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
+              />
+
+              <div className="relative">
                 <input
-                  id="email"
-                  type="email"
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
-                  className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-zinc-400 dark:hover:text-white"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
               </div>
 
-              <div className="space-y-2">
-                <label
-                  htmlFor="password"
-                  className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-zinc-500"
+              <div className="relative">
+                <input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm Password"
+                  className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-zinc-400 dark:hover:text-white"
                 >
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-zinc-400 dark:hover:text-white"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-5 w-5" />
-                    ) : (
-                      <Eye className="h-5 w-5" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label
-                  htmlFor="confirmPassword"
-                  className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-zinc-500"
-                >
-                  Confirm Password
-                </label>
-                <div className="relative">
-                  <input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:ring-white/10"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-zinc-400 dark:hover:text-white"
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="h-5 w-5" />
-                    ) : (
-                      <Eye className="h-5 w-5" />
-                    )}
-                  </button>
-                </div>
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
               </div>
 
               <button
@@ -213,24 +189,16 @@ export default function RegisterPage() {
             )}
 
             <form onSubmit={handleVerifySubmit} className="space-y-6">
-              <div className="space-y-2">
-                <label
-                  htmlFor="verifyCode"
-                  className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-zinc-500"
-                >
-                  6-Digit Verification Code
-                </label>
-                <input
-                  id="verifyCode"
-                  type="text"
-                  required
-                  maxLength={6}
-                  value={verifyCode}
-                  onChange={(e) => setVerifyCode(e.target.value)}
-                  placeholder="123456"
-                  className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 text-center text-lg font-bold tracking-widest text-black outline-none placeholder:text-zinc-400 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-500 dark:focus:ring-white/10"
-                />
-              </div>
+              <input
+                id="verifyCode"
+                type="text"
+                required
+                maxLength={6}
+                value={verifyCode}
+                onChange={(e) => setVerifyCode(e.target.value)}
+                placeholder="6-Digit Verification Code"
+                className="w-full rounded-xl border-none bg-[#F5F5F7] p-3 text-center text-lg font-bold tracking-widest text-black outline-none placeholder:text-zinc-400 focus:ring-1 focus:ring-black/20 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-500 dark:focus:ring-white/10 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
+              />
 
               <button
                 type="submit"

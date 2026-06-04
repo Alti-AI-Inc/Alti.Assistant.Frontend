@@ -274,7 +274,7 @@ export function AuthModal() {
                           {...field}
                           type="email"
                           placeholder="Email"
-                          className="w-full border-none bg-[#F5F5F7] focus-visible:ring-0"
+                          className="w-full border-none bg-[#F5F5F7] focus-visible:ring-0 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
                         />
                       </FormControl>
                       <FormMessage />
@@ -292,7 +292,7 @@ export function AuthModal() {
                             {...field}
                             type={isPasswordVisible ? 'text' : 'password'}
                             placeholder="Password"
-                            className="w-full border-none bg-[#F5F5F7] focus-visible:ring-0"
+                            className="w-full border-none bg-[#F5F5F7] focus-visible:ring-0 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
                           />
                         </FormControl>
                         <FormMessage />
@@ -391,7 +391,7 @@ export function AuthModal() {
                           {...field}
                           type="email"
                           placeholder="Email"
-                          className="w-full border-none bg-[#F5F5F7] focus-visible:ring-0"
+                          className="w-full border-none bg-[#F5F5F7] focus-visible:ring-0 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
                         />
                       </FormControl>
                       <FormMessage />
@@ -409,7 +409,7 @@ export function AuthModal() {
                             {...field}
                             type={isPasswordVisible ? 'text' : 'password'}
                             placeholder="Password"
-                            className="w-full border-none bg-[#F5F5F7] focus-visible:ring-0"
+                            className="w-full border-none bg-[#F5F5F7] focus-visible:ring-0 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
                           />
                         </FormControl>
                         <FormMessage />
@@ -438,7 +438,7 @@ export function AuthModal() {
                           {...field}
                           type="password"
                           placeholder="Confirm Password"
-                          className="w-full border-none bg-[#F5F5F7] focus-visible:ring-0"
+                          className="w-full border-none bg-[#F5F5F7] focus-visible:ring-0 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
                         />
                       </FormControl>
                       <FormMessage />
@@ -514,7 +514,7 @@ export function AuthModal() {
                   setVerifyCode(e.target.value.replace(/\D/g, '').slice(0, 6));
                   setVerifyError(null);
                 }}
-                className="w-full border-none bg-[#F5F5F7] text-center text-xl tracking-[0.5em] focus-visible:ring-0"
+                className="w-full border-none bg-[#F5F5F7] text-center text-xl tracking-[0.5em] focus-visible:ring-0 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
               />
               {verifyError && (
                 <p className="text-center text-sm text-red-500">
