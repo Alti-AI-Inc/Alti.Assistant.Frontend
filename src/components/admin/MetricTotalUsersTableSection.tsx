@@ -147,6 +147,12 @@ export function MetricTotalUsersTableSection() {
     })
     .sort((a, b) => (a.email || '').localeCompare(b.email || ''));
 
+  const placeholderText = planFilter === 'free'
+    ? 'Search free users...'
+    : planFilter === 'paid'
+      ? 'Search paid users...'
+      : 'Search user email addresses...';
+
   if (!accessToken) {
     return (
       <Card className="mt-4">
@@ -163,7 +169,7 @@ export function MetricTotalUsersTableSection() {
       <div className="relative w-full flex-none">
         <Search className="text-muted-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
         <Input
-          placeholder="Search user email addresses..."
+          placeholder={placeholderText}
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
           className="pl-12 pr-4 h-12 w-full text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-1 focus-visible:ring-primary"

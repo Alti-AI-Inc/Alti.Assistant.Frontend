@@ -616,6 +616,7 @@ const LeftSideNavMobile = () => {
                     { name: 'Free Users', href: '/admin/metrics/total-users?plan=free', icon: User },
                     { name: 'Paid Users', href: '/admin/metrics/total-users?plan=paid', icon: UserCheck },
                     { name: 'Team Plans', href: '/admin/metrics/active-organizations', icon: UsersRound },
+                    { name: 'Instructions', href: '/admin/instructions', icon: FileText },
                   ].map((item) => {
                     const currentPlan = searchParams?.get('plan');
                     const isActive = item.exact 
@@ -688,7 +689,6 @@ const LeftSideNavMobile = () => {
                   </div>
                   {[
                     { name: 'Data', href: '/admin/data', icon: Database },
-                    { name: 'Instructions', href: '/admin/instructions', icon: FileText },
                     { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
                     { name: 'Projects', href: '/admin/projects', icon: Folder },
                   ].map((item) => {
