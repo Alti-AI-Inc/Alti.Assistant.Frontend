@@ -131,7 +131,7 @@ export default function AdminInstructionsPage() {
                 placeholder="Search instructions..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="pl-12 pr-4 h-12 w-full text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-1 focus-visible:ring-primary"
+                className="pl-12 pr-4 h-12 w-full text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
               />
             </div>
 
@@ -197,7 +197,7 @@ export default function AdminInstructionsPage() {
                                 value={editValue}
                                 onChange={e => setEditValue(e.target.value)}
                                 rows={4}
-                                className="w-full resize-none border-black/10 dark:border-white/10 rounded-lg"
+                                className="w-full resize-none border-black/10 dark:border-white/10 rounded-lg focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
                                 autoFocus
                               />
                             </div>
