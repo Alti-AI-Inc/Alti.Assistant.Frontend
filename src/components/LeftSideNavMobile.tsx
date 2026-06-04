@@ -619,15 +619,6 @@ const LeftSideNavMobile = () => {
                       ]
                     },
                     {
-                      groupName: 'Credentials',
-                      items: [
-                        { name: 'My Accounts', href: '/admin/accounts', icon: KeyRound },
-                        { name: 'Email Accounts', href: '/admin/emails', icon: Mail },
-                        { name: 'Data Partners', href: '/admin/partners', icon: Database },
-                        { name: 'API Keys', href: '/admin/apikeys', icon: Key },
-                      ]
-                    },
-                    {
                       groupName: 'Members',
                       items: [
                         { name: 'Free Users', href: '/admin/metrics/total-users?plan=free', icon: User },
@@ -640,6 +631,15 @@ const LeftSideNavMobile = () => {
                       items: [
                         { name: 'Instructions', href: '/admin/instructions', icon: FileText },
                         { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
+                      ]
+                    },
+                    {
+                      groupName: 'Credentials',
+                      items: [
+                        { name: 'My Accounts', href: '/admin/accounts', icon: KeyRound },
+                        { name: 'Email Accounts', href: '/admin/emails', icon: Mail },
+                        { name: 'Data Partners', href: '/admin/partners', icon: Database },
+                        { name: 'API Keys', href: '/admin/apikeys', icon: Key },
                       ]
                     }
                   ].map((group) => (
