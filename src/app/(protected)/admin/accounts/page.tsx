@@ -233,21 +233,19 @@ export default function AdminAccountsPage() {
                       key={index}
                       className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 items-center animate-in fade-in-50 duration-150"
                     >
-                      {/* Left Icon (Wallet) */}
-                      <div className="col-span-1 flex items-center justify-start">
-                        <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center">
+                      {/* Left Icon (Wallet) & Content column merged */}
+                      <div className="col-span-10 flex items-center gap-3.5 min-w-0">
+                        <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-none">
                           <Wallet className="h-4 w-4" />
                         </div>
-                      </div>
-
-                      {/* Content column */}
-                      <div className="col-span-9 flex flex-col justify-center min-w-0">
-                        <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 leading-normal break-words">
-                          {item.name}
-                        </span>
-                        <span className="text-[9px] text-gray-450 dark:text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
-                          Password: {item.password || 'None'}
-                        </span>
+                        <div className="flex flex-col justify-center min-w-0">
+                          <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 leading-normal break-words">
+                            {item.name}
+                          </span>
+                          <span className="text-[9px] text-gray-450 dark:text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                            Password: {item.password || 'None'}
+                          </span>
+                        </div>
                       </div>
 
                       {/* Actions columns */}
