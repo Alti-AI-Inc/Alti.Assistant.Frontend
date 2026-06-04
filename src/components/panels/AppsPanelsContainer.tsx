@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { allApps, APP } from '@/lib/all-apps';
+import AppImage from '@/components/AppImage';
 import { apiClientJson, buildApiUrl } from '@/lib/api-client';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -411,11 +412,7 @@ export const AppsPanelsContainer = () => {
                 <div className="relative">
                   <div className="absolute inset-0 rounded-3xl bg-blue-500/10 dark:bg-blue-500/5 blur-xl animate-pulse" />
                   <div className="relative h-20 w-20 rounded-2xl border border-black/10 dark:border-white/10 bg-white p-3.5 flex items-center justify-center shadow-md">
-                    {selectedApp.image ? (
-                      <img src={selectedApp.image} alt={selectedApp.title} className="h-full w-full object-contain" />
-                    ) : (
-                      <span className="text-3xl font-bold text-blue-600">{selectedApp.title.charAt(0)}</span>
-                    )}
+                    <AppImage src={selectedApp.image} alt={selectedApp.title} className="h-full w-full object-contain" fallbackSizeClass="text-3xl" />
                   </div>
                 </div>
 
@@ -477,14 +474,10 @@ export const AppsPanelsContainer = () => {
             <div className="flex-1 flex flex-col overflow-hidden h-full">
               
               {/* Scoped Chat Header */}
-              <div className="h-14 border-b border-black/10 dark:border-white/10 bg-[#F5F5F7] dark:bg-gray-955 px-4 flex items-center justify-between flex-none">
+              <div className="h-14 border-b border-black/10 dark:border-white/10 bg-white dark:bg-gray-950 px-4 flex items-center justify-between flex-none">
                 <div className="flex items-center gap-3">
                   <div className="h-7 w-7 rounded overflow-hidden border border-gray-200 bg-white p-1.5 flex items-center justify-center dark:border-gray-800">
-                    {selectedApp.image ? (
-                      <img src={selectedApp.image} alt={selectedApp.title} className="h-full w-full object-contain" />
-                    ) : (
-                      <span className="text-xs font-bold text-blue-600">{selectedApp.title.charAt(0)}</span>
-                    )}
+                    <AppImage src={selectedApp.image} alt={selectedApp.title} className="h-full w-full object-contain" fallbackSizeClass="text-xs" />
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100">{selectedApp.title} Console</h3>

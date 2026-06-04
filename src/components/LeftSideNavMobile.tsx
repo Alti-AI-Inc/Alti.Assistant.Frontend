@@ -58,6 +58,7 @@ import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { allApps, APP } from '@/lib/all-apps';
+import AppImage from './AppImage';
 import { apiClientJson, buildApiUrl } from '@/lib/api-client';
 import { useBotsStore } from '@/stores/useBotsStore';
 import { useConnectionsQuery } from '@/hooks/useConnectApps';
@@ -890,19 +891,12 @@ const LeftSideNavMobile = () => {
                         <div className="flex items-center gap-2.5 min-w-0">
                           {/* App Logo with Fallback */}
                           <div className="relative flex-none h-7 w-7 rounded-md overflow-hidden border border-black/10 bg-white p-1 flex items-center justify-center">
-                            {app.image ? (
-                              <img 
-                                src={app.image} 
-                                alt={app.title} 
-                                className="h-full w-full object-contain"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = 'none';
-                                  e.currentTarget.parentElement!.innerHTML = `<span class="text-xs font-semibold text-blue-600">${app.title.charAt(0)}</span>`;
-                                }}
-                              />
-                            ) : (
-                              <span className="text-xs font-semibold text-blue-600">{app.title.charAt(0)}</span>
-                            )}
+                            <AppImage 
+                              src={app.image} 
+                              alt={app.title} 
+                              className="h-full w-full object-contain"
+                              fallbackSizeClass="text-xs"
+                            />
                           </div>
    
                           <div className="min-w-0">

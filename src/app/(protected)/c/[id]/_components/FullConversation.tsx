@@ -685,7 +685,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     >
                       <div
                         className={cn(
-                          'w-fit max-w-[85%] rounded-2xl bg-zinc-100 dark:bg-zinc-800 px-4 py-2.5 text-zinc-900 dark:text-zinc-100 border border-black/5 dark:border-white/5 shadow-sm transition-colors duration-300 leading-relaxed text-sm font-medium',
+                          'w-fit max-w-[85%] rounded-2xl bg-white dark:bg-white px-4 py-2.5 text-zinc-900 dark:text-zinc-900 border border-black/10 shadow-sm transition-colors duration-300 leading-relaxed text-sm font-medium',
                           showStartLastMessage && 'mt-8',
                         )}
                       >
@@ -975,7 +975,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         className={cn(
           'sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8',
           hasMessages
-            ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-800/80 backdrop-blur-xl bg-[#F5F5F7]/70 dark:bg-zinc-950/70'
+            ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-850 backdrop-blur-xl bg-white/80 dark:bg-gray-950/80'
             : 'py-4 bg-transparent border-t-0',
         )}
       >

@@ -146,7 +146,7 @@ export default function CustomerDetailPage() {
   return (
     <div className="h-full flex flex-col bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden">
       {/* Dynamic Header */}
-      <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-[#F5F5F7] dark:bg-gray-955">
+      <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-white dark:bg-gray-950">
         <div className="flex items-center gap-4">
           <Button variant="outline" size="sm" onClick={() => router.push('/admin/stripe')}>
             <ArrowLeft className="mr-2 h-4 w-4" />

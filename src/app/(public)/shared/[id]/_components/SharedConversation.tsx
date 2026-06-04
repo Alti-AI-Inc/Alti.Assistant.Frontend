@@ -31,7 +31,7 @@ const SharedConversation = ({ id }: { id: string }) => {
                     <div className="flex items-center justify-end">
                       <div
                         className={cn(
-                          'w-fit max-w-[85%] rounded-2xl bg-gray-100 px-4 py-2 text-black shadow',
+                          'w-fit max-w-[85%] rounded-2xl bg-white dark:bg-white px-4 py-2.5 text-zinc-900 dark:text-zinc-900 border border-black/10 shadow-sm transition-colors duration-300 leading-relaxed text-sm font-medium',
                         )}
                       >
                         {message.content}

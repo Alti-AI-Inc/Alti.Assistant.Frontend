@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { LoaderCircle, ShieldCheck, Zap } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import AppImage from '@/components/AppImage';
 import { useState } from 'react';
 
 // Premium high-stakes app configuration mapping
@@ -378,12 +379,11 @@ const AppCard = ({
                 "flex h-14 w-14 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-850 p-2 shadow-sm transition-all duration-300 group-hover:scale-105",
                 strategicStyle && "border-slate-200/60 dark:border-slate-800"
               )}>
-                <Image
+                <AppImage
                   src={app.image}
                   alt={app.title}
-                  width={50}
-                  height={50}
                   className="size-9 object-contain"
+                  fallbackSizeClass="text-lg"
                 />
               </div>
 
