@@ -101,7 +101,7 @@ export default function AdminInstructionsPage() {
 
           <div className="flex-1 min-h-0 flex flex-col gap-4">
             {/* Prompt Box to Enter New Instructions */}
-            <div className="relative w-full flex-none flex items-center gap-2 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-lg shadow-sm focus-within:ring-1 focus-within:ring-primary pr-2">
+            <div className="relative w-full flex-none flex items-center gap-2 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-lg shadow-sm pr-2">
               <Input
                 placeholder="Enter instruction..."
                 value={newInstruction}
@@ -112,7 +112,7 @@ export default function AdminInstructionsPage() {
                     handleAdd();
                   }
                 }}
-                className="px-4 h-12 w-full text-base border-none shadow-none focus-visible:ring-0 bg-transparent flex-1"
+                className="px-4 h-12 w-full text-base border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none bg-transparent flex-1"
               />
               <Button
                 size="sm"
