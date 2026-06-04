@@ -301,13 +301,13 @@ export default function AdminDashboardPage() {
     {
       title: 'Monthly Recurring Revenues',
       value: `$${Math.round(parseFloat(kpis.monthlyRevenue)).toLocaleString()}`,
-      delta: 'MRR based on active payments',
+      delta: '',
       icon: CreditCard,
     },
     {
       title: 'Annual Recurring Revenues',
       value: `$${Math.round(parseFloat(kpis.monthlyRevenue) * 12).toLocaleString()}`,
-      delta: 'ARR projected calculation',
+      delta: '',
       icon: TrendingUp,
     },
   ];
@@ -382,7 +382,9 @@ export default function AdminDashboardPage() {
                   <Icon className="text-muted-foreground h-5 w-5" />
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-muted-foreground text-xs">{card.delta}</p>
+                  {card.delta ? (
+                    <p className="text-muted-foreground text-xs">{card.delta}</p>
+                  ) : null}
                   {card.href ? (
                     <Button
                       asChild
