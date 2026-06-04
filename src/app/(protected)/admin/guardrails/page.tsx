@@ -160,7 +160,7 @@ export default function AdminGuardrailsPage() {
                   {filteredGuardrails.map(({ text, index }) => (
                     <div
                       key={index}
-                      className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 items-center animate-in fade-in-50 duration-150"
+                      className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center animate-in fade-in-50 duration-150"
                     >
                       {/* Left Icon (Shield) & Content column merged */}
                       <div className="col-span-10 flex items-center gap-5 min-w-0">

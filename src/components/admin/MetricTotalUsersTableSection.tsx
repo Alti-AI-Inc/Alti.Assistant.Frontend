@@ -197,7 +197,7 @@ export function MetricTotalUsersTableSection() {
                 return (
                   <div
                     key={user._id}
-                    className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 items-center"
+                    className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center"
                   >
                     <div className="col-span-5 flex items-center min-w-0">
                       <span className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate select-all">

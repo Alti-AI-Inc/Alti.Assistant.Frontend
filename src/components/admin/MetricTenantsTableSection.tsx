@@ -234,7 +234,7 @@ export function MetricTenantsTableSection() {
                 return (
                   <div
                     key={t._id}
-                    className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 items-center cursor-pointer"
+                    className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center cursor-pointer"
                     onClick={() => openDetail(t._id)}
                   >
                     <div className="col-span-9 flex items-center min-w-0">
