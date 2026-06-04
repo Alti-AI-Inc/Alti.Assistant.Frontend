@@ -48,6 +48,7 @@ import {
   Inbox,
   UserCheck,
   KeyRound,
+  Mail,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -692,6 +693,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   {[
                     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
                     { name: 'My Accounts', href: '/admin/accounts', icon: KeyRound },
+                    { name: 'Email Accounts', href: '/admin/emails', icon: Mail },
                     { name: 'Data Partners', href: '/admin/partners', icon: Database },
                     { name: 'Free Users', href: '/admin/metrics/total-users?plan=free', icon: User },
                     { name: 'Paid Users', href: '/admin/metrics/total-users?plan=paid', icon: UserCheck },
