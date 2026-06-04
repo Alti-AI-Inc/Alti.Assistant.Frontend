@@ -314,11 +314,11 @@ export default function TeamMembersPage() {
                     </div>
                   </div>
 
-                  <DialogFooter className="flex gap-2 justify-end mt-2">
+                  <DialogFooter className="flex gap-3 justify-end mt-2">
                     <Button
                       variant="outline"
                       onClick={() => setIsEditingPrice(false)}
-                      className="rounded-lg border-black/10 dark:border-white/10"
+                      className="w-36 rounded-lg border-black/10 dark:border-white/10"
                     >
                       Cancel
                     </Button>
@@ -330,7 +330,7 @@ export default function TeamMembersPage() {
                         }
                         setIsEditingPrice(false);
                       }}
-                      className="rounded-lg bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90"
+                      className="w-36 rounded-lg bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90"
                     >
                       Save
                     </Button>

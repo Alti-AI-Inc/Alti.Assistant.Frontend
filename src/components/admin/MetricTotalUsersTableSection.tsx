@@ -265,11 +265,18 @@ export function MetricTotalUsersTableSection() {
               </div>
             </div>
           )}
-          <DialogFooter className="gap-2 sm:gap-0">
-            <Button variant="outline" onClick={() => setEditingUser(null)}>
+          <DialogFooter className="flex gap-3 justify-end mt-2">
+            <Button
+              variant="outline"
+              onClick={() => setEditingUser(null)}
+              className="w-36 rounded-lg border-black/10 dark:border-white/10"
+            >
               Cancel
             </Button>
-            <Button onClick={handleSave}>
+            <Button
+              onClick={handleSave}
+              className="w-36 rounded-lg bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/90"
+            >
               Save Changes
             </Button>
           </DialogFooter>
