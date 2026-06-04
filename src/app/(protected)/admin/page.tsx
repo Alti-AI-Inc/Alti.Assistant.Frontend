@@ -5,6 +5,9 @@ import {
   BriefcaseBusiness,
   CreditCard,
   User,
+  UserCheck,
+  UsersRound,
+  TrendingUp,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -260,30 +263,49 @@ export default function AdminDashboardPage() {
     load();
   }, [token]);
 
-  const kpiCards = [
+  const userAndTeamCards = [
     {
-      title: 'Total Users',
-      value: String(kpis.totalUsers),
-      delta: `${kpis.paidUser} paid • ${kpis.freeUser} free`,
+      title: 'Total Free Users',
+      value: String(kpis.freeUser ?? 0),
+      delta: 'Free accounts',
       icon: User,
-      href: '/admin/metrics/total-users',
-      linkLabel: 'View all of the users',
+      href: '/admin/metrics/total-users?plan=free',
+      linkLabel: 'view all of the free users',
     },
     {
-      title: 'Total Teams',
+      title: 'Total Paid Users',
+      value: String(kpis.paidUser ?? 0),
+      delta: 'Active paid subscriptions',
+      icon: UserCheck,
+      href: '/admin/metrics/total-users?plan=paid',
+      linkLabel: 'view all of the paid users',
+    },
+    {
+      title: 'Total Team Plans',
       value: String(kpis.totalTeams ?? 0),
       delta: '+ realtime',
-      icon: BriefcaseBusiness,
+      icon: UsersRound,
       href: '/admin/metrics/active-organizations',
-      linkLabel: 'View all of the teams',
+      linkLabel: 'view all of the team plans',
     },
+  ];
+
+  const revenueCards = [
     {
-      title: 'Total Revenue',
-      value: `$${kpis.monthlyRevenue}`,
-      delta: `${kpis.unverifyUsers} unverified users`,
+      title: 'Monthly Recurring Revenues',
+      value: `$${Math.round(parseFloat(kpis.monthlyRevenue)).toLocaleString()}`,
+      delta: 'MRR based on active payments',
       icon: CreditCard,
       href: '/admin/metrics/monthly-revenue',
-      linkLabel: 'View all of the payments',
+      linkLabel: 'view all of the payments',
+    },
+    {
+      title: 'Annual Recurring Revenues',
+      value: `$${Math.round(parseFloat(kpis.monthlyRevenue) * 12).toLocaleString()}`,
+      delta: 'ARR projected calculation',
+      icon: TrendingUp,
+      href: '/admin/metrics/monthly-revenue',
+      linkLabel: 'view all of the payments',
     },
   ];
 
@@ -310,8 +332,40 @@ export default function AdminDashboardPage() {
 
 
 
+        {/* First Row of 3 boxes */}
         <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {kpiCards.map(card => {
+          {userAndTeamCards.map(card => {
+            const Icon = card.icon;
+            return (
+              <Card key={card.title}>
+                <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+                  <div className="space-y-1">
+                    <CardDescription>{card.title}</CardDescription>
+                    <CardTitle className="text-2xl">{card.value}</CardTitle>
+                  </div>
+                  <Icon className="text-muted-foreground h-5 w-5" />
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <p className="text-muted-foreground text-xs">{card.delta}</p>
+                  {card.href ? (
+                    <Button
+                      asChild
+                      size="sm"
+                      variant="outline"
+                      className="w-full"
+                    >
+                      <Link href={card.href}>{card.linkLabel}</Link>
+                    </Button>
+                  ) : null}
+                </CardContent>
+              </Card>
+            );
+          })}
+        </section>
+
+        {/* Second Row of 2 boxes */}
+        <section className="grid gap-4 sm:grid-cols-2">
+          {revenueCards.map(card => {
             const Icon = card.icon;
             return (
               <Card key={card.title}>
