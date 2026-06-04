@@ -87,13 +87,13 @@ export default function RegisterPage() {
             />
           </Link>
           <h2 className="text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">
-            {showVerification ? 'Verify your email' : 'Create an account'}
+            {showVerification ? 'Verify Email' : 'Register'}
           </h2>
-          <p className="text-sm text-gray-500 dark:text-zinc-400">
-            {showVerification
-              ? 'Enter the 6-digit confirmation code sent to your email'
-              : 'Sign up to get started with Alti'}
-          </p>
+          {showVerification && (
+            <p className="text-sm text-gray-500 dark:text-zinc-400">
+              Enter the 6-digit confirmation code sent to your email
+            </p>
+          )}
         </div>
 
         {!showVerification ? (
@@ -169,14 +169,14 @@ export default function RegisterPage() {
                 {loading ? (
                   <span className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-current border-r-transparent"></span>
                 ) : null}
-                Sign Up
+                Register
               </button>
             </form>
 
             <div className="text-center text-sm text-gray-500 dark:text-zinc-400">
               Already have an account?{' '}
               <Link href="/login" className="font-semibold text-black hover:underline dark:text-white">
-                Log in
+                Login
               </Link>
             </div>
           </>
