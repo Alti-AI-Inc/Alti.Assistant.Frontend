@@ -8,6 +8,8 @@ import {
   Trash2,
   Pencil,
   Search,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -46,6 +48,10 @@ export default function AdminAccountsPage() {
 
   // Dialog state for deleting
   const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
+
+  // Eye toggle visibility states
+  const [showCreatePassword, setShowCreatePassword] = useState(false);
+  const [showEditPassword, setShowEditPassword] = useState(false);
 
   const accountsList: AccountEntry[] = accounts
     ? accounts.split('\n\n').filter(Boolean).map(item => {
@@ -132,6 +138,7 @@ export default function AdminAccountsPage() {
                   setIsCreateOpen(open);
                   setNewAccount('');
                   setNewPassword('');
+                  setShowCreatePassword(false);
                 }}
               >
                 <DialogTrigger asChild>
@@ -153,25 +160,36 @@ export default function AdminAccountsPage() {
                         placeholder="Enter account name"
                         value={newAccount}
                         onChange={e => setNewAccount(e.target.value)}
+                        autoComplete="new-password"
                         className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
                         autoFocus
                       />
                     </div>
                     <div>
                       <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Account Password</label>
-                      <Input
-                        type="password"
-                        placeholder="Enter account password"
-                        value={newPassword}
-                        onChange={e => setNewPassword(e.target.value)}
-                        onKeyDown={e => {
-                          if (e.key === 'Enter' && newAccount.trim()) {
-                            e.preventDefault();
-                            handleCreate();
-                          }
-                        }}
-                        className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
-                      />
+                      <div className="relative">
+                        <Input
+                          type={showCreatePassword ? "text" : "password"}
+                          placeholder="Enter account password"
+                          value={newPassword}
+                          onChange={e => setNewPassword(e.target.value)}
+                          autoComplete="new-password"
+                          onKeyDown={e => {
+                            if (e.key === 'Enter' && newAccount.trim()) {
+                              e.preventDefault();
+                              handleCreate();
+                            }
+                          }}
+                          className="w-full h-12 pl-4 pr-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowCreatePassword(!showCreatePassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black dark:hover:text-white cursor-pointer h-5 w-5 flex items-center justify-center"
+                        >
+                          {showCreatePassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                        </button>
+                      </div>
                     </div>
                   </div>
                   <DialogFooter>
@@ -241,6 +259,7 @@ export default function AdminAccountsPage() {
                               setEditingIndex(null);
                               setEditValue('');
                               setEditPassword('');
+                              setShowEditPassword(false);
                             }
                           }}
                         >
@@ -268,25 +287,36 @@ export default function AdminAccountsPage() {
                                   placeholder="Enter account name"
                                   value={editValue}
                                   onChange={e => setEditValue(e.target.value)}
+                                  autoComplete="new-password"
                                   className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
                                   autoFocus
                                 />
                               </div>
                               <div>
                                 <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Account Password</label>
-                                <Input
-                                  type="password"
-                                  placeholder="Enter account password"
-                                  value={editPassword}
-                                  onChange={e => setEditPassword(e.target.value)}
-                                  onKeyDown={e => {
-                                    if (e.key === 'Enter' && editValue.trim()) {
-                                      e.preventDefault();
-                                      handleSaveEdit();
-                                    }
-                                  }}
-                                  className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
-                                />
+                                <div className="relative">
+                                  <Input
+                                    type={showEditPassword ? "text" : "password"}
+                                    placeholder="Enter account password"
+                                    value={editPassword}
+                                    onChange={e => setEditPassword(e.target.value)}
+                                    autoComplete="new-password"
+                                    onKeyDown={e => {
+                                      if (e.key === 'Enter' && editValue.trim()) {
+                                        e.preventDefault();
+                                        handleSaveEdit();
+                                      }
+                                    }}
+                                    className="w-full h-12 pl-4 pr-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => setShowEditPassword(!showEditPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black dark:hover:text-white cursor-pointer h-5 w-5 flex items-center justify-center"
+                                  >
+                                    {showEditPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                                  </button>
+                                </div>
                               </div>
                             </div>
                             <DialogFooter>
