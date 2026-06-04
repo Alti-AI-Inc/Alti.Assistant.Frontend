@@ -130,10 +130,8 @@ export default function AdminAccountsPage() {
                 open={isCreateOpen}
                 onOpenChange={open => {
                   setIsCreateOpen(open);
-                  if (!open) {
-                    setNewAccount('');
-                    setNewPassword('');
-                  }
+                  setNewAccount('');
+                  setNewPassword('');
                 }}
               >
                 <DialogTrigger asChild>
