@@ -47,6 +47,7 @@ import {
   CreditCard,
   Inbox,
   UserCheck,
+  Wallet,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -690,6 +691,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   </div>
                   {[
                     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
+                    { name: 'My Accounts', href: '/admin/accounts', icon: Wallet },
                     { name: 'Free Users', href: '/admin/metrics/total-users?plan=free', icon: User },
                     { name: 'Paid Users', href: '/admin/metrics/total-users?plan=paid', icon: UserCheck },
                     { name: 'Team Plans', href: '/admin/metrics/active-organizations', icon: UsersRound },
