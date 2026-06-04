@@ -265,7 +265,7 @@ export default function AdminPartnersPage() {
                           <KeyRound className="h-4 w-4" />
                         </div>
                         <div className="flex-1 flex items-center gap-8 min-w-0">
-                          <div className="w-[180px] min-w-0">
+                          <div className="flex-1 min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Partner Name
                             </span>
@@ -273,7 +273,7 @@ export default function AdminPartnersPage() {
                               {item.name}
                             </span>
                           </div>
-                          <div className="w-[180px] min-w-0">
+                          <div className="flex-1 min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Username
                             </span>
