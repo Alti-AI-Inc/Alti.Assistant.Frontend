@@ -87,7 +87,7 @@ export default function RegisterPage() {
             />
           </Link>
           <h2 className="text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">
-            {showVerification ? 'Verify Email' : 'Register'}
+            {showVerification ? 'Verify Email' : 'Register Account'}
           </h2>
           {showVerification && (
             <p className="text-sm text-gray-500 dark:text-zinc-400">

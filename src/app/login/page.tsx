@@ -54,7 +54,7 @@ export default function LoginPage() {
             />
           </Link>
           <h2 className="text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">
-            Login
+            Login Account
           </h2>
         </div>
 
