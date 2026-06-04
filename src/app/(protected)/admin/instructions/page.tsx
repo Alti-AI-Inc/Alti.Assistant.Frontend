@@ -112,7 +112,7 @@ export default function AdminInstructionsPage() {
                     handleAdd();
                   }
                 }}
-                className="px-4 h-12 w-full text-base border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none bg-transparent flex-1"
+                className="px-4 h-12 w-full text-base border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none bg-transparent flex-1"
               />
               <Button
                 size="sm"
