@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft,
-  KeyRound,
+  Database,
   Trash2,
   Pencil,
   Search,
@@ -28,14 +28,16 @@ import { useAdminStore } from '@/stores/useAdminStore';
 
 interface PartnerEntry {
   name: string;
-  username?: string;
+  website?: string;
+  email?: string;
   password?: string;
 }
 
 export default function AdminPartnersPage() {
   const { partners, setPartners } = useAdminStore();
   const [newPartner, setNewPartner] = useState('');
-  const [newUsername, setNewUsername] = useState('');
+  const [newWebsite, setNewWebsite] = useState('');
+  const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -45,7 +47,8 @@ export default function AdminPartnersPage() {
   // Dialog state for editing
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState('');
-  const [editUsername, setEditUsername] = useState('');
+  const [editWebsite, setEditWebsite] = useState('');
+  const [editEmail, setEditEmail] = useState('');
   const [editPassword, setEditPassword] = useState('');
 
   // Dialog state for deleting
@@ -70,7 +73,7 @@ export default function AdminPartnersPage() {
         try {
           return JSON.parse(item);
         } catch (e) {
-          return { name: item, username: '', password: '' };
+          return { name: item, website: '', email: '', password: '' };
         }
       })
     : [];
@@ -79,13 +82,15 @@ export default function AdminPartnersPage() {
     if (!newPartner.trim()) return;
     const newEntry: PartnerEntry = {
       name: newPartner.trim(),
-      username: newUsername.trim(),
+      website: newWebsite.trim(),
+      email: newEmail.trim(),
       password: newPassword,
     };
     const newList = [newEntry, ...partnersList];
     setPartners(newList.map(item => JSON.stringify(item)).join('\n\n'));
     setNewPartner('');
-    setNewUsername('');
+    setNewWebsite('');
+    setNewEmail('');
     setNewPassword('');
     setIsCreateOpen(false);
   };
@@ -93,7 +98,8 @@ export default function AdminPartnersPage() {
   const handleStartEdit = (index: number, val: PartnerEntry) => {
     setEditingIndex(index);
     setEditValue(val.name);
-    setEditUsername(val.username || '');
+    setEditWebsite(val.website || '');
+    setEditEmail(val.email || '');
     setEditPassword(val.password || '');
   };
 
@@ -101,13 +107,19 @@ export default function AdminPartnersPage() {
     if (editingIndex === null || !editValue.trim()) return;
     const newList = partnersList.map((item, idx) =>
       idx === editingIndex
-        ? { name: editValue.trim(), username: editUsername.trim(), password: editPassword }
+        ? {
+            name: editValue.trim(),
+            website: editWebsite.trim(),
+            email: editEmail.trim(),
+            password: editPassword,
+          }
         : item,
     );
     setPartners(newList.map(item => JSON.stringify(item)).join('\n\n'));
     setEditingIndex(null);
     setEditValue('');
-    setEditUsername('');
+    setEditWebsite('');
+    setEditEmail('');
     setEditPassword('');
   };
 
@@ -153,7 +165,8 @@ export default function AdminPartnersPage() {
                 onOpenChange={open => {
                   setIsCreateOpen(open);
                   setNewPartner('');
-                  setNewUsername('');
+                  setNewWebsite('');
+                  setNewEmail('');
                   setNewPassword('');
                   setShowCreatePassword(false);
                 }}
@@ -167,13 +180,13 @@ export default function AdminPartnersPage() {
                   <DialogHeader>
                     <DialogTitle>Create New Partner</DialogTitle>
                     <DialogDescription className="text-gray-500 dark:text-gray-400 text-sm">
-                      Enter the name and password details for the new partner below.
+                      Enter the details for the new data partner below.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="py-4 flex flex-col gap-3">
                     <div>
                       <Input
-                        placeholder="Enter partner name"
+                        placeholder="Enter data name"
                         value={newPartner}
                         onChange={e => setNewPartner(e.target.value)}
                         autoComplete="new-password"
@@ -183,9 +196,18 @@ export default function AdminPartnersPage() {
                     </div>
                     <div>
                       <Input
-                        placeholder="Enter partner username"
-                        value={newUsername}
-                        onChange={e => setNewUsername(e.target.value)}
+                        placeholder="Enter data website"
+                        value={newWebsite}
+                        onChange={e => setNewWebsite(e.target.value)}
+                        autoComplete="new-password"
+                        className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+                      />
+                    </div>
+                    <div>
+                      <Input
+                        placeholder="Enter email address"
+                        value={newEmail}
+                        onChange={e => setNewEmail(e.target.value)}
                         autoComplete="new-password"
                         className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
                       />
@@ -194,12 +216,12 @@ export default function AdminPartnersPage() {
                       <div className="relative">
                         <Input
                           type={showCreatePassword ? "text" : "password"}
-                          placeholder="Enter partner password"
+                          placeholder="Enter password"
                           value={newPassword}
                           onChange={e => setNewPassword(e.target.value)}
                           autoComplete="new-password"
                           onKeyDown={e => {
-                            if (e.key === 'Enter' && newPartner.trim() && newUsername.trim() && newPassword.trim()) {
+                            if (e.key === 'Enter' && newPartner.trim() && newWebsite.trim() && newEmail.trim() && newPassword.trim()) {
                               e.preventDefault();
                               handleCreate();
                             }
@@ -222,8 +244,8 @@ export default function AdminPartnersPage() {
                     </DialogClose>
                     <Button
                       onClick={handleCreate}
-                      disabled={!newPartner.trim() || !newUsername.trim() || !newPassword.trim()}
-                      className={(!newPartner.trim() || !newUsername.trim() || !newPassword.trim())
+                      disabled={!newPartner.trim() || !newWebsite.trim() || !newEmail.trim() || !newPassword.trim()}
+                      className={(!newPartner.trim() || !newWebsite.trim() || !newEmail.trim() || !newPassword.trim())
                         ? "bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 cursor-not-allowed"
                         : "bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/95"
                       }
@@ -262,12 +284,12 @@ export default function AdminPartnersPage() {
                       {/* Left Icon (KeyRound) & Content column merged */}
                       <div className="col-span-10 flex items-center gap-5 min-w-0">
                         <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-none">
-                          <KeyRound className="h-4 w-4" />
+                          <Database className="h-4 w-4" />
                         </div>
-                        <div className="flex-1 flex items-center gap-8 min-w-0">
+                        <div className="flex-1 flex items-center gap-6 min-w-0">
                           <div className="flex-1 min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
-                              Partner Name
+                              Data Name
                             </span>
                             <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate block">
                               {item.name}
@@ -275,10 +297,18 @@ export default function AdminPartnersPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
-                              Username
+                              Data Website
                             </span>
                             <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate block">
-                              {item.username || 'None'}
+                              {item.website || 'None'}
+                            </span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
+                              Email Address
+                            </span>
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate block">
+                              {item.email || 'None'}
                             </span>
                           </div>
                           <div className="flex-1 min-w-0">
@@ -315,7 +345,8 @@ export default function AdminPartnersPage() {
                             if (!open) {
                               setEditingIndex(null);
                               setEditValue('');
-                              setEditUsername('');
+                              setEditWebsite('');
+                              setEditEmail('');
                               setEditPassword('');
                               setShowEditPassword(false);
                             }
@@ -341,7 +372,7 @@ export default function AdminPartnersPage() {
                             <div className="py-4 flex flex-col gap-3">
                               <div>
                                 <Input
-                                  placeholder="Enter partner name"
+                                  placeholder="Enter data name"
                                   value={editValue}
                                   onChange={e => setEditValue(e.target.value)}
                                   autoComplete="new-password"
@@ -351,9 +382,18 @@ export default function AdminPartnersPage() {
                               </div>
                               <div>
                                 <Input
-                                  placeholder="Enter partner username"
-                                  value={editUsername}
-                                  onChange={e => setEditUsername(e.target.value)}
+                                  placeholder="Enter data website"
+                                  value={editWebsite}
+                                  onChange={e => setEditWebsite(e.target.value)}
+                                  autoComplete="new-password"
+                                  className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+                                />
+                              </div>
+                              <div>
+                                <Input
+                                  placeholder="Enter email address"
+                                  value={editEmail}
+                                  onChange={e => setEditEmail(e.target.value)}
                                   autoComplete="new-password"
                                   className="w-full h-12 text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
                                 />
@@ -362,12 +402,12 @@ export default function AdminPartnersPage() {
                                 <div className="relative">
                                   <Input
                                     type={showEditPassword ? "text" : "password"}
-                                    placeholder="Enter partner password"
+                                    placeholder="Enter password"
                                     value={editPassword}
                                     onChange={e => setEditPassword(e.target.value)}
                                     autoComplete="new-password"
                                     onKeyDown={e => {
-                                      if (e.key === 'Enter' && editValue.trim() && editUsername.trim() && editPassword.trim()) {
+                                      if (e.key === 'Enter' && editValue.trim() && editWebsite.trim() && editEmail.trim() && editPassword.trim()) {
                                         e.preventDefault();
                                         handleSaveEdit();
                                       }
@@ -390,8 +430,8 @@ export default function AdminPartnersPage() {
                               </DialogClose>
                               <Button
                                 onClick={handleSaveEdit}
-                                disabled={!editValue.trim() || !editUsername.trim() || !editPassword.trim()}
-                                className={(!editValue.trim() || !editUsername.trim() || !editPassword.trim())
+                                disabled={!editValue.trim() || !editWebsite.trim() || !editEmail.trim() || !editPassword.trim()}
+                                className={(!editValue.trim() || !editWebsite.trim() || !editEmail.trim() || !editPassword.trim())
                                   ? "bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 cursor-not-allowed"
                                   : "bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/95"
                                 }
