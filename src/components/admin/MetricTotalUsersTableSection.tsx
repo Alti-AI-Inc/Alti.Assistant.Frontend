@@ -73,7 +73,7 @@ export function MetricTotalUsersTableSection() {
     }
     return {
       isSubscribed: user.isSubscribed,
-      amount: user.isSubscribed ? '$19' : '$0',
+      amount: user.isSubscribed ? '$20' : '$0',
     };
   }, [userSettings]);
 

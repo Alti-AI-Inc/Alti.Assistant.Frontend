@@ -195,7 +195,7 @@ export default function TeamMembersPage() {
       {/* Header */}
       <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-[#F5F5F7] dark:bg-zinc-950">
         <h1 className="text-base font-semibold text-gray-900 dark:text-white truncate">
-          Team Members {detail?.name ? `— ${detail.name}` : ''}
+          Team Members
         </h1>
         <Button asChild variant="outline" size="sm">
           <Link href="/admin/metrics/active-organizations">
