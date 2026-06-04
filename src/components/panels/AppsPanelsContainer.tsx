@@ -403,7 +403,7 @@ export const AppsPanelsContainer = () => {
           </div>
         ) : !isSelectedAppConnected ? (
           /* STATE 1: App Setup / Connection screen */
-          <div className="flex-1 overflow-y-auto p-8 flex items-center justify-center">
+          <div className="flex-1 overflow-y-auto p-8 flex items-start justify-center pt-24">
             <div className="w-full max-w-lg animate-in zoom-in-95 duration-200">
               <div className="flex flex-col items-center text-center space-y-6">
                 
@@ -463,18 +463,7 @@ export const AppsPanelsContainer = () => {
                     disabled={isConnecting}
                     className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-blue-500/10 font-medium dark:bg-blue-700 dark:hover:bg-blue-800"
                   >
-                    {isConnecting ? (
-                      <>
-                        <RefreshCw className="h-4 w-4 animate-spin" />
-                        Authorizing connection...
-                      </>
-                    ) : (
-                      <>
-                        <Key className="h-4 w-4" />
-                        Authorize Connection
-                        <ExternalLink className="h-3.5 w-3.5 ml-0.5" />
-                      </>
-                    )}
+                    {isConnecting ? 'Authorizing connection...' : 'Authorize Connection'}
                   </Button>
                 </div>
               </div>
