@@ -249,11 +249,7 @@ export default function AdminAccountsPage() {
 
             {/* Structured list identical in layout to user lists */}
             <div className="flex-1 min-h-0 overflow-y-auto pr-1">
-              {filteredAccounts.length === 0 ? (
-                <div className="text-center p-8 border border-dashed rounded-lg text-muted-foreground text-sm bg-white dark:bg-gray-900">
-                  No matching accounts found
-                </div>
-              ) : (
+              {filteredAccounts.length === 0 ? null : (
                 <div className="flex flex-col gap-2 pb-4">
                   {filteredAccounts.map(({ item, index }) => (
                     <div

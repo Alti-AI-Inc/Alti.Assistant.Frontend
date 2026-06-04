@@ -256,11 +256,7 @@ export default function TeamMembersPage() {
               {/* Team Users List (styled exactly as Team rows) */}
               <div className="flex-1 min-h-0 overflow-y-auto pr-1">
                 <div className="flex flex-col gap-2 pb-4">
-                  {filteredMembers.length === 0 ? (
-                    <div className="text-center p-8 border border-dashed rounded-lg text-muted-foreground text-sm bg-white dark:bg-gray-900">
-                      {searchTerm.trim() ? 'No matching users found' : 'No other users on this team'}
-                    </div>
-                  ) : (
+                  {filteredMembers.length === 0 ? null : (
                     filteredMembers.map(member => {
                       const email = member.userId?.email || '—';
                       return (
