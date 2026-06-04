@@ -178,7 +178,7 @@ export default function AdminInstructionsPage() {
                           {text}
                         </span>
                         <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
-                          Instruction Rule #{index + 1}
+                          Instruction Rule
                         </span>
                       </div>
 
