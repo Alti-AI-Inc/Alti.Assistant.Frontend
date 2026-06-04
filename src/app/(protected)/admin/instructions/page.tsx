@@ -103,7 +103,7 @@ export default function AdminInstructionsPage() {
             {/* Prompt Box to Enter New Instructions */}
             <div className="relative w-full flex-none flex items-center gap-2 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-lg shadow-sm pr-2">
               <Input
-                placeholder="Enter instruction..."
+                placeholder="Enter new instruction..."
                 value={newInstruction}
                 onChange={e => setNewInstruction(e.target.value)}
                 onKeyDown={e => {
