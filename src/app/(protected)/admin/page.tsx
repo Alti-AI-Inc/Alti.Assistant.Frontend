@@ -267,7 +267,7 @@ export default function AdminDashboardPage() {
     {
       title: 'Total Free Users',
       value: String(kpis.freeUser ?? 0),
-      delta: 'Free accounts',
+      delta: '',
       icon: User,
       href: '/admin/metrics/total-users?plan=free',
       linkLabel: 'view all of the free users',
@@ -275,7 +275,7 @@ export default function AdminDashboardPage() {
     {
       title: 'Total Paid Users',
       value: String(kpis.paidUser ?? 0),
-      delta: 'Active paid subscriptions',
+      delta: '',
       icon: UserCheck,
       href: '/admin/metrics/total-users?plan=paid',
       linkLabel: 'view all of the paid users',
@@ -283,7 +283,7 @@ export default function AdminDashboardPage() {
     {
       title: 'Total Team Plans',
       value: String(kpis.totalTeams ?? 0),
-      delta: '+ realtime',
+      delta: '',
       icon: UsersRound,
       href: '/admin/metrics/active-organizations',
       linkLabel: 'view all of the team plans',
@@ -349,7 +349,9 @@ export default function AdminDashboardPage() {
                   <Icon className="text-muted-foreground h-5 w-5" />
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-muted-foreground text-xs">{card.delta}</p>
+                  {card.delta ? (
+                    <p className="text-muted-foreground text-xs">{card.delta}</p>
+                  ) : null}
                   {card.href ? (
                     <Button
                       asChild
