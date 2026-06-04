@@ -199,23 +199,15 @@ export function MetricTotalUsersTableSection() {
                       </span>
                     </div>
                     <div className="col-span-3 flex justify-center">
-                      <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${
-                          isPaid
-                            ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400'
-                            : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
-                        }`}
-                      >
-                        <span
-                          className={`h-1.5 w-1.5 rounded-full ${
-                            isPaid ? 'bg-emerald-500' : 'bg-gray-400'
-                          }`}
-                        />
-                        {planText}
-                      </span>
+                      {isPaid ? (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                          Paid Plan
+                        </span>
+                      ) : null}
                     </div>
                     <div className="col-span-2 flex items-center justify-end text-sm font-semibold text-gray-900 dark:text-gray-100">
-                      {amountText}
+                      {isPaid ? amountText : null}
                     </div>
                     <div className="col-span-2 flex items-center justify-end">
                       <Button
