@@ -11,6 +11,7 @@ import {
   Plus,
   Search,
   RefreshCw,
+  ReceiptText,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -29,6 +30,7 @@ import { CustomersTable } from '@/components/stripe/admin/CustomersTable';
 import { SubscriptionsTable } from '@/components/stripe/admin/SubscriptionsTable';
 import { ProductsTable } from '@/components/stripe/admin/ProductsTable';
 import { CreateCustomerDialog } from '@/components/stripe/admin/CreateCustomerDialog';
+import { MetricMonthlyRevenuePaymentsTableSection } from '@/components/admin/MetricMonthlyRevenuePaymentsTableSection';
 
 import {
   getStripeCustomers,
@@ -120,7 +122,7 @@ export default function StripeAdminDashboard() {
       {/* Dynamic Header */}
       <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-[#F5F5F7] dark:bg-gray-955">
         <h1 className="text-base font-semibold text-gray-900 dark:text-white">
-          Billing Console
+          Payments
         </h1>
         <div className="flex items-center gap-2">
           <Button
@@ -218,12 +220,16 @@ export default function StripeAdminDashboard() {
       >
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <TabsList>
+            <TabsTrigger value="payments" className="gap-2">
+              <CreditCard className="h-4 w-4" />
+              Payments
+            </TabsTrigger>
             <TabsTrigger value="customers" className="gap-2">
               <Users className="h-4 w-4" />
               Customers
             </TabsTrigger>
             <TabsTrigger value="subscriptions" className="gap-2">
-              <CreditCard className="h-4 w-4" />
+              <ReceiptText className="h-4 w-4" />
               Subscriptions
             </TabsTrigger>
             <TabsTrigger value="products" className="gap-2">
@@ -232,16 +238,22 @@ export default function StripeAdminDashboard() {
             </TabsTrigger>
           </TabsList>
 
-          <div className="relative w-full sm:w-64">
-            <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-            <Input
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
+          {activeTab !== 'payments' && (
+            <div className="relative w-full sm:w-64">
+              <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+              <Input
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+          )}
         </div>
+
+        <TabsContent value="payments" className="space-y-4">
+          <MetricMonthlyRevenuePaymentsTableSection />
+        </TabsContent>
 
         <TabsContent value="customers" className="space-y-4">
           <CustomersTable

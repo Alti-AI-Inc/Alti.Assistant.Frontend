@@ -296,7 +296,7 @@ export default function AdminDashboardPage() {
       value: `$${Math.round(parseFloat(kpis.monthlyRevenue)).toLocaleString()}`,
       delta: 'MRR based on active payments',
       icon: CreditCard,
-      href: '/admin/metrics/monthly-revenue',
+      href: '/admin/stripe',
       linkLabel: 'view all of the payments',
     },
     {
@@ -304,7 +304,7 @@ export default function AdminDashboardPage() {
       value: `$${Math.round(parseFloat(kpis.monthlyRevenue) * 12).toLocaleString()}`,
       delta: 'ARR projected calculation',
       icon: TrendingUp,
-      href: '/admin/metrics/monthly-revenue',
+      href: '/admin/stripe',
       linkLabel: 'view all of the payments',
     },
   ];
