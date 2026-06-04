@@ -376,15 +376,15 @@ export const AppsPanelsContainer = () => {
   const isSelectedAppConnected = selectedApp && connectedAppSlugs.has(selectedApp.app_name.toLowerCase());
 
   return (
-    <div className="flex h-full w-full flex-row overflow-hidden bg-gray-50 dark:bg-gray-950">
+    <div className="flex h-full w-full flex-row overflow-hidden bg-[#F5F5F7] dark:bg-gray-955">
       
       {/* =========================================================
           RIGHT WORKSPACE - ACTIVE DETAIL OR CHATVIEW CONSOLE
           ========================================================= */}
-      <main className="flex-1 flex flex-row bg-white dark:bg-gray-950 overflow-hidden relative">
+      <main className="flex-1 flex flex-row bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden relative">
         
         {isFetchingStatus ? (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-4 bg-white dark:bg-gray-950">
+          <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-4 bg-[#F5F5F7] dark:bg-gray-955">
             <RefreshCw className="h-8 w-8 text-blue-600 animate-spin" />
             <p className="text-sm text-gray-500 animate-pulse">Loading workspace status...</p>
           </div>
@@ -400,33 +400,17 @@ export const AppsPanelsContainer = () => {
                 Connect and prompt individual web applications securely. Select an application in the sidebar to configure authentication and interact with its tools in a focused, zero-hallucination agent session.
               </p>
             </div>
-            
-            <div className="w-full grid grid-cols-2 gap-3 mt-4 text-left">
-              <div className="p-3.5 rounded-xl border border-gray-150 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/30">
-                <Shield className="h-4.5 w-4.5 text-blue-500 mb-2" />
-                <h4 className="text-xs font-bold text-gray-950 dark:text-gray-50">100% Isolated Scoping</h4>
-                <p className="text-[11px] text-gray-500 mt-1">Tools are locked dynamically to ensure strict deterministic execution.</p>
-              </div>
-              <div className="p-3.5 rounded-xl border border-gray-150 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/30">
-                <Key className="h-4.5 w-4.5 text-blue-500 mb-2" />
-                <h4 className="text-xs font-bold text-gray-950 dark:text-gray-50">Composio MCP Auth</h4>
-                <p className="text-[11px] text-gray-500 mt-1">Universal OAuth management handles complex authentications seamlessly.</p>
-              </div>
-            </div>
-
-
-
           </div>
         ) : !isSelectedAppConnected ? (
           /* STATE 1: App Setup / Connection screen */
           <div className="flex-1 overflow-y-auto p-8 flex items-center justify-center">
-            <div className="w-full max-w-lg rounded-2xl border border-gray-200/80 bg-white p-8 dark:border-gray-800 dark:bg-gray-900/40 shadow-xl shadow-gray-200/50 dark:shadow-none backdrop-blur-md animate-in zoom-in-95 duration-200">
+            <div className="w-full max-w-lg animate-in zoom-in-95 duration-200">
               <div className="flex flex-col items-center text-center space-y-6">
                 
                 {/* Visual animated Aura under the app logo */}
                 <div className="relative">
                   <div className="absolute inset-0 rounded-3xl bg-blue-500/10 dark:bg-blue-500/5 blur-xl animate-pulse" />
-                  <div className="relative h-20 w-20 rounded-2xl border border-gray-200 bg-white p-3.5 flex items-center justify-center dark:border-gray-800 shadow-md">
+                  <div className="relative h-20 w-20 rounded-2xl border border-black/10 dark:border-white/10 bg-white p-3.5 flex items-center justify-center shadow-md">
                     {selectedApp.image ? (
                       <img src={selectedApp.image} alt={selectedApp.title} className="h-full w-full object-contain" />
                     ) : (
@@ -436,7 +420,7 @@ export const AppsPanelsContainer = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-gray-950 dark:text-gray-50">Connect {selectedApp.title}</h3>
+                  <h3 className="text-xl font-bold text-gray-950 dark:text-gray-55">Connect {selectedApp.title}</h3>
                   <p className="mt-2.5 text-sm text-gray-600 dark:text-gray-400">
                     {selectedApp.description}
                   </p>
@@ -465,7 +449,7 @@ export const AppsPanelsContainer = () => {
                             placeholder={key === 'databaseUrl' ? 'postgresql://username:password@localhost:5432/dbname' : `Enter your ${key.replace(/_/g, ' ')}...`}
                             value={mcpInputs[key] || ''}
                             onChange={(e) => setMcpInputs(prev => ({ ...prev, [key]: e.target.value }))}
-                            className="h-10 text-sm rounded-lg bg-gray-50 border-gray-200 dark:border-gray-800 dark:bg-gray-950 focus-visible:ring-1 focus-visible:ring-blue-500/30"
+                            className="h-10 text-sm rounded-lg bg-white border border-black/10 dark:border-white/10 dark:bg-gray-950 focus-visible:ring-1 focus-visible:ring-blue-500/30"
                           />
                         </div>
                       ))}
@@ -493,18 +477,6 @@ export const AppsPanelsContainer = () => {
                     )}
                   </Button>
                 </div>
-
-                <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-500 pt-2 border-t border-gray-100 dark:border-gray-800 w-full justify-center">
-                  <Shield className="h-3.5 w-3.5" />
-                  <span>
-                    {(() => {
-                      const isMcp = !!selectedApp.isMcp || ['filesystem', 'google-maps', 'slack', 'linear', 'gcal', 'brave-search', 'postgres', 'sqlite', 'playwright', 'fetch', 'evernote'].includes(selectedApp.app_name);
-                      return isMcp 
-                        ? 'Authenticated securely via sandboxed stdio protocol'
-                        : 'Authenticated securely via Composio protocol';
-                    })()}
-                  </span>
-                </div>
               </div>
             </div>
           </div>
@@ -516,7 +488,7 @@ export const AppsPanelsContainer = () => {
             <div className="flex-1 flex flex-col overflow-hidden h-full">
               
               {/* Scoped Chat Header */}
-              <div className="h-14 border-b border-gray-150 bg-white dark:border-gray-800 dark:bg-gray-900 px-4 flex items-center justify-between flex-none">
+              <div className="h-14 border-b border-black/10 dark:border-white/10 bg-[#F5F5F7] dark:bg-gray-955 px-4 flex items-center justify-between flex-none">
                 <div className="flex items-center gap-3">
                   <div className="h-7 w-7 rounded overflow-hidden border border-gray-200 bg-white p-1.5 flex items-center justify-center dark:border-gray-800">
                     {selectedApp.image ? (
@@ -550,7 +522,7 @@ export const AppsPanelsContainer = () => {
               </div>
 
               {/* Scoped Message List */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50/50 dark:bg-gray-950/40">
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#F5F5F7] dark:bg-gray-955">
                 {(!chatHistories[selectedApp.app_name] || chatHistories[selectedApp.app_name].length === 0) ? (
                   <div className="h-full flex flex-col items-center justify-center text-center max-w-sm mx-auto space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-350">
                     <div className="h-11 w-11 rounded-full bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center text-blue-500">
@@ -631,7 +603,7 @@ export const AppsPanelsContainer = () => {
               </div>
 
               {/* Scoped Input Box sticky */}
-              <div className="p-4 border-t border-gray-150 bg-white dark:border-gray-800 dark:bg-gray-900 flex-none">
+              <div className="p-4 border-t border-black/10 dark:border-white/10 bg-[#F5F5F7] dark:bg-gray-955 flex-none">
                 <div className="flex gap-2">
                   <Input
                     placeholder={`Ask ${selectedApp.title} agent to execute an action...`}
@@ -639,7 +611,7 @@ export const AppsPanelsContainer = () => {
                     onChange={e => setCurrentInput(e.target.value)}
                     onKeyPress={handleKeyPress}
                     disabled={isSendingMessage}
-                    className="flex-1 h-10 text-sm rounded-lg bg-gray-50 border-gray-200 dark:border-gray-800 dark:bg-gray-950 focus-visible:ring-1 focus-visible:ring-blue-500/30 focus-visible:border-blue-500"
+                    className="flex-1 h-10 text-sm rounded-lg bg-white border border-black/10 dark:border-white/10 dark:bg-gray-950 focus-visible:ring-1 focus-visible:ring-blue-500/30 focus-visible:border-blue-500"
                   />
 
                   <Button

@@ -109,7 +109,7 @@ export const SettingsSidebar = ({
       >
         {!hideSidebar ? (
           <>
-            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+            <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
               Settings
             </span>
             <PanelLeftClose
