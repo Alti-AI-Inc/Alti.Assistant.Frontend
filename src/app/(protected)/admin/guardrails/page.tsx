@@ -1,20 +1,250 @@
 'use client';
 
-import { AdminGuardrailsEditor } from '@/components/admin/AdminEditors';
+import { useState, useRef } from 'react';
+import Link from 'next/link';
+import {
+  ArrowLeft,
+  Shield,
+  Trash2,
+  Pencil,
+  Plus,
+  Search,
+  FileText,
+} from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { useAdminStore } from '@/stores/useAdminStore';
 
 export default function AdminGuardrailsPage() {
+  const { guardrails, setGuardrails } = useAdminStore();
+  const [newGuardrail, setNewGuardrail] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Index of guardrail being edited
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  // Dialog state for deleting
+  const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
+
+  const guardrailsList = guardrails
+    ? guardrails.split('\n\n').filter(Boolean)
+    : [];
+
+  const handleSendOrSave = () => {
+    if (!newGuardrail.trim()) return;
+    if (editingIndex !== null) {
+      const newList = guardrailsList.map((item, idx) =>
+        idx === editingIndex ? newGuardrail.trim() : item,
+      );
+      setGuardrails(newList.join('\n\n'));
+      setEditingIndex(null);
+    } else {
+      const newList = [newGuardrail.trim(), ...guardrailsList];
+      setGuardrails(newList.join('\n\n'));
+    }
+    setNewGuardrail('');
+  };
+
+  const handleStartEdit = (index: number, val: string) => {
+    setEditingIndex(index);
+    setNewGuardrail(val);
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 50);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingIndex(null);
+    setNewGuardrail('');
+  };
+
+  const handleDelete = () => {
+    if (deletingIndex === null) return;
+    const newList = guardrailsList.filter((_, idx) => idx !== deletingIndex);
+    setGuardrails(newList.join('\n\n'));
+    setDeletingIndex(null);
+  };
+
+  const filteredGuardrails = guardrailsList
+    .map((text, index) => ({ text, index }))
+    .filter(({ text }) =>
+      text.toLowerCase().includes(searchTerm.toLowerCase().trim()),
+    );
+
   return (
     <div className="h-full flex flex-col bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden">
       {/* Dynamic Header */}
-      <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center px-8 flex-none bg-[#F5F5F7] dark:bg-gray-955">
+      <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-[#F5F5F7] dark:bg-gray-955">
         <h1 className="text-base font-semibold text-gray-900 dark:text-white">
           Guardrails
         </h1>
+        <div className="flex items-center gap-2">
+          <Button asChild variant="outline" size="sm">
+            <Link href="/admin">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Dashboard
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Main Workspace Body */}
-      <div className="flex-1 overflow-y-auto min-h-0">
-        <AdminGuardrailsEditor />
+      <div className="flex-1 min-h-0 px-8 py-6 overflow-hidden flex flex-col">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 flex-1 min-h-0">
+
+          <div className="flex-1 min-h-0 flex flex-col gap-4">
+            {/* Prompt Box to Enter New Guardrails */}
+            <div className="relative w-full flex-none flex items-center gap-2 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-lg shadow-sm pr-2">
+              <Input
+                ref={inputRef}
+                placeholder="Enter new guardrail"
+                value={newGuardrail}
+                onChange={e => setNewGuardrail(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && newGuardrail.trim()) {
+                    e.preventDefault();
+                    handleSendOrSave();
+                  }
+                }}
+                className="px-4 h-12 w-full text-base border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none bg-transparent flex-1"
+              />
+              {editingIndex !== null && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={handleCancelEdit}
+                  className="h-8 px-3 rounded-md text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white"
+                >
+                  Cancel
+                </Button>
+              )}
+              <Button
+                size="sm"
+                onClick={handleSendOrSave}
+                disabled={!newGuardrail.trim()}
+                className="h-8 px-4 rounded-md"
+              >
+                {editingIndex !== null ? 'Save' : 'Send'}
+              </Button>
+            </div>
+
+            {/* Second Full-width Search Bar */}
+            <div className="relative w-full flex-none">
+              <Search className="text-muted-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
+              <Input
+                placeholder="Search guardrails"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                className="pl-12 pr-4 h-12 w-full text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+              />
+            </div>
+
+            {/* Structured list identical in layout to user lists */}
+            <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+              {filteredGuardrails.length === 0 ? (
+                <div className="text-center p-8 border border-dashed rounded-lg text-muted-foreground text-sm bg-white dark:bg-gray-900">
+                  No matching guardrails found
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2 pb-4">
+                  {filteredGuardrails.map(({ text, index }) => (
+                    <div
+                      key={index}
+                      className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 items-center animate-in fade-in-50 duration-150"
+                    >
+                      {/* Left Icon (Shield) */}
+                      <div className="col-span-1 flex items-center justify-start">
+                        <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center">
+                          <Shield className="h-4 w-4" />
+                        </div>
+                      </div>
+
+                      {/* Content column */}
+                      <div className="col-span-9 flex flex-col justify-center min-w-0">
+                        <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 leading-normal break-words">
+                          {text}
+                        </span>
+                        <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
+                          Guardrail Rule
+                        </span>
+                      </div>
+
+                      {/* Actions columns */}
+                      <div className="col-span-2 flex items-center justify-end gap-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 rounded-lg text-gray-400 hover:text-black dark:hover:text-white"
+                          onClick={() => handleStartEdit(index, text)}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+
+                        {/* Delete Dialog */}
+                        <Dialog
+                          open={deletingIndex === index}
+                          onOpenChange={open => {
+                            if (!open) setDeletingIndex(null);
+                          }}
+                        >
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20"
+                              onClick={() => setDeletingIndex(index)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden animate-in fade-in-50 duration-150">
+                            <div className="px-5 pt-5 pb-4 text-center">
+                              <DialogTitle className="text-[17px] font-semibold text-black dark:text-white leading-tight text-center">
+                                Delete Guardrail
+                              </DialogTitle>
+                              <DialogDescription className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1 text-center">
+                                Are you sure you want to remove this guardrail?
+                              </DialogDescription>
+                            </div>
+                            <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+                              <DialogClose asChild>
+                                <button className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none">
+                                  Cancel
+                                </button>
+                              </DialogClose>
+                              <DialogClose asChild>
+                                <button
+                                  onClick={handleDelete}
+                                  className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none"
+                                >
+                                  Delete
+                                </button>
+                              </DialogClose>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

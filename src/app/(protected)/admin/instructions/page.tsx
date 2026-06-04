@@ -20,6 +20,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
   DialogClose,
   DialogTrigger,
@@ -212,12 +213,12 @@ export default function AdminInstructionsPage() {
                           </DialogTrigger>
                           <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden animate-in fade-in-50 duration-150">
                             <div className="px-5 pt-5 pb-4 text-center">
-                              <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                              <DialogTitle className="text-[17px] font-semibold text-black dark:text-white leading-tight text-center">
                                 Delete Instruction
-                              </h2>
-                              <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+                              </DialogTitle>
+                              <DialogDescription className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1 text-center">
                                 Are you sure you want to remove this instruction?
-                              </p>
+                              </DialogDescription>
                             </div>
                             <div className="border-t border-black/10 dark:border-white/10 flex h-11">
                               <DialogClose asChild>
