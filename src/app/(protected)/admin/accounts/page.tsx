@@ -196,8 +196,11 @@ export default function AdminAccountsPage() {
                     </DialogClose>
                     <Button
                       onClick={handleCreate}
-                      disabled={!newAccount.trim()}
-                      className="bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/95"
+                      disabled={!newAccount.trim() || !newPassword.trim()}
+                      className={(!newAccount.trim() || !newPassword.trim())
+                        ? "bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 cursor-not-allowed"
+                        : "bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/95"
+                      }
                     >
                       Create
                     </Button>
@@ -321,8 +324,11 @@ export default function AdminAccountsPage() {
                               </DialogClose>
                               <Button
                                 onClick={handleSaveEdit}
-                                disabled={!editValue.trim()}
-                                className="bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/95"
+                                disabled={!editValue.trim() || !editPassword.trim()}
+                                className={(!editValue.trim() || !editPassword.trim())
+                                  ? "bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500 cursor-not-allowed"
+                                  : "bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/95"
+                                }
                               >
                                 Save Changes
                               </Button>
