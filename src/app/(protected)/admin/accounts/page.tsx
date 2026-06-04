@@ -242,8 +242,8 @@ export default function AdminAccountsPage() {
                           <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 leading-normal break-words">
                             {item.name}
                           </span>
-                          <span className="text-[9px] text-gray-450 dark:text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
-                            Password: {item.password || 'None'}
+                          <span className="text-[9px] text-gray-450 dark:text-gray-400 font-medium block mt-0.5 font-mono tracking-wider">
+                            {item.password || 'None'}
                           </span>
                         </div>
                       </div>
