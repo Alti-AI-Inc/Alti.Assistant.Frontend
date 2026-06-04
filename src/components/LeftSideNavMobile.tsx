@@ -613,7 +613,7 @@ const LeftSideNavMobile = () => {
                 <div className="space-y-4">
                   {[
                     {
-                      groupName: 'Platform Owner',
+                      groupName: 'Platform',
                       items: [
                         { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true }
                       ]
@@ -628,7 +628,7 @@ const LeftSideNavMobile = () => {
                       ]
                     },
                     {
-                      groupName: 'Users & Teams',
+                      groupName: 'Members',
                       items: [
                         { name: 'Free Users', href: '/admin/metrics/total-users?plan=free', icon: User },
                         { name: 'Paid Users', href: '/admin/metrics/total-users?plan=paid', icon: UserCheck },
@@ -636,7 +636,7 @@ const LeftSideNavMobile = () => {
                       ]
                     },
                     {
-                      groupName: 'Configuration',
+                      groupName: 'Configurations',
                       items: [
                         { name: 'Instructions', href: '/admin/instructions', icon: FileText },
                         { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
