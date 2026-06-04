@@ -693,7 +693,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     { name: 'Free Users', href: '/admin/metrics/total-users?plan=free', icon: User },
                     { name: 'Paid Users', href: '/admin/metrics/total-users?plan=paid', icon: UserCheck },
                     { name: 'Team Plans', href: '/admin/metrics/active-organizations', icon: UsersRound },
-                    { name: 'Billing Console', href: '/admin/stripe', icon: ReceiptText },
                   ].map((item) => {
                     const currentPlan = searchParams?.get('plan');
                     const isActive = item.exact 
