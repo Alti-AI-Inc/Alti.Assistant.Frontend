@@ -975,7 +975,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         className={cn(
           'sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8',
           hasMessages
-            ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-850 backdrop-blur-xl bg-white/80 dark:bg-gray-950/80'
+            ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-850 backdrop-blur-xl bg-zinc-100/80 dark:bg-gray-950/80'
             : 'py-4 bg-transparent border-t-0',
         )}
       >
