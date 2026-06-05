@@ -1067,7 +1067,7 @@ const ChatInput = ({
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0">
         <div
-          style={{ backgroundColor: '#FFFFFF' }}
+          style={{ backgroundColor: '#F3F4F6' }}
           className={cn(
             'flex flex-col rounded-2xl border border-gray-200 px-3 shadow-sm sm:px-4',
             activeConversation?.knowledgebaseId &&
@@ -1246,8 +1246,8 @@ const ChatInput = ({
                       ? 'Describe your workflow...'
                       : 'Enter prompt here...')
               }
-              style={{ backgroundColor: '#FFFFFF' }}
-              className="min-h-8 w-full flex-1 resize-none border-none bg-white px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+              style={{ backgroundColor: 'transparent' }}
+              className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
               autoFocus
             />
             {selectedOption === OPTIONS.RESEARCH && (
