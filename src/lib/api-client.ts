@@ -101,10 +101,18 @@ export async function apiClientJson<T = unknown>(
 
     if (!response.ok) {
       const errorText = await response.text();
+      let parsedError: any = null;
+      try {
+        parsedError = JSON.parse(errorText);
+      } catch (e) {
+        // Not a JSON response
+      }
+      
+      const friendlyMessage = parsedError?.message || 'Request failed';
       return {
         success: false,
-        message: 'Request failed',
-        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        message: friendlyMessage,
+        debugMessage: friendlyMessage,
         statusCode: response.status,
       };
     }

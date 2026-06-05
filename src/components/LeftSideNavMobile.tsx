@@ -872,7 +872,7 @@ const LeftSideNavMobile = () => {
                 <>
                   {displayedApps.map(app => {
                     const isConnected = connectedAppSlugs.has(app.app_name.toLowerCase());
-                    const isSelected = activeAppSlug === app.app_name;
+                    const isSelected = activeAppSlug?.toLowerCase() === app.app_name.toLowerCase();
                     
                     return (
                       <button

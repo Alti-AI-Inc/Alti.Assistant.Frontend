@@ -393,7 +393,7 @@ export const AppsPanelsContainer = () => {
           ========================================================= */}
       <main className="flex-1 flex flex-row bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden relative">
         
-        {isFetchingStatus ? (
+        {isFetchingStatus && !connections ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-4 bg-[#F5F5F7] dark:bg-gray-955">
             <RefreshCw className="h-8 w-8 text-blue-600 animate-spin" />
             <p className="text-sm text-gray-500 animate-pulse">Loading workspace status...</p>
