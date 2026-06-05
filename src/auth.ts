@@ -81,6 +81,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!credentials?.accessToken) return null;
         try {
           const token = credentials.accessToken as string;
+          // TODO Phase 2: Use jwt.verify() with backend JWT secret instead of jwt.decode()
+          // jwt.decode() does NOT validate the token signature — it only parses the payload.
           const decoded = jwt.decode(token) as jwt.JwtPayload & { _id?: string };
           if (!decoded || !decoded._id) return null;
           if (decoded.exp && decoded.exp * 1000 < Date.now()) return null;
@@ -95,7 +97,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   session: {
     strategy: 'jwt',
-    maxAge: 365 * 24 * 60 * 60 * 10, // 10 years
+    maxAge: 24 * 60 * 60, // 24 hours
   },
 
   pages: {
@@ -106,6 +108,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user, trigger, session }) {
       // Handle token updates (e.g., after creating tenant)
       if (trigger === 'update' && session?.accessToken) {
+        // TODO Phase 2: Use jwt.verify() with backend JWT secret instead of jwt.decode()
         const decoded = jwt.decode(session.accessToken) as jwt.JwtPayload & {
           _id?: string;
           role?: string;
@@ -144,6 +147,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.id = user.id;
         token.accessToken = user.accessToken;
 
+        // TODO Phase 2: Use jwt.verify() with backend JWT secret instead of jwt.decode()
         const decoded = jwt.decode(user.accessToken) as jwt.JwtPayload & {
           _id?: string;
           role?: string;

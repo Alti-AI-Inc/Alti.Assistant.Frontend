@@ -161,7 +161,6 @@ export async function checkSubdomainAvailability(
         message: 'Authentication required',
       };
     }
-    console.log('Checking subdomain availability for:', subdomain);
     const response = await fetch(
       `${API_URL}/tenant/check-subdomain?subdomain=${encodeURIComponent(subdomain)}`,
       {
@@ -297,10 +296,6 @@ export async function getUserTenants(): Promise<ApiResponse<UserTenant[]>> {
         message: 'Unauthorized',
       };
     }
-    console.log(
-      'Fetching user tenants with access token:',
-      session.accessToken,
-    );
     const response = await fetch(`${API_URL}/tenant/all`, {
       method: 'GET',
       headers: {
@@ -323,8 +318,6 @@ export async function getUserTenants(): Promise<ApiResponse<UserTenant[]>> {
       };
     }
     const result = (await response.json()) as Record<string, unknown>;
-    console.log('User tenants response:', JSON.stringify(result));
-
     const list = extractTenantRowsFromListResponse(result);
 
     const tenants: UserTenant[] = list

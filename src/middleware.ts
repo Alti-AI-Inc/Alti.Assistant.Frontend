@@ -1,6 +1,31 @@
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 
+// Security headers applied to all responses
+const securityHeaders = {
+  'Content-Security-Policy': [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https: blob:",
+    "connect-src 'self' https: wss:",
+    "frame-ancestors 'none'",
+  ].join('; '),
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+};
+
+function applySecurityHeaders(response: NextResponse): NextResponse {
+  for (const [key, value] of Object.entries(securityHeaders)) {
+    response.headers.set(key, value);
+  }
+  return response;
+}
+
 export default auth(async function middleware(req) {
   const { nextUrl } = req;
   const session = (req as any).auth;
@@ -15,12 +40,12 @@ export default auth(async function middleware(req) {
 
   // Allow public routes
   if (isPublicRoute) {
-    return NextResponse.next();
+    return applySecurityHeaders(NextResponse.next());
   }
 
   // Check authentication
   if (!session?.user) {
-    return NextResponse.redirect(new URL('/', req.url));
+    return applySecurityHeaders(NextResponse.redirect(new URL('/', req.url)));
   }
 
   // Check for organization-specific routes
@@ -31,7 +56,7 @@ export default auth(async function middleware(req) {
 
     // Skip validation for static organization routes
     if (tenantId === 'create' || tenantId === 'dashboard') {
-      return NextResponse.next();
+      return applySecurityHeaders(NextResponse.next());
     }
 
     // Validate tenant membership
@@ -40,11 +65,11 @@ export default auth(async function middleware(req) {
 
     if (!isMember) {
       // User is not a member of this tenant, redirect to organizations list
-      return NextResponse.redirect(new URL('/organizations', req.url));
+      return applySecurityHeaders(NextResponse.redirect(new URL('/organizations', req.url)));
     }
   }
 
-  return NextResponse.next();
+  return applySecurityHeaders(NextResponse.next());
 });
 
 export const config = {

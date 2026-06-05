@@ -128,8 +128,6 @@ export interface StripePaymentIntent {
 export async function getStripeCustomers(
   accessToken: string,
 ): Promise<ApiResponse<StripeCustomer[]>> {
-  console.log('[stripeActions] GET - getStripeCustomers payload:', null);
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/customers`,
@@ -152,11 +150,6 @@ export async function getStripeCustomers(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] GET - getStripeCustomers response:',
-      // JSON.stringify(data),
-      data,
-    );
     // Backend returns: { accounts: { object: "list", data: [...] } }
     const customers =
       data.accounts?.data ||
@@ -171,7 +164,6 @@ export async function getStripeCustomers(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - getStripeCustomers error:', error);
     return {
       success: false,
       message: 'Failed to fetch customers',
@@ -185,10 +177,6 @@ export async function getStripeCustomer(
   customerId: string,
   accessToken: string,
 ): Promise<ApiResponse<StripeCustomer>> {
-  console.log('[stripeActions] GET - getStripeCustomer payload:', {
-    customerId,
-  });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/customer/${customerId}`,
@@ -211,11 +199,6 @@ export async function getStripeCustomer(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] GET - getStripeCustomer response:',
-      // JSON.stringify(data),
-      data,
-    );
     return {
       success: true,
       message: 'Customer fetched successfully',
@@ -223,7 +206,6 @@ export async function getStripeCustomer(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - getStripeCustomer error:', error);
     return {
       success: false,
       message: 'Failed to fetch customer',
@@ -248,11 +230,6 @@ export async function createStripeCustomer(
   },
   accessToken: string,
 ): Promise<ApiResponse<StripeCustomer>> {
-  console.log(
-    '[stripeActions] POST - createStripeCustomer payload:',
-    customerData,
-  );
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/customer`,
@@ -276,11 +253,6 @@ export async function createStripeCustomer(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] POST - createStripeCustomer response:',
-      // JSON.stringify(data),
-      data,
-    );
     return {
       success: true,
       message: 'Customer created successfully',
@@ -288,7 +260,6 @@ export async function createStripeCustomer(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] POST - createStripeCustomer error:', error);
     return {
       success: false,
       message: 'Failed to create customer',
@@ -314,11 +285,6 @@ export async function updateStripeCustomer(
   }>,
   accessToken: string,
 ): Promise<ApiResponse<StripeCustomer>> {
-  console.log('[stripeActions] PUT - updateStripeCustomer payload:', {
-    customerId,
-    updateData,
-  });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/customer/${customerId}`,
@@ -342,11 +308,6 @@ export async function updateStripeCustomer(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] PUT - updateStripeCustomer response:',
-      // JSON.stringify(data),
-      data,
-    );
     return {
       success: true,
       message: 'Customer updated successfully',
@@ -354,7 +315,6 @@ export async function updateStripeCustomer(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] PUT - updateStripeCustomer error:', error);
     return {
       success: false,
       message: 'Failed to update customer',
@@ -368,10 +328,6 @@ export async function deleteStripeCustomer(
   customerId: string,
   accessToken: string,
 ): Promise<ApiResponse<{ deleted: boolean }>> {
-  console.log('[stripeActions] DELETE - deleteStripeCustomer payload:', {
-    customerId,
-  });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/customer/${customerId}`,
@@ -393,9 +349,6 @@ export async function deleteStripeCustomer(
       };
     }
 
-    console.log('[stripeActions] DELETE - deleteStripeCustomer response:', {
-      deleted: true,
-    });
     return {
       success: true,
       message: 'Customer deleted successfully',
@@ -403,10 +356,6 @@ export async function deleteStripeCustomer(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(
-      '[stripeActions] DELETE - deleteStripeCustomer error:',
-      error,
-    );
     return {
       success: false,
       message: 'Failed to delete customer',
@@ -423,8 +372,6 @@ export async function deleteStripeCustomer(
 export async function getStripeProducts(
   accessToken: string,
 ): Promise<ApiResponse<StripeProduct[]>> {
-  console.log('[stripeActions] GET - getStripeProducts payload:', null);
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/products`,
@@ -447,11 +394,6 @@ export async function getStripeProducts(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] GET - getStripeProducts response:',
-      // JSON.stringify(data),
-      data,
-    );
     // Backend returns: { products: { object: "list", data: [...] } }
     const products = data.products?.data || data.products || data.data || [];
     return {
@@ -461,7 +403,6 @@ export async function getStripeProducts(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - getStripeProducts error:', error);
     return {
       success: false,
       message: 'Failed to fetch products',
@@ -475,8 +416,6 @@ export async function getStripePrices(
   accessToken: string,
   productId?: string,
 ): Promise<ApiResponse<StripePrice[]>> {
-  console.log('[stripeActions] GET - getStripePrices payload:', { productId });
-
   try {
     const url = productId
       ? `${process.env.NEXT_PUBLIC_API_URL}/stripe/prices?productId=${productId}`
@@ -500,11 +439,6 @@ export async function getStripePrices(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] GET - getStripePrices response:',
-      // JSON.stringify(data),
-      data,
-    );
     return {
       success: true,
       message: 'Prices fetched successfully',
@@ -512,7 +446,6 @@ export async function getStripePrices(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - getStripePrices error:', error);
     return {
       success: false,
       message: 'Failed to fetch prices',
@@ -525,8 +458,6 @@ export async function getStripePrices(
 export async function createStripeProducts(
   accessToken: string,
 ): Promise<ApiResponse<StripeProduct[]>> {
-  console.log('[stripeActions] POST - createStripeProducts payload:', {});
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/products`,
@@ -550,7 +481,6 @@ export async function createStripeProducts(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] POST - createStripeProducts response:', data);
     return {
       success: true,
       message: 'Products created successfully',
@@ -558,7 +488,6 @@ export async function createStripeProducts(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] POST - createStripeProducts error:', error);
     return {
       success: false,
       message: 'Failed to create products',
@@ -572,8 +501,6 @@ export async function getStripeProduct(
   productId: string,
   accessToken: string,
 ): Promise<ApiResponse<StripeProduct>> {
-  console.log('[stripeActions] GET - getStripeProduct payload:', { productId });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/products/${productId}`,
@@ -596,7 +523,6 @@ export async function getStripeProduct(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] GET - getStripeProduct response:', data);
     return {
       success: true,
       message: 'Product fetched successfully',
@@ -604,7 +530,6 @@ export async function getStripeProduct(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - getStripeProduct error:', error);
     return {
       success: false,
       message: 'Failed to fetch product',
@@ -621,8 +546,6 @@ export async function getStripeProduct(
 export async function getPaymentMethods(
   accessToken: string,
 ): Promise<ApiResponse<StripePaymentMethod[]>> {
-  console.log('[stripeActions] GET - getPaymentMethods');
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/my-payment-methods`,
@@ -645,7 +568,6 @@ export async function getPaymentMethods(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] GET - getPaymentMethods response:', data);
     return {
       success: true,
       message: 'Payment methods fetched successfully',
@@ -653,7 +575,6 @@ export async function getPaymentMethods(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - getPaymentMethods error:', error);
     return {
       success: false,
       message: 'Failed to fetch payment methods',
@@ -668,11 +589,6 @@ export async function addPaymentMethod(
   paymentMethodId: string,
   accessToken: string,
 ): Promise<ApiResponse<StripePaymentMethod>> {
-  console.log('[stripeActions] POST - addPaymentMethod payload:', {
-    customerId,
-    paymentMethodId,
-  });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/payment-method`,
@@ -696,11 +612,6 @@ export async function addPaymentMethod(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] POST - addPaymentMethod response:',
-      // JSON.stringify(data),
-      data,
-    );
     return {
       success: true,
       message: 'Payment method added successfully',
@@ -708,7 +619,6 @@ export async function addPaymentMethod(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] POST - addPaymentMethod error:', error);
     return {
       success: false,
       message: 'Failed to add payment method',
@@ -728,12 +638,6 @@ export async function createPaymentIntent(
   customerId: string,
   accessToken: string,
 ): Promise<ApiResponse<StripePaymentIntent>> {
-  console.log('[stripeActions] POST - createPaymentIntent payload:', {
-    amount,
-    currency,
-    customerId,
-  });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/payment-intent`,
@@ -757,11 +661,6 @@ export async function createPaymentIntent(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] POST - createPaymentIntent response:',
-      // JSON.stringify(data),
-      data,
-    );
     return {
       success: true,
       message: 'Payment intent created successfully',
@@ -769,7 +668,6 @@ export async function createPaymentIntent(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] POST - createPaymentIntent error:', error);
     return {
       success: false,
       message: 'Failed to create payment intent',
@@ -786,8 +684,6 @@ export async function createPaymentIntent(
 export async function getStripeSubscriptions(
   accessToken: string,
 ): Promise<ApiResponse<StripeSubscription[]>> {
-  console.log('[stripeActions] GET - getStripeSubscriptions payload:', null);
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/subscriptions`,
@@ -810,11 +706,6 @@ export async function getStripeSubscriptions(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] GET - getStripeSubscriptions response:',
-      // JSON.stringify(data),
-      data,
-    );
     // Backend returns: { subscriptions: { object: "list", data: [...] } }
     const subscriptions =
       data.subscriptions?.data || data.subscriptions || data.data || [];
@@ -825,7 +716,6 @@ export async function getStripeSubscriptions(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - getStripeSubscriptions error:', error);
     return {
       success: false,
       message: 'Failed to fetch subscriptions',
@@ -839,10 +729,6 @@ export async function getStripeSubscription(
   subscriptionId: string,
   accessToken: string,
 ): Promise<ApiResponse<StripeSubscription>> {
-  console.log('[stripeActions] GET - getStripeSubscription payload:', {
-    subscriptionId,
-  });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/subscription/${subscriptionId}`,
@@ -865,7 +751,6 @@ export async function getStripeSubscription(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] GET - getStripeSubscription response:', data);
     return {
       success: true,
       message: 'Subscription fetched successfully',
@@ -873,7 +758,6 @@ export async function getStripeSubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - getStripeSubscription error:', error);
     return {
       success: false,
       message: 'Failed to fetch subscription',
@@ -888,11 +772,6 @@ export async function createSubscription(
   priceId: string,
   accessToken: string,
 ): Promise<ApiResponse<StripeSubscription>> {
-  console.log('[stripeActions] POST - createSubscription payload:', {
-    customerId,
-    priceId,
-  });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/subscription`,
@@ -916,11 +795,6 @@ export async function createSubscription(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] POST - createSubscription response:',
-      // JSON.stringify(data),
-      data,
-    );
     return {
       success: true,
       message: 'Subscription created successfully',
@@ -928,7 +802,6 @@ export async function createSubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] POST - createSubscription error:', error);
     return {
       success: false,
       message: 'Failed to create subscription',
@@ -942,10 +815,6 @@ export async function cancelSubscription(
   subscriptionId: string,
   accessToken: string,
 ): Promise<ApiResponse<StripeSubscription>> {
-  console.log('[stripeActions] DELETE - cancelSubscription payload:', {
-    subscriptionId,
-  });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/subscription/${subscriptionId}`,
@@ -968,11 +837,6 @@ export async function cancelSubscription(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] DELETE - cancelSubscription response:',
-      // JSON.stringify(data),
-      data,
-    );
     return {
       success: true,
       message: 'Subscription canceled successfully',
@@ -980,7 +844,6 @@ export async function cancelSubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] DELETE - cancelSubscription error:', error);
     return {
       success: false,
       message: 'Failed to cancel subscription',
@@ -998,8 +861,6 @@ export async function cancelSubscription(
  * Get subscription plans (public endpoint)
  */
 export async function getSubscriptionPlans(): Promise<ApiResponse<any[]>> {
-  console.log('[stripeActions] GET - getSubscriptionPlans');
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/plans`,
@@ -1021,7 +882,6 @@ export async function getSubscriptionPlans(): Promise<ApiResponse<any[]>> {
     }
 
     const data = await response.json();
-    console.log('[stripeActions] GET - getSubscriptionPlans response:', data);
     return {
       success: true,
       message: 'Plans fetched successfully',
@@ -1029,7 +889,6 @@ export async function getSubscriptionPlans(): Promise<ApiResponse<any[]>> {
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - getSubscriptionPlans error:', error);
     return {
       success: false,
       message: 'Failed to fetch subscription plans',
@@ -1046,8 +905,6 @@ export async function getSubscriptionPlans(): Promise<ApiResponse<any[]>> {
 export async function getMySubscription(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
-  console.log('[stripeActions] GET - getMySubscription');
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/my-subscription`,
@@ -1070,7 +927,6 @@ export async function getMySubscription(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] GET - getMySubscription response:', data);
     return {
       success: true,
       message: 'Subscription fetched successfully',
@@ -1078,7 +934,6 @@ export async function getMySubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - getMySubscription error:', error);
     return {
       success: false,
       message: 'Failed to fetch subscription',
@@ -1095,8 +950,6 @@ export async function getTenantSubscription(
   tenantId: string,
   accessToken: string,
 ): Promise<ApiResponse<any>> {
-  console.log('[stripeActions] GET - getTenantSubscription:', { tenantId });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/my-subscriptions`,
@@ -1119,22 +972,8 @@ export async function getTenantSubscription(
     }
 
     const apiData = await response.json();
-    console.log(
-      '[stripeActions] GET - getTenantSubscription response:',
-      apiData,
-    );
-    console.log(
-      '[stripeActions] Full API data structure:',
-      JSON.stringify(apiData, null, 2),
-    );
-
     // Extract subscription data from API response
     const subscriptions = apiData.data?.subscriptions || [];
-    console.log('[stripeActions] Subscriptions array:', subscriptions);
-    console.log(
-      '[stripeActions] Number of subscriptions:',
-      subscriptions.length,
-    );
 
     // There will always be one subscription according to user
     if (subscriptions.length === 0) {
@@ -1146,9 +985,6 @@ export async function getTenantSubscription(
     }
 
     const subscription = subscriptions[0];
-    console.log('[stripeActions] First subscription:', subscription);
-    console.log('[stripeActions] Subscription plan:', subscription.plan);
-    console.log('[stripeActions] Subscription items:', subscription.items);
 
     // Transform Stripe subscription data to match expected format
     const transformedData = {
@@ -1177,7 +1013,6 @@ export async function getTenantSubscription(
       customerId: apiData.data?.customerId,
     };
 
-    console.log('[stripeActions] Transformed data:', transformedData);
 
     return {
       success: true,
@@ -1186,7 +1021,6 @@ export async function getTenantSubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - getTenantSubscription error:', error);
     return {
       success: false,
       message: 'Failed to fetch tenant subscription',
@@ -1203,8 +1037,6 @@ export async function createFreeSubscription(
   tenantId: string,
   accessToken: string,
 ): Promise<ApiResponse<any>> {
-  console.log('[stripeActions] POST - createFreeSubscription:', { tenantId });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/create-free`,
@@ -1228,10 +1060,6 @@ export async function createFreeSubscription(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] POST - createFreeSubscription response:',
-      data,
-    );
     return {
       success: true,
       message: 'Free subscription created successfully',
@@ -1239,10 +1067,6 @@ export async function createFreeSubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(
-      '[stripeActions] POST - createFreeSubscription error:',
-      error,
-    );
     return {
       success: false,
       message: 'Failed to create free subscription',
@@ -1264,8 +1088,6 @@ export async function upgradeSubscription(
   },
   accessToken: string,
 ): Promise<ApiResponse<any>> {
-  console.log('[stripeActions] POST - upgradeSubscription:', data);
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/upgrade`,
@@ -1289,10 +1111,6 @@ export async function upgradeSubscription(
     }
 
     const responseData = await response.json();
-    console.log(
-      '[stripeActions] POST - upgradeSubscription response:',
-      responseData,
-    );
     return {
       success: true,
       message: 'Checkout session created successfully',
@@ -1300,7 +1118,6 @@ export async function upgradeSubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] POST - upgradeSubscription error:', error);
     return {
       success: false,
       message: 'Failed to upgrade subscription',
@@ -1316,8 +1133,6 @@ export async function upgradeSubscription(
 export async function getUsageStats(
   accessToken: string,
 ): Promise<ApiResponse<any>> {
-  console.log('[stripeActions] GET - getUsageStats');
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/usage`,
@@ -1340,7 +1155,6 @@ export async function getUsageStats(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] GET - getUsageStats response:', data);
     return {
       success: true,
       message: 'Usage stats fetched successfully',
@@ -1348,7 +1162,6 @@ export async function getUsageStats(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - getUsageStats error:', error);
     return {
       success: false,
       message: 'Failed to fetch usage stats',
@@ -1365,8 +1178,6 @@ export async function checkUsageLimit(
   limitType: string,
   accessToken: string,
 ): Promise<ApiResponse<any>> {
-  console.log('[stripeActions] GET - checkUsageLimit:', { limitType });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/check-limit?limitType=${limitType}`,
@@ -1389,7 +1200,6 @@ export async function checkUsageLimit(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] GET - checkUsageLimit response:', data);
     return {
       success: true,
       message: 'Usage limit checked successfully',
@@ -1397,7 +1207,6 @@ export async function checkUsageLimit(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - checkUsageLimit error:', error);
     return {
       success: false,
       message: 'Failed to check usage limit',
@@ -1415,11 +1224,6 @@ export async function addSeatToSubscription(
   userId: string,
   accessToken: string,
 ): Promise<ApiResponse<any>> {
-  console.log('[stripeActions] POST - addSeatToSubscription:', {
-    subscriptionId,
-    userId,
-  });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/add-seat`,
@@ -1443,7 +1247,6 @@ export async function addSeatToSubscription(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] POST - addSeatToSubscription response:', data);
     return {
       success: true,
       message: 'Seat added successfully',
@@ -1451,7 +1254,6 @@ export async function addSeatToSubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] POST - addSeatToSubscription error:', error);
     return {
       success: false,
       message: 'Failed to add seat',
@@ -1469,11 +1271,6 @@ export async function removeSeatFromSubscription(
   userId: string,
   accessToken: string,
 ): Promise<ApiResponse<any>> {
-  console.log('[stripeActions] POST - removeSeatFromSubscription:', {
-    subscriptionId,
-    userId,
-  });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/remove-seat`,
@@ -1497,10 +1294,6 @@ export async function removeSeatFromSubscription(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] POST - removeSeatFromSubscription response:',
-      data,
-    );
     return {
       success: true,
       message: 'Seat removed successfully',
@@ -1508,10 +1301,6 @@ export async function removeSeatFromSubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(
-      '[stripeActions] POST - removeSeatFromSubscription error:',
-      error,
-    );
     return {
       success: false,
       message: 'Failed to remove seat',
@@ -1529,8 +1318,6 @@ export async function cancelAppSubscription(
   immediate: boolean,
   accessToken: string,
 ): Promise<ApiResponse<any>> {
-  console.log('[stripeActions] POST - cancelAppSubscription:', { immediate });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/cancel`,
@@ -1554,7 +1341,6 @@ export async function cancelAppSubscription(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] POST - cancelAppSubscription response:', data);
     return {
       success: true,
       message: immediate
@@ -1564,7 +1350,6 @@ export async function cancelAppSubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] POST - cancelAppSubscription error:', error);
     return {
       success: false,
       message: 'Failed to cancel subscription',
@@ -1585,8 +1370,6 @@ export async function cancelAppSubscription(
 export async function getMyPaymentMethods(
   accessToken: string,
 ): Promise<ApiResponse<StripePaymentMethod[]>> {
-  console.log('[stripeActions] GET - getMyPaymentMethods');
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/my-payment-methods`,
@@ -1609,7 +1392,6 @@ export async function getMyPaymentMethods(
     }
 
     const data = await response.json();
-    console.log('[stripeActions] GET - getMyPaymentMethods response:', data);
 
     // Handle various response formats
     const paymentMethods =
@@ -1626,7 +1408,6 @@ export async function getMyPaymentMethods(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error('[stripeActions] GET - getMyPaymentMethods error:', error);
     return {
       success: false,
       message: 'Failed to fetch payment methods',
@@ -1645,11 +1426,6 @@ export async function createTenantPaymentIntent(
   currency: string,
   accessToken: string,
 ): Promise<ApiResponse<StripePaymentIntent>> {
-  console.log('[stripeActions] POST - createTenantPaymentIntent:', {
-    amount,
-    currency,
-  });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/payment-intent`,
@@ -1673,10 +1449,6 @@ export async function createTenantPaymentIntent(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] POST - createTenantPaymentIntent response:',
-      data,
-    );
 
     // Extract paymentIntent from nested response structure
     // Backend returns: { data: { paymentIntent: { clientSecret: '...' } } }
@@ -1690,10 +1462,6 @@ export async function createTenantPaymentIntent(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(
-      '[stripeActions] POST - createTenantPaymentIntent error:',
-      error,
-    );
     return {
       success: false,
       message: 'Failed to create payment intent',
@@ -1711,10 +1479,6 @@ export async function addPaymentMethodToTenant(
   paymentMethodId: string,
   accessToken: string,
 ): Promise<ApiResponse<StripePaymentMethod>> {
-  console.log('[stripeActions] POST - addPaymentMethodToTenant:', {
-    paymentMethodId,
-  });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/payment-method`,
@@ -1738,10 +1502,6 @@ export async function addPaymentMethodToTenant(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] POST - addPaymentMethodToTenant response:',
-      data,
-    );
 
     return {
       success: true,
@@ -1750,10 +1510,6 @@ export async function addPaymentMethodToTenant(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(
-      '[stripeActions] POST - addPaymentMethodToTenant error:',
-      error,
-    );
     return {
       success: false,
       message: 'Failed to add payment method',
@@ -1771,8 +1527,6 @@ export async function createTenantSubscription(
   priceId: string,
   accessToken: string,
 ): Promise<ApiResponse<StripeSubscription>> {
-  console.log('[stripeActions] POST - createTenantSubscription:', { priceId });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stripe/subscription`,
@@ -1796,10 +1550,6 @@ export async function createTenantSubscription(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] POST - createTenantSubscription response:',
-      data,
-    );
 
     return {
       success: true,
@@ -1808,10 +1558,6 @@ export async function createTenantSubscription(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(
-      '[stripeActions] POST - createTenantSubscription error:',
-      error,
-    );
     return {
       success: false,
       message: 'Failed to create subscription',
@@ -1880,8 +1626,6 @@ export async function getMyPersonalSubscription(accessToken: string): Promise<
     } | null;
   }>
 > {
-  console.log('[stripeActions] GET - getMyPersonalSubscription');
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/my-subscription`,
@@ -1904,10 +1648,6 @@ export async function getMyPersonalSubscription(accessToken: string): Promise<
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] GET - getMyPersonalSubscription response:',
-      data,
-    );
 
     return {
       success: true,
@@ -1916,10 +1656,6 @@ export async function getMyPersonalSubscription(accessToken: string): Promise<
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(
-      '[stripeActions] GET - getMyPersonalSubscription error:',
-      error,
-    );
     return {
       success: false,
       message: 'Failed to fetch personal subscription',
@@ -1933,8 +1669,6 @@ export async function createBillingPortalSessionAction(
   tenantId: string | null,
   accessToken: string,
 ): Promise<ApiResponse<{ url: string }>> {
-  console.log('[stripeActions] POST - createBillingPortalSessionAction payload:', { tenantId });
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/billing-portal`,
@@ -1958,10 +1692,6 @@ export async function createBillingPortalSessionAction(
     }
 
     const data = await response.json();
-    console.log(
-      '[stripeActions] POST - createBillingPortalSessionAction response:',
-      data,
-    );
 
     return {
       success: true,
@@ -1970,10 +1700,6 @@ export async function createBillingPortalSessionAction(
     };
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(
-      '[stripeActions] POST - createBillingPortalSessionAction error:',
-      error,
-    );
     return {
       success: false,
       message: 'Failed to create billing portal session',
