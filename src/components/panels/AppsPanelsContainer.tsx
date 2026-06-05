@@ -205,7 +205,10 @@ export const AppsPanelsContainer = () => {
       buildApiUrl('/composio-simple/initiate'),
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.accessToken}`
+        },
         body: JSON.stringify({ app_name: app.app_name }),
       }
     );
@@ -246,7 +249,10 @@ export const AppsPanelsContainer = () => {
           buildApiUrl('/composio-simple/wait-for-connection'),
           {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${session?.accessToken}`
+            },
             body: JSON.stringify({ connected_account_id: connectionId }),
           }
         );
@@ -308,7 +314,10 @@ export const AppsPanelsContainer = () => {
       buildApiUrl('/composio-simple/chat'),
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.accessToken}`
+        },
         body: JSON.stringify({
           message: userPrompt,
           conversationId: currentConvId,
