@@ -404,7 +404,7 @@ export const AppsPanelsContainer = () => {
           </div>
         ) : !isSelectedAppConnected ? (
           /* STATE 1: App Setup / Connection screen */
-          <div className="flex-1 overflow-y-auto p-8 flex items-center justify-center">
+          <div className="flex-1 overflow-y-auto p-8 flex items-center justify-center pb-24">
             <div className="w-full max-w-lg animate-in zoom-in-95 duration-200">
               <div className="flex flex-col items-center text-center space-y-6">
                 
