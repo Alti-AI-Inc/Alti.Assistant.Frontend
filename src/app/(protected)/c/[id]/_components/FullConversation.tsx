@@ -892,7 +892,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         className={cn(
           'sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8',
           hasMessages
-            ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-800 bg-[#E5E7EB] dark:bg-zinc-900'
+            ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-800 bg-[#F5F5F7] dark:bg-zinc-900'
             : 'py-4 bg-transparent border-t-0',
         )}
       >
