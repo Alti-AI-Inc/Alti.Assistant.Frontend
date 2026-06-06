@@ -67,7 +67,7 @@ export default function page() {
           {
             text: '2.3 Search and Research Features.',
             description:
-              'When you use search-enabled or research features, your queries may be transmitted to third-party search services including Tavily, Serper, Linkup, and Google Custom Search to retrieve relevant web results.',
+              'When you use search-enabled or research features, your queries may be transmitted to Google Custom Search and Google Search Grounding to retrieve relevant web results.',
           },
           {
             text: '2.4 Billing and Payments.',
@@ -160,8 +160,8 @@ export default function page() {
                 translation services. MongoDB Atlas provides database hosting.
               </li>
               <li>
-                <strong>Search Services:</strong> Tavily, Serper, Linkup, and
-                Google Custom Search process search queries when you use research
+                <strong>Search Services:</strong> Google Custom Search and
+                Google Search Grounding process search queries when you use research
                 and web search features.
               </li>
               <li>

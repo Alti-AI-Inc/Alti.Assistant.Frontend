@@ -91,7 +91,7 @@ export default function page() {
       {
         heading: '4. Third-Party Service Providers',
         content:
-          'We share information with third-party providers solely to operate the Platform: AI model providers (OpenAI, Anthropic, Google, Groq, Together AI, DeepSeek), payment processing (Stripe), email delivery (Mailgun, Google SMTP), authentication providers (when using social login), cloud infrastructure (Google Cloud Platform, MongoDB Atlas), and search services (Tavily, Serper, Linkup, Google Custom Search). We do not sell your personal information.',
+          'We share information with third-party providers solely to operate the Platform: AI model providers (OpenAI, Anthropic, Google, Groq, Together AI, DeepSeek), payment processing (Stripe), email delivery (Mailgun, Google SMTP), authentication providers (when using social login), cloud infrastructure (Google Cloud Platform, MongoDB Atlas), and search services (Google Custom Search, Google Search Grounding). We do not sell your personal information.',
       },
       {
         heading: '5. Your Rights',

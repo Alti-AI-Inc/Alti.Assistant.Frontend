@@ -21,7 +21,7 @@ import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useQueryClient } from '@tanstack/react-query';
-import { EllipsisVertical, Share, Trash2, Brain, Search, CheckCircle2, Loader2, Database } from 'lucide-react';
+import { EllipsisVertical, Share, Trash2, Brain } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -844,98 +844,15 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   active={isLoadingResponse}
                 />
               ) : (
-                <div className="w-full max-w-2xl bg-zinc-50/30 dark:bg-zinc-900/20 backdrop-blur-md border border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl p-5 shadow-sm my-4 transition-all duration-300">
-                  {/* Telemetry Header */}
-                  <div className="flex items-center justify-between border-b border-zinc-200/50 dark:border-zinc-800/50 pb-3.5 mb-4">
-                    <div className="flex items-center gap-2.5">
-                      <div className="relative flex items-center justify-center h-6 w-6">
-                        <div className="absolute inset-0 rounded-full bg-indigo-500/20 dark:bg-indigo-400/20 animate-ping scale-125" />
-                        <div className="h-5 w-5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-500/20">
-                          <Search className="h-3 w-3 animate-pulse" />
-                        </div>
-                      </div>
-                      <span className="text-[11px] font-bold tracking-widest text-zinc-700 dark:text-zinc-300 uppercase font-mono">Alti Grounded Search Engine</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider">
-                      <span className="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-ping" />
-                      Scanning Live
-                    </div>
+                <div className="flex items-center gap-2.5 py-3 px-1">
+                  <div className="flex gap-1">
+                    <div className="h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
-
-                  {/* Dynamic Databases Pills */}
-                  <div className="mb-4.5 space-y-2">
-                    <span className="text-[9px] uppercase tracking-wider font-semibold text-zinc-400 dark:text-zinc-500 font-mono">Scanning active datastores:</span>
-                    <div className="flex flex-wrap gap-2">
-                      {scannedSources.map((src, idx) => (
-                        <div
-                          key={idx}
-                          className={cn(
-                            "px-2.5 py-1 rounded-md text-[10px] font-mono flex items-center gap-1.5 transition-all duration-300 border",
-                            src.status === 'completed' && "bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 border-emerald-500/15",
-                            src.status === 'scanning' && "bg-indigo-500/5 text-indigo-600 dark:text-indigo-400 border-indigo-500/15 animate-pulse shadow-[0_0_12px_rgba(99,102,241,0.1)]",
-                            src.status === 'idle' && "bg-zinc-100/50 dark:bg-zinc-900/30 text-zinc-400 dark:text-zinc-500 border-zinc-200/30 dark:border-zinc-800/30"
-                          )}
-                        >
-                          {src.status === 'completed' ? (
-                            <CheckCircle2 className="h-3 w-3 text-emerald-500" />
-                          ) : src.status === 'scanning' ? (
-                            <Loader2 className="h-3 w-3 animate-spin text-indigo-500" />
-                          ) : (
-                            <Database className="h-3 w-3 text-zinc-400 dark:text-zinc-600" />
-                          )}
-                          <span className="font-semibold">{src.name}</span>
-                          <span className="text-[9px] opacity-60">({src.domain})</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Terminal Log Console */}
-                  <div className="bg-zinc-100/80 dark:bg-zinc-900/60 rounded-xl p-3.5 border border-zinc-200/80 dark:border-zinc-800/80 shadow-inner h-28 overflow-y-auto font-mono text-[10px] leading-relaxed flex flex-col gap-1.5 text-zinc-700 dark:text-zinc-300 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-800 scrollbar-track-transparent mt-4">
-                    {logs.map((log, idx) => {
-                      let type = 'system';
-                      let msg = log;
-                      if (log.startsWith('[')) {
-                        const closeBracket = log.indexOf(']');
-                        if (closeBracket !== -1) {
-                          type = log.substring(1, closeBracket);
-                          msg = log.substring(closeBracket + 1).trim();
-                        }
-                      }
-
-                      let typeColor = 'text-zinc-500 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/20';
-                      let msgColor = 'text-zinc-650 dark:text-zinc-300';
-                      if (type === 'dns') {
-                        typeColor = 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/20 border-cyan-200 dark:border-cyan-900/30';
-                      } else if (type === 'fetch') {
-                        typeColor = 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-900/30';
-                      } else if (type === 'status') {
-                        typeColor = 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-900/30 font-bold';
-                        msgColor = 'text-emerald-600 dark:text-emerald-300 font-medium';
-                      } else if (type === 'parse') {
-                        typeColor = 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900/30';
-                      } else if (type === 'consensus') {
-                        typeColor = 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/30 font-bold';
-                        msgColor = 'text-zinc-800 dark:text-zinc-150';
-                      } else if (type === 'grounding') {
-                        typeColor = 'text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/20 border-teal-200 dark:border-teal-900/30 font-bold';
-                        msgColor = 'text-teal-600 dark:text-teal-350';
-                      } else if (type === 'synthesis') {
-                        typeColor = 'text-pink-600 dark:text-pink-400 bg-pink-50 dark:bg-pink-950/20 border-pink-200 dark:border-pink-900/30 font-bold';
-                        msgColor = 'text-pink-600 dark:text-pink-350';
-                      }
-
-                      return (
-                        <div key={idx} className="flex gap-2 items-start transition-all duration-300">
-                          <span className={cn("px-1 rounded border text-[8px] uppercase tracking-wider font-extrabold flex-shrink-0 leading-tight mt-0.5", typeColor)}>
-                            {type}
-                          </span>
-                          <span className={cn("flex-1 select-all break-all", msgColor)}>{msg}</span>
-                        </div>
-                      );
-                    })}
-                    <div ref={consoleEndRef} />
-                  </div>
+                  <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+                    {scanningStatus === 'alti is thinking...' ? 'Thinking...' : scanningStatus}
+                  </span>
                 </div>
               )
             )}
