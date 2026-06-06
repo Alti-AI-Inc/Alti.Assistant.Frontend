@@ -664,7 +664,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         </div>
       ) : (
         <div
-          className="relative flex-grow overflow-y-auto bg-transparent transition-colors duration-300 flex flex-col"
+          className="relative flex-grow overflow-y-scroll bg-transparent transition-colors duration-300 flex flex-col"
+          style={{ scrollbarGutter: 'stable' }}
           ref={messagesContainerRef}
         >
           {(!!activeConversation?.messages.length ||
