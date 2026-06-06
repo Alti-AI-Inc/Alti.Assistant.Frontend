@@ -664,7 +664,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         </div>
       ) : (
         <div
-          className="flex-grow overflow-y-auto bg-transparent transition-colors duration-300 flex flex-col"
+          className="relative flex-grow overflow-y-auto bg-transparent transition-colors duration-300 flex flex-col"
           ref={messagesContainerRef}
         >
           {(!!activeConversation?.messages.length ||
