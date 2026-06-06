@@ -1067,9 +1067,8 @@ const ChatInput = ({
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0">
         <div
-          style={{ backgroundColor: '#F3F4F6' }}
           className={cn(
-            'flex flex-col rounded-2xl border border-gray-200 px-3 shadow-sm sm:px-4',
+            'flex flex-col rounded-2xl border border-gray-300 bg-white px-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-800 sm:px-4',
             activeConversation?.knowledgebaseId &&
               message.length < 100 &&
               'flex',
