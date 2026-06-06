@@ -664,8 +664,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         </div>
       ) : (
         <div
-          className="relative flex-grow overflow-y-scroll bg-transparent transition-colors duration-300 flex flex-col"
-          style={{ scrollbarGutter: 'stable' }}
+          className="relative flex-grow overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col"
           ref={messagesContainerRef}
         >
           {(!!activeConversation?.messages.length ||
@@ -877,26 +876,26 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             </div>
           )}
 
-          {/* Sticky chat input at bottom */}
-          <div
-            className={cn(
-              'sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8 mt-auto',
-              hasMessages
-                ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-800 bg-[#F5F5F7] dark:bg-zinc-900'
-                : 'py-4 bg-transparent border-t-0',
-            )}
-          >
-            <div className="mx-auto w-full max-w-[796px]">
-              <ChatInput
-                conversationId={conversationId}
-                imageGenHook={imageGenHook}
-                selectedFiles={selectedFiles}
-                onFilesChange={setSelectedFiles}
-              />
-            </div>
-          </div>
-          
           <div ref={messagesEndRef} />
+        </div>
+
+        {/* Chat input - OUTSIDE scroll container, fixed at bottom as flex sibling */}
+        <div
+          className={cn(
+            'shrink-0 w-full px-4 sm:px-6 lg:px-8',
+            hasMessages
+              ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-800 bg-[#F5F5F7] dark:bg-zinc-900'
+              : 'py-4 bg-transparent border-t-0',
+          )}
+        >
+          <div className="mx-auto w-full max-w-[796px]">
+            <ChatInput
+              conversationId={conversationId}
+              imageGenHook={imageGenHook}
+              selectedFiles={selectedFiles}
+              onFilesChange={setSelectedFiles}
+            />
+          </div>
         </div>
       )}
     </div>
