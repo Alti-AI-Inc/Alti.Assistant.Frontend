@@ -651,223 +651,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         isLoading && activeConversation?.messages?.length && 'h-[calc(100vh-70px)] lg:h-screen',
       )}
     >
-      {/* Messages container - takes remaining space and scrolls */}
-      {/* {!!activeConversation?.messages.length && ( */}
-      {(!!activeConversation?.messages.length ||
-        drafting.isActive ||
-        (review && review.isActive) ||
-        selectedOption === OPTIONS.REWRITE ||
-        selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
-        selectedOption === OPTIONS.BRAINSTORM ||
-        selectedOption === OPTIONS.GENERATE_PLAN ||
-        selectedOption === OPTIONS.REVIEW_CONTRACT ||
-        selectedOption === OPTIONS.GENERATE_REPORT) && (
-        <div
-          className="flex-grow overflow-y-auto px-4 sm:px-6 lg:px-8 bg-transparent transition-colors duration-300"
-          ref={messagesContainerRef}
-        >
-          <div
-            className={cn(
-              'mx-auto w-full max-w-[796px] space-y-6 py-6 px-0',
-            )}
-          >
-            {activeConversation?.messages.length &&
-              activeConversation.messages.map((message, idx) => (
-                <div key={idx} className="space-y-4">
-                  {message.role === 'user' && (
-                    <div
-                      className="flex items-center justify-end"
-                      ref={
-                        message.content === lastUserMessage?.content
-                          ? lastMessageRef
-                          : null
-                      }
-                    >
-                      <div
-                        className={cn(
-                          'w-fit max-w-[85%] rounded-2xl bg-white dark:bg-white px-4 py-2.5 text-zinc-900 dark:text-zinc-900 border border-black/10 shadow-sm transition-colors duration-300 leading-relaxed text-sm font-medium',
-                          showStartLastMessage && 'mt-8',
-                        )}
-                      >
-                        {message.content}
-                      </div>
-                    </div>
-                  )}
- 
-                  {message.role === 'assistant' &&
-                    // Skip rendering if content is empty and there's no image
-                    !(
-                      !message.content?.trim() && !message.metadata?.imageUrl
-                    ) && (
-                      <div className="text-zinc-850 dark:text-zinc-200 space-y-2">
-                        {containsYouTubeUrl(message.content) ? (
-                          <VideoComponentForContent content={message.content} />
-                        ) : (
-                          <div className="relative group">
-                            <Streamdown className="w-full rounded-lg leading-relaxed text-sm">
-                              {message.content}
-                            </Streamdown>
- 
-                            <CopyButton content={message.content} />
-                          </div>
-                        )}
-
-                      </div>
-                    )}
- 
-                  {message.metadata?.imageUrl && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={
-                        typeof message.metadata.imageUrl === 'string'
-                          ? message.metadata.imageUrl
-                          : (message.metadata.imageUrl as any)?.url
-                      }
-                      alt={message.metadata.type || 'Generated image'}
-                      className="max-w-full rounded-lg shadow-md border border-black/5 dark:border-white/5"
-                      onError={e => {
-                        console.error(
-                           '[FullConversation] Image failed to load:',
-                          message.metadata!.imageUrl,
-                        );
-                        console.error('Error details:', e);
-                      }}
-                    />
-                  )}
-                  {message.metadata?.video?.name && (
-                    <VideoComponent
-                      operationId={message.metadata?.video?.name}
-                    />
-                  )}
- 
-                  {message.metadata?.document && (
-                    <FileDownloadCard document={message.metadata.document} />
-                  )}
-                  {!!message.metadata?.reference?.length && (
-                    <>
-                      <ReferencesList 
-                        references={message.metadata.reference} 
-                        webSearchQueries={(message.metadata as any).webSearchQueries}
-                        searchEntryPoint={(message.metadata as any).searchEntryPoint}
-                      />
-                      <InteractiveTopology sources={message.metadata.reference} knowledgeGraph={(message.metadata as any).knowledgeGraph} />
-                    </>
-                  )}
-                  {message.metadata?.financialTicker && (
-                    <FinancialWidget 
-                      ticker={message.metadata.financialTicker} 
-                      liveData={message.metadata} 
-                    />
-                  )}
-
-                  {((message.metadata as any)?.domain === 'sports_odds' || (message.metadata as any)?.homeTeam) && (
-                    <SportsWidget sportsData={message.metadata} />
-                  )}
-
-                  {((message.metadata as any)?.domain === 'real_estate' || (message.metadata as any)?.domain === 'census_bps' || (message.metadata as any)?.address) && (
-                    <RealEstateWidget realEstateData={message.metadata} />
-                  )}
-
-                  {((message.metadata as any)?.domain === 'cisa_kev' || (message.metadata as any)?.domain === 'nist_nvd_cve' || (message.metadata as any)?.cveId) && (
-                    <SecurityVulnerabilityWidget vulnerabilityData={message.metadata} />
-                  )}
-
-                  {message.metadata?.brainstormData && (
-                    <BrainstormData
-                      data={message.metadata.brainstormData}
-                      analysis={message.metadata.ideaAnalysis}
-                    />
-                  )}
-                  {message.metadata?.planData && (
-                    <PlanDataComponent
-                      plan={message.metadata.planData}
-                      analysis={message.metadata.planAnalysis}
-                      brainstorm={message.metadata.planBrainstorm}
-                    />
-                  )}
-                  {message.metadata?.tableData && (
-                    <InteractiveTableWidget tableData={message.metadata.tableData} />
-                  )}
-                  {message.metadata?.chartData && (
-                    <UniversalChartWidget chartData={message.metadata.chartData} />
-                  )}
-                  {message.metadata?.formData && (
-                    <InteractiveFormWidget formData={message.metadata.formData} />
-                  )}
-                  {message.metadata?.reportData && (
-                    <ReportData report={message.metadata.reportData} />
-                  )}
-                </div>
-              ))}
-            {/* Presentation Loading Card - shown during polling */}
-            {presentationTask && presentationTask.status === 'pending' && (
-              <PresentationLoadingCard message={presentationTask.message} />
-            )}
-            {/* Image Generation UI */}
-            {shouldShowConfirmation && (
-              <ImageGenConfirmation onConfirm={handleUserConfirmation} />
-            )}
-            {isCollectingDetails && <ImageGenSuggestions />}
-            {/* Document Drafting/Review/Rewrite/Translate/Brainstorm/Plan Generation/Report Generation UI */}
-            {(drafting.isActive ||
-              selectedOption === OPTIONS.REWRITE ||
-              selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
-              selectedOption === OPTIONS.BRAINSTORM ||
-              selectedOption === OPTIONS.GENERATE_PLAN ||
-              selectedOption === OPTIONS.REVIEW_CONTRACT ||
-              selectedOption === OPTIONS.GENERATE_REPORT) &&
-              !isLoadingResponse && (
-                <>
-                  {!shouldHideModeSelector() && (
-                    <ModeSelector
-                       currentMode={getCurrentMode()}
-                      modeContext={getModeContext()}
-                    />
-                  )}
- 
-                  {shouldShowConfigForm() && (
-                    <div
-                      className={cn(
-                        isLoadingResponse && 'pointer-events-none opacity-50',
-                      )}
-                    >
-                      <ConfigForm />
-                    </div>
-                  )}
-                </>
-              )}
-            {/* Loading message - visible in the messages area */}
-            {isLoadingResponse && (
-              selectedOption === OPTIONS.RESEARCH ? (
-                <TelemetryConsole
-                  conversationId={activeConversation?.conversationId || 'new-chat'}
-                  active={isLoadingResponse}
-                />
-              ) : (
-                <div className="flex items-center gap-2.5 py-3 px-1">
-                  <div className="flex gap-1">
-                    <div className="h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <div className="h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '300ms' }} />
-                  </div>
-                  <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
-                    {scanningStatus === 'alti is thinking...' ? 'Thinking...' : scanningStatus}
-                  </span>
-                </div>
-              )
-            )}
-            <div
-              className={cn(
-                showStartLastMessage &&
-                  isLoadingResponse &&
-                  'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
-              )}
-            ></div>
-          </div>
-          <div ref={messagesEndRef} />
-        </div>
-      )}
-      {isLoading && (
+      {isLoading ? (
         <div
           className={cn(
             'flex h-[calc()100vh_-110px] flex-grow items-center justify-center py-4 bg-transparent',
@@ -878,33 +662,242 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             <span className="text-xs font-semibold">loading chat...</span>
           </div>
         </div>
-      )}
+      ) : (
+        <div
+          className="flex-grow overflow-y-auto bg-transparent transition-colors duration-300 flex flex-col"
+          ref={messagesContainerRef}
+        >
+          {(!!activeConversation?.messages.length ||
+            drafting.isActive ||
+            (review && review.isActive) ||
+            selectedOption === OPTIONS.REWRITE ||
+            selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
+            selectedOption === OPTIONS.BRAINSTORM ||
+            selectedOption === OPTIONS.GENERATE_PLAN ||
+            selectedOption === OPTIONS.REVIEW_CONTRACT ||
+            selectedOption === OPTIONS.GENERATE_REPORT) && (
+            <div
+              className={cn(
+                'mx-auto w-full max-w-[796px] space-y-6 py-6 px-4 sm:px-6 lg:px-8',
+              )}
+            >
+              {activeConversation?.messages.length &&
+                activeConversation.messages.map((message, idx) => (
+                  <div key={idx} className="space-y-4">
+                    {message.role === 'user' && (
+                      <div
+                        className="flex items-center justify-end"
+                        ref={
+                          message.content === lastUserMessage?.content
+                            ? lastMessageRef
+                            : null
+                        }
+                      >
+                        <div
+                          className={cn(
+                            'w-fit max-w-[85%] rounded-2xl bg-white dark:bg-white px-4 py-2.5 text-zinc-900 dark:text-zinc-900 border border-black/10 shadow-sm transition-colors duration-300 leading-relaxed text-sm font-medium',
+                            showStartLastMessage && 'mt-8',
+                          )}
+                        >
+                          {message.content}
+                        </div>
+                      </div>
+                    )}
 
+                    {message.role === 'assistant' &&
+                      // Skip rendering if content is empty and there's no image
+                      !(
+                        !message.content?.trim() && !message.metadata?.imageUrl
+                      ) && (
+                        <div className="text-zinc-850 dark:text-zinc-200 space-y-2">
+                          {containsYouTubeUrl(message.content) ? (
+                            <VideoComponentForContent content={message.content} />
+                          ) : (
+                            <div className="relative group">
+                              <Streamdown className="w-full rounded-lg leading-relaxed text-sm">
+                                {message.content}
+                              </Streamdown>
 
- 
-      {/* {error && !isHomePage && (
-        <div className="my-6 text-center">{error.message}</div>
-      )} */}
- 
-      {/* Sticky chat input at bottom */}
-      {/* <div className="sticky bottom-0 bg-white px-4 pb-4"> */}
-      <div
-        className={cn(
-          'sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8',
-          hasMessages
-            ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-800 bg-[#F5F5F7] dark:bg-zinc-900'
-            : 'py-4 bg-transparent border-t-0',
-        )}
-      >
-        <div className="mx-auto w-full max-w-[796px]">
-          <ChatInput
-            conversationId={conversationId}
-            imageGenHook={imageGenHook}
-            selectedFiles={selectedFiles}
-            onFilesChange={setSelectedFiles}
-          />
+                              <CopyButton content={message.content} />
+                            </div>
+                          )}
+
+                        </div>
+                      )}
+
+                    {message.metadata?.imageUrl && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={
+                          typeof message.metadata.imageUrl === 'string'
+                            ? message.metadata.imageUrl
+                            : (message.metadata.imageUrl as any)?.url
+                        }
+                        alt={message.metadata.type || 'Generated image'}
+                        className="max-w-full rounded-lg shadow-md border border-black/5 dark:border-white/5"
+                        onError={e => {
+                          console.error(
+                             '[FullConversation] Image failed to load:',
+                            message.metadata!.imageUrl,
+                          );
+                          console.error('Error details:', e);
+                        }}
+                      />
+                    )}
+                    {message.metadata?.video?.name && (
+                      <VideoComponent
+                        operationId={message.metadata?.video?.name}
+                      />
+                    )}
+
+                    {message.metadata?.document && (
+                      <FileDownloadCard document={message.metadata.document} />
+                    )}
+                    {!!message.metadata?.reference?.length && (
+                      <>
+                        <ReferencesList 
+                          references={message.metadata.reference} 
+                          webSearchQueries={(message.metadata as any).webSearchQueries}
+                          searchEntryPoint={(message.metadata as any).searchEntryPoint}
+                        />
+                        <InteractiveTopology sources={message.metadata.reference} knowledgeGraph={(message.metadata as any).knowledgeGraph} />
+                      </>
+                    )}
+                    {message.metadata?.financialTicker && (
+                      <FinancialWidget 
+                        ticker={message.metadata.financialTicker} 
+                        liveData={message.metadata} 
+                      />
+                    )}
+
+                    {((message.metadata as any)?.domain === 'sports_odds' || (message.metadata as any)?.homeTeam) && (
+                      <SportsWidget sportsData={message.metadata} />
+                    )}
+
+                    {((message.metadata as any)?.domain === 'real_estate' || (message.metadata as any)?.domain === 'census_bps' || (message.metadata as any)?.address) && (
+                      <RealEstateWidget realEstateData={message.metadata} />
+                    )}
+
+                    {((message.metadata as any)?.domain === 'cisa_kev' || (message.metadata as any)?.domain === 'nist_nvd_cve' || (message.metadata as any)?.cveId) && (
+                      <SecurityVulnerabilityWidget vulnerabilityData={message.metadata} />
+                    )}
+
+                    {message.metadata?.brainstormData && (
+                      <BrainstormData
+                        data={message.metadata.brainstormData}
+                        analysis={message.metadata.ideaAnalysis}
+                      />
+                    )}
+                    {message.metadata?.planData && (
+                      <PlanDataComponent
+                        plan={message.metadata.planData}
+                        analysis={message.metadata.planAnalysis}
+                        brainstorm={message.metadata.planBrainstorm}
+                      />
+                    )}
+                    {message.metadata?.tableData && (
+                      <InteractiveTableWidget tableData={message.metadata.tableData} />
+                    )}
+                    {message.metadata?.chartData && (
+                      <UniversalChartWidget chartData={message.metadata.chartData} />
+                    )}
+                    {message.metadata?.formData && (
+                      <InteractiveFormWidget formData={message.metadata.formData} />
+                    )}
+                    {message.metadata?.reportData && (
+                      <ReportData report={message.metadata.reportData} />
+                    )}
+                  </div>
+                ))}
+              {/* Presentation Loading Card - shown during polling */}
+              {presentationTask && presentationTask.status === 'pending' && (
+                <PresentationLoadingCard message={presentationTask.message} />
+              )}
+              {/* Image Generation UI */}
+              {shouldShowConfirmation && (
+                <ImageGenConfirmation onConfirm={handleUserConfirmation} />
+              )}
+              {isCollectingDetails && <ImageGenSuggestions />}
+              {/* Document Drafting/Review/Rewrite/Translate/Brainstorm/Plan Generation/Report Generation UI */}
+              {(drafting.isActive ||
+                selectedOption === OPTIONS.REWRITE ||
+                selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
+                selectedOption === OPTIONS.BRAINSTORM ||
+                selectedOption === OPTIONS.GENERATE_PLAN ||
+                selectedOption === OPTIONS.REVIEW_CONTRACT ||
+                selectedOption === OPTIONS.GENERATE_REPORT) &&
+                !isLoadingResponse && (
+                  <>
+                    {!shouldHideModeSelector() && (
+                      <ModeSelector
+                         currentMode={getCurrentMode()}
+                        modeContext={getModeContext()}
+                      />
+                    )}
+
+                    {shouldShowConfigForm() && (
+                      <div
+                        className={cn(
+                          isLoadingResponse && 'pointer-events-none opacity-50',
+                        )}
+                      >
+                        <ConfigForm />
+                      </div>
+                    )}
+                  </>
+                )}
+              {/* Loading message - visible in the messages area */}
+              {isLoadingResponse && (
+                selectedOption === OPTIONS.RESEARCH ? (
+                  <TelemetryConsole
+                    conversationId={activeConversation?.conversationId || 'new-chat'}
+                    active={isLoadingResponse}
+                  />
+                ) : (
+                  <div className="flex items-center gap-2.5 py-3 px-1">
+                    <div className="flex gap-1">
+                      <div className="h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <div className="h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <div className="h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                    <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+                      {scanningStatus === 'alti is thinking...' ? 'Thinking...' : scanningStatus}
+                    </span>
+                  </div>
+                )
+              )}
+              <div
+                className={cn(
+                  showStartLastMessage &&
+                    isLoadingResponse &&
+                    'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
+                )}
+              ></div>
+            </div>
+          )}
+
+          {/* Sticky chat input at bottom */}
+          <div
+            className={cn(
+              'sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8 mt-auto',
+              hasMessages
+                ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-800 bg-[#F5F5F7] dark:bg-zinc-900'
+                : 'py-4 bg-transparent border-t-0',
+            )}
+          >
+            <div className="mx-auto w-full max-w-[796px]">
+              <ChatInput
+                conversationId={conversationId}
+                imageGenHook={imageGenHook}
+                selectedFiles={selectedFiles}
+                onFilesChange={setSelectedFiles}
+              />
+            </div>
+          </div>
+          
+          <div ref={messagesEndRef} />
         </div>
-      </div>
+      )}
     </div>
   );
 };
