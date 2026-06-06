@@ -50,6 +50,7 @@ import {
   KeyRound,
   Mail,
   Key,
+  Cloud,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -141,7 +142,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'research' | 'bots' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'none';
+type SidebarTab = 'chat' | 'research' | 'bots' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'gcp' | 'none';
 
 const AVAILABLE_COMPOSIO_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -261,6 +262,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       setActiveTab('bots');
     } else if (pathname === '/workflows' || pathname.startsWith('/workflows')) {
       setActiveTab('workflows');
+    } else if (pathname === '/gcp' || pathname.startsWith('/gcp')) {
+      setActiveTab('gcp');
     } else if (pathname === '/assistant' || pathname.startsWith('/assistant')) {
       setActiveTab('assistant');
     } else if (pathname === '/inbox' || pathname.startsWith('/inbox')) {
@@ -288,6 +291,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           !pathname.startsWith('/my-chatbots') &&
           pathname !== '/apps' &&
           pathname !== '/workflows' &&
+          pathname !== '/gcp' &&
+          !pathname.startsWith('/gcp') &&
           pathname !== '/assistant' &&
           !pathname.startsWith('/assistant') &&
           pathname !== '/knowledge' &&
@@ -315,6 +320,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       router.push('/my-chatbots');
     } else if (tab === 'workflows') {
       router.push('/workflows');
+    } else if (tab === 'gcp') {
+      router.push('/gcp');
     } else if (tab === 'assistant') {
       router.push('/assistant');
     } else if (tab === 'inbox') {
@@ -612,6 +619,26 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Workflows</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('gcp')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'gcp'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Cloud className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Google Cloud Hub</p>
               </TooltipContent>
             </Tooltip>
 
