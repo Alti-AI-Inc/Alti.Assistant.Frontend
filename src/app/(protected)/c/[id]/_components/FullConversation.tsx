@@ -663,6 +663,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
           </div>
         </div>
       ) : (
+        <>
         <div
           className="relative flex-grow overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col"
           ref={messagesContainerRef}
@@ -897,6 +898,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             />
           </div>
         </div>
+        </>
       )}
     </div>
   );
