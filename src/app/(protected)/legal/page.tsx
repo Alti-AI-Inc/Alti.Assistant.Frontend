@@ -62,7 +62,7 @@ export default function page() {
           {
             text: '2.2 AI Processing.',
             description:
-              'To deliver our AI features, your prompts, messages, and relevant context (such as documents in your knowledge base) are transmitted to third-party AI model providers for processing. These providers include OpenAI, Anthropic, Google (Gemini and Vertex AI), Groq, Together AI, and DeepSeek. Your data is transmitted to these providers solely for the purpose of generating AI responses to your requests. We select the provider based on the model you choose or via our intelligent routing system. Please see Section 4 (Third-Party Service Providers) for more details.',
+              'To deliver our AI features, your prompts, messages, and relevant context (such as documents in your knowledge base) are processed exclusively using Google native AI models (Gemini and Imagen) hosted on Google Cloud Platform. Your data is transmitted to Google APIs solely for the purpose of generating AI responses to your requests. Please see Section 4 (Third-Party Service Providers) for more details.',
           },
           {
             text: '2.3 Search and Research Features.',
@@ -77,7 +77,7 @@ export default function page() {
           {
             text: '2.5 Transactional Communications.',
             description:
-              'We use your email address to send you essential communications including account verification emails, password reset requests, Organization invitation notifications, billing receipts, and important service updates. These transactional emails are sent via Mailgun and Google SMTP.',
+              'We use your email address to send you essential communications including account verification emails, password reset requests, Organization invitation notifications, billing receipts, and important service updates. These transactional emails are sent via Google Workspace SMTP.',
           },
           {
             text: '2.6 Security and Fraud Prevention.',
@@ -133,19 +133,17 @@ export default function page() {
             </p>
             <ul className="mb-4 list-disc space-y-3 pl-6">
               <li>
-                <strong>AI Model Providers:</strong> OpenAI, Anthropic, Google
-                (Gemini / Vertex AI), Groq, Together AI, and DeepSeek receive
-                your prompts and relevant context to generate AI responses. Each
-                provider is governed by its own data processing terms. We
-                configure our usage to request that providers do not use your
-                data for training their models.
+                <strong>AI Model Providers:</strong> Google (Gemini and Imagen)
+                receives your prompts and relevant context to generate AI responses. All 
+                AI models are hosted exclusively on Google Cloud Platform. We configure our 
+                usage to request that the models do not use your data for training.
               </li>
               <li>
                 <strong>Payment Processing:</strong> Stripe, Inc. processes all
                 payment transactions and is PCI-DSS Level 1 certified.
               </li>
               <li>
-                <strong>Email Services:</strong> Mailgun and Google SMTP are used
+                <strong>Email Services:</strong> Google Workspace SMTP is used
                 to deliver transactional emails on our behalf.
               </li>
               <li>
@@ -263,7 +261,7 @@ export default function page() {
       {
         heading: '4. Description of the Platform',
         content:
-          'Alti is an AI-powered productivity and intelligence platform that provides access to advanced artificial intelligence capabilities including, but not limited to, conversational AI chat, deep research, web search, image and video generation, audio transcription, code generation, writing and editing tools, legal contract review, presentation creation, report generation, knowledge base management with retrieval-augmented generation (RAG), and third-party integrations. The Platform routes your requests to various AI models provided by third-party providers (including OpenAI, Anthropic, Google, Groq, Together AI, and DeepSeek) to deliver responses.',
+          'Alti is an AI-powered productivity and intelligence platform that provides access to advanced artificial intelligence capabilities including, but not limited to, conversational AI chat, deep research, web search, image and video generation, audio transcription, code generation, writing and editing tools, legal contract review, presentation creation, report generation, knowledge base management with retrieval-augmented generation (RAG), and third-party integrations. The Platform routes and processes your requests exclusively using Google native AI models (Gemini and Imagen) hosted on Google Cloud Platform to deliver responses.',
       },
       {
         heading: '5. Subscription Plans and Payments',
