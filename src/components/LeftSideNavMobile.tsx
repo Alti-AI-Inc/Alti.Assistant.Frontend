@@ -175,7 +175,8 @@ const LeftSideNavMobile = () => {
   const isManagerSection = pathname.startsWith('/admin/data') || 
                            pathname.startsWith('/admin/instructions') || 
                            pathname.startsWith('/admin/guardrails') || 
-                           pathname.startsWith('/admin/projects');
+                           pathname.startsWith('/admin/projects') ||
+                           pathname.startsWith('/admin/platform-manager');
   const isAdminSection = !isManagerSection && isAdminMode;
 
   const userEmail = data?.user?.email?.toLowerCase();
@@ -801,9 +802,6 @@ const LeftSideNavMobile = () => {
               {/* First Section */}
               {isAdminSection && !isSuperAdmin && (
                 <div className="space-y-1">
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
-                    Platform Admin
-                  </div>
                   {[
                     { name: 'Invite', href: '/admin/members', icon: UserPlus },
                     { name: 'Members', href: '/admin/team-members', icon: Users },
@@ -835,9 +833,6 @@ const LeftSideNavMobile = () => {
               {/* Second Section */}
               {isManagerSection && !isSuperAdmin && (
                 <div className="space-y-1">
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
-                    Platform Manager
-                  </div>
                   {[
                     { name: 'Data', href: '/admin/data', icon: Database },
                     { name: 'Instructions', href: '/admin/instructions', icon: FileText },
@@ -1324,12 +1319,12 @@ const LeftSideNavMobile = () => {
                     </DropdownMenuItem>
                   )}
                   {isAdmin && !isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => { router.push('/admin/members'); close(); }}>
+                    <DropdownMenuItem onClick={() => { router.push('/admin/platform-admin'); close(); }}>
                       <Shield className="text-black" /> Platform Admin
                     </DropdownMenuItem>
                   )}
                   {(isAdmin || isManager) && !isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => { router.push('/admin/data'); close(); }}>
+                    <DropdownMenuItem onClick={() => { router.push('/admin/platform-manager'); close(); }}>
                       <LayoutDashboard className="text-black" /> Platform Manager
                     </DropdownMenuItem>
                   )}

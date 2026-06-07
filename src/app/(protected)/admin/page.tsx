@@ -88,7 +88,7 @@ export default function AdminDashboardPage() {
 
   useEffect(() => {
     if (status !== 'loading' && !isSuperAdmin) {
-      router.replace('/admin/members');
+      router.replace('/admin/platform-admin');
     }
   }, [status, isSuperAdmin, router]);
 
