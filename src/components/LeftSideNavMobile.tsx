@@ -1335,11 +1335,11 @@ const LeftSideNavMobile = () => {
                 {!isSuperAdmin && (
                   <DropdownMenuItem
                     onClick={() => {
-                      router.push('/settings/memory');
+                      onOpen({ type: 'memory' });
                       close();
                     }}
                   >
-                    <Brain className="text-black dark:text-white" /> Chat Memory
+                    <Brain className="text-black dark:text-white" /> Memory
                   </DropdownMenuItem>
                 )}
                 {!isSuperAdmin && (

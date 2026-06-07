@@ -1393,8 +1393,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/settings/memory')}>
-                      <Brain className="text-black dark:text-white" /> Chat Memory
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'memory' })}>
+                      <Brain className="text-black dark:text-white" /> Memory
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (

@@ -23,6 +23,7 @@ import RenameChat from './RenameChat';
 import SearchChats from './SearchChats';
 import SearchWorkflows from './SearchWorkflows';
 import { ShareConversationModal } from './ShareConversationModal';
+import { MemoryModal } from './MemoryModal';
 
 export const ModalProvider = () => {
   const pathname = usePathname();
@@ -74,6 +75,7 @@ export const ModalProvider = () => {
       {type === 'invite-member' && <InviteMemberModal />}
       {type === 'create-organization' && <CreateOrganizationModal />}
       {type === 'auth-modal' && <AuthModal />}
+      {type === 'memory' && <MemoryModal />}
     </>
   );
 };

@@ -21,6 +21,7 @@ type ModalType =
   | 'invite-member'
   | 'create-organization'
   | 'auth-modal'
+  | 'memory'
   | null;
 
 enum APP_STATUS {
