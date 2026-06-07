@@ -583,141 +583,71 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           </div>
 
           {/* Action Buttons to the right */}
-          {((activeTab !== 'apps') || plusProps.visible) && (
-            <div className="flex flex-none items-center gap-1.5">
-              {activeTab !== 'apps' && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#F5F5F7] text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 transition-all duration-200 focus:outline-none select-none dark:bg-zinc-800/50"
-                      onClick={() => handleTabChange('apps')}
-                    >
-                      <LayoutGrid className="size-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>Apps Workspace</p>
-                  </TooltipContent>
-                </Tooltip>
-              )}
-
-              {plusProps.visible && (
-                <div className="animate-in fade-in zoom-in duration-200">
-                  {/* Plus for Dynamic Tab Action */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#F5F5F7] text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black dark:bg-zinc-800/50 dark:text-white"
-                        onClick={plusProps.onClick}
-                      >
-                        <Plus className="size-4 text-black" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>{plusProps.tooltip}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Action Suite (Tasks, Workflows, Inbox) row */}
-      {!hideSidebar && isLoggedIn && side !== 'right' && !isAdminMode && (
-        <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300 animate-in fade-in slide-in-from-top-1 duration-200">
-          <div className="flex bg-[#F5F5F7] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('bots')}
-                  className={cn(
-                    'flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none text-[11px] font-semibold tracking-tight',
-                    activeTab === 'bots'
-                      ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
-                  )}
-                >
-                  Spaces
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Spaces</p>
-              </TooltipContent>
-            </Tooltip>
+          <div className="flex flex-none items-center gap-1.5">
+            {activeTab !== 'apps' && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#F5F5F7] text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 transition-all duration-200 focus:outline-none select-none dark:bg-zinc-800/50"
+                    onClick={() => handleTabChange('apps')}
+                  >
+                    <LayoutGrid className="size-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Apps Workspace</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
 
             <Tooltip>
               <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('assistant')}
+                <Button
+                  variant="outline"
+                  size="icon"
                   className={cn(
-                    'flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none text-[11px] font-semibold tracking-tight',
-                    activeTab === 'assistant'
-                      ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
-                  )}
-                >
-                  Tasks
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Tasks</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('workflows')}
-                  className={cn(
-                    'flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none text-[11px] font-semibold tracking-tight',
-                    activeTab === 'workflows'
-                      ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
-                  )}
-                >
-                  Flows
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Workflows</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('inbox')}
-                  className={cn(
-                    'flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none text-[11px] font-semibold tracking-tight',
+                    "relative flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none dark:bg-zinc-800/50",
                     activeTab === 'inbox'
-                      ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
+                      ? "bg-white dark:bg-zinc-800 border-black/20 text-black dark:text-white shadow-xs"
+                      : "bg-[#F5F5F7] border-black/10 text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200"
                   )}
+                  onClick={() => handleTabChange('inbox')}
                 >
-                  <span className="relative">
-                    Inbox
-                    {unreadInboxCount > 0 && (
-                      <span className="absolute -top-2.5 -right-2.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white ring-1 ring-white dark:ring-zinc-800 animate-pulse">
-                        {unreadInboxCount}
-                      </span>
-                    )}
-                  </span>
-                </button>
+                  <Inbox className="size-4" />
+                  {unreadInboxCount > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white ring-1 ring-white dark:ring-zinc-800 animate-pulse">
+                      {unreadInboxCount}
+                    </span>
+                  )}
+                </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Inbox</p>
               </TooltipContent>
             </Tooltip>
+
+            {plusProps.visible && (
+              <div className="animate-in fade-in zoom-in duration-200">
+                {/* Plus for Dynamic Tab Action */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#F5F5F7] text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black dark:bg-zinc-800/50 dark:text-white"
+                      onClick={plusProps.onClick}
+                    >
+                      <Plus className="size-4 text-black" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>{plusProps.tooltip}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -783,6 +713,46 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Media</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('bots')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'bots'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Orbit className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Spaces</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('assistant')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'assistant' || activeTab === 'workflows'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Zap className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Actions</p>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -1120,105 +1090,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </>
               )}
             </div>
-          ) : activeTab === 'workflows' ? (
-            <div className="mt-2 space-y-1 py-1 pb-4">
-              {[
-                { id: 'wf-1', name: 'Daily Market Intel', icon: '📊', trigger: 'Every Day @ 8am', active: true },
-                { id: 'wf-2', name: 'Code Vulnerability Scan', icon: '🛡️', trigger: 'On Git Push', active: true },
-                { id: 'wf-3', name: 'Sales Prospecting Flow', icon: '🎯', trigger: 'On Notion Add', active: false },
-                { id: 'wf-4', name: 'Support Mail Auto-Draft', icon: '✉️', trigger: 'On New Email', active: true }
-              ].filter(wf => wf.name.toLowerCase().includes(searchQuery.toLowerCase())).map(wf => {
-                const isSelected = pathname === '/workflows' && searchParams?.get('wf') === wf.id;
-                return (
-                  <div
-                    key={wf.id}
-                    className={cn(
-                      "group flex h-9 w-full items-center justify-between rounded-md text-xs font-normal text-black text-left transition-all",
-                      isSelected 
-                        ? "bg-black/10" 
-                        : "hover:bg-black/5"
-                    )}
-                  >
-                    <span
-                      className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
-                      onClick={() => {
-                        router.push(`/workflows?wf=${wf.id}`);
-                      }}
-                    >
-                      <Zap className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />
-                      <span className="truncate">{wf.name}</span>
-                    </span>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger className="focus-visible:outline-none">
-                        <EllipsisVertical className="mr-2 rotate-90 h-3.5 w-3.5 text-black opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="rounded-2xl">
-                        <DropdownMenuItem
-                          onClick={() => {
-                            router.push(`/workflows?wf=${wf.id}`);
-                          }}
-                        >
-                          <Zap className="text-black h-4 w-4 mr-2" /> Open
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                );
-              })}
-            </div>
-          ) : activeTab === 'inbox' ? (
-            <div className="mt-2 space-y-1 py-1 pb-4">
-              {inboxItems
-                .filter(item => 
-                  item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                  item.description.toLowerCase().includes(searchQuery.toLowerCase())
-                )
-                .map(item => {
-                  const isSelected = pathname === '/inbox' && searchParams?.get('id') === item._id;
-                  const isSuccess = item.payload?.status === 'success';
-                  const isFailed = item.payload?.status === 'failed';
-                  
-                  return (
-                    <div
-                      key={item._id}
-                      className={cn(
-                        "group flex h-11 w-full items-center justify-between rounded-md text-xs font-normal text-black text-left transition-all border border-transparent px-2.5",
-                        isSelected 
-                          ? "bg-black/10 dark:bg-white/10 border-black/5 dark:border-white/5" 
-                          : "hover:bg-black/5 dark:hover:bg-white/5"
-                      )}
-                    >
-                      <span
-                        className="flex-1 cursor-pointer truncate py-1.5 flex flex-col justify-center min-w-0"
-                        onClick={() => {
-                          router.push(`/inbox?id=${item._id}`);
-                        }}
-                      >
-                        <div className="flex items-center gap-1.5 truncate">
-                          <span className={cn(
-                            "h-1.5 w-1.5 rounded-full flex-shrink-0",
-                            isSuccess ? "bg-emerald-500 shadow-[0_0_6px_#10b981]" :
-                            isFailed ? "bg-rose-500 shadow-[0_0_6px_#f43f5e]" :
-                            "bg-amber-500 shadow-[0_0_6px_#f59e0b]"
-                          )} />
-                          <span className="font-semibold truncate">{item.title}</span>
-                          {!item.isRead && (
-                            <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse flex-shrink-0" />
-                          )}
-                        </div>
-                        <span className="text-[10px] text-gray-500 dark:text-zinc-400 truncate mt-0.5 ml-3">
-                          {item.description}
-                        </span>
-                      </span>
-                    </div>
-                  );
-                })}
-              {inboxItems.length === 0 && (
-                <div className="py-8 text-center text-xs text-gray-500 dark:text-zinc-400">
-                  Your Inbox is empty.
-                </div>
-              )}
-            </div>
           ) : activeTab === 'chat' ? (
             <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
               <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full mb-2 select-none">
@@ -1312,8 +1183,138 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               <div className="my-3 h-px bg-black/10 dark:bg-white/10 -mx-4" />
               <ConversationsList searchQuery={searchQuery} activeTab="search" />
             </div>
-          ) : activeTab === 'assistant' ? (
-            <ConversationsList searchQuery={searchQuery} activeTab="assistant" />
+          ) : (activeTab === 'assistant' || activeTab === 'workflows') ? (
+            <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
+              <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full mb-2 select-none">
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('assistant')}
+                  className={cn(
+                    "flex-1 py-1.5 px-3 text-[11px] font-semibold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
+                    activeTab === 'assistant'
+                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
+                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
+                  )}
+                >
+                  Tasks
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('workflows')}
+                  className={cn(
+                    "flex-1 py-1.5 px-3 text-[11px] font-semibold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
+                    activeTab === 'workflows'
+                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
+                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
+                  )}
+                >
+                  Flows
+                </button>
+              </div>
+              <div className="my-3 h-px bg-black/10 dark:bg-white/10 -mx-4" />
+              {activeTab === 'assistant' ? (
+                <ConversationsList searchQuery={searchQuery} activeTab="assistant" />
+              ) : (
+                <div className="space-y-1">
+                  {[
+                    { id: 'wf-1', name: 'Daily Market Intel', icon: '📊', trigger: 'Every Day @ 8am', active: true },
+                    { id: 'wf-2', name: 'Code Vulnerability Scan', icon: '🛡️', trigger: 'On Git Push', active: true },
+                    { id: 'wf-3', name: 'Sales Prospecting Flow', icon: '🎯', trigger: 'On Notion Add', active: false },
+                    { id: 'wf-4', name: 'Support Mail Auto-Draft', icon: '✉️', trigger: 'On New Email', active: true }
+                  ].filter(wf => wf.name.toLowerCase().includes(searchQuery.toLowerCase())).map(wf => {
+                    const isSelected = pathname === '/workflows' && searchParams?.get('wf') === wf.id;
+                    return (
+                      <div
+                        key={wf.id}
+                        className={cn(
+                          "group flex h-9 w-full items-center justify-between rounded-md text-xs font-normal text-black text-left transition-all",
+                          isSelected 
+                            ? "bg-black/10" 
+                            : "hover:bg-black/5"
+                        )}
+                      >
+                        <span
+                          className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
+                          onClick={() => {
+                            router.push(`/workflows?wf=${wf.id}`);
+                          }}
+                        >
+                          <Zap className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />
+                          <span className="truncate">{wf.name}</span>
+                        </span>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger className="focus-visible:outline-none">
+                            <EllipsisVertical className="mr-2 rotate-90 h-3.5 w-3.5 text-black opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity" />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="rounded-2xl">
+                            <DropdownMenuItem
+                              onClick={() => {
+                                router.push(`/workflows?wf=${wf.id}`);
+                              }}
+                            >
+                              <Zap className="text-black h-4 w-4 mr-2" /> Open
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          ) : activeTab === 'inbox' ? (
+            <div className="mt-2 space-y-1 py-1 pb-4">
+              {inboxItems
+                .filter(item => 
+                  item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  item.description.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map(item => {
+                  const isSelected = pathname === '/inbox' && searchParams?.get('id') === item._id;
+                  const isSuccess = item.payload?.status === 'success';
+                  const isFailed = item.payload?.status === 'failed';
+                  
+                  return (
+                    <div
+                      key={item._id}
+                      className={cn(
+                        "group flex h-11 w-full items-center justify-between rounded-md text-xs font-normal text-black text-left transition-all border border-transparent px-2.5",
+                        isSelected 
+                          ? "bg-black/10 dark:bg-white/10 border-black/5 dark:border-white/5" 
+                          : "hover:bg-black/5 dark:hover:bg-white/5"
+                      )}
+                    >
+                      <span
+                        className="flex-1 cursor-pointer truncate py-1.5 flex flex-col justify-center min-w-0"
+                        onClick={() => {
+                          router.push(`/inbox?id=${item._id}`);
+                        }}
+                      >
+                        <div className="flex items-center gap-1.5 truncate">
+                          <span className={cn(
+                            "h-1.5 w-1.5 rounded-full flex-shrink-0",
+                            isSuccess ? "bg-emerald-500 shadow-[0_0_6px_#10b981]" :
+                            isFailed ? "bg-rose-500 shadow-[0_0_6px_#f43f5e]" :
+                            "bg-amber-500 shadow-[0_0_6px_#f59e0b]"
+                          )} />
+                          <span className="font-semibold truncate">{item.title}</span>
+                          {!item.isRead && (
+                            <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse flex-shrink-0" />
+                          )}
+                        </div>
+                        <span className="text-[10px] text-gray-500 dark:text-zinc-400 truncate mt-0.5 ml-3">
+                          {item.description}
+                        </span>
+                      </span>
+                    </div>
+                  );
+                })}
+              {inboxItems.length === 0 && (
+                <div className="py-8 text-center text-xs text-gray-500 dark:text-zinc-400">
+                  Your Inbox is empty.
+                </div>
+              )}
+            </div>
           ) : null}
         </div>
       )}
