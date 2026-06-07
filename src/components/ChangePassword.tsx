@@ -106,7 +106,7 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                           type="password"
                           id="password"
                           placeholder="Old Password"
-                          className="max-w-md h-10 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
+                          className="max-w-md h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
                         />
                       </FormControl>
                       <FormMessage />
@@ -124,7 +124,7 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                           type="password"
                           id="password"
                           placeholder="New Password"
-                          className="max-w-md h-10 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
+                          className="max-w-md h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
                         />
                       </FormControl>
                       <FormMessage />
@@ -142,28 +142,28 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                           type="password"
                           id="new-password"
                           placeholder="Confirm New Password"
-                          className="max-w-md h-10 rounded-lg border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
+                          className="max-w-md h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
                         />
                       </FormControl>
                       <FormMessage />
-                      {error && <p className="">{error}</p>}
+                      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
                     </FormItem>
                   )}
                 />
 
                 <Button
                   disabled={isLoading}
-                  className="w-full bg-black text-white dark:bg-white dark:text-black"
+                  className="w-full bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/90"
                   color="primary"
                   type="submit"
                 >
                   {isLoading && (
                     <span className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></span>
                   )}
-                  Change
+                  Update Password
                 </Button>
                 {success && (
-                  <p className="text-center text-green-500">{success}</p>
+                  <p className="text-center text-green-500 text-sm">{success}</p>
                 )}
               </form>
             </Form>
