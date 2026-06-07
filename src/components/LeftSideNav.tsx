@@ -399,7 +399,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       case 'bots':
         return {
           visible: projectTab === 'my',
-          tooltip: 'New Project',
+          tooltip: 'New Space',
           onClick: () => {
             setActiveBotId(null);
             router.push('/my-chatbots');
@@ -608,25 +608,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </TooltipContent>
             </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('bots')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'bots'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <Folder className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Projects</p>
-              </TooltipContent>
-            </Tooltip>
+
 
             <Tooltip>
               <TooltipTrigger asChild>
@@ -699,6 +681,27 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           </div>
           <div className="h-[48px] flex items-center px-4 pb-2">
             <div className="flex bg-[#F5F5F7] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={() => handleTabChange('bots')}
+                    className={cn(
+                      'flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none gap-1.5',
+                      activeTab === 'bots'
+                        ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
+                        : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
+                    )}
+                  >
+                    <Folder className="size-3.5" />
+                    <span className="text-[11px] font-medium">Spaces</span>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Spaces</p>
+                </TooltipContent>
+              </Tooltip>
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
@@ -964,7 +967,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
                   )}
                 >
-                  My Projects
+                  My Spaces
                 </button>
                 <button
                   type="button"
@@ -976,7 +979,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
                   )}
                 >
-                  Team Projects
+                  Team Spaces
                 </button>
               </div>
               <div className="my-3 h-px bg-black/10 dark:bg-white/10 -mx-4" />
@@ -1033,7 +1036,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 (projectTab === 'my' ? !bot.isShared : !!bot.isShared)
               ).length === 0 && (
                 <div className="py-4 text-center text-xs text-gray-500">
-                  No projects found.
+                  No spaces found.
                 </div>
               )}
             </div>

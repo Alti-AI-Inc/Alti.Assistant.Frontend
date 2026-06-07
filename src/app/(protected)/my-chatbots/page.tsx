@@ -158,7 +158,7 @@ function MyChatbotsContent() {
       // 2. Add local bot to Zustand store
       const newBot = addBot({
         name: projectName,
-        description: `Custom Project Workspace: ${projectName}`,
+        description: `Custom Space Workspace: ${projectName}`,
         instructions: instructionsList.length > 0 ? instructionsList.map(i => i.text).join('\n\n') : instructions,
         model: 'Gemini 1.5 Pro',
         avatar: '🤖',
@@ -205,9 +205,9 @@ function MyChatbotsContent() {
       setActiveBotId(newBot.id);
       router.push(`/my-chatbots?bot=${newBot.id}`);
     } catch (err: any) {
-      console.error('Error creating project:', err);
-      setError(err.message || 'An error occurred during project workspace creation.');
-      toast.error('Failed to fully initialize the project workspace.');
+      console.error('Error creating space:', err);
+      setError(err.message || 'An error occurred during space workspace creation.');
+      toast.error('Failed to fully initialize the space workspace.');
     } finally {
       setIsCreating(false);
     }
@@ -236,7 +236,7 @@ function MyChatbotsContent() {
     if (projectTab === 'team') {
       return (
         <div className="flex-grow w-full bg-[#F5F5F7] dark:bg-zinc-950 h-full flex items-center justify-center relative animate-in fade-in duration-500 overflow-y-auto">
-          <p className="text-gray-400 dark:text-zinc-500 text-sm">Select a Team Project from the left sidebar to view it.</p>
+          <p className="text-gray-400 dark:text-zinc-500 text-sm">Select a Team Space from the left sidebar to view it.</p>
         </div>
       );
     }
@@ -270,7 +270,7 @@ function MyChatbotsContent() {
                     type="button"
                     onClick={() => {
                       if (step === 2 && !projectName.trim()) {
-                        setError('Please enter a project name first.');
+                        setError('Please enter a space name first.');
                         return;
                       } else if (step === 3 && !projectName.trim()) {
                         setError('Please complete the previous steps.');
@@ -334,11 +334,11 @@ function MyChatbotsContent() {
 
           {/* Form Step Cards */}
           <div className={cn("w-full", (currentStep !== 1 && currentStep !== 2 && currentStep !== 3 && currentStep !== 4) && "mt-4")}>
-            {/* Step 1: Project Name */}
+            {/* Step 1: Space Name */}
             {currentStep === 1 && (
               <>
                 <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
-                  Enter Project Name
+                  Enter Space Name
                 </h1>
 
                 <div className="flex w-full flex-col">
@@ -360,7 +360,7 @@ function MyChatbotsContent() {
                                   setCurrentStep(2);
                                 }
                               }}
-                              placeholder="Enter project name..."
+                              placeholder="Enter space name..."
                               className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
                               autoFocus
                               rows={1}
@@ -867,7 +867,7 @@ function MyChatbotsContent() {
                             </div>
                           )}
 
-                          {/* Create Project Button below fixed list area */}
+                          {/* Create Space Button below fixed list area */}
                           <div className="absolute top-[224px] left-0 w-full flex justify-center">
                             <button
                               type="button"
@@ -876,7 +876,7 @@ function MyChatbotsContent() {
                               className="flex items-center gap-1.5 px-6 py-3 rounded-full text-sm font-semibold bg-black hover:bg-gray-800 text-white shadow-sm transition-all duration-200 cursor-pointer disabled:opacity-50"
                             >
                               {isCreating ? <Loader2 className="size-4 animate-spin" /> : null}
-                              {isCreating ? "Creating..." : "Create Workspace"}
+                              {isCreating ? "Creating..." : "Create Space"}
                             </button>
                           </div>
                         </div>
