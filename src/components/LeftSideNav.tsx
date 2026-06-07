@@ -851,17 +851,21 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   type="button"
                   onClick={() => handleTabChange('inbox')}
                   className={cn(
-                    'relative flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none text-[11px] font-semibold tracking-tight',
+                    'flex-1 flex flex-col h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none text-[11px] font-semibold tracking-tight gap-0',
                     activeTab === 'inbox'
                       ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
                   )}
                 >
-                  Inbox
-                  {unreadInboxCount > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-medium text-white ring-2 ring-[#FFFFFF] dark:ring-zinc-900 animate-pulse">
-                      {unreadInboxCount}
-                    </span>
+                  {unreadInboxCount > 0 ? (
+                    <>
+                      <span className="text-[10px] font-bold text-red-500 dark:text-red-400 leading-none h-3 flex items-center justify-center animate-pulse">
+                        {unreadInboxCount}
+                      </span>
+                      <span className="text-[10px] leading-none mt-0.5">Inbox</span>
+                    </>
+                  ) : (
+                    <span>Inbox</span>
                   )}
                 </button>
               </TooltipTrigger>
