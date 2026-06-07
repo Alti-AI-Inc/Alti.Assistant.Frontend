@@ -41,7 +41,7 @@ export default function ConversationsList({
   activeTab = 'chat',
 }: {
   searchQuery?: string;
-  activeTab?: 'chat' | 'search' | 'write' | 'research' | 'assistant';
+  activeTab?: 'chat' | 'search' | 'write' | 'research' | 'assistant' | 'code';
 }) {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
@@ -70,6 +70,9 @@ export default function ConversationsList({
     }
     if (activeTab === 'write') {
       return <FileText className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    }
+    if (activeTab === 'code') {
+      return <Code2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     }
     if (activeTab !== 'assistant') {
       return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
@@ -177,8 +180,8 @@ export default function ConversationsList({
           <p className="text-xs text-gray-400">
             {activeTab === 'research'
               ? 'No research sessions yet. Switch to Research mode in the prompt bar to get started.'
-              : activeTab === 'write'
-                ? 'No documents yet. Start a new writing task!'
+              : activeTab === 'write' || activeTab === 'code'
+                ? 'No documents yet. Start a new writing/code task!'
                 : 'No conversations yet. Start a new chat!'}
           </p>
         </div>
