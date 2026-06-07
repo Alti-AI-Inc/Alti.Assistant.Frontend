@@ -50,6 +50,8 @@ function App() {
               ? 'Code Generation'
               : selectedOption === OPTIONS.VIDEO
               ? 'Video Generation'
+              : selectedOption === OPTIONS.DRAFT_DOCUMENT
+              ? 'Writing Assistant'
               : 'Real-Time Intelligence'}
           </h1>
         )}
