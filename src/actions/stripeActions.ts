@@ -1710,21 +1710,31 @@ export async function createBillingPortalSessionAction(
 }
 
 /**
- * Get the Stripe Publishable Key from server-side environment
+ * Get the Stripe Publishable Key from server-side environment.
+ * Checks multiple env var names to handle production deployments where
+ * NEXT_PUBLIC_ vars are baked at build time and may be stale/placeholder.
  */
 export async function getStripePublishableKey(): Promise<ApiResponse<string>> {
   try {
-    const key = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-    if (!key || key.includes('placeholder') || key === 'undefined' || key === 'null') {
-      return {
-        success: false,
-        message: 'Stripe publishable key is not configured on the server.',
-      };
+    // Check all possible env var names — runtime secrets may use any of these
+    const candidates = [
+      process.env.STRIPE_PUBLISHABLE_KEY,                // Non-prefixed runtime var (preferred)
+      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,     // Standard Next.js public var
+    ];
+
+    for (const key of candidates) {
+      if (key && !key.includes('placeholder') && key !== 'undefined' && key !== 'null' && key.startsWith('pk_')) {
+        return {
+          success: true,
+          message: 'Key fetched successfully',
+          data: key,
+        };
+      }
     }
+
     return {
-      success: true,
-      message: 'Key fetched successfully',
-      data: key,
+      success: false,
+      message: 'Stripe publishable key is not configured on the server. Checked STRIPE_PUBLISHABLE_KEY and NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.',
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);

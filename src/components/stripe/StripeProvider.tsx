@@ -2,86 +2,132 @@
 
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { getStripePublishableKey } from '@/actions/stripeActions';
+import React from 'react';
 
 /**
  * Stripe Provider Component
- * Initializes Stripe.js and provides Elements context to child components
+ * Initializes Stripe.js and provides Elements context to child components.
+ *
+ * Key resolution strategy:
+ * 1. Try NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY (baked at build time)
+ * 2. If missing/placeholder, call server action to get runtime key
+ * 3. Validate key starts with 'pk_' before loading Stripe
  */
-
-let stripePromise: Promise<Stripe | null> | null = null;
-
-const getStripe = () => {
-  if (!stripePromise) {
-    const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-
-    if (!publishableKey) {
-      console.error(
-        'Missing NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY environment variable',
-      );
-      return null;
-    }
-
-    stripePromise = loadStripe(publishableKey);
-  }
-  return stripePromise;
-};
 
 interface StripeProviderProps {
   children: React.ReactNode;
 }
 
+type StripeState =
+  | { status: 'loading' }
+  | { status: 'ready'; stripe: Promise<Stripe | null> }
+  | { status: 'error'; message: string };
+
+function isValidStripeKey(key: string | undefined | null): key is string {
+  if (!key) return false;
+  if (key === 'undefined' || key === 'null') return false;
+  if (key.includes('placeholder')) return false;
+  if (!key.startsWith('pk_')) return false;
+  return true;
+}
+
 export function StripeProvider({ children }: StripeProviderProps) {
-  const [stripePromiseState, setStripePromiseState] = useState<Promise<Stripe | null> | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [state, setState] = useState<StripeState>({ status: 'loading' });
 
-  useEffect(() => {
-    async function initStripe() {
-      try {
-        let key = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+  const initStripe = useCallback(async () => {
+    setState({ status: 'loading' });
 
-        // If key is missing or is placeholder, fetch it from the server dynamically
-        if (!key || key.includes('placeholder') || key === 'undefined' || key === 'null') {
+    try {
+      // Step 1: Try the build-time NEXT_PUBLIC key
+      let key = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+
+      // Step 2: If invalid, ask the server for the runtime key
+      if (!isValidStripeKey(key)) {
+        console.info('[StripeProvider] Build-time key unavailable, fetching from server...');
+        try {
           const res = await getStripePublishableKey();
           if (res.success && res.data) {
             key = res.data;
           } else {
-            setError('Failed to load Stripe configuration from the server.');
-            return;
+            console.warn('[StripeProvider] Server action returned:', res.message);
           }
+        } catch (fetchErr) {
+          console.warn('[StripeProvider] Server action failed:', fetchErr);
         }
-
-        const promise = loadStripe(key);
-        setStripePromiseState(promise);
-
-        // Verify key works
-        const instance = await promise;
-        if (!instance) {
-          setError('Failed to initialize Stripe client. Please check your publishable key.');
-        }
-      } catch (err: any) {
-        console.error('Stripe initialization error:', err);
-        setError('Failed to initialize payment provider.');
       }
-    }
 
-    initStripe();
+      // Step 3: Final validation
+      if (!isValidStripeKey(key)) {
+        setState({
+          status: 'error',
+          message: 'Stripe payment system is not configured. Please contact your administrator to set up the Stripe publishable key.',
+        });
+        return;
+      }
+
+      // Step 4: Load Stripe
+      const stripePromise = loadStripe(key);
+      const instance = await stripePromise;
+
+      if (!instance) {
+        setState({
+          status: 'error',
+          message: 'Failed to initialize Stripe. The publishable key may be invalid or expired.',
+        });
+        return;
+      }
+
+      // Re-create the promise since the resolved one can still be used
+      setState({ status: 'ready', stripe: loadStripe(key) });
+    } catch (err: any) {
+      console.error('[StripeProvider] Initialization error:', err);
+      setState({
+        status: 'error',
+        message: err?.message || 'An unexpected error occurred while initializing the payment system.',
+      });
+    }
   }, []);
 
-  if (error) {
+  useEffect(() => {
+    initStripe();
+  }, [initStripe]);
+
+  if (state.status === 'loading') {
     return (
-      <div className="flex items-center justify-center p-4">
-        <div className="text-destructive text-sm">{error}</div>
+      <div className="flex items-center justify-center p-8">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600 dark:border-gray-600 dark:border-t-gray-300" />
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            Initializing payment system...
+          </div>
+        </div>
       </div>
     );
   }
 
-  if (!stripePromiseState) {
+  if (state.status === 'error') {
     return (
-      <div className="flex items-center justify-center p-4">
-        <div className="text-muted-foreground text-sm">
-          Loading payment provider...
+      <div className="flex items-center justify-center p-8">
+        <div className="flex flex-col items-center gap-3 max-w-md text-center">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+            <svg className="h-5 w-5 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+            </svg>
+          </div>
+          <div className="text-sm font-medium text-red-700 dark:text-red-400">
+            Payment System Unavailable
+          </div>
+          <div className="text-xs text-gray-500 dark:text-gray-400">
+            {state.message}
+          </div>
+          <button
+            onClick={initStripe}
+            className="mt-2 rounded-md bg-gray-900 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
+          >
+            Retry
+          </button>
         </div>
       </div>
     );
@@ -89,7 +135,7 @@ export function StripeProvider({ children }: StripeProviderProps) {
 
   return (
     <Elements
-      stripe={stripePromiseState}
+      stripe={state.stripe}
       options={{
         fonts: [
           {
@@ -175,9 +221,6 @@ export class StripeErrorBoundary extends React.Component<
     return this.props.children;
   }
 }
-
-// Import React for error boundary
-import React from 'react';
 
 /**
  * Combined Stripe Provider with Error Boundary
