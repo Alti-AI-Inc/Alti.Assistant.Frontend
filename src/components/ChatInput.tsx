@@ -435,6 +435,8 @@ const ChatInput = ({
         return '/legal-contract/assistant';
       case OPTIONS.CODE:
         return '/code/assistant';
+      case OPTIONS.VIDEO:
+        return '/video/generate';
       case OPTIONS.RESEARCH:
         return '/deep-research/assistant';
       // case OPTIONS.GENERATE_PLAN:
@@ -621,6 +623,7 @@ const ChatInput = ({
 
         switch (selectedOption) {
           case OPTIONS.IMAGE:
+          case OPTIONS.VIDEO:
             return response.data?.responseMessage?.text;
           case OPTIONS.CREATIVE_WRITING:
             return response.data?.response;
