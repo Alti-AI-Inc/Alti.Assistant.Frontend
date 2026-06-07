@@ -41,7 +41,7 @@ export default function ConversationsList({
   activeTab = 'chat',
 }: {
   searchQuery?: string;
-  activeTab?: 'chat' | 'research' | 'assistant';
+  activeTab?: 'chat' | 'search' | 'write' | 'research' | 'assistant';
 }) {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
@@ -65,8 +65,11 @@ export default function ConversationsList({
     );
 
   const getDisplayIcon = (title: string) => {
-    if (activeTab === 'chat') {
+    if (activeTab === 'chat' || activeTab === 'search') {
       return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    }
+    if (activeTab === 'write') {
+      return <FileText className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     }
     if (activeTab !== 'assistant') {
       return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
@@ -174,7 +177,9 @@ export default function ConversationsList({
           <p className="text-xs text-gray-400">
             {activeTab === 'research'
               ? 'No research sessions yet. Switch to Research mode in the prompt bar to get started.'
-              : 'No conversations yet. Start a new chat!'}
+              : activeTab === 'write'
+                ? 'No documents yet. Start a new writing task!'
+                : 'No conversations yet. Start a new chat!'}
           </p>
         </div>
       )}

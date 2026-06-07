@@ -149,7 +149,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'research' | 'bots' | 'code' | 'image' | 'video' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'none';
+type SidebarTab = 'search' | 'research' | 'write' | 'bots' | 'code' | 'image' | 'video' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'none';
 
 const AVAILABLE_COMPOSIO_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -201,7 +201,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
   const [logoHovered, setLogoHovered] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<SidebarTab>('chat');
+  const [activeTab, setActiveTab] = useState<SidebarTab>('search');
 
 
 
@@ -280,12 +280,22 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         setActiveTab('research');
       } else if (selectedOption === OPTIONS.CODE) {
         setActiveTab('code');
-      } else if (selectedOption === OPTIONS.IMAGE) {
+      } else if (selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) {
         setActiveTab('image');
       } else if (selectedOption === OPTIONS.VIDEO) {
         setActiveTab('video');
+      } else if (
+        selectedOption === OPTIONS.DRAFT_DOCUMENT ||
+        selectedOption === OPTIONS.REWRITE ||
+        selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
+        selectedOption === OPTIONS.BRAINSTORM ||
+        selectedOption === OPTIONS.GENERATE_PLAN ||
+        selectedOption === OPTIONS.REVIEW_CONTRACT ||
+        selectedOption === OPTIONS.GENERATE_REPORT
+      ) {
+        setActiveTab('write');
       } else {
-        setActiveTab('chat');
+        setActiveTab('search');
       }
     } else if (pathname === '/settings' || pathname.startsWith('/settings') || pathname.startsWith('/admin') || pathname.startsWith('/knowledge') || pathname === '/legal' || pathname.startsWith('/legal')) {
       setActiveTab('none');
@@ -297,12 +307,12 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     if (activeConversation) {
       const isDeepSearch = !!((activeConversation as any).is_deep_search);
       if (isDeepSearch) {
-        setActiveTab('chat');
+        setActiveTab('search');
         if (selectedOption !== OPTIONS.RESEARCH) {
           setSelectedOption(OPTIONS.RESEARCH);
         }
       } else {
-        // Only set to chat if not on the bots page or apps page or data page or assistant/workflows
+        // Only set to search if not on the bots page or apps page or data page or assistant/workflows
         if (
           pathname !== '/my-chatbots' &&
           !pathname.startsWith('/my-chatbots') &&
@@ -318,8 +328,31 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           !pathname.startsWith('/legal') &&
           !pathname.startsWith('/admin')
         ) {
-          setActiveTab('chat');
-          if (selectedOption === OPTIONS.RESEARCH) {
+          // If the conversation option is document/write related, keep activeTab as 'write'
+          const opt = (activeConversation as any).option || selectedOption;
+          if (
+            opt === OPTIONS.DRAFT_DOCUMENT ||
+            opt === OPTIONS.REWRITE ||
+            opt === OPTIONS.TRANSLATE_DOCUMENTS ||
+            opt === OPTIONS.BRAINSTORM ||
+            opt === OPTIONS.GENERATE_PLAN ||
+            opt === OPTIONS.REVIEW_CONTRACT ||
+            opt === OPTIONS.GENERATE_REPORT
+          ) {
+            setActiveTab('write');
+          } else if (opt === OPTIONS.RESEARCH) {
+            setActiveTab('research');
+          } else if (opt === OPTIONS.CODE) {
+            setActiveTab('code');
+          } else if (opt === OPTIONS.IMAGE || opt === OPTIONS.EDIT_IMAGE) {
+            setActiveTab('image');
+          } else if (opt === OPTIONS.VIDEO) {
+            setActiveTab('video');
+          } else {
+            setActiveTab('search');
+          }
+
+          if (selectedOption === OPTIONS.RESEARCH && !isDeepSearch) {
             setSelectedOption(null);
           }
         }
@@ -341,6 +374,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       router.push('/inbox');
     } else if (tab === 'research') {
       setSelectedOption(OPTIONS.RESEARCH);
+      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+        router.push('/');
+      }
+    } else if (tab === 'write') {
+      setSelectedOption(OPTIONS.DRAFT_DOCUMENT);
       if (pathname !== '/' && !pathname.startsWith('/c/')) {
         router.push('/');
       }
@@ -370,10 +408,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
   const getPlusButtonProps = () => {
     switch (activeTab) {
-      case 'chat':
+      case 'search':
         return {
           visible: true,
-          tooltip: 'New Chat',
+          tooltip: 'New Search',
           onClick: () => {
             setActiveConversation(null);
             setShowStartLastMessage(false);
@@ -392,6 +430,19 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             setShowStartLastMessage(false);
             setUserMessage('');
             setSelectedOption(OPTIONS.RESEARCH);
+            close();
+            router.push('/');
+          },
+        };
+      case 'write':
+        return {
+          visible: true,
+          tooltip: 'New Document',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.DRAFT_DOCUMENT);
             close();
             router.push('/');
           },
@@ -611,19 +662,19 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               <TooltipTrigger asChild>
                 <button
                   type="button"
-                  onClick={() => handleTabChange('chat')}
+                  onClick={() => handleTabChange('search')}
                   className={cn(
                     'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'chat'
+                    activeTab === 'search'
                       ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                   )}
                 >
-                  <MessageSquare className="size-4" />
+                  <Search className="size-4" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Chat</p>
+                <p>Search</p>
               </TooltipContent>
             </Tooltip>
 
@@ -647,7 +698,25 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </TooltipContent>
             </Tooltip>
 
-
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('write')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'write'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <FileText className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Write</p>
+              </TooltipContent>
+            </Tooltip>
 
             <Tooltip>
               <TooltipTrigger asChild>
@@ -685,7 +754,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Image Gen</p>
+                <p>Image</p>
               </TooltipContent>
             </Tooltip>
 
@@ -705,7 +774,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Video Gen</p>
+                <p>Video</p>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -1234,7 +1303,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </div>
               )}
             </div>
-          ) : activeTab === 'chat' || activeTab === 'assistant' ? (
+          ) : activeTab === 'search' || activeTab === 'write' || activeTab === 'assistant' ? (
             <ConversationsList searchQuery={searchQuery} activeTab={activeTab === 'assistant' ? 'assistant' : activeTab as any} />
           ) : null}
         </div>
