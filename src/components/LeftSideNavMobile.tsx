@@ -612,25 +612,21 @@ const LeftSideNavMobile = () => {
 
       {/* Action Suite (Tasks, Workflows, Inbox) row */}
       {isLoggedIn && !isAdminMode && (
-        <div className="flex flex-col border-b border-black/5 px-4 py-2 bg-secondary animate-in fade-in slide-in-from-top-1 duration-200">
-          <div className="px-1 pb-1 flex items-center justify-between text-[9px] font-semibold text-zinc-400 dark:text-zinc-500 tracking-wider uppercase select-none">
-            <span>Operations & automation</span>
-          </div>
-          <div className="flex bg-[#F5F5F7] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
+        <div className="border-b border-black/5 px-4 py-2 bg-secondary animate-in fade-in slide-in-from-top-1 duration-200">
+          <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
                   type="button"
                   onClick={() => handleTabChange('bots')}
                   className={cn(
-                    'flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none gap-1.5',
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
                     activeTab === 'bots'
                       ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
                   )}
                 >
-                  <Folder className="size-3.5" />
-                  <span className="text-[11px] font-medium">Spaces</span>
+                  <Folder className="size-4" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
@@ -644,14 +640,13 @@ const LeftSideNavMobile = () => {
                   type="button"
                   onClick={() => handleTabChange('assistant')}
                   className={cn(
-                    'flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none gap-1.5',
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
                     activeTab === 'assistant'
                       ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
                   )}
                 >
-                  <Sparkles className="size-3.5" />
-                  <span className="text-[11px] font-medium">Tasks</span>
+                  <Sparkles className="size-4" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
@@ -665,14 +660,13 @@ const LeftSideNavMobile = () => {
                   type="button"
                   onClick={() => handleTabChange('workflows')}
                   className={cn(
-                    'flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none gap-1.5',
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
                     activeTab === 'workflows'
                       ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
                   )}
                 >
-                  <Zap className="size-3.5" />
-                  <span className="text-[11px] font-medium">Flows</span>
+                  <Zap className="size-4" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
@@ -686,14 +680,13 @@ const LeftSideNavMobile = () => {
                   type="button"
                   onClick={() => handleTabChange('inbox')}
                   className={cn(
-                    'flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none relative gap-1.5',
+                    'relative flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
                     activeTab === 'inbox'
                       ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
                   )}
                 >
-                  <Inbox className="size-3.5" />
-                  <span className="text-[11px] font-medium">Inbox</span>
+                  <Inbox className="size-4" />
                   {unreadInboxCount > 0 && (
                     <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-medium text-white ring-2 ring-[#FFFFFF] dark:ring-zinc-900 animate-pulse">
                       {unreadInboxCount}
