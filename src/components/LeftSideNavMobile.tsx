@@ -1361,6 +1361,16 @@ const LeftSideNavMobile = () => {
                 {!isSuperAdmin && (
                   <DropdownMenuItem
                     onClick={() => {
+                      router.push('/settings?tab=platform-knowledge');
+                      close();
+                    }}
+                  >
+                    <Database className="text-black dark:text-white" /> Platform Knowledge
+                  </DropdownMenuItem>
+                )}
+                {!isSuperAdmin && (
+                  <DropdownMenuItem
+                    onClick={() => {
                       router.push('/legal');
                       close();
                     }}

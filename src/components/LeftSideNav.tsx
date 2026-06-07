@@ -1399,6 +1399,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => router.push('/settings?tab=platform-knowledge')}>
+                      <Database className="text-black dark:text-white" /> Platform Knowledge
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/legal')}>
                       <Scale className="text-black" /> Legal Documents
                     </DropdownMenuItem>

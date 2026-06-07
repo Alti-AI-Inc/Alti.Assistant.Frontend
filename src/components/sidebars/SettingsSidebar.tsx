@@ -31,17 +31,6 @@ interface SettingsSidebarProps {
 
 const settingsSections: SettingsSection[] = [
   {
-    sectionTitle: 'AI Cognition',
-    options: [
-      {
-        id: 'data-tab',
-        title: 'Data',
-        value: 'data',
-        icon: <Database className="h-5 w-5" />,
-      },
-    ],
-  },
-  {
     sectionTitle: 'Account Settings',
     options: [
       {
