@@ -71,7 +71,7 @@ const SettingsContent = () => {
             "flex-1 overflow-y-auto min-h-0 px-8 py-6",
             !showSidebar && "flex justify-center"
           )}>
-            <div className="max-w-4xl w-full">
+            <div className="w-full">
               {selectedOption === 'platform-instructions' && <Instructions />}
               {selectedOption === 'platform-guardrails' && <Guardrails />}
               {selectedOption === 'password' && <ChangePassword />}
@@ -175,7 +175,7 @@ const Instructions = () => {
   }
 
   return (
-    <div className="max-w-4xl space-y-6">
+    <div className="w-full space-y-6">
       {/* Top Add Instruction Prompter (Integrated Chat-Style Input Box) */}
       <div className="flex items-center rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 px-3.5 py-1.5 shadow-xs transition-all focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
         <input
@@ -386,7 +386,7 @@ const Guardrails = () => {
   }
 
   return (
-    <div className="max-w-4xl space-y-6">
+    <div className="w-full space-y-6">
       {/* Top Add Guardrail Prompter (Integrated Chat-Style Input Box) */}
       <div className="flex items-center rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 px-3.5 py-1.5 shadow-xs transition-all focus-within:border-rose-500 focus-within:ring-1 focus-within:ring-rose-500">
         <input
