@@ -1390,16 +1390,16 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
                   {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => onOpen({ type: 'memory' })}>
-                      <Brain className="text-black dark:text-white" /> Chat Memory
+                      <Brain className="text-black dark:text-white" /> Platform Memory
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => onOpen({ type: 'platform-instructions' })}>
+                    <DropdownMenuItem onClick={() => router.push('/settings?tab=platform-instructions')}>
                       <SlidersHorizontal className="text-black dark:text-white" /> Platform Instructions
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => onOpen({ type: 'platform-guardrails' })}>
+                    <DropdownMenuItem onClick={() => router.push('/settings?tab=platform-guardrails')}>
                       <ShieldAlert className="text-black dark:text-white" /> Platform Guardrails
                     </DropdownMenuItem>
                   )}

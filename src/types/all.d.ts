@@ -22,8 +22,6 @@ type ModalType =
   | 'create-organization'
   | 'auth-modal'
   | 'memory'
-  | 'platform-instructions'
-  | 'platform-guardrails'
   | null;
 
 enum APP_STATUS {

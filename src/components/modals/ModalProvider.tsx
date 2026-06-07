@@ -24,8 +24,6 @@ import SearchChats from './SearchChats';
 import SearchWorkflows from './SearchWorkflows';
 import { ShareConversationModal } from './ShareConversationModal';
 import { MemoryModal } from './MemoryModal';
-import { PlatformInstructionsModal } from './PlatformInstructionsModal';
-import { PlatformGuardrailsModal } from './PlatformGuardrailsModal';
 
 export const ModalProvider = () => {
   const pathname = usePathname();
@@ -78,8 +76,6 @@ export const ModalProvider = () => {
       {type === 'create-organization' && <CreateOrganizationModal />}
       {type === 'auth-modal' && <AuthModal />}
       {type === 'memory' && <MemoryModal />}
-      {type === 'platform-instructions' && <PlatformInstructionsModal />}
-      {type === 'platform-guardrails' && <PlatformGuardrailsModal />}
     </>
   );
 };

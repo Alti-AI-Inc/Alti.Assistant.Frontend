@@ -1340,13 +1340,13 @@ const LeftSideNavMobile = () => {
                       close();
                     }}
                   >
-                    <Brain className="text-black dark:text-white" /> Chat Memory
+                    <Brain className="text-black dark:text-white" /> Platform Memory
                   </DropdownMenuItem>
                 )}
                 {!isSuperAdmin && (
                   <DropdownMenuItem
                     onClick={() => {
-                      onOpen({ type: 'platform-instructions' });
+                      router.push('/settings?tab=platform-instructions');
                       close();
                     }}
                   >
@@ -1356,7 +1356,7 @@ const LeftSideNavMobile = () => {
                 {!isSuperAdmin && (
                   <DropdownMenuItem
                     onClick={() => {
-                      onOpen({ type: 'platform-guardrails' });
+                      router.push('/settings?tab=platform-guardrails');
                       close();
                     }}
                   >
