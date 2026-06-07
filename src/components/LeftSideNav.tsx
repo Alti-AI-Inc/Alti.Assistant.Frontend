@@ -1388,13 +1388,13 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   )}
 
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/legal')}>
-                      <Scale className="text-black" /> Legal
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'memory' })}>
+                      <Brain className="text-black dark:text-white" /> Memory
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => onOpen({ type: 'memory' })}>
-                      <Brain className="text-black dark:text-white" /> Memory
+                    <DropdownMenuItem onClick={() => router.push('/legal')}>
+                      <Scale className="text-black" /> Legal
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (

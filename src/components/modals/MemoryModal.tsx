@@ -46,12 +46,9 @@ export const MemoryModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[420px] rounded-2xl p-6 bg-white dark:bg-zinc-900 border-none shadow-xl">
-        <DialogHeader className="flex flex-row items-center gap-2.5 pb-4 border-b border-black/5 dark:border-white/5 space-y-0">
-          <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center">
-            <Brain className="h-5 w-5" />
-          </div>
-          <DialogTitle className="text-base font-semibold text-gray-900 dark:text-white">
+      <DialogContent className="max-w-[480px] rounded-2xl p-6 bg-white dark:bg-zinc-900 border-none shadow-xl">
+        <DialogHeader className="pb-4 border-b border-black/5 dark:border-white/5 space-y-0">
+          <DialogTitle className="text-base font-semibold text-gray-900 dark:text-white text-left">
             Memory
           </DialogTitle>
         </DialogHeader>
