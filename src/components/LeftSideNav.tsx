@@ -57,7 +57,7 @@ import {
   Compass,
   Code2,
   ImageIcon,
-  Video,
+  Clapperboard,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -770,7 +770,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                   )}
                 >
-                  <Video className="size-4" />
+                  <Clapperboard className="size-4" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
