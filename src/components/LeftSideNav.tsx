@@ -1409,6 +1409,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'change-password' })}>
+                      <KeyRound className="text-black dark:text-white" /> Change Password
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/settings')}>
                       <Settings className="text-black" /> Settings
                     </DropdownMenuItem>

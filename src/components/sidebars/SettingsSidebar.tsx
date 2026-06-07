@@ -34,12 +34,6 @@ const settingsSections: SettingsSection[] = [
     sectionTitle: 'Account Settings',
     options: [
       {
-        id: '4',
-        title: 'Password',
-        value: 'password',
-        icon: <KeyRound className="h-5 w-5" />,
-      },
-      {
         id: '5',
         title: 'Invite',
         value: 'invite',

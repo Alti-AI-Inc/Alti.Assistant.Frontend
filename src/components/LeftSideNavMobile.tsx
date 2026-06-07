@@ -1381,6 +1381,16 @@ const LeftSideNavMobile = () => {
                 {!isSuperAdmin && (
                   <DropdownMenuItem
                     onClick={() => {
+                      onOpen({ type: 'change-password' });
+                      close();
+                    }}
+                  >
+                    <KeyRound className="text-black dark:text-white" /> Change Password
+                  </DropdownMenuItem>
+                )}
+                {!isSuperAdmin && (
+                  <DropdownMenuItem
+                    onClick={() => {
                       router.push('/settings');
                       close();
                     }}

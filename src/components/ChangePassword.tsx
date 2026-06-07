@@ -29,7 +29,7 @@ const formSchema = z.object({
 });
 
 
-export default function ChangePassword() {
+export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }) {
   const { data } = useSession();
 
   const [error, setError] = useState('');
@@ -72,6 +72,11 @@ export default function ChangePassword() {
       if (response.ok) {
         setSuccess('Password changed successfully');
         form.reset();
+        if (onSuccess) {
+          setTimeout(() => {
+            onSuccess();
+          }, 1500);
+        }
       }
     } catch (error) {
       console.log(error);

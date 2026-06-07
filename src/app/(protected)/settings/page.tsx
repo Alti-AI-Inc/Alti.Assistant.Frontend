@@ -1,6 +1,5 @@
 'use client';
 
-import ChangePassword from '@/components/ChangePassword';
 import SendInviteButton from '@/components/SendInviteButton';
 import { SettingsSidebar } from '@/components/sidebars/SettingsSidebar';
 import { Button } from '@/components/ui/button';
@@ -34,13 +33,13 @@ import { getFileExtension, getFileIconComponent } from '@/components/panels/Proj
 const SettingsContent = () => {
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
-  const [selectedOption, setSelectedOption] = useState('password');
+  const [selectedOption, setSelectedOption] = useState('invite');
 
   useEffect(() => {
     if (tabParam) {
       setSelectedOption(tabParam);
     } else {
-      setSelectedOption('password');
+      setSelectedOption('invite');
     }
   }, [tabParam]);
 
@@ -69,7 +68,6 @@ const SettingsContent = () => {
             {selectedOption === 'platform-instructions' && 'Platform Instructions'}
             {selectedOption === 'platform-guardrails' && 'Platform Guardrails'}
             {selectedOption === 'platform-knowledge' && 'Platform Knowledge'}
-            {selectedOption === 'password' && 'Update Password'}
             {selectedOption === 'invite' && 'Invite Friends'}
           </h1>
         </div>
@@ -83,7 +81,6 @@ const SettingsContent = () => {
             {selectedOption === 'platform-instructions' && <Instructions />}
             {selectedOption === 'platform-guardrails' && <Guardrails />}
             {selectedOption === 'platform-knowledge' && <PlatformKnowledge />}
-            {selectedOption === 'password' && <ChangePassword />}
             {selectedOption === 'invite' && <Invite />}
           </div>
         </div>
