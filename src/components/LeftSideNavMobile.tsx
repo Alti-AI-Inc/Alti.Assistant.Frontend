@@ -383,6 +383,45 @@ const LeftSideNavMobile = () => {
             close();
           },
         };
+      case 'code':
+        return {
+          visible: true,
+          label: 'New Code',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.CODE);
+            router.push('/');
+            close();
+          },
+        };
+      case 'image':
+        return {
+          visible: true,
+          label: 'New Image',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.IMAGE);
+            router.push('/');
+            close();
+          },
+        };
+      case 'video':
+        return {
+          visible: true,
+          label: 'New Video',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.VIDEO);
+            router.push('/');
+            close();
+          },
+        };
       case 'bots':
         return {
           visible: projectTab === 'my',

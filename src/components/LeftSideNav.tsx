@@ -396,6 +396,45 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             router.push('/');
           },
         };
+      case 'code':
+        return {
+          visible: true,
+          tooltip: 'New Code',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.CODE);
+            close();
+            router.push('/');
+          },
+        };
+      case 'image':
+        return {
+          visible: true,
+          tooltip: 'New Image',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.IMAGE);
+            close();
+            router.push('/');
+          },
+        };
+      case 'video':
+        return {
+          visible: true,
+          tooltip: 'New Video',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.VIDEO);
+            close();
+            router.push('/');
+          },
+        };
       case 'bots':
         return {
           visible: projectTab === 'my',
