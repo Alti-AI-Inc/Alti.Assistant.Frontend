@@ -2,9 +2,23 @@
 
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, createContext, useContext } from 'react';
 import { getStripePublishableKey } from '@/actions/stripeActions';
 import React from 'react';
+
+export interface StripeAvailability {
+  status: 'loading' | 'ready' | 'error';
+  message?: string;
+  isAvailable: boolean;
+  retry?: () => void;
+}
+
+const StripeAvailabilityContext = createContext<StripeAvailability>({
+  status: 'loading',
+  isAvailable: false,
+});
+
+export const useStripeAvailability = () => useContext(StripeAvailabilityContext);
 
 /**
  * Stripe Provider Component
@@ -109,56 +123,55 @@ export function StripeProvider({ children }: StripeProviderProps) {
 
   if (state.status === 'error') {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="flex flex-col items-center gap-3 max-w-md text-center">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
-            <svg className="h-5 w-5 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-            </svg>
-          </div>
-          <div className="text-sm font-medium text-red-700 dark:text-red-400">
-            Payment System Unavailable
-          </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400">
-            {state.message}
-          </div>
-          <button
-            onClick={initStripe}
-            className="mt-2 rounded-md bg-gray-900 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
-          >
-            Retry
-          </button>
-        </div>
-      </div>
+      <StripeAvailabilityContext.Provider
+        value={{
+          status: 'error',
+          message: state.message,
+          isAvailable: false,
+          retry: initStripe,
+        }}
+      >
+        <Elements stripe={null}>
+          {children}
+        </Elements>
+      </StripeAvailabilityContext.Provider>
     );
   }
 
   return (
-    <Elements
-      stripe={state.stripe}
-      options={{
-        fonts: [
-          {
-            cssSrc: 'https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap',
-          },
-        ],
-        appearance: {
-          theme: 'stripe',
-          variables: {
-            colorPrimary: '#0570de',
-            colorBackground: '#ffffff',
-            colorText: '#30313d',
-            colorDanger: '#df1b41',
-            fontFamily: '"Exo 2", system-ui, sans-serif',
-            spacingUnit: '4px',
-            borderRadius: '6px',
-          },
-        },
-        loader: 'auto',
+    <StripeAvailabilityContext.Provider
+      value={{
+        status: 'ready',
+        isAvailable: true,
+        retry: initStripe,
       }}
     >
-      {children}
-    </Elements>
+      <Elements
+        stripe={state.stripe}
+        options={{
+          fonts: [
+            {
+              cssSrc: 'https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap',
+            },
+          ],
+          appearance: {
+            theme: 'stripe',
+            variables: {
+              colorPrimary: '#0570de',
+              colorBackground: '#ffffff',
+              colorText: '#30313d',
+              colorDanger: '#df1b41',
+              fontFamily: '"Exo 2", system-ui, sans-serif',
+              spacingUnit: '4px',
+              borderRadius: '6px',
+            },
+          },
+          loader: 'auto',
+        }}
+      >
+        {children}
+      </Elements>
+    </StripeAvailabilityContext.Provider>
   );
 }
 
