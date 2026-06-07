@@ -683,13 +683,13 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   type="button"
                   onClick={() => handleTabChange('bots')}
                   className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    'flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none text-[11px] font-semibold tracking-tight',
                     activeTab === 'bots'
                       ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
                   )}
                 >
-                  <Folder className="size-4" />
+                  Spaces
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
@@ -703,13 +703,13 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   type="button"
                   onClick={() => handleTabChange('assistant')}
                   className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    'flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none text-[11px] font-semibold tracking-tight',
                     activeTab === 'assistant'
                       ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
                   )}
                 >
-                  <Sparkles className="size-4" />
+                  Tasks
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
@@ -723,13 +723,13 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   type="button"
                   onClick={() => handleTabChange('workflows')}
                   className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    'flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none text-[11px] font-semibold tracking-tight',
                     activeTab === 'workflows'
                       ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
                   )}
                 >
-                  <Zap className="size-4" />
+                  Flows
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
@@ -743,13 +743,13 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   type="button"
                   onClick={() => handleTabChange('inbox')}
                   className={cn(
-                    'relative flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    'relative flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none text-[11px] font-semibold tracking-tight',
                     activeTab === 'inbox'
                       ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
                   )}
                 >
-                  <Inbox className="size-4" />
+                  Inbox
                   {unreadInboxCount > 0 && (
                     <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-medium text-white ring-2 ring-[#FFFFFF] dark:ring-zinc-900 animate-pulse">
                       {unreadInboxCount}
