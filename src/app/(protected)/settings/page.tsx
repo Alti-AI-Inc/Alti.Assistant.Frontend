@@ -34,15 +34,19 @@ const SettingsContent = () => {
     }
   }, [tabParam]);
 
+  const showSidebar = selectedOption !== 'platform-instructions' && selectedOption !== 'platform-guardrails';
+
   return (
     <div className="flex h-full w-full overflow-hidden bg-[#F5F5F7] dark:bg-gray-900">
       {/* Settings Sidebar */}
-      <div className="relative shrink-0">
-        <SettingsSidebar
-          selectedOption={selectedOption}
-          onSelectOption={setSelectedOption}
-        />
-      </div>
+      {showSidebar && (
+        <div className="relative shrink-0">
+          <SettingsSidebar
+            selectedOption={selectedOption}
+            onSelectOption={setSelectedOption}
+          />
+        </div>
+      )}
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#F5F5F7] dark:bg-gray-955">
