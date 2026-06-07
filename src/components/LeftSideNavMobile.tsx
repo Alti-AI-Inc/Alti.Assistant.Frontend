@@ -789,22 +789,20 @@ const LeftSideNavMobile = () => {
                   type="button"
                   onClick={() => handleTabChange('inbox')}
                   className={cn(
-                    'flex-1 flex flex-col h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none text-[11px] font-semibold tracking-tight gap-0',
+                    'flex-1 flex h-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none text-[11px] font-semibold tracking-tight',
                     activeTab === 'inbox'
                       ? 'bg-white dark:bg-zinc-800 border-black/10 dark:border-zinc-700/50 text-black dark:text-white shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 dark:text-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] hover:text-gray-800 dark:hover:text-zinc-200',
                   )}
                 >
-                  {unreadInboxCount > 0 ? (
-                    <>
-                      <span className="text-[10px] font-bold text-red-500 dark:text-red-400 leading-none h-3 flex items-center justify-center animate-pulse">
+                  <span className="relative">
+                    Inbox
+                    {unreadInboxCount > 0 && (
+                      <span className="absolute -top-1.5 -right-3.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white ring-1 ring-white dark:ring-zinc-800 animate-pulse">
                         {unreadInboxCount}
                       </span>
-                      <span className="text-[10px] leading-none mt-0.5">Inbox</span>
-                    </>
-                  ) : (
-                    <span>Inbox</span>
-                  )}
+                    )}
+                  </span>
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
