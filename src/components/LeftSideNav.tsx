@@ -584,24 +584,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
           {/* Action Buttons to the right */}
           <div className="flex flex-none items-center gap-1.5">
-            {activeTab !== 'apps' && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#F5F5F7] text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 transition-all duration-200 focus:outline-none select-none dark:bg-zinc-800/50"
-                    onClick={() => handleTabChange('apps')}
-                  >
-                    <LayoutGrid className="size-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>Apps Workspace</p>
-                </TooltipContent>
-              </Tooltip>
-            )}
-
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -627,6 +609,24 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 <p>Inbox</p>
               </TooltipContent>
             </Tooltip>
+
+            {activeTab !== 'apps' && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#F5F5F7] text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 transition-all duration-200 focus:outline-none select-none dark:bg-zinc-800/50"
+                    onClick={() => handleTabChange('apps')}
+                  >
+                    <LayoutGrid className="size-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Apps Workspace</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
 
             {plusProps.visible && (
               <div className="animate-in fade-in zoom-in duration-200">
