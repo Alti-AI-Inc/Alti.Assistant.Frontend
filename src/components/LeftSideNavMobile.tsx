@@ -57,6 +57,7 @@ import {
   Code2,
   ImageIcon,
   Clapperboard,
+  ShieldAlert,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -1345,11 +1346,21 @@ const LeftSideNavMobile = () => {
                 {!isSuperAdmin && (
                   <DropdownMenuItem
                     onClick={() => {
-                      router.push('/settings');
+                      onOpen({ type: 'platform-instructions' });
                       close();
                     }}
                   >
-                    <Settings className="text-black" /> Settings
+                    <SlidersHorizontal className="text-black dark:text-white" /> Platform Instructions
+                  </DropdownMenuItem>
+                )}
+                {!isSuperAdmin && (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onOpen({ type: 'platform-guardrails' });
+                      close();
+                    }}
+                  >
+                    <ShieldAlert className="text-black dark:text-white" /> Platform Guardrails
                   </DropdownMenuItem>
                 )}
                 {!isSuperAdmin && (
@@ -1360,6 +1371,16 @@ const LeftSideNavMobile = () => {
                     }}
                   >
                     <Scale className="text-black" /> Legal Documents
+                  </DropdownMenuItem>
+                )}
+                {!isSuperAdmin && (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      router.push('/settings');
+                      close();
+                    }}
+                  >
+                    <Settings className="text-black" /> Settings
                   </DropdownMenuItem>
                 )}
               </DropdownMenuGroup>

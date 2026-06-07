@@ -7,8 +7,6 @@ import {
   Brain,
   ChevronRight,
   KeyRound,
-  SlidersHorizontal,
-  ShieldCheck,
   PanelLeftClose,
   UserPlus,
   Database,
@@ -40,23 +38,6 @@ const settingsSections: SettingsSection[] = [
         title: 'Data',
         value: 'data',
         icon: <Database className="h-5 w-5" />,
-      },
-    ],
-  },
-  {
-    sectionTitle: 'AI Behavior',
-    options: [
-      {
-        id: '2',
-        title: 'Instructions',
-        value: 'instructions',
-        icon: <SlidersHorizontal className="h-5 w-5" />,
-      },
-      {
-        id: '3',
-        title: 'Guardrails',
-        value: 'guardrails',
-        icon: <ShieldCheck className="h-5 w-5" />,
       },
     ],
   },

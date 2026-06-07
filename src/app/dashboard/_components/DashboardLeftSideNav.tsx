@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
-import { CircleUserRound, LogOut, ReceiptText, Settings, Shield, Brain } from 'lucide-react';
+import { CircleUserRound, LogOut, ReceiptText, Settings, Shield, Brain, SlidersHorizontal, ShieldAlert } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -115,6 +115,16 @@ const DashboardLeftSideNav = () => {
                   {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => onOpen({ type: 'memory' })}>
                       <Brain className="text-black dark:text-white" /> Chat Memory
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'platform-instructions' })}>
+                      <SlidersHorizontal className="text-black dark:text-white" /> Platform Instructions
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'platform-guardrails' })}>
+                      <ShieldAlert className="text-black dark:text-white" /> Platform Guardrails
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (

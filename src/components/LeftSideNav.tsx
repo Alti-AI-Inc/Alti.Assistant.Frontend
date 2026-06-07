@@ -59,6 +59,7 @@ import {
   Code2,
   ImageIcon,
   Clapperboard,
+  ShieldAlert,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -1390,6 +1391,16 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => onOpen({ type: 'memory' })}>
                       <Brain className="text-black dark:text-white" /> Chat Memory
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'platform-instructions' })}>
+                      <SlidersHorizontal className="text-black dark:text-white" /> Platform Instructions
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'platform-guardrails' })}>
+                      <ShieldAlert className="text-black dark:text-white" /> Platform Guardrails
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
