@@ -31,6 +31,8 @@ const SettingsContent = () => {
   useEffect(() => {
     if (tabParam) {
       setSelectedOption(tabParam);
+    } else {
+      setSelectedOption('data');
     }
   }, [tabParam]);
 
