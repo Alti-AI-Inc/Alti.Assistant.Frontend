@@ -149,7 +149,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'search' | 'research' | 'write' | 'bots' | 'code' | 'image' | 'video' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'none';
+type SidebarTab = 'search' | 'research' | 'write' | 'bots' | 'code' | 'media' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'none';
 
 const AVAILABLE_COMPOSIO_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -280,10 +280,12 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         setActiveTab('research');
       } else if (selectedOption === OPTIONS.CODE) {
         setActiveTab('code');
-      } else if (selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) {
-        setActiveTab('image');
-      } else if (selectedOption === OPTIONS.VIDEO) {
-        setActiveTab('video');
+      } else if (
+        selectedOption === OPTIONS.IMAGE ||
+        selectedOption === OPTIONS.EDIT_IMAGE ||
+        selectedOption === OPTIONS.VIDEO
+      ) {
+        setActiveTab('media');
       } else if (
         selectedOption === OPTIONS.DRAFT_DOCUMENT ||
         selectedOption === OPTIONS.REWRITE ||
@@ -344,10 +346,12 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             setActiveTab('research');
           } else if (opt === OPTIONS.CODE) {
             setActiveTab('code');
-          } else if (opt === OPTIONS.IMAGE || opt === OPTIONS.EDIT_IMAGE) {
-            setActiveTab('image');
-          } else if (opt === OPTIONS.VIDEO) {
-            setActiveTab('video');
+          } else if (
+            opt === OPTIONS.IMAGE ||
+            opt === OPTIONS.EDIT_IMAGE ||
+            opt === OPTIONS.VIDEO
+          ) {
+            setActiveTab('media');
           } else {
             setActiveTab('search');
           }
@@ -387,13 +391,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       if (pathname !== '/' && !pathname.startsWith('/c/')) {
         router.push('/');
       }
-    } else if (tab === 'image') {
-      setSelectedOption(OPTIONS.IMAGE);
-      if (pathname !== '/' && !pathname.startsWith('/c/')) {
-        router.push('/');
+    } else if (tab === 'media') {
+      if (selectedOption !== OPTIONS.IMAGE && selectedOption !== OPTIONS.EDIT_IMAGE && selectedOption !== OPTIONS.VIDEO) {
+        setSelectedOption(OPTIONS.IMAGE);
       }
-    } else if (tab === 'video') {
-      setSelectedOption(OPTIONS.VIDEO);
       if (pathname !== '/' && !pathname.startsWith('/c/')) {
         router.push('/');
       }
@@ -460,28 +461,16 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             router.push('/');
           },
         };
-      case 'image':
+      case 'media':
+        const isVideoMode = selectedOption === OPTIONS.VIDEO;
         return {
           visible: true,
-          tooltip: 'New Image',
+          tooltip: isVideoMode ? 'New Video' : 'New Image',
           onClick: () => {
             setActiveConversation(null);
             setShowStartLastMessage(false);
             setUserMessage('');
-            setSelectedOption(OPTIONS.IMAGE);
-            close();
-            router.push('/');
-          },
-        };
-      case 'video':
-        return {
-          visible: true,
-          tooltip: 'New Video',
-          onClick: () => {
-            setActiveConversation(null);
-            setShowStartLastMessage(false);
-            setUserMessage('');
-            setSelectedOption(OPTIONS.VIDEO);
+            setSelectedOption(isVideoMode ? OPTIONS.VIDEO : OPTIONS.IMAGE);
             close();
             router.push('/');
           },
@@ -742,10 +731,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               <TooltipTrigger asChild>
                 <button
                   type="button"
-                  onClick={() => handleTabChange('image')}
+                  onClick={() => handleTabChange('media')}
                   className={cn(
                     'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'image'
+                    activeTab === 'media'
                       ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                   )}
@@ -754,27 +743,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Image</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('video')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'video'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <Clapperboard className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Video</p>
+                <p>Media</p>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -1304,6 +1273,37 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   Your Inbox is empty.
                 </div>
               )}
+            </div>
+          ) : activeTab === 'media' ? (
+            <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
+              <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full mb-2 select-none">
+                <button
+                  type="button"
+                  onClick={() => setSelectedOption(OPTIONS.IMAGE)}
+                  className={cn(
+                    "flex-1 py-1.5 px-3 text-[11px] font-semibold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
+                    selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE
+                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
+                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
+                  )}
+                >
+                  Image Gen
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedOption(OPTIONS.VIDEO)}
+                  className={cn(
+                    "flex-1 py-1.5 px-3 text-[11px] font-semibold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
+                    selectedOption === OPTIONS.VIDEO
+                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
+                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
+                  )}
+                >
+                  Video Gen
+                </button>
+              </div>
+              <div className="my-3 h-px bg-black/10 dark:bg-white/10 -mx-4" />
+              <ConversationsList searchQuery={searchQuery} activeTab="search" />
             </div>
           ) : activeTab === 'search' || activeTab === 'write' || activeTab === 'assistant' ? (
             <ConversationsList searchQuery={searchQuery} activeTab={activeTab === 'assistant' ? 'assistant' : activeTab as any} />
