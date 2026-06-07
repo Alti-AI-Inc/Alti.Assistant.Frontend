@@ -1,6 +1,9 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: process.cwd(),
+  },
   output: process.platform === 'win32' ? undefined : 'standalone',
   experimental: {
     serverActions: {

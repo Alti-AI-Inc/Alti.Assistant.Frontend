@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
-import { CircleUserRound, LogOut, ReceiptText, Settings, Shield } from 'lucide-react';
+import { CircleUserRound, LogOut, ReceiptText, Settings, Shield, Brain } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -110,6 +110,11 @@ const DashboardLeftSideNav = () => {
                   {isAdmin && !isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/admin')}>
                       <Shield className="text-black" /> Admin
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => router.push('/settings/memory')}>
+                      <Brain className="text-black dark:text-white" /> Chat Memory
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (

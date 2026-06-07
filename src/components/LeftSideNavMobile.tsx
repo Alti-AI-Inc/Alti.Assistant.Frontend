@@ -15,6 +15,7 @@ import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {
   Building2,
+  Brain,
   LayoutDashboard,
   LogOut,
   Orbit,
@@ -1331,6 +1332,16 @@ const LeftSideNavMobile = () => {
                       <LayoutDashboard className="text-black" /> Manager
                     </DropdownMenuItem>
                   )}
+                {!isSuperAdmin && (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      router.push('/settings/memory');
+                      close();
+                    }}
+                  >
+                    <Brain className="text-black dark:text-white" /> Chat Memory
+                  </DropdownMenuItem>
+                )}
                 {!isSuperAdmin && (
                   <DropdownMenuItem
                     onClick={() => {

@@ -16,6 +16,7 @@ import { useSidebarStore } from '@/stores/useSidebarStore';
 import { UserMode } from '@/types/tenant';
 import {
   Building2,
+  Brain,
   LayoutDashboard,
   LogOut,
   Orbit,
@@ -1389,6 +1390,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/legal')}>
                       <Scale className="text-black" /> Legal
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => router.push('/settings/memory')}>
+                      <Brain className="text-black dark:text-white" /> Chat Memory
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (

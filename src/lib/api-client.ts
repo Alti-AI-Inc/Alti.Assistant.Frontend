@@ -73,6 +73,7 @@ export async function apiClient(
 
   // Make the request
   try {
+    console.log('[apiClient] Fetching URL:', url);
     const response = await fetch(url, {
       ...restOptions,
       headers: requestHeaders,
