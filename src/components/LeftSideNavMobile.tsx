@@ -142,7 +142,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'research' | 'bots' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'gcp' | 'none';
+type SidebarTab = 'chat' | 'research' | 'bots' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'none';
 
 const AVAILABLE_COMPOSIO_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -205,30 +205,7 @@ const LeftSideNavMobile = () => {
 
   const [activeTab, setActiveTab] = useState<SidebarTab>('chat');
 
-  const [isActionSuiteExpanded, setIsActionSuiteExpanded] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('alti_action_suite_expanded');
-      return saved !== 'false';
-    }
-    return true;
-  });
 
-  const toggleActionSuite = () => {
-    const nextVal = !isActionSuiteExpanded;
-    setIsActionSuiteExpanded(nextVal);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('alti_action_suite_expanded', String(nextVal));
-    }
-    if (!nextVal && (activeTab === 'assistant' || activeTab === 'workflows' || activeTab === 'inbox')) {
-      handleTabChange('chat');
-    }
-  };
-
-  useEffect(() => {
-    if (activeTab === 'assistant' || activeTab === 'workflows' || activeTab === 'inbox') {
-      setIsActionSuiteExpanded(true);
-    }
-  }, [activeTab]);
 
   const [searchQuery, setSearchQuery] = useState('');
   const searchParams = useSearchParams();
@@ -273,8 +250,6 @@ const LeftSideNavMobile = () => {
       setActiveTab('bots');
     } else if (pathname === '/workflows' || pathname.startsWith('/workflows')) {
       setActiveTab('workflows');
-    } else if (pathname === '/gcp' || pathname.startsWith('/gcp')) {
-      setActiveTab('gcp');
     } else if (pathname === '/assistant' || pathname.startsWith('/assistant')) {
       setActiveTab('assistant');
     } else if (pathname === '/inbox' || pathname.startsWith('/inbox')) {
@@ -302,8 +277,6 @@ const LeftSideNavMobile = () => {
           !pathname.startsWith('/my-chatbots') &&
           pathname !== '/apps' &&
           pathname !== '/workflows' &&
-          pathname !== '/gcp' &&
-          !pathname.startsWith('/gcp') &&
           pathname !== '/assistant' &&
           !pathname.startsWith('/assistant') &&
           pathname !== '/knowledge' &&
@@ -328,9 +301,6 @@ const LeftSideNavMobile = () => {
       close();
     } else if (tab === 'workflows') {
       router.push('/workflows');
-      close();
-    } else if (tab === 'gcp') {
-      router.push('/gcp');
       close();
     } else if (tab === 'assistant') {
       router.push('/assistant');
@@ -542,54 +512,12 @@ const LeftSideNavMobile = () => {
                 <p>Projects</p>
               </TooltipContent>
             </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('gcp')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'gcp'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <Cloud className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Google Cloud Hub</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <div className="h-6 w-px bg-black/10 dark:bg-white/10 mx-1" />
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={toggleActionSuite}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    isActionSuiteExpanded
-                      ? 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 text-black dark:text-white'
-                      : 'bg-transparent border-transparent text-gray-400 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <SlidersHorizontal className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>{isActionSuiteExpanded ? 'Hide Actions' : 'Show Actions'}</p>
-              </TooltipContent>
-            </Tooltip>
           </div>
         </div>
       )}
 
       {/* Action Suite (Tasks, Workflows, Inbox) row */}
-      {isLoggedIn && !isAdminMode && isActionSuiteExpanded && (
+      {isLoggedIn && !isAdminMode && (
         <div className="flex flex-col border-b border-black/5 px-4 py-2 bg-secondary animate-in fade-in slide-in-from-top-1 duration-200">
           <div className="px-1 pb-1 flex items-center justify-between text-[9px] font-semibold text-zinc-400 dark:text-zinc-500 tracking-wider uppercase select-none">
             <span>Operations & automation</span>
