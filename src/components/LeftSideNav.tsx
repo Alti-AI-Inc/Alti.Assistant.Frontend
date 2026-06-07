@@ -877,7 +877,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               {isAdminSection && !isSuperAdmin && (
                 <div className="space-y-1">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
-                    Admin
+                    Platform Admin
                   </div>
                   {[
                     { name: 'Invite', href: '/admin/members', icon: UserPlus },
@@ -910,7 +910,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               {isManagerSection && !isSuperAdmin && (
                 <div className="space-y-1">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
-                    Manager
+                    Platform Manager
                   </div>
                   {[
                     { name: 'Data', href: '/admin/data', icon: Database },
@@ -1378,23 +1378,23 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   )}
                   {isAdmin && !isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/admin/members')}>
-                      <Shield className="text-black" /> Admin
+                      <Shield className="text-black" /> Platform Admin
                     </DropdownMenuItem>
                   )}
                   {(isAdmin || isManager) && !isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/admin/data')}>
-                      <LayoutDashboard className="text-black" /> Manager
+                      <LayoutDashboard className="text-black" /> Platform Manager
                     </DropdownMenuItem>
                   )}
 
                   {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => onOpen({ type: 'memory' })}>
-                      <Brain className="text-black dark:text-white" /> Memory
+                      <Brain className="text-black dark:text-white" /> Chat Memory
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/legal')}>
-                      <Scale className="text-black" /> Legal
+                      <Scale className="text-black" /> Legal Documents
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (

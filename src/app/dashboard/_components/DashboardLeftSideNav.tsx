@@ -109,12 +109,12 @@ const DashboardLeftSideNav = () => {
                   )}
                   {isAdmin && !isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/admin')}>
-                      <Shield className="text-black" /> Admin
+                      <Shield className="text-black" /> Platform Admin
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => onOpen({ type: 'memory' })}>
-                      <Brain className="text-black dark:text-white" /> Memory
+                      <Brain className="text-black dark:text-white" /> Chat Memory
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
