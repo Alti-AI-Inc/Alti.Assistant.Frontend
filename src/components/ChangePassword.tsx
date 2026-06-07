@@ -106,7 +106,7 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                           type="password"
                           id="password"
                           placeholder="Old Password"
-                          className="max-w-md h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
+                          className="max-w-md h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 px-4 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all"
                         />
                       </FormControl>
                       <FormMessage />
@@ -124,7 +124,7 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                           type="password"
                           id="password"
                           placeholder="New Password"
-                          className="max-w-md h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
+                          className="max-w-md h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 px-4 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all"
                         />
                       </FormControl>
                       <FormMessage />
@@ -142,7 +142,7 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                           type="password"
                           id="new-password"
                           placeholder="Confirm New Password"
-                          className="max-w-md h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 px-4 text-sm text-gray-800 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-500 dark:text-gray-100 dark:placeholder-gray-400 outline-none transition-all focus-visible:ring-0"
+                          className="max-w-md h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 px-4 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all"
                         />
                       </FormControl>
                       <FormMessage />
