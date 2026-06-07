@@ -32,7 +32,7 @@ import { toast } from 'sonner';
 import { LlamaIndexChat } from '@/app/(protected)/knowledge/_components/LlamaIndexChat';
 
 const Page = () => {
-  const [selectedOption, setSelectedOption] = useState('memory');
+  const [selectedOption, setSelectedOption] = useState('data');
 
   return (
     <div className="flex h-full w-full overflow-hidden bg-[#F5F5F7] dark:bg-gray-900">
@@ -49,7 +49,6 @@ const Page = () => {
         {/* Dynamic Settings Top Navbar (Header) */}
         <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center px-8 flex-none bg-white dark:bg-gray-950 justify-between">
           <h1 className="text-base font-semibold text-gray-900 dark:text-white">
-            {selectedOption === 'memory' && 'Chat Memory'}
             {selectedOption === 'data' && 'Data Vault'}
             {selectedOption === 'instructions' && 'System Instructions'}
             {selectedOption === 'guardrails' && 'Safety Guardrails'}
@@ -66,7 +65,6 @@ const Page = () => {
         ) : (
           <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
             <div className="max-w-4xl">
-              {selectedOption === 'memory' && <Memory />}
               {selectedOption === 'instructions' && <Instructions />}
               {selectedOption === 'guardrails' && <Guardrails />}
               {selectedOption === 'password' && <ChangePassword />}
@@ -79,61 +77,6 @@ const Page = () => {
   );
 };
 
-const Memory = () => {
-  const [selected, setSelected] = useState('1-month');
-
-  useEffect(() => {
-    const stored = localStorage.getItem('alti_memory_retention');
-    if (stored) {
-      setSelected(stored);
-    }
-  }, []);
-
-  const handleSelect = (val: string) => {
-    setSelected(val);
-    localStorage.setItem('alti_memory_retention', val);
-  };
-
-  const options = [
-    { value: 'off', label: 'Off' },
-    { value: '1-month', label: '1 Month' },
-    { value: '3-month', label: '3 Months' },
-    { value: '6-month', label: '6 Months' },
-    { value: '12-month', label: '12 Months' },
-  ];
-
-  const activeIndex = options.findIndex(opt => opt.value === selected);
-
-  return (
-    <div className="max-w-4xl pt-2">
-      <div className="relative bg-white dark:bg-gray-900/30 p-1 rounded-2xl flex w-full max-w-3xl border border-black/10 dark:border-white/10 shadow-xs select-none">
-        {/* Dynamic sliding highlight block */}
-        <div
-          className="absolute top-1 bottom-1 rounded-xl bg-[#F5F5F7] dark:bg-zinc-800 shadow-sm transition-all duration-300 ease-out border border-black/5 dark:border-white/5"
-          style={{
-            left: `calc(${activeIndex * 20}% + 4px)`,
-            width: `calc(20% - 8px)`,
-          }}
-        />
-
-        {options.map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => handleSelect(opt.value)}
-            className={cn(
-              "relative z-10 flex-1 py-3 text-sm font-semibold transition-colors duration-200 outline-none rounded-xl text-center flex items-center justify-center cursor-pointer",
-              selected === opt.value
-                ? "text-indigo-650 dark:text-indigo-400"
-                : "text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
-            )}
-          >
-            {opt.label}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
 
 const Instructions = () => {
   const [instructionsList, setInstructionsList] = useState<{ id: string; text: string; timestamp: string }[]>([]);

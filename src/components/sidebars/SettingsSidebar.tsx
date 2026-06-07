@@ -36,12 +36,6 @@ const settingsSections: SettingsSection[] = [
     sectionTitle: 'AI Cognition',
     options: [
       {
-        id: '1',
-        title: 'Memory',
-        value: 'memory',
-        icon: <Brain className="h-5 w-5" />,
-      },
-      {
         id: 'data-tab',
         title: 'Data',
         value: 'data',
