@@ -1294,7 +1294,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
                   )}
                 >
-                  Image Gen
+                  Image
                 </button>
                 <button
                   type="button"
@@ -1306,7 +1306,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
                   )}
                 >
-                  Video Gen
+                  Video
                 </button>
               </div>
               <div className="my-3 h-px bg-black/10 dark:bg-white/10 -mx-4" />
