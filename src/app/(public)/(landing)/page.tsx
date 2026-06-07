@@ -48,6 +48,8 @@ function App() {
               ? 'Image Generation'
               : selectedOption === OPTIONS.CODE
               ? 'Code Generation'
+              : selectedOption === OPTIONS.VIDEO
+              ? 'Video Generation'
               : 'Real-Time Intelligence'}
           </h1>
         )}
