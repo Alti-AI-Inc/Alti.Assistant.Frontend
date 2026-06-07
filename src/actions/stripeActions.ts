@@ -1708,3 +1708,30 @@ export async function createBillingPortalSessionAction(
     };
   }
 }
+
+/**
+ * Get the Stripe Publishable Key from server-side environment
+ */
+export async function getStripePublishableKey(): Promise<ApiResponse<string>> {
+  try {
+    const key = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+    if (!key || key.includes('placeholder') || key === 'undefined' || key === 'null') {
+      return {
+        success: false,
+        message: 'Stripe publishable key is not configured on the server.',
+      };
+    }
+    return {
+      success: true,
+      message: 'Key fetched successfully',
+      data: key,
+    };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return {
+      success: false,
+      message: 'Failed to retrieve Stripe key',
+      debugMessage: errorMessage,
+    };
+  }
+}

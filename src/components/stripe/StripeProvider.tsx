@@ -3,6 +3,7 @@
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
+import { getStripePublishableKey } from '@/actions/stripeActions';
 
 /**
  * Stripe Provider Component
@@ -32,39 +33,40 @@ interface StripeProviderProps {
 }
 
 export function StripeProvider({ children }: StripeProviderProps) {
-  const [stripe, setStripe] = useState<Promise<Stripe | null> | null>(null);
+  const [stripePromiseState, setStripePromiseState] = useState<Promise<Stripe | null> | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    try {
-      const stripeInstance = getStripe();
+    async function initStripe() {
+      try {
+        let key = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
-      if (!stripeInstance) {
-        setError(
-          'Failed to initialize Stripe. Check your environment configuration.',
-        );
-        return;
-      }
-
-      setStripe(stripeInstance);
-
-      // Verify Stripe loaded successfully
-      stripeInstance
-        .then(stripe => {
-          if (!stripe) {
-            setError(
-              'Stripe failed to load. Please check your publishable key.',
-            );
+        // If key is missing or is placeholder, fetch it from the server dynamically
+        if (!key || key.includes('placeholder') || key === 'undefined' || key === 'null') {
+          const res = await getStripePublishableKey();
+          if (res.success && res.data) {
+            key = res.data;
+          } else {
+            setError('Failed to load Stripe configuration from the server.');
+            return;
           }
-        })
-        .catch(err => {
-          console.error('Stripe initialization error:', err);
-          setError('Failed to initialize payment provider.');
-        });
-    } catch (err) {
-      console.error('Error setting up Stripe:', err);
-      setError('Payment provider setup failed.');
+        }
+
+        const promise = loadStripe(key);
+        setStripePromiseState(promise);
+
+        // Verify key works
+        const instance = await promise;
+        if (!instance) {
+          setError('Failed to initialize Stripe client. Please check your publishable key.');
+        }
+      } catch (err: any) {
+        console.error('Stripe initialization error:', err);
+        setError('Failed to initialize payment provider.');
+      }
     }
+
+    initStripe();
   }, []);
 
   if (error) {
@@ -75,7 +77,7 @@ export function StripeProvider({ children }: StripeProviderProps) {
     );
   }
 
-  if (!stripe) {
+  if (!stripePromiseState) {
     return (
       <div className="flex items-center justify-center p-4">
         <div className="text-muted-foreground text-sm">
@@ -87,7 +89,7 @@ export function StripeProvider({ children }: StripeProviderProps) {
 
   return (
     <Elements
-      stripe={stripe}
+      stripe={stripePromiseState}
       options={{
         fonts: [
           {
