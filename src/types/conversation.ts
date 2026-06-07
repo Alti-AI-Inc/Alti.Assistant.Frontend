@@ -43,7 +43,7 @@ export enum OPTIONS {
   CREATIVE_WRITING = 'creative-writing',
   STOCK_INTELLIGENCE = 'stock-intelligence',
 
-  // VIDEO = 'video-generation',
+  VIDEO = 'video-generation',
 }
 
 export interface Reference {

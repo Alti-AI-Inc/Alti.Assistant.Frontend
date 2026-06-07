@@ -52,6 +52,10 @@ import {
   SlidersHorizontal,
   ChevronUp,
   ChevronDown,
+  Compass,
+  Code2,
+  ImageIcon,
+  Video,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -142,7 +146,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'research' | 'bots' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'none';
+type SidebarTab = 'chat' | 'research' | 'bots' | 'code' | 'image' | 'video' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'none';
 
 const AVAILABLE_COMPOSIO_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -255,11 +259,21 @@ const LeftSideNavMobile = () => {
     } else if (pathname === '/inbox' || pathname.startsWith('/inbox')) {
       setActiveTab('inbox');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
-      setActiveTab('chat');
+      if (selectedOption === OPTIONS.RESEARCH) {
+        setActiveTab('research');
+      } else if (selectedOption === OPTIONS.CODE) {
+        setActiveTab('code');
+      } else if (selectedOption === OPTIONS.IMAGE) {
+        setActiveTab('image');
+      } else if (selectedOption === OPTIONS.VIDEO) {
+        setActiveTab('video');
+      } else {
+        setActiveTab('chat');
+      }
     } else if (pathname === '/settings' || pathname.startsWith('/settings') || pathname.startsWith('/admin') || pathname.startsWith('/knowledge') || pathname === '/legal' || pathname.startsWith('/legal')) {
       setActiveTab('none');
     }
-  }, [pathname]);
+  }, [pathname, selectedOption]);
 
   // Synchronize tab and option selection with activeConversation.is_deep_search
   useEffect(() => {
@@ -310,6 +324,24 @@ const LeftSideNavMobile = () => {
       close();
     } else if (tab === 'research') {
       setSelectedOption(OPTIONS.RESEARCH);
+      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+        router.push('/');
+      }
+      close();
+    } else if (tab === 'code') {
+      setSelectedOption(OPTIONS.CODE);
+      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+        router.push('/');
+      }
+      close();
+    } else if (tab === 'image') {
+      setSelectedOption(OPTIONS.IMAGE);
+      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+        router.push('/');
+      }
+      close();
+    } else if (tab === 'video') {
+      setSelectedOption(OPTIONS.VIDEO);
       if (pathname !== '/' && !pathname.startsWith('/c/')) {
         router.push('/');
       }
@@ -497,6 +529,26 @@ const LeftSideNavMobile = () => {
               <TooltipTrigger asChild>
                 <button
                   type="button"
+                  onClick={() => handleTabChange('research')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'research'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Compass className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Research</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
                   onClick={() => handleTabChange('bots')}
                   className={cn(
                     'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
@@ -510,6 +562,66 @@ const LeftSideNavMobile = () => {
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Projects</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('code')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'code'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Code2 className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Code</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('image')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'image'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <ImageIcon className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Image Gen</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('video')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'video'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Video className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Video Gen</p>
               </TooltipContent>
             </Tooltip>
           </div>
