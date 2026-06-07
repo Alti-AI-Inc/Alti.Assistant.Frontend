@@ -46,7 +46,7 @@ export const MemoryModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[560px] rounded-2xl p-6 bg-white dark:bg-zinc-900 border-none shadow-xl">
+      <DialogContent className="max-w-[680px] rounded-2xl p-6 bg-white dark:bg-zinc-900 border-none shadow-xl">
         <DialogHeader className="pb-4 border-b border-black/5 dark:border-white/5 space-y-0">
           <DialogTitle className="text-base font-semibold text-gray-900 dark:text-white text-left">
             Memory
