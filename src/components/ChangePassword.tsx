@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 
 const formSchema = z.object({
   oldPassword: z.string().min(6, {
@@ -28,7 +29,6 @@ const formSchema = z.object({
   }),
 });
 
-
 export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }) {
   const { data } = useSession();
 
@@ -36,6 +36,9 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
   const [success, setSuccess] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -101,13 +104,22 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input
-                          {...field}
-                          type="password"
-                          id="password"
-                          placeholder="Old Password"
-                          className="max-w-md h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 px-4 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all"
-                        />
+                        <div className="relative max-w-md">
+                          <Input
+                            {...field}
+                            type={showOldPassword ? "text" : "password"}
+                            id="oldPassword"
+                            placeholder="Old Password"
+                            className="w-full h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 pl-4 pr-10 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all autofill:shadow-[inset_0_0_0_1000px_#f4f4f5] dark:autofill:shadow-[inset_0_0_0_1000px_#27272a] [-webkit-text-fill-color:#1f2937] dark:[-webkit-text-fill-color:#f3f4f6] [transition:background-color_50000s_ease-in-out_0s]"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowOldPassword(!showOldPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none"
+                          >
+                            {showOldPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          </button>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -119,13 +131,22 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input
-                          {...field}
-                          type="password"
-                          id="password"
-                          placeholder="New Password"
-                          className="max-w-md h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 px-4 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all"
-                        />
+                        <div className="relative max-w-md">
+                          <Input
+                            {...field}
+                            type={showNewPassword ? "text" : "password"}
+                            id="newPassword"
+                            placeholder="New Password"
+                            className="w-full h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 pl-4 pr-10 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all autofill:shadow-[inset_0_0_0_1000px_#f4f4f5] dark:autofill:shadow-[inset_0_0_0_1000px_#27272a] [-webkit-text-fill-color:#1f2937] dark:[-webkit-text-fill-color:#f3f4f6] [transition:background-color_50000s_ease-in-out_0s]"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowNewPassword(!showNewPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none"
+                          >
+                            {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          </button>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -137,13 +158,22 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input
-                          {...field}
-                          type="password"
-                          id="new-password"
-                          placeholder="Confirm New Password"
-                          className="max-w-md h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 px-4 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all"
-                        />
+                        <div className="relative max-w-md">
+                          <Input
+                            {...field}
+                            type={showConfirmNewPassword ? "text" : "password"}
+                            id="confirmNewPassword"
+                            placeholder="Confirm New Password"
+                            className="w-full h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 pl-4 pr-10 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all autofill:shadow-[inset_0_0_0_1000px_#f4f4f5] dark:autofill:shadow-[inset_0_0_0_1000px_#27272a] [-webkit-text-fill-color:#1f2937] dark:[-webkit-text-fill-color:#f3f4f6] [transition:background-color_50000s_ease-in-out_0s]"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none"
+                          >
+                            {showConfirmNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          </button>
+                        </div>
                       </FormControl>
                       <FormMessage />
                       {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
