@@ -83,19 +83,23 @@ export default function ProtectedLayoutClient({
             width={26}
           />
         </Link>
-        <Button
-          onClick={() => {
-            setActiveConversation(null);
-            setShowStartLastMessage(false);
-            setUserMessage('');
-            setSelectedOption(null);
-            router.push('/');
-            close();
-          }}
-          className="flex items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
-        >
-          <SquarePen className="size-5" />
-        </Button>
+        {isSuperAdmin ? (
+          <div className="w-10" />
+        ) : (
+          <Button
+            onClick={() => {
+              setActiveConversation(null);
+              setShowStartLastMessage(false);
+              setUserMessage('');
+              setSelectedOption(null);
+              router.push('/');
+              close();
+            }}
+            className="flex items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
+          >
+            <SquarePen className="size-5" />
+          </Button>
+        )}
       </header>
 
       {/* Body */}

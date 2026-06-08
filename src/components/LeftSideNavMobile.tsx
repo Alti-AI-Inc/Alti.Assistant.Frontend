@@ -540,7 +540,7 @@ const LeftSideNavMobile = () => {
             </Button>
           )}
 
-          {isLoggedIn && (
+          {isLoggedIn && !isSuperAdmin && (
             <>
               {/* <Button
                 disabled={pathname === '/workspaces'}

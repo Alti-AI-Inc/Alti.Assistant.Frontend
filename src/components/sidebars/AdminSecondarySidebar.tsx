@@ -59,7 +59,7 @@ export const AdminSecondarySidebar = () => {
   }
 
   return (
-    <div className="w-64 bg-white dark:bg-zinc-900 border-r border-black/10 dark:border-zinc-800/80 flex flex-col h-full shrink-0 z-10 transition-colors duration-300">
+    <div className="w-64 bg-white dark:bg-zinc-900 border-r border-black/10 dark:border-zinc-800/80 hidden md:flex flex-col h-full shrink-0 z-10 transition-colors duration-300">
       {/* Header */}
       <div className="h-[52px] border-b border-black/10 dark:border-zinc-800/80 px-4 flex items-center justify-between flex-none">
         <span className="text-sm font-semibold text-black dark:text-white truncate">
