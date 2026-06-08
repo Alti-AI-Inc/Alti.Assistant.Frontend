@@ -194,7 +194,7 @@ export default function AdminSupportInboxPage() {
                         
                         <div className="flex-1 flex items-center gap-8 min-w-0">
                            {/* Email */}
-                          <div className="flex-[2.0] min-w-0">
+                          <div className="flex-[3.2] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Email Address
                             </span>
@@ -204,7 +204,7 @@ export default function AdminSupportInboxPage() {
                           </div>
                           
                           {/* Subject */}
-                          <div className="flex-[4.8] min-w-0">
+                          <div className="flex-[3.6] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Subject
                             </span>
@@ -240,8 +240,8 @@ export default function AdminSupportInboxPage() {
                             </span>
                             <span className={`text-sm font-semibold block mt-0.5 ${
                               req.status === 'Pending'
-                                ? 'text-amber-600 dark:text-amber-400'
-                                : 'text-emerald-600 dark:text-emerald-400'
+                                ? 'text-emerald-600 dark:text-emerald-400'
+                                : 'text-black dark:text-white'
                             }`}>
                               {req.status}
                             </span>
