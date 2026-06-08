@@ -101,13 +101,13 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
             render={({ field }) => (
               <FormItem className="space-y-1">
                 <FormControl>
-                  <div className="relative w-full h-12 flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm px-4 focus-within:border-black/20 dark:focus-within:border-white/20 transition-all">
+                  <div className="relative w-full h-12 flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm px-4 focus-within:border-black/10 dark:focus-within:border-white/10 focus-within:ring-0 focus-within:outline-none transition-all">
                     <Input
                       {...field}
                       type={showOldPassword ? "text" : "password"}
                       id="oldPassword"
                       placeholder="Old Password"
-                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all"
+                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
                     />
                     <button
                       type="button"
@@ -130,13 +130,13 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
             render={({ field }) => (
               <FormItem className="space-y-1">
                 <FormControl>
-                  <div className="relative w-full h-12 flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm px-4 focus-within:border-black/20 dark:focus-within:border-white/20 transition-all">
+                  <div className="relative w-full h-12 flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm px-4 focus-within:border-black/10 dark:focus-within:border-white/10 focus-within:ring-0 focus-within:outline-none transition-all">
                     <Input
                       {...field}
                       type={showNewPassword ? "text" : "password"}
                       id="newPassword"
                       placeholder="New Password"
-                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all"
+                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
                     />
                     <button
                       type="button"
@@ -159,13 +159,13 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
             render={({ field }) => (
               <FormItem className="space-y-1">
                 <FormControl>
-                  <div className="relative w-full h-12 flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm px-4 focus-within:border-black/20 dark:focus-within:border-white/20 transition-all">
+                  <div className="relative w-full h-12 flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm px-4 focus-within:border-black/10 dark:focus-within:border-white/10 focus-within:ring-0 focus-within:outline-none transition-all">
                     <Input
                       {...field}
                       type={showConfirmNewPassword ? "text" : "password"}
                       id="confirmNewPassword"
                       placeholder="Confirm New Password"
-                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all"
+                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
                     />
                     <button
                       type="button"
@@ -185,7 +185,7 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
           {/* Box 4: Update Password Button */}
           <Button
             disabled={isLoading}
-            className="w-full h-12 rounded-xl bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/90 font-medium shadow-sm transition-all cursor-pointer flex items-center justify-center"
+            className="w-full h-12 rounded-xl bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/90 font-medium shadow-sm transition-all cursor-pointer flex items-center justify-center disabled:opacity-100 disabled:bg-black disabled:text-white dark:disabled:bg-white dark:disabled:text-black"
             type="submit"
           >
             {isLoading && (
