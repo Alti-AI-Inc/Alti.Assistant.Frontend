@@ -27,18 +27,12 @@ const InviteContent = () => {
 
       {/* Main Body */}
       <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6 flex justify-center">
-        <div className="w-full max-w-md space-y-6">
+        <div className="w-full space-y-6">
           {!isSent ? (
             <>
               {/* Card description */}
-              <div className="bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/5 rounded-2xl p-6 shadow-xs space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
-                    <UserPlus className="h-5 w-5" />
-                  </div>
-                  <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Share Alti</h2>
-                </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 leading-normal">
+              <div className="bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/5 rounded-2xl p-6 shadow-xs">
+                <p className="text-xs text-gray-505 dark:text-gray-400 leading-normal">
                   Invite your friends to join the alti platform.<br />
                   Enter their email address below to send an invitation.
                 </p>

@@ -47,16 +47,14 @@ const MemoryContent = () => {
 
       {/* Main Body */}
       <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6 flex justify-center">
-        <div className="w-full max-w-2xl space-y-6">
-          {/* Card description */}
-          <div className="bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/5 rounded-2xl p-6 shadow-xs space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
-                <Brain className="h-5 w-5" />
-              </div>
+        <div className="w-full space-y-6">
+          {/* Header description (no box) */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Brain className="h-5 w-5 text-gray-950 dark:text-white" />
               <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Long Term Memory Retention</h2>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            <p className="text-xs text-gray-505 dark:text-gray-400 leading-relaxed">
               Control how long your chat history is retained. Once the retention period ends, older conversation logs are automatically pruned to keep your workspace clean and protect context limits.
             </p>
           </div>

@@ -62,7 +62,7 @@ const PlatformKnowledgeContent = () => {
 
       {/* Main Body */}
       <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6 flex justify-center">
-        <div className="w-full max-w-4xl space-y-6">
+        <div className="w-full space-y-6">
           {/* Upload Box */}
           <div
             className={cn(

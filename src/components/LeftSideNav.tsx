@@ -1315,56 +1315,56 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           )}
           style={{ backgroundColor: '#FFFFFF' }}
         >
-          {isAdminMode && !isSuperAdmin && (
-            <div className="flex h-20 w-full items-center justify-center border-t border-black/10 p-4 py-1.5">
+          {isLoggedIn && activeTab === 'account' ? (
+            <div className="flex flex-col w-full border-t border-black/10 dark:border-zinc-800/80 p-4 gap-2">
               <Button
                 variant="outline"
-                className="w-full justify-center gap-2"
-                onClick={() => router.push('/')}
+                className="w-full justify-center gap-2 bg-[#F5F5F7] hover:bg-[#EAEAEB] dark:bg-zinc-800 dark:hover:bg-zinc-700/80 text-black dark:text-white border border-black/5 dark:border-white/5"
+                onClick={() => {
+                  setActiveTab('chat');
+                  router.push('/');
+                }}
               >
                 Return to App
               </Button>
-            </div>
-          )}
-          <div className="flex h-20 w-full items-center justify-center border-t border-black/10 p-4 py-1.5">
-          {!isLoggedIn ? (
-            <div className="flex w-full items-center gap-2">
               <Button
-                variant="default"
-                className="flex-1 bg-black px-0 text-white hover:bg-black/90"
-                asChild
+                variant="outline"
+                onClick={() => onOpen({ type: 'logout' })}
+                className="w-full transition-all duration-200 outline-none select-none cursor-pointer bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 border-transparent"
               >
-                <Link href="/login">Login</Link>
-              </Button>
-              <Button
-                variant="default"
-                className="flex-1 bg-black px-0 text-white hover:bg-black/90"
-                asChild
-              >
-                <Link href="/register">Register</Link>
+                Logout
               </Button>
             </div>
           ) : (
-            <Button
-              variant="outline"
-              onClick={() => {
-                if (activeTab === 'account') {
-                  onOpen({ type: 'logout' });
-                } else {
-                  setActiveTab('account');
-                }
-              }}
-              className={cn(
-                "w-full transition-all duration-200 outline-none select-none cursor-pointer border border-black/5 dark:border-white/5",
-                activeTab === 'account'
-                  ? "bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 border-transparent"
-                  : "bg-[#F5F5F7] hover:bg-[#EAEAEB] dark:bg-zinc-800 dark:hover:bg-zinc-700/80"
-              )}
-            >
-              {activeTab === 'account' ? 'Logout' : 'My Account'}
-            </Button>
+            <div className="flex h-20 w-full items-center justify-center border-t border-black/10 dark:border-zinc-800/80 p-4 py-1.5">
+            {!isLoggedIn ? (
+              <div className="flex w-full items-center gap-2">
+                <Button
+                  variant="default"
+                  className="flex-1 bg-black px-0 text-white hover:bg-black/90"
+                  asChild
+                >
+                  <Link href="/login">Login</Link>
+                </Button>
+                <Button
+                  variant="default"
+                  className="flex-1 bg-black px-0 text-white hover:bg-black/90"
+                  asChild
+                >
+                  <Link href="/register">Register</Link>
+                </Button>
+              </div>
+            ) : (
+              <Button
+                variant="outline"
+                onClick={() => setActiveTab('account')}
+                className="w-full transition-all duration-200 outline-none select-none cursor-pointer border border-black/5 dark:border-white/5 bg-[#F5F5F7] hover:bg-[#EAEAEB] dark:bg-zinc-800 dark:hover:bg-zinc-700/80"
+              >
+                My Account
+              </Button>
+            )}
+            </div>
           )}
-          </div>
         </div>
       )}
     </>

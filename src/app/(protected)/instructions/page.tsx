@@ -110,7 +110,7 @@ const InstructionsContent = () => {
 
       {/* Main Body */}
       <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6 flex justify-center">
-        <div className="w-full max-w-4xl space-y-6">
+        <div className="w-full space-y-6">
           {/* Top Add Instruction Prompter (Integrated Chat-Style Input Box) */}
           <div className="flex items-center rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 px-3.5 py-1.5 shadow-xs transition-all focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
             <input
