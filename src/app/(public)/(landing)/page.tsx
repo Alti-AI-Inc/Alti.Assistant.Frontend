@@ -22,9 +22,9 @@ function App() {
     // error,
   } = useKnowledgeBases(data?.accessToken);
 
-  const activeKnowledgeBaseName = knowledgeBases?.filter(
+  const activeKnowledgeBaseName = knowledgeBases?.find(
     kb => kb.id === activeConversation?.knowledgebaseId,
-  )[0]?.name;
+  )?.name;
 
   return (
     <div

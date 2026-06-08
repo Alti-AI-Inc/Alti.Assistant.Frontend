@@ -17,7 +17,7 @@ const NewBaseChatTitle = ({
     // error,
   } = useKnowledgeBases(data?.accessToken);
 
-  const activeKnowledgeBase = knowledgeBases?.filter(kb => kb.id === baseId)[0];
+  const activeKnowledgeBase = knowledgeBases?.find(kb => kb.id === baseId);
   return (
     <div>
       <h1 className="mb-8 text-center text-4xl font-medium">

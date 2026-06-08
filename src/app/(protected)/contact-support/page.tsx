@@ -3,8 +3,10 @@
 import { useState, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { useSession } from 'next-auth/react';
 
 const SupportContent = () => {
+  const { data: session } = useSession();
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +19,23 @@ const SupportContent = () => {
       // Simulate API call to send support message
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
+      const now = new Date();
+      const userEmail = session?.user?.email || 'user@altihq.com';
+      const newRequest = {
+        id: `req-${Math.random().toString(36).substring(2, 9)}`,
+        email: userEmail,
+        subject: subject.trim(),
+        message: message.trim(),
+        date: now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        time: now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+        status: 'Pending',
+      };
+
+      const existing = localStorage.getItem('alti_support_requests');
+      const requests = existing ? JSON.parse(existing) : [];
+      requests.unshift(newRequest);
+      localStorage.setItem('alti_support_requests', JSON.stringify(requests));
+
       toast.success('Your message has been sent to our support team.');
       setSubject('');
       setMessage('');
@@ -26,6 +45,7 @@ const SupportContent = () => {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-transparent">

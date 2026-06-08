@@ -54,9 +54,9 @@ function KnowledgeBots() {
     // setActiveKbId(item.id);
   };
 
-  const activeKnowledgeBaseName = knowledgeBases?.filter(
+  const activeKnowledgeBaseName = knowledgeBases?.find(
     kb => kb.id === activeConversation?.knowledgebaseId,
-  )[0]?.name;
+  )?.name;
 
   return (
     <div className="relative h-full w-full p-8 pt-0">

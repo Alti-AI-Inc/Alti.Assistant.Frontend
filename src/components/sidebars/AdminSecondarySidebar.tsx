@@ -124,7 +124,8 @@ export const AdminSecondarySidebar = () => {
               {
                 groupName: 'Platform',
                 items: [
-                  { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true }
+                  { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
+                  { name: 'Support', href: '/admin/support', icon: Mail }
                 ]
               },
               {
