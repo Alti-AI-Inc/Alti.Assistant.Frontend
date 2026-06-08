@@ -1319,8 +1319,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             <div className="flex flex-col w-full">
               <div className="flex h-20 w-full items-center justify-center border-t border-black/10 dark:border-zinc-800/80 p-4 py-1.5">
                 <Button
-                  variant="outline"
-                  className="w-full justify-center gap-2 bg-[#F5F5F7] hover:bg-[#EAEAEB] dark:bg-zinc-800 dark:hover:bg-zinc-700/80 text-black dark:text-white border border-black/5 dark:border-white/5"
+                  variant="default"
+                  className="w-full justify-center gap-2 bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 border border-transparent"
                   onClick={() => {
                     setActiveTab('chat');
                     router.push('/');
