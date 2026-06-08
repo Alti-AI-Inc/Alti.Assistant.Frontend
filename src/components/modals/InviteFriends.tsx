@@ -43,7 +43,7 @@ export function InviteFriends() {
               </DialogTitle>
             </DialogHeader>
 
-            <div className="px-6 pb-6 pt-5 space-y-4">
+            <div className="px-6 pb-6 pt-3 space-y-4">
               <p className="text-sm text-gray-500 dark:text-gray-400 leading-normal">
                 Invite your friends to join the alti platform.<br />
                 Enter their email address below to send an invitation.
