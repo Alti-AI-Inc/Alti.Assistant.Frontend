@@ -496,7 +496,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       case 'workflows':
         return {
           visible: true,
-          tooltip: 'New Workflow',
+          tooltip: 'New Flow',
           onClick: () => {
             setActiveConversation(null);
             setShowStartLastMessage(false);
@@ -509,7 +509,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       case 'assistant':
         return {
           visible: true,
-          tooltip: 'New Command',
+          tooltip: 'New Task',
           onClick: () => {
             setActiveBotId(null);
             setActiveConversation(null);

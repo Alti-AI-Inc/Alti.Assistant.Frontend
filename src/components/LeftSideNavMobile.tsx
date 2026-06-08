@@ -488,7 +488,7 @@ const LeftSideNavMobile = () => {
       case 'workflows':
         return {
           visible: true,
-          label: 'New Workflow',
+          label: 'New Flow',
           onClick: () => {
             alert('Define Cron or Webhook triggers to chain your custom agents and RAG indexes in a new workflow!');
             close();
@@ -497,7 +497,7 @@ const LeftSideNavMobile = () => {
       case 'assistant':
         return {
           visible: true,
-          label: 'New Command',
+          label: 'New Task',
           onClick: () => {
             setActiveBotId(null);
             setActiveConversation(null);
