@@ -131,7 +131,7 @@ const DashboardLeftSideNav = () => {
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/invite-friends')}>
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'invite' })}>
                       <UserPlus className="text-black dark:text-white" /> Invite Friends
                     </DropdownMenuItem>
                   )}
