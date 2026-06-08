@@ -2,6 +2,7 @@ type ModalType =
   | 'logout'
   | 'invite'
   | 'change-password'
+  | 'contact-support'
   | 'search-chats'
   | 'rename-chat'
   | 'forgot-password'

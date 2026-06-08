@@ -1398,6 +1398,16 @@ const LeftSideNavMobile = () => {
                     <UserPlus className="text-black dark:text-white" /> Invite Friends
                   </DropdownMenuItem>
                 )}
+                {!isSuperAdmin && (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onOpen({ type: 'contact-support' });
+                      close();
+                    }}
+                  >
+                    <Mail className="text-black dark:text-white" /> Contact Support
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem

@@ -25,6 +25,8 @@ import SearchWorkflows from './SearchWorkflows';
 import { ShareConversationModal } from './ShareConversationModal';
 import { MemoryModal } from './MemoryModal';
 import { ChangePasswordModal } from './ChangePasswordModal';
+import { ContactSupportModal } from './ContactSupportModal';
+
 
 export const ModalProvider = () => {
   const pathname = usePathname();
@@ -78,6 +80,7 @@ export const ModalProvider = () => {
       {type === 'auth-modal' && <AuthModal />}
       {type === 'memory' && <MemoryModal />}
       {type === 'change-password' && <ChangePasswordModal />}
+      {type === 'contact-support' && <ContactSupportModal />}
     </>
   );
 };

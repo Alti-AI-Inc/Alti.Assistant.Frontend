@@ -1422,6 +1422,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       <UserPlus className="text-black dark:text-white" /> Invite Friends
                     </DropdownMenuItem>
                   )}
+                  {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'contact-support' })}>
+                      <Mail className="text-black dark:text-white" /> Contact Support
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
 

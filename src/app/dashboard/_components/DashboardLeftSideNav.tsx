@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
-import { CircleUserRound, LogOut, ReceiptText, Settings, Shield, Brain, SlidersHorizontal, ShieldAlert, UserPlus } from 'lucide-react';
+import { CircleUserRound, LogOut, ReceiptText, Settings, Shield, Brain, SlidersHorizontal, ShieldAlert, UserPlus, Mail } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -130,6 +130,11 @@ const DashboardLeftSideNav = () => {
                   {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => onOpen({ type: 'invite' })}>
                       <UserPlus className="text-black dark:text-white" /> Invite Friends
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'contact-support' })}>
+                      <Mail className="text-black dark:text-white" /> Contact Support
                     </DropdownMenuItem>
                   )}
                 </DropdownMenuGroup>
