@@ -233,6 +233,53 @@ input.bg-auth-input:autofill:active {
   transition: background-color 50000s ease-in-out 0s, box-shadow 50000s ease-in-out 0s !important;
 }
 
+/* White input fields inside gray modals */
+.bg-modal-gray input.bg-auth-input,
+.bg-modal-gray textarea.bg-auth-input {
+  --autofill-bg: #ffffff !important;
+  --autofill-color: #1f2937 !important;
+  background-color: #ffffff !important;
+  color: #1f2937 !important;
+}
+
+.dark .bg-modal-gray input.bg-auth-input,
+.dark .bg-modal-gray textarea.bg-auth-input {
+  --autofill-bg: #18181b !important; /* zinc-900 */
+  --autofill-color: #f3f4f6 !important;
+  background-color: #18181b !important;
+  color: #f3f4f6 !important;
+}
+
+.bg-modal-gray input.bg-auth-input:-webkit-autofill,
+.bg-modal-gray input.bg-auth-input:-webkit-autofill:hover,
+.bg-modal-gray input.bg-auth-input:-webkit-autofill:focus,
+.bg-modal-gray input.bg-auth-input:-webkit-autofill:active,
+.bg-modal-gray input.bg-auth-input:autofill,
+.bg-modal-gray input.bg-auth-input:autofill:hover,
+.bg-modal-gray input.bg-auth-input:autofill:focus,
+.bg-modal-gray input.bg-auth-input:autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #1f2937 !important;
+  color: #1f2937 !important;
+  background-color: #ffffff !important;
+}
+
+.dark .bg-modal-gray input.bg-auth-input:-webkit-autofill,
+.dark .bg-modal-gray input.bg-auth-input:-webkit-autofill:hover,
+.dark .bg-modal-gray input.bg-auth-input:-webkit-autofill:focus,
+.dark .bg-modal-gray input.bg-auth-input:-webkit-autofill:active,
+.dark .bg-modal-gray input.bg-auth-input:autofill,
+.dark .bg-modal-gray input.bg-auth-input:autofill:hover,
+.dark .bg-modal-gray input.bg-auth-input:autofill:focus,
+.dark .bg-modal-gray input.bg-auth-input:autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #18181b inset !important;
+  box-shadow: 0 0 0 1000px #18181b inset !important;
+  -webkit-text-fill-color: #f3f4f6 !important;
+  color: #f3f4f6 !important;
+  background-color: #18181b !important;
+}
+
 
 
 /* Webkit browsers (Chrome, Safari, Edge) */

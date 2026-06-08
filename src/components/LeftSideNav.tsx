@@ -1393,6 +1393,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => router.push('/platform-knowledge')}>
+                      <Database className="text-black dark:text-white" /> Platform Knowledge
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/instructions')}>
                       <SlidersHorizontal className="text-black dark:text-white" /> Platform Instructions
                     </DropdownMenuItem>
@@ -1403,13 +1408,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/platform-knowledge')}>
-                      <Database className="text-black dark:text-white" /> Platform Knowledge
-                    </DropdownMenuItem>
-                  )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/legal')}>
-                      <Scale className="text-black" /> Legal Documents
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'invite' })}>
+                      <UserPlus className="text-black dark:text-white" /> Invite Friends
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
@@ -1418,13 +1418,13 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => onOpen({ type: 'invite' })}>
-                      <UserPlus className="text-black dark:text-white" /> Invite Friends
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'contact-support' })}>
+                      <Mail className="text-black dark:text-white" /> Contact Support
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => onOpen({ type: 'contact-support' })}>
-                      <Mail className="text-black dark:text-white" /> Contact Support
+                    <DropdownMenuItem onClick={() => router.push('/legal')}>
+                      <Scale className="text-black" /> Legal Documents
                     </DropdownMenuItem>
                   )}
                 </DropdownMenuGroup>

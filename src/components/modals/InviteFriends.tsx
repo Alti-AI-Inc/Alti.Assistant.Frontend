@@ -34,7 +34,7 @@ export function InviteFriends() {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-[440px] rounded-[20px] p-0 bg-white dark:bg-zinc-900 border-none shadow-xl overflow-hidden animate-in fade-in-50 duration-150">
+      <DialogContent className="max-w-[440px] rounded-[20px] p-0 bg-[#F5F5F7] bg-modal-gray dark:bg-zinc-900 border-none shadow-xl overflow-hidden animate-in fade-in-50 duration-150">
         {!isSent ? (
           <>
             <DialogHeader className="px-6 py-4 border-b border-black/10 dark:border-white/10 space-y-0">

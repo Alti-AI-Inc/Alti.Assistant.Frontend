@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
-import { CircleUserRound, LogOut, ReceiptText, Settings, Shield, Brain, SlidersHorizontal, ShieldAlert, UserPlus, Mail } from 'lucide-react';
+import { CircleUserRound, LogOut, ReceiptText, Settings, Shield, Brain, SlidersHorizontal, ShieldAlert, UserPlus, Mail, Database, KeyRound, Scale } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -118,6 +118,11 @@ const DashboardLeftSideNav = () => {
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => router.push('/platform-knowledge')}>
+                      <Database className="text-black dark:text-white" /> Platform Knowledge
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/instructions')}>
                       <SlidersHorizontal className="text-black dark:text-white" /> Platform Instructions
                     </DropdownMenuItem>
@@ -133,8 +138,18 @@ const DashboardLeftSideNav = () => {
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'change-password' })}>
+                      <KeyRound className="text-black dark:text-white" /> Change Password
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => onOpen({ type: 'contact-support' })}>
                       <Mail className="text-black dark:text-white" /> Contact Support
+                    </DropdownMenuItem>
+                  )}
+                  {!isSuperAdmin && (
+                    <DropdownMenuItem onClick={() => router.push('/legal')}>
+                      <Scale className="text-black" /> Legal Documents
                     </DropdownMenuItem>
                   )}
                 </DropdownMenuGroup>

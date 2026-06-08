@@ -1338,6 +1338,16 @@ const LeftSideNavMobile = () => {
                     <Brain className="text-black dark:text-white" /> Platform Memory
                   </DropdownMenuItem>
                 )}
+                {!isSuperAdmin && (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      router.push('/platform-knowledge');
+                      close();
+                    }}
+                  >
+                    <Database className="text-black dark:text-white" /> Platform Knowledge
+                  </DropdownMenuItem>
+                )}
                  {!isSuperAdmin && (
                   <DropdownMenuItem
                     onClick={() => {
@@ -1361,21 +1371,11 @@ const LeftSideNavMobile = () => {
                 {!isSuperAdmin && (
                   <DropdownMenuItem
                     onClick={() => {
-                      router.push('/platform-knowledge');
+                      onOpen({ type: 'invite' });
                       close();
                     }}
                   >
-                    <Database className="text-black dark:text-white" /> Platform Knowledge
-                  </DropdownMenuItem>
-                )}
-                {!isSuperAdmin && (
-                  <DropdownMenuItem
-                    onClick={() => {
-                      router.push('/legal');
-                      close();
-                    }}
-                  >
-                    <Scale className="text-black" /> Legal Documents
+                    <UserPlus className="text-black dark:text-white" /> Invite Friends
                   </DropdownMenuItem>
                 )}
                 {!isSuperAdmin && (
@@ -1391,21 +1391,21 @@ const LeftSideNavMobile = () => {
                 {!isSuperAdmin && (
                   <DropdownMenuItem
                     onClick={() => {
-                      onOpen({ type: 'invite' });
-                      close();
-                    }}
-                  >
-                    <UserPlus className="text-black dark:text-white" /> Invite Friends
-                  </DropdownMenuItem>
-                )}
-                {!isSuperAdmin && (
-                  <DropdownMenuItem
-                    onClick={() => {
                       onOpen({ type: 'contact-support' });
                       close();
                     }}
                   >
                     <Mail className="text-black dark:text-white" /> Contact Support
+                  </DropdownMenuItem>
+                )}
+                {!isSuperAdmin && (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      router.push('/legal');
+                      close();
+                    }}
+                  >
+                    <Scale className="text-black" /> Legal Documents
                   </DropdownMenuItem>
                 )}
               </DropdownMenuGroup>
