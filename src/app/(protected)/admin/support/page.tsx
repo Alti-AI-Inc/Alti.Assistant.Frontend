@@ -194,7 +194,7 @@ export default function AdminSupportInboxPage() {
                         
                         <div className="flex-1 flex items-center gap-8 min-w-0">
                            {/* Email */}
-                          <div className="flex-[3.2] min-w-0">
+                          <div className="flex-[4.0] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Email Address
                             </span>
@@ -204,7 +204,7 @@ export default function AdminSupportInboxPage() {
                           </div>
                           
                           {/* Subject */}
-                          <div className="flex-[3.6] min-w-0">
+                          <div className="flex-[4.5] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Subject
                             </span>
@@ -214,7 +214,7 @@ export default function AdminSupportInboxPage() {
                           </div>
                           
                           {/* Date */}
-                          <div className="flex-[1.3] min-w-0">
+                          <div className="flex-[1.1] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Date
                             </span>
@@ -224,7 +224,7 @@ export default function AdminSupportInboxPage() {
                           </div>
                           
                           {/* Time */}
-                          <div className="flex-[1.1] min-w-0">
+                          <div className="flex-[0.9] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Time
                             </span>
@@ -234,11 +234,11 @@ export default function AdminSupportInboxPage() {
                           </div>
 
                           {/* Status Badge */}
-                          <div className="flex-[1.4] min-w-0">
+                          <div className="flex-[1.1] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Status
                             </span>
-                            <span className={`text-sm font-semibold block mt-0.5 ${
+                            <span className={`text-sm font-medium block mt-0.5 ${
                               req.status === 'Pending'
                                 ? 'text-emerald-600 dark:text-emerald-400'
                                 : 'text-black dark:text-white'
