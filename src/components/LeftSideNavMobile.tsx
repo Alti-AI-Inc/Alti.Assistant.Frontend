@@ -1311,7 +1311,7 @@ const LeftSideNavMobile = () => {
                 My Account
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="start">
+            <DropdownMenuContent className="w-56 bg-[#F5F5F7] dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-2xl shadow-xl" align="start">
                 <DropdownMenuGroup>
                   {isSuperAdmin && (
                     <DropdownMenuItem onClick={() => { router.push('/admin'); close(); }}>

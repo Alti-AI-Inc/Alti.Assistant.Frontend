@@ -1367,7 +1367,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="w-[var(--radix-dropdown-menu-trigger-width)]"
+                className="w-[var(--radix-dropdown-menu-trigger-width)] bg-[#F5F5F7] dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-2xl shadow-xl"
                 align="start"
               >
                 <DropdownMenuGroup>
