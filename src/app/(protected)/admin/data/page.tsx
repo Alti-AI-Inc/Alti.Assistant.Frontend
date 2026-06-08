@@ -104,10 +104,10 @@ export default function AdminDataPage() {
               }}
             >
               <div
-                className="px-4 h-full w-full text-base flex items-center cursor-pointer text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 transition-colors flex-1 select-none"
+                className="px-4 h-full w-full text-base flex items-center cursor-pointer text-gray-400/60 hover:text-gray-600 dark:text-gray-400/60 dark:hover:text-gray-300 transition-colors flex-1 select-none"
                 onClick={() => fileInputRef.current?.click()}
               >
-                {isDragActive ? 'Drop files here...' : 'Click or drag & drop files here...'}
+                {isDragActive ? 'Drop files here...' : 'Enter new knowledge'}
               </div>
               <input
                 type="file"
@@ -135,7 +135,7 @@ export default function AdminDataPage() {
             <div className="relative w-full flex-none">
               <Search className="text-gray-400 dark:text-gray-400 absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
               <input
-                placeholder="Search files"
+                placeholder="Search knowledge"
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
                 className="pl-12 pr-4 h-12 w-full text-base rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 focus:border-black/10 dark:focus:border-white/10 focus-visible:border-black/10 dark:focus-visible:border-white/10 text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 transition-all"

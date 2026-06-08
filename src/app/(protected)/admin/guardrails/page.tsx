@@ -14,7 +14,6 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import {
   Dialog,
   DialogContent,
@@ -108,8 +107,8 @@ export default function AdminGuardrailsPage() {
 
           <div className="flex-1 min-h-0 flex flex-col gap-4">
             {/* Prompt Box to Enter New Guardrails */}
-            <div className="relative w-full flex-none flex items-center gap-2 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-lg shadow-sm pr-2">
-              <Input
+            <div className="relative w-full h-12 flex-none flex items-center gap-2 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm pr-2 pl-4 transition-all">
+              <input
                 ref={inputRef}
                 placeholder="Enter new guardrail"
                 value={newGuardrail}
@@ -120,14 +119,14 @@ export default function AdminGuardrailsPage() {
                     handleSendOrSave();
                   }
                 }}
-                className="px-4 h-12 w-full text-base border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none bg-transparent flex-1"
+                className="flex-1 min-w-0 h-full bg-transparent border-none py-0 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
               />
               {editingIndex !== null && (
                 <Button
                   size="sm"
                   variant="ghost"
                   onClick={handleCancelEdit}
-                  className="h-8 px-3 rounded-md text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white"
+                  className="h-8 px-3 rounded-md text-gray-555 hover:text-black dark:text-gray-400 dark:hover:text-white"
                 >
                   Cancel
                 </Button>
@@ -144,12 +143,12 @@ export default function AdminGuardrailsPage() {
 
             {/* Second Full-width Search Bar */}
             <div className="relative w-full flex-none">
-              <Search className="text-muted-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
-              <Input
+              <Search className="text-gray-400 dark:text-gray-400 absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
+              <input
                 placeholder="Search guardrails"
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="pl-12 pr-4 h-12 w-full text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+                className="pl-12 pr-4 h-12 w-full text-base rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 focus:border-black/10 dark:focus:border-white/10 focus-visible:border-black/10 dark:focus-visible:border-white/10 text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 transition-all"
               />
             </div>
 
