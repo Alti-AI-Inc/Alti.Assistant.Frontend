@@ -5,6 +5,9 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
 } from '@/components/ui/dialog';
 import AudioRecorder from '@/components/AudioRecorder';
 import { cn } from '@/lib/utils';
@@ -111,8 +114,8 @@ const InstructionsContent = () => {
       {/* Main Body */}
       <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6 flex justify-center">
         <div className="w-full space-y-6">
-          {/* Top Add Instruction Prompter (Integrated Chat-Style Input Box) */}
-          <div className="flex items-center rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 px-3.5 py-1.5 shadow-xs transition-all focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
+          {/* Top Add Instruction Box (Matching Platform Knowledge Upload style) */}
+          <div className="relative w-full flex-none flex items-center gap-2 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-lg shadow-sm pr-2 pl-4 py-1.5 transition-colors">
             <input
               placeholder="Enter instruction here..."
               value={inputVal}
@@ -123,73 +126,73 @@ const InstructionsContent = () => {
                 }
               }}
               disabled={isSaving}
-              className="flex-1 min-w-0 bg-transparent border-none py-1.5 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 outline-none focus:ring-0 focus-visible:ring-0"
+              className="flex-1 min-w-0 bg-transparent border-none py-1.5 h-9 text-base text-gray-800 placeholder-gray-400 dark:text-gray-100 outline-none focus:ring-0 focus-visible:ring-0"
             />
-            <div className="flex-none ml-2">
-              {inputVal.trim() && !isAudioRecording ? (
-                <ArrowUp
-                  onClick={handleAddInstruction}
-                  className={cn(
-                    'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1 text-white transition-opacity hover:bg-zinc-800 cursor-pointer dark:bg-white dark:text-black dark:border-gray-700 dark:hover:bg-zinc-200',
-                    isSaving ? 'cursor-not-allowed opacity-50' : ''
-                  )}
-                />
-              ) : (
-                <AudioRecorder setMessage={setInputVal} setIsRecording={setIsAudioRecording} />
-              )}
+            <div className="flex-none ml-2 flex items-center gap-2">
+              <AudioRecorder setMessage={setInputVal} setIsRecording={setIsAudioRecording} />
+              <Button
+                size="sm"
+                onClick={handleAddInstruction}
+                disabled={isSaving || !inputVal.trim()}
+                className="h-8 px-4 rounded-md cursor-pointer"
+              >
+                <ArrowUp className="mr-1.5 h-3.5 w-3.5" />
+                Add
+              </Button>
             </div>
           </div>
 
-          {/* Dynamic List Section */}
-          <div className="space-y-4">
-            {/* Search Bar */}
-            <div className="relative flex items-center">
-              <Search className="absolute left-3 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search instructions..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-11 pl-9 text-sm rounded-xl bg-white border-gray-200 dark:border-gray-800 dark:bg-gray-900/30 text-gray-800 dark:text-gray-100 placeholder-gray-400 placeholder:text-gray-400 dark:placeholder-gray-400 focus-visible:ring-1 focus-visible:ring-indigo-500/30 focus-visible:border-indigo-500"
-              />
-            </div>
+          {/* Search Bar (Matching Platform Knowledge search bar style) */}
+          <div className="relative w-full flex-none">
+            <Search className="text-muted-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
+            <Input
+              placeholder="Search instructions..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-12 pr-4 h-12 w-full text-base rounded-lg border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none outline-none"
+            />
+          </div>
 
-            {/* Dynamic Results Grid (Floating Individual Cards) */}
+          {/* Dynamic Results Grid (Floating Individual Cards, Matching Platform Knowledge style) */}
+          <div className="w-full">
             {filteredInstructions.length === 0 ? (
-              <div className="w-full border border-black/10 dark:border-white/10 rounded-2xl bg-white/40 dark:bg-gray-900/10 py-8 px-4 text-center text-xs text-gray-400 flex flex-col items-center justify-center gap-2">
+              <div className="w-full border border-black/10 dark:border-white/10 rounded-lg bg-white/40 dark:bg-gray-900/10 py-8 px-4 text-center text-xs text-gray-400 flex flex-col items-center justify-center gap-2">
                 <Search className="h-6 w-6 text-gray-300 dark:text-gray-700" />
                 <span>No matching instructions found</span>
               </div>
             ) : (
-              <div className="space-y-3 max-h-[450px] overflow-y-auto pr-1">
+              <div className="flex flex-col gap-2 pb-4">
                 {filteredInstructions.map((item) => (
                   <div
                     key={item.id}
-                    className="group flex items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs transition-all duration-150 hover:bg-indigo-50/20 dark:hover:bg-indigo-955/10"
+                    className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center animate-in fade-in-50 duration-150"
                   >
-                    <div className="flex items-center gap-3 min-w-0 pr-3 flex-1">
-                      <div className="h-7 w-7 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-shrink-0">
+                    {/* Left Icon & Content */}
+                    <div className="col-span-10 flex items-center gap-5 min-w-0">
+                      <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-none">
                         <Terminal className="h-4 w-4" />
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed" title={item.text}>
+                      <div className="flex flex-col justify-center min-w-0">
+                        <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 leading-normal break-words">
                           {item.text}
-                        </p>
+                        </span>
                         <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
                           Prompt Rule • {item.timestamp}
                         </span>
                       </div>
                     </div>
 
-                    {/* Active Hover Delete Button */}
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setDeleteTargetId(item.id)}
-                      className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none ml-2 cursor-pointer"
-                      title="Delete Custom Prompt"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </Button>
+                    {/* Delete Action */}
+                    <div className="col-span-2 flex items-center justify-end gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 cursor-pointer"
+                        onClick={() => setDeleteTargetId(item.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -200,39 +203,43 @@ const InstructionsContent = () => {
 
       {/* iOS-Style Delete Confirmation Dialog */}
       <Dialog open={deleteTargetId !== null} onOpenChange={(open) => !open && setDeleteTargetId(null)}>
-        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[380px] sm:max-w-[380px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden animate-in fade-in-50 duration-150">
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden animate-in fade-in-50 duration-150">
           {/* Centered Content Section */}
           <div className="px-5 pt-5 pb-4 text-center">
-            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+            <DialogTitle className="text-[17px] font-semibold text-black dark:text-white leading-tight text-center">
               Delete Instruction
-            </h2>
-            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+            </DialogTitle>
+            <DialogDescription className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1 text-center">
               Are you sure you want to remove this instruction?
-            </p>
+            </DialogDescription>
           </div>
 
           {/* Extended Border & iOS Layout Action Buttons */}
           <div className="border-t border-black/10 dark:border-white/10 flex h-11">
             {/* Cancel Option */}
-            <button
-              onClick={() => setDeleteTargetId(null)}
-              className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none cursor-pointer"
-            >
-              Cancel
-            </button>
+            <DialogClose asChild>
+              <button
+                onClick={() => setDeleteTargetId(null)}
+                className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none cursor-pointer"
+              >
+                Cancel
+              </button>
+            </DialogClose>
             
             {/* Confirm Option */}
-            <button
-              onClick={() => {
-                if (deleteTargetId) {
-                  handleDeleteInstruction(deleteTargetId);
-                  setDeleteTargetId(null);
-                }
-              }}
-              className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none cursor-pointer"
-            >
-              Delete
-            </button>
+            <DialogClose asChild>
+              <button
+                onClick={() => {
+                  if (deleteTargetId) {
+                    handleDeleteInstruction(deleteTargetId);
+                    setDeleteTargetId(null);
+                  }
+                }}
+                className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none cursor-pointer"
+              >
+                Delete
+              </button>
+            </DialogClose>
           </div>
         </DialogContent>
       </Dialog>
