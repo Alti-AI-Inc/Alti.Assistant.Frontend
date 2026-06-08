@@ -83,7 +83,7 @@ const PlatformKnowledgeContent = () => {
             }}
           >
             <div
-              className="px-4 h-full w-full text-base flex items-center cursor-pointer text-gray-400/60 hover:text-gray-600 dark:text-gray-400/60 dark:hover:text-gray-300 transition-colors flex-1 select-none"
+              className="px-4 h-full w-full text-base flex items-center cursor-pointer text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 transition-colors flex-1 select-none"
               onClick={() => fileInputRef.current?.click()}
             >
               {isDragActive ? 'Drop files here...' : 'Enter platform knowledge here...'}
