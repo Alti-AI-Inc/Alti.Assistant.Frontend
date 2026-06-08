@@ -28,10 +28,10 @@ const DashboardLeftSideNav = () => {
 
   return (
     <>
-      <div className="bg-secondary flex flex-col pt-4 pb-2">
+      <div className="fixed left-0 top-0 h-screen w-64 bg-white dark:bg-zinc-900 border-r border-black/10 dark:border-zinc-800/80 flex flex-col pt-4 pb-2">
         <div
           className={cn(
-            'bg-secondary sticky top-0 z-30 flex w-64 items-center justify-between px-4 pt-2',
+            'bg-white dark:bg-zinc-900 sticky top-0 z-30 flex w-full items-center justify-between px-4 pt-2',
           )}
         >
           <div
@@ -71,10 +71,8 @@ const DashboardLeftSideNav = () => {
 
         <div
           className={cn(
-            'sticky bottom-0 z-30 flex h-20 items-center justify-center p-4 py-1.5',
-            // hideSidebar && 'hidden',
+            'bg-white dark:bg-zinc-900 sticky bottom-0 z-30 flex h-20 items-center justify-center p-4 py-1.5 border-t border-black/10 dark:border-zinc-800/80 w-full',
           )}
-          style={{ backgroundColor: '#FFFFFF' }}
         >
           {!isLoggedIn ? (
             <div className="flex w-full items-center gap-2">

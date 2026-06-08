@@ -27,7 +27,7 @@ export default function PublicLayout({
   return (
     <div className="flex min-h-screen flex-col">
       {/* Header - Mobile only */}
-      <header className="bg-secondary text-foreground fixed top-0 left-0 z-50 flex w-full items-center justify-between px-4 py-3 md:hidden">
+      <header className="bg-white dark:bg-zinc-900 border-b border-black/10 dark:border-zinc-800 text-foreground fixed top-0 left-0 z-50 flex w-full items-center justify-between px-4 py-3 md:hidden">
         {/* Mobile Drawer (Sheet) */}
         <Sheet>
           <SheetTrigger asChild>
@@ -35,7 +35,7 @@ export default function PublicLayout({
               <Menu className="h-6 w-6" />
             </button>
           </SheetTrigger>
-          <SheetContent side="left" className="bg-secondary w-64">
+          <SheetContent side="left" className="bg-white dark:bg-zinc-900 w-64 border-r border-black/10 dark:border-zinc-800">
             <SheetHeader>
               <SheetTitle>
                 <Image
@@ -67,7 +67,7 @@ export default function PublicLayout({
         {/* Sidebar - Desktop only */}
         <div
           className={cn(
-            'bg-secondary sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out md:flex',
+            'bg-white dark:bg-zinc-900 sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out md:flex',
             !isLeftSidebarOpen ? 'w-10' : 'w-68',
           )}
           style={{ backgroundColor: '#FFFFFF' }}

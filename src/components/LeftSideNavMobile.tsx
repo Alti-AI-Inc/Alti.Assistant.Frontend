@@ -495,9 +495,9 @@ const LeftSideNavMobile = () => {
   const plusProps = getPlusButtonProps();
 
   return (
-    <div className="bg-secondary flex h-full flex-col">
+    <div className="bg-white dark:bg-zinc-900 flex h-full flex-col">
       {/* Sticky nav buttons */}
-      <div className="bg-secondary sticky top-0 z-10">
+      <div className="bg-white dark:bg-zinc-900 sticky top-0 z-10">
         <div className="space-y-0.5 px-2 py-2">
           {plusProps.visible && !isAdminMode && (
             <Button
@@ -590,7 +590,7 @@ const LeftSideNavMobile = () => {
 
       {/* Chat / Projects / GCP Hub row toggle */}
       {isLoggedIn && !isAdminMode && (
-        <div className="border-b border-black/5 px-4 py-2 bg-secondary">
+        <div className="border-b border-black/5 px-4 py-2 bg-white dark:bg-zinc-900">
           <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
             <Tooltip>
               <TooltipTrigger asChild>
@@ -1271,9 +1271,6 @@ const LeftSideNavMobile = () => {
             </div>
           ) : activeTab === 'account' ? (
             <div className="mt-4 space-y-1 py-1 pb-4">
-              <div className="text-xs font-bold text-gray-400 dark:text-zinc-500 px-3 pb-2 uppercase tracking-wider select-none">
-                My Account
-              </div>
               
               {isSuperAdmin && (
                 <button
@@ -1372,21 +1369,13 @@ const LeftSideNavMobile = () => {
                 </button>
               )}
 
-              <div className="my-2 h-px bg-black/10 dark:bg-white/10" />
-
-              <button
-                onClick={() => { onOpen({ type: 'logout' }); close(); }}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 transition-colors text-left"
-              >
-                <LogOut className="w-4 h-4 text-red-500" /> Logout
-              </button>
             </div>
           ) : null}
         </div>
       )}
 
       {/* Footer fixed at bottom */}
-      <div className="bg-secondary sticky bottom-0 flex flex-col w-full">
+      <div className="bg-white dark:bg-zinc-900 sticky bottom-0 flex flex-col w-full">
         {isAdminMode && !isSuperAdmin && (
           <div className="flex h-20 w-full items-center justify-center border-t border-black/10 p-4">
             <Button
@@ -1419,15 +1408,22 @@ const LeftSideNavMobile = () => {
         ) : (
             <Button
               variant="outline"
-              onClick={() => setActiveTab(activeTab === 'account' ? 'chat' : 'account')}
+              onClick={() => {
+                if (activeTab === 'account') {
+                  onOpen({ type: 'logout' });
+                  close();
+                } else {
+                  setActiveTab('account');
+                }
+              }}
               className={cn(
                 "w-full transition-all duration-200 outline-none select-none cursor-pointer border border-black/5 dark:border-white/5",
                 activeTab === 'account'
-                  ? "bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90"
+                  ? "bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 border-transparent"
                   : "bg-[#F5F5F7] hover:bg-[#EAEAEB] dark:bg-zinc-800 dark:hover:bg-zinc-700/80"
               )}
             >
-              My Account
+              {activeTab === 'account' ? 'Logout' : 'My Account'}
             </Button>
         )}
         </div>

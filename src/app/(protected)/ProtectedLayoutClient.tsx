@@ -41,7 +41,7 @@ export default function ProtectedLayoutClient({
   return (
     <div className="flex h-screen h-[100dvh] flex-col overflow-hidden">
       {/* Header - Mobile only */}
-      <header className="bg-secondary text-foreground sticky top-0 z-50 flex shrink-0 items-center justify-between px-4 py-3 md:hidden">
+      <header className="bg-white dark:bg-zinc-900 border-b border-black/10 dark:border-zinc-800 text-foreground sticky top-0 z-50 flex shrink-0 items-center justify-between px-4 py-3 md:hidden">
         {/* Left Sidebar Mobile Drawer */}
         <Sheet
           open={drawerOpen}
@@ -52,7 +52,7 @@ export default function ProtectedLayoutClient({
               <Menu className="h-6 w-6" />
             </button>
           </SheetTrigger>
-          <SheetContent side="left" className="bg-secondary w-64 p-0">
+          <SheetContent side="left" className="bg-white dark:bg-zinc-900 w-64 p-0 border-r border-black/10 dark:border-zinc-800">
             <SheetHeader>
               <SheetTitle>
                 <Link href="/">
