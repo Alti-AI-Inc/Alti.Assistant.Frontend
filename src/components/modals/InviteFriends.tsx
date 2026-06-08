@@ -38,15 +38,15 @@ export function InviteFriends() {
         {!isSent ? (
           <>
             <DialogHeader className="px-6 py-4 border-b border-black/10 dark:border-white/10 space-y-0">
-              <DialogTitle className="text-base font-semibold text-gray-900 dark:text-white text-left flex items-center gap-2">
-                <UserPlus className="h-4 w-4 text-gray-500" />
+              <DialogTitle className="text-base font-semibold text-gray-900 dark:text-white text-left">
                 Invite Friends
               </DialogTitle>
             </DialogHeader>
 
             <div className="px-6 pb-6 pt-5 space-y-4">
               <p className="text-sm text-gray-500 dark:text-gray-400 leading-normal">
-                Invite your friends to join the Alti Assistant platform. Enter their email address below to send an invitation.
+                Invite your friends to join the alti platform.<br />
+                Enter their email address below to send an invitation.
               </p>
 
               <div className="relative flex items-center">
