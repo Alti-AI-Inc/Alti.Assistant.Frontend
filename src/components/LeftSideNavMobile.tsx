@@ -18,7 +18,6 @@ import {
   Brain,
   LayoutDashboard,
   LogOut,
-  Orbit,
   ReceiptText,
   Scale,
   Search,
@@ -691,7 +690,7 @@ const LeftSideNavMobile = () => {
                       : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                   )}
                 >
-                  <Orbit className="size-4" />
+                  <LayoutGrid className="size-4" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
