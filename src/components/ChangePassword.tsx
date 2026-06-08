@@ -107,7 +107,7 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                       type={showOldPassword ? "text" : "password"}
                       id="oldPassword"
                       placeholder="Old Password"
-                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
+                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
                     />
                     <button
                       type="button"
@@ -136,7 +136,7 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                       type={showNewPassword ? "text" : "password"}
                       id="newPassword"
                       placeholder="New Password"
-                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
+                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
                     />
                     <button
                       type="button"
@@ -165,7 +165,7 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                       type={showConfirmNewPassword ? "text" : "password"}
                       id="confirmNewPassword"
                       placeholder="Confirm New Password"
-                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
+                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
                     />
                     <button
                       type="button"
