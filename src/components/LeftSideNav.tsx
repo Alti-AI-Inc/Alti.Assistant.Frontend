@@ -151,7 +151,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'text' | 'media' | 'bots' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'none';
+type SidebarTab = 'chat' | 'text' | 'media' | 'bots' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'none' | 'account';
 
 const AVAILABLE_COMPOSIO_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -1316,6 +1316,118 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </div>
               )}
             </div>
+          ) : activeTab === 'account' ? (
+            <div className="mt-4 space-y-1 py-1 pb-4">
+              <div className="text-xs font-bold text-gray-400 dark:text-zinc-500 px-3 pb-2 uppercase tracking-wider select-none">
+                My Account
+              </div>
+              
+              {isSuperAdmin && (
+                <button
+                  onClick={() => router.push('/admin')}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                >
+                  <Shield className="w-4 h-4 text-black dark:text-white" /> Owner Dashboard
+                </button>
+              )}
+              {isAdmin && !isSuperAdmin && (
+                <button
+                  onClick={() => router.push('/admin/platform-admin')}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                >
+                  <Shield className="w-4 h-4 text-black dark:text-white" /> Platform Admin
+                </button>
+              )}
+              {(isAdmin || isManager) && !isSuperAdmin && (
+                <button
+                  onClick={() => router.push('/admin/platform-manager')}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                >
+                  <LayoutDashboard className="w-4 h-4 text-black dark:text-white" /> Platform Manager
+                </button>
+              )}
+
+              {!isSuperAdmin && (
+                <button
+                  onClick={() => onOpen({ type: 'memory' })}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                >
+                  <Brain className="w-4 h-4 text-black dark:text-white" /> Platform Memory
+                </button>
+              )}
+              
+              {!isSuperAdmin && (
+                <button
+                  onClick={() => router.push('/platform-knowledge')}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                >
+                  <Database className="w-4 h-4 text-black dark:text-white" /> Platform Knowledge
+                </button>
+              )}
+
+              {!isSuperAdmin && (
+                <button
+                  onClick={() => router.push('/instructions')}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                >
+                  <SlidersHorizontal className="w-4 h-4 text-black dark:text-white" /> Platform Instructions
+                </button>
+              )}
+
+              {!isSuperAdmin && (
+                <button
+                  onClick={() => router.push('/guardrails')}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                >
+                  <ShieldAlert className="w-4 h-4 text-black dark:text-white" /> Platform Guardrails
+                </button>
+              )}
+
+              {!isSuperAdmin && (
+                <button
+                  onClick={() => onOpen({ type: 'invite' })}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                >
+                  <UserPlus className="w-4 h-4 text-black dark:text-white" /> Invite Friends
+                </button>
+              )}
+
+              {!isSuperAdmin && (
+                <button
+                  onClick={() => onOpen({ type: 'change-password' })}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                >
+                  <KeyRound className="w-4 h-4 text-black dark:text-white" /> Change Password
+                </button>
+              )}
+
+              {!isSuperAdmin && (
+                <button
+                  onClick={() => onOpen({ type: 'contact-support' })}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                >
+                  <Mail className="w-4 h-4 text-black dark:text-white" /> Contact Support
+                </button>
+              )}
+
+              {!isSuperAdmin && (
+                <button
+                  onClick={() => router.push('/legal')}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                >
+                  <Scale className="w-4 h-4 text-black dark:text-white" /> Legal Documents
+                </button>
+              )}
+
+              <div className="my-2 h-px bg-black/10 dark:bg-white/10" />
+
+              <button
+                onClick={() => onOpen({ type: 'logout' })}
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 transition-colors text-left"
+              >
+                <LogOut className="w-4 h-4 text-red-500" /> Logout
+              </button>
+            </div>
           ) : null}
         </div>
       )}
@@ -1360,88 +1472,18 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </Button>
             </div>
           ) : (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full bg-[#F5F5F7] hover:bg-[#EAEAEB] dark:bg-zinc-800 dark:hover:bg-zinc-700/80">
-                  My Account
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-[var(--radix-dropdown-menu-trigger-width)] bg-[#F5F5F7] dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-2xl shadow-xl"
-                align="start"
-              >
-                <DropdownMenuGroup>
-                  {isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/admin')}>
-                      <Shield className="text-black" /> Owner Dashboard
-                    </DropdownMenuItem>
-                  )}
-                  {isAdmin && !isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/admin/platform-admin')}>
-                      <Shield className="text-black" /> Platform Admin
-                    </DropdownMenuItem>
-                  )}
-                  {(isAdmin || isManager) && !isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/admin/platform-manager')}>
-                      <LayoutDashboard className="text-black" /> Platform Manager
-                    </DropdownMenuItem>
-                  )}
-
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => onOpen({ type: 'memory' })}>
-                      <Brain className="text-black dark:text-white" /> Platform Memory
-                    </DropdownMenuItem>
-                  )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/platform-knowledge')}>
-                      <Database className="text-black dark:text-white" /> Platform Knowledge
-                    </DropdownMenuItem>
-                  )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/instructions')}>
-                      <SlidersHorizontal className="text-black dark:text-white" /> Platform Instructions
-                    </DropdownMenuItem>
-                  )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/guardrails')}>
-                      <ShieldAlert className="text-black dark:text-white" /> Platform Guardrails
-                    </DropdownMenuItem>
-                  )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => onOpen({ type: 'invite' })}>
-                      <UserPlus className="text-black dark:text-white" /> Invite Friends
-                    </DropdownMenuItem>
-                  )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => onOpen({ type: 'change-password' })}>
-                      <KeyRound className="text-black dark:text-white" /> Change Password
-                    </DropdownMenuItem>
-                  )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => onOpen({ type: 'contact-support' })}>
-                      <Mail className="text-black dark:text-white" /> Contact Support
-                    </DropdownMenuItem>
-                  )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/legal')}>
-                      <Scale className="text-black" /> Legal Documents
-                    </DropdownMenuItem>
-                  )}
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-
-                <DropdownMenuItem
-                  className="rounded-xl"
-                  onClick={() =>
-                    onOpen({
-                      type: 'logout',
-                    })
-                  }
-                >
-                  <LogOut className="text-black" /> Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Button
+              variant="outline"
+              onClick={() => setActiveTab(activeTab === 'account' ? 'chat' : 'account')}
+              className={cn(
+                "w-full transition-all duration-200 outline-none select-none cursor-pointer border border-black/5 dark:border-white/5",
+                activeTab === 'account'
+                  ? "bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90"
+                  : "bg-[#F5F5F7] hover:bg-[#EAEAEB] dark:bg-zinc-800 dark:hover:bg-zinc-700/80"
+              )}
+            >
+              My Account
+            </Button>
           )}
           </div>
         </div>
