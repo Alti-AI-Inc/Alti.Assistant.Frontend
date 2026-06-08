@@ -288,7 +288,11 @@ const LeftSideNavMobile = () => {
                pathname.startsWith('/guardrails') || 
                pathname.startsWith('/platform-knowledge') || 
                pathname.startsWith('/legal') || 
-               pathname.startsWith('/admin')) {
+               pathname.startsWith('/admin') ||
+               pathname.startsWith('/platform-memory') ||
+               pathname.startsWith('/change-password') ||
+               pathname.startsWith('/contact-support') ||
+               pathname.startsWith('/invite-friends')) {
       setActiveTab('account');
     } else if (pathname.startsWith('/knowledge')) {
       setActiveTab('none');
@@ -314,7 +318,24 @@ const LeftSideNavMobile = () => {
           pathname !== '/assistant' &&
           !pathname.startsWith('/assistant') &&
           pathname !== '/knowledge' &&
-          !pathname.startsWith('/knowledge')
+          !pathname.startsWith('/knowledge') &&
+          pathname !== '/instructions' &&
+          !pathname.startsWith('/instructions') &&
+          pathname !== '/guardrails' &&
+          !pathname.startsWith('/guardrails') &&
+          pathname !== '/platform-knowledge' &&
+          !pathname.startsWith('/platform-knowledge') &&
+          pathname !== '/legal' &&
+          !pathname.startsWith('/legal') &&
+          !pathname.startsWith('/admin') &&
+          pathname !== '/platform-memory' &&
+          !pathname.startsWith('/platform-memory') &&
+          pathname !== '/change-password' &&
+          !pathname.startsWith('/change-password') &&
+          pathname !== '/contact-support' &&
+          !pathname.startsWith('/contact-support') &&
+          pathname !== '/invite-friends' &&
+          !pathname.startsWith('/invite-friends')
         ) {
           const opt = (activeConversation as any).option || selectedOption;
           if (
@@ -1144,7 +1165,7 @@ const LeftSideNavMobile = () => {
 
               {!isSuperAdmin && (
                 <button
-                  onClick={() => { onOpen({ type: 'memory' }); close(); }}
+                  onClick={() => { router.push('/platform-memory'); close(); }}
                   className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
                 >
                   <Brain className="w-4 h-4 text-black dark:text-white" /> Platform Memory
@@ -1180,7 +1201,7 @@ const LeftSideNavMobile = () => {
 
               {!isSuperAdmin && (
                 <button
-                  onClick={() => { onOpen({ type: 'invite' }); close(); }}
+                  onClick={() => { router.push('/invite-friends'); close(); }}
                   className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
                 >
                   <UserPlus className="w-4 h-4 text-black dark:text-white" /> Invite Friends
@@ -1189,7 +1210,7 @@ const LeftSideNavMobile = () => {
 
               {!isSuperAdmin && (
                 <button
-                  onClick={() => { onOpen({ type: 'change-password' }); close(); }}
+                  onClick={() => { router.push('/change-password'); close(); }}
                   className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
                 >
                   <KeyRound className="w-4 h-4 text-black dark:text-white" /> Change Password
@@ -1198,7 +1219,7 @@ const LeftSideNavMobile = () => {
 
               {!isSuperAdmin && (
                 <button
-                  onClick={() => { onOpen({ type: 'contact-support' }); close(); }}
+                  onClick={() => { router.push('/contact-support'); close(); }}
                   className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
                 >
                   <Mail className="w-4 h-4 text-black dark:text-white" /> Contact Support

@@ -305,7 +305,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                pathname.startsWith('/guardrails') || 
                pathname.startsWith('/platform-knowledge') || 
                pathname.startsWith('/legal') || 
-               pathname.startsWith('/admin')) {
+               pathname.startsWith('/admin') ||
+               pathname.startsWith('/platform-memory') ||
+               pathname.startsWith('/change-password') ||
+               pathname.startsWith('/contact-support') ||
+               pathname.startsWith('/invite-friends')) {
       setActiveTab('account');
     } else if (pathname.startsWith('/knowledge')) {
       setActiveTab('none');
@@ -340,7 +344,15 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           !pathname.startsWith('/platform-knowledge') &&
           pathname !== '/legal' &&
           !pathname.startsWith('/legal') &&
-          !pathname.startsWith('/admin')
+          !pathname.startsWith('/admin') &&
+          pathname !== '/platform-memory' &&
+          !pathname.startsWith('/platform-memory') &&
+          pathname !== '/change-password' &&
+          !pathname.startsWith('/change-password') &&
+          pathname !== '/contact-support' &&
+          !pathname.startsWith('/contact-support') &&
+          pathname !== '/invite-friends' &&
+          !pathname.startsWith('/invite-friends')
         ) {
           const opt = (activeConversation as any).option || selectedOption;
           if (
@@ -1219,7 +1231,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
               {!isSuperAdmin && (
                 <button
-                  onClick={() => onOpen({ type: 'memory' })}
+                  onClick={() => router.push('/platform-memory')}
                   className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
                 >
                   <Brain className="w-4 h-4 text-black dark:text-white" /> Platform Memory
@@ -1255,7 +1267,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
               {!isSuperAdmin && (
                 <button
-                  onClick={() => onOpen({ type: 'invite' })}
+                  onClick={() => router.push('/invite-friends')}
                   className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
                 >
                   <UserPlus className="w-4 h-4 text-black dark:text-white" /> Invite Friends
@@ -1264,7 +1276,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
               {!isSuperAdmin && (
                 <button
-                  onClick={() => onOpen({ type: 'change-password' })}
+                  onClick={() => router.push('/change-password')}
                   className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
                 >
                   <KeyRound className="w-4 h-4 text-black dark:text-white" /> Change Password
@@ -1273,7 +1285,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
               {!isSuperAdmin && (
                 <button
-                  onClick={() => onOpen({ type: 'contact-support' })}
+                  onClick={() => router.push('/contact-support')}
                   className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
                 >
                   <Mail className="w-4 h-4 text-black dark:text-white" /> Contact Support

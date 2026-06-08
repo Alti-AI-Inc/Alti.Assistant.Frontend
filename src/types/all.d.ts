@@ -1,8 +1,5 @@
 type ModalType =
   | 'logout'
-  | 'invite'
-  | 'change-password'
-  | 'contact-support'
   | 'search-chats'
   | 'rename-chat'
   | 'forgot-password'
@@ -22,8 +19,6 @@ type ModalType =
   | 'invite-member'
   | 'create-organization'
   | 'auth-modal'
-  | 'memory'
-  | 'change-password'
   | null;
 
 enum APP_STATUS {

@@ -16,16 +16,12 @@ import { DeleteKnowledgeBankFileModal } from './DeleteKnowledgeBankFileModal';
 import { DeleteKnowledgeBankFolderModal } from './DeleteKnowledgeBankFolderModal';
 import { EditChatbotModal } from './EditChatbotModal';
 import { ForgotPasswordDialog } from './ForgotPasswordDialog';
-import { InviteFriends } from './InviteFriends';
 import { InviteMemberModal } from './InviteMemberModal';
 import { Logout } from './logout';
 import RenameChat from './RenameChat';
 import SearchChats from './SearchChats';
 import SearchWorkflows from './SearchWorkflows';
 import { ShareConversationModal } from './ShareConversationModal';
-import { MemoryModal } from './MemoryModal';
-import { ChangePasswordModal } from './ChangePasswordModal';
-import { ContactSupportModal } from './ContactSupportModal';
 
 
 export const ModalProvider = () => {
@@ -50,7 +46,6 @@ export const ModalProvider = () => {
   return (
     <>
       {type === 'logout' && <Logout />}
-      {type === 'invite' && <InviteFriends />}
       {type === 'search-chats' && <SearchChats />}
       {type === 'rename-chat' && <RenameChat />}
       {type === 'forgot-password' && <ForgotPasswordDialog />}
@@ -78,9 +73,6 @@ export const ModalProvider = () => {
       {type === 'invite-member' && <InviteMemberModal />}
       {type === 'create-organization' && <CreateOrganizationModal />}
       {type === 'auth-modal' && <AuthModal />}
-      {type === 'memory' && <MemoryModal />}
-      {type === 'change-password' && <ChangePasswordModal />}
-      {type === 'contact-support' && <ContactSupportModal />}
     </>
   );
 };

@@ -111,7 +111,7 @@ const DashboardLeftSideNav = () => {
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => onOpen({ type: 'memory' })}>
+                    <DropdownMenuItem onClick={() => router.push('/platform-memory')}>
                       <Brain className="text-black dark:text-white" /> Platform Memory
                     </DropdownMenuItem>
                   )}
@@ -131,17 +131,17 @@ const DashboardLeftSideNav = () => {
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => onOpen({ type: 'invite' })}>
+                    <DropdownMenuItem onClick={() => router.push('/invite-friends')}>
                       <UserPlus className="text-black dark:text-white" /> Invite Friends
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => onOpen({ type: 'change-password' })}>
+                    <DropdownMenuItem onClick={() => router.push('/change-password')}>
                       <KeyRound className="text-black dark:text-white" /> Change Password
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => onOpen({ type: 'contact-support' })}>
+                    <DropdownMenuItem onClick={() => router.push('/contact-support')}>
                       <Mail className="text-black dark:text-white" /> Contact Support
                     </DropdownMenuItem>
                   )}
