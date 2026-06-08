@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  ArrowUpRight,
   BriefcaseBusiness,
   CreditCard,
   User,
@@ -319,14 +318,6 @@ export default function AdminDashboardPage() {
         <h1 className="text-base font-semibold text-gray-900 dark:text-white">
           Dashboard
         </h1>
-        <div className="flex items-center gap-2">
-          <Button asChild variant="outline" size="sm">
-            <Link href="/admin/stripe">
-              Open Billing Console
-              <ArrowUpRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
       </div>
 
       {/* Main Workspace Body */}

@@ -5,6 +5,9 @@ import { cn } from '@/lib/utils';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { useModalStore } from '@/stores/useModalStore';
+import Image from 'next/image';
 import {
   LayoutDashboard,
   User,
@@ -28,6 +31,7 @@ export const AdminSecondarySidebar = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { mode, currentTenant } = useTenant();
+  const { onOpen } = useModalStore();
 
   const userEmail = data?.user?.email?.toLowerCase();
   const isGlobalAdmin = data?.user?.role === 'admin' || data?.user?.role === 'super_admin';
@@ -51,7 +55,7 @@ export const AdminSecondarySidebar = () => {
   // Determine header title
   let headerTitle = 'Admin Console';
   if (isSuperAdmin) {
-    headerTitle = 'Owner Dashboard';
+    headerTitle = 'Owner Platform';
   } else if (isManagerSection) {
     headerTitle = 'Platform Manager';
   } else if (isAdminSection) {
@@ -61,7 +65,15 @@ export const AdminSecondarySidebar = () => {
   return (
     <div className="w-64 bg-white dark:bg-zinc-900 border-r border-black/10 dark:border-zinc-800/80 hidden md:flex flex-col h-full shrink-0 z-10 transition-colors duration-300">
       {/* Header */}
-      <div className="h-[52px] border-b border-black/10 dark:border-zinc-800/80 px-4 flex items-center justify-between flex-none">
+      <div className="h-[52px] border-b border-black/10 dark:border-zinc-800/80 px-4 flex items-center gap-2.5 flex-none">
+        {isSuperAdmin && (
+          <Image
+            src="/assets/logo-icon.png"
+            alt="logo"
+            height={20}
+            width={20}
+          />
+        )}
         <span className="text-sm font-semibold text-black dark:text-white truncate">
           {headerTitle}
         </span>
@@ -200,6 +212,17 @@ export const AdminSecondarySidebar = () => {
           </div>
         )}
       </div>
+      {isSuperAdmin && (
+        <div className="sticky bottom-0 z-30 flex flex-col w-full border-t border-black/10 dark:border-zinc-800/80 p-4 py-3 bg-white dark:bg-zinc-900 flex-none">
+          <Button
+            variant="outline"
+            onClick={() => onOpen({ type: 'logout' })}
+            className="w-full transition-all duration-200 outline-none select-none cursor-pointer bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 border-transparent"
+          >
+            Logout
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

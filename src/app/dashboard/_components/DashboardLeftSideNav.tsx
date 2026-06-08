@@ -102,7 +102,7 @@ const DashboardLeftSideNav = () => {
                 <DropdownMenuGroup>
                   {isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/admin')}>
-                      <Shield className="text-black" /> Owner Dashboard
+                       <Shield className="text-black" /> Owner Platform
                     </DropdownMenuItem>
                   )}
                   {isAdmin && !isSuperAdmin && (
