@@ -187,14 +187,14 @@ export default function AdminSupportInboxPage() {
                       className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center animate-in fade-in-50 duration-150"
                     >
                       {/* Left icon & Content columns */}
-                      <div className="col-span-10 flex items-center gap-5 min-w-0">
+                      <div className="col-span-11 flex items-center gap-5 min-w-0">
                         <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-none">
                           <Mail className="h-4 w-4" />
                         </div>
                         
                         <div className="flex-1 flex items-center gap-8 min-w-0">
-                          {/* Email */}
-                          <div className="flex-[2.5] min-w-0">
+                           {/* Email */}
+                          <div className="flex-[2.0] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Email Address
                             </span>
@@ -204,7 +204,7 @@ export default function AdminSupportInboxPage() {
                           </div>
                           
                           {/* Subject */}
-                          <div className="flex-[3.5] min-w-0">
+                          <div className="flex-[4.8] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Subject
                             </span>
@@ -214,7 +214,7 @@ export default function AdminSupportInboxPage() {
                           </div>
                           
                           {/* Date */}
-                          <div className="flex-[1.5] min-w-0">
+                          <div className="flex-[1.3] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Date
                             </span>
@@ -224,7 +224,7 @@ export default function AdminSupportInboxPage() {
                           </div>
                           
                           {/* Time */}
-                          <div className="flex-[1.2] min-w-0">
+                          <div className="flex-[1.1] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Time
                             </span>
@@ -234,14 +234,14 @@ export default function AdminSupportInboxPage() {
                           </div>
 
                           {/* Status Badge */}
-                          <div className="flex-[1.3] min-w-0">
+                          <div className="flex-[1.4] min-w-0">
                             <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500 block uppercase tracking-wider mb-0.5 select-none">
                               Status
                             </span>
-                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold mt-0.5 ${
+                            <span className={`text-sm font-semibold block mt-0.5 ${
                               req.status === 'Pending'
-                                ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
-                                : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
+                                ? 'text-amber-600 dark:text-amber-400'
+                                : 'text-emerald-600 dark:text-emerald-400'
                             }`}>
                               {req.status}
                             </span>
@@ -250,7 +250,7 @@ export default function AdminSupportInboxPage() {
                       </div>
 
                       {/* Actions */}
-                      <div className="col-span-2 flex items-center justify-end gap-2">
+                      <div className="col-span-1 flex items-center justify-end gap-2">
                         {/* View & Respond Button */}
                         <Button
                           variant="ghost"
