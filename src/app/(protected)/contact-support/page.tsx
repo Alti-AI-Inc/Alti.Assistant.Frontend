@@ -2,7 +2,6 @@
 
 import { useState, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 
 const SupportContent = () => {
@@ -39,16 +38,16 @@ const SupportContent = () => {
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             placeholder="Enter Subject"
-            className="w-full h-12 rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 px-4 text-base text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 focus:border-black/10 dark:focus:border-white/10 focus-visible:border-black/10 dark:focus-visible:border-white/10 shadow-sm transition-all"
+            className="w-full h-12 rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 px-4 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 focus:border-black/10 dark:focus:border-white/10 focus-visible:border-black/10 dark:focus-visible:border-white/10 shadow-sm transition-all"
             disabled={isLoading}
           />
 
-          <Textarea
+          <textarea
             id="support-message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Enter Message"
-            className="w-full min-h-[120px] rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 p-4 text-base text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 focus:border-black/10 dark:focus:border-white/10 focus-visible:border-black/10 dark:focus-visible:border-white/10 shadow-sm transition-all resize-none"
+            className="w-full min-h-[120px] rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 p-4 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 focus:border-black/10 dark:focus:border-white/10 focus-visible:border-black/10 dark:focus-visible:border-white/10 shadow-sm transition-all resize-none"
             disabled={isLoading}
             rows={5}
           />
