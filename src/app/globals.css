@@ -188,13 +188,17 @@ select:autofill:active {
 
 /* Gray input fields autofill override */
 input.bg-auth-input {
-  --autofill-bg: #F5F5F7 !important;
+  --autofill-bg: #EFEFF0 !important;
   --autofill-color: #1f2937 !important;
+  background-color: #EFEFF0 !important;
+  color: #1f2937 !important;
 }
 
 .dark input.bg-auth-input {
   --autofill-bg: #27272a !important;
   --autofill-color: #f3f4f6 !important;
+  background-color: #27272a !important;
+  color: #f3f4f6 !important;
 }
 
 input.bg-auth-input:-webkit-autofill,
@@ -205,11 +209,11 @@ input.bg-auth-input:autofill,
 input.bg-auth-input:autofill:hover,
 input.bg-auth-input:autofill:focus,
 input.bg-auth-input:autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px #F5F5F7 inset !important;
-  box-shadow: 0 0 0 1000px #F5F5F7 inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #EFEFF0 inset !important;
+  box-shadow: 0 0 0 1000px #EFEFF0 inset !important;
   -webkit-text-fill-color: #1f2937 !important;
   color: #1f2937 !important;
-  background-color: #F5F5F7 !important;
+  background-color: #EFEFF0 !important;
   transition: background-color 50000s ease-in-out 0s, box-shadow 50000s ease-in-out 0s !important;
 }
 
@@ -228,6 +232,7 @@ input.bg-auth-input:autofill:active {
   background-color: #27272a !important;
   transition: background-color 50000s ease-in-out 0s, box-shadow 50000s ease-in-out 0s !important;
 }
+
 
 
 /* Webkit browsers (Chrome, Safari, Edge) */
