@@ -284,7 +284,7 @@ const LeftSideNavMobile = () => {
       } else {
         setActiveTab('chat');
       }
-    } else if (pathname === '/settings' || pathname.startsWith('/settings') || pathname.startsWith('/admin') || pathname.startsWith('/knowledge') || pathname === '/legal' || pathname.startsWith('/legal')) {
+    } else if (pathname === '/instructions' || pathname.startsWith('/instructions') || pathname === '/guardrails' || pathname.startsWith('/guardrails') || pathname === '/platform-knowledge' || pathname.startsWith('/platform-knowledge') || pathname.startsWith('/admin') || pathname.startsWith('/knowledge') || pathname === '/legal' || pathname.startsWith('/legal')) {
       setActiveTab('none');
     }
   }, [pathname, selectedOption]);
@@ -1338,10 +1338,10 @@ const LeftSideNavMobile = () => {
                     <Brain className="text-black dark:text-white" /> Platform Memory
                   </DropdownMenuItem>
                 )}
-                {!isSuperAdmin && (
+                 {!isSuperAdmin && (
                   <DropdownMenuItem
                     onClick={() => {
-                      router.push('/settings?tab=platform-instructions');
+                      router.push('/instructions');
                       close();
                     }}
                   >
@@ -1351,7 +1351,7 @@ const LeftSideNavMobile = () => {
                 {!isSuperAdmin && (
                   <DropdownMenuItem
                     onClick={() => {
-                      router.push('/settings?tab=platform-guardrails');
+                      router.push('/guardrails');
                       close();
                     }}
                   >
@@ -1361,7 +1361,7 @@ const LeftSideNavMobile = () => {
                 {!isSuperAdmin && (
                   <DropdownMenuItem
                     onClick={() => {
-                      router.push('/settings?tab=platform-knowledge');
+                      router.push('/platform-knowledge');
                       close();
                     }}
                   >
@@ -1391,11 +1391,11 @@ const LeftSideNavMobile = () => {
                 {!isSuperAdmin && (
                   <DropdownMenuItem
                     onClick={() => {
-                      router.push('/settings');
+                      onOpen({ type: 'invite' });
                       close();
                     }}
                   >
-                    <Settings className="text-black" /> Settings
+                    <UserPlus className="text-black dark:text-white" /> Invite Friends
                   </DropdownMenuItem>
                 )}
               </DropdownMenuGroup>

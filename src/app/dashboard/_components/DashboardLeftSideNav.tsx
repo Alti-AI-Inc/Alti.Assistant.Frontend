@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
-import { CircleUserRound, LogOut, ReceiptText, Settings, Shield, Brain, SlidersHorizontal, ShieldAlert } from 'lucide-react';
+import { CircleUserRound, LogOut, ReceiptText, Settings, Shield, Brain, SlidersHorizontal, ShieldAlert, UserPlus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -118,18 +118,18 @@ const DashboardLeftSideNav = () => {
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/settings?tab=platform-instructions')}>
+                    <DropdownMenuItem onClick={() => router.push('/instructions')}>
                       <SlidersHorizontal className="text-black dark:text-white" /> Platform Instructions
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/settings?tab=platform-guardrails')}>
+                    <DropdownMenuItem onClick={() => router.push('/guardrails')}>
                       <ShieldAlert className="text-black dark:text-white" /> Platform Guardrails
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/settings')}>
-                      <Settings className="text-black" /> Settings
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'invite' })}>
+                      <UserPlus className="text-black dark:text-white" /> Invite Friends
                     </DropdownMenuItem>
                   )}
                 </DropdownMenuGroup>

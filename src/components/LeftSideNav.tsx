@@ -301,7 +301,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       } else {
         setActiveTab('chat');
       }
-    } else if (pathname === '/settings' || pathname.startsWith('/settings') || pathname.startsWith('/admin') || pathname.startsWith('/knowledge') || pathname === '/legal' || pathname.startsWith('/legal')) {
+    } else if (pathname === '/instructions' || pathname.startsWith('/instructions') || pathname === '/guardrails' || pathname.startsWith('/guardrails') || pathname === '/platform-knowledge' || pathname.startsWith('/platform-knowledge') || pathname.startsWith('/admin') || pathname.startsWith('/knowledge') || pathname === '/legal' || pathname.startsWith('/legal')) {
       setActiveTab('none');
     }
   }, [pathname, selectedOption]);
@@ -326,8 +326,12 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           !pathname.startsWith('/assistant') &&
           pathname !== '/knowledge' &&
           !pathname.startsWith('/knowledge') &&
-          pathname !== '/settings' &&
-          !pathname.startsWith('/settings') &&
+          pathname !== '/instructions' &&
+          !pathname.startsWith('/instructions') &&
+          pathname !== '/guardrails' &&
+          !pathname.startsWith('/guardrails') &&
+          pathname !== '/platform-knowledge' &&
+          !pathname.startsWith('/platform-knowledge') &&
           pathname !== '/legal' &&
           !pathname.startsWith('/legal') &&
           !pathname.startsWith('/admin')
@@ -1389,17 +1393,17 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/settings?tab=platform-instructions')}>
+                    <DropdownMenuItem onClick={() => router.push('/instructions')}>
                       <SlidersHorizontal className="text-black dark:text-white" /> Platform Instructions
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/settings?tab=platform-guardrails')}>
+                    <DropdownMenuItem onClick={() => router.push('/guardrails')}>
                       <ShieldAlert className="text-black dark:text-white" /> Platform Guardrails
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/settings?tab=platform-knowledge')}>
+                    <DropdownMenuItem onClick={() => router.push('/platform-knowledge')}>
                       <Database className="text-black dark:text-white" /> Platform Knowledge
                     </DropdownMenuItem>
                   )}
@@ -1414,8 +1418,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/settings')}>
-                      <Settings className="text-black" /> Settings
+                    <DropdownMenuItem onClick={() => onOpen({ type: 'invite' })}>
+                      <UserPlus className="text-black dark:text-white" /> Invite Friends
                     </DropdownMenuItem>
                   )}
                 </DropdownMenuGroup>
