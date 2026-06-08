@@ -30,6 +30,16 @@ export default auth(async function middleware(req) {
   const { nextUrl } = req;
   const session = (req as any).auth;
 
+  // Canonical host redirection (point altihq.com and naked domain to www.altiassistant.com)
+  const host = req.headers.get('host') || '';
+  if (
+    host.includes('altihq.com') ||
+    host === 'altiassistant.com'
+  ) {
+    const redirectUrl = new URL(nextUrl.pathname + nextUrl.search, 'https://www.altiassistant.com');
+    return NextResponse.redirect(redirectUrl, { status: 301 });
+  }
+
   // Redirect logged-in super_admin (owner) to /admin if they try to access any non-admin route
   if (session?.user?.role === 'super_admin' && !nextUrl.pathname.startsWith('/admin')) {
     const allowedAuthPaths = ['/auth', '/accept-invite'];
