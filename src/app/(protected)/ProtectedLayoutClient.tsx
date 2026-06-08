@@ -2,8 +2,8 @@
 
 import { Suspense } from 'react';
 import LeftSideNav from '@/components/LeftSideNav';
-
 import LeftSideNavMobile from '@/components/LeftSideNavMobile';
+import AdminSecondarySidebar from '@/components/sidebars/AdminSecondarySidebar';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -109,6 +109,11 @@ export default function ProtectedLayoutClient({
             <LeftSideNav />
           </Suspense>
         </div>
+
+        {/* Administrative Secondary Left Sidebar */}
+        <Suspense fallback={null}>
+          <AdminSecondarySidebar />
+        </Suspense>
 
         {/* Main content */}
         <main

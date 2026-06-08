@@ -284,7 +284,13 @@ const LeftSideNavMobile = () => {
       } else {
         setActiveTab('chat');
       }
-    } else if (pathname === '/instructions' || pathname.startsWith('/instructions') || pathname === '/guardrails' || pathname.startsWith('/guardrails') || pathname === '/platform-knowledge' || pathname.startsWith('/platform-knowledge') || pathname.startsWith('/admin') || pathname.startsWith('/knowledge') || pathname === '/legal' || pathname.startsWith('/legal')) {
+    } else if (pathname.startsWith('/instructions') || 
+               pathname.startsWith('/guardrails') || 
+               pathname.startsWith('/platform-knowledge') || 
+               pathname.startsWith('/legal') || 
+               pathname.startsWith('/admin')) {
+      setActiveTab('account');
+    } else if (pathname.startsWith('/knowledge')) {
       setActiveTab('none');
     }
   }, [pathname, selectedOption]);
@@ -499,7 +505,7 @@ const LeftSideNavMobile = () => {
       {/* Sticky nav buttons */}
       <div className="bg-white dark:bg-zinc-900 sticky top-0 z-10">
         <div className="space-y-0.5 px-2 py-2">
-          {plusProps.visible && !isAdminMode && (
+          {plusProps.visible && (
             <Button
               onClick={plusProps.onClick}
               className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 animate-in fade-in zoom-in duration-200"
@@ -509,7 +515,7 @@ const LeftSideNavMobile = () => {
             </Button>
           )}
 
-          {isLoggedIn && !isAdminMode && (
+          {isLoggedIn && (
             <>
               {/* <Button
                 disabled={pathname === '/workspaces'}
@@ -589,7 +595,7 @@ const LeftSideNavMobile = () => {
       </div>
 
       {/* Chat / Projects / GCP Hub row toggle */}
-      {isLoggedIn && !isAdminMode && (
+      {isLoggedIn && (
         <div className="border-b border-black/5 px-4 py-2 bg-white dark:bg-zinc-900">
           <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
             <Tooltip>
@@ -698,7 +704,7 @@ const LeftSideNavMobile = () => {
       {/* Scrollable conversation list */}
       {isLoggedIn && (
         <div className="flex-1 overflow-y-auto px-4 pb-4">
-          {!isAdminMode && (
+          {activeTab !== 'account' && (
           <div className="mt-3 mb-2 flex items-center justify-between px-1">
             <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-zinc-400">
             </div>
@@ -726,168 +732,7 @@ const LeftSideNavMobile = () => {
             )}
           </div>
           )}
-          {isAdminMode ? (
-            <div className="mt-2 space-y-6">
-              {/* Platform Owner Section (for super_admin) */}
-              {isSuperAdmin && (
-                <div className="space-y-4">
-                  {[
-                    {
-                      groupName: 'Platform',
-                      items: [
-                        { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true }
-                      ]
-                    },
-                    {
-                      groupName: 'Members',
-                      items: [
-                        { name: 'Free Users', href: '/admin/metrics/total-users?plan=free', icon: User },
-                        { name: 'Paid Users', href: '/admin/metrics/total-users?plan=paid', icon: UserCheck },
-                        { name: 'Team Plans', href: '/admin/metrics/active-organizations', icon: UsersRound },
-                      ]
-                    },
-                    {
-                      groupName: 'Configurations',
-                      items: [
-                        { name: 'Instructions', href: '/admin/instructions', icon: FileText },
-                        { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
-                      ]
-                    },
-                    {
-                      groupName: 'Credentials',
-                      items: [
-                        { name: 'My Accounts', href: '/admin/accounts', icon: KeyRound },
-                        { name: 'Email Accounts', href: '/admin/emails', icon: Mail },
-                        { name: 'Data Partners', href: '/admin/partners', icon: Database },
-                        { name: 'API Keys', href: '/admin/apikeys', icon: Key },
-                      ]
-                    }
-                  ].map((group) => (
-                    <div key={group.groupName} className="space-y-1">
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
-                        {group.groupName}
-                      </div>
-                      {group.items.map((item: { name: string; href: string; icon: any; exact?: boolean }) => {
-                        const currentPlan = searchParams?.get('plan');
-                        const isActive = item.exact 
-                          ? pathname === item.href 
-                          : item.href.includes('?plan=free')
-                            ? pathname === '/admin/metrics/total-users' && currentPlan === 'free'
-                            : item.href.includes('?plan=paid')
-                              ? pathname === '/admin/metrics/total-users' && currentPlan === 'paid'
-                              : pathname.startsWith(item.href);
-                        const Icon = item.icon;
-                        return (
-                          <Link
-                            key={item.name}
-                            href={item.href}
-                            onClick={() => close()}
-                            className={cn(
-                              'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                              isActive
-                                ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
-                                : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
-                            )}
-                          >
-                            <Icon className="w-4 h-4" />
-                            {item.name}
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* First Section */}
-              {isAdminSection && !isSuperAdmin && (
-                <div className="space-y-1">
-                  {[
-                    { name: 'Invite', href: '/admin/members', icon: UserPlus },
-                    { name: 'Members', href: '/admin/team-members', icon: Users },
-                    { name: 'Billing', href: '/admin/billing', icon: CreditCard },
-                    { name: 'Invoices', href: '/admin/invoices', icon: FileText },
-                  ].map((item) => {
-                    const isActive = pathname.startsWith(item.href);
-                    const Icon = item.icon;
-                    return (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        onClick={() => close()}
-                        className={cn(
-                          'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                          isActive
-                            ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
-                            : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
-                        )}
-                      >
-                        <Icon className="w-4 h-4" />
-                        {item.name}
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* Second Section */}
-              {isManagerSection && !isSuperAdmin && (
-                <div className="space-y-1">
-                  {[
-                    { name: 'Knowledge', href: '/admin/data', icon: Database },
-                    { name: 'Instructions', href: '/admin/instructions', icon: FileText },
-                    { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
-                    { name: 'Projects', href: '/admin/projects', icon: Folder },
-                  ].map((item) => {
-                    const isActive = pathname === item.href || (item.name === 'Projects' && pathname.startsWith('/admin/projects'));
-                    const Icon = item.icon;
-                    return (
-                      <div key={item.name}>
-                        <Link
-                          href={item.href}
-                          onClick={() => close()}
-                          className={cn(
-                            'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                            isActive
-                              ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
-                              : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
-                          )}
-                        >
-                          <Icon className="w-4 h-4" />
-                          {item.name}
-                        </Link>
-                        {item.name === 'Projects' && (
-                          <div className="mt-1 flex flex-col pl-9 pr-2">
-                            {bots.filter(b => b.isShared).map(bot => {
-                              const isSelected = activeBotId === bot.id && pathname.startsWith('/admin/projects');
-                              return (
-                                <Link
-                                  key={bot.id}
-                                  href={`/admin/projects?bot=${bot.id}`}
-                                  onClick={() => {
-                                    setActiveBotId(bot.id);
-                                    close();
-                                  }}
-                                  className={cn(
-                                    "flex h-8 w-full items-center truncate rounded-md px-2 text-xs font-normal transition-all text-left",
-                                    isSelected
-                                      ? "bg-black/10 text-black dark:bg-white/10 dark:text-white font-medium"
-                                      : "text-gray-500 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white"
-                                  )}
-                                >
-                                  {bot.name}
-                                </Link>
-                              )
-                            })}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          ) : activeTab === 'bots' ? (
+          {activeTab === 'bots' ? (
             <div className="space-y-1 py-1 pb-4 mt-2">
               <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full mb-2 select-none">
                 <button
@@ -1369,6 +1214,167 @@ const LeftSideNavMobile = () => {
                 </button>
               )}
 
+              {isAdminMode && (
+                <>
+                  <div className="my-3 h-px bg-black/10 dark:bg-white/10" />
+                  
+                  {isSuperAdmin && (
+                    <div className="space-y-4">
+                      {[
+                        {
+                          groupName: 'Platform',
+                          items: [
+                            { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true }
+                          ]
+                        },
+                        {
+                          groupName: 'Members',
+                          items: [
+                            { name: 'Free Users', href: '/admin/metrics/total-users?plan=free', icon: User },
+                            { name: 'Paid Users', href: '/admin/metrics/total-users?plan=paid', icon: UserCheck },
+                            { name: 'Team Plans', href: '/admin/metrics/active-organizations', icon: UsersRound },
+                          ]
+                        },
+                        {
+                          groupName: 'Configurations',
+                          items: [
+                            { name: 'Instructions', href: '/admin/instructions', icon: FileText },
+                            { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
+                          ]
+                        },
+                        {
+                          groupName: 'Credentials',
+                          items: [
+                            { name: 'My Accounts', href: '/admin/accounts', icon: KeyRound },
+                            { name: 'Email Accounts', href: '/admin/emails', icon: Mail },
+                            { name: 'Data Partners', href: '/admin/partners', icon: Database },
+                            { name: 'API Keys', href: '/admin/apikeys', icon: Key },
+                          ]
+                        }
+                      ].map((group) => (
+                        <div key={group.groupName} className="space-y-1">
+                          <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
+                            {group.groupName}
+                          </div>
+                          {group.items.map((item: { name: string; href: string; icon: any; exact?: boolean }) => {
+                            const currentPlan = searchParams?.get('plan');
+                            const isActive = item.exact 
+                              ? pathname === item.href 
+                              : item.href.includes('?plan=free')
+                                ? pathname === '/admin/metrics/total-users' && currentPlan === 'free'
+                                : item.href.includes('?plan=paid')
+                                  ? pathname === '/admin/metrics/total-users' && currentPlan === 'paid'
+                                  : pathname.startsWith(item.href);
+                            const Icon = item.icon;
+                            return (
+                              <Link
+                                key={item.name}
+                                href={item.href}
+                                onClick={() => close()}
+                                className={cn(
+                                  'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                                  isActive
+                                    ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white font-semibold'
+                                    : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                                )}
+                              >
+                                <Icon className="w-4 h-4 text-black dark:text-white" />
+                                {item.name}
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {isAdminSection && !isSuperAdmin && (
+                    <div className="space-y-1">
+                      {[
+                        { name: 'Invite', href: '/admin/members', icon: UserPlus },
+                        { name: 'Members', href: '/admin/team-members', icon: Users },
+                        { name: 'Billing', href: '/admin/billing', icon: CreditCard },
+                        { name: 'Invoices', href: '/admin/invoices', icon: FileText },
+                      ].map((item) => {
+                        const isActive = pathname.startsWith(item.href);
+                        const Icon = item.icon;
+                        return (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            onClick={() => close()}
+                            className={cn(
+                              'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                              isActive
+                                ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white font-semibold'
+                                : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                            )}
+                          >
+                            <Icon className="w-4 h-4 text-black dark:text-white" />
+                            {item.name}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {isManagerSection && !isSuperAdmin && (
+                    <div className="space-y-1">
+                      {[
+                        { name: 'Knowledge', href: '/admin/data', icon: Database },
+                        { name: 'Instructions', href: '/admin/instructions', icon: FileText },
+                        { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
+                        { name: 'Projects', href: '/admin/projects', icon: Folder },
+                      ].map((item) => {
+                        const isActive = pathname === item.href || (item.name === 'Projects' && pathname.startsWith('/admin/projects'));
+                        const Icon = item.icon;
+                        return (
+                          <div key={item.name}>
+                            <Link
+                              href={item.href}
+                              onClick={() => close()}
+                              className={cn(
+                                'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                                isActive
+                                  ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white font-semibold'
+                                  : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                              )}
+                            >
+                              <Icon className="w-4 h-4 text-black dark:text-white" />
+                              {item.name}
+                            </Link>
+                            {item.name === 'Projects' && (
+                              <div className="mt-1 flex flex-col pl-9 pr-2">
+                                {bots.filter(b => b.isShared).map(bot => {
+                                  const isSelected = activeBotId === bot.id && pathname.startsWith('/admin/projects');
+                                  return (
+                                    <Link
+                                      key={bot.id}
+                                      href={`/admin/projects?bot=${bot.id}`}
+                                      onClick={() => {
+                                        setActiveBotId(bot.id);
+                                        close();
+                                      }}
+                                      className={cn(
+                                        "flex h-8 w-full items-center truncate rounded-md px-2 text-xs font-normal transition-all text-left",
+                                        isSelected
+                                          ? "bg-black/10 text-black dark:bg-white/10 dark:text-white font-medium"
+                                          : "text-gray-500 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white"
+                                      )}
+                                    >
+                                      {bot.name}
+                                    </Link>
+                                  )
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           ) : null}
         </div>

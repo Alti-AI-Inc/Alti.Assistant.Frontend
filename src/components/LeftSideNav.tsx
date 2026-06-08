@@ -301,7 +301,13 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       } else {
         setActiveTab('chat');
       }
-    } else if (pathname === '/instructions' || pathname.startsWith('/instructions') || pathname === '/guardrails' || pathname.startsWith('/guardrails') || pathname === '/platform-knowledge' || pathname.startsWith('/platform-knowledge') || pathname.startsWith('/admin') || pathname.startsWith('/knowledge') || pathname === '/legal' || pathname.startsWith('/legal')) {
+    } else if (pathname.startsWith('/instructions') || 
+               pathname.startsWith('/guardrails') || 
+               pathname.startsWith('/platform-knowledge') || 
+               pathname.startsWith('/legal') || 
+               pathname.startsWith('/admin')) {
+      setActiveTab('account');
+    } else if (pathname.startsWith('/knowledge')) {
       setActiveTab('none');
     }
   }, [pathname, selectedOption]);
@@ -575,7 +581,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         )}
       </div>
       {/* Enclosed Search & Actions Row */}
-      {!hideSidebar && !isAdminMode && (
+      {!hideSidebar && activeTab !== 'account' && (
         <div className="h-[52px] flex items-center justify-between gap-2 border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-all duration-300 flex-none">
           {/* Search Bar Input */}
           <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 dark:border-zinc-800/80 bg-[#F5F5F7] dark:bg-zinc-800/50 px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 dark:focus-within:ring-white/10">
@@ -660,7 +666,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       )}
 
       {/* Chat / Projects / GCP Hub row toggle */}
-      {!hideSidebar && isLoggedIn && side !== 'right' && !isAdminMode && (
+      {!hideSidebar && isLoggedIn && side !== 'right' && (
         <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300">
           <div className="flex bg-[#F5F5F7] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
             <Tooltip>
@@ -807,140 +813,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           )}
         >
 
-          {isAdminMode ? (
-            <div className="mt-4 space-y-6">
-              {/* Platform Owner Section (for super_admin) */}
-              {isSuperAdmin && (
-                <div className="space-y-4">
-                  {[
-                    {
-                      groupName: 'Platform',
-                      items: [
-                        { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true }
-                      ]
-                    },
-                    {
-                      groupName: 'Members',
-                      items: [
-                        { name: 'Free Users', href: '/admin/metrics/total-users?plan=free', icon: User },
-                        { name: 'Paid Users', href: '/admin/metrics/total-users?plan=paid', icon: UserCheck },
-                        { name: 'Team Plans', href: '/admin/metrics/active-organizations', icon: UsersRound },
-                      ]
-                    },
-                    {
-                      groupName: 'Configurations',
-                      items: [
-                        { name: 'Instructions', href: '/admin/instructions', icon: FileText },
-                        { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
-                      ]
-                    },
-                    {
-                      groupName: 'Credentials',
-                      items: [
-                        { name: 'My Accounts', href: '/admin/accounts', icon: KeyRound },
-                        { name: 'Email Accounts', href: '/admin/emails', icon: Mail },
-                        { name: 'Data Partners', href: '/admin/partners', icon: Database },
-                        { name: 'API Keys', href: '/admin/apikeys', icon: Key },
-                      ]
-                    }
-                  ].map((group) => (
-                    <div key={group.groupName} className="space-y-1">
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-3 pb-1 select-none">
-                        {group.groupName}
-                      </div>
-                      {group.items.map((item: { name: string; href: string; icon: any; exact?: boolean }) => {
-                        const currentPlan = searchParams?.get('plan');
-                        const isActive = item.exact 
-                          ? pathname === item.href 
-                          : item.href.includes('?plan=free')
-                            ? pathname === '/admin/metrics/total-users' && currentPlan === 'free'
-                            : item.href.includes('?plan=paid')
-                              ? pathname === '/admin/metrics/total-users' && currentPlan === 'paid'
-                              : pathname.startsWith(item.href);
-                        const Icon = item.icon;
-                        return (
-                          <Link
-                            key={item.name}
-                            href={item.href}
-                            className={cn(
-                              'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                              isActive
-                                ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
-                                : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
-                            )}
-                          >
-                            <Icon className="w-4 h-4" />
-                            {item.name}
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* First Section */}
-              {isAdminSection && !isSuperAdmin && (
-                <div className="space-y-1">
-                  {[
-                    { name: 'Invite', href: '/admin/members', icon: UserPlus },
-                    { name: 'Members', href: '/admin/team-members', icon: Users },
-                    { name: 'Billing', href: '/admin/billing', icon: CreditCard },
-                    { name: 'Invoices', href: '/admin/invoices', icon: FileText },
-                  ].map((item) => {
-                    const isActive = pathname.startsWith(item.href);
-                    const Icon = item.icon;
-                    return (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className={cn(
-                          'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                          isActive
-                            ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
-                            : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
-                        )}
-                      >
-                        <Icon className="w-4 h-4" />
-                        {item.name}
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* Second Section */}
-              {isManagerSection && !isSuperAdmin && (
-                <div className="space-y-1">
-                  {[
-                    { name: 'Knowledge', href: '/admin/data', icon: Database },
-                    { name: 'Instructions', href: '/admin/instructions', icon: FileText },
-                    { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
-                    { name: 'Projects', href: '/admin/projects', icon: Folder },
-                  ].map((item) => {
-                    const isActive = pathname === item.href || (item.name === 'Projects' && pathname.startsWith('/admin/projects'));
-                    const Icon = item.icon;
-                    return (
-                      <div key={item.name}>
-                        <Link
-                          href={item.href}
-                          className={cn(
-                            'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                            isActive
-                              ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white'
-                              : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
-                          )}
-                        >
-                          <Icon className="w-4 h-4" />
-                          {item.name}
-                        </Link>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          ) : activeTab === 'bots' ? (
+          {activeTab === 'bots' ? (
             <div className="mt-2 space-y-1 py-1 pb-4">
               <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full mb-2 select-none">
                 <button
