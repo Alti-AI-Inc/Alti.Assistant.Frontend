@@ -48,17 +48,6 @@ const MemoryContent = () => {
       {/* Main Body */}
       <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6 flex justify-center">
         <div className="w-full space-y-6">
-          {/* Header description (no box) */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <Brain className="h-5 w-5 text-gray-950 dark:text-white" />
-              <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Long Term Memory Retention</h2>
-            </div>
-            <p className="text-xs text-gray-505 dark:text-gray-400 leading-relaxed">
-              Control how long your chat history is retained. Once the retention period ends, older conversation logs are automatically pruned to keep your workspace clean and protect context limits.
-            </p>
-          </div>
-
           {/* Toggle/Selection List */}
           <div className="space-y-3">
             {options.map((opt) => {

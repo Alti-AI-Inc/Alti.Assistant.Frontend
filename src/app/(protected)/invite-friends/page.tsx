@@ -30,14 +30,6 @@ const InviteContent = () => {
         <div className="w-full space-y-6">
           {!isSent ? (
             <>
-              {/* Card description */}
-              <div className="bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/5 rounded-2xl p-6 shadow-xs">
-                <p className="text-xs text-gray-505 dark:text-gray-400 leading-normal">
-                  Invite your friends to join the alti platform.<br />
-                  Enter their email address below to send an invitation.
-                </p>
-              </div>
-
               {/* Form Input Container */}
               <div className="bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/5 rounded-2xl p-6 shadow-xs">
                 <div className="relative flex items-center">
