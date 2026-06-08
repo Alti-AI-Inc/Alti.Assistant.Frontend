@@ -110,7 +110,7 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                             type={showOldPassword ? "text" : "password"}
                             id="oldPassword"
                             placeholder="Old Password"
-                            className="w-full h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 pl-4 pr-10 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all autofill:shadow-[inset_0_0_0_1000px_#f4f4f5] dark:autofill:shadow-[inset_0_0_0_1000px_#27272a] [-webkit-text-fill-color:#1f2937] dark:[-webkit-text-fill-color:#f3f4f6] [transition:background-color_50000s_ease-in-out_0s]"
+                            className="w-full h-10 rounded-lg border border-black/5 dark:border-white/5 bg-[#F5F5F7] dark:bg-zinc-800 bg-auth-input pl-4 pr-10 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all"
                           />
                           <button
                             type="button"
@@ -137,7 +137,7 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                             type={showNewPassword ? "text" : "password"}
                             id="newPassword"
                             placeholder="New Password"
-                            className="w-full h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 pl-4 pr-10 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all autofill:shadow-[inset_0_0_0_1000px_#f4f4f5] dark:autofill:shadow-[inset_0_0_0_1000px_#27272a] [-webkit-text-fill-color:#1f2937] dark:[-webkit-text-fill-color:#f3f4f6] [transition:background-color_50000s_ease-in-out_0s]"
+                            className="w-full h-10 rounded-lg border border-black/5 dark:border-white/5 bg-[#F5F5F7] dark:bg-zinc-800 bg-auth-input pl-4 pr-10 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all"
                           />
                           <button
                             type="button"
@@ -164,7 +164,7 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                             type={showConfirmNewPassword ? "text" : "password"}
                             id="confirmNewPassword"
                             placeholder="Confirm New Password"
-                            className="w-full h-10 rounded-lg border border-black/5 dark:border-white/5 bg-zinc-100 dark:bg-zinc-800 pl-4 pr-10 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all autofill:shadow-[inset_0_0_0_1000px_#f4f4f5] dark:autofill:shadow-[inset_0_0_0_1000px_#27272a] [-webkit-text-fill-color:#1f2937] dark:[-webkit-text-fill-color:#f3f4f6] [transition:background-color_50000s_ease-in-out_0s]"
+                            className="w-full h-10 rounded-lg border border-black/5 dark:border-white/5 bg-[#F5F5F7] dark:bg-zinc-800 bg-auth-input pl-4 pr-10 text-sm text-gray-800 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-400 outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 transition-all"
                           />
                           <button
                             type="button"
