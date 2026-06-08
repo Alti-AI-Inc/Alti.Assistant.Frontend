@@ -130,7 +130,7 @@ const InstructionsContent = () => {
                 size="sm"
                 onClick={handleAddInstruction}
                 disabled={isSaving || !inputVal.trim()}
-                className="h-8 px-4 rounded-md cursor-pointer"
+                className="h-8 px-4 rounded-md cursor-pointer bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 disabled:opacity-100 disabled:bg-black disabled:text-white/40 dark:disabled:bg-white dark:disabled:text-black/40"
               >
                 Add
                 <ArrowUp className="ml-1.5 h-3.5 w-3.5" />
