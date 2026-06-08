@@ -647,7 +647,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>Apps Workspace</p>
+                  <p>Apps</p>
                 </TooltipContent>
               </Tooltip>
             )}
