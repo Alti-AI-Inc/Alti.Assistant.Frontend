@@ -5,7 +5,6 @@ import Link from 'next/link';
 import {
   ArrowLeft,
   Mail,
-  Trash2,
   Search,
   MessageSquare,
 } from 'lucide-react';
@@ -87,8 +86,7 @@ export default function AdminSupportInboxPage() {
   const [responseText, setResponseText] = useState('');
   const [isSubmittingResponse, setIsSubmittingResponse] = useState(false);
 
-  // Dialog state for deleting
-  const [deletingRequest, setDeletingRequest] = useState<SupportRequest | null>(null);
+
 
   useEffect(() => {
     const existing = localStorage.getItem('alti_support_requests');
@@ -133,14 +131,7 @@ export default function AdminSupportInboxPage() {
     }, 800);
   };
 
-  const handleDelete = () => {
-    if (!deletingRequest) return;
-    const updatedRequests = requests.filter(req => req.id !== deletingRequest.id);
-    setRequests(updatedRequests);
-    localStorage.setItem('alti_support_requests', JSON.stringify(updatedRequests));
-    toast.success('Support request removed from inbox.');
-    setDeletingRequest(null);
-  };
+
 
   const filteredRequests = requests.filter(req => {
     const term = searchTerm.toLowerCase().trim();
@@ -197,11 +188,7 @@ export default function AdminSupportInboxPage() {
                     >
                       {/* Left icon & Content columns */}
                       <div className="col-span-10 flex items-center gap-5 min-w-0">
-                        <div className={`h-8 w-8 rounded-lg flex items-center justify-center flex-none ${
-                          req.status === 'Pending' 
-                            ? 'bg-amber-50 dark:bg-amber-955/20 text-amber-600 dark:text-amber-400' 
-                            : 'bg-emerald-50 dark:bg-emerald-955/20 text-emerald-600 dark:text-emerald-400'
-                        }`}>
+                        <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-none">
                           <Mail className="h-4 w-4" />
                         </div>
                         
@@ -275,16 +262,6 @@ export default function AdminSupportInboxPage() {
                           }}
                         >
                           <MessageSquare className="h-4 w-4" />
-                        </Button>
-
-                        {/* Delete Button */}
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20"
-                          onClick={() => setDeletingRequest(req)}
-                        >
-                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
@@ -390,39 +367,7 @@ export default function AdminSupportInboxPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog
-        open={!!deletingRequest}
-        onOpenChange={open => {
-          if (!open) setDeletingRequest(null);
-        }}
-      >
-        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden animate-in fade-in-50 duration-150">
-          <div className="px-5 pt-5 pb-4 text-center">
-            <DialogTitle className="text-[17px] font-semibold text-black dark:text-white leading-tight text-center">
-              Delete Support Request
-            </DialogTitle>
-            <DialogDescription className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1 text-center">
-              Are you sure you want to remove this support ticket from the inbox?
-            </DialogDescription>
-          </div>
-          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
-            <DialogClose asChild>
-              <button className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none">
-                Cancel
-              </button>
-            </DialogClose>
-            <DialogClose asChild>
-              <button
-                onClick={handleDelete}
-                className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none"
-              >
-                Delete
-              </button>
-            </DialogClose>
-          </div>
-        </DialogContent>
-      </Dialog>
+
     </div>
   );
 }
