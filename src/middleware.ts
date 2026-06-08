@@ -30,6 +30,15 @@ export default auth(async function middleware(req) {
   const { nextUrl } = req;
   const session = (req as any).auth;
 
+  // Redirect logged-in super_admin (owner) to /admin if they try to access any non-admin route
+  if (session?.user?.role === 'super_admin' && !nextUrl.pathname.startsWith('/admin')) {
+    const allowedAuthPaths = ['/auth', '/accept-invite'];
+    const isAllowedAuth = allowedAuthPaths.some(path => nextUrl.pathname.startsWith(path));
+    if (!isAllowedAuth) {
+      return applySecurityHeaders(NextResponse.redirect(new URL('/admin', req.url)));
+    }
+  }
+
   // Public routes that don't require authentication
   const publicRoutes = ['/accept-invite', '/auth', '/login', '/register', '/'];
   const isPublicRoute = publicRoutes.some(route =>

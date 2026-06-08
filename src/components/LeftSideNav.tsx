@@ -267,6 +267,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   }, [searchQuery, filteredApps, connectedAppSlugs, appsFilterTab]);
 
   useEffect(() => {
+    if (isSuperAdmin) {
+      setActiveTab('account');
+      return;
+    }
     if (pathname === '/apps') {
       setActiveTab('apps');
     } else if (pathname === '/my-chatbots' || pathname.startsWith('/my-chatbots')) {
@@ -317,6 +321,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
   // Synchronize tab and option selection with activeConversation.is_deep_search
   useEffect(() => {
+    if (isSuperAdmin) return;
     if (activeConversation) {
       const isDeepSearch = !!((activeConversation as any).is_deep_search);
       if (isDeepSearch) {
@@ -554,7 +559,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           onMouseEnter={handleLogoMouseEnter}
           onMouseLeave={() => setLogoHovered(false)}
         >
-          {logoHovered && hideSidebar ? (
+          {logoHovered && hideSidebar && !isSuperAdmin ? (
             <PanelLeftClose
               className={cn(
                 'size-[21px] cursor-pointer text-gray-600 dark:text-zinc-400 transition-transform duration-300',
@@ -574,21 +579,25 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         </div>
 
         {side === 'right' ? (
-          <PanelRightClose
-            className={cn(
-              'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
-              hideSidebar && 'hidden',
-            )}
-            onClick={toggleRightSidebar}
-          />
+          !isSuperAdmin && (
+            <PanelRightClose
+              className={cn(
+                'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
+                hideSidebar && 'hidden',
+              )}
+              onClick={toggleRightSidebar}
+            />
+          )
         ) : (
-          <PanelLeftClose
-            className={cn(
-              'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
-              hideSidebar && 'hidden',
-            )}
-            onClick={toggleLeftSidebar}
-          />
+          !isSuperAdmin && (
+            <PanelLeftClose
+              className={cn(
+                'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
+                hideSidebar && 'hidden',
+              )}
+              onClick={toggleLeftSidebar}
+            />
+          )
         )}
       </div>
       {/* Enclosed Search & Actions Row */}
@@ -677,7 +686,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       )}
 
       {/* Chat / Projects / GCP Hub row toggle */}
-      {!hideSidebar && isLoggedIn && side !== 'right' && (
+      {!hideSidebar && isLoggedIn && side !== 'right' && !isSuperAdmin && (
         <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300">
           <div className="flex bg-[#F5F5F7] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
             <Tooltip>
@@ -1316,18 +1325,20 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         >
           {isLoggedIn && activeTab === 'account' ? (
             <div className="flex flex-col w-full">
-              <div className="flex h-20 w-full items-center justify-center border-t border-black/10 dark:border-zinc-800/80 p-4 py-1.5">
-                <Button
-                  variant="default"
-                  className="w-full justify-center gap-2 bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 border border-transparent"
-                  onClick={() => {
-                    setActiveTab('chat');
-                    router.push('/');
-                  }}
-                >
-                  Return to App
-                </Button>
-              </div>
+              {!isSuperAdmin && (
+                <div className="flex h-20 w-full items-center justify-center border-t border-black/10 dark:border-zinc-800/80 p-4 py-1.5">
+                  <Button
+                    variant="default"
+                    className="w-full justify-center gap-2 bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 border border-transparent"
+                    onClick={() => {
+                      setActiveTab('chat');
+                      router.push('/');
+                    }}
+                  >
+                    Return to App
+                  </Button>
+                </div>
+              )}
               <div className="flex h-20 w-full items-center justify-center border-t border-black/10 dark:border-zinc-800/80 p-4 py-1.5">
                 <Button
                   variant="outline"

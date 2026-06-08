@@ -250,6 +250,10 @@ const LeftSideNavMobile = () => {
   }, [searchQuery, filteredApps, connectedAppSlugs]);
 
   useEffect(() => {
+    if (isSuperAdmin) {
+      setActiveTab('account');
+      return;
+    }
     if (pathname === '/apps') {
       setActiveTab('apps');
     } else if (pathname === '/my-chatbots' || pathname.startsWith('/my-chatbots')) {
@@ -300,6 +304,7 @@ const LeftSideNavMobile = () => {
 
   // Synchronize tab and option selection with activeConversation.is_deep_search
   useEffect(() => {
+    if (isSuperAdmin) return;
     if (activeConversation) {
       const isDeepSearch = !!((activeConversation as any).is_deep_search);
       if (isDeepSearch) {
@@ -615,7 +620,7 @@ const LeftSideNavMobile = () => {
       </div>
 
       {/* Chat / Projects / GCP Hub row toggle */}
-      {isLoggedIn && (
+      {isLoggedIn && !isSuperAdmin && (
         <div className="border-b border-black/5 px-4 py-2 bg-white dark:bg-zinc-900">
           <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
             <Tooltip>
@@ -1404,19 +1409,21 @@ const LeftSideNavMobile = () => {
       <div className="bg-white dark:bg-zinc-900 sticky bottom-0 flex flex-col w-full">
         {isLoggedIn && activeTab === 'account' ? (
           <div className="flex flex-col w-full">
-            <div className="flex h-20 w-full items-center justify-center border-t border-black/10 dark:border-zinc-800/80 p-4 py-1.5">
-              <Button
-                variant="default"
-                className="w-full justify-center gap-2 bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 border border-transparent"
-                onClick={() => {
-                  setActiveTab('chat');
-                  router.push('/');
-                  close();
-                }}
-              >
-                Return to App
-              </Button>
-            </div>
+            {!isSuperAdmin && (
+              <div className="flex h-20 w-full items-center justify-center border-t border-black/10 dark:border-zinc-800/80 p-4 py-1.5">
+                <Button
+                  variant="default"
+                  className="w-full justify-center gap-2 bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 border border-transparent"
+                  onClick={() => {
+                    setActiveTab('chat');
+                    router.push('/');
+                    close();
+                  }}
+                >
+                  Return to App
+                </Button>
+              </div>
+            )}
             <div className="flex h-20 w-full items-center justify-center border-t border-black/10 dark:border-zinc-800/80 p-4 py-1.5">
               <Button
                 variant="outline"
