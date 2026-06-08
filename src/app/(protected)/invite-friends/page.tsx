@@ -72,18 +72,15 @@ const InviteContent = () => {
 
       {/* iOS-Style Success Confirmation Dialog (Same style/design as logout popup) */}
       <Dialog open={showSuccess} onOpenChange={(open) => !open && setShowSuccess(false)}>
-        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[270px] sm:max-w-[270px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden animate-in fade-in-50 duration-150">
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[420px] sm:max-w-[420px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden animate-in fade-in-50 duration-150">
           {/* Centered Content Section */}
-          <div className="px-5 pt-5 pb-4 text-center space-y-2">
+          <div className="px-6 pt-5 pb-4 text-center space-y-2">
             <DialogTitle className="text-[17px] font-semibold text-black dark:text-white leading-tight text-center">
               Invite Sent
             </DialogTitle>
-            <DialogDescription className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1 text-center">
-              Your invitation has been successfully sent to:
+            <DialogDescription className="mt-1.5 text-[13px] text-gray-555 dark:text-gray-400 leading-normal px-1 text-center whitespace-nowrap">
+              Your invitation has been sent to <span className="font-semibold text-gray-800 dark:text-gray-200 select-all">{sentEmail}</span>
             </DialogDescription>
-            <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-200 break-all select-all px-2 py-1 bg-[#F5F5F7] dark:bg-zinc-800 rounded-lg inline-block">
-              {sentEmail}
-            </p>
           </div>
 
           {/* OK / Close Button */}

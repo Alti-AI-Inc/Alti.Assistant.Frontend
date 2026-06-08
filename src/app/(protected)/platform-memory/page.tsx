@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { toast } from 'sonner';
 import { Brain, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -20,8 +19,6 @@ const MemoryContent = () => {
   const handleSelect = (val: string) => {
     setSelected(val);
     localStorage.setItem('alti_memory_retention', val);
-    const label = options.find(o => o.value === val)?.label || val;
-    toast.success(`Memory retention updated to ${label}`);
   };
 
   const options = [

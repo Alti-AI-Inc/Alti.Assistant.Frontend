@@ -82,7 +82,6 @@ const InstructionsContent = () => {
       localStorage.setItem('alti_instructions', JSON.stringify(updatedList));
       setInputVal('');
       setIsSaving(false);
-      toast.success('Instruction added successfully');
     }, 300);
   };
 
@@ -90,7 +89,6 @@ const InstructionsContent = () => {
     const updatedList = instructionsList.filter(item => item.id !== id);
     setInstructionsList(updatedList);
     localStorage.setItem('alti_instructions', JSON.stringify(updatedList));
-    toast.success('Instruction removed');
   };
 
   const filteredInstructions = instructionsList.filter(item =>

@@ -82,7 +82,6 @@ const GuardrailsContent = () => {
       localStorage.setItem('alti_guardrails', JSON.stringify(updatedList));
       setInputVal('');
       setIsSaving(false);
-      toast.success('Guardrail added successfully');
     }, 300);
   };
 
@@ -90,7 +89,6 @@ const GuardrailsContent = () => {
     const updatedList = guardrailsList.filter(item => item.id !== id);
     setGuardrailsList(updatedList);
     localStorage.setItem('alti_guardrails', JSON.stringify(updatedList));
-    toast.success('Guardrail removed');
   };
 
   const filteredGuardrails = guardrailsList.filter(item =>
