@@ -1404,28 +1404,32 @@ const LeftSideNavMobile = () => {
       {/* Footer fixed at bottom */}
       <div className="bg-white dark:bg-zinc-900 sticky bottom-0 flex flex-col w-full">
         {isLoggedIn && activeTab === 'account' ? (
-          <div className="flex flex-col w-full border-t border-black/10 dark:border-zinc-800/80 p-4 gap-2">
-            <Button
-              variant="outline"
-              className="w-full justify-center gap-2 bg-[#F5F5F7] hover:bg-[#EAEAEB] dark:bg-zinc-800 dark:hover:bg-zinc-700/80 text-black dark:text-white border border-black/5 dark:border-white/5"
-              onClick={() => {
-                setActiveTab('chat');
-                router.push('/');
-                close();
-              }}
-            >
-              Return to App
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => {
-                onOpen({ type: 'logout' });
-                close();
-              }}
-              className="w-full transition-all duration-200 outline-none select-none cursor-pointer bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 border-transparent"
-            >
-              Logout
-            </Button>
+          <div className="flex flex-col w-full">
+            <div className="flex h-20 w-full items-center justify-center border-t border-black/10 dark:border-zinc-800/80 p-4 py-1.5">
+              <Button
+                variant="outline"
+                className="w-full justify-center gap-2 bg-[#F5F5F7] hover:bg-[#EAEAEB] dark:bg-zinc-800 dark:hover:bg-zinc-700/80 text-black dark:text-white border border-black/5 dark:border-white/5"
+                onClick={() => {
+                  setActiveTab('chat');
+                  router.push('/');
+                  close();
+                }}
+              >
+                Return to App
+              </Button>
+            </div>
+            <div className="flex h-20 w-full items-center justify-center border-t border-black/10 dark:border-zinc-800/80 p-4 py-1.5">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  onOpen({ type: 'logout' });
+                  close();
+                }}
+                className="w-full transition-all duration-200 outline-none select-none cursor-pointer bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 border-transparent"
+              >
+                Logout
+              </Button>
+            </div>
           </div>
         ) : (
           <div className="flex h-20 w-full items-center justify-center border-t border-black/10 dark:border-zinc-800/80 p-4">
