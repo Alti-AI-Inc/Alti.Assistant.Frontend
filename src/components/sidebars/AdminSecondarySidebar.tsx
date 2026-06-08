@@ -86,12 +86,11 @@ export const AdminSecondarySidebar = () => {
                 className="flex-shrink-0"
               />
             )}
-            <span className={cn(
-              "text-sm font-semibold text-black dark:text-white truncate",
-              isSuperAdmin ? "absolute left-1/2 -translate-x-1/2" : ""
-            )}>
-              {headerTitle}
-            </span>
+            {!isSuperAdmin && (
+              <span className="text-sm font-semibold text-black dark:text-white truncate">
+                {headerTitle}
+              </span>
+            )}
             {isSuperAdmin && (
               <button
                 onClick={toggleLeftSidebar}
