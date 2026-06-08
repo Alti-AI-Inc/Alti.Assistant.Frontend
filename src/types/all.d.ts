@@ -1,6 +1,5 @@
 type ModalType =
   | 'logout'
-  | 'invite'
   | 'search-chats'
   | 'rename-chat'
   | 'forgot-password'

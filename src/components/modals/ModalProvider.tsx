@@ -18,7 +18,6 @@ import { EditChatbotModal } from './EditChatbotModal';
 import { ForgotPasswordDialog } from './ForgotPasswordDialog';
 import { InviteMemberModal } from './InviteMemberModal';
 import { Logout } from './logout';
-import { InviteFriends } from './InviteFriends';
 import RenameChat from './RenameChat';
 import SearchChats from './SearchChats';
 import SearchWorkflows from './SearchWorkflows';
@@ -47,7 +46,6 @@ export const ModalProvider = () => {
   return (
     <>
       {type === 'logout' && <Logout />}
-      {type === 'invite' && <InviteFriends />}
       {type === 'search-chats' && <SearchChats />}
       {type === 'rename-chat' && <RenameChat />}
       {type === 'forgot-password' && <ForgotPasswordDialog />}

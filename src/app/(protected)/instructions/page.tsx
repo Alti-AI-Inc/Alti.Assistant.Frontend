@@ -9,7 +9,6 @@ import {
   DialogDescription,
   DialogClose,
 } from '@/components/ui/dialog';
-import AudioRecorder from '@/components/AudioRecorder';
 import { cn } from '@/lib/utils';
 import {
   Terminal,
@@ -129,15 +128,14 @@ const InstructionsContent = () => {
               className="flex-1 min-w-0 bg-transparent border-none py-1.5 h-9 text-base text-gray-800 placeholder-gray-400 dark:text-gray-100 outline-none focus:ring-0 focus-visible:ring-0"
             />
             <div className="flex-none ml-2 flex items-center gap-2">
-              <AudioRecorder setMessage={setInputVal} setIsRecording={setIsAudioRecording} />
               <Button
                 size="sm"
                 onClick={handleAddInstruction}
                 disabled={isSaving || !inputVal.trim()}
                 className="h-8 px-4 rounded-md cursor-pointer"
               >
-                <ArrowUp className="mr-1.5 h-3.5 w-3.5" />
                 Add
+                <ArrowUp className="ml-1.5 h-3.5 w-3.5" />
               </Button>
             </div>
           </div>

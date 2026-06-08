@@ -1267,7 +1267,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
               {!isSuperAdmin && (
                 <button
-                  onClick={() => onOpen({ type: 'invite' })}
+                  onClick={() => router.push('/invite-friends')}
                   className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
                 >
                   <UserPlus className="w-4 h-4 text-black dark:text-white" /> Invite Friends
