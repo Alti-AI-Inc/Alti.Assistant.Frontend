@@ -656,6 +656,15 @@ const ChatInput = ({
         queryClient.invalidateQueries({
           queryKey: ['conversations', data?.accessToken],
         });
+        const targetId =
+          conversationId === 'new-chat'
+            ? response.data.conversationId
+            : conversationId;
+        if (targetId) {
+          queryClient.invalidateQueries({
+            queryKey: ['activeConversation', targetId, data?.accessToken],
+          });
+        }
       }
       setLoadingResponse(false);
     },
