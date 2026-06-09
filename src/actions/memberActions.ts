@@ -211,6 +211,7 @@ export async function getTenantMember(
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error getting tenant member',
+      data: null as unknown as TenantMember,
     };
   }
 }
@@ -486,6 +487,7 @@ export async function verifyInvitationToken(
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error verifying invitation token',
+      data: null as unknown as VerifyInvitationResponse,
     };
   }
 }
@@ -543,6 +545,7 @@ export async function acceptInvitation(
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error accepting invitation',
+      data: null as unknown as { tenantId: string; message: string },
     };
   }
 }
@@ -614,6 +617,7 @@ export async function updateMemberRole(
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error updating member role',
+      data: null as unknown as TenantMember,
     };
   }
 }
@@ -649,6 +653,7 @@ export async function removeMember(
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error removing member',
+      data: null as unknown as { message: string },
     };
   }
 }
@@ -723,6 +728,7 @@ export async function cancelInvitation(
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error canceling invitation',
+      data: null as unknown as { message: string },
     };
   }
 }

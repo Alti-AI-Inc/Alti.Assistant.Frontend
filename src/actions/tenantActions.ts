@@ -252,6 +252,7 @@ export async function getTenantById(
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error getting tenant by ID',
+      data: null as unknown as Tenant,
     };
   }
 }
@@ -285,6 +286,7 @@ export async function getCurrentTenant(): Promise<ApiResponse<Tenant>> {
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error getting current tenant',
+      data: null as unknown as Tenant,
     };
   }
 }
@@ -491,6 +493,7 @@ export async function updateTenantSettings(
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error updating tenant settings',
+      data: null as unknown as Tenant,
     };
   }
 }
@@ -524,6 +527,7 @@ export async function getTenantUsage(): Promise<ApiResponse<TenantUsage>> {
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error getting tenant usage',
+      data: null as unknown as TenantUsage,
     };
   }
 }
@@ -563,6 +567,7 @@ export async function switchTenant(
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Error switching tenant',
+      data: null as unknown as SwitchTenantResponse,
     };
   }
 }
