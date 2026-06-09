@@ -249,7 +249,10 @@ export async function getTenantById(
     return await response.json();
   } catch (error: any) {
     console.error('Error getting tenant by ID:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error getting tenant by ID',
+    };
   }
 }
 
@@ -279,7 +282,10 @@ export async function getCurrentTenant(): Promise<ApiResponse<Tenant>> {
     return await response.json();
   } catch (error: any) {
     console.error('Error getting current tenant:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error getting current tenant',
+    };
   }
 }
 
@@ -385,7 +391,11 @@ export async function getUserTenants(): Promise<ApiResponse<UserTenant[]>> {
     };
   } catch (error: any) {
     console.error('Error getting user tenants:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error getting user tenants',
+      data: [],
+    };
   }
 }
 
@@ -478,7 +488,10 @@ export async function updateTenantSettings(
     return await response.json();
   } catch (error: any) {
     console.error('Error updating tenant settings:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error updating tenant settings',
+    };
   }
 }
 
@@ -508,7 +521,10 @@ export async function getTenantUsage(): Promise<ApiResponse<TenantUsage>> {
     return await response.json();
   } catch (error: any) {
     console.error('Error getting tenant usage:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error getting tenant usage',
+    };
   }
 }
 
@@ -544,6 +560,9 @@ export async function switchTenant(
     return await response.json();
   } catch (error: any) {
     console.error('Error switching tenant:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error switching tenant',
+    };
   }
 }

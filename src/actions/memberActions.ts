@@ -172,7 +172,11 @@ export async function getTenantMembers(): Promise<ApiResponse<TenantMember[]>> {
     };
   } catch (error: any) {
     console.error('Error getting tenant members:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error getting tenant members',
+      data: [],
+    };
   }
 }
 
@@ -204,7 +208,10 @@ export async function getTenantMember(
     return await response.json();
   } catch (error: any) {
     console.error('Error getting tenant member:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error getting tenant member',
+    };
   }
 }
 
@@ -247,7 +254,11 @@ export async function getTenantMemberByTenantId(
     };
   } catch (error: any) {
     console.error('Error getting tenant members by tenant ID:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error getting tenant members by tenant ID',
+      data: [],
+    };
   }
 }
 
@@ -361,7 +372,11 @@ export async function getPendingInvitations(): Promise<
     };
   } catch (error: any) {
     console.error('Error getting pending invitations:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error getting pending invitations',
+      data: [],
+    };
   }
 }
 
@@ -468,7 +483,10 @@ export async function verifyInvitationToken(
     };
   } catch (error: any) {
     console.error('Error verifying invitation token:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error verifying invitation token',
+    };
   }
 }
 
@@ -522,7 +540,10 @@ export async function acceptInvitation(
     return await response.json();
   } catch (error: any) {
     console.error('Error accepting invitation:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error accepting invitation',
+    };
   }
 }
 
@@ -590,7 +611,10 @@ export async function updateMemberRole(
     };
   } catch (error: any) {
     console.error('Error updating member role:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error updating member role',
+    };
   }
 }
 
@@ -622,7 +646,10 @@ export async function removeMember(
     return await response.json();
   } catch (error: any) {
     console.error('Error removing member:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error removing member',
+    };
   }
 }
 
@@ -654,7 +681,11 @@ export async function getUserInvitations(): Promise<
     return await response.json();
   } catch (error: any) {
     console.error('Error getting user invitations:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error getting user invitations',
+      data: [],
+    };
   }
 }
 
@@ -689,6 +720,9 @@ export async function cancelInvitation(
     return await response.json();
   } catch (error: any) {
     console.error('Error canceling invitation:', error);
-    throw error;
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Error canceling invitation',
+    };
   }
 }

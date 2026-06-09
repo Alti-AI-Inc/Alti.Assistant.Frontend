@@ -1,44 +1,16 @@
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 
-// Security headers applied to all responses
-const securityHeaders = {
-  'Content-Security-Policy': [
-    "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com",
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "font-src 'self' https://fonts.gstatic.com",
-    "img-src 'self' data: https: blob:",
-    "connect-src 'self' https: wss: https://api.stripe.com",
-    "frame-src 'self' https://js.stripe.com https://hooks.stripe.com",
-    "frame-ancestors 'none'",
-  ].join('; '),
-  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
-  'X-Content-Type-Options': 'nosniff',
-  'X-Frame-Options': 'DENY',
-  'Referrer-Policy': 'strict-origin-when-cross-origin',
-  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
-};
-
-function applySecurityHeaders(response: NextResponse): NextResponse {
-  for (const [key, value] of Object.entries(securityHeaders)) {
-    response.headers.set(key, value);
-  }
-  return response;
-}
-
 export default auth(async function middleware(req) {
   const { nextUrl } = req;
   const session = (req as any).auth;
-
-
 
   // Redirect logged-in super_admin (owner) to /admin if they try to access any non-admin route
   if (session?.user?.role === 'super_admin' && !nextUrl.pathname.startsWith('/admin')) {
     const allowedAuthPaths = ['/auth', '/accept-invite'];
     const isAllowedAuth = allowedAuthPaths.some(path => nextUrl.pathname.startsWith(path));
     if (!isAllowedAuth) {
-      return applySecurityHeaders(NextResponse.redirect(new URL('/admin', req.url)));
+      return NextResponse.redirect(new URL('/admin', req.url));
     }
   }
 
@@ -52,12 +24,12 @@ export default auth(async function middleware(req) {
 
   // Allow public routes
   if (isPublicRoute) {
-    return applySecurityHeaders(NextResponse.next());
+    return NextResponse.next();
   }
 
   // Check authentication
   if (!session?.user) {
-    return applySecurityHeaders(NextResponse.redirect(new URL('/', req.url)));
+    return NextResponse.redirect(new URL('/', req.url));
   }
 
   // Check for organization-specific routes
@@ -68,7 +40,7 @@ export default auth(async function middleware(req) {
 
     // Skip validation for static organization routes
     if (tenantId === 'create' || tenantId === 'dashboard') {
-      return applySecurityHeaders(NextResponse.next());
+      return NextResponse.next();
     }
 
     // Validate tenant membership
@@ -77,11 +49,11 @@ export default auth(async function middleware(req) {
 
     if (!isMember) {
       // User is not a member of this tenant, redirect to organizations list
-      return applySecurityHeaders(NextResponse.redirect(new URL('/organizations', req.url)));
+      return NextResponse.redirect(new URL('/organizations', req.url));
     }
   }
 
-  return applySecurityHeaders(NextResponse.next());
+  return NextResponse.next();
 });
 
 export const config = {
