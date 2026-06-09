@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { RegisterUser, confirmRegistration } from '@/actions/register';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Eye, EyeOff } from 'lucide-react';
 
-export default function RegisterPage() {
+function RegisterPageContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -20,6 +20,35 @@ export default function RegisterPage() {
   const [verifying, setVerifying] = useState(false);
   const [verifyError, setVerifyError] = useState<string | null>(null);
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const queryCode = searchParams?.get('code');
+
+  useEffect(() => {
+    if (queryCode && queryCode.length === 6) {
+      setShowVerification(true);
+      setVerifyCode(queryCode);
+
+      const autoVerify = async () => {
+        setVerifying(true);
+        setVerifyError(null);
+        try {
+          const res = await confirmRegistration(queryCode);
+          if (!res.success) {
+            setVerifyError(res.message || 'Invalid code. Please try again.');
+          } else {
+            // Success: Redirect to login
+            router.push('/login');
+          }
+        } catch (err) {
+          setVerifyError('An error occurred. Please try again.');
+        } finally {
+          setVerifying(false);
+        }
+      };
+      autoVerify();
+    }
+  }, [queryCode, router]);
 
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -223,5 +252,19 @@ export default function RegisterPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-[#F5F5F7] px-4 dark:bg-zinc-950">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-black" />
+        </div>
+      }
+    >
+      <RegisterPageContent />
+    </Suspense>
   );
 }
