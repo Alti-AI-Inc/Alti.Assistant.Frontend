@@ -77,7 +77,7 @@ export const AppsPanelsContainer = () => {
     const fetchMcpStatus = async () => {
       if (!session?.accessToken) return;
       const res = await apiClientJson<{ servers: { id: string; status: string }[] }>(
-        buildApiUrl('/mcp_toolbox/servers/status'),
+        buildApiUrl('/mcp-toolbox/servers/status'),
         {
           headers: { 'Authorization': `Bearer ${session.accessToken}` }
         }
@@ -155,7 +155,7 @@ export const AppsPanelsContainer = () => {
     }
 
     const response = await apiClientJson<{ success: boolean; message?: string }>(
-      buildApiUrl('/mcp_toolbox/install-app'),
+      buildApiUrl('/mcp-toolbox/install-app'),
       {
         method: 'POST',
         headers: { 
