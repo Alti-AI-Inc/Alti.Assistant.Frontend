@@ -31,27 +31,10 @@ import { MemberRoleSelector } from './MemberRoleSelector';
 import type { TenantMember } from '@/types/tenant';
 
 interface MembersListProps {
-  members: (TenantMember & { isInvitation?: boolean; firstName?: string; lastName?: string })[];
+  members: (TenantMember & { isInvitation?: boolean })[];
   tenantId: string;
   onUpdate: () => void | Promise<void>;
 }
-
-// LocalStorage helper for display names
-const getInvitedName = (email: string) => {
-  if (typeof window === 'undefined') return { firstName: '', lastName: '' };
-  try {
-    const saved = localStorage.getItem('alti_invited_names');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (parsed[email.toLowerCase()]) {
-        return parsed[email.toLowerCase()];
-      }
-    }
-  } catch (e) {
-    console.error(e);
-  }
-  return { firstName: '', lastName: '' };
-};
 
 function MembersListComponent({
   members,
@@ -116,16 +99,12 @@ function MembersListComponent({
     {
       _id: 'dummy1',
       userId: { _id: 'dummy1_user', email: 'john.doe@example.com' },
-      firstName: 'John',
-      lastName: 'Doe',
       role: 'admin',
       isInvitation: false,
     },
     {
       _id: 'dummy2',
       userId: { _id: 'dummy2_user', email: 'jane.smith@example.com' },
-      firstName: 'Jane',
-      lastName: 'Smith',
       role: 'member',
       isInvitation: true,
       status: 'pending'
@@ -133,8 +112,6 @@ function MembersListComponent({
     {
       _id: 'dummy3',
       userId: { _id: 'dummy3_user', email: 'mike.ross@example.com' },
-      firstName: 'Mike',
-      lastName: 'Ross',
       role: 'member',
       isInvitation: false,
     }
@@ -148,14 +125,8 @@ function MembersListComponent({
     <>
       <div className="flex-1 overflow-y-auto pr-1 pb-4 custom-scrollbar space-y-3 relative z-10 !mt-0">
         {/* Title Bar */}
-        <div className="hidden md:flex items-center justify-between py-2 px-4 gap-4 sticky top-0 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md z-20 border-b border-black/10 dark:border-white/10 mb-4 rounded-t-lg">
+        <div className="hidden md:flex items-center justify-between py-2 px-4 gap-4 sticky top-0 bg-white/80 dark:bg-gray-955/80 backdrop-blur-md z-20 border-b border-black/10 dark:border-white/10 mb-4 rounded-t-lg">
           <div className="flex items-center gap-4 flex-1">
-            <div className="flex-1 min-w-0">
-              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">First Name</span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Last Name</span>
-            </div>
             <div className="flex-1 min-w-0">
               <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Email Address</span>
             </div>
@@ -177,11 +148,6 @@ function MembersListComponent({
               member.tenantRole ?? member.role ?? 'member',
             ).toLowerCase();
             
-            // Retrieve names with lookups
-            const nameInfo = getInvitedName(email);
-            const firstName = member.firstName || nameInfo.firstName || (isCurrentUser ? session?.user?.name?.split(' ')[0] : '') || '—';
-            const lastName = member.lastName || nameInfo.lastName || (isCurrentUser ? session?.user?.name?.split(' ').slice(1).join(' ') : '') || '—';
-            
             const canModify = isTenantAdminOrOwner && !isCurrentUser;
 
             return (
@@ -190,18 +156,6 @@ function MembersListComponent({
                 className="group flex flex-col md:flex-row md:items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs gap-4"
               >
                 <div className="flex flex-col md:flex-row md:items-center gap-4 flex-1">
-                  {/* First Name */}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed">
-                      {firstName}
-                    </p>
-                  </div>
-                  {/* Last Name */}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed">
-                      {lastName}
-                    </p>
-                  </div>
                   {/* Email */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
