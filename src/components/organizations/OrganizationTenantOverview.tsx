@@ -78,6 +78,8 @@ export function OrganizationTenantOverview({
   const latestTenantLoadRef = useRef<string | null>(null);
 
   // Form states for the permanent invite box
+  const [inviteFirstName, setInviteFirstName] = useState('');
+  const [inviteLastName, setInviteLastName] = useState('');
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState('');
   const [isInviting, setIsInviting] = useState(false);
@@ -313,7 +315,24 @@ export function OrganizationTenantOverview({
       });
 
       if (response.success && response.data) {
+        // Save the invited name locally
+        if (typeof window !== 'undefined') {
+          try {
+            const saved = localStorage.getItem('alti_invited_names') || '{}';
+            const parsed = JSON.parse(saved);
+            parsed[inviteEmail.toLowerCase().trim()] = {
+              firstName: inviteFirstName.trim(),
+              lastName: inviteLastName.trim(),
+            };
+            localStorage.setItem('alti_invited_names', JSON.stringify(parsed));
+          } catch (e) {
+            console.error(e);
+          }
+        }
+
         toast.success('Invitation sent successfully!');
+        setInviteFirstName('');
+        setInviteLastName('');
         setInviteEmail('');
         setInviteRole('');
         void reloadDashboard();
@@ -365,7 +384,27 @@ export function OrganizationTenantOverview({
         <>
           {(view === 'both' || view === 'invite') && (
           <div className="space-y-4 pt-2">
-
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Row 1: First Name & Last Name */}
+              <Input
+                id="first-name"
+                type="text"
+                placeholder="Enter First Name"
+                value={inviteFirstName}
+                onChange={(e) => setInviteFirstName(e.target.value)}
+                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-black/20 focus:shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
+                disabled={isInviting}
+              />
+              <Input
+                id="last-name"
+                type="text"
+                placeholder="Enter Last Name"
+                value={inviteLastName}
+                onChange={(e) => setInviteLastName(e.target.value)}
+                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-black/20 focus:shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
+                disabled={isInviting}
+              />
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Row 2: Email & Role */}

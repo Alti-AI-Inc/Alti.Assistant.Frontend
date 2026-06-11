@@ -80,10 +80,12 @@ function PaymentMethodForm({
 
       // "You then use this ID when calling your backend API to attach or add the payment method"
       console.log('paymentMethod payload', {
+        customerId,
         paymentMethodId: paymentMethod.id,
         accessToken,
       });
       const result = await addPaymentMethod(
+        customerId,
         paymentMethod.id,
         accessToken,
       );

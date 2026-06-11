@@ -585,6 +585,7 @@ export async function getPaymentMethods(
 }
 
 export async function addPaymentMethod(
+  customerId: string,
   paymentMethodId: string,
   accessToken: string,
 ): Promise<ApiResponse<StripePaymentMethod>> {
@@ -597,7 +598,7 @@ export async function addPaymentMethod(
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ paymentMethodId }),
+        body: JSON.stringify({ customerId, paymentMethodId }),
       },
     );
 
