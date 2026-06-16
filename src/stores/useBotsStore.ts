@@ -9,9 +9,15 @@ export interface Chatbot {
   model: string;
   avatar: string; // Emoji
   createdAt: string;
-  data?: string;
+  data?: string | null;
   guardrails?: string;
   isShared?: boolean;
+  metadata?: {
+    status?: 'tuning' | 'ready' | 'failed';
+    jobId?: string;
+    tuningError?: string;
+    tuningDatasetUri?: string;
+  };
 }
 
 export interface BotThread {
@@ -29,9 +35,10 @@ interface BotsState {
   projectTab: 'my' | 'team';
   
   // Actions
-  addBot: (bot: Omit<Chatbot, 'id' | 'createdAt'>) => Chatbot;
-  editBot: (id: string, updated: Partial<Omit<Chatbot, 'id' | 'createdAt'>>) => void;
-  deleteBot: (id: string) => void;
+  addBot: (bot: Omit<Chatbot, 'id' | 'createdAt'>, token?: string) => Chatbot;
+  addBotAsync: (bot: Omit<Chatbot, 'id' | 'createdAt'>, token?: string) => Promise<Chatbot>;
+  editBot: (id: string, updated: Partial<Omit<Chatbot, 'id' | 'createdAt'>>, token?: string) => void;
+  deleteBot: (id: string, token?: string) => void;
   setActiveBotId: (id: string | null) => void;
   
   addThread: (botId: string, threadId: string, title: string) => void;
@@ -40,7 +47,7 @@ interface BotsState {
   setProjectTab: (tab: 'my' | 'team') => void;
   
   // Async initialization
-  fetchBots: () => Promise<void>;
+  fetchBots: (token?: string) => Promise<void>;
 }
 
 const getApiUrl = () => process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
@@ -93,7 +100,7 @@ export const useBotsStore = create<BotsState>()(
       activeBotThreadId: null,
       projectTab: 'my',
 
-      addBot: (newBotData) => {
+      addBot: (newBotData, token) => {
         const id = `bot_${Date.now()}`;
         const newBot: Chatbot = {
           ...newBotData,
@@ -110,6 +117,7 @@ export const useBotsStore = create<BotsState>()(
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
           },
           body: JSON.stringify(newBot),
         }).catch((err) => console.error('Failed to sync addBot to backend', err));
@@ -117,7 +125,46 @@ export const useBotsStore = create<BotsState>()(
         return newBot;
       },
 
-      editBot: (id, updatedData) => {
+      addBotAsync: async (newBotData, token) => {
+        const tempId = `bot_${Date.now()}`;
+        const tempBot: Chatbot = {
+          ...newBotData,
+          id: tempId,
+          createdAt: new Date().toISOString(),
+        };
+        set((state) => ({
+          bots: [...state.bots, tempBot],
+          activeBotId: tempId,
+        }));
+        
+        try {
+          const res = await fetch(`${getApiUrl()}/chatbots`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify(tempBot),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data?.data) {
+              const backendBot: Chatbot = data.data;
+              set((state) => ({
+                bots: state.bots.map((b) => b.id === tempId ? backendBot : b),
+                activeBotId: state.activeBotId === tempId ? backendBot.id : state.activeBotId,
+              }));
+              return backendBot;
+            }
+          }
+        } catch (err) {
+          console.error('Failed to sync addBotAsync to backend', err);
+        }
+        
+        return tempBot;
+      },
+
+      editBot: (id, updatedData, token) => {
         set((state) => ({
           bots: state.bots.map((bot) =>
             bot.id === id ? { ...bot, ...updatedData } : bot
@@ -125,15 +172,16 @@ export const useBotsStore = create<BotsState>()(
         }));
         // Sync with backend asynchronously
         fetch(`${getApiUrl()}/chatbots/${id}`, {
-          method: 'PUT',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
           },
           body: JSON.stringify(updatedData),
         }).catch((err) => console.error('Failed to sync editBot to backend', err));
       },
 
-      deleteBot: (id) => {
+      deleteBot: (id, token) => {
         set((state) => ({
           bots: state.bots.filter((bot) => bot.id !== id),
           // Clear active bot if it was deleted
@@ -146,6 +194,9 @@ export const useBotsStore = create<BotsState>()(
         // Sync with backend
         fetch(`${getApiUrl()}/chatbots/${id}`, {
           method: 'DELETE',
+          headers: {
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+          },
         }).catch((err) => console.error('Failed to sync deleteBot to backend', err));
       },
 
@@ -183,9 +234,13 @@ export const useBotsStore = create<BotsState>()(
 
       setProjectTab: (tab) => set({ projectTab: tab }),
 
-      fetchBots: async () => {
+      fetchBots: async (token) => {
         try {
-          const res = await fetch(`${getApiUrl()}/chatbots`);
+          const res = await fetch(`${getApiUrl()}/chatbots`, {
+            headers: {
+              ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+            },
+          });
           if (res.ok) {
             const data = await res.json();
             if (data?.data && Array.isArray(data.data)) {

@@ -44,7 +44,8 @@ import {
   Image as ImageIcon,
   Presentation,
   File,
-  Paperclip
+  Paperclip,
+  Cpu
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -85,7 +86,7 @@ function MyChatbotsContent() {
   const { data: session } = useSession();
   const queryClient = useQueryClient();
 
-  const { bots, activeBotId, activeBotThreadId, setActiveBotId, setActiveBotThreadId, addBot, projectTab } = useBotsStore();
+  const { bots, activeBotId, activeBotThreadId, setActiveBotId, setActiveBotThreadId, addBotAsync, projectTab } = useBotsStore();
   const { setActiveConversation, activeConversation } = useConversationsStore();
 
   const hasMessages = !!activeConversation?.messages?.length;
@@ -108,12 +109,11 @@ function MyChatbotsContent() {
   const viewParam = searchParams?.get('view');
   
   const [isCreating, setIsCreating] = useState(false);
+  const [isRetryingTuning, setIsRetryingTuning] = useState(false);
   const [error, setError] = useState('');
   
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragActive, setIsDragActive] = useState(false);
-
-
 
   // Sync state with URL params
   useEffect(() => {
@@ -133,9 +133,115 @@ function MyChatbotsContent() {
 
   const activeBot = bots.find((b) => b.id === activeBotId);
 
+  // Poll tuning status for active chatbot if status is 'tuning'
+  useEffect(() => {
+    if (!activeBot || activeBot.metadata?.status !== 'tuning' || !session?.accessToken) return;
+
+    let isSubscribed = true;
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
+
+    const checkStatus = async () => {
+      try {
+        const res = await fetch(`${apiUrl}/chatbots/${activeBot.id}/tuning-status`, {
+          headers: {
+            'Authorization': `Bearer ${session.accessToken}`,
+          },
+        });
+        if (!res.ok) return;
+
+        const data = await res.json();
+        if (!isSubscribed) return;
+
+        // If status or jobId or error changed, update the store
+        if (data?.success && data.data) {
+          const newStatus = data.data.status; // 'tuning' | 'ready' | 'failed'
+          const newJobId = data.data.jobId;
+          const newError = data.data.tuningError;
+          const newDatasetUri = data.data.tuningDatasetUri;
+
+          const currentMeta = activeBot.metadata || {};
+          if (
+            currentMeta.status !== newStatus ||
+            currentMeta.jobId !== newJobId ||
+            currentMeta.tuningError !== newError ||
+            currentMeta.tuningDatasetUri !== newDatasetUri
+          ) {
+            console.log('[Tuning Poll] Status updated:', newStatus);
+            useBotsStore.getState().editBot(activeBot.id, {
+              metadata: {
+                status: newStatus,
+                jobId: newJobId,
+                tuningError: newError,
+                tuningDatasetUri: newDatasetUri,
+              },
+            }, session.accessToken);
+            
+            if (newStatus === 'ready') {
+              toast.success('Your custom model is fully trained and ready to use!');
+            } else if (newStatus === 'failed') {
+              toast.error(`Model training failed: ${newError || 'Unknown error'}`);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error polling tuning status:', err);
+      }
+    };
+
+    // Poll every 15 seconds
+    const intervalId = setInterval(checkStatus, 15000);
+    // Also run immediately on status change to 'tuning'
+    checkStatus();
+
+    return () => {
+      isSubscribed = false;
+      clearInterval(intervalId);
+    };
+  }, [activeBotId, activeBot?.metadata?.status, session?.accessToken]);
+
+  // Model Retry Submission
+  const handleRetryTuning = async () => {
+    if (!activeBot || !session?.accessToken) return;
+    
+    setIsRetryingTuning(true);
+    try {
+      toast.info('Initiating model training retry...');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
+      const res = await fetch(`${apiUrl}/chatbots/${activeBot.id}/tune`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.accessToken}`,
+        },
+      });
+      if (res.ok) {
+        toast.success('Model fine-tuning has been restarted.');
+        // Update local status to tuning immediately so UI updates
+        const updatedMetadata = {
+          ...activeBot.metadata,
+          status: 'tuning' as const,
+          tuningError: undefined,
+        };
+        useBotsStore.getState().editBot(activeBot.id, { metadata: updatedMetadata }, session.accessToken);
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        toast.error(`Failed to restart training: ${errData.message || 'Unknown error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to communicate with tuning service.');
+    } finally {
+      setIsRetryingTuning(false);
+    }
+  };
+
   // Form Submission
   const handleCreateProject = async () => {
     if (!projectName.trim() || (!instructions.trim() && instructionsList.length === 0)) return;
+
+    if (projectTab === 'team' && selectedFiles.length === 0) {
+      setError('Please upload at least one training file to fine-tune your model.');
+      return;
+    }
 
     setIsCreating(true);
     setError('');
@@ -156,7 +262,7 @@ function MyChatbotsContent() {
       }
 
       // 2. Add local bot to Zustand store
-      const newBot = addBot({
+      const newBot = await addBotAsync({
         name: projectName,
         description: projectTab === 'team' ? `Custom Model Workspace: ${projectName}` : `Custom Project Workspace: ${projectName}`,
         instructions: instructionsList.length > 0 ? instructionsList.map(i => i.text).join('\n\n') : instructions,
@@ -165,7 +271,7 @@ function MyChatbotsContent() {
         guardrails: guardrailsList.length > 0 ? guardrailsList.map(g => g.text).join('\n\n') : guardrails,
         data: backendId || undefined, // Save the backend knowledgebase ID in the 'data' field!
         isShared: projectTab === 'team',
-      });
+      }, session?.accessToken || undefined);
 
       // 3. Sequentially upload files to the knowledgebase if files are selected
       if (selectedFiles.length > 0 && backendId && session?.accessToken) {
@@ -193,16 +299,39 @@ function MyChatbotsContent() {
         });
       }
 
+      // 4. Trigger model tuning if it is a Model tab creation and we have backend access
+      if (projectTab === 'team' && newBot && newBot.id && !newBot.id.startsWith('bot_') && session?.accessToken) {
+        try {
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
+          const tuneRes = await fetch(`${apiUrl}/chatbots/${newBot.id}/tune`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${session.accessToken}`,
+            },
+          });
+          if (tuneRes.ok) {
+            toast.success('Model fine-tuning has been triggered successfully.');
+          } else {
+            const errData = await tuneRes.json().catch(() => ({}));
+            console.error('Failed to trigger tuning:', errData);
+            toast.error(`Failed to trigger model fine-tuning: ${errData.message || 'Unknown error'}`);
+          }
+        } catch (tuneErr) {
+          console.error('[Wizard] SFT triggering error:', tuneErr);
+          toast.error('Connection error: Failed to trigger model fine-tuning.');
+        }
+      }
 
       setIsCreating(false);
       setProjectName('');
       setInstructions('');
       setInstructionsList([]);
       setGuardrails('');
+      setGuardrailsList([]);
       setSelectedFiles([]);
       setCurrentStep(1);
 
-      // 4. Select new bot and route to active view
+      // 5. Select new bot and route to active view
       setActiveBotId(newBot.id);
       router.push(`/my-chatbots?bot=${newBot.id}`);
     } catch (err: any) {
@@ -861,15 +990,21 @@ function MyChatbotsContent() {
                           )}
 
                           {/* Create Space Button below fixed list area */}
-                          <div className="absolute top-[224px] left-0 w-full flex justify-center">
+                          <div className="absolute top-[224px] left-0 w-full flex flex-col items-center justify-center gap-2">
+                            {projectTab === 'team' && selectedFiles.length === 0 && (
+                              <p className="text-xs text-amber-500 font-medium flex items-center gap-1 bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-full mb-1">
+                                <AlertCircle className="size-3.5" />
+                                Please upload at least one training file to fine-tune your model.
+                              </p>
+                            )}
                             <button
                               type="button"
                               onClick={() => handleCreateProject()}
-                              disabled={isCreating}
-                              className="flex items-center gap-1.5 px-6 py-3 rounded-full text-sm font-semibold bg-black hover:bg-gray-800 text-white shadow-sm transition-all duration-200 cursor-pointer disabled:opacity-50"
+                              disabled={isCreating || (projectTab === 'team' && selectedFiles.length === 0)}
+                              className="flex items-center gap-1.5 px-6 py-3 rounded-full text-sm font-semibold bg-black hover:bg-gray-800 text-white shadow-sm transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               {isCreating ? <Loader2 className="size-4 animate-spin" /> : null}
-                              {isCreating ? "Creating..." : "Create Space"}
+                              {isCreating ? "Creating..." : projectTab === 'team' ? "Create Model" : "Create Project"}
                             </button>
                           </div>
                         </div>
@@ -905,6 +1040,104 @@ function MyChatbotsContent() {
             <GuardrailsEditor bot={activeBot} />
           ) : viewParam === 'data' ? (
             <DataEditor bot={activeBot} />
+          ) : activeBot.metadata?.status === 'tuning' ? (
+            <div className="flex flex-col items-center justify-center p-8 text-center max-w-lg mx-auto h-full animate-in fade-in duration-300">
+              <div className="relative mb-8 flex items-center justify-center">
+                {/* Pulsing ring animation */}
+                <div className="absolute inset-0 rounded-full bg-indigo-500/10 blur-xl animate-pulse" style={{ animationDuration: '3s' }} />
+                <div className="relative size-24 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-xl flex items-center justify-center">
+                  <Cpu className="size-10 text-indigo-600 dark:text-indigo-400 animate-bounce" style={{ animationDuration: '2.5s' }} />
+                  {/* Decorative star */}
+                  <Sparkles className="absolute top-1 right-1 size-5 text-amber-500 animate-spin" style={{ animationDuration: '8s' }} />
+                </div>
+              </div>
+
+              <h2 className="text-2xl font-semibold text-zinc-900 dark:text-white mb-3 tracking-tight">
+                Model Training in Progress...
+              </h2>
+              
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-8 leading-relaxed max-w-sm">
+                We are training a custom model for you on Google Cloud Vertex AI. This process runs fully in the background and can take 10-20 minutes.
+              </p>
+
+              {/* Status Steps checklist */}
+              <div className="w-full bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-850 rounded-2xl p-5 shadow-sm space-y-4 text-left">
+                <div className="flex items-start gap-3">
+                  <div className="size-5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-450 flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">
+                    <Check className="size-3" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">Dataset creation</p>
+                    <p className="text-[10px] text-zinc-400">Generated training examples from uploaded documents.</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="size-5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-450 flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">
+                    <Check className="size-3" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">Google Cloud Storage upload</p>
+                    <p className="text-[10px] text-zinc-400">Saved training JSONL to secure GCS bucket.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="size-5 rounded-full bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Loader2 className="size-3 animate-spin" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">Vertex AI Pipeline SFT Run</p>
+                    <p className="text-[10px] text-zinc-550 dark:text-zinc-400">Tuning foundation model <code className="bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded text-[9px]">gemini-1.5-flash</code>...</p>
+                  </div>
+                </div>
+              </div>
+
+              <span className="text-[10px] text-zinc-400 font-mono mt-6 uppercase tracking-wider block">
+                Job ID: {activeBot.metadata?.jobId || 'Initializing...'}
+              </span>
+            </div>
+          ) : activeBot.metadata?.status === 'failed' ? (
+            <div className="flex flex-col items-center justify-center p-8 text-center max-w-lg mx-auto h-full animate-in fade-in duration-300">
+              <div className="relative mb-8 flex items-center justify-center">
+                <div className="absolute inset-0 rounded-full bg-red-500/10 blur-xl" />
+                <div className="relative size-20 rounded-full bg-red-50 dark:bg-red-955/20 border border-red-200 dark:border-red-900 shadow-xl flex items-center justify-center">
+                  <AlertCircle className="size-10 text-red-600 dark:text-red-450" />
+                </div>
+              </div>
+
+              <h2 className="text-2xl font-semibold text-zinc-900 dark:text-white mb-3 tracking-tight">
+                Model Training Failed
+              </h2>
+              
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6 leading-relaxed max-w-sm">
+                An error occurred during the Vertex AI supervised tuning pipeline. Check the logs below for troubleshooting.
+              </p>
+
+              {/* Error message card */}
+              <div className="w-full bg-red-50 dark:bg-red-955/15 border border-red-200/50 dark:border-red-900/30 rounded-2xl p-4 shadow-inner text-left mb-8 max-h-[160px] overflow-y-auto custom-scrollbar">
+                <span className="text-[10px] text-red-500 dark:text-red-400 font-bold uppercase tracking-wider block mb-1">Error Trace</span>
+                <p className="text-xs font-mono text-red-850 dark:text-red-300 break-all whitespace-pre-wrap leading-relaxed">
+                  {activeBot.metadata?.tuningError || 'Pipeline execution failed without generating diagnostic logs. This can happen if GCP Vertex AI quotas are exceeded or permissions are missing.'}
+                </p>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => handleRetryTuning()}
+                  disabled={isRetryingTuning}
+                  className="flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold bg-red-600 hover:bg-red-700 text-white shadow-sm transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isRetryingTuning && <Loader2 className="size-4 animate-spin" />}
+                  Retry Model Training
+                </button>
+              </div>
+
+              <span className="text-[10px] text-zinc-400 font-mono mt-6 uppercase tracking-wider block">
+                Job ID: {activeBot.metadata?.jobId || 'N/A'}
+              </span>
+            </div>
           ) : (
             <>
               {!hasMessages && (
