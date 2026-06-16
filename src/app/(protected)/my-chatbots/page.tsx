@@ -158,12 +158,13 @@ function MyChatbotsContent() {
       // 2. Add local bot to Zustand store
       const newBot = addBot({
         name: projectName,
-        description: `Custom Space Workspace: ${projectName}`,
+        description: projectTab === 'team' ? `Custom Model Workspace: ${projectName}` : `Custom Project Workspace: ${projectName}`,
         instructions: instructionsList.length > 0 ? instructionsList.map(i => i.text).join('\n\n') : instructions,
         model: 'Gemini 1.5 Pro',
         avatar: '🤖',
         guardrails: guardrailsList.length > 0 ? guardrailsList.map(g => g.text).join('\n\n') : guardrails,
         data: backendId || undefined, // Save the backend knowledgebase ID in the 'data' field!
+        isShared: projectTab === 'team',
       });
 
       // 3. Sequentially upload files to the knowledgebase if files are selected
@@ -233,14 +234,6 @@ function MyChatbotsContent() {
 
   // Render Focused Projects Workspace Dashboard (when no active bot)
   if (!activeBot) {
-    if (projectTab === 'team') {
-      return (
-        <div className="flex-grow w-full bg-[#F5F5F7] dark:bg-zinc-950 h-full flex items-center justify-center relative animate-in fade-in duration-500 overflow-y-auto">
-          <p className="text-gray-400 dark:text-zinc-500 text-sm">Select a Team Space from the left sidebar to view it.</p>
-        </div>
-      );
-    }
-
     return (
       <div className="flex-grow w-full bg-[#F5F5F7] dark:bg-zinc-950 h-full flex flex-col relative animate-in fade-in duration-500 overflow-y-auto">
         
@@ -270,7 +263,7 @@ function MyChatbotsContent() {
                     type="button"
                     onClick={() => {
                       if (step === 2 && !projectName.trim()) {
-                        setError('Please enter a space name first.');
+                        setError(projectTab === 'team' ? 'Please enter a model name first.' : 'Please enter a project name first.');
                         return;
                       } else if (step === 3 && !projectName.trim()) {
                         setError('Please complete the previous steps.');
@@ -334,11 +327,11 @@ function MyChatbotsContent() {
 
           {/* Form Step Cards */}
           <div className={cn("w-full", (currentStep !== 1 && currentStep !== 2 && currentStep !== 3 && currentStep !== 4) && "mt-4")}>
-            {/* Step 1: Space Name */}
+            {/* Step 1: Space/Project/Model Name */}
             {currentStep === 1 && (
               <>
                 <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
-                  Enter Space Name
+                  {projectTab === 'team' ? 'Enter Model Name' : 'Enter Project Name'}
                 </h1>
 
                 <div className="flex w-full flex-col">
@@ -360,7 +353,7 @@ function MyChatbotsContent() {
                                   setCurrentStep(2);
                                 }
                               }}
-                              placeholder="Enter space name..."
+                              placeholder={projectTab === 'team' ? "Enter model name..." : "Enter project name..."}
                               className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
                               autoFocus
                               rows={1}

@@ -487,8 +487,8 @@ const LeftSideNavMobile = () => {
         };
       case 'bots':
         return {
-          visible: projectTab === 'my',
-          label: 'New Workspace',
+          visible: true,
+          label: projectTab === 'my' ? 'New Project' : 'New Model',
           onClick: () => {
             setActiveBotId(null);
             router.push('/my-chatbots');

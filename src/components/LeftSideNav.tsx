@@ -496,8 +496,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         };
       case 'bots':
         return {
-          visible: projectTab === 'my',
-          tooltip: 'New Workspace',
+          visible: true,
+          tooltip: projectTab === 'my' ? 'New Project' : 'New Model',
           onClick: () => {
             setActiveBotId(null);
             router.push('/my-chatbots');
