@@ -14,7 +14,7 @@ export interface Connection {
   authConfigId: string;
   connectedAccountId: string;
   redirectUrl: string;
-  status: APP_STATUS;
+  status: string;
   __v: number;
   toolkit: {
     slug: string;
@@ -50,12 +50,15 @@ interface WaitForConnectionResponse {
   };
 }
 
+/**
+ * Fetches connections by querying active MCP servers status and mapping them to connection objects.
+ */
 export const getConnections = async (
   accessToken?: string,
 ): Promise<ApiResponse<Connection[]>> => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/composio_v2/user-connections`,
+      `${process.env.NEXT_PUBLIC_API_URL}/mcp-toolbox/servers/status`,
       {
         method: 'GET',
         headers: {
@@ -65,8 +68,25 @@ export const getConnections = async (
       },
     );
     const data = await response.json();
+    
+    // Map active MCP servers to standard connection structures
+    const serversList = data?.servers || [];
+    const connections: Connection[] = serversList
+      .filter((s: any) => s.status === 'active' || s.status === 'connected')
+      .map((s: any) => ({
+        _id: s.id,
+        userId: '',
+        authConfigId: '',
+        connectedAccountId: '',
+        redirectUrl: '',
+        status: 'active',
+        __v: 0,
+        toolkit: {
+          slug: s.id
+        }
+      }));
 
-    return { success: true, message: 'Success', data: data.data ?? [] };
+    return { success: true, message: 'Success', data: connections };
   } catch (error: any) {
     console.error('getConnections Error:', error);
     return {
@@ -78,64 +98,30 @@ export const getConnections = async (
   }
 };
 
+/**
+ * Legacy Composio OAuth Initiate - Stubbed for MCP compatibility
+ */
 export async function initiateConnection(
   app_name: string,
   user_id: string,
   accessToken: string,
 ): Promise<ApiResponse<InitiateResponse>> {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/composio_v2/initiate`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          app_name,
-          user_id,
-        }),
-      },
-    );
-    const data = await response.json();
-    return { success: true, message: 'Success', data };
-  } catch (error: any) {
-    console.error('initiateConnection Error:', error);
-    return {
-      success: false,
-      message: 'Failed to initiate connection.',
-      debugMessage: error.message || String(error),
-      statusCode: 500,
-    };
-  }
+  return {
+    success: false,
+    message: 'OAuth initiated via Composio is deprecated. Please configure your self-hosted MCP server instead.',
+    statusCode: 400
+  };
 }
 
+/**
+ * Legacy Composio OAuth Wait - Stubbed for MCP compatibility
+ */
 export async function waitForConnection(
   connected_account_id: string,
 ): Promise<ApiResponse<WaitForConnectionResponse>> {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/composio_v2/wait-for-connection`,
-      {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          connected_account_id,
-        }),
-      },
-    );
-    const data = await response.json();
-    return { success: true, message: 'Success', data };
-  } catch (error: any) {
-    console.error('waitForConnection Error:', error);
-    return {
-      success: false,
-      message: 'Failed to wait for connection.',
-      debugMessage: error.message || String(error),
-      statusCode: 500,
-    };
-  }
+  return {
+    success: false,
+    message: 'OAuth wait via Composio is deprecated. Please configure your self-hosted MCP server instead.',
+    statusCode: 400
+  };
 }

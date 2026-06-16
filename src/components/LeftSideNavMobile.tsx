@@ -149,12 +149,17 @@ const DATA_CONNECTORS: DataConnector[] = [
 
 type SidebarTab = 'chat' | 'text' | 'media' | 'bots' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'none' | 'account';
 
-const AVAILABLE_COMPOSIO_APPS = (() => {
+const AVAILABLE_MCP_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
   allApps.forEach(app => {
     if (app.isAvailable && app.app_name) {
       const slug = app.app_name.toLowerCase();
-      if (!uniqueMap.has(slug)) {
+      const isMcp = !!app.isMcp || [
+        'filesystem', 'google-maps', 'slack', 'linear', 'gcal',
+        'brave-search', 'postgres', 'sqlite', 'playwright', 'fetch', 'evernote'
+      ].includes(slug);
+      
+      if (isMcp && !uniqueMap.has(slug)) {
         uniqueMap.set(slug, app);
       }
     }
@@ -234,7 +239,7 @@ const LeftSideNavMobile = () => {
   }, [connections]);
 
   const filteredApps = useMemo(() => {
-    return AVAILABLE_COMPOSIO_APPS.filter(app =>
+    return AVAILABLE_MCP_APPS.filter(app =>
       app.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       app.description.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -244,8 +249,8 @@ const LeftSideNavMobile = () => {
     if (searchQuery.trim() !== '') {
       return filteredApps;
     }
-    const connected = AVAILABLE_COMPOSIO_APPS.filter(app => connectedAppSlugs.has(app.app_name.toLowerCase()));
-    const nonConnected = AVAILABLE_COMPOSIO_APPS.filter(app => !connectedAppSlugs.has(app.app_name.toLowerCase()));
+    const connected = AVAILABLE_MCP_APPS.filter(app => connectedAppSlugs.has(app.app_name.toLowerCase()));
+    const nonConnected = AVAILABLE_MCP_APPS.filter(app => !connectedAppSlugs.has(app.app_name.toLowerCase()));
     return [...connected, ...nonConnected];
   }, [searchQuery, filteredApps, connectedAppSlugs]);
 
@@ -483,7 +488,7 @@ const LeftSideNavMobile = () => {
       case 'bots':
         return {
           visible: projectTab === 'my',
-          label: 'New Space',
+          label: 'New Workspace',
           onClick: () => {
             setActiveBotId(null);
             router.push('/my-chatbots');
@@ -699,7 +704,7 @@ const LeftSideNavMobile = () => {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Spaces</p>
+                <p>Workspace</p>
               </TooltipContent>
             </Tooltip>
 
@@ -770,7 +775,7 @@ const LeftSideNavMobile = () => {
                       : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
                   )}
                 >
-                  My Spaces
+                  Projects
                 </button>
                 <button
                   type="button"
@@ -782,7 +787,7 @@ const LeftSideNavMobile = () => {
                       : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
                   )}
                 >
-                  Team Spaces
+                  Models
                 </button>
               </div>
               <div className="my-3 h-px bg-black/10 dark:bg-white/10 -mx-4" />
@@ -841,7 +846,7 @@ const LeftSideNavMobile = () => {
                 (projectTab === 'my' ? !bot.isShared : !!bot.isShared)
               ).length === 0 && (
                 <div className="py-4 text-center text-xs text-gray-500">
-                  No spaces found.
+                  No workspaces found.
                 </div>
               )}
             </div>

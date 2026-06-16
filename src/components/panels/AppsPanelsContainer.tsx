@@ -187,94 +187,7 @@ export const AppsPanelsContainer = () => {
   // --- Connect/OAuth flow for standard Composio apps ---
   const handleConnectApp = async (app: APP) => {
     if (!app.app_name) return;
-
-    // Check if it is a standard stdio open-source MCP server
-    const isMcp = !!app.isMcp || [
-      'filesystem', 'google-maps', 'slack', 'linear', 'gcal',
-      'brave-search', 'postgres', 'sqlite', 'playwright', 'fetch', 'evernote'
-    ].includes(app.app_name);
-
-    if (isMcp) {
-      return handleConnectMcpServer(app);
-    }
-
-    setIsConnecting(true);
-    setConnectionError(null);
-
-    const response = await apiClientJson<{ redirectUrl: string; id: string }>(
-      buildApiUrl('/composio-simple/initiate'),
-      {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.accessToken}`
-        },
-        body: JSON.stringify({ app_name: app.app_name }),
-      }
-    );
-
-    if (response.success && response.data?.redirectUrl) {
-      const authUrl = response.data.redirectUrl;
-      const connectionId = response.data.id;
-
-      // Open OAuth in popup window
-      const width = 600;
-      const height = 700;
-      const left = window.screen.width / 2 - width / 2;
-      const top = window.screen.height / 2 - height / 2;
-      
-      const oauthPopup = window.open(
-        authUrl,
-        `Connect ${app.title}`,
-        `width=${width},height=${height},top=${top},left=${left},status=no,resizable=yes,scrollbars=yes`
-      );
-
-      // Start polling for connection confirmation
-      let attempts = 0;
-      const maxAttempts = 60; // 3 minutes
-      
-      const pollInterval = setInterval(async () => {
-        attempts++;
-        if (attempts > maxAttempts || oauthPopup?.closed) {
-          clearInterval(pollInterval);
-          setIsConnecting(false);
-          if (attempts > maxAttempts) {
-            setConnectionError('Connection authorization timed out. Please try again.');
-          }
-          return;
-        }
-
-        // Fetch connection status dynamically
-        const checkRes = await apiClientJson<{ success: boolean }>(
-          buildApiUrl('/composio-simple/wait-for-connection'),
-          {
-            method: 'POST',
-            headers: { 
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${session?.accessToken}`
-            },
-            body: JSON.stringify({ connected_account_id: connectionId }),
-          }
-        );
-
-        if (checkRes.success) {
-          clearInterval(pollInterval);
-          setIsConnecting(false);
-          oauthPopup?.close();
-          // Update local status immediately
-          setConnectedAppSlugs(prev => {
-            const next = new Set(prev);
-            next.add(app.app_name.toLowerCase());
-            return next;
-          });
-          // Invalidate connections query to refetch status globally
-          queryClient.invalidateQueries({ queryKey: ['connections'] });
-        }
-      }, 3000);
-    } else {
-      setIsConnecting(false);
-      setConnectionError(response.debugMessage || 'Failed to initiate application authentication.');
-    }
+    return handleConnectMcpServer(app);
   };
 
 
@@ -311,7 +224,7 @@ export const AppsPanelsContainer = () => {
     const currentConvId = activeConversationIds[appSlug] || null;
 
     const response = await apiClientJson<{ response: string; conversationId: string; toolsUsed?: string[] }>(
-      buildApiUrl('/composio-simple/chat'),
+      buildApiUrl('/mcp-toolbox/chat'),
       {
         method: 'POST',
         headers: { 
