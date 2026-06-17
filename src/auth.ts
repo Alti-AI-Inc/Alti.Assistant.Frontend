@@ -29,6 +29,27 @@ declare module 'next-auth' {
   }
 }
 
+const verifyBackendJwt = (token: string): jwt.JwtPayload | null => {
+  const secret =
+    process.env.JWT_ACCESS_TOKEN ||
+    process.env.JWT_ACCESS_TOKEN_SECRET ||
+    process.env.AUTH_SECRET;
+
+  if (!secret) {
+    console.warn(
+      'Alti Auth: Neither JWT_ACCESS_TOKEN nor AUTH_SECRET is defined. Falling back to unverified jwt.decode().'
+    );
+    return jwt.decode(token) as jwt.JwtPayload;
+  }
+
+  try {
+    return jwt.verify(token, secret) as jwt.JwtPayload;
+  } catch (error) {
+    console.error('Alti Auth: Failed to verify backend JWT signature:', error);
+    return null;
+  }
+};
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
   providers: [
@@ -81,9 +102,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!credentials?.accessToken) return null;
         try {
           const token = credentials.accessToken as string;
-          // TODO Phase 2: Use jwt.verify() with backend JWT secret instead of jwt.decode()
-          // jwt.decode() does NOT validate the token signature — it only parses the payload.
-          const decoded = jwt.decode(token) as jwt.JwtPayload & { _id?: string };
+          const decoded = verifyBackendJwt(token) as jwt.JwtPayload & { _id?: string };
           if (!decoded || !decoded._id) return null;
           if (decoded.exp && decoded.exp * 1000 < Date.now()) return null;
           return { id: decoded._id, accessToken: token };
@@ -108,8 +127,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user, trigger, session }) {
       // Handle token updates (e.g., after creating tenant)
       if (trigger === 'update' && session?.accessToken) {
-        // TODO Phase 2: Use jwt.verify() with backend JWT secret instead of jwt.decode()
-        const decoded = jwt.decode(session.accessToken) as jwt.JwtPayload & {
+        const decoded = verifyBackendJwt(session.accessToken) as jwt.JwtPayload & {
           _id?: string;
           role?: string;
           tenants?: Array<{
@@ -147,8 +165,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.id = user.id;
         token.accessToken = user.accessToken;
 
-        // TODO Phase 2: Use jwt.verify() with backend JWT secret instead of jwt.decode()
-        const decoded = jwt.decode(user.accessToken) as jwt.JwtPayload & {
+        const decoded = verifyBackendJwt(user.accessToken) as jwt.JwtPayload & {
           _id?: string;
           role?: string;
           tenants?: Array<{
