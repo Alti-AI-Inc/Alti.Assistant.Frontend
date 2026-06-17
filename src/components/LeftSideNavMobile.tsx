@@ -185,7 +185,7 @@ const LeftSideNavMobile = () => {
 
   const userEmail = data?.user?.email?.toLowerCase();
   const isGlobalAdmin = data?.user?.role === 'admin' || data?.user?.role === 'super_admin';
-  const isTenantOwner = mode === 'tenant' && currentTenant?.role === 'admin';
+  const isTenantOwner = mode === 'tenant' && (currentTenant?.role === 'admin' || currentTenant?.role === 'owner');
   const isTenantAdmin = mode === 'tenant' && currentTenant?.role === 'manager';
 
   const isAdmin = userEmail === 'admin@altihq.com' || isGlobalAdmin || isTenantOwner;
