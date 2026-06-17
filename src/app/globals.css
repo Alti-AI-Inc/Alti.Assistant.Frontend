@@ -335,3 +335,168 @@ input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
   display: none;
 }
+
+/* ==========================================
+   🌭 SECRET THEME: HIGH CONTRAST HOT DOG STAND
+   ========================================== */
+.hotdog {
+  --background: #FFFF00 !important; /* Bright Yellow */
+  --foreground: #FF0000 !important; /* Bright Red */
+  --card: #FFFF00 !important;
+  --card-foreground: #FF0000 !important;
+  --popover: #FFFF00 !important;
+  --popover-foreground: #FF0000 !important;
+  --primary: #FF0000 !important; /* Bright Red */
+  --primary-foreground: #FFFF00 !important; /* Bright Yellow */
+  --secondary: #000000 !important; /* Black */
+  --secondary-foreground: #FFFF00 !important;
+  --muted: #FFFF00 !important;
+  --muted-foreground: #FF0000 !important;
+  --accent: #FF0000 !important;
+  --accent-foreground: #FFFF00 !important;
+  --destructive: #FF0000 !important;
+  --border: #FF0000 !important;
+  --input: #FF0000 !important;
+  --ring: #000000 !important;
+
+  --sidebar: #FFFF00 !important;
+  --sidebar-foreground: #FF0000 !important;
+  --sidebar-primary: #FF0000 !important;
+  --sidebar-primary-foreground: #FFFF00 !important;
+  --sidebar-accent: #FF0000 !important;
+  --sidebar-accent-foreground: #FFFF00 !important;
+  --sidebar-border: #FF0000 !important;
+  --sidebar-ring: #000000 !important;
+  
+  --radius: 0px !important;
+}
+
+/* Force colors on specific standard classes */
+.hotdog,
+.hotdog body,
+.hotdog main,
+.hotdog header,
+.hotdog footer,
+.hotdog nav,
+.hotdog aside,
+.hotdog div:not([class*="UniversalChartWidget"]), 
+.hotdog section,
+.hotdog p,
+.hotdog span,
+.hotdog h1,
+.hotdog h2,
+.hotdog h3,
+.hotdog h4,
+.hotdog h5,
+.hotdog h6,
+.hotdog a,
+.hotdog li,
+.hotdog ul,
+.hotdog ol,
+.hotdog label,
+.hotdog button {
+  transition: none !important;
+}
+
+/* Bulletproof inline style overrides */
+.hotdog [style*="background-color: #FFFFFF"],
+.hotdog [style*="background-color: #ffffff"],
+.hotdog [style*="background-color: rgb(255, 255, 255)"],
+.hotdog [style*="background-color: #FFFFFF"] *,
+.hotdog [style*="background-color: #ffffff"] * {
+  background-color: #FFFF00 !important;
+}
+
+.hotdog [style*="background-color: #F5F5F7"],
+.hotdog [style*="background-color: rgb(245, 245, 247)"],
+.hotdog [style*="background-color: #F5F5F7"] *,
+.hotdog [style*="background-color: rgb(245, 245, 247)"] * {
+  background-color: #FFFF00 !important;
+}
+
+/* Force borders, bg and colors for layout containers */
+.hotdog .bg-white,
+.hotdog .bg-background,
+.hotdog .bg-sidebar,
+.hotdog .bg-card,
+.hotdog .bg-popover,
+.hotdog .bg-gray-50,
+.hotdog .bg-gray-100,
+.hotdog .bg-gray-200,
+.hotdog .bg-zinc-50,
+.hotdog .bg-zinc-100,
+.hotdog .bg-zinc-200,
+.hotdog .bg-zinc-900,
+.hotdog .bg-zinc-950 {
+  background-color: #FFFF00 !important;
+  color: #FF0000 !important;
+}
+
+.hotdog .text-black,
+.hotdog .text-white,
+.hotdog .text-gray-500,
+.hotdog .text-gray-600,
+.hotdog .text-gray-700,
+.hotdog .text-gray-800,
+.hotdog .text-gray-900,
+.hotdog .text-zinc-500,
+.hotdog .text-zinc-600,
+.hotdog .text-zinc-700,
+.hotdog .text-zinc-800,
+.hotdog .text-zinc-900,
+.hotdog .text-foreground,
+.hotdog .text-muted-foreground {
+  color: #FF0000 !important;
+}
+
+/* Borders */
+.hotdog *,
+.hotdog *::before,
+.hotdog *::after {
+  border-color: #FF0000 !important;
+  border-radius: 0px !important;
+}
+
+/* Inputs, Textareas, Selects: High Contrast Windows 3.1 style */
+.hotdog input,
+.hotdog textarea,
+.hotdog select,
+.hotdog [role="textbox"],
+.hotdog input.bg-auth-input,
+.hotdog textarea.bg-auth-input {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  border: 3px solid #FF0000 !important;
+  border-radius: 0px !important;
+  --autofill-bg: #FFFFFF !important;
+  --autofill-color: #000000 !important;
+}
+
+/* Buttons */
+.hotdog button,
+.hotdog [role="button"],
+.hotdog .bg-primary,
+.hotdog button.bg-black,
+.hotdog button.bg-primary {
+  background-color: #FF0000 !important;
+  color: #FFFF00 !important;
+  border: 3px solid #000000 !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  border-radius: 0px !important;
+}
+
+.hotdog button:hover,
+.hotdog [role="button"]:hover,
+.hotdog button.bg-black:hover,
+.hotdog button.bg-primary:hover {
+  background-color: #000000 !important;
+  color: #FFFF00 !important;
+  border-color: #FF0000 !important;
+}
+
+/* Selected text */
+.hotdog ::selection {
+  background-color: #000000 !important;
+  color: #FFFF00 !important;
+}

@@ -8,6 +8,7 @@ import dynamic from 'next/dynamic';
 import { ThemeProvider } from 'next-themes';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import SecretThemeTrigger from '@/components/SecretThemeTrigger';
 
 const ReactQueryDevtools = dynamic(
   () =>
@@ -73,7 +74,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       attribute="class"
       defaultTheme="light"
       disableTransitionOnChange
+      themes={['light', 'dark', 'hotdog']}
     >
+      <SecretThemeTrigger />
       <QueryClientProvider client={queryClient}>
         <SessionProvider>
           <TenantProvider>
