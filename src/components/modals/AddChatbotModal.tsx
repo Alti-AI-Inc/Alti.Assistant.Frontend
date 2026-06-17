@@ -20,7 +20,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 const EMOJIS = ['🤖', '🐍', '🎨', '✍️', '⚖️', '📊', '📈', '💡', '🧠', '💬', '🚀', '💻', '🔍', '⚙️', '📅', '🔐'];
-const MODELS = ['Gemini 1.5 Pro', 'Gemini 1.5 Flash', 'Claude 3.5 Sonnet', 'GPT-4o'];
+const MODELS = ['Gemini 1.5 Pro', 'Gemini 1.5 Flash', 'Gemini 2.5 Flash', 'Gemini 2.5 Pro'];
 
 export function AddChatbotModal() {
   const { isOpen, onClose, type } = useModalStore();
