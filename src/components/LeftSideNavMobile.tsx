@@ -625,7 +625,7 @@ const LeftSideNavMobile = () => {
       </div>
 
       {/* Chat / Projects / GCP Hub row toggle */}
-      {isLoggedIn && !isSuperAdmin && (
+      {!isSuperAdmin && (
         <div className="border-b border-black/5 px-4 py-2 bg-white dark:bg-zinc-900">
           <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
             <Tooltip>
@@ -732,7 +732,6 @@ const LeftSideNavMobile = () => {
       )}
 
       {/* Scrollable conversation list */}
-      {isLoggedIn && (
         <div className="flex-1 overflow-y-auto px-4 pb-4">
           {activeTab !== 'account' && (
           <div className="mt-3 mb-2 flex items-center justify-between px-1">
@@ -1409,7 +1408,6 @@ const LeftSideNavMobile = () => {
             </div>
           ) : null}
         </div>
-      )}
 
       {/* Footer fixed at bottom */}
       <div className="bg-white dark:bg-zinc-900 sticky bottom-0 flex flex-col w-full">

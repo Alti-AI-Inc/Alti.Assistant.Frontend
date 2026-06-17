@@ -691,7 +691,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       )}
 
       {/* Chat / Projects / GCP Hub row toggle */}
-      {!hideSidebar && isLoggedIn && side !== 'right' && !isSuperAdmin && (
+      {!hideSidebar && side !== 'right' && !isSuperAdmin && (
         <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300">
           <div className="flex bg-[#F5F5F7] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
             <Tooltip>
@@ -798,7 +798,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       )}
 
       {/* Fixed Apps Filter Toggle Button Bar */}
-      {!hideSidebar && isLoggedIn && activeTab === 'apps' && (
+      {!hideSidebar && activeTab === 'apps' && (
         <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors select-none flex-none">
           <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full">
             <button
@@ -829,7 +829,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         </div>
       )}
 
-      {isLoggedIn && (
         <div
           className={cn(
             'flex flex-1 flex-col overflow-y-scroll px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300',
@@ -1316,9 +1315,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             </div>
           ) : null}
         </div>
-      )}
-
-      {!isLoggedIn && <div className="flex flex-1 flex-col bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300"></div>}
 
       {side !== 'right' && (
         <div
