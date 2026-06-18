@@ -255,6 +255,10 @@ const LeftSideNavMobile = () => {
   }, [searchQuery, filteredApps, connectedAppSlugs]);
 
   useEffect(() => {
+    if (!isLoggedIn) {
+      setActiveTab('chat');
+      return;
+    }
     if (isSuperAdmin) {
       setActiveTab('account');
       return;
@@ -305,7 +309,14 @@ const LeftSideNavMobile = () => {
     } else if (pathname.startsWith('/knowledge')) {
       setActiveTab('none');
     }
-  }, [pathname, selectedOption]);
+  }, [pathname, selectedOption, isLoggedIn]);
+
+  // Reset active tab to chat when user logs out
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setActiveTab('chat');
+    }
+  }, [isLoggedIn]);
 
   // Synchronize tab and option selection with activeConversation.is_deep_search
   useEffect(() => {
@@ -1143,7 +1154,7 @@ const LeftSideNavMobile = () => {
                 </div>
               )}
             </div>
-          ) : activeTab === 'account' ? (
+          ) : isLoggedIn && activeTab === 'account' ? (
             <div className="mt-4 space-y-1 py-1 pb-4">
               
               {isSuperAdmin && (

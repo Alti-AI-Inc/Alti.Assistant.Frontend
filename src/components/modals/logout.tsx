@@ -17,10 +17,8 @@ export function Logout() {
   const handleLogOut = async () => {
     setIsLoading(true);
     await signOut({
-      redirect: false,
+      callbackUrl: '/',
     });
-    router.push('/');
-    onClose();
   };
 
   return (
