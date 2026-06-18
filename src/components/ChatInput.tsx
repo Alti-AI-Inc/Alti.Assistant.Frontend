@@ -458,7 +458,7 @@ const ChatInput = ({
 
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}${getApiEndpoint()}`;
   // console.log('apiUrl', apiUrl);
-  console.log('token', data?.accessToken);
+  // console.log('token', data?.accessToken);
   // console.log('userid', data?.user);
   // console.log('knowledgebaseId', activeConversation?.knowledgebaseId);
   const mutation = useMutation({

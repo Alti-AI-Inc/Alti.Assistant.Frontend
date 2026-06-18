@@ -33,10 +33,10 @@ export function useContextSwitch() {
       activeTenantId !== null;
 
     if (modeChanged || tenantChanged) {
-      console.log('[useContextSwitch] Context switch detected:', {
-        from: { mode: prevModeRef.current, tenant: prevTenantIdRef.current },
-        to: { mode, tenant: activeTenantId },
-      });
+      // console.log('[useContextSwitch] Context switch detected:', {
+      //   from: { mode: prevModeRef.current, tenant: prevTenantIdRef.current },
+      //   to: { mode, tenant: activeTenantId },
+      // });
 
       // Clear all conversation-related stores
       const clearConversationData =
@@ -74,7 +74,7 @@ export function useContextSwitch() {
         ).clearImageGenData();
       }
 
-      console.log('[useContextSwitch] All stores cleared for new context');
+      // console.log('[useContextSwitch] All stores cleared for new context');
 
       // Update refs for next comparison
       prevModeRef.current = mode;
