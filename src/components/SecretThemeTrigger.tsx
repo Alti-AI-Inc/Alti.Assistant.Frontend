@@ -8,6 +8,20 @@ export default function SecretThemeTrigger() {
   const { theme, setTheme } = useTheme();
   const inputSequence = useRef<string[]>([]);
   const targetSequence = 'hotdog';
+  const prevTheme = useRef(theme);
+
+  useEffect(() => {
+    if (theme === 'hotdog' && prevTheme.current !== 'hotdog') {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance('hotdog');
+        window.speechSynthesis.speak(utterance);
+      }
+      for (let i = 0; i < 500; i++) {
+        console.log('HOTDOG');
+      }
+    }
+    prevTheme.current = theme;
+  }, [theme]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
