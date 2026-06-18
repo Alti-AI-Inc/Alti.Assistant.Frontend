@@ -614,7 +614,6 @@ const ChatInput = ({
       const document =
         response.data?.document || response.data?.responseMessage?.document;
 
-      console.log('full response', response);
       // Determine the appropriate response text based on the context
       const getResponseText = () => {
         if (activeConversation?.knowledgebaseId || activeBot?.data) {
@@ -681,14 +680,6 @@ const ChatInput = ({
   const handleSubmit = async () => {
     // Prevent submission if response is loading or message is empty
     if (isLoadingResponse) return;
-
-    console.log('ChatInput submit:', {
-      selectedOption,
-      conversationId,
-      userId: data?.user.id,
-      hasImage: !!imageBase64,
-      imageWorkflow,
-    });
 
     if (!message?.trim()) return;
     setShowStartLastMessage(true);

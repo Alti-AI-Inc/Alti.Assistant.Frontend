@@ -455,7 +455,6 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
           attempts++;
 
           if (attempts < maxAttempts) {
-            console.log('Scrolling...', attempts);
             setTimeout(forceScrollLoop, 200);
           } else {
             isFirstLoad.current = false;

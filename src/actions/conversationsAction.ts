@@ -18,13 +18,6 @@ export async function PostConversation(
   extraParams?: Record<string, any>,
 ): Promise<ApiResponse> {
   try {
-    console.log('[conversationsAction] PostConversation payload:', {
-      apiUrl,
-      knowledgebaseId,
-      conversationId,
-      message,
-      extraParams,
-    });
     const response = await apiClient(apiUrl, {
       method: 'POST',
       headers: {
@@ -60,10 +53,6 @@ export async function PostConversation(
     }
 
     const data = await response.json();
-    console.log(
-      '[conversationsAction] PostConversation response:',
-      data.data || data,
-    );
     // Unwrap data if present to avoid nesting
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
@@ -278,9 +267,6 @@ export async function loadSingleConversation(
   conversationId: string,
   accessToken: string,
 ): Promise<ApiResponse> {
-  console.log('[conversationsAction] loadSingleConversation payload:', {
-    conversationId,
-  });
   try {
     const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/conversations/${conversationId}`,
@@ -304,10 +290,6 @@ export async function loadSingleConversation(
     }
 
     const data = await response.json();
-    console.log(
-      '[conversationsAction] loadSingleConversation response:',
-      data.data || data,
-    );
     // Assuming data is already the shape we want or wrapped?
     // The original code returned 'data'. Let's check if 'data' has 'success' field or if it is the payload.
     // Original: const data = await response.json(); return data;
