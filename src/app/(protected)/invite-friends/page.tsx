@@ -10,23 +10,55 @@ import {
   DialogDescription,
   DialogClose,
 } from '@/components/ui/dialog';
+import { useTenant } from '@/contexts/TenantContext';
+import { inviteMember } from '@/actions/memberActions';
+import { toast } from 'sonner';
 
 const InviteContent = () => {
+  const { activeTenantId, tenants } = useTenant();
   const [email, setEmail] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [sentEmail, setSentEmail] = useState('');
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!email.trim()) return;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+
+    const targetTenantId = activeTenantId || tenants[0]?.id;
+    if (!targetTenantId) {
+      toast.error('Please select or create an organization workspace first to invite friends.');
+      return;
+    }
+
     setIsSending(true);
-    // Simulate sending invitation (1 second delay)
-    setTimeout(() => {
+    try {
+      const response = await inviteMember({
+        tenantId: targetTenantId,
+        email: email.trim(),
+        role: 'member',
+        message: 'Join me on Alti Assistant!',
+      });
+
+      if (response.success) {
+        setIsSending(false);
+        setSentEmail(email.trim());
+        setShowSuccess(true);
+        setEmail('');
+      } else {
+        toast.error(response.message || 'Failed to send invitation');
+      }
+    } catch (error) {
+      console.error('Failed to send invitation:', error);
+      toast.error('An unexpected error occurred while sending the invitation');
+    } finally {
       setIsSending(false);
-      setSentEmail(email.trim());
-      setShowSuccess(true);
-      setEmail('');
-    }, 1000);
+    }
   };
 
   return (

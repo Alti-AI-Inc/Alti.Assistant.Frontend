@@ -880,8 +880,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
               {bots
                 .filter(bot =>
-                  (bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                  bot.description.toLowerCase().includes(searchQuery.toLowerCase())) &&
+                  ((bot.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  (bot.description || '').toLowerCase().includes(searchQuery.toLowerCase())) &&
                   (projectTab === 'my' ? !bot.isShared : !!bot.isShared)
                 )
                 .map(bot => {
@@ -925,8 +925,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   );
                 })}
               {bots.filter(bot =>
-                (bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                bot.description.toLowerCase().includes(searchQuery.toLowerCase())) &&
+                ((bot.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (bot.description || '').toLowerCase().includes(searchQuery.toLowerCase())) &&
                 (projectTab === 'my' ? !bot.isShared : !!bot.isShared)
               ).length === 0 && (
                 <div className="py-4 text-center text-xs text-gray-500">
