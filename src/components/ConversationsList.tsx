@@ -24,6 +24,9 @@ import {
   Scale,
   Palette,
   Sparkles,
+  Image as ImageIcon,
+  Video as VideoIcon,
+  Zap,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -41,7 +44,7 @@ export default function ConversationsList({
   activeTab = 'chat',
 }: {
   searchQuery?: string;
-  activeTab?: 'chat' | 'search' | 'write' | 'research' | 'assistant' | 'code';
+  activeTab?: 'chat' | 'search' | 'write' | 'research' | 'assistant' | 'code' | 'image' | 'video' | 'media';
 }) {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
@@ -58,10 +61,28 @@ export default function ConversationsList({
   // isDeepSearch drives server-side filtering: each tab hits its own API query
   const isDeepSearch = activeTab === 'research' ? true : undefined;
 
+  let category: string | undefined = undefined;
+  if (activeTab === 'search') {
+    category = 'search';
+  } else if (activeTab === 'write') {
+    category = 'article_writer,document_drafting,creative_writing,rewrite,translation,document_analysis,document_review,report,plan_generation,legal_contract,legal_contract_review,presentation,brainstorm';
+  } else if (activeTab === 'code') {
+    category = 'code';
+  } else if (activeTab === 'image') {
+    category = 'image,image_generation,image_editing,image_intent_analysis,intent_analysis';
+  } else if (activeTab === 'video') {
+    category = 'video';
+  } else if (activeTab === 'media') {
+    category = 'image,image_generation,image_editing,image_intent_analysis,intent_analysis,video';
+  } else if (activeTab === 'assistant') {
+    category = 'assistant,composio,composio_simple';
+  }
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useConversations(
       canFetchConversations ? session.accessToken : undefined,
       isDeepSearch,
+      category,
     );
 
   const getDisplayIcon = (title: string) => {
@@ -73,6 +94,12 @@ export default function ConversationsList({
     }
     if (activeTab === 'code') {
       return <Code2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    }
+    if (activeTab === 'image') {
+      return <ImageIcon className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    }
+    if (activeTab === 'video') {
+      return <VideoIcon className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     }
     if (activeTab !== 'assistant') {
       return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
@@ -94,7 +121,7 @@ export default function ConversationsList({
     } else if (lower.includes('image') || lower.includes('draw') || lower.includes('photo') || lower.includes('generation')) {
       return <Palette className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     }
-    return <Sparkles className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    return <Zap className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
   };
 
   const getDisplayTitle = (title: string) => {

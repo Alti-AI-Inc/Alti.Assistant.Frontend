@@ -532,6 +532,51 @@ const ChatInput = ({
         }
       }
 
+      const getCategoryFromOption = (opt: OPTIONS | null): string | undefined => {
+        if (!opt) return 'search';
+        switch (opt) {
+          case OPTIONS.RESEARCH:
+            return 'search';
+          case OPTIONS.CODE:
+          case OPTIONS.DEBUG_CODE:
+            return 'code';
+          case OPTIONS.IMAGE:
+          case OPTIONS.EDIT_IMAGE:
+            return 'image_generation';
+          case OPTIONS.VIDEO:
+            return 'video';
+          case OPTIONS.TASK:
+          case OPTIONS.Transcribe:
+            return 'composio';
+          case OPTIONS.DRAFT_DOCUMENT:
+            return 'document_drafting';
+          case OPTIONS.REWRITE:
+            return 'rewrite';
+          case OPTIONS.TRANSLATE_DOCUMENTS:
+            return 'translation';
+          case OPTIONS.BRAINSTORM:
+            return 'brainstorm';
+          case OPTIONS.GENERATE_PLAN:
+            return 'plan_generation';
+          case OPTIONS.REVIEW_CONTRACT:
+          case OPTIONS.WRITE_CONTRACT:
+            return 'legal_contract';
+          case OPTIONS.GENERATE_REPORT:
+            return 'report';
+          case OPTIONS.PRESENTATION:
+            return 'presentation';
+          case OPTIONS.CREATIVE_WRITING:
+            return 'creative_writing';
+          case OPTIONS.ARTICLE:
+            return 'article_writer';
+          case OPTIONS.SUMMARIZE:
+          case OPTIONS.EXTRACT_DATA:
+            return 'document_analysis';
+          default:
+            return 'search';
+        }
+      };
+
       if ((files && files.length > 0) || file) {
         const formData = new FormData();
         formData.append('message', userMessage);
@@ -547,12 +592,26 @@ const ChatInput = ({
             ? activeConversation?.conversationId || undefined
             : conversationId;
         if (convId) formData.append('conversationId', convId);
+        
+        const categoryVal = getCategoryFromOption(selectedOption);
+        if (categoryVal) formData.append('category', categoryVal);
+
         return await PostConversationWithFile(formData, data.accessToken);
       }
-      const targetApiUrl = activeBot?.data 
+      const isKbId = activeBot?.data && /^[0-9a-fA-F]{24}$/.test(activeBot.data);
+      const targetApiUrl = isKbId || activeConversation?.knowledgebaseId
         ? `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/chat` 
         : apiUrl;
-      const targetKbId = activeBot?.data || activeConversation?.knowledgebaseId;
+      const targetKbId = (isKbId ? activeBot.data : activeConversation?.knowledgebaseId) || undefined;
+
+      const extraParams: Record<string, any> = {};
+      if (selectedOption === OPTIONS.RESEARCH) {
+        Object.assign(extraParams, researchSettings);
+      }
+      const categoryVal = getCategoryFromOption(selectedOption);
+      if (categoryVal) {
+        extraParams.category = categoryVal;
+      }
 
       return await PostConversation(
         targetApiUrl,
@@ -562,7 +621,7 @@ const ChatInput = ({
           ? activeConversation?.conversationId || undefined
           : conversationId,
         targetKbId,
-        selectedOption === OPTIONS.RESEARCH ? researchSettings : undefined
+        extraParams
       );
     },
     onMutate: ({ message: userMessage }) => {
@@ -616,7 +675,8 @@ const ChatInput = ({
 
       // Determine the appropriate response text based on the context
       const getResponseText = () => {
-        if (activeConversation?.knowledgebaseId || activeBot?.data) {
+        const isKbId = activeBot?.data && /^[0-9a-fA-F]{24}$/.test(activeBot.data);
+        if (activeConversation?.knowledgebaseId || isKbId) {
           return response.data?.message;
         }
 

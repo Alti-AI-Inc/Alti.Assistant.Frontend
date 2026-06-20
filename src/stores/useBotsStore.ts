@@ -120,7 +120,21 @@ export const useBotsStore = create<BotsState>()(
             ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
           },
           body: JSON.stringify(newBot),
-        }).catch((err) => console.error('Failed to sync addBot to backend', err));
+        })
+        .then(async (res) => {
+          if (res.ok) {
+            const data = await res.json();
+            if (data?.data) {
+              const backendBot = data.data;
+              const botId = backendBot.id || backendBot._id || id;
+              set((state) => ({
+                bots: state.bots.map((b) => b.id === id ? { ...backendBot, id: botId } : b),
+                activeBotId: state.activeBotId === id ? botId : state.activeBotId,
+              }));
+            }
+          }
+        })
+        .catch((err) => console.error('Failed to sync addBot to backend', err));
         
         return newBot;
       },
@@ -149,12 +163,17 @@ export const useBotsStore = create<BotsState>()(
           if (res.ok) {
             const data = await res.json();
             if (data?.data) {
-              const backendBot: Chatbot = data.data;
+              const backendBot = data.data;
+              const botId = backendBot.id || backendBot._id || tempId;
+              const mappedBot: Chatbot = {
+                ...backendBot,
+                id: botId,
+              };
               set((state) => ({
-                bots: state.bots.map((b) => b.id === tempId ? backendBot : b),
-                activeBotId: state.activeBotId === tempId ? backendBot.id : state.activeBotId,
+                bots: state.bots.map((b) => b.id === tempId ? mappedBot : b),
+                activeBotId: state.activeBotId === tempId ? botId : state.activeBotId,
               }));
-              return backendBot;
+              return mappedBot;
             }
           }
         } catch (err) {
@@ -170,15 +189,18 @@ export const useBotsStore = create<BotsState>()(
             bot.id === id ? { ...bot, ...updatedData } : bot
           ),
         }));
-        // Sync with backend asynchronously
-        fetch(`${getApiUrl()}/chatbots/${id}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-          },
-          body: JSON.stringify(updatedData),
-        }).catch((err) => console.error('Failed to sync editBot to backend', err));
+        // Sync with backend asynchronously only if it is a database chatbot
+        const isMongoId = /^[0-9a-fA-F]{24}$/.test(id);
+        if (isMongoId) {
+          fetch(`${getApiUrl()}/chatbots/${id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify(updatedData),
+          }).catch((err) => console.error('Failed to sync editBot to backend', err));
+        }
       },
 
       deleteBot: (id, token) => {
@@ -191,13 +213,16 @@ export const useBotsStore = create<BotsState>()(
           // Clean up threads associated with the deleted bot
           threads: state.threads.filter((t) => t.botId !== id),
         }));
-        // Sync with backend
-        fetch(`${getApiUrl()}/chatbots/${id}`, {
-          method: 'DELETE',
-          headers: {
-            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-          },
-        }).catch((err) => console.error('Failed to sync deleteBot to backend', err));
+        // Sync with backend only if it is a database chatbot
+        const isMongoId = /^[0-9a-fA-F]{24}$/.test(id);
+        if (isMongoId) {
+          fetch(`${getApiUrl()}/chatbots/${id}`, {
+            method: 'DELETE',
+            headers: {
+              ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+            },
+          }).catch((err) => console.error('Failed to sync deleteBot to backend', err));
+        }
       },
 
       setActiveBotId: (id) => {
@@ -244,7 +269,17 @@ export const useBotsStore = create<BotsState>()(
           if (res.ok) {
             const data = await res.json();
             if (data?.data && Array.isArray(data.data)) {
-              set({ bots: data.data });
+              const mapped = data.data.map((bot: any) => ({
+                ...bot,
+                id: bot.id || bot._id,
+              }));
+              const merged = [...PRELOADED_BOTS];
+              mapped.forEach((b: Chatbot) => {
+                if (!merged.some((p) => p.id === b.id)) {
+                  merged.push(b);
+                }
+              });
+              set({ bots: merged });
             }
           }
         } catch (error) {

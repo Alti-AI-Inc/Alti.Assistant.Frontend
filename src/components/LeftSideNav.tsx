@@ -1090,7 +1090,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </button>
               </div>
               <div className="my-3 h-px bg-black/10 dark:bg-white/10 -mx-4" />
-              <ConversationsList searchQuery={searchQuery} activeTab="search" />
+              <ConversationsList searchQuery={searchQuery} activeTab={selectedOption === OPTIONS.VIDEO ? 'video' : 'image'} />
             </div>
           ) : (activeTab === 'assistant' || activeTab === 'workflows') ? (
             <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">

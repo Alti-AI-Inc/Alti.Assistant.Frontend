@@ -143,6 +143,7 @@ export async function fetchConversationList(
   accessToken: string,
   page = 1,
   isDeepSearch?: boolean,
+  category?: string,
 ): Promise<ApiResponse<ConversationListResponse>> {
   try {
     const params = new URLSearchParams({
@@ -151,6 +152,9 @@ export async function fetchConversationList(
     });
     if (isDeepSearch !== undefined) {
       params.set('is_deep_search', String(isDeepSearch));
+    }
+    if (category !== undefined) {
+      params.set('category', category);
     }
     const res = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/conversations?${params.toString()}`,

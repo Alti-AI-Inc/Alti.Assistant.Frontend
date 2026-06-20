@@ -5,7 +5,7 @@ import { useBotsStore, Chatbot } from '@/stores/useBotsStore';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { ArrowUp, Terminal, Trash2, Shield, Upload, ChevronLeft, Paperclip, FileText, FileAudio, FileVideo, FileImage, Search } from 'lucide-react';
-import { Dialog, DialogContent, DialogTrigger, DialogClose } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger, DialogClose, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
 export function getFileExtension(filename: string) {
@@ -127,12 +127,12 @@ export function InstructionsEditor({ bot }: EditorProps) {
               </DialogTrigger>
               <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
                 <div className="px-5 pt-5 pb-4 text-center">
-                  <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                  <DialogTitle className="text-[17px] font-semibold text-black dark:text-white leading-tight">
                     Delete Instruction
-                  </h2>
-                  <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+                  </DialogTitle>
+                  <DialogDescription className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
                     Are you sure you want to remove this instruction?
-                  </p>
+                  </DialogDescription>
                 </div>
                 <div className="border-t border-black/10 dark:border-white/10 flex h-11">
                   <DialogClose asChild>
@@ -260,12 +260,12 @@ export function GuardrailsEditor({ bot }: EditorProps) {
               </DialogTrigger>
               <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
                 <div className="px-5 pt-5 pb-4 text-center">
-                  <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                  <DialogTitle className="text-[17px] font-semibold text-black dark:text-white leading-tight">
                     Delete Guardrail
-                  </h2>
-                  <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+                  </DialogTitle>
+                  <DialogDescription className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
                     Are you sure you want to remove this constraint?
-                  </p>
+                  </DialogDescription>
                 </div>
                 <div className="border-t border-black/10 dark:border-white/10 flex h-11">
                   <DialogClose asChild>
@@ -424,12 +424,12 @@ export function DataEditor({ bot }: EditorProps) {
               </DialogTrigger>
               <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
                 <div className="px-5 pt-5 pb-4 text-center">
-                  <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                  <DialogTitle className="text-[17px] font-semibold text-black dark:text-white leading-tight">
                     Delete Data
-                  </h2>
-                  <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+                  </DialogTitle>
+                  <DialogDescription className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
                     Are you sure you want to remove this data?
-                  </p>
+                  </DialogDescription>
                 </div>
                 <div className="border-t border-black/10 dark:border-white/10 flex h-11">
                   <DialogClose asChild>
