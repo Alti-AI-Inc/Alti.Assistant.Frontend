@@ -130,6 +130,8 @@ export type ActiveConversation = {
   messages: ConversationMessage[];
   createdAt?: string;
   updatedAt?: string;
+  is_deep_search?: boolean;
+  option?: OPTIONS;
 };
 
 // Presentation task for async generation with polling

@@ -129,7 +129,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
 
       const historyContext = getHistoryContext(activeConversation);
 
-      // console.log('[useImageGeneration] evaluatePrompt - sending:', {
+      console.log('[useImageGeneration] evaluatePrompt - sending:', {
         originalPrompt: prompt,
         fullPrompt: prompt, // prompt is already full if needed, but we pass history separately now
         conversationId: convId,
@@ -194,7 +194,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         return null;
       }
 
-      // console.log('[useImageGeneration] analyzeIntent - calling API:', {
+      console.log('[useImageGeneration] analyzeIntent - calling API:', {
         request,
         hasImage,
         conversationId: existingConversationId,
@@ -246,14 +246,14 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         // SAFEGUARD: If intent is edit but no image is uploaded, DO NOT REDIRECT.
         const currentStore = useImageGenStore.getState();
         if (respIsEditable && !currentStore.imageBase64 && needsRedirect) {
-          // console.log(
+          console.log(
             '[useImageGeneration] Blocking redirect for implicit edit without image',
           );
           needsRedirect = false;
         }
 
         if (needsRedirect) {
-          // console.log(
+          console.log(
             '[useImageGeneration] Redirecting to conversation:',
             backendConversationId,
           );
@@ -288,7 +288,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         // Workflow #2: Edit flow
         // Check if we have an image in the store (set by ChatInput)
         if (store.imageBase64) {
-          // console.log(
+          console.log(
             '[useImageGeneration] Intent is edit and image exists. Triggering edit...',
           );
           // Auto-trigger edit
@@ -298,7 +298,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
           });
         } else {
           // No image yet - ask user
-          // console.log(
+          console.log(
             '[useImageGeneration] Intent is edit but no image. Asking user...',
           );
           setWorkflow('editing');
@@ -321,11 +321,11 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
           const effectiveCurrentId = existingConversationId;
 
           if (backendConversationId === effectiveCurrentId) {
-            // console.log(
+            console.log(
               '[useImageGeneration] Staying on same page, letting useEffect handle continuation...',
             );
           } else {
-            // console.log(
+            console.log(
               '[useImageGeneration] Redirecting, letting useEffect handle continuation on new page...',
             );
           }
@@ -365,7 +365,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         return null; // throw new Error(...)
       }
 
-      // console.log('[useImageGeneration] addDetail - sending:', {
+      console.log('[useImageGeneration] addDetail - sending:', {
         conversationId: currentConvId,
         userId: currentUserId,
         detail,
@@ -406,7 +406,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // Check if conversation ID changed (e.g. from new-chat to real ID)
       const store = useImageGenStore.getState();
       if (newConvId && newConvId !== store.conversationId) {
-        // console.log(
+        console.log(
           '[useImageGeneration] addDetail - conversation ID changed/assigned:',
           newConvId,
         );
@@ -454,7 +454,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // Example:
       // await syncConversationToBackend(currentConvId, currentUserId, accessToken);
 
-      // console.log('[useImageGeneration] finalizePrompt - sending:', {
+      console.log('[useImageGeneration] finalizePrompt - sending:', {
         conversationId: currentConvId,
         userId: currentUserId,
       });
@@ -483,7 +483,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setEnhancedPrompt(prompt);
       setConversationHistory(history);
 
-      // console.log(
+      console.log(
         '[useImageGeneration] finalizePrompt - enhanced prompt:',
         prompt,
       );
@@ -514,7 +514,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         return null;
       }
 
-      // console.log('[useImageGeneration] generateImage - sending:', {
+      console.log('[useImageGeneration] generateImage - sending:', {
         prompt,
         aspectRatio: currentAspectRatio,
         negativePrompt: currentNegativePrompt || undefined,
@@ -603,7 +603,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         return null;
       }
 
-      // console.log('[useImageGeneration] editImage - sending:', {
+      console.log('[useImageGeneration] editImage - sending:', {
         prompt,
         conversationId: currentConvId,
         userId: currentUserId,
@@ -640,7 +640,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         setError(errorMsg);
         setLoadingResponse(false);
 
-        // console.log(
+        console.log(
           '[useImageGeneration] editImage error - sending error message:',
           errorMsg,
         );
@@ -656,7 +656,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       const { responseMessage } = response.data;
       const { answer, image } = responseMessage;
 
-      // console.log(
+      console.log(
         '[useImageGeneration] editImage success - image object:',
         image,
       );
@@ -670,7 +670,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
           ? (image.url as any).url
           : image.url;
 
-      // console.log(
+      console.log(
         '[useImageGeneration] editImage - extracted imageUrl:',
         imageUrl,
       );
@@ -682,7 +682,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       });
 
       const store = useImageGenStore.getState();
-      // console.log(
+      console.log(
         '[useImageGeneration] editImage - updating conversation with:',
         {
           answer,
@@ -764,7 +764,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // If we have an explicit conversation ID from the UI (e.g. existing chat),
       // ensure it's set in the store so all subsequent steps use it.
       if (outgoingConversationId) {
-        // console.log(
+        console.log(
           '[useImageGeneration] handleImageRequest outgoingConversationId',
           outgoingConversationId,
         );
@@ -775,7 +775,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // (which might have just been set above, or exists from a previous step)
       const currentConversationId =
         outgoingConversationId || useImageGenStore.getState().conversationId;
-      // console.log(
+      console.log(
         '[useImageGeneration] handleImageRequest currentConversationId',
         currentConversationId,
       );
@@ -798,7 +798,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
           msg => msg.metadata?.imageUrl || msg.metadata?.images,
         ) ?? false;
 
-      // console.log('[useImageGeneration] handleImageRequest check:', {
+      console.log('[useImageGeneration] handleImageRequest check:', {
         conversationId: {
           store: useImageGenStore.getState().conversationId,
           outgoing: outgoingConversationId,
@@ -813,7 +813,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // 2. New Chat OR No Prior Images -> Full Analyze-Evaluate Flow
 
       if (currentConversationId && hasPriorImages && !hasImage) {
-        // console.log(
+        console.log(
           '[useImageGeneration] Existing context detected. Skipping analysis, going straight to generation.',
         );
 
@@ -830,7 +830,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         });
       } else {
         // Full Flow (Analyze -> Evaluate -> ...)
-        // console.log(
+        console.log(
           '[useImageGeneration] New context or no prior images. Starting full analysis workflow.',
         );
 
@@ -861,7 +861,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         setWorkflow('collecting');
       } else {
         // User is done - finalize and generate (auto-chain)
-        // console.log(
+        console.log(
           '[useImageGeneration] User confirmed - finalizing and generating...',
         );
 
@@ -870,7 +870,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         // Get the enhanced prompt from store after finalize
         const store = useImageGenStore.getState();
         const finalPrompt = store.enhancedPrompt;
-        // console.log('[useImageGeneration] Using enhanced prompt:', finalPrompt);
+        console.log('[useImageGeneration] Using enhanced prompt:', finalPrompt);
 
         if (finalPrompt) {
           await generateImageMutation.mutateAsync({ prompt: finalPrompt });
@@ -930,7 +930,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // Check if we have a conversation ID and we are on the correct page for it
       // Wait for the URL to reflect the new conversation ID before continuing
       if (conversationId && accessToken && pathname?.includes(conversationId)) {
-        // console.log(
+        console.log(
           '[useImageGeneration] Resuming evaluation flow for conversation:',
           conversationId,
         );
@@ -945,7 +945,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
           ?.slice(-1)[0]?.content;
 
         if (lastUserMessage) {
-          // console.log(
+          console.log(
             '[useImageGeneration] Found pending prompt from history:',
             lastUserMessage,
           );

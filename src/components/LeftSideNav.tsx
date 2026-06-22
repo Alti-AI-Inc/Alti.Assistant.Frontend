@@ -633,49 +633,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
           {/* Action Buttons to the right */}
           <div className="flex flex-none items-center gap-1.5">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className={cn(
-                    "relative flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none dark:bg-zinc-800/50",
-                    activeTab === 'inbox'
-                      ? "bg-white dark:bg-zinc-800 border-black/20 text-black dark:text-white shadow-xs"
-                      : "bg-[#F5F5F7] border-black/10 text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-                  )}
-                  onClick={() => handleTabChange('inbox')}
-                >
-                  <Inbox className="size-4" />
-                  {unreadInboxCount > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white ring-1 ring-white dark:ring-zinc-800 animate-pulse">
-                      {unreadInboxCount}
-                    </span>
-                  )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Inbox</p>
-              </TooltipContent>
-            </Tooltip>
-
-            {activeTab !== 'apps' && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#F5F5F7] text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 transition-all duration-200 focus:outline-none select-none dark:bg-zinc-800/50"
-                    onClick={() => handleTabChange('apps')}
-                  >
-                    <LayoutGrid className="size-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>Apps</p>
-                </TooltipContent>
-              </Tooltip>
-            )}
 
             {plusProps.visible && (
               <div className="animate-in fade-in zoom-in duration-200">
@@ -785,25 +742,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </TooltipContent>
             </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('assistant')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'assistant' || activeTab === 'workflows'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <Zap className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Actions</p>
-              </TooltipContent>
-            </Tooltip>
+
           </div>
         </div>
       )}

@@ -594,42 +594,7 @@ const LeftSideNavMobile = () => {
                 <span className="text-sm font-normal">Spaces</span>
               </Button> */}
 
-              <Button
-                disabled={pathname === '/inbox'}
-                onClick={() => {
-                  setActiveConversation(null);
-                  setShowStartLastMessage(false);
-                  setUserMessage('');
-                  setSelectedOption(null);
-                  if (pathname !== '/inbox') router.push('/inbox');
-                  close();
-                }}
-                className="relative flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
-              >
-                <Inbox className="size-4 mr-2 text-black" />
-                <span className="text-sm font-normal">Inbox</span>
-                {unreadInboxCount > 0 && (
-                  <span className="absolute right-4 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white animate-pulse">
-                    {unreadInboxCount}
-                  </span>
-                )}
-              </Button>
 
-              <Button
-                disabled={pathname === '/apps'}
-                onClick={() => {
-                  setActiveConversation(null);
-                  setShowStartLastMessage(false);
-                  setUserMessage('');
-                  setSelectedOption(null);
-                  if (pathname !== '/apps') router.push('/apps');
-                  close();
-                }}
-                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
-              >
-                <LayoutGrid className="size-4 mr-2 text-black" />
-                <span className="text-sm font-normal">Apps</span>
-              </Button>
             </>
           )}
         </div>
@@ -719,25 +684,7 @@ const LeftSideNavMobile = () => {
               </TooltipContent>
             </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('assistant')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'assistant' || activeTab === 'workflows'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <Zap className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Actions</p>
-              </TooltipContent>
-            </Tooltip>
+
           </div>
         </div>
       )}
