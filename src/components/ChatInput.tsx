@@ -745,17 +745,11 @@ const ChatInput = ({
     setShowStartLastMessage(true);
 
     const handleImageWorkflow = async () => {
-      console.log('[ChatInput] Image workflow - current state:', imageWorkflow);
-
       if (isCollectingDetails) {
         // We're in detail collection phase - add detail
-        console.log('[ChatInput] Adding detail to image prompt');
         await handleAddDetail(message);
       } else {
         // Start new image generation flow
-        console.log('[ChatInput] Starting image generation flow', {
-          hasImage: !!imageBase64,
-        });
         await handleImageRequest(
           message,
           selectedOption === OPTIONS.EDIT_IMAGE || !!imageBase64,
