@@ -155,6 +155,8 @@ export const createConversationSlice: StateCreator<
           ...state,
           activeConversation: {
             ...(conversationId && { conversationId }),
+            is_deep_search: state.selectedOption === OPTIONS.RESEARCH,
+            option: state.selectedOption || undefined,
             messages: [
               {
                 role,
@@ -184,6 +186,8 @@ export const createConversationSlice: StateCreator<
         activeConversation: {
           ...state.activeConversation,
           ...(conversationId && { conversationId }), // Allow updating ID
+          is_deep_search: state.activeConversation.is_deep_search || state.selectedOption === OPTIONS.RESEARCH,
+          option: state.activeConversation.option || state.selectedOption || undefined,
           messages: newMessages,
           updatedAt: timestamp,
         },

@@ -451,6 +451,10 @@ const ChatInput = ({
       //   return '/search/extract';
       // case OPTIONS.Transcribe:
       //   return '/search/transcribe';
+      case OPTIONS.DRAFT_DOCUMENT:
+        return '/documents/assistant';
+      case OPTIONS.IMAGE:
+        return '/image/generate';
       default:
         return '/orchestrator/route-prompt'; // Master Intelligence Router
     }
