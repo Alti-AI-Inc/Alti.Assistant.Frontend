@@ -52,10 +52,9 @@ import {
   SlidersHorizontal,
   ChevronUp,
   ChevronDown,
-  Compass,
   Code2,
   ImageIcon,
-  Clapperboard,
+  Video,
   ShieldAlert,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -147,7 +146,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'chat' | 'text' | 'media' | 'bots' | 'assistant' | 'apps' | 'workflows' | 'inbox' | 'none' | 'account';
+type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'video' | 'bots' | 'none' | 'account';
 
 const AVAILABLE_MCP_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -214,7 +213,7 @@ const LeftSideNavMobile = () => {
   
   const unreadInboxCount = inboxItems.filter(item => !item.isRead).length;
 
-  const [activeTab, setActiveTab] = useState<SidebarTab>('chat');
+  const [activeTab, setActiveTab] = useState<SidebarTab>('search');
 
 
 
@@ -256,28 +255,21 @@ const LeftSideNavMobile = () => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      setActiveTab('chat');
+      setActiveTab('search');
       return;
     }
     if (isSuperAdmin) {
       setActiveTab('account');
       return;
     }
-    if (pathname === '/apps') {
-      setActiveTab('apps');
-    } else if (pathname === '/my-chatbots' || pathname.startsWith('/my-chatbots')) {
+    if (pathname === '/my-chatbots' || pathname.startsWith('/my-chatbots')) {
       setActiveTab('bots');
-    } else if (pathname === '/workflows' || pathname.startsWith('/workflows')) {
-      setActiveTab('workflows');
-    } else if (pathname === '/assistant' || pathname.startsWith('/assistant')) {
-      setActiveTab('assistant');
-    } else if (pathname === '/inbox' || pathname.startsWith('/inbox')) {
-      setActiveTab('inbox');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
-      if (selectedOption === OPTIONS.RESEARCH || !selectedOption) {
-        setActiveTab('chat');
+      if (selectedOption === OPTIONS.RESEARCH) {
+        setActiveTab('research');
+      } else if (selectedOption === OPTIONS.CODE) {
+        setActiveTab('code');
       } else if (
-        selectedOption === OPTIONS.CODE ||
         selectedOption === OPTIONS.DRAFT_DOCUMENT ||
         selectedOption === OPTIONS.REWRITE ||
         selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
@@ -286,15 +278,16 @@ const LeftSideNavMobile = () => {
         selectedOption === OPTIONS.REVIEW_CONTRACT ||
         selectedOption === OPTIONS.GENERATE_REPORT
       ) {
-        setActiveTab('text');
+        setActiveTab('write');
       } else if (
         selectedOption === OPTIONS.IMAGE ||
-        selectedOption === OPTIONS.EDIT_IMAGE ||
-        selectedOption === OPTIONS.VIDEO
+        selectedOption === OPTIONS.EDIT_IMAGE
       ) {
-        setActiveTab('media');
+        setActiveTab('image');
+      } else if (selectedOption === OPTIONS.VIDEO) {
+        setActiveTab('video');
       } else {
-        setActiveTab('chat');
+        setActiveTab('search');
       }
     } else if (pathname.startsWith('/instructions') || 
                pathname.startsWith('/guardrails') || 
@@ -311,10 +304,10 @@ const LeftSideNavMobile = () => {
     }
   }, [pathname, selectedOption, isLoggedIn]);
 
-  // Reset active tab to chat when user logs out
+  // Reset active tab to search when user logs out
   useEffect(() => {
     if (!isLoggedIn) {
-      setActiveTab('chat');
+      setActiveTab('search');
     }
   }, [isLoggedIn]);
 
@@ -324,7 +317,7 @@ const LeftSideNavMobile = () => {
     if (activeConversation) {
       const isDeepSearch = !!((activeConversation as any).is_deep_search);
       if (isDeepSearch) {
-        setActiveTab('chat');
+        setActiveTab('research');
         if (selectedOption !== OPTIONS.RESEARCH) {
           setSelectedOption(OPTIONS.RESEARCH);
         }
@@ -358,27 +351,29 @@ const LeftSideNavMobile = () => {
           !pathname.startsWith('/invite-friends')
         ) {
           const opt = (activeConversation as any).option || selectedOption;
-          if (
+          if (opt === OPTIONS.CODE) {
+            setActiveTab('code');
+          } else if (
             opt === OPTIONS.DRAFT_DOCUMENT ||
             opt === OPTIONS.REWRITE ||
             opt === OPTIONS.TRANSLATE_DOCUMENTS ||
             opt === OPTIONS.BRAINSTORM ||
             opt === OPTIONS.GENERATE_PLAN ||
             opt === OPTIONS.REVIEW_CONTRACT ||
-            opt === OPTIONS.GENERATE_REPORT ||
-            opt === OPTIONS.CODE
+            opt === OPTIONS.GENERATE_REPORT
           ) {
-            setActiveTab('text');
+            setActiveTab('write');
           } else if (
             opt === OPTIONS.IMAGE ||
-            opt === OPTIONS.EDIT_IMAGE ||
-            opt === OPTIONS.VIDEO
+            opt === OPTIONS.EDIT_IMAGE
           ) {
-            setActiveTab('media');
+            setActiveTab('image');
+          } else if (opt === OPTIONS.VIDEO) {
+            setActiveTab('video');
           } else if (opt === OPTIONS.RESEARCH) {
-            setActiveTab('chat');
+            setActiveTab('research');
           } else {
-            setActiveTab('chat');
+            setActiveTab('search');
           }
 
           if (selectedOption === OPTIONS.RESEARCH && !isDeepSearch) {
@@ -391,60 +386,41 @@ const LeftSideNavMobile = () => {
 
   const handleTabChange = (tab: SidebarTab) => {
     setActiveTab(tab);
-    if (tab === 'apps') {
-      router.push('/apps');
-      close();
-    } else if (tab === 'bots') {
+    if (tab === 'bots') {
       router.push('/my-chatbots');
       close();
-    } else if (tab === 'workflows') {
-      router.push('/workflows');
-      close();
-    } else if (tab === 'assistant') {
-      router.push('/assistant');
-      close();
-    } else if (tab === 'inbox') {
-      router.push('/inbox');
-      close();
-    } else if (tab === 'chat') {
-      if (selectedOption !== OPTIONS.RESEARCH) {
-        setSelectedOption(null);
-      }
-      if (pathname !== '/' && !pathname.startsWith('/c/')) {
-        router.push('/');
-      }
-      close();
-    } else if (tab === 'text') {
-      if (
-        selectedOption !== OPTIONS.CODE &&
-        selectedOption !== OPTIONS.DRAFT_DOCUMENT &&
-        selectedOption !== OPTIONS.REWRITE &&
-        selectedOption !== OPTIONS.TRANSLATE_DOCUMENTS &&
-        selectedOption !== OPTIONS.BRAINSTORM &&
-        selectedOption !== OPTIONS.GENERATE_PLAN &&
-        selectedOption !== OPTIONS.REVIEW_CONTRACT &&
-        selectedOption !== OPTIONS.GENERATE_REPORT
-      ) {
-        setSelectedOption(OPTIONS.DRAFT_DOCUMENT);
-      }
-      if (pathname !== '/' && !pathname.startsWith('/c/')) {
-        router.push('/');
-      }
-      close();
-    } else if (tab === 'media') {
-      if (
-        selectedOption !== OPTIONS.IMAGE &&
-        selectedOption !== OPTIONS.EDIT_IMAGE &&
-        selectedOption !== OPTIONS.VIDEO
-      ) {
-        setSelectedOption(OPTIONS.IMAGE);
-      }
-      if (pathname !== '/' && !pathname.startsWith('/c/')) {
-        router.push('/');
-      }
-      close();
-    } else {
+    } else if (tab === 'search') {
       setSelectedOption(null);
+      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+        router.push('/');
+      }
+      close();
+    } else if (tab === 'research') {
+      setSelectedOption(OPTIONS.RESEARCH);
+      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+        router.push('/');
+      }
+      close();
+    } else if (tab === 'write') {
+      setSelectedOption(OPTIONS.DRAFT_DOCUMENT);
+      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+        router.push('/');
+      }
+      close();
+    } else if (tab === 'code') {
+      setSelectedOption(OPTIONS.CODE);
+      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+        router.push('/');
+      }
+      close();
+    } else if (tab === 'image') {
+      setSelectedOption(OPTIONS.IMAGE);
+      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+        router.push('/');
+      }
+      close();
+    } else if (tab === 'video') {
+      setSelectedOption(OPTIONS.VIDEO);
       if (pathname !== '/' && !pathname.startsWith('/c/')) {
         router.push('/');
       }
@@ -454,82 +430,94 @@ const LeftSideNavMobile = () => {
 
   const getPlusButtonProps = () => {
     switch (activeTab) {
-      case 'chat':
-        const isResearchMode = selectedOption === OPTIONS.RESEARCH;
+      case 'search':
         return {
           visible: true,
-          label: isResearchMode ? 'New Research' : 'New Search',
+          label: 'New Search',
           onClick: () => {
             setActiveConversation(null);
             setShowStartLastMessage(false);
             setUserMessage('');
-            setSelectedOption(isResearchMode ? OPTIONS.RESEARCH : null);
-            router.push('/');
+            setSelectedOption(null);
             close();
+            router.push('/');
           },
         };
-      case 'text':
-        const isCodeMode = selectedOption === OPTIONS.CODE;
+      case 'research':
         return {
           visible: true,
-          label: isCodeMode ? 'New Code' : 'New Document',
+          label: 'New Research',
           onClick: () => {
             setActiveConversation(null);
             setShowStartLastMessage(false);
             setUserMessage('');
-            setSelectedOption(isCodeMode ? OPTIONS.CODE : OPTIONS.DRAFT_DOCUMENT);
-            router.push('/');
+            setSelectedOption(OPTIONS.RESEARCH);
             close();
+            router.push('/');
           },
         };
-      case 'media':
-        const isVideoMode = selectedOption === OPTIONS.VIDEO;
+      case 'write':
         return {
           visible: true,
-          label: isVideoMode ? 'New Video' : 'New Image',
+          label: 'New Document',
           onClick: () => {
             setActiveConversation(null);
             setShowStartLastMessage(false);
             setUserMessage('');
-            setSelectedOption(isVideoMode ? OPTIONS.VIDEO : OPTIONS.IMAGE);
-            router.push('/');
+            setSelectedOption(OPTIONS.DRAFT_DOCUMENT);
             close();
+            router.push('/');
+          },
+        };
+      case 'code':
+        return {
+          visible: true,
+          label: 'New Code',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.CODE);
+            close();
+            router.push('/');
+          },
+        };
+      case 'image':
+        return {
+          visible: true,
+          label: 'New Image',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.IMAGE);
+            close();
+            router.push('/');
+          },
+        };
+      case 'video':
+        return {
+          visible: true,
+          label: 'New Video',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.VIDEO);
+            close();
+            router.push('/');
           },
         };
       case 'bots':
         return {
           visible: true,
-          label: projectTab === 'my' ? 'New Project' : 'New Model',
+          label: 'New Space',
           onClick: () => {
             setActiveBotId(null);
             router.push('/my-chatbots');
             close();
           },
         };
-      case 'workflows':
-        return {
-          visible: true,
-          label: 'New Flow',
-          onClick: () => {
-            alert('Define Cron or Webhook triggers to chain your custom agents and RAG indexes in a new workflow!');
-            close();
-          },
-        };
-      case 'assistant':
-        return {
-          visible: true,
-          label: 'New Task',
-          onClick: () => {
-            setActiveBotId(null);
-            setActiveConversation(null);
-            setShowStartLastMessage(false);
-            setUserMessage('');
-            setSelectedOption(null);
-            router.push('/assistant');
-            close();
-          },
-        };
-      case 'apps':
       default:
         return {
           visible: false,
@@ -543,75 +531,81 @@ const LeftSideNavMobile = () => {
 
   return (
     <div className="bg-white dark:bg-zinc-900 flex h-full flex-col">
-      {/* Sticky nav buttons */}
-      <div className="bg-white dark:bg-zinc-900 sticky top-0 z-10">
-        <div className="space-y-0.5 px-2 py-2">
-          {plusProps.visible && (
-            <Button
-              onClick={plusProps.onClick}
-              className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 animate-in fade-in zoom-in duration-200"
-            >
-              <Plus className="size-4 mr-2 text-black" />
-              <span className="text-sm font-normal">{plusProps.label}</span>
-            </Button>
-          )}
+      {/* Enclosed Search & Actions Row */}
+      {activeTab !== 'account' && (
+        <div className="h-[52px] flex items-center justify-between gap-2 border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-all duration-300 flex-none">
+          {/* Search Bar Input */}
+          <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 dark:border-zinc-800/80 bg-[#F5F5F7] dark:bg-zinc-800/50 px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 dark:focus-within:ring-white/10">
+            <Search className="size-3.5 flex-none text-zinc-500 dark:text-zinc-400" />
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-transparent text-xs text-black dark:text-zinc-100 outline-none placeholder:text-zinc-500 dark:placeholder:text-zinc-400"
+            />
+          </div>
 
-          {isLoggedIn && !isSuperAdmin && (
-            <>
-              {/* <Button
-                disabled={pathname === '/workspaces'}
-                onClick={() => {
-                  setActiveConversation(null);
-                  setShowStartLastMessage(false);
-                  setUserMessage('');
-                  setSelectedOption(null);
-                  if (pathname !== '/workspaces') router.push('/workspaces');
-                  close();
-                }}
-                className="flex w-full items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5 disabled:opacity-100"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-vector-square-icon lucide-vector-square"
+          {/* Action Buttons to the right */}
+          <div className="flex flex-none items-center gap-1.5">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className={cn(
+                    "flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none dark:bg-zinc-800/50",
+                    activeTab === 'bots'
+                      ? "bg-white dark:bg-zinc-800 border-black/20 text-black dark:text-white shadow-xs"
+                      : "bg-[#F5F5F7] border-black/10 text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+                  )}
+                  onClick={() => handleTabChange('bots')}
                 >
-                  <path d="M19.5 7a24 24 0 0 1 0 10" />
-                  <path d="M4.5 7a24 24 0 0 0 0 10" />
-                  <path d="M7 19.5a24 24 0 0 0 10 0" />
-                  <path d="M7 4.5a24 24 0 0 1 10 0" />
-                  <rect x="17" y="17" width="5" height="5" rx="1" />
-                  <rect x="17" y="2" width="5" height="5" rx="1" />
-                  <rect x="2" y="17" width="5" height="5" rx="1" />
-                  <rect x="2" y="2" width="5" height="5" rx="1" />
-                </svg>
-                <span className="text-sm font-normal">Spaces</span>
-              </Button> */}
+                  <LayoutGrid className="size-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Spaces</p>
+              </TooltipContent>
+            </Tooltip>
 
-
-            </>
-          )}
+            {plusProps.visible && (
+              <div className="animate-in fade-in zoom-in duration-200">
+                {/* Plus for Dynamic Tab Action */}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#F5F5F7] text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black dark:bg-zinc-800/50 dark:text-white"
+                      onClick={plusProps.onClick}
+                    >
+                      <Plus className="size-4 text-black" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>{plusProps.label}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Chat / Projects / GCP Hub row toggle */}
+      {/* 6-Icon Toggle Row */}
       {!isSuperAdmin && (
-        <div className="border-b border-black/5 px-4 py-2 bg-white dark:bg-zinc-900">
-          <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
+        <div className="border-b border-black/5 px-4 py-2 bg-white dark:bg-zinc-900 flex-none">
+          <div className="flex bg-[#F5F5F7] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
+            {/* Search */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
                   type="button"
-                  onClick={() => handleTabChange('chat')}
+                  onClick={() => handleTabChange('search')}
                   className={cn(
                     'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'chat'
+                    activeTab === 'search'
                       ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                   )}
@@ -620,18 +614,40 @@ const LeftSideNavMobile = () => {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Chat</p>
+                <p>Search</p>
               </TooltipContent>
             </Tooltip>
 
+            {/* Research */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
                   type="button"
-                  onClick={() => handleTabChange('text')}
+                  onClick={() => handleTabChange('research')}
                   className={cn(
                     'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'text'
+                    activeTab === 'research'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Sparkles className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Research</p>
+              </TooltipContent>
+            </Tooltip>
+
+            {/* Write */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('write')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'write'
                       ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                   )}
@@ -640,18 +656,40 @@ const LeftSideNavMobile = () => {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Text</p>
+                <p>Write</p>
               </TooltipContent>
             </Tooltip>
 
+            {/* Code */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
                   type="button"
-                  onClick={() => handleTabChange('media')}
+                  onClick={() => handleTabChange('code')}
                   className={cn(
                     'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'media'
+                    activeTab === 'code'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Code2 className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Code</p>
+              </TooltipContent>
+            </Tooltip>
+
+            {/* Image */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('image')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'image'
                       ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                   )}
@@ -660,100 +698,42 @@ const LeftSideNavMobile = () => {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Media</p>
+                <p>Image</p>
               </TooltipContent>
             </Tooltip>
 
+            {/* Video */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
                   type="button"
-                  onClick={() => handleTabChange('bots')}
+                  onClick={() => handleTabChange('video')}
                   className={cn(
                     'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'bots'
+                    activeTab === 'video'
                       ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                   )}
                 >
-                  <LayoutGrid className="size-4" />
+                  <Video className="size-4" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Workspace</p>
+                <p>Video</p>
               </TooltipContent>
             </Tooltip>
-
-
           </div>
         </div>
       )}
 
       {/* Scrollable conversation list */}
         <div className="flex-1 overflow-y-auto px-4 pb-4">
-          {activeTab !== 'account' && (
-          <div className="mt-3 mb-2 flex items-center justify-between px-1">
-            <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-zinc-400">
-            </div>
-            {activeTab === 'apps' ? (
-              <div className="flex h-7 flex-1 items-center gap-1.5 rounded-lg border border-black/10 bg-[#F5F5F7] px-2 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 ml-4 max-w-[150px]">
-                <Search className="size-3 text-black" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-transparent text-[11px] text-black outline-none placeholder:text-gray-500"
-                />
-              </div>
-            ) : activeTab === 'bots' ? null : (
-              <Search
-                onClick={() => {
-                  onOpen({
-                    type: 'search-chats',
-                  });
-                  close();
-                }}
-                className="size-3.5 cursor-pointer text-gray-500 hover:text-black transition-colors"
-              />
-            )}
-          </div>
-          )}
           {activeTab === 'bots' ? (
-            <div className="space-y-1 py-1 pb-4 mt-2">
-              <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full mb-2 select-none">
-                <button
-                  type="button"
-                  onClick={() => setProjectTab('my')}
-                  className={cn(
-                    "flex-1 py-1.5 px-3 text-[11px] font-normal rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
-                    projectTab === 'my'
-                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
-                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
-                  )}
-                >
-                  Projects
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setProjectTab('team')}
-                  className={cn(
-                    "flex-1 py-1.5 px-3 text-[11px] font-normal rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
-                    projectTab === 'team'
-                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
-                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
-                  )}
-                >
-                  Models
-                </button>
-              </div>
-              <div className="my-3 h-px bg-black/10 dark:bg-white/10 -mx-4" />
-
+            <div className="mt-2 space-y-1 py-1 pb-4">
               {bots
                 .filter(bot =>
-                  ((bot.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-                  (bot.description || '').toLowerCase().includes(searchQuery.toLowerCase())) &&
-                  (projectTab === 'my' ? !bot.isShared : !!bot.isShared)
+                  (bot.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  (bot.description || '').toLowerCase().includes(searchQuery.toLowerCase())
                 )
                 .map(bot => {
                   const isSelected = activeBotId === bot.id && pathname === '/my-chatbots';
@@ -798,308 +778,37 @@ const LeftSideNavMobile = () => {
                   );
                 })}
               {bots.filter(bot =>
-                ((bot.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (bot.description || '').toLowerCase().includes(searchQuery.toLowerCase())) &&
-                (projectTab === 'my' ? !bot.isShared : !!bot.isShared)
+                (bot.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (bot.description || '').toLowerCase().includes(searchQuery.toLowerCase())
               ).length === 0 && (
                 <div className="py-4 text-center text-xs text-gray-500">
                   No workspaces found.
                 </div>
               )}
             </div>
-          ) : activeTab === 'apps' ? (
-            <div className="space-y-1 py-1 pb-4">
-              {displayedApps.length === 0 ? (
-                <div className="py-4 text-center text-xs text-gray-500">
-                  No integrations found.
-                </div>
-              ) : (
-                <>
-                  {displayedApps.map(app => {
-                    const isConnected = connectedAppSlugs.has(app.app_name.toLowerCase());
-                    const isSelected = activeAppSlug?.toLowerCase() === app.app_name.toLowerCase();
-                    
-                    return (
-                      <button
-                        key={app.app_name}
-                        onClick={() => {
-                          router.push(`/apps?app=${app.app_name}`);
-                          close();
-                        }}
-                        className={cn(
-                          "w-full flex items-center justify-between rounded-lg p-2 transition-all text-left group",
-                          isSelected 
-                            ? "bg-black/[0.06] border border-black/10 shadow-xs" 
-                            : "hover:bg-black/[0.03] border border-transparent"
-                        )}
-                      >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          {/* App Logo with Fallback */}
-                          <div className="relative flex-none h-7 w-7 rounded-md overflow-hidden border border-black/10 bg-white p-1 flex items-center justify-center">
-                            <AppImage 
-                              src={app.image} 
-                              alt={app.title} 
-                              className="h-full w-full object-contain"
-                              fallbackSizeClass="text-xs"
-                            />
-                          </div>
-   
-                          <div className="min-w-0">
-                            <h4 className={cn(
-                              "text-xs font-semibold truncate",
-                              isSelected ? "text-blue-600 font-bold" : "text-gray-950"
-                            )}>
-                              {app.title}
-                            </h4>
-                          </div>
-                        </div>
-   
-                        {/* Right hand Status dot indicators */}
-                        <div className="flex items-center gap-1">
-                          {isConnected ? (
-                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981]" title="Connected" />
-                          ) : (
-                            <ChevronRight className="h-3.5 w-3.5 text-gray-400 group-hover:translate-x-0.5 transition-transform" />
-                          )}
-                        </div>
-                      </button>
-                    );
-                  })}
-                  {filteredApps.length > displayedApps.length && (
-                    <div className="py-2 px-3 text-[10px] text-center text-gray-500 italic bg-black/[0.02] rounded-lg border border-dashed border-black/5 mt-2">
-                      Use search to find all {filteredApps.length} apps.
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          ) : activeTab === 'chat' ? (
+          ) : activeTab === 'search' ? (
             <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
-              <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full mb-2 select-none">
-                <button
-                  type="button"
-                  onClick={() => setSelectedOption(null)}
-                  className={cn(
-                    "flex-1 py-1.5 px-3 text-[11px] font-semibold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
-                    selectedOption !== OPTIONS.RESEARCH
-                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
-                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
-                  )}
-                >
-                  Search
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
-                  className={cn(
-                    "flex-1 py-1.5 px-3 text-[11px] font-semibold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
-                    selectedOption === OPTIONS.RESEARCH
-                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
-                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
-                  )}
-                >
-                  Research
-                </button>
-              </div>
-              <div className="my-3 h-px bg-black/10 dark:bg-white/10 -mx-4" />
-              <ConversationsList activeTab={selectedOption === OPTIONS.RESEARCH ? 'research' : 'search'} />
+              <ConversationsList searchQuery={searchQuery} activeTab="search" />
             </div>
-          ) : activeTab === 'text' ? (
+          ) : activeTab === 'research' ? (
             <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
-              <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full mb-2 select-none">
-                <button
-                  type="button"
-                  onClick={() => setSelectedOption(OPTIONS.DRAFT_DOCUMENT)}
-                  className={cn(
-                    "flex-1 py-1.5 px-3 text-[11px] font-semibold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
-                    selectedOption !== OPTIONS.CODE
-                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
-                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
-                  )}
-                >
-                  Write
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedOption(OPTIONS.CODE)}
-                  className={cn(
-                    "flex-1 py-1.5 px-3 text-[11px] font-semibold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
-                    selectedOption === OPTIONS.CODE
-                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
-                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
-                  )}
-                >
-                  Code
-                </button>
-              </div>
-              <div className="my-3 h-px bg-black/10 dark:bg-white/10 -mx-4" />
-              <ConversationsList activeTab={selectedOption === OPTIONS.CODE ? 'code' : 'write'} />
+              <ConversationsList searchQuery={searchQuery} activeTab="research" />
             </div>
-          ) : activeTab === 'media' ? (
+          ) : activeTab === 'write' ? (
             <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
-              <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full mb-2 select-none">
-                <button
-                  type="button"
-                  onClick={() => setSelectedOption(OPTIONS.IMAGE)}
-                  className={cn(
-                    "flex-1 py-1.5 px-3 text-[11px] font-semibold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
-                    selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE
-                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
-                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
-                  )}
-                >
-                  Image
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedOption(OPTIONS.VIDEO)}
-                  className={cn(
-                    "flex-1 py-1.5 px-3 text-[11px] font-semibold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
-                    selectedOption === OPTIONS.VIDEO
-                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
-                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
-                  )}
-                >
-                  Video
-                </button>
-              </div>
-              <div className="my-3 h-px bg-black/10 dark:bg-white/10 -mx-4" />
-              <ConversationsList activeTab={selectedOption === OPTIONS.VIDEO ? 'video' : 'image'} />
+              <ConversationsList searchQuery={searchQuery} activeTab="write" />
             </div>
-          ) : (activeTab === 'assistant' || activeTab === 'workflows') ? (
+          ) : activeTab === 'code' ? (
             <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
-              <div className="flex p-0.5 bg-black/[0.04] dark:bg-white/[0.04] rounded-lg border border-black/5 dark:border-white/5 w-full mb-2 select-none">
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('assistant')}
-                  className={cn(
-                    "flex-1 py-1.5 px-3 text-[11px] font-semibold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
-                    activeTab === 'assistant'
-                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
-                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
-                  )}
-                >
-                  Tasks
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('workflows')}
-                  className={cn(
-                    "flex-1 py-1.5 px-3 text-[11px] font-semibold rounded-md transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer",
-                    activeTab === 'workflows'
-                      ? "bg-white dark:bg-zinc-800 text-gray-950 dark:text-zinc-50 shadow-xs"
-                      : "text-gray-500 hover:text-gray-950 dark:hover:text-zinc-300"
-                  )}
-                >
-                  Flows
-                </button>
-              </div>
-              <div className="my-3 h-px bg-black/10 dark:bg-white/10 -mx-4" />
-              {activeTab === 'assistant' ? (
-                <ConversationsList activeTab="assistant" />
-              ) : (
-                <div className="space-y-1">
-                  {[
-                    { id: 'wf-1', name: 'Daily Market Intel', icon: '📊', trigger: 'Every Day @ 8am', active: true },
-                    { id: 'wf-2', name: 'Code Vulnerability Scan', icon: '🛡️', trigger: 'On Git Push', active: true },
-                    { id: 'wf-3', name: 'Sales Prospecting Flow', icon: '🎯', trigger: 'On Notion Add', active: false },
-                    { id: 'wf-4', name: 'Support Mail Auto-Draft', icon: '✉️', trigger: 'On New Email', active: true }
-                  ].filter(wf => wf.name.toLowerCase().includes(searchQuery.toLowerCase())).map(wf => {
-                    const isSelected = pathname === '/workflows' && searchParams?.get('wf') === wf.id;
-                    return (
-                      <div
-                        key={wf.id}
-                        className={cn(
-                          "group flex h-9 w-full items-center justify-between rounded-md text-xs font-semibold text-black text-left transition-all",
-                          isSelected 
-                            ? "bg-black/10" 
-                            : "hover:bg-black/5"
-                        )}
-                      >
-                        <span
-                          className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
-                          onClick={() => {
-                            router.push(`/workflows?wf=${wf.id}`);
-                            close();
-                          }}
-                        >
-                          <Zap className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />
-                          <span className="truncate">{wf.name}</span>
-                        </span>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger className="focus-visible:outline-none">
-                            <EllipsisVertical className="mr-2 rotate-90 h-3.5 w-3.5 text-black opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity" />
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent className="rounded-2xl">
-                            <DropdownMenuItem
-                              onClick={() => {
-                                router.push(`/workflows?wf=${wf.id}`);
-                                close();
-                              }}
-                            >
-                              <Zap className="text-black h-4 w-4 mr-2" /> Open
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+              <ConversationsList searchQuery={searchQuery} activeTab="code" />
             </div>
-          ) : activeTab === 'inbox' ? (
-            <div className="mt-2 space-y-1 py-1 pb-4">
-              {inboxItems
-                .filter(item => 
-                  item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                  item.description.toLowerCase().includes(searchQuery.toLowerCase())
-                )
-                .map(item => {
-                  const isSelected = pathname === '/inbox' && searchParams?.get('id') === item._id;
-                  const isSuccess = item.payload?.status === 'success';
-                  const isFailed = item.payload?.status === 'failed';
-                  
-                  return (
-                    <div
-                      key={item._id}
-                      className={cn(
-                        "group flex h-11 w-full items-center justify-between rounded-md text-xs font-normal text-black text-left transition-all border border-transparent px-2.5",
-                        isSelected 
-                          ? "bg-black/10 dark:bg-white/10 border-black/5 dark:border-white/5" 
-                          : "hover:bg-black/5 dark:hover:bg-white/5"
-                      )}
-                    >
-                      <span
-                        className="flex-1 cursor-pointer truncate py-1.5 flex flex-col justify-center min-w-0"
-                        onClick={() => {
-                          router.push(`/inbox?id=${item._id}`);
-                          close();
-                        }}
-                      >
-                        <div className="flex items-center gap-1.5 truncate">
-                          <span className={cn(
-                            "h-1.5 w-1.5 rounded-full flex-shrink-0",
-                            isSuccess ? "bg-emerald-500 shadow-[0_0_6px_#10b981]" :
-                            isFailed ? "bg-rose-500 shadow-[0_0_6px_#f43f5e]" :
-                            "bg-amber-500 shadow-[0_0_6px_#f59e0b]"
-                          )} />
-                          <span className="font-semibold truncate">{item.title}</span>
-                          {!item.isRead && (
-                            <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse flex-shrink-0" />
-                          )}
-                        </div>
-                        <span className="text-[10px] text-gray-500 dark:text-zinc-400 truncate mt-0.5 ml-3 font-normal">
-                          {item.description}
-                        </span>
-                      </span>
-                    </div>
-                  );
-                })}
-              {inboxItems.length === 0 && (
-                <div className="py-8 text-center text-xs text-gray-500 dark:text-zinc-400">
-                  Your Inbox is empty.
-                </div>
-              )}
+          ) : activeTab === 'image' ? (
+            <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
+              <ConversationsList searchQuery={searchQuery} activeTab="image" />
+            </div>
+          ) : activeTab === 'video' ? (
+            <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
+              <ConversationsList searchQuery={searchQuery} activeTab="video" />
             </div>
           ) : isLoggedIn && activeTab === 'account' ? (
             <div className="mt-4 space-y-1 py-1 pb-4">
@@ -1377,7 +1086,7 @@ const LeftSideNavMobile = () => {
                   variant="default"
                   className="w-full justify-center gap-2 bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 border border-transparent"
                   onClick={() => {
-                    setActiveTab('chat');
+                    setActiveTab('search');
                     router.push('/');
                     close();
                   }}
