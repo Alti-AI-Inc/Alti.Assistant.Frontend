@@ -10,7 +10,8 @@ export const formatArea = (area: number) => {
 };
 
 export const formatConversationTitle = (title: string) => {
-  return title?.replace(/^(Search|Code|Image|Deep Research):\s*/, '');
+  if (!title) return '';
+  return title.replace(/^(Search|Code|Image|Deep Research):\s*/, '');
 };
 
 export const containsYouTubeUrl = (text: string) => {
