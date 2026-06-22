@@ -43,6 +43,7 @@ import {
   Upload,
   Cpu,
   Sparkles,
+  Microscope,
   EllipsisVertical,
   CreditCard,
   Inbox,
@@ -701,7 +702,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                   )}
                 >
-                  <Sparkles className="size-4" />
+                  <Microscope className="size-4" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
