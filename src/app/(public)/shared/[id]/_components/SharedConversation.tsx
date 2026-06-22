@@ -2,6 +2,7 @@
 
 import ReferencesList from '@/app/(protected)/c/[id]/_components/ReferenceList';
 import VideoComponent from '@/app/(protected)/c/[id]/_components/VideoComponent';
+import AudioComponent from '@/app/(protected)/c/[id]/_components/AudioComponent';
 import VideoComponentForContent from '@/app/(protected)/c/[id]/_components/YoutubePlayer';
 import CopyButton from '@/components/CopyButton';
 import { useSharedConversation } from '@/hooks/useConversations';
@@ -67,6 +68,11 @@ const SharedConversation = ({ id }: { id: string }) => {
                   {message.metadata?.video?.name && (
                     <VideoComponent
                       operationId={message.metadata?.video?.name}
+                    />
+                  )}
+                  {message.metadata?.audioUrl && (
+                    <AudioComponent
+                      audioUrl={message.metadata.audioUrl}
                     />
                   )}
                   {!!message.metadata?.reference?.length && (

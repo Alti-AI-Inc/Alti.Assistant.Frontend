@@ -56,6 +56,7 @@ import {
   Code2,
   ImageIcon,
   Video,
+  Volume2,
   ShieldAlert,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -147,7 +148,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'video' | 'bots' | 'none' | 'account';
+type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'none' | 'account';
 
 const AVAILABLE_MCP_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -285,6 +286,8 @@ const LeftSideNavMobile = () => {
         selectedOption === OPTIONS.EDIT_IMAGE
       ) {
         setActiveTab('image');
+      } else if (selectedOption === OPTIONS.AUDIO) {
+        setActiveTab('audio');
       } else if (selectedOption === OPTIONS.VIDEO) {
         setActiveTab('video');
       } else {
@@ -369,6 +372,8 @@ const LeftSideNavMobile = () => {
             opt === OPTIONS.EDIT_IMAGE
           ) {
             setActiveTab('image');
+          } else if (opt === OPTIONS.AUDIO) {
+            setActiveTab('audio');
           } else if (opt === OPTIONS.VIDEO) {
             setActiveTab('video');
           } else if (opt === OPTIONS.RESEARCH) {
@@ -416,6 +421,12 @@ const LeftSideNavMobile = () => {
       close();
     } else if (tab === 'image') {
       setSelectedOption(OPTIONS.IMAGE);
+      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+        router.push('/');
+      }
+      close();
+    } else if (tab === 'audio') {
+      setSelectedOption(OPTIONS.AUDIO);
       if (pathname !== '/' && !pathname.startsWith('/c/')) {
         router.push('/');
       }
@@ -492,6 +503,19 @@ const LeftSideNavMobile = () => {
             setShowStartLastMessage(false);
             setUserMessage('');
             setSelectedOption(OPTIONS.IMAGE);
+            close();
+            router.push('/');
+          },
+        };
+      case 'audio':
+        return {
+          visible: true,
+          label: 'New Audio',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.AUDIO);
             close();
             router.push('/');
           },
@@ -703,6 +727,27 @@ const LeftSideNavMobile = () => {
               </TooltipContent>
             </Tooltip>
 
+            {/* Audio */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('audio')}
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'audio'
+                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                  )}
+                >
+                  <Volume2 className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Audio</p>
+              </TooltipContent>
+            </Tooltip>
+
             {/* Video */}
             <Tooltip>
               <TooltipTrigger asChild>
@@ -806,6 +851,10 @@ const LeftSideNavMobile = () => {
           ) : activeTab === 'image' ? (
             <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
               <ConversationsList searchQuery={searchQuery} activeTab="image" />
+            </div>
+          ) : activeTab === 'audio' ? (
+            <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
+              <ConversationsList searchQuery={searchQuery} activeTab="audio" />
             </div>
           ) : activeTab === 'video' ? (
             <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">

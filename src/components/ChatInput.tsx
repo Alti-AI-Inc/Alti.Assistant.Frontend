@@ -435,6 +435,8 @@ const ChatInput = ({
         return '/legal-contract/assistant';
       case OPTIONS.CODE:
         return '/code/assistant';
+      case OPTIONS.AUDIO:
+        return '/audio/generate';
       case OPTIONS.VIDEO:
         return '/video/generate';
       case OPTIONS.RESEARCH:
@@ -547,6 +549,8 @@ const ChatInput = ({
           case OPTIONS.IMAGE:
           case OPTIONS.EDIT_IMAGE:
             return 'image_generation';
+          case OPTIONS.AUDIO:
+            return 'audio';
           case OPTIONS.VIDEO:
             return 'video';
           case OPTIONS.TASK:
@@ -672,6 +676,7 @@ const ChatInput = ({
 
       const images = response.data?.responseMessage?.images;
       const name = response.data?.responseMessage?.video?.name;
+      const audioUrl = response.data?.responseMessage?.audioUrl;
       const reference = response.data?.responseMessage?.reference;
       // Extract document if it exists in the response
       const document =
@@ -686,6 +691,7 @@ const ChatInput = ({
 
         switch (selectedOption) {
           case OPTIONS.IMAGE:
+          case OPTIONS.AUDIO:
           case OPTIONS.VIDEO:
             return response.data?.responseMessage?.text;
           case OPTIONS.CREATIVE_WRITING:
@@ -712,6 +718,7 @@ const ChatInput = ({
           ...(name && { videoName: name }),
           ...(reference && { reference }),
           ...(document && { document }),
+          ...(audioUrl && { audioUrl }),
         },
       );
 

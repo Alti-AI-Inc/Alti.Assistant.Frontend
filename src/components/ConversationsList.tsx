@@ -26,6 +26,7 @@ import {
   Sparkles,
   Image as ImageIcon,
   Video as VideoIcon,
+  Volume2,
   Zap,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -44,7 +45,7 @@ export default function ConversationsList({
   activeTab = 'chat',
 }: {
   searchQuery?: string;
-  activeTab?: 'chat' | 'search' | 'write' | 'research' | 'assistant' | 'code' | 'image' | 'video' | 'media';
+  activeTab?: 'chat' | 'search' | 'write' | 'research' | 'assistant' | 'code' | 'image' | 'audio' | 'video' | 'media';
 }) {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
@@ -70,6 +71,8 @@ export default function ConversationsList({
     category = 'code';
   } else if (activeTab === 'image') {
     category = 'image,image_generation,image_editing,image_intent_analysis,intent_analysis';
+  } else if (activeTab === 'audio') {
+    category = 'audio';
   } else if (activeTab === 'video') {
     category = 'video';
   } else if (activeTab === 'media') {
@@ -97,6 +100,9 @@ export default function ConversationsList({
     }
     if (activeTab === 'image') {
       return <ImageIcon className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    }
+    if (activeTab === 'audio') {
+      return <Volume2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     }
     if (activeTab === 'video') {
       return <VideoIcon className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;

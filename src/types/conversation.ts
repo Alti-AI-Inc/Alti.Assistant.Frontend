@@ -43,6 +43,7 @@ export enum OPTIONS {
   CREATIVE_WRITING = 'creative-writing',
   STOCK_INTELLIGENCE = 'stock-intelligence',
 
+  AUDIO = 'audio-generation',
   VIDEO = 'video-generation',
 }
 
@@ -86,6 +87,7 @@ export type ConversationMessage = {
     reference?: Reference[];
     images?: null | string;
     imageUrl?: string; // New property to align with backend
+    audioUrl?: string;
     video?: {
       name: string;
     };

@@ -35,6 +35,7 @@ import CodeIDEWidget from './CodeIDEWidget';
 
 import FileDownloadCard from './FileDownloadCard';
 import VideoComponent from './VideoComponent';
+import AudioComponent from './AudioComponent';
 import VideoComponentForContent from './YoutubePlayer';
 import FinancialWidget from './FinancialWidget';
 import SportsWidget from './SportsWidget';
@@ -904,6 +905,12 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 {message.metadata?.video?.name && (
                   <VideoComponent
                     operationId={message.metadata?.video?.name}
+                  />
+                )}
+
+                {message.metadata?.audioUrl && (
+                  <AudioComponent
+                    audioUrl={message.metadata.audioUrl}
                   />
                 )}
 
