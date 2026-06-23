@@ -1105,7 +1105,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
               ) : selectedOption === OPTIONS.VIDEO ? (
                 <VideoStudioWidget 
                   currentVideoUrl={(() => {
-                    const video = lastAssistantMessage?.metadata?.video;
+                    const video = lastAssistantMessage?.metadata?.video as any;
                     return typeof video === 'string' ? video : video?.url || video?.name || null;
                   })()}
                   status={isLoadingResponse ? 'processing' : 'idle'}
