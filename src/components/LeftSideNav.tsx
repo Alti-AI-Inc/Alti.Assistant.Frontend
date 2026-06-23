@@ -684,7 +684,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                   )}
                 >
-                  <MessageSquare className="size-4" />
+                  <Globe className="size-4" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
