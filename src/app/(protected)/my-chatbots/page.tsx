@@ -1032,7 +1032,7 @@ function MyChatbotsContent() {
         {/* Chatbot Content Body */}
         <div className={cn(
           "flex-1 flex flex-col items-center justify-center overflow-hidden relative",
-          viewParam !== 'instructions' && viewParam !== 'guardrails' && viewParam !== 'data' && !hasMessages && "pb-20"
+          viewParam !== 'instructions' && viewParam !== 'guardrails' && viewParam !== 'data' && !hasMessages && "pb-40"
         )}>
           {viewParam === 'instructions' ? (
             <InstructionsEditor bot={activeBot} />
@@ -1141,7 +1141,7 @@ function MyChatbotsContent() {
           ) : (
             <>
               {!hasMessages && (
-                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
+                <h1 className="mb-2 mt-12 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
                   {activeBot.name}
                 </h1>
               )}
