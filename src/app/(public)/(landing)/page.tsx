@@ -45,7 +45,7 @@ function App() {
             {selectedOption === OPTIONS.RESEARCH
               ? 'Deep Research'
               : selectedOption === OPTIONS.IMAGE
-              ? 'Image Generation'
+              ? 'Design The Future'
               : selectedOption === OPTIONS.CODE
               ? 'Your Engineering Partner'
               : selectedOption === OPTIONS.VIDEO

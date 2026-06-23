@@ -704,7 +704,12 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       ? parseCodeFromMessage(lastAssistantMessage.content)
       : null;
 
-  const isSplitScreen = !!codeData || selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE || selectedOption === OPTIONS.VIDEO;
+  const hasImageContent = !!imageGenHook.imageBase64 || !!(lastAssistantMessage?.metadata?.imageUrl || lastAssistantMessage?.metadata?.images) || isImageGenLoading;
+  const hasVideoContent = !!lastAssistantMessage?.metadata?.video || (selectedOption === OPTIONS.VIDEO && isLoadingResponse);
+
+  const isSplitScreen = !!codeData || 
+    ((selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) && hasImageContent) || 
+    (selectedOption === OPTIONS.VIDEO && hasVideoContent);
 
   const handleDownloadImage = async (url: string, filename: string) => {
     try {
