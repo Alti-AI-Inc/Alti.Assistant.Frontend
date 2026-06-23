@@ -165,7 +165,13 @@ export default function ConversationsList({
     data?.pages.flatMap(p => p.conversations) ?? [];
   const conversations = Array.from(
     new Map(rawConversations.map(chat => [chat._id, chat])).values(),
-  );
+  ).filter(chat => {
+    if (!chat.title) return true;
+    const clean = formatConversationTitle(chat.title);
+    if (clean === 'Previous Conversation') return false;
+    if (/^[0-9a-f]{32}:[0-9a-f]+$/i.test(clean)) return false;
+    return true;
+  });
 
   // Search filter only — tab filtering is done server-side via isDeepSearch
   const filteredConversations = searchQuery
