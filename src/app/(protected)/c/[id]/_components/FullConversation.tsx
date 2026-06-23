@@ -862,7 +862,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       src={(() => {
                         const img = message.metadata?.imageUrl || message.metadata?.images;
                         if (typeof img === 'string') return img;
-                        if (Array.isArray(img)) return typeof img[0] === 'string' ? img[0] : img[0]?.url;
+                        if (Array.isArray(img)) return typeof img[0] === 'string' ? img[0] : (img as any[])[0]?.url;
                         return (img as any)?.url;
                       })()}
                       alt={message.metadata?.type || 'Generated image'}
@@ -880,7 +880,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       <button
                         onClick={() => {
                           const img = message.metadata?.imageUrl || message.metadata?.images;
-                          const imageUrl = typeof img === 'string' ? img : Array.isArray(img) ? (typeof img[0] === 'string' ? img[0] : img[0]?.url) : (img as any)?.url;
+                          const imageUrl = typeof img === 'string' ? img : Array.isArray(img) ? (typeof img[0] === 'string' ? img[0] : (img as any[])[0]?.url) : (img as any)?.url;
                           handleDownloadImage(imageUrl, message.metadata?.type || 'generated-image');
                         }}
                         className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl text-xs font-semibold backdrop-blur-md transition-all duration-200 shadow-lg cursor-pointer transform hover:scale-105 active:scale-95"
@@ -892,7 +892,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       <button
                         onClick={() => {
                           const img = message.metadata?.imageUrl || message.metadata?.images;
-                          const imageUrl = typeof img === 'string' ? img : Array.isArray(img) ? (typeof img[0] === 'string' ? img[0] : img[0]?.url) : (img as any)?.url;
+                          const imageUrl = typeof img === 'string' ? img : Array.isArray(img) ? (typeof img[0] === 'string' ? img[0] : (img as any[])[0]?.url) : (img as any)?.url;
                           handleEditImage(imageUrl);
                         }}
                         className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold shadow-lg cursor-pointer transform hover:scale-105 active:scale-95 transition-all duration-200"
@@ -1089,7 +1089,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 <DesignStudioWidget 
                   currentImageUrl={imageGenHook.imageBase64 || (() => {
                     const img = lastAssistantMessage?.metadata?.imageUrl || lastAssistantMessage?.metadata?.images;
-                    return typeof img === 'string' ? img : Array.isArray(img) ? (typeof img[0] === 'string' ? img[0] : img[0]?.url) : (img as any)?.url;
+                    return typeof img === 'string' ? img : Array.isArray(img) ? (typeof img[0] === 'string' ? img[0] : (img as any[])[0]?.url) : (img as any)?.url;
                   })()}
                   onUpload={(file) => {
                     const reader = new FileReader();
