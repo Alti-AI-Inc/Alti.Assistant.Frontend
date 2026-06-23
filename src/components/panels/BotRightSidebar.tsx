@@ -208,15 +208,21 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
             {/* Action Button: New Chat */}
             {activeTab === 'history' && (
-              <Button
-                variant="outline"
-                size="icon"
-                className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#F5F5F7] text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black flex-none dark:bg-zinc-800/50 dark:text-white"
-                onClick={handleNewChat}
-                title="New Conversation"
-              >
-                <Plus className="size-4 text-black" />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#F5F5F7] text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black flex-none dark:bg-zinc-800/50 dark:text-white"
+                    onClick={handleNewChat}
+                  >
+                    <Plus className="size-4 text-black dark:text-white" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>{getNewChatTooltipText()}</p>
+                </TooltipContent>
+              </Tooltip>
             )}
           </div>
 
