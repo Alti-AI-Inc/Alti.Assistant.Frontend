@@ -30,7 +30,7 @@ function App() {
     <div
       className={cn(
         'flex h-full w-full flex-1 flex-col items-center justify-center',
-        !activeConversation && 'pb-20',
+        !activeConversation && 'pb-40',
       )}
       style={{ backgroundColor: '#F5F5F7' }}
     >
@@ -41,7 +41,7 @@ function App() {
       )}
       {!activeConversation?.knowledgebaseId &&
         !activeConversation?.messages?.length && (
-          <h1 className="mb-2 mt-24 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
+          <h1 className="mb-2 mt-12 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
             {selectedOption === OPTIONS.RESEARCH
               ? 'Deep Research'
               : selectedOption === OPTIONS.IMAGE
