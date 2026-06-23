@@ -861,7 +861,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       src={
                         typeof (message.metadata.imageUrl || message.metadata.images) === 'string'
                           ? (message.metadata.imageUrl || message.metadata.images)
-                          : ((message.metadata.imageUrl || message.metadata.images) as any)?.url
+                          : Array.isArray(message.metadata.imageUrl || message.metadata.images)
+                            ? (typeof (message.metadata.imageUrl || message.metadata.images)[0] === 'string'
+                                ? (message.metadata.imageUrl || message.metadata.images)[0]
+                                : (message.metadata.imageUrl || message.metadata.images)[0]?.url)
+                            : ((message.metadata.imageUrl || message.metadata.images) as any)?.url
                       }
                       alt={message.metadata.type || 'Generated image'}
                       className="w-full object-contain max-h-[500px]"

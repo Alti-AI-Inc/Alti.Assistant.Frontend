@@ -345,12 +345,15 @@ export default function AdminDashboardPage() {
                   ) : null}
                   {card.href ? (
                     <Button
-                      asChild
                       size="sm"
                       variant="outline"
                       className="w-full"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        router.push(card.href);
+                      }}
                     >
-                      <Link href={card.href}>{card.linkLabel}</Link>
+                      {card.linkLabel}
                     </Button>
                   ) : null}
                 </CardContent>
@@ -377,14 +380,15 @@ export default function AdminDashboardPage() {
                     <p className="text-muted-foreground text-xs">{card.delta}</p>
                   ) : null}
                   {card.href ? (
-                    <Button
-                      asChild
-                      size="sm"
-                      variant="outline"
-                      className="w-full"
-                    >
-                      <Link href={card.href}>{card.linkLabel}</Link>
-                    </Button>
+                    <Link href={card.href} className="block w-full">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="w-full"
+                      >
+                        {card.linkLabel}
+                      </Button>
+                    </Link>
                   ) : null}
                 </CardContent>
               </Card>

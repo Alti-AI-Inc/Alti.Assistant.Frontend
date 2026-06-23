@@ -370,8 +370,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           pathname !== '/invite-friends' &&
           !pathname.startsWith('/invite-friends')
         ) {
-          const opt = (activeConversation as any).option || selectedOption;
-          if (opt === OPTIONS.CODE) {
+          const opt = (activeConversation as any).option || (activeConversation as any).metadata?.category || selectedOption;
+          if (opt === OPTIONS.CODE || opt === 'code') {
             setActiveTab('code');
           } else if (
             opt === OPTIONS.DRAFT_DOCUMENT ||
@@ -380,31 +380,36 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             opt === OPTIONS.BRAINSTORM ||
             opt === OPTIONS.GENERATE_PLAN ||
             opt === OPTIONS.REVIEW_CONTRACT ||
-            opt === OPTIONS.GENERATE_REPORT
+            opt === OPTIONS.GENERATE_REPORT ||
+            (typeof opt === 'string' && opt.includes('document_drafting'))
           ) {
             setActiveTab('write');
           } else if (
             opt === OPTIONS.IMAGE ||
-            opt === OPTIONS.EDIT_IMAGE
+            opt === OPTIONS.EDIT_IMAGE ||
+            opt === 'image'
           ) {
             setActiveTab('image');
-          } else if (opt === OPTIONS.AUDIO) {
+          } else if (opt === OPTIONS.AUDIO || opt === 'audio') {
             setActiveTab('audio');
-          } else if (opt === OPTIONS.VIDEO) {
+          } else if (opt === OPTIONS.VIDEO || opt === 'video') {
             setActiveTab('video');
-          } else if (opt === OPTIONS.RESEARCH) {
+          } else if (opt === OPTIONS.RESEARCH || opt === 'research') {
             setActiveTab('research');
+            if (selectedOption !== OPTIONS.RESEARCH) {
+              setSelectedOption(OPTIONS.RESEARCH);
+            }
           } else {
             setActiveTab('search');
           }
 
-          if (selectedOption === OPTIONS.RESEARCH && !isDeepSearch) {
+          if (selectedOption === OPTIONS.RESEARCH && !isDeepSearch && opt !== OPTIONS.RESEARCH && opt !== 'research') {
             setSelectedOption(null);
           }
         }
       }
     }
-  }, [activeConversation, selectedOption, setSelectedOption, pathname]);
+  }, [activeConversation, selectedOption, setSelectedOption, pathname, isSuperAdmin, setActiveTab]);
 
   const handleTabChange = (tab: SidebarTab) => {
     setActiveTab(tab);

@@ -213,6 +213,7 @@ export function useActiveConversation(
 
               if (
                 msg.content.startsWith('Image generated successfully') ||
+                msg.content.startsWith('Image generation completed successfully') ||
                 msg.content.startsWith('Image edited successfully') ||
                 // msg.content.startsWith('Video generated successfully') ||
                 msg.content.startsWith('Intent analysis:')
