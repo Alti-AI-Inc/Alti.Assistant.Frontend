@@ -28,6 +28,7 @@ import {
   Video as VideoIcon,
   Volume2,
   Zap,
+  Microscope,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -91,6 +92,9 @@ export default function ConversationsList({
   const getDisplayIcon = (title: string) => {
     if (activeTab === 'chat' || activeTab === 'search') {
       return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    }
+    if (activeTab === 'research') {
+      return <Microscope className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     }
     if (activeTab === 'write') {
       return <FileText className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
