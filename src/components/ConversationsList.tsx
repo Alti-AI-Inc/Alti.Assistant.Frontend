@@ -66,6 +66,8 @@ export default function ConversationsList({
   let category: string | undefined = undefined;
   if (activeTab === 'search') {
     category = 'search';
+  } else if (activeTab === 'research') {
+    category = 'deep_research';
   } else if (activeTab === 'write') {
     category = 'article_writer,document_drafting,creative_writing,rewrite,translation,document_analysis,document_review,report,plan_generation,legal_contract,legal_contract_review,presentation,brainstorm';
   } else if (activeTab === 'code') {
