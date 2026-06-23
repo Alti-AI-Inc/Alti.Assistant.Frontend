@@ -5,8 +5,9 @@ import { useBotsStore } from '@/stores/useBotsStore';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { Dialog, DialogContent, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { useSidebarStore } from '@/stores/useSidebarStore';
-import { Plus, Trash2, PanelLeftClose, Search, MessageSquare, FileText, Shield, Upload } from 'lucide-react';
+import { Plus, Trash2, PanelLeftClose, Search, MessageSquare, FileText, Shield, Upload, Globe, Microscope, Code2, ImageIcon, Volume2, Video } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { OPTIONS } from '@/types/conversation';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -25,7 +26,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   const pathname = usePathname();
   const basePath = pathname?.startsWith('/admin') ? '/admin/projects' : '/my-chatbots';
   const { bots, threads, deleteThread, setActiveBotThreadId, editBot } = useBotsStore();
-  const { setActiveConversation } = useConversationsStore();
+  const { setActiveConversation, selectedOption, setSelectedOption } = useConversationsStore();
   const { isRightSidebarOpen, toggleRightSidebar } = useSidebarStore();
 
   const bot = bots.find((b) => b.id === botId);
@@ -45,9 +46,22 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
     }
   };
 
-  const filteredThreads = botThreads.filter((t) =>
-    (t.title || 'Untitled Chat').toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredThreads = botThreads.filter((t) => {
+    const titleMatch = (t.title || 'Untitled Chat').toLowerCase().includes(searchQuery.toLowerCase());
+    if (!titleMatch) return false;
+
+    // Filter by selected function (approximation based on title keywords)
+    const lower = (t.title || '').toLowerCase();
+    if (selectedOption === null) return lower.includes('search') || lower.includes('google') || lower.includes('web');
+    if (selectedOption === OPTIONS.RESEARCH) return lower.includes('research') || lower.includes('deep');
+    if (selectedOption === OPTIONS.DRAFT_DOCUMENT) return lower.includes('write') || lower.includes('draft') || lower.includes('article') || lower.includes('mail');
+    if (selectedOption === OPTIONS.CODE) return lower.includes('code') || lower.includes('debug') || lower.includes('python') || lower.includes('rust');
+    if (selectedOption === OPTIONS.IMAGE) return lower.includes('image') || lower.includes('photo') || lower.includes('draw');
+    if (selectedOption === OPTIONS.AUDIO) return lower.includes('audio') || lower.includes('voice') || lower.includes('sound');
+    if (selectedOption === OPTIONS.VIDEO) return lower.includes('video') || lower.includes('animation');
+    
+    return true;
+  });
 
   if (!bot) return null;
 
@@ -125,6 +139,70 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
               />
             </div>
 
+            {(basePath === '/admin/projects' || !bot?.isShared) && (
+              <div className="flex items-center gap-1">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={() => handleTabChange('instructions')}
+                      className={cn(
+                        'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                        activeTab === 'instructions'
+                          ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                          : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                      )}
+                    >
+                      <FileText className="size-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>Instructions</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={() => handleTabChange('guardrails')}
+                      className={cn(
+                        'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                        activeTab === 'guardrails'
+                          ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                          : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                      )}
+                    >
+                      <Shield className="size-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>Guardrails</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={() => handleTabChange('data')}
+                      className={cn(
+                        'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                        activeTab === 'data'
+                          ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                          : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                      )}
+                    >
+                      <Upload className="size-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>Data</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            )}
+
             {/* Action Button: New Chat */}
             {activeTab === 'history' && (
               <Button
@@ -139,43 +217,62 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
             )}
           </div>
 
-
-          {/* Toggle with 4 icons */}
-          {(basePath === '/admin/projects' || !bot.isShared) && (
-            <>
-              <div className="h-px w-[calc(100%+2rem)] -ml-4 bg-black/10 mt-2" />
-              <div className="h-10 mt-2 flex items-center bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300 w-full">
-                <div className="flex bg-black/[0.04] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
+          {/* Toggle with 7 icons */}
+          <div className="h-px w-[calc(100%+2rem)] -ml-4 bg-black/10 mt-2" />
+          <div className="h-10 mt-2 flex items-center bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300 w-full">
+            <div className="flex bg-[#F5F5F7] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
+              
+              {/* Search */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => handleTabChange('history')}
+                    onClick={() => { setSelectedOption(null); handleTabChange('history'); }}
                     className={cn(
                       'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                      activeTab === 'history'
+                      activeTab === 'history' && selectedOption === null
                         ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                         : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                     )}
                   >
-                    <MessageSquare className="size-4" />
+                    <Globe className="size-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>Chat History</p>
+                  <p>Search</p>
                 </TooltipContent>
               </Tooltip>
 
-              {(basePath === '/admin/projects' || !bot.isShared) && (
-                <>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
+              {/* Research */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
                     type="button"
-                    onClick={() => handleTabChange('instructions')}
+                    onClick={() => { setSelectedOption(OPTIONS.RESEARCH); handleTabChange('history'); }}
                     className={cn(
                       'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                      activeTab === 'instructions'
+                      activeTab === 'history' && selectedOption === OPTIONS.RESEARCH
+                        ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                        : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                    )}
+                  >
+                    <Microscope className="size-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Research</p>
+                </TooltipContent>
+              </Tooltip>
+
+              {/* Write */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={() => { setSelectedOption(OPTIONS.DRAFT_DOCUMENT); handleTabChange('history'); }}
+                    className={cn(
+                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                      activeTab === 'history' && selectedOption === OPTIONS.DRAFT_DOCUMENT
                         ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                         : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                     )}
@@ -184,55 +281,96 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>Instructions</p>
+                  <p>Write</p>
                 </TooltipContent>
               </Tooltip>
 
+              {/* Code */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => handleTabChange('guardrails')}
+                    onClick={() => { setSelectedOption(OPTIONS.CODE); handleTabChange('history'); }}
                     className={cn(
                       'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                      activeTab === 'guardrails'
+                      activeTab === 'history' && selectedOption === OPTIONS.CODE
                         ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                         : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                     )}
                   >
-                    <Shield className="size-4" />
+                    <Code2 className="size-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>Guardrails</p>
+                  <p>Code</p>
                 </TooltipContent>
               </Tooltip>
 
+              {/* Image */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => handleTabChange('data')}
+                    onClick={() => { setSelectedOption(OPTIONS.IMAGE); handleTabChange('history'); }}
                     className={cn(
                       'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                      activeTab === 'data'
+                      activeTab === 'history' && selectedOption === OPTIONS.IMAGE
                         ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                         : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                     )}
                   >
-                    <Upload className="size-4" />
+                    <ImageIcon className="size-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>Data</p>
+                  <p>Image</p>
                 </TooltipContent>
               </Tooltip>
-                </>
-              )}
+
+              {/* Audio */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={() => { setSelectedOption(OPTIONS.AUDIO); handleTabChange('history'); }}
+                    className={cn(
+                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                      activeTab === 'history' && selectedOption === OPTIONS.AUDIO
+                        ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                        : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                    )}
+                  >
+                    <Volume2 className="size-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Audio</p>
+                </TooltipContent>
+              </Tooltip>
+
+              {/* Video */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={() => { setSelectedOption(OPTIONS.VIDEO); handleTabChange('history'); }}
+                    className={cn(
+                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                      activeTab === 'history' && selectedOption === OPTIONS.VIDEO
+                        ? 'bg-white border-black/10 text-black shadow-xs scale-105'
+                        : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                    )}
+                  >
+                    <Video className="size-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Video</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
-            </>
-          )}
+
         </div>
       )}
 
