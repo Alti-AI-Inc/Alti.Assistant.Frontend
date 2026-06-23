@@ -26,6 +26,7 @@ export async function PostConversation(
       },
       body: JSON.stringify({
         message,
+        prompt: message,
         ...(conversationId && { conversationId }),
         ...(knowledgebaseId && { knowledgebaseId }),
         timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',

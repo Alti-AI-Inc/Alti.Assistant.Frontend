@@ -428,19 +428,19 @@ const ChatInput = ({
 
     switch (selectedOption) {
       case OPTIONS.CREATIVE_WRITING:
-        return '/creative-writing/assistant';
+        return '/writing/execute';
       case OPTIONS.PRESENTATION:
         return '/presentation/assistant';
       case OPTIONS.WRITE_CONTRACT:
         return '/legal-contract/assistant';
       case OPTIONS.CODE:
-        return '/code/assistant';
+        return '/code/execute';
       case OPTIONS.AUDIO:
-        return '/audio/generate';
+        return '/audio/execute';
       case OPTIONS.VIDEO:
-        return '/video/generate';
+        return '/video/execute';
       case OPTIONS.RESEARCH:
-        return '/deep-research/assistant';
+        return '/deep-research/execute';
       // case OPTIONS.GENERATE_PLAN:
       //   return '/search/plan';
       // case OPTIONS.GENERATE_REPORT:
@@ -456,7 +456,7 @@ const ChatInput = ({
       case OPTIONS.DRAFT_DOCUMENT:
         return '/documents/assistant';
       case OPTIONS.IMAGE:
-        return '/image/generate';
+        return '/image/execute';
       default:
         return '/orchestrator/route-prompt'; // Master Intelligence Router
     }
@@ -674,11 +674,27 @@ const ChatInput = ({
         }
       }
 
-      const images = response.data?.responseMessage?.images;
-      const name = response.data?.responseMessage?.video?.name;
-      const audioUrl = response.data?.responseMessage?.audioUrl;
-      const reference = response.data?.responseMessage?.reference;
-      // Extract document if it exists in the response
+      // Extract media and attachments based on the new agent JSON schemas or legacy schema
+      let imageUrl = response.data?.responseMessage?.images?.[0] || response.data?.responseMessage?.imageUrl;
+      if (response.data?.imageUrl) {
+        imageUrl = response.data.imageUrl;
+      }
+      
+      let name = response.data?.responseMessage?.video?.name;
+      if (response.data?.videoUrl) {
+        name = response.data.videoUrl;
+      }
+      
+      let audioUrl = response.data?.responseMessage?.audioUrl;
+      if (response.data?.audioBase64) {
+        audioUrl = `data:audio/mp3;base64,${response.data.audioBase64}`;
+      }
+      
+      let reference = response.data?.responseMessage?.reference;
+      if (response.data?.sources) {
+        reference = response.data.sources;
+      }
+      
       const document =
         response.data?.document || response.data?.responseMessage?.document;
 
@@ -689,22 +705,36 @@ const ChatInput = ({
           return response.data?.message;
         }
 
+        // If gathering details from LangGraph agent, return the reply
+        if (response.data?.status === 'gathering_details') {
+          return response.data?.reply;
+        }
+
         switch (selectedOption) {
           case OPTIONS.IMAGE:
           case OPTIONS.AUDIO:
           case OPTIONS.VIDEO:
-            return response.data?.responseMessage?.text;
+            return response.data?.content || response.data?.prompt || response.data?.responseMessage?.text;
           case OPTIONS.CREATIVE_WRITING:
-            return response.data?.response;
+            return response.data?.content || response.data?.response;
           case OPTIONS.CODE:
-          case OPTIONS.RESEARCH:
+            if (response.data?.code) {
+              const { code, language, explanation } = response.data;
+              return `${explanation || 'Here is the code:'}\n\n\`\`\`${language || 'javascript'}\n${code}\n\`\`\``;
+            }
+            if (response.data?.fixedCode) {
+              const { fixedCode, explanation } = response.data;
+              return `${explanation || 'Here is the fixed code:'}\n\n\`\`\`javascript\n${fixedCode}\n\`\`\``;
+            }
             return response.data?.responseMessage?.answer;
+          case OPTIONS.RESEARCH:
+            return response.data?.synthesis || response.data?.content || response.data?.responseMessage?.answer;
           case OPTIONS.PRESENTATION:
             return response.data?.message;
           case OPTIONS.WRITE_CONTRACT:
             return response.data?.contract;
           default:
-            return response.data?.responseMessage?.answer;
+            return response.data?.content || response.data?.responseMessage?.answer;
         }
       };
 
@@ -714,8 +744,8 @@ const ChatInput = ({
 
         newId,
         {
-          ...(images && { images }),
-          ...(name && { videoName: name }),
+          ...(imageUrl && { imageUrl }),
+          ...(name && { video: { name } }),
           ...(reference && { reference }),
           ...(document && { document }),
           ...(audioUrl && { audioUrl }),
