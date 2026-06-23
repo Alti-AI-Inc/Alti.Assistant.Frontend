@@ -1167,8 +1167,8 @@ const ChatInput = ({
       )}
 
       {selectedOption === OPTIONS.RESEARCH && (
-        <div className="mx-auto w-full max-w-[796px] mb-3 px-0 flex justify-center sm:justify-end">
-          <div className="flex w-full sm:w-auto bg-gray-100/80 dark:bg-zinc-800/80 backdrop-blur-md p-1.5 rounded-2xl shadow-inner border border-gray-200/50 dark:border-zinc-700/50 gap-1 overflow-x-auto">
+        <div className="mx-auto w-full max-w-[796px] mb-5 px-0 flex justify-center">
+          <div className="flex w-full sm:w-auto bg-white dark:bg-zinc-900 backdrop-blur-md p-1.5 rounded-2xl shadow-inner border border-gray-200/50 dark:border-zinc-800/50 gap-1 overflow-x-auto">
             {[
               { id: 'bachelors', name: 'Bachelors', desc: 'Fast (~3-5 pages)' },
               { id: 'masters', name: 'Masters', desc: 'Deep (~10-15 pages)' },
@@ -1181,8 +1181,8 @@ const ChatInput = ({
                 className={cn(
                   'flex flex-col items-center justify-center px-4 py-2 min-w-[130px] sm:min-w-[140px] rounded-xl transition-all duration-300 ease-out',
                   researchTier === tier.id 
-                    ? 'bg-white dark:bg-zinc-700 shadow-md ring-1 ring-black/5 scale-[1.02]' 
-                    : 'hover:bg-black/5 dark:hover:bg-white/5 opacity-80 hover:opacity-100'
+                    ? 'bg-gray-100 dark:bg-zinc-800 shadow-sm ring-1 ring-black/5 scale-[1.02]' 
+                    : 'hover:bg-gray-50 dark:hover:bg-zinc-800/50 opacity-80 hover:opacity-100'
                 )}
               >
                 <span className={cn(
