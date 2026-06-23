@@ -89,6 +89,15 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   const parsedInstructions = bot.instructions ? bot.instructions.split('\n\n').filter(Boolean) : [];
   const parsedGuardrails = bot.guardrails ? bot.guardrails.split('\n\n').filter(Boolean) : [];
 
+  const getNewChatTooltipText = () => {
+    if (selectedOption === OPTIONS.RESEARCH) return "New Research Chat";
+    if (selectedOption === OPTIONS.DRAFT_DOCUMENT) return "New Write Chat";
+    if (selectedOption === OPTIONS.CODE) return "New Code Chat";
+    if (selectedOption === OPTIONS.IMAGE) return "New Image Chat";
+    if (selectedOption === OPTIONS.AUDIO) return "New Audio Chat";
+    if (selectedOption === OPTIONS.VIDEO) return "New Video Chat";
+    return "New Search Chat";
+  };
   return (
     <aside
       className={cn(
