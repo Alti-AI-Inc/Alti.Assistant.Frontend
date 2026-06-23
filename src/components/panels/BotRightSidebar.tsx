@@ -341,7 +341,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>Image</p>
+                  <p>Design</p>
                 </TooltipContent>
               </Tooltip>
 
