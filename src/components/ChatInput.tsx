@@ -1167,7 +1167,7 @@ const ChatInput = ({
       )}
 
       {selectedOption === OPTIONS.RESEARCH && (
-        <div className="mx-auto w-full max-w-[796px] mb-5 px-0 flex justify-center">
+        <div className="mx-auto w-full max-w-[796px] mb-12 px-0 flex justify-center">
           <div className="flex w-full sm:w-auto bg-white dark:bg-zinc-900 backdrop-blur-md p-1.5 rounded-2xl shadow-inner border border-gray-200/50 dark:border-zinc-800/50 gap-1 overflow-x-auto">
             {[
               { id: 'bachelors', name: 'Bachelors', desc: 'Fast (~3-5 pages)' },

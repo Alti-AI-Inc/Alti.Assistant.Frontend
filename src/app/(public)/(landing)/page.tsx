@@ -41,7 +41,7 @@ function App() {
       )}
       {!activeConversation?.knowledgebaseId &&
         !activeConversation?.messages?.length && (
-          <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
+          <h1 className="mb-6 mt-4 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
             {selectedOption === OPTIONS.RESEARCH
               ? 'Deep Research'
               : selectedOption === OPTIONS.IMAGE
