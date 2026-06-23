@@ -460,7 +460,7 @@ function MyChatbotsContent() {
             {currentStep === 1 && (
               <>
                 <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
-                  {projectTab === 'team' ? 'Enter Model Name' : 'Enter Project Name'}
+                  {projectTab === 'team' ? 'Enter Model Name' : 'Enter Space Name'}
                 </h1>
 
                 <div className="flex w-full flex-col">
@@ -482,7 +482,7 @@ function MyChatbotsContent() {
                                   setCurrentStep(2);
                                 }
                               }}
-                              placeholder={projectTab === 'team' ? "Enter model name..." : "Enter project name..."}
+                              placeholder={projectTab === 'team' ? "Enter model name..." : "Enter space name..."}
                               className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
                               autoFocus
                               rows={1}
