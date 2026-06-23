@@ -34,9 +34,15 @@ export async function RegisterUser({
       },
     );
     const data = await response.json();
+
+    let errorMessage = data.message || (response.ok ? 'Success' : 'Failed');
+    if (data.errorMessages && Array.isArray(data.errorMessages) && data.errorMessages.length > 0) {
+      errorMessage = data.errorMessages.map((e: any) => e.message).join(', ');
+    }
+
     return {
       success: data.success || data.status === 'success' || response.ok,
-      message: data.message || (response.ok ? 'Success' : 'Failed'),
+      message: errorMessage,
       data: data.data || data,
       statusCode: response.status,
     };

@@ -1167,7 +1167,7 @@ const ChatInput = ({
       )}
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
-        {selectedOption === OPTIONS.RESEARCH && (
+        {selectedOption === OPTIONS.RESEARCH && !isExistingConversation && (
           <div className="absolute bottom-full left-0 right-0 mb-6 flex justify-center pointer-events-none">
             <div className="pointer-events-auto flex w-full sm:w-auto bg-white dark:bg-zinc-900 backdrop-blur-md p-1.5 rounded-2xl shadow-inner border border-gray-200/50 dark:border-zinc-800/50 gap-1 overflow-x-auto">
               {[

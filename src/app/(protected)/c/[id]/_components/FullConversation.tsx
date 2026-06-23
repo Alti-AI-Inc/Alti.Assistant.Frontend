@@ -28,7 +28,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Streamdown } from 'streamdown';
 import ReferencesList from './ReferenceList';
 import TelemetryConsole from '@/components/research/TelemetryConsole';
-import InteractiveTopology from '@/components/research/InteractiveTopology';
+
 import { useBotsStore } from '@/stores/useBotsStore';
 import { toast } from 'sonner';
 import CodeIDEWidget from './CodeIDEWidget';
@@ -925,14 +925,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   <FileDownloadCard document={message.metadata.document} />
                 )}
                 {!!message.metadata?.reference?.length && (
-                  <>
-                    <ReferencesList 
-                      references={message.metadata.reference} 
-                      webSearchQueries={(message.metadata as any).webSearchQueries}
-                      searchEntryPoint={(message.metadata as any).searchEntryPoint}
-                    />
-                    <InteractiveTopology sources={message.metadata.reference} knowledgeGraph={(message.metadata as any).knowledgeGraph} />
-                  </>
+                  <ReferencesList 
+                    references={message.metadata.reference} 
+                    webSearchQueries={(message.metadata as any).webSearchQueries}
+                    searchEntryPoint={(message.metadata as any).searchEntryPoint}
+                  />
                 )}
                 {message.metadata?.financialTicker && (
                   <FinancialWidget 
