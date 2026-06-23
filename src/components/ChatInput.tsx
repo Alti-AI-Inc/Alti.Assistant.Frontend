@@ -1166,44 +1166,44 @@ const ChatInput = ({
         />
       )}
 
-      {selectedOption === OPTIONS.RESEARCH && (
-        <div className="mx-auto w-full max-w-[796px] mb-4 px-0 flex justify-center">
-          <div className="flex w-full sm:w-auto bg-white dark:bg-zinc-900 backdrop-blur-md p-1.5 rounded-2xl shadow-inner border border-gray-200/50 dark:border-zinc-800/50 gap-1 overflow-x-auto">
-            {[
-              { id: 'bachelors', name: 'Bachelors', desc: 'Fast (~3-5 pages)' },
-              { id: 'masters', name: 'Masters', desc: 'Deep (~10-15 pages)' },
-              { id: 'phd', name: 'PhD', desc: 'Exhaustive (~20-25 pages)' }
-            ].map((tier) => (
-              <button
-                key={tier.id}
-                type="button"
-                onClick={() => setResearchTier(tier.id as any)}
-                className={cn(
-                  'flex flex-col items-center justify-center px-4 py-2 min-w-[130px] sm:min-w-[140px] rounded-xl transition-all duration-300 ease-out',
-                  researchTier === tier.id 
-                    ? 'bg-[#F5F5F7] dark:bg-zinc-800 shadow-sm ring-1 ring-black/5 scale-[1.02]' 
-                    : 'hover:bg-zinc-50 dark:hover:bg-zinc-800/50 opacity-80 hover:opacity-100'
-                )}
-              >
-                <span className={cn(
-                  "text-sm font-bold tracking-tight transition-colors duration-300",
-                  researchTier === tier.id ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-600 dark:text-zinc-400"
-                )}>
-                  {tier.name}
-                </span>
-                <span className={cn(
-                  "text-[10px] uppercase tracking-wider font-semibold mt-0.5 transition-colors duration-300",
-                  researchTier === tier.id ? "text-zinc-600 dark:text-zinc-400" : "text-zinc-400 dark:text-zinc-500"
-                )}>
-                  {tier.desc}
-                </span>
-              </button>
-            ))}
+      <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
+        {selectedOption === OPTIONS.RESEARCH && (
+          <div className="absolute bottom-full left-0 right-0 mb-6 flex justify-center pointer-events-none">
+            <div className="pointer-events-auto flex w-full sm:w-auto bg-white dark:bg-zinc-900 backdrop-blur-md p-1.5 rounded-2xl shadow-inner border border-gray-200/50 dark:border-zinc-800/50 gap-1 overflow-x-auto">
+              {[
+                { id: 'bachelors', name: 'Bachelors', desc: 'Fast (~3-5 pages)' },
+                { id: 'masters', name: 'Masters', desc: 'Deep (~10-15 pages)' },
+                { id: 'phd', name: 'PhD', desc: 'Exhaustive (~20-25 pages)' }
+              ].map((tier) => (
+                <button
+                  key={tier.id}
+                  type="button"
+                  onClick={() => setResearchTier(tier.id as any)}
+                  className={cn(
+                    'flex flex-col items-center justify-center px-4 py-2 min-w-[130px] sm:min-w-[140px] rounded-xl transition-all duration-300 ease-out',
+                    researchTier === tier.id 
+                      ? 'bg-[#F5F5F7] dark:bg-zinc-800 shadow-sm ring-1 ring-black/5 scale-[1.02]' 
+                      : 'hover:bg-zinc-50 dark:hover:bg-zinc-800/50 opacity-80 hover:opacity-100'
+                  )}
+                >
+                  <span className={cn(
+                    "text-sm font-bold tracking-tight transition-colors duration-300",
+                    researchTier === tier.id ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-600 dark:text-zinc-400"
+                  )}>
+                    {tier.name}
+                  </span>
+                  <span className={cn(
+                    "text-[10px] uppercase tracking-wider font-semibold mt-0.5 transition-colors duration-300",
+                    researchTier === tier.id ? "text-zinc-600 dark:text-zinc-400" : "text-zinc-400 dark:text-zinc-500"
+                  )}>
+                    {tier.desc}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <div className="mx-auto w-full max-w-[796px] space-y-6 px-0">
         <div
           className={cn(
             'flex flex-col rounded-2xl border border-gray-300 bg-white px-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-800 sm:px-4',
