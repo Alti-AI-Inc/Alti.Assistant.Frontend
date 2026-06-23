@@ -32,6 +32,7 @@ import InteractiveTopology from '@/components/research/InteractiveTopology';
 import { useBotsStore } from '@/stores/useBotsStore';
 import { toast } from 'sonner';
 import CodeIDEWidget from './CodeIDEWidget';
+import DesignStudioWidget from './DesignStudioWidget';
 
 import FileDownloadCard from './FileDownloadCard';
 import VideoComponent from './VideoComponent';
@@ -702,7 +703,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       ? parseCodeFromMessage(lastAssistantMessage.content)
       : null;
 
-  const isSplitScreen = !!codeData;
+  const isSplitScreen = !!codeData || selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE;
 
   const handleDownloadImage = async (url: string, filename: string) => {
     try {
@@ -1078,11 +1079,29 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             </div>
             {/* Right Column: IDE panel (55%) */}
             <div className="w-[55%] h-full overflow-y-auto min-h-0 p-6 flex flex-col justify-start bg-zinc-950/20">
-              <CodeIDEWidget
-                code={codeData!.code}
-                language={codeData!.language}
-                guideText={codeData!.guideText}
-              />
+              {codeData ? (
+                <CodeIDEWidget
+                  code={codeData.code}
+                  language={codeData.language}
+                  guideText={codeData.guideText}
+                />
+              ) : (selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) ? (
+                <DesignStudioWidget 
+                  currentImageUrl={imageGenHook.imageBase64 || (() => {
+                    const img = lastAssistantMessage?.metadata?.imageUrl || lastAssistantMessage?.metadata?.images;
+                    return typeof img === 'string' ? img : Array.isArray(img) ? (typeof img[0] === 'string' ? img[0] : img[0]?.url) : (img as any)?.url;
+                  })()}
+                  onUpload={(file) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      imageGenHook.setImageBase64(reader.result as string);
+                      setSelectedOption(OPTIONS.EDIT_IMAGE);
+                    };
+                    reader.readAsDataURL(file);
+                  }}
+                  isGenerating={isImageGenLoading}
+                />
+              ) : null}
             </div>
           </div>
         ) : (

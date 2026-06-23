@@ -5,7 +5,6 @@ import {
   LiveKitRoom,
   RoomAudioRenderer,
   BarVisualizer,
-  AgentState,
   VoiceAssistantControlBar,
   DisconnectButton,
   useConnectionState,
@@ -103,7 +102,7 @@ export default function LiveVoiceAgent({ roomName = 'alti-ai-room' }: LiveVoiceA
               </div>
               
               <div className="h-8 flex items-center justify-center">
-                <AgentState />
+                <div className="text-sm font-medium text-indigo-500 animate-pulse">Voice Assistant Active</div>
               </div>
             </div>
 
