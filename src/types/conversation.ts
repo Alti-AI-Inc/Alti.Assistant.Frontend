@@ -11,6 +11,8 @@ export enum ROLES {
   ASSISTANT = 'assistant',
 }
 
+export type ResearchTier = 'bachelors' | 'masters' | 'phd';
+
 export enum OPTIONS {
   RESEARCH = 'deep-research',
   CODE = 'code-generation',

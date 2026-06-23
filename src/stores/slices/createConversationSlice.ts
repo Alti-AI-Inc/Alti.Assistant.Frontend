@@ -32,6 +32,8 @@ export interface ConversationSlice {
   error: string | null;
   selectedOption: OPTIONS | null;
   setSelectedOption: (opt: OPTIONS | null) => void;
+  researchTier: 'bachelors' | 'masters' | 'phd';
+  setResearchTier: (tier: 'bachelors' | 'masters' | 'phd') => void;
 
   setActiveConversation: (conversation: ActiveConversation | null) => void;
   updateActiveConversation: (
@@ -93,12 +95,14 @@ export const createConversationSlice: StateCreator<
   isLoadingResponse: false,
   error: null,
   selectedOption: null,
+  researchTier: 'masters',
   setUserMessage(message) {
     set({ userMessage: message });
   },
   setShowStartLastMessage: show => set({ showStartLastMessage: show }),
 
   setSelectedOption: opt => set({ selectedOption: opt }),
+  setResearchTier: tier => set({ researchTier: tier }),
 
   setActiveConversation: conversation =>
     set({ activeConversation: conversation }),

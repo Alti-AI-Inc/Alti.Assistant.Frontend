@@ -145,6 +145,8 @@ const ChatInput = ({
     isLoadingResponse,
     selectedOption,
     setSelectedOption,
+    researchTier,
+    setResearchTier,
     activeConversation,
     userMessage: message,
     setUserMessage: setMessage,
@@ -615,6 +617,7 @@ const ChatInput = ({
       const extraParams: Record<string, any> = {};
       if (selectedOption === OPTIONS.RESEARCH) {
         Object.assign(extraParams, researchSettings);
+        extraParams.researchTier = researchTier;
       }
       const categoryVal = getCategoryFromOption(selectedOption);
       if (categoryVal) {
@@ -1161,6 +1164,28 @@ const ChatInput = ({
           title={activeWarning.title}
           description={activeWarning.description}
         />
+      )}
+
+      {selectedOption === OPTIONS.RESEARCH && (
+        <div className="mx-auto w-full max-w-[796px] mb-2 px-0 flex justify-end">
+          <div className="inline-flex bg-gray-100 dark:bg-zinc-800 p-1 rounded-xl shadow-inner border border-gray-200 dark:border-zinc-700">
+            {['bachelors', 'masters', 'phd'].map((tier) => (
+              <button
+                key={tier}
+                type="button"
+                onClick={() => setResearchTier(tier as any)}
+                className={cn(
+                  'px-4 py-1.5 text-xs font-semibold rounded-lg capitalize transition-all duration-200',
+                  researchTier === tier 
+                    ? 'bg-white dark:bg-zinc-700 text-teal-700 dark:text-teal-400 shadow-sm ring-1 ring-black/5' 
+                    : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                )}
+              >
+                {tier === 'bachelors' ? 'Bachelors (Fast)' : tier === 'masters' ? 'Masters (Deep)' : 'PhD (Exhaustive)'}
+              </button>
+            ))}
+          </div>
+        </div>
       )}
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0">

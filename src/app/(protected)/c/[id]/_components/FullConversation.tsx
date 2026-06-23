@@ -33,6 +33,7 @@ import { useBotsStore } from '@/stores/useBotsStore';
 import { toast } from 'sonner';
 import CodeIDEWidget from './CodeIDEWidget';
 import DesignStudioWidget from './DesignStudioWidget';
+import { VideoStudioWidget } from './VideoStudioWidget';
 
 import FileDownloadCard from './FileDownloadCard';
 import VideoComponent from './VideoComponent';
@@ -703,7 +704,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
       ? parseCodeFromMessage(lastAssistantMessage.content)
       : null;
 
-  const isSplitScreen = !!codeData || selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE;
+  const isSplitScreen = !!codeData || selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE || selectedOption === OPTIONS.VIDEO;
 
   const handleDownloadImage = async (url: string, filename: string) => {
     try {
@@ -1100,6 +1101,15 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     reader.readAsDataURL(file);
                   }}
                   isGenerating={isImageGenLoading}
+                />
+              ) : selectedOption === OPTIONS.VIDEO ? (
+                <VideoStudioWidget 
+                  currentVideoUrl={(() => {
+                    const video = lastAssistantMessage?.metadata?.video;
+                    return typeof video === 'string' ? video : video?.url || video?.name || null;
+                  })()}
+                  status={isLoadingResponse ? 'processing' : 'idle'}
+                  progress={isLoadingResponse ? 45 : 0}
                 />
               ) : null}
             </div>
