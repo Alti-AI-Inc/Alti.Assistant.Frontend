@@ -49,7 +49,7 @@ function App() {
               : selectedOption === OPTIONS.CODE
               ? 'Your Engineering Partner'
               : selectedOption === OPTIONS.VIDEO
-              ? 'Video Generation'
+              ? 'Create Moving Art'
               : selectedOption === OPTIONS.AUDIO
               ? "Let's Make Some Noise"
               : selectedOption === OPTIONS.DRAFT_DOCUMENT
