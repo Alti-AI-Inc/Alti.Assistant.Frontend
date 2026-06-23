@@ -1181,19 +1181,19 @@ const ChatInput = ({
                 className={cn(
                   'flex flex-col items-center justify-center px-4 py-2 min-w-[130px] sm:min-w-[140px] rounded-xl transition-all duration-300 ease-out',
                   researchTier === tier.id 
-                    ? 'bg-teal-50 dark:bg-teal-500/10 shadow-sm ring-1 ring-teal-500/20 scale-[1.02]' 
+                    ? 'bg-[#F5F5F7] dark:bg-zinc-800 shadow-sm ring-1 ring-black/5 scale-[1.02]' 
                     : 'hover:bg-zinc-50 dark:hover:bg-zinc-800/50 opacity-80 hover:opacity-100'
                 )}
               >
                 <span className={cn(
                   "text-sm font-bold tracking-tight transition-colors duration-300",
-                  researchTier === tier.id ? "text-teal-800 dark:text-teal-300" : "text-zinc-600 dark:text-zinc-400"
+                  researchTier === tier.id ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-600 dark:text-zinc-400"
                 )}>
                   {tier.name}
                 </span>
                 <span className={cn(
                   "text-[10px] uppercase tracking-wider font-semibold mt-0.5 transition-colors duration-300",
-                  researchTier === tier.id ? "text-teal-600/80 dark:text-teal-400/80" : "text-zinc-400 dark:text-zinc-500"
+                  researchTier === tier.id ? "text-zinc-600 dark:text-zinc-400" : "text-zinc-400 dark:text-zinc-500"
                 )}>
                   {tier.desc}
                 </span>
