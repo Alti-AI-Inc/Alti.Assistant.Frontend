@@ -50,6 +50,8 @@ function App() {
               ? 'Your Engineering Partner'
               : selectedOption === OPTIONS.VIDEO
               ? 'Video Generation'
+              : selectedOption === OPTIONS.AUDIO
+              ? "Let's Make Some Noise"
               : selectedOption === OPTIONS.DRAFT_DOCUMENT
               ? "Let's Write Together"
               : 'Real-Time Intelligence'}
