@@ -187,7 +187,6 @@ export default function ConversationsList({
 
   const handleConversationClick = (id: string) => {
     close();
-    setSelectedOption(null);
     setShowStartLastMessage(false);
     setUserMessage('');
     if (activeTab === 'assistant') {
