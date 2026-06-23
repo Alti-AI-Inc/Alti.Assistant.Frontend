@@ -203,6 +203,7 @@ const LeftSideNavMobile = () => {
     setUserMessage,
   } = useConversationsStore();
 
+
   const isLoggedIn = data?.accessToken;
   const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab } = useBotsStore();
   
@@ -354,37 +355,9 @@ const LeftSideNavMobile = () => {
           pathname !== '/invite-friends' &&
           !pathname.startsWith('/invite-friends')
         ) {
-          const opt = (activeConversation as any).option || selectedOption;
-          if (opt === OPTIONS.CODE) {
-            setActiveTab('code');
-          } else if (
-            opt === OPTIONS.DRAFT_DOCUMENT ||
-            opt === OPTIONS.REWRITE ||
-            opt === OPTIONS.TRANSLATE_DOCUMENTS ||
-            opt === OPTIONS.BRAINSTORM ||
-            opt === OPTIONS.GENERATE_PLAN ||
-            opt === OPTIONS.REVIEW_CONTRACT ||
-            opt === OPTIONS.GENERATE_REPORT
-          ) {
-            setActiveTab('write');
-          } else if (
-            opt === OPTIONS.IMAGE ||
-            opt === OPTIONS.EDIT_IMAGE
-          ) {
-            setActiveTab('image');
-          } else if (opt === OPTIONS.AUDIO) {
-            setActiveTab('audio');
-          } else if (opt === OPTIONS.VIDEO) {
-            setActiveTab('video');
-          } else if (opt === OPTIONS.RESEARCH) {
-            setActiveTab('research');
-          } else {
-            setActiveTab('search');
-          }
-
-          if (selectedOption === OPTIONS.RESEARCH && !isDeepSearch) {
-            setSelectedOption(null);
-          }
+          // Removed: We no longer guess the activeTab from the conversation title, 
+          // because it causes the tab to unexpectedly switch away from the current tab 
+          // when clicking a history item. (e.g. clicking image history while on image tab)
         }
       }
     }
@@ -731,7 +704,7 @@ const LeftSideNavMobile = () => {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Image</p>
+                <p>Design</p>
               </TooltipContent>
             </Tooltip>
 

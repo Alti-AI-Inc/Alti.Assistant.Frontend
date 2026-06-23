@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Play, Pause, Download, Volume2, RotateCcw, VolumeX, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import LiveVoiceAgent from './LiveVoiceAgent';
 
 interface AudioComponentProps {
   audioUrl: string;
@@ -92,9 +93,14 @@ export default function AudioComponent({ audioUrl }: AudioComponentProps) {
   };
 
   return (
-    <div className="w-full max-w-xl mx-auto my-4 overflow-hidden rounded-2xl border border-black/10 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-lg select-none">
-      {/* Hidden HTML5 Audio Element */}
-      <audio ref={audioRef} src={audioUrl} preload="metadata" />
+    <div className="flex flex-col gap-6 w-full">
+      {/* New Real-time Interactive Agent */}
+      <LiveVoiceAgent roomName="alti-ai-room" />
+
+      {/* Legacy Static Audio Synthesizer */}
+      <div className="w-full max-w-xl mx-auto my-4 overflow-hidden rounded-2xl border border-black/10 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-lg select-none">
+        {/* Hidden HTML5 Audio Element */}
+        <audio ref={audioRef} src={audioUrl} preload="metadata" />
 
       {/* Header bar */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-zinc-50 dark:bg-zinc-900 border-b border-black/5 dark:border-zinc-800 text-xs text-zinc-500 dark:text-zinc-400">
@@ -173,6 +179,7 @@ export default function AudioComponent({ audioUrl }: AudioComponentProps) {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }

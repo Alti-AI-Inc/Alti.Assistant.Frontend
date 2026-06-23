@@ -370,42 +370,9 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           pathname !== '/invite-friends' &&
           !pathname.startsWith('/invite-friends')
         ) {
-          const opt = (activeConversation as any).option || (activeConversation as any).metadata?.category || selectedOption;
-          if (opt === OPTIONS.CODE || opt === 'code') {
-            setActiveTab('code');
-          } else if (
-            opt === OPTIONS.DRAFT_DOCUMENT ||
-            opt === OPTIONS.REWRITE ||
-            opt === OPTIONS.TRANSLATE_DOCUMENTS ||
-            opt === OPTIONS.BRAINSTORM ||
-            opt === OPTIONS.GENERATE_PLAN ||
-            opt === OPTIONS.REVIEW_CONTRACT ||
-            opt === OPTIONS.GENERATE_REPORT ||
-            (typeof opt === 'string' && opt.includes('document_drafting'))
-          ) {
-            setActiveTab('write');
-          } else if (
-            opt === OPTIONS.IMAGE ||
-            opt === OPTIONS.EDIT_IMAGE ||
-            opt === 'image'
-          ) {
-            setActiveTab('image');
-          } else if (opt === OPTIONS.AUDIO || opt === 'audio') {
-            setActiveTab('audio');
-          } else if (opt === OPTIONS.VIDEO || opt === 'video') {
-            setActiveTab('video');
-          } else if (opt === OPTIONS.RESEARCH || opt === 'research') {
-            setActiveTab('research');
-            if (selectedOption !== OPTIONS.RESEARCH) {
-              setSelectedOption(OPTIONS.RESEARCH);
-            }
-          } else {
-            setActiveTab('search');
-          }
-
-          if (selectedOption === OPTIONS.RESEARCH && !isDeepSearch && opt !== OPTIONS.RESEARCH && opt !== 'research') {
-            setSelectedOption(null);
-          }
+          // Removed: We no longer guess the activeTab from the conversation title, 
+          // because it causes the tab to unexpectedly switch away from the current tab 
+          // when clicking a history item. (e.g. clicking image history while on image tab)
         }
       }
     }
@@ -805,7 +772,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Image</p>
+                <p>Design</p>
               </TooltipContent>
             </Tooltip>
 
