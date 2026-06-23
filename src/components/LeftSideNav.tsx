@@ -409,40 +409,48 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const handleTabChange = (tab: SidebarTab) => {
     setActiveTab(tab);
     if (tab === 'bots') {
+      setActiveConversation(null);
       router.push('/my-chatbots');
     } else if (tab === 'search') {
       setSelectedOption(null);
-      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+      if (pathname !== '/') {
+        setActiveConversation(null);
         router.push('/');
       }
     } else if (tab === 'research') {
       setSelectedOption(OPTIONS.RESEARCH);
-      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+      if (pathname !== '/') {
+        setActiveConversation(null);
         router.push('/');
       }
     } else if (tab === 'write') {
       setSelectedOption(OPTIONS.DRAFT_DOCUMENT);
-      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+      if (pathname !== '/') {
+        setActiveConversation(null);
         router.push('/');
       }
     } else if (tab === 'code') {
       setSelectedOption(OPTIONS.CODE);
-      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+      if (pathname !== '/') {
+        setActiveConversation(null);
         router.push('/');
       }
     } else if (tab === 'image') {
       setSelectedOption(OPTIONS.IMAGE);
-      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+      if (pathname !== '/') {
+        setActiveConversation(null);
         router.push('/');
       }
     } else if (tab === 'audio') {
       setSelectedOption(OPTIONS.AUDIO);
-      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+      if (pathname !== '/') {
+        setActiveConversation(null);
         router.push('/');
       }
     } else if (tab === 'video') {
       setSelectedOption(OPTIONS.VIDEO);
-      if (pathname !== '/' && !pathname.startsWith('/c/')) {
+      if (pathname !== '/') {
+        setActiveConversation(null);
         router.push('/');
       }
     }
