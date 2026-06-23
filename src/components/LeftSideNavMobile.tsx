@@ -576,7 +576,7 @@ const LeftSideNavMobile = () => {
             </Tooltip>
 
             {plusProps.visible && (
-              <div className="animate-in fade-in zoom-in duration-200">
+              <div>
                 {/* Plus for Dynamic Tab Action */}
                 <Tooltip>
                   <TooltipTrigger asChild>
