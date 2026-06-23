@@ -824,6 +824,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   !(
                     isContentEmpty &&
                     !message.metadata?.imageUrl &&
+                    !message.metadata?.images &&
                     !message.metadata?.video?.name &&
                     !message.metadata?.document &&
                     !message.metadata?.reference?.length &&
@@ -853,21 +854,21 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     </div>
                   )}
 
-                {message.metadata?.imageUrl && (
+                {(message.metadata?.imageUrl || message.metadata?.images) && (
                   <div className="relative group overflow-hidden rounded-lg shadow-md border border-black/5 dark:border-white/5 max-w-full">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={
-                        typeof message.metadata.imageUrl === 'string'
-                          ? message.metadata.imageUrl
-                          : (message.metadata.imageUrl as any)?.url
+                        typeof (message.metadata.imageUrl || message.metadata.images) === 'string'
+                          ? (message.metadata.imageUrl || message.metadata.images)
+                          : ((message.metadata.imageUrl || message.metadata.images) as any)?.url
                       }
                       alt={message.metadata.type || 'Generated image'}
                       className="w-full object-contain max-h-[500px]"
                       onError={e => {
                         console.error(
                            '[FullConversation] Image failed to load:',
-                          message.metadata!.imageUrl,
+                          (message.metadata!.imageUrl || message.metadata!.images),
                         );
                         console.error('Error details:', e);
                       }}
@@ -876,9 +877,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-3">
                       <button
                         onClick={() => {
-                          const imageUrl = typeof message.metadata!.imageUrl === 'string'
-                            ? message.metadata!.imageUrl
-                            : (message.metadata!.imageUrl as any)?.url;
+                          const imageUrl = typeof (message.metadata!.imageUrl || message.metadata!.images) === 'string'
+                            ? (message.metadata!.imageUrl || message.metadata!.images)
+                            : ((message.metadata!.imageUrl || message.metadata!.images) as any)?.url;
                           handleDownloadImage(imageUrl, message.metadata?.type || 'generated-image');
                         }}
                         className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl text-xs font-semibold backdrop-blur-md transition-all duration-200 shadow-lg cursor-pointer transform hover:scale-105 active:scale-95"
@@ -889,9 +890,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       
                       <button
                         onClick={() => {
-                          const imageUrl = typeof message.metadata!.imageUrl === 'string'
-                            ? message.metadata!.imageUrl
-                            : (message.metadata!.imageUrl as any)?.url;
+                          const imageUrl = typeof (message.metadata!.imageUrl || message.metadata!.images) === 'string'
+                            ? (message.metadata!.imageUrl || message.metadata!.images)
+                            : ((message.metadata!.imageUrl || message.metadata!.images) as any)?.url;
                           handleEditImage(imageUrl);
                         }}
                         className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold shadow-lg cursor-pointer transform hover:scale-105 active:scale-95 transition-all duration-200"
