@@ -143,18 +143,19 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
               <div className="flex items-center gap-1">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button
-                      type="button"
+                    <Button
+                      variant="outline"
+                      size="icon"
                       onClick={() => handleTabChange('instructions')}
                       className={cn(
-                        'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                        'flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 shadow-xs transition-all flex-none focus:outline-none select-none dark:border-white/[0.03]',
                         activeTab === 'instructions'
-                          ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                          : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                          ? 'bg-white text-black scale-105 dark:bg-zinc-700 dark:text-white'
+                          : 'bg-[#F5F5F7] text-black hover:bg-black/[0.03] hover:text-black dark:bg-zinc-800/50 dark:text-white',
                       )}
                     >
                       <FileText className="size-4" />
-                    </button>
+                    </Button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
                     <p>Instructions</p>
@@ -163,18 +164,19 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button
-                      type="button"
+                    <Button
+                      variant="outline"
+                      size="icon"
                       onClick={() => handleTabChange('guardrails')}
                       className={cn(
-                        'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                        'flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 shadow-xs transition-all flex-none focus:outline-none select-none dark:border-white/[0.03]',
                         activeTab === 'guardrails'
-                          ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                          : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                          ? 'bg-white text-black scale-105 dark:bg-zinc-700 dark:text-white'
+                          : 'bg-[#F5F5F7] text-black hover:bg-black/[0.03] hover:text-black dark:bg-zinc-800/50 dark:text-white',
                       )}
                     >
                       <Shield className="size-4" />
-                    </button>
+                    </Button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
                     <p>Guardrails</p>
@@ -183,18 +185,19 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button
-                      type="button"
+                    <Button
+                      variant="outline"
+                      size="icon"
                       onClick={() => handleTabChange('data')}
                       className={cn(
-                        'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                        'flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 shadow-xs transition-all flex-none focus:outline-none select-none dark:border-white/[0.03]',
                         activeTab === 'data'
-                          ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                          : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                          ? 'bg-white text-black scale-105 dark:bg-zinc-700 dark:text-white'
+                          : 'bg-[#F5F5F7] text-black hover:bg-black/[0.03] hover:text-black dark:bg-zinc-800/50 dark:text-white',
                       )}
                     >
                       <Upload className="size-4" />
-                    </button>
+                    </Button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
                     <p>Data</p>
