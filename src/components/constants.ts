@@ -70,7 +70,7 @@ export const TOOLBAR_ITEMS = [
   // },
   {
     type: OPTIONS.CODE,
-    label: 'Write Code',
+    label: 'Your Engineering Partner',
     Icon: Code,
   },
   {

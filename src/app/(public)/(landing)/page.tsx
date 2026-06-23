@@ -47,7 +47,7 @@ function App() {
               : selectedOption === OPTIONS.IMAGE
               ? 'Image Generation'
               : selectedOption === OPTIONS.CODE
-              ? 'Code Generation'
+              ? 'Your Engineering Partner'
               : selectedOption === OPTIONS.VIDEO
               ? 'Video Generation'
               : selectedOption === OPTIONS.DRAFT_DOCUMENT
