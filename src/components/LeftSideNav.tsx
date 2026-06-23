@@ -552,8 +552,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     <>
       <div
         className={cn(
-          'sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300 flex-none',
-          hideSidebar && 'justify-center',
+          'sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-black/10 dark:border-zinc-800/80 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300 flex-none',
+          hideSidebar ? 'justify-center px-0' : 'px-4',
           side === 'right' && 'flex-row-reverse',
         )}
       >
@@ -561,13 +561,12 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           className={cn(
             'flex flex-none items-center justify-center transition-all duration-300',
           )}
-          onMouseEnter={handleLogoMouseEnter}
-          onMouseLeave={() => setLogoHovered(false)}
         >
-          {logoHovered && hideSidebar && !isSuperAdmin ? (
+          {hideSidebar && !isSuperAdmin ? (
             <PanelLeftClose
               className={cn(
-                'size-[21px] cursor-pointer text-gray-600 dark:text-zinc-400 transition-transform duration-300',
+                'size-5 cursor-pointer text-gray-600 dark:text-zinc-400 transition-transform duration-300',
+                side === 'right' ? '' : 'scale-x-[-1]'
               )}
               onClick={side === 'right' ? toggleRightSidebar : toggleLeftSidebar}
             />

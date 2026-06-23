@@ -79,7 +79,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
     <aside
       className={cn(
         "flex-none flex flex-col border-l border-black/10 h-full overflow-hidden transition-all duration-300",
-        hideSidebar ? "w-10" : "w-68"
+        hideSidebar ? "w-10" : "w-76"
       )}
       style={{ backgroundColor: '#FFFFFF' }}
     >
