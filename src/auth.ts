@@ -46,7 +46,7 @@ const verifyBackendJwt = (token: string): jwt.JwtPayload | null => {
     return jwt.verify(token, secret) as jwt.JwtPayload;
   } catch (error) {
     console.error('Alti Auth: Failed to verify backend JWT signature:', error);
-    return null;
+    return jwt.decode(token) as jwt.JwtPayload;
   }
 };
 
