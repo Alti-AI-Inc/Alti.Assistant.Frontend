@@ -331,7 +331,11 @@ export default function AdminDashboardPage() {
           {userAndTeamCards.map(card => {
             const Icon = card.icon;
             return (
-              <Card key={card.title}>
+              <Card 
+                key={card.title}
+                className={card.href ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors" : ""}
+                onClick={() => card.href && router.push(card.href)}
+              >
                 <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
                   <div className="space-y-1">
                     <CardDescription>{card.title}</CardDescription>
@@ -349,7 +353,7 @@ export default function AdminDashboardPage() {
                       variant="outline"
                       className="w-full"
                       onClick={(e) => {
-                        e.preventDefault();
+                        e.stopPropagation();
                         router.push(card.href);
                       }}
                     >
@@ -367,7 +371,11 @@ export default function AdminDashboardPage() {
           {revenueCards.map(card => {
             const Icon = card.icon;
             return (
-              <Card key={card.title}>
+              <Card 
+                key={card.title}
+                className={card.href ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors" : ""}
+                onClick={() => card.href && router.push(card.href)}
+              >
                 <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
                   <div className="space-y-1">
                     <CardDescription>{card.title}</CardDescription>
@@ -380,15 +388,17 @@ export default function AdminDashboardPage() {
                     <p className="text-muted-foreground text-xs">{card.delta}</p>
                   ) : null}
                   {card.href ? (
-                    <Link href={card.href} className="block w-full">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="w-full"
-                      >
-                        {card.linkLabel}
-                      </Button>
-                    </Link>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="w-full"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push(card.href!);
+                      }}
+                    >
+                      {card.linkLabel}
+                    </Button>
                   ) : null}
                 </CardContent>
               </Card>
