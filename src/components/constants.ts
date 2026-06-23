@@ -110,7 +110,7 @@ export const TOOLBAR_ITEMS = [
   },
   {
     type: OPTIONS.DRAFT_DOCUMENT,
-    label: 'Draft Document',
+    label: "Let's Write Together",
     Icon: PencilLine,
   },
   {
