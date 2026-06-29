@@ -554,27 +554,6 @@ const LeftSideNavMobile = () => {
 
           {/* Action Buttons to the right */}
           <div className="flex flex-none items-center gap-1.5">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className={cn(
-                    "flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none dark:bg-zinc-800/50",
-                    activeTab === 'bots'
-                      ? "bg-white dark:bg-zinc-800 border-black/20 text-black dark:text-white shadow-xs"
-                      : "bg-[#F5F5F7] border-black/10 text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-                  )}
-                  onClick={() => handleTabChange('bots')}
-                >
-                  <LayoutGrid className="size-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Spaces</p>
-              </TooltipContent>
-            </Tooltip>
-
             {plusProps.visible && (
               <div>
                 {/* Plus for Dynamic Tab Action */}
@@ -624,66 +603,24 @@ const LeftSideNavMobile = () => {
               </TooltipContent>
             </Tooltip>
 
-            {/* Research */}
+            {/* Spaces */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
                   type="button"
-                  onClick={() => handleTabChange('research')}
+                  onClick={() => handleTabChange('bots')}
                   className={cn(
                     'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'research'
+                    activeTab === 'bots'
                       ? 'bg-white border-black/10 text-black shadow-xs scale-105'
                       : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
                   )}
                 >
-                  <Microscope className="size-4" />
+                  <LayoutGrid className="size-4" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Research</p>
-              </TooltipContent>
-            </Tooltip>
-
-            {/* Write */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('write')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'write'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <FileText className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Write</p>
-              </TooltipContent>
-            </Tooltip>
-
-            {/* Code */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('code')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'code'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <Code2 className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Code</p>
+                <p>Spaces</p>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -753,18 +690,6 @@ const LeftSideNavMobile = () => {
           ) : activeTab === 'search' ? (
             <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
               <ConversationsList searchQuery={searchQuery} activeTab="search" />
-            </div>
-          ) : activeTab === 'research' ? (
-            <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
-              <ConversationsList searchQuery={searchQuery} activeTab="research" />
-            </div>
-          ) : activeTab === 'write' ? (
-            <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
-              <ConversationsList searchQuery={searchQuery} activeTab="write" />
-            </div>
-          ) : activeTab === 'code' ? (
-            <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
-              <ConversationsList searchQuery={searchQuery} activeTab="code" />
             </div>
           ) : isLoggedIn && activeTab === 'account' ? (
             <div className="mt-4 space-y-1 py-1 pb-4">

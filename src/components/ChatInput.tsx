@@ -1285,21 +1285,46 @@ const ChatInput = ({
 
           {/* Input container with Plus icon inside */}
           <div className="relative flex items-center gap-2 py-2">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="flex cursor-pointer items-center focus:outline-none"
-                  aria-label="Attach Files"
-                >
-                  <Paperclip className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="top">
-                <p>Attach Files</p>
-              </TooltipContent>
-            </Tooltip>
+            <DropdownMenu>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type="button"
+                      className="flex cursor-pointer items-center focus:outline-none"
+                      aria-label="More Options"
+                    >
+                      <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                    </button>
+                  </DropdownMenuTrigger>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  <p>More Options</p>
+                </TooltipContent>
+              </Tooltip>
+              <DropdownMenuContent align="start" className="w-56 mb-2">
+                <DropdownMenuItem onClick={() => fileInputRef.current?.click()} className="cursor-pointer">
+                  <Paperclip className="mr-2 size-4" />
+                  <span>Attach Files</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSelectedOption(OPTIONS.RESEARCH)} className="cursor-pointer">
+                  <Globe className="mr-2 size-4" />
+                  <span>Deep Research</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSelectedOption(OPTIONS.DRAFT_DOCUMENT)} className="cursor-pointer">
+                  <FileText className="mr-2 size-4" />
+                  <span>Writing Assistant</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSelectedOption(OPTIONS.CODE)} className="cursor-pointer">
+                  <Code className="mr-2 size-4" />
+                  <span>Code Assistant</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSelectedOption(OPTIONS.IMAGE)} className="cursor-pointer">
+                  <ImageIcon className="mr-2 size-4" />
+                  <span>Image Generation</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
 
             <Textarea
