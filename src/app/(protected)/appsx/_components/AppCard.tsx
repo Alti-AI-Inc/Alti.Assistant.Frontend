@@ -388,7 +388,6 @@ const AppCard = ({
                 {errorMessage}
               </p>
             )}
-            
             <Button
               className={cn(
                 "w-full transition-all duration-300 font-medium shadow-sm",
@@ -399,17 +398,12 @@ const AppCard = ({
                     : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-750 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200"
               )}
               variant={isAlreadyConnected ? "ghost" : "default"}
-              disabled={isAlreadyConnected || isPending || isWaiting}
+              disabled={isAlreadyConnected}
               onClick={handleClick}
             >
-              {(isPending || isWaiting) && (
-                <LoaderCircle className="mr-2 animate-spin size-4" />
-              )}
               {isAlreadyConnected
                 ? 'Authorized & Ready'
-                : isPending || isWaiting
-                  ? 'Connecting account...'
-                  : 'Establish Integration'}
+                : 'Establish Integration'}
             </Button>
           </div>
         </CardContent>
