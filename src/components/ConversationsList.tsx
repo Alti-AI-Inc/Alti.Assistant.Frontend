@@ -92,47 +92,43 @@ export default function ConversationsList({
 
   const getDisplayIcon = (chat: Conversation) => {
     // Override icon for the currently active conversation based on selectedOption
-    if (activeConversation && chat.conversationId === (activeConversation as any).conversationId && selectedOption) {
+    if (activeConversation && chat.conversationId === (activeConversation as any).conversationId) {
       if (selectedOption === OPTIONS.RESEARCH) {
         return <Microscope className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
-      } else if (selectedOption === OPTIONS.CODE) {
+      } else if (selectedOption === OPTIONS.CODE || selectedOption === OPTIONS.DEBUG_CODE) {
         return <Code2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
-      } else if (selectedOption === OPTIONS.DRAFT_DOCUMENT) {
-        return <FileText className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
       } else if (selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) {
         return <ImageIcon className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
       } else if (selectedOption === OPTIONS.AUDIO) {
         return <Volume2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
       } else if (selectedOption === OPTIONS.VIDEO) {
         return <VideoIcon className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      } else if (
+        selectedOption === OPTIONS.DRAFT_DOCUMENT ||
+        selectedOption === OPTIONS.REWRITE ||
+        selectedOption === OPTIONS.SUMMARIZE ||
+        selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
+        selectedOption === OPTIONS.REVIEW_DOCUMENTS ||
+        selectedOption === OPTIONS.CREATIVE_WRITING ||
+        selectedOption === OPTIONS.ARTICLE ||
+        selectedOption === OPTIONS.WRITE_CONTRACT ||
+        selectedOption === OPTIONS.REVIEW_CONTRACT ||
+        selectedOption === OPTIONS.GENERATE_REPORT ||
+        selectedOption === OPTIONS.GENERATE_PLAN ||
+        selectedOption === OPTIONS.BRAINSTORM
+      ) {
+        return <FileText className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      } else if (selectedOption) {
+        // Any other selected option fallback
+        return <Sparkles className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      } else {
+        // If selectedOption is null, they are explicitly in standard Chat mode
+        return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
       }
     }
 
     if (chat.is_deep_search) {
       return <Microscope className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
-    }
-
-    if (activeTab === 'chat' || activeTab === 'search') {
-      return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
-    }
-
-    if (activeTab === 'research') {
-      return <Microscope className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
-    }
-    if (activeTab === 'write') {
-      return <FileText className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
-    }
-    if (activeTab === 'code') {
-      return <Code2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
-    }
-    if (activeTab === 'image') {
-      return <ImageIcon className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
-    }
-    if (activeTab === 'audio') {
-      return <Volume2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
-    }
-    if (activeTab === 'video') {
-      return <VideoIcon className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     }
 
     const title = chat.title || '';
