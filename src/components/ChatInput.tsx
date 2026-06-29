@@ -558,7 +558,7 @@ const ChatInput = ({
             return 'video';
           case OPTIONS.TASK:
           case OPTIONS.Transcribe:
-            return 'composio';
+            return 'task';
           case OPTIONS.DRAFT_DOCUMENT:
             return 'document_drafting';
           case OPTIONS.REWRITE:

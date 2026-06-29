@@ -98,30 +98,3 @@ export const getConnections = async (
   }
 };
 
-/**
- * Legacy Composio OAuth Initiate - Stubbed for MCP compatibility
- */
-export async function initiateConnection(
-  app_name: string,
-  user_id: string,
-  accessToken: string,
-): Promise<ApiResponse<InitiateResponse>> {
-  return {
-    success: false,
-    message: 'OAuth initiated via Composio is deprecated. Please configure your self-hosted MCP server instead.',
-    statusCode: 400
-  };
-}
-
-/**
- * Legacy Composio OAuth Wait - Stubbed for MCP compatibility
- */
-export async function waitForConnection(
-  connected_account_id: string,
-): Promise<ApiResponse<WaitForConnectionResponse>> {
-  return {
-    success: false,
-    message: 'OAuth wait via Composio is deprecated. Please configure your self-hosted MCP server instead.',
-    statusCode: 400
-  };
-}

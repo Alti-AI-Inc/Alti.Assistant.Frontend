@@ -81,7 +81,7 @@ export default function ConversationsList({
   } else if (activeTab === 'media') {
     category = 'image,image_generation,image_editing,image_intent_analysis,intent_analysis,video';
   } else if (activeTab === 'assistant') {
-    category = 'assistant,composio,composio_simple';
+    category = 'assistant';
   }
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
@@ -126,7 +126,7 @@ export default function ConversationsList({
       return <Search className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     } else if (lower.includes('code') || lower.includes('write') || lower.includes('debug') || lower.includes('python') || lower.includes('rust') || lower.includes('go')) {
       return <Code2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
-    } else if (lower.includes('email') || lower.includes('mail') || lower.includes('send') || lower.includes('draft') || lower.includes('composio')) {
+    } else if (lower.includes('email') || lower.includes('mail') || lower.includes('send') || lower.includes('draft')) {
       return <Mail className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     } else if (lower.includes('notion') || lower.includes('doc') || lower.includes('file') || lower.includes('summarize') || lower.includes('pdf')) {
       return <FileText className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
@@ -147,8 +147,8 @@ export default function ConversationsList({
       return `/web_search: ${cleanTitle}`;
     } else if (lower.includes('code') || lower.includes('write') || lower.includes('debug') || lower.includes('python') || lower.includes('rust') || lower.includes('go')) {
       return `/code_gen: ${cleanTitle}`;
-    } else if (lower.includes('email') || lower.includes('mail') || lower.includes('send') || lower.includes('draft') || lower.includes('composio')) {
-      return `/composio: ${cleanTitle}`;
+    } else if (lower.includes('email') || lower.includes('mail') || lower.includes('send') || lower.includes('draft')) {
+      return `/email: ${cleanTitle}`;
     } else if (lower.includes('notion') || lower.includes('doc') || lower.includes('file') || lower.includes('summarize') || lower.includes('pdf')) {
       return `/doc_analysis: ${cleanTitle}`;
     } else if (lower.includes('contract') || lower.includes('legal') || lower.includes('agreement')) {

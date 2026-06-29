@@ -1,9 +1,5 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import {
-  useInitiateConnectionMutation,
-  useWaitForConnectionMutation,
-} from '@/hooks/useConnectApps';
 import { APP } from '@/lib/all-apps';
 import { cn } from '@/lib/utils';
 import { LoaderCircle, ShieldCheck, Zap } from 'lucide-react';
@@ -305,53 +301,18 @@ const AppCard = ({
   isAlreadyConnected: boolean;
 }) => {
   const { data: session } = useSession();
-  const { mutate: initiateConnection, isPending } =
-    useInitiateConnectionMutation();
-
-  const { mutate: waitForConnection, isPending: isWaiting } =
-    useWaitForConnectionMutation();
 
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleClick = () => {
-    setErrorMessage('');
-    initiateConnection(
-      {
-        app_name: app.app_name,
-        user_id: session?.user?.id ?? '',
-        accessToken: session?.accessToken ?? '',
-      },
-      {
-        onSuccess: response => {
-          if (!response || response.error) {
-            setErrorMessage(response?.error || 'An unexpected error occurred');
-            return;
-          }
-          const redirectUrl = response.authConfig.authConfig.redirectUrl;
-          const connectedAccountId = response.authConfig.authConfig.id;
-
-          window.open(redirectUrl, '_blank');
-
-          if (connectedAccountId) {
-            waitForConnection(connectedAccountId, {
-              onSuccess: result => {
-                console.log('✅ Connection established:', result);
-              },
-              onError: err => {
-                console.error('❌ Error while waiting:', err);
-              },
-            });
-          }
-        },
-        onError: error => {
-          console.error('❌ Error initiating connection:', error);
-        },
-      },
-    );
+    // Legacy Composio connection removed
+    // Native MCP connections should be configured via the MCP settings panel
+    setErrorMessage('Please configure this integration directly in the MCP Platform settings.');
   };
 
   const slug = app.app_name?.toLowerCase() || '';
   const strategicStyle = STRATEGIC_APPS_STYLE[slug];
+
 
   return (
     <div className="h-full group">
