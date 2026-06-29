@@ -52,8 +52,6 @@ import {
   Presentation,
   X,
   Check,
-  LayoutGrid,
-  Zap,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -1207,57 +1205,7 @@ const ChatInput = ({
           </div>
         )}
 
-        <div className="flex bg-gray-100 dark:bg-zinc-800 p-1 rounded-xl mb-4 self-center w-fit mx-auto shadow-xs border border-black/5 dark:border-white/5">
-          <button
-            type="button"
-            onClick={() => {
-              if (pathname !== '/' && !pathname.startsWith('/c/')) {
-                router.push('/');
-              }
-            }}
-            className={cn(
-              'px-4 py-1.5 text-sm font-medium rounded-lg transition-all flex items-center gap-2',
-              (pathname === '/' || pathname.startsWith('/c/'))
-                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
-                : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-            )}
-          >
-            <Globe className="size-4" />
-            Chat
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              if (pathname !== '/my-chatbots' && !pathname.startsWith('/my-chatbots')) {
-                router.push('/my-chatbots');
-              }
-            }}
-            className={cn(
-              'px-4 py-1.5 text-sm font-medium rounded-lg transition-all flex items-center gap-2',
-              (pathname === '/my-chatbots' || pathname.startsWith('/my-chatbots'))
-                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
-                : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-            )}
-          >
-            <LayoutGrid className="size-4" />
-            Spaces
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              router.push('/tasks');
-            }}
-            className={cn(
-              'px-4 py-1.5 text-sm font-medium rounded-lg transition-all flex items-center gap-2',
-              false // since we are in ChatInput, Tasks is never active here
-                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
-                : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-            )}
-          >
-            <Zap className="size-4" />
-            Tasks
-          </button>
-        </div>
+
 
         <div
           className={cn(
