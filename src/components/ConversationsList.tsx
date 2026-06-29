@@ -112,6 +112,10 @@ export default function ConversationsList({
       return <Microscope className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     }
 
+    if (activeTab === 'chat' || activeTab === 'search') {
+      return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    }
+
     if (activeTab === 'research') {
       return <Microscope className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     }
