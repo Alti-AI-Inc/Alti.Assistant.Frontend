@@ -52,6 +52,8 @@ import {
   Presentation,
   X,
   Check,
+  LayoutGrid,
+  Zap,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -1205,6 +1207,58 @@ const ChatInput = ({
           </div>
         )}
 
+        <div className="flex bg-gray-100 dark:bg-zinc-800 p-1 rounded-xl mb-4 self-center w-fit mx-auto shadow-xs border border-black/5 dark:border-white/5">
+          <button
+            type="button"
+            onClick={() => {
+              if (pathname !== '/' && !pathname.startsWith('/c/')) {
+                router.push('/');
+              }
+            }}
+            className={cn(
+              'px-4 py-1.5 text-sm font-medium rounded-lg transition-all flex items-center gap-2',
+              (pathname === '/' || pathname.startsWith('/c/'))
+                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
+                : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+            )}
+          >
+            <Globe className="size-4" />
+            Chat
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (pathname !== '/my-chatbots' && !pathname.startsWith('/my-chatbots')) {
+                router.push('/my-chatbots');
+              }
+            }}
+            className={cn(
+              'px-4 py-1.5 text-sm font-medium rounded-lg transition-all flex items-center gap-2',
+              (pathname === '/my-chatbots' || pathname.startsWith('/my-chatbots'))
+                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
+                : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+            )}
+          >
+            <LayoutGrid className="size-4" />
+            Spaces
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              router.push('/tasks');
+            }}
+            className={cn(
+              'px-4 py-1.5 text-sm font-medium rounded-lg transition-all flex items-center gap-2',
+              false // since we are in ChatInput, Tasks is never active here
+                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
+                : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+            )}
+          >
+            <Zap className="size-4" />
+            Tasks
+          </button>
+        </div>
+
         <div
           className={cn(
             'flex flex-col rounded-2xl border border-gray-300 bg-white px-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-800 sm:px-4',
@@ -1320,7 +1374,7 @@ const ChatInput = ({
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setSelectedOption(selectedOption === OPTIONS.RESEARCH ? null : OPTIONS.RESEARCH)} 
-                  className={cn("cursor-pointer", selectedOption === OPTIONS.RESEARCH && "bg-blue-100 dark:bg-blue-500/20")}
+                  className={cn("cursor-pointer", selectedOption === OPTIONS.RESEARCH && "!bg-blue-100 dark:!bg-blue-500/20")}
                 >
                   <Globe className="mr-2 size-4" />
                   <span className="flex-1">Deep Research</span>
@@ -1328,7 +1382,7 @@ const ChatInput = ({
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setSelectedOption(selectedOption === OPTIONS.DRAFT_DOCUMENT ? null : OPTIONS.DRAFT_DOCUMENT)} 
-                  className={cn("cursor-pointer", selectedOption === OPTIONS.DRAFT_DOCUMENT && "bg-blue-100 dark:bg-blue-500/20")}
+                  className={cn("cursor-pointer", selectedOption === OPTIONS.DRAFT_DOCUMENT && "!bg-blue-100 dark:!bg-blue-500/20")}
                 >
                   <FileText className="mr-2 size-4" />
                   <span className="flex-1">Writing Assistant</span>
@@ -1336,7 +1390,7 @@ const ChatInput = ({
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setSelectedOption(selectedOption === OPTIONS.CODE ? null : OPTIONS.CODE)} 
-                  className={cn("cursor-pointer", selectedOption === OPTIONS.CODE && "bg-blue-100 dark:bg-blue-500/20")}
+                  className={cn("cursor-pointer", selectedOption === OPTIONS.CODE && "!bg-blue-100 dark:!bg-blue-500/20")}
                 >
                   <Code className="mr-2 size-4" />
                   <span className="flex-1">Code Assistant</span>
@@ -1344,7 +1398,7 @@ const ChatInput = ({
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setSelectedOption(selectedOption === OPTIONS.IMAGE ? null : OPTIONS.IMAGE)} 
-                  className={cn("cursor-pointer", selectedOption === OPTIONS.IMAGE && "bg-blue-100 dark:bg-blue-500/20")}
+                  className={cn("cursor-pointer", selectedOption === OPTIONS.IMAGE && "!bg-blue-100 dark:!bg-blue-500/20")}
                 >
                   <ImageIcon className="mr-2 size-4" />
                   <span className="flex-1">Image Generation</span>
