@@ -127,17 +127,11 @@ export default function ConversationsList({
       }
     }
 
-    if (chat.is_deep_search) {
-      return <Microscope className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
-    }
-
     const title = chat.title || '';
     const cleanTitle = formatConversationTitle(title);
     const lower = cleanTitle.toLowerCase();
 
-    if (lower.includes('research')) {
-      return <Microscope className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
-    } else if (lower.includes('search') || lower.includes('google') || lower.includes('web')) {
+    if (lower.includes('search') || lower.includes('google') || lower.includes('web')) {
       return <Search className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     } else if (lower.includes('code') || lower.includes('write') || lower.includes('debug') || lower.includes('python') || lower.includes('rust') || lower.includes('go')) {
       return <Code2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
