@@ -295,32 +295,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     } else if (pathname === '/tasks' || pathname.startsWith('/tasks')) {
       setActiveTab('tasks');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
-      if (selectedOption === OPTIONS.RESEARCH) {
-        setActiveTab('research');
-      } else if (selectedOption === OPTIONS.CODE) {
-        setActiveTab('code');
-      } else if (
-        selectedOption === OPTIONS.DRAFT_DOCUMENT ||
-        selectedOption === OPTIONS.REWRITE ||
-        selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
-        selectedOption === OPTIONS.BRAINSTORM ||
-        selectedOption === OPTIONS.GENERATE_PLAN ||
-        selectedOption === OPTIONS.REVIEW_CONTRACT ||
-        selectedOption === OPTIONS.GENERATE_REPORT
-      ) {
-        setActiveTab('write');
-      } else if (
-        selectedOption === OPTIONS.IMAGE ||
-        selectedOption === OPTIONS.EDIT_IMAGE
-      ) {
-        setActiveTab('image');
-      } else if (selectedOption === OPTIONS.AUDIO) {
-        setActiveTab('audio');
-      } else if (selectedOption === OPTIONS.VIDEO) {
-        setActiveTab('video');
-      } else {
-        setActiveTab('search');
-      }
+      setActiveTab('search');
     } else if (pathname.startsWith('/instructions') || 
                pathname.startsWith('/guardrails') || 
                pathname.startsWith('/platform-knowledge') || 
@@ -334,7 +309,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     } else if (pathname.startsWith('/knowledge')) {
       setActiveTab('none');
     }
-  }, [pathname, selectedOption, isLoggedIn]);
+  }, [pathname, isLoggedIn]);
 
   // Reset active tab to search when user logs out
   useEffect(() => {
@@ -345,52 +320,9 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
   // Synchronize tab and option selection with activeConversation.is_deep_search
   useEffect(() => {
-    if (isSuperAdmin) return;
-    if (activeConversation) {
-      const isDeepSearch = !!((activeConversation as any).is_deep_search);
-      if (isDeepSearch) {
-        setActiveTab('research');
-        if (selectedOption !== OPTIONS.RESEARCH) {
-          setSelectedOption(OPTIONS.RESEARCH);
-        }
-      } else {
-        // Only set to search if not on the bots page or apps page or data page or assistant/workflows
-        if (
-          pathname !== '/my-chatbots' &&
-          !pathname.startsWith('/my-chatbots') &&
-          pathname !== '/tasks' &&
-          !pathname.startsWith('/tasks') &&
-          pathname !== '/apps' &&
-          pathname !== '/workflows' &&
-          pathname !== '/assistant' &&
-          !pathname.startsWith('/assistant') &&
-          pathname !== '/knowledge' &&
-          !pathname.startsWith('/knowledge') &&
-          pathname !== '/instructions' &&
-          !pathname.startsWith('/instructions') &&
-          pathname !== '/guardrails' &&
-          !pathname.startsWith('/guardrails') &&
-          pathname !== '/platform-knowledge' &&
-          !pathname.startsWith('/platform-knowledge') &&
-          pathname !== '/legal' &&
-          !pathname.startsWith('/legal') &&
-          !pathname.startsWith('/admin') &&
-          pathname !== '/platform-memory' &&
-          !pathname.startsWith('/platform-memory') &&
-          pathname !== '/change-password' &&
-          !pathname.startsWith('/change-password') &&
-          pathname !== '/contact-support' &&
-          !pathname.startsWith('/contact-support') &&
-          pathname !== '/invite-friends' &&
-          !pathname.startsWith('/invite-friends')
-        ) {
-          // Removed: We no longer guess the activeTab from the conversation title, 
-          // because it causes the tab to unexpectedly switch away from the current tab 
-          // when clicking a history item. (e.g. clicking image history while on image tab)
-        }
-      }
-    }
-  }, [activeConversation, selectedOption, setSelectedOption, pathname, isSuperAdmin, setActiveTab]);
+    // We no longer sync the sidebar activeTab with the active conversation type
+    // to keep the chat history as one unified list.
+  }, []);
 
   const handleTabChange = (tab: SidebarTab) => {
     setActiveTab(tab);

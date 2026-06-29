@@ -45,7 +45,7 @@ export default function AppIntegrationsGrid() {
   }, [resolvedApps, query]);
 
   return (
-    <div className="min-h-screen bg-[#F5F5F7] dark:bg-zinc-950 p-6 md:p-10 space-y-8 relative transition-colors duration-300">
+    <div className="h-full overflow-y-auto bg-[#F5F5F7] dark:bg-zinc-950 p-6 md:p-10 space-y-8 relative transition-colors duration-300">
       {/* Floating Search Bar */}
       <div className="sticky top-0 z-20 w-full pb-4">
         <div className="relative w-full rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-800/80 bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl p-2 transition-all duration-300 flex items-center justify-between">

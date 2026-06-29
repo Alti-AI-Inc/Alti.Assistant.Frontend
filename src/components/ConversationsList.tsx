@@ -7,6 +7,7 @@
 import { Conversation } from '@/actions/conversationsAction';
 import { useConversations } from '@/hooks/useConversations';
 import { formatConversationTitle } from '@/lib/utils';
+import { OPTIONS } from '@/types/conversation';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
@@ -52,7 +53,7 @@ export default function ConversationsList({
   const { data: session, status: sessionStatus } = useSession();
   const { close } = useDrawerStore();
   const { onOpen } = useModalStore();
-  const { setSelectedOption, setShowStartLastMessage, setUserMessage } =
+  const { activeConversation, selectedOption, setSelectedOption, setShowStartLastMessage, setUserMessage } =
     useConversationsStore();
 
   const canFetchConversations =
@@ -64,9 +65,7 @@ export default function ConversationsList({
   const isDeepSearch = activeTab === 'research' ? true : undefined;
 
   let category: string | undefined = undefined;
-  if (activeTab === 'search') {
-    category = 'search';
-  } else if (activeTab === 'research') {
+  if (activeTab === 'research') {
     category = 'deep_research';
   } else if (activeTab === 'write') {
     category = 'article_writer,document_drafting,creative_writing,rewrite,translation,document_analysis,document_review,report,plan_generation,legal_contract,legal_contract_review,presentation,brainstorm';
@@ -91,10 +90,28 @@ export default function ConversationsList({
       category,
     );
 
-  const getDisplayIcon = (title: string) => {
-    if (activeTab === 'chat' || activeTab === 'search') {
-      return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+  const getDisplayIcon = (chat: Conversation) => {
+    // Override icon for the currently active conversation based on selectedOption
+    if (activeConversation && chat.conversationId === (activeConversation as any).conversationId && selectedOption) {
+      if (selectedOption === OPTIONS.RESEARCH) {
+        return <Microscope className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      } else if (selectedOption === OPTIONS.CODE) {
+        return <Code2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      } else if (selectedOption === OPTIONS.DRAFT_DOCUMENT) {
+        return <FileText className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      } else if (selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) {
+        return <ImageIcon className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      } else if (selectedOption === OPTIONS.AUDIO) {
+        return <Volume2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      } else if (selectedOption === OPTIONS.VIDEO) {
+        return <VideoIcon className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      }
     }
+
+    if (chat.is_deep_search) {
+      return <Microscope className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    }
+
     if (activeTab === 'research') {
       return <Microscope className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     }
@@ -113,10 +130,8 @@ export default function ConversationsList({
     if (activeTab === 'video') {
       return <VideoIcon className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     }
-    if (activeTab !== 'assistant') {
-      return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
-    }
 
+    const title = chat.title || '';
     const cleanTitle = formatConversationTitle(title);
     const lower = cleanTitle.toLowerCase();
 
@@ -135,7 +150,7 @@ export default function ConversationsList({
     } else if (lower.includes('image') || lower.includes('draw') || lower.includes('photo') || lower.includes('generation')) {
       return <Palette className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
     }
-    return <Zap className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
   };
 
   const getDisplayTitle = (title: string) => {
@@ -241,7 +256,7 @@ export default function ConversationsList({
             className="flex-1 cursor-pointer truncate px-3 py-2 text-xs font-normal flex items-center gap-2.5"
             onClick={() => handleConversationClick(chat.conversationId)}
           >
-            {getDisplayIcon(chat.title)}
+            {getDisplayIcon(chat)}
             <span className="truncate">{getDisplayTitle(chat.title)}</span>
           </span>
 
