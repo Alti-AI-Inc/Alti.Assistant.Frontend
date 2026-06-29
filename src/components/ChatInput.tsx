@@ -1320,35 +1320,35 @@ const ChatInput = ({
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setSelectedOption(selectedOption === OPTIONS.RESEARCH ? null : OPTIONS.RESEARCH)} 
-                  className={cn("cursor-pointer", selectedOption === OPTIONS.RESEARCH && "bg-black/5 dark:bg-white/10")}
+                  className={cn("cursor-pointer", selectedOption === OPTIONS.RESEARCH && "bg-blue-100 dark:bg-blue-500/20")}
                 >
                   <Globe className="mr-2 size-4" />
                   <span className="flex-1">Deep Research</span>
-                  {selectedOption === OPTIONS.RESEARCH && <Check className="ml-2 size-4" />}
+                  {selectedOption === OPTIONS.RESEARCH && <Check className="ml-2 size-4 text-black dark:text-black" />}
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setSelectedOption(selectedOption === OPTIONS.DRAFT_DOCUMENT ? null : OPTIONS.DRAFT_DOCUMENT)} 
-                  className={cn("cursor-pointer", selectedOption === OPTIONS.DRAFT_DOCUMENT && "bg-black/5 dark:bg-white/10")}
+                  className={cn("cursor-pointer", selectedOption === OPTIONS.DRAFT_DOCUMENT && "bg-blue-100 dark:bg-blue-500/20")}
                 >
                   <FileText className="mr-2 size-4" />
                   <span className="flex-1">Writing Assistant</span>
-                  {selectedOption === OPTIONS.DRAFT_DOCUMENT && <Check className="ml-2 size-4" />}
+                  {selectedOption === OPTIONS.DRAFT_DOCUMENT && <Check className="ml-2 size-4 text-black dark:text-black" />}
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setSelectedOption(selectedOption === OPTIONS.CODE ? null : OPTIONS.CODE)} 
-                  className={cn("cursor-pointer", selectedOption === OPTIONS.CODE && "bg-black/5 dark:bg-white/10")}
+                  className={cn("cursor-pointer", selectedOption === OPTIONS.CODE && "bg-blue-100 dark:bg-blue-500/20")}
                 >
                   <Code className="mr-2 size-4" />
                   <span className="flex-1">Code Assistant</span>
-                  {selectedOption === OPTIONS.CODE && <Check className="ml-2 size-4" />}
+                  {selectedOption === OPTIONS.CODE && <Check className="ml-2 size-4 text-black dark:text-black" />}
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setSelectedOption(selectedOption === OPTIONS.IMAGE ? null : OPTIONS.IMAGE)} 
-                  className={cn("cursor-pointer", selectedOption === OPTIONS.IMAGE && "bg-black/5 dark:bg-white/10")}
+                  className={cn("cursor-pointer", selectedOption === OPTIONS.IMAGE && "bg-blue-100 dark:bg-blue-500/20")}
                 >
                   <ImageIcon className="mr-2 size-4" />
                   <span className="flex-1">Image Generation</span>
-                  {selectedOption === OPTIONS.IMAGE && <Check className="ml-2 size-4" />}
+                  {selectedOption === OPTIONS.IMAGE && <Check className="ml-2 size-4 text-black dark:text-black" />}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
