@@ -59,6 +59,7 @@ import {
   Video,
   Volume2,
   ShieldAlert,
+  Blocks,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -729,6 +730,15 @@ const LeftSideNavMobile = () => {
                   className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
                 >
                   <LayoutDashboard className="w-4 h-4 text-black dark:text-white" /> Platform Manager
+                </button>
+              )}
+
+              {!isSuperAdmin && (
+                <button
+                  onClick={() => { router.push('/appsx'); close(); }}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                >
+                  <Blocks className="w-4 h-4 text-black dark:text-white" /> Platform Connectors
                 </button>
               )}
 
