@@ -674,7 +674,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Search</p>
+                <p>Chat</p>
               </TooltipContent>
             </Tooltip>
 
