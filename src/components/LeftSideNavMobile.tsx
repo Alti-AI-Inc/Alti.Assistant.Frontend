@@ -765,6 +765,7 @@ const LeftSideNavMobile = () => {
           ) : activeTab === 'code' ? (
             <div className="space-y-1 py-1 pb-4 mt-2 animate-in fade-in duration-200">
               <ConversationsList searchQuery={searchQuery} activeTab="code" />
+            </div>
           ) : isLoggedIn && activeTab === 'account' ? (
             <div className="mt-4 space-y-1 py-1 pb-4">
               
