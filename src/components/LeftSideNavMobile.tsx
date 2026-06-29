@@ -34,6 +34,7 @@ import {
   Folder,
   Database,
   LayoutGrid,
+  ListTodo,
   Zap,
   Upload,
   Cpu,
@@ -148,7 +149,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'none' | 'account';
+type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'tasks' | 'none' | 'account';
 
 const AVAILABLE_MCP_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -411,6 +412,10 @@ const LeftSideNavMobile = () => {
         router.push('/');
       }
       close();
+    } else if (tab === 'tasks') {
+      setActiveConversation(null);
+      router.push('/tasks');
+      close();
     } else if (tab === 'video') {
       setSelectedOption(OPTIONS.VIDEO);
       if (pathname !== '/') {
@@ -610,6 +615,21 @@ const LeftSideNavMobile = () => {
             >
               <LayoutGrid className="size-4" />
               <span>Spaces</span>
+            </button>
+
+            {/* Tasks */}
+            <button
+              type="button"
+              onClick={() => handleTabChange('tasks')}
+              className={cn(
+                'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
+                activeTab === 'tasks'
+                  ? 'bg-white border-black/10 text-black shadow-xs scale-[1.02] dark:bg-zinc-800 dark:border-white/10 dark:text-white'
+                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
+              )}
+            >
+              <ListTodo className="size-4" />
+              <span>Tasks</span>
             </button>
           </div>
         </div>
