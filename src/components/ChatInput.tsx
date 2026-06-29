@@ -51,6 +51,7 @@ import {
   Plus,
   Presentation,
   X,
+  Check,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -1283,7 +1284,7 @@ const ChatInput = ({
             </div>
           )}
 
-          {/* Input container with Plus icon inside */}
+          {/* Input container with active icon inside */}
           <div className="relative flex items-center gap-2 py-2">
             <DropdownMenu>
               <Tooltip>
@@ -1294,7 +1295,17 @@ const ChatInput = ({
                       className="flex cursor-pointer items-center focus:outline-none"
                       aria-label="More Options"
                     >
-                      <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                      {selectedOption === OPTIONS.RESEARCH ? (
+                        <Globe className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                      ) : selectedOption === OPTIONS.DRAFT_DOCUMENT ? (
+                        <FileText className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                      ) : selectedOption === OPTIONS.CODE ? (
+                        <Code className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                      ) : selectedOption === OPTIONS.IMAGE ? (
+                        <ImageIcon className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                      ) : (
+                        <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                      )}
                     </button>
                   </DropdownMenuTrigger>
                 </TooltipTrigger>
@@ -1305,23 +1316,39 @@ const ChatInput = ({
               <DropdownMenuContent align="start" className="w-56 mb-2">
                 <DropdownMenuItem onClick={() => fileInputRef.current?.click()} className="cursor-pointer">
                   <Paperclip className="mr-2 size-4" />
-                  <span>Attach Files</span>
+                  <span className="flex-1">Attach Files</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSelectedOption(OPTIONS.RESEARCH)} className="cursor-pointer">
+                <DropdownMenuItem 
+                  onClick={() => setSelectedOption(selectedOption === OPTIONS.RESEARCH ? null : OPTIONS.RESEARCH)} 
+                  className={cn("cursor-pointer", selectedOption === OPTIONS.RESEARCH && "bg-black/5 dark:bg-white/10")}
+                >
                   <Globe className="mr-2 size-4" />
-                  <span>Deep Research</span>
+                  <span className="flex-1">Deep Research</span>
+                  {selectedOption === OPTIONS.RESEARCH && <Check className="ml-2 size-4" />}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSelectedOption(OPTIONS.DRAFT_DOCUMENT)} className="cursor-pointer">
+                <DropdownMenuItem 
+                  onClick={() => setSelectedOption(selectedOption === OPTIONS.DRAFT_DOCUMENT ? null : OPTIONS.DRAFT_DOCUMENT)} 
+                  className={cn("cursor-pointer", selectedOption === OPTIONS.DRAFT_DOCUMENT && "bg-black/5 dark:bg-white/10")}
+                >
                   <FileText className="mr-2 size-4" />
-                  <span>Writing Assistant</span>
+                  <span className="flex-1">Writing Assistant</span>
+                  {selectedOption === OPTIONS.DRAFT_DOCUMENT && <Check className="ml-2 size-4" />}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSelectedOption(OPTIONS.CODE)} className="cursor-pointer">
+                <DropdownMenuItem 
+                  onClick={() => setSelectedOption(selectedOption === OPTIONS.CODE ? null : OPTIONS.CODE)} 
+                  className={cn("cursor-pointer", selectedOption === OPTIONS.CODE && "bg-black/5 dark:bg-white/10")}
+                >
                   <Code className="mr-2 size-4" />
-                  <span>Code Assistant</span>
+                  <span className="flex-1">Code Assistant</span>
+                  {selectedOption === OPTIONS.CODE && <Check className="ml-2 size-4" />}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSelectedOption(OPTIONS.IMAGE)} className="cursor-pointer">
+                <DropdownMenuItem 
+                  onClick={() => setSelectedOption(selectedOption === OPTIONS.IMAGE ? null : OPTIONS.IMAGE)} 
+                  className={cn("cursor-pointer", selectedOption === OPTIONS.IMAGE && "bg-black/5 dark:bg-white/10")}
+                >
                   <ImageIcon className="mr-2 size-4" />
-                  <span>Image Generation</span>
+                  <span className="flex-1">Image Generation</span>
+                  {selectedOption === OPTIONS.IMAGE && <Check className="ml-2 size-4" />}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -1345,6 +1372,14 @@ const ChatInput = ({
                     ? `Chat with ${activeKnowledgeBaseName}`
                     : (pathname === '/workflows' || pathname?.startsWith('/workflows')
                       ? 'Describe your workflow...'
+                      : selectedOption === OPTIONS.RESEARCH
+                      ? 'What would you like to research?'
+                      : selectedOption === OPTIONS.DRAFT_DOCUMENT
+                      ? 'What would you like to write?'
+                      : selectedOption === OPTIONS.CODE
+                      ? 'What would you like to code?'
+                      : selectedOption === OPTIONS.IMAGE
+                      ? 'Describe the image you want to generate...'
                       : 'Enter prompt here...')
               }
               style={{ backgroundColor: 'transparent' }}
