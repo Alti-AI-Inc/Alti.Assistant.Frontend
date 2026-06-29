@@ -657,47 +657,35 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {!hideSidebar && side !== 'right' && !isSuperAdmin && (
         <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300">
           <div className="flex bg-[#F5F5F7] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
-            {/* Search */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('search')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'search'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <Globe className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Chat</p>
-              </TooltipContent>
-            </Tooltip>
+            {/* Chat */}
+            <button
+              type="button"
+              onClick={() => handleTabChange('search')}
+              className={cn(
+                'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
+                activeTab === 'search'
+                  ? 'bg-white border-black/10 text-black shadow-xs scale-[1.02] dark:bg-zinc-800 dark:border-white/10 dark:text-white'
+                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
+              )}
+            >
+              <Globe className="size-4" />
+              <span>Chat</span>
+            </button>
 
             {/* Spaces */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('bots')}
-                  className={cn(
-                    'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                    activeTab === 'bots'
-                      ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                      : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                  )}
-                >
-                  <LayoutGrid className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Spaces</p>
-              </TooltipContent>
-            </Tooltip>
+            <button
+              type="button"
+              onClick={() => handleTabChange('bots')}
+              className={cn(
+                'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
+                activeTab === 'bots'
+                  ? 'bg-white border-black/10 text-black shadow-xs scale-[1.02] dark:bg-zinc-800 dark:border-white/10 dark:text-white'
+                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
+              )}
+            >
+              <LayoutGrid className="size-4" />
+              <span>Spaces</span>
+            </button>
           </div>
         </div>
       )}
