@@ -323,69 +323,6 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   <p>Code</p>
                 </TooltipContent>
               </Tooltip>
-
-              {/* Image */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    onClick={() => { setSelectedOption(OPTIONS.IMAGE); handleTabChange('history'); }}
-                    className={cn(
-                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                      activeTab === 'history' && selectedOption === OPTIONS.IMAGE
-                        ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                        : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                    )}
-                  >
-                    <ImageIcon className="size-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>Design</p>
-                </TooltipContent>
-              </Tooltip>
-
-              {/* Audio */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    onClick={() => { setSelectedOption(OPTIONS.AUDIO); handleTabChange('history'); }}
-                    className={cn(
-                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                      activeTab === 'history' && selectedOption === OPTIONS.AUDIO
-                        ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                        : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                    )}
-                  >
-                    <Volume2 className="size-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>Audio</p>
-                </TooltipContent>
-              </Tooltip>
-
-              {/* Video */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    onClick={() => { setSelectedOption(OPTIONS.VIDEO); handleTabChange('history'); }}
-                    className={cn(
-                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                      activeTab === 'history' && selectedOption === OPTIONS.VIDEO
-                        ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                        : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                    )}
-                  >
-                    <Video className="size-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>Video</p>
-                </TooltipContent>
-              </Tooltip>
             </div>
           </div>
 
