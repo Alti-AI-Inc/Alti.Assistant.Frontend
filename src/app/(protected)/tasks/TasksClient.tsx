@@ -230,29 +230,6 @@ export default function TasksClient() {
       
       {/* Main Centered Container */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 md:p-8 relative overflow-hidden h-full">
-        
-        {/* Top Right Runs Inbox trigger - only visible when collapsed */}
-        {!isInboxOpen && (
-          <div className="absolute top-6 right-6 z-20 select-none animate-in fade-in duration-200">
-            <Button
-              onClick={() => setIsInboxOpen(true)}
-              variant="outline"
-              size="icon"
-              className="bg-white hover:bg-gray-50 dark:bg-zinc-900 dark:hover:bg-zinc-800/80 border border-black/10 dark:border-zinc-800/80 text-gray-800 dark:text-white rounded-xl shadow-sm h-10 w-10 flex items-center justify-center transition-all duration-200"
-              title="Show Runs Inbox"
-            >
-              <div className="relative">
-                <PanelRightClose className="size-5 text-gray-600 dark:text-zinc-400 rotate-180" />
-                {activeRunsCount > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                  </span>
-                )}
-              </div>
-            </Button>
-          </div>
-        )}
 
         {/* Creator Form */}
         <div className="w-full max-w-2xl flex flex-col items-center z-10">
@@ -376,14 +353,14 @@ export default function TasksClient() {
       </div>
 
       {/* Persistent Collapsible Right Side Runs Inbox */}
-      {isInboxOpen && (
-        <TaskInboxPanel
-          runs={runs}
-          onViewLogs={handleViewLogs}
-          onClearRuns={handleClearRuns}
-          onClose={() => setIsInboxOpen(false)}
-        />
-      )}
+      <TaskInboxPanel
+        isOpen={isInboxOpen}
+        runs={runs}
+        onViewLogs={handleViewLogs}
+        onClearRuns={handleClearRuns}
+        onClose={() => setIsInboxOpen(false)}
+        onOpen={() => setIsInboxOpen(true)}
+      />
 
       {/* Terminal logs Modal */}
       <TaskHistoryLogs

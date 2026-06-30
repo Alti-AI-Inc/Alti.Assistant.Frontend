@@ -1,18 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { 
-  CheckCircle2, 
-  XCircle, 
-  Clock, 
-  Terminal, 
-  Copy, 
-  Download, 
-  Check,
-  PanelRightClose,
-  Zap
+  PanelRightClose
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -61,7 +51,7 @@ export default function TaskInboxPanel({
   return (
     <div className={cn(
       "h-full bg-white dark:bg-zinc-900 border-l border-black/10 dark:border-zinc-800/80 flex flex-col shrink-0 transition-all duration-300 ease-in-out relative",
-      isOpen ? "w-80 md:w-96" : "w-[52px]"
+      isOpen ? "w-64" : "w-[52px]"
     )}>
       {/* Panel Header */}
       <div className="h-[52px] flex items-center justify-between border-b border-black/10 dark:border-zinc-800/80 bg-white dark:bg-zinc-900 transition-colors duration-300 shrink-0 px-4">
@@ -70,22 +60,22 @@ export default function TaskInboxPanel({
             {/* Collapse Icon on top left */}
             <button
               onClick={onClose}
-              className="p-1 text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+              className="p-1 text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-855 transition-colors"
               title="Collapse Panel"
             >
               <PanelRightClose className="size-5 text-gray-600 dark:text-zinc-400" />
             </button>
 
-            {/* Task Lightning Icon on top right */}
-            <div className="text-black dark:text-white select-none">
-              <Zap className="size-5 text-black dark:text-white fill-black dark:fill-white" />
-            </div>
+            {/* Title "Tasks" on top right */}
+            <span className="text-[11px] font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider select-none">
+              Tasks
+            </span>
           </>
         ) : (
           /* Centered Open/Expand Icon when collapsed */
           <button
             onClick={onOpen}
-            className="w-full flex justify-center p-1 text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+            className="w-full flex justify-center p-1 text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-855 transition-colors"
             title="Expand Panel"
           >
             <PanelRightClose className="size-5 text-gray-600 dark:text-zinc-400 rotate-180" />
@@ -95,98 +85,73 @@ export default function TaskInboxPanel({
 
       {/* Runs Feed */}
       <div className={cn(
-        "flex-1 overflow-y-auto p-5 space-y-4 bg-white dark:bg-zinc-900",
+        "flex-1 overflow-y-auto p-5 space-y-3.5 bg-white dark:bg-zinc-900",
         !isOpen && "hidden"
       )}>
         {runs.map((run) => (
           <div 
             key={run.id}
-            className="bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-2xl p-4 shadow-xs space-y-3.5 hover:shadow-sm transition-shadow duration-300 relative overflow-hidden"
+            className="bg-gray-50 dark:bg-zinc-800/40 rounded-xl p-3.5 space-y-2.5 relative overflow-hidden"
           >
             {run.status === 'running' && (
-              <div className="absolute top-0 left-0 right-0 h-1 bg-indigo-500/20 overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-0.5 bg-indigo-500/20 overflow-hidden">
                 <div className="h-full bg-indigo-500 animate-[shimmer_1.5s_infinite] w-[40%]" />
               </div>
             )}
 
-            <div className="flex items-start justify-between gap-3">
-              <div className="space-y-0.5 flex-1 min-w-0">
-                <h3 className="font-semibold text-gray-900 dark:text-white text-xs leading-snug truncate">
-                  {run.taskName}
-                </h3>
-                <p className="text-[9px] text-gray-400 dark:text-zinc-500 font-medium">
-                  Run ID: {run.id.slice(0, 8)}
-                </p>
-              </div>
-
-              <div className="shrink-0">
-                {run.status === 'running' ? (
-                  <Badge className="bg-indigo-500/10 hover:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 rounded-md font-semibold px-1.5 py-0.5 text-[9px] flex gap-1 items-center select-none animate-pulse">
-                    <div className="size-1.5 rounded-full bg-indigo-500 animate-ping" />
-                    Running
-                  </Badge>
-                ) : run.status === 'success' ? (
-                  <Badge className="bg-emerald-500/10 hover:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-md font-semibold px-1.5 py-0.5 text-[9px] flex gap-1 items-center select-none">
-                    <CheckCircle2 className="h-2.5 w-2.5" />
-                    Success
-                  </Badge>
-                ) : (
-                  <Badge className="bg-rose-500/10 hover:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 rounded-md font-semibold px-1.5 py-0.5 text-[9px] flex gap-1 items-center select-none">
-                    <XCircle className="h-2.5 w-2.5" />
-                    Failed
-                  </Badge>
-                )}
-              </div>
+            {/* Title & Status */}
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-semibold text-gray-900 dark:text-white text-xs truncate">
+                {run.taskName}
+              </span>
+              <span className={cn(
+                "text-[9px] font-bold px-1.5 py-0.5 rounded-md border select-none shrink-0",
+                run.status === 'running' && "bg-indigo-500/10 text-indigo-650 dark:text-indigo-400 border-indigo-500/20 animate-pulse",
+                run.status === 'success' && "bg-emerald-500/10 text-emerald-650 dark:text-emerald-450 border-emerald-500/20",
+                run.status === 'failed' && "bg-rose-500/10 text-rose-650 dark:text-rose-450 border-rose-500/20"
+              )}>
+                {run.status === 'running' ? 'Running' : run.status === 'success' ? 'Success' : 'Failed'}
+              </span>
             </div>
 
-            <div className="text-[11px] text-gray-600 dark:text-zinc-300 leading-relaxed bg-gray-50/50 dark:bg-zinc-950/40 rounded-xl p-3 border border-black/5 dark:border-white/5">
+            {/* Summary Text (flat, directly inside card) */}
+            <p className="text-[11px] text-gray-600 dark:text-zinc-400 leading-relaxed">
               {run.summary}
-            </div>
+            </p>
 
-            <div className="flex flex-wrap items-center justify-between pt-1 gap-2 border-t border-black/5 dark:border-zinc-800/80">
-              <div className="flex items-center gap-3 text-[10px] text-gray-400 dark:text-zinc-500">
-                <span className="flex items-center gap-1 font-medium">
-                  <Clock className="size-3" />
-                  {run.duration ? `${(run.duration / 1000).toFixed(1)}s` : '--'}
-                </span>
-                <span className="font-medium">
-                  {new Date(run.timestamp).toLocaleTimeString(undefined, {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                  })}
-                </span>
-              </div>
+            {/* Footer Row (Time + Actions aligned) */}
+            <div className="flex items-center justify-between pt-2 border-t border-black/5 dark:border-zinc-800/80 text-[10px] text-gray-400 dark:text-zinc-500 font-medium">
+              <span>
+                {new Date(run.timestamp).toLocaleTimeString(undefined, {
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+              </span>
 
-              <div className="flex items-center gap-1">
-                <Button
-                  variant="ghost"
-                  size="sm"
+              <div className="flex items-center gap-2">
+                <button
                   onClick={() => onViewLogs(run.taskName)}
-                  className="h-6 px-1.5 rounded-md text-[10px] text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center gap-1"
+                  className="hover:text-black dark:hover:text-white transition-colors"
                 >
-                  <Terminal className="size-2.5" />
                   Logs
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
+                </button>
+                <span>•</span>
+                <button
                   onClick={() => handleCopySummary(run.id, run.summary)}
-                  className="h-6 px-1.5 rounded-md text-[10px] text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center gap-1"
+                  className="hover:text-black dark:hover:text-white transition-colors"
                 >
-                  {copiedId === run.id ? <Check className="size-2.5 text-emerald-500" /> : <Copy className="size-2.5" />}
-                  Copy
-                </Button>
+                  {copiedId === run.id ? 'Copied' : 'Copy'}
+                </button>
                 {run.status === 'success' && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleDownload(run.taskName)}
-                    className="h-6 px-1.5 rounded-md text-[10px] text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 flex items-center gap-1"
-                  >
-                    <Download className="size-2.5" />
-                    Report
-                  </Button>
+                  <>
+                    <span>•</span>
+                    <button
+                      onClick={() => handleDownload(run.taskName)}
+                      className="hover:text-black dark:hover:text-white transition-colors"
+                    >
+                      Report
+                    </button>
+                  </>
                 )}
               </div>
             </div>
@@ -194,11 +159,10 @@ export default function TaskInboxPanel({
         ))}
 
         {runs.length === 0 && (
-          <div className="flex flex-col items-center justify-center text-center p-8 border border-dashed border-black/10 dark:border-white/10 rounded-3xl min-h-[250px] bg-white dark:bg-zinc-900">
-            <Zap className="size-8 text-gray-300 dark:text-zinc-700 mb-2.5 animate-pulse" />
-            <h4 className="font-semibold text-xs text-gray-900 dark:text-white mb-1">
+          <div className="flex flex-col items-center justify-center text-center p-8 border border-dashed border-black/10 dark:border-white/10 rounded-2xl min-h-[200px] bg-gray-50 dark:bg-zinc-800/20">
+            <span className="text-[11px] font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider select-none mb-1">
               No runs recorded
-            </h4>
+            </span>
             <p className="text-[10px] text-gray-500 dark:text-zinc-400 max-w-[180px] leading-relaxed">
               Create an automated task and check this feed for results.
             </p>
