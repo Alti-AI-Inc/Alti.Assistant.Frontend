@@ -14,6 +14,7 @@ import {
   PanelRightClose,
   Zap
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 export interface TaskRun {
@@ -26,17 +27,21 @@ export interface TaskRun {
 }
 
 interface TaskInboxPanelProps {
+  isOpen: boolean;
   runs: TaskRun[];
   onViewLogs: (taskName: string) => void;
   onClearRuns: () => void;
   onClose: () => void;
+  onOpen: () => void;
 }
 
 export default function TaskInboxPanel({
+  isOpen,
   runs,
   onViewLogs,
   onClearRuns,
-  onClose
+  onClose,
+  onOpen
 }: TaskInboxPanelProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -54,26 +59,45 @@ export default function TaskInboxPanel({
   };
 
   return (
-    <div className="w-80 md:w-96 h-full bg-white dark:bg-zinc-900 border-l border-black/10 dark:border-zinc-800/80 flex flex-col shrink-0 transition-all duration-300 ease-in-out relative">
+    <div className={cn(
+      "h-full bg-white dark:bg-zinc-900 border-l border-black/10 dark:border-zinc-800/80 flex flex-col shrink-0 transition-all duration-300 ease-in-out relative",
+      isOpen ? "w-80 md:w-96" : "w-[52px]"
+    )}>
       {/* Panel Header */}
-      <div className="h-[52px] px-4 flex items-center justify-between border-b border-black/10 dark:border-zinc-800/80 bg-white dark:bg-zinc-900 transition-colors duration-300 shrink-0">
-        {/* Collapse Icon on top left */}
-        <button
-          onClick={onClose}
-          className="p-1 text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
-          title="Collapse Panel"
-        >
-          <PanelRightClose className="size-5 text-gray-600 dark:text-zinc-400" />
-        </button>
+      <div className="h-[52px] flex items-center justify-between border-b border-black/10 dark:border-zinc-800/80 bg-white dark:bg-zinc-900 transition-colors duration-300 shrink-0 px-4">
+        {isOpen ? (
+          <>
+            {/* Collapse Icon on top left */}
+            <button
+              onClick={onClose}
+              className="p-1 text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+              title="Collapse Panel"
+            >
+              <PanelRightClose className="size-5 text-gray-600 dark:text-zinc-400" />
+            </button>
 
-        {/* Task Lightning Icon on top right */}
-        <div className="text-black dark:text-white select-none">
-          <Zap className="size-5 text-black dark:text-white fill-black dark:fill-white" />
-        </div>
+            {/* Task Lightning Icon on top right */}
+            <div className="text-black dark:text-white select-none">
+              <Zap className="size-5 text-black dark:text-white fill-black dark:fill-white" />
+            </div>
+          </>
+        ) : (
+          /* Centered Open/Expand Icon when collapsed */
+          <button
+            onClick={onOpen}
+            className="w-full flex justify-center p-1 text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+            title="Expand Panel"
+          >
+            <PanelRightClose className="size-5 text-gray-600 dark:text-zinc-400 rotate-180" />
+          </button>
+        )}
       </div>
 
       {/* Runs Feed */}
-      <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-white dark:bg-zinc-900">
+      <div className={cn(
+        "flex-1 overflow-y-auto p-5 space-y-4 bg-white dark:bg-zinc-900",
+        !isOpen && "hidden"
+      )}>
         {runs.map((run) => (
           <div 
             key={run.id}
@@ -115,7 +139,7 @@ export default function TaskInboxPanel({
               </div>
             </div>
 
-            <div className="text-[11px] text-gray-600 dark:text-zinc-300 leading-relaxed bg-gray-50/55 dark:bg-zinc-950/40 rounded-xl p-3 border border-black/5 dark:border-white/5">
+            <div className="text-[11px] text-gray-600 dark:text-zinc-300 leading-relaxed bg-gray-50/50 dark:bg-zinc-950/40 rounded-xl p-3 border border-black/5 dark:border-white/5">
               {run.summary}
             </div>
 

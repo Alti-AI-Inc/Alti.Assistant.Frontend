@@ -393,9 +393,7 @@ const AppCard = ({
                 "w-full transition-all duration-300 font-medium shadow-sm",
                 isAlreadyConnected
                   ? "bg-slate-100 dark:bg-slate-800 text-slate-450 dark:text-slate-500 cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800 border-none"
-                  : strategicStyle
-                    ? "bg-slate-900 dark:bg-slate-50 hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900"
-                    : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-750 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200"
+                  : "bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:text-white border-none"
               )}
               variant={isAlreadyConnected ? "ghost" : "default"}
               disabled={isAlreadyConnected}
