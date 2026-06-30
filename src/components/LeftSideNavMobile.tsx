@@ -580,144 +580,52 @@ const LeftSideNavMobile = () => {
       {/* 6-Icon Toggle Row / Space Toggles */}
       {!isSuperAdmin && (
         <div className="border-b border-black/5 px-4 py-2 bg-white dark:bg-zinc-900 flex-none">
-          {pathname.startsWith('/my-chatbots') && activeBotId ? (
-            <div className="flex w-full items-center gap-1">
-              {/* Back Button */}
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveBotId(null);
-                  router.push('/my-chatbots');
-                  close();
-                }}
-                className="flex items-center justify-center p-1.5 rounded-lg text-gray-500 hover:bg-black/5 hover:text-black dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors"
-                title="Back to Spaces"
-              >
-                <ArrowLeft className="size-4" />
-              </button>
+          <div className="flex bg-[#F5F5F7] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
+            {/* Chat */}
+            <button
+              type="button"
+              onClick={() => handleTabChange('search')}
+              className={cn(
+                'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
+                activeTab === 'search'
+                  ? 'bg-white border-black/10 text-black shadow-xs scale-[1.02] dark:bg-zinc-800 dark:border-white/10 dark:text-white'
+                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
+              )}
+            >
+              <Globe className="size-4" />
+              <span>Chat</span>
+            </button>
 
-              <div className="flex-1 flex bg-[#F5F5F7] dark:bg-white/[0.04] p-0.5 rounded-xl items-center gap-0.5 border border-black/[0.03] dark:border-white/[0.03]">
-                {/* Bot Chat */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    router.push(`/my-chatbots?bot=${activeBotId}`);
-                    close();
-                  }}
-                  className={cn(
-                    'flex flex-1 h-7.5 items-center justify-center gap-1 rounded-lg border text-[10px] font-semibold transition-all duration-200 focus:outline-none select-none',
-                    (!searchParams?.get('view') || searchParams.get('view') === 'chat')
-                      ? 'bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white'
-                      : 'bg-transparent border-transparent text-gray-500 hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-250',
-                  )}
-                >
-                  <MessageSquare className="size-3" />
-                  <span>Chat</span>
-                </button>
+            {/* Spaces */}
+            <button
+              type="button"
+              onClick={() => handleTabChange('bots')}
+              className={cn(
+                'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
+                activeTab === 'bots'
+                  ? 'bg-white border-black/10 text-black shadow-xs scale-[1.02] dark:bg-zinc-800 dark:border-white/10 dark:text-white'
+                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
+              )}
+            >
+              <LayoutGrid className="size-4" />
+              <span>Spaces</span>
+            </button>
 
-                {/* Instructions */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    router.push(`/my-chatbots?bot=${activeBotId}&view=instructions`);
-                    close();
-                  }}
-                  className={cn(
-                    'flex flex-1 h-7.5 items-center justify-center gap-1 rounded-lg border text-[10px] font-semibold transition-all duration-200 focus:outline-none select-none',
-                    searchParams?.get('view') === 'instructions'
-                      ? 'bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white'
-                      : 'bg-transparent border-transparent text-gray-500 hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-250',
-                  )}
-                >
-                  <Brain className="size-3" />
-                  <span>Rules</span>
-                </button>
-
-                {/* Guardrails */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    router.push(`/my-chatbots?bot=${activeBotId}&view=guardrails`);
-                    close();
-                  }}
-                  className={cn(
-                    'flex flex-1 h-7.5 items-center justify-center gap-1 rounded-lg border text-[10px] font-semibold transition-all duration-200 focus:outline-none select-none',
-                    searchParams?.get('view') === 'guardrails'
-                      ? 'bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white'
-                      : 'bg-transparent border-transparent text-gray-500 hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-250',
-                  )}
-                >
-                  <Shield className="size-3" />
-                  <span>Guards</span>
-                </button>
-
-                {/* Data */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    router.push(`/my-chatbots?bot=${activeBotId}&view=data`);
-                    close();
-                  }}
-                  className={cn(
-                    'flex flex-1 h-7.5 items-center justify-center gap-1 rounded-lg border text-[10px] font-semibold transition-all duration-200 focus:outline-none select-none',
-                    searchParams?.get('view') === 'data'
-                      ? 'bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white'
-                      : 'bg-transparent border-transparent text-gray-500 hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-250',
-                  )}
-                >
-                  <Database className="size-3" />
-                  <span>Data</span>
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="flex bg-[#F5F5F7] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
-              {/* Chat */}
-              <button
-                type="button"
-                onClick={() => handleTabChange('search')}
-                className={cn(
-                  'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
-                  activeTab === 'search'
-                    ? 'bg-white border-black/10 text-black shadow-xs scale-[1.02] dark:bg-zinc-800 dark:border-white/10 dark:text-white'
-                    : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
-                )}
-              >
-                <Globe className="size-4" />
-                <span>Chat</span>
-              </button>
-
-              {/* Spaces */}
-              <button
-                type="button"
-                onClick={() => handleTabChange('bots')}
-                className={cn(
-                  'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
-                  activeTab === 'bots'
-                    ? 'bg-white border-black/10 text-black shadow-xs scale-[1.02] dark:bg-zinc-800 dark:border-white/10 dark:text-white'
-                    : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
-                )}
-              >
-                <LayoutGrid className="size-4" />
-                <span>Spaces</span>
-              </button>
-
-              {/* Tasks */}
-              <button
-                type="button"
-                onClick={() => handleTabChange('tasks')}
-                className={cn(
-                  'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
-                  activeTab === 'tasks'
-                    ? 'bg-white border-black/10 text-black shadow-xs scale-[1.02] dark:bg-zinc-800 dark:border-white/10 dark:text-white'
-                    : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
-                )}
-              >
-                <Zap className="size-4" />
-                <span>Tasks</span>
-              </button>
-            </div>
-          )}
+            {/* Tasks */}
+            <button
+              type="button"
+              onClick={() => handleTabChange('tasks')}
+              className={cn(
+                'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
+                activeTab === 'tasks'
+                  ? 'bg-white border-black/10 text-black shadow-xs scale-[1.02] dark:bg-zinc-800 dark:border-white/10 dark:text-white'
+                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
+              )}
+            >
+              <Zap className="size-4" />
+              <span>Tasks</span>
+            </button>
+          </div>
         </div>
       )}
 

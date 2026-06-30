@@ -148,73 +148,6 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
               />
             </div>
 
-            {(basePath === '/admin/projects' || !bot?.isShared) && (
-              <div className="flex items-center gap-1">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => handleTabChange('instructions')}
-                      className={cn(
-                        'flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 shadow-xs transition-all flex-none focus:outline-none select-none dark:border-white/[0.03]',
-                        activeTab === 'instructions'
-                          ? 'bg-white text-black scale-105 dark:bg-zinc-700 dark:text-white'
-                          : 'bg-[#F5F5F7] text-black hover:bg-black/[0.03] hover:text-black dark:bg-zinc-800/50 dark:text-white',
-                      )}
-                    >
-                      <FileText className="size-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>Instructions</p>
-                  </TooltipContent>
-                </Tooltip>
-
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => handleTabChange('guardrails')}
-                      className={cn(
-                        'flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 shadow-xs transition-all flex-none focus:outline-none select-none dark:border-white/[0.03]',
-                        activeTab === 'guardrails'
-                          ? 'bg-white text-black scale-105 dark:bg-zinc-700 dark:text-white'
-                          : 'bg-[#F5F5F7] text-black hover:bg-black/[0.03] hover:text-black dark:bg-zinc-800/50 dark:text-white',
-                      )}
-                    >
-                      <Shield className="size-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>Guardrails</p>
-                  </TooltipContent>
-                </Tooltip>
-
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => handleTabChange('data')}
-                      className={cn(
-                        'flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 shadow-xs transition-all flex-none focus:outline-none select-none dark:border-white/[0.03]',
-                        activeTab === 'data'
-                          ? 'bg-white text-black scale-105 dark:bg-zinc-700 dark:text-white'
-                          : 'bg-[#F5F5F7] text-black hover:bg-black/[0.03] hover:text-black dark:bg-zinc-800/50 dark:text-white',
-                      )}
-                    >
-                      <Upload className="size-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>Data</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-            )}
-
             {/* Action Button: New Chat */}
             {activeTab === 'history' && (
               <Tooltip>
@@ -235,92 +168,92 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
             )}
           </div>
 
-          {/* Toggle with 7 icons */}
+          {/* Toggle with 4 space configuration items */}
           <div className="h-px w-[calc(100%+2rem)] -ml-4 bg-black/10 mt-2" />
           <div className="h-10 mt-2 flex items-center bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300 w-full">
             <div className="flex bg-[#F5F5F7] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
               
-              {/* Search */}
+              {/* Chat History */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => { setSelectedOption(null); handleTabChange('history'); }}
+                    onClick={() => handleTabChange('history')}
                     className={cn(
                       'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                      activeTab === 'history' && selectedOption === null
-                        ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                        : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                      activeTab === 'history'
+                        ? 'bg-white border-black/10 text-black shadow-xs scale-105 dark:bg-zinc-800 dark:border-white/10 dark:text-white'
+                        : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
                     )}
                   >
-                    <Globe className="size-4" />
+                    <MessageSquare className="size-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>Search</p>
+                  <p>Chat History</p>
                 </TooltipContent>
               </Tooltip>
 
-              {/* Research */}
+              {/* Instructions */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => { setSelectedOption(OPTIONS.RESEARCH); handleTabChange('history'); }}
+                    onClick={() => handleTabChange('instructions')}
                     className={cn(
                       'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                      activeTab === 'history' && selectedOption === OPTIONS.RESEARCH
-                        ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                        : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
-                    )}
-                  >
-                    <Microscope className="size-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>Research</p>
-                </TooltipContent>
-              </Tooltip>
-
-              {/* Write */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    onClick={() => { setSelectedOption(OPTIONS.DRAFT_DOCUMENT); handleTabChange('history'); }}
-                    className={cn(
-                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                      activeTab === 'history' && selectedOption === OPTIONS.DRAFT_DOCUMENT
-                        ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                        : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                      activeTab === 'instructions'
+                        ? 'bg-white border-black/10 text-black shadow-xs scale-105 dark:bg-zinc-800 dark:border-white/10 dark:text-white'
+                        : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
                     )}
                   >
                     <FileText className="size-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>Write</p>
+                  <p>Instructions</p>
                 </TooltipContent>
               </Tooltip>
 
-              {/* Code */}
+              {/* Guardrails */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => { setSelectedOption(OPTIONS.CODE); handleTabChange('history'); }}
+                    onClick={() => handleTabChange('guardrails')}
                     className={cn(
                       'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
-                      activeTab === 'history' && selectedOption === OPTIONS.CODE
-                        ? 'bg-white border-black/10 text-black shadow-xs scale-105'
-                        : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800',
+                      activeTab === 'guardrails'
+                        ? 'bg-white border-black/10 text-black shadow-xs scale-105 dark:bg-zinc-800 dark:border-white/10 dark:text-white'
+                        : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
                     )}
                   >
-                    <Code2 className="size-4" />
+                    <Shield className="size-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>Code</p>
+                  <p>Guardrails</p>
+                </TooltipContent>
+              </Tooltip>
+
+              {/* Data */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={() => handleTabChange('data')}
+                    className={cn(
+                      'flex h-8 w-8 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none',
+                      activeTab === 'data'
+                        ? 'bg-white border-black/10 text-black shadow-xs scale-105 dark:bg-zinc-800 dark:border-white/10 dark:text-white'
+                        : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
+                    )}
+                  >
+                    <Upload className="size-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Data</p>
                 </TooltipContent>
               </Tooltip>
             </div>
