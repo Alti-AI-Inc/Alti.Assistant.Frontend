@@ -51,7 +51,7 @@ export default function TaskInboxPanel({
   return (
     <div className={cn(
       "h-full bg-white dark:bg-zinc-900 border-l border-black/10 dark:border-zinc-800/80 flex flex-col shrink-0 transition-all duration-300 ease-in-out relative",
-      isOpen ? "w-64" : "w-[52px]"
+      isOpen ? "w-76" : "w-10"
     )}>
       {/* Panel Header */}
       <div className="h-[52px] flex items-center justify-between border-b border-black/10 dark:border-zinc-800/80 bg-white dark:bg-zinc-900 transition-colors duration-300 shrink-0 px-4">

@@ -341,7 +341,7 @@ export default function TasksClient() {
                     disabled={!prompt.trim()}
                     className="bg-black hover:bg-black/90 disabled:bg-black disabled:opacity-100 text-white rounded-xl h-[42px] w-[42px] p-0 flex items-center justify-center transition-transform active:scale-95 disabled:active:scale-100"
                   >
-                    <ArrowUp className={cn("size-5", !prompt.trim() ? "text-white/40" : "text-white")} />
+                    <ArrowUp className="size-5 text-white" />
                   </Button>
                 </div>
 
