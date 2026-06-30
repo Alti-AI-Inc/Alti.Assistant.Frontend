@@ -286,7 +286,7 @@ export default function TasksClient() {
         <TaskPresets onSelectPreset={handleSelectPreset} />
 
         {/* Task Creator Form (White Card) */}
-        <div className="bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-3xl shadow-sm overflow-hidden flex flex-col focus-within:ring-2 focus-within:ring-indigo-500/50 transition-shadow">
+        <div className="bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-3xl shadow-sm overflow-hidden flex flex-col transition-shadow">
           <Textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -388,7 +388,7 @@ export default function TasksClient() {
                 <Button 
                   onClick={handleCreateTask}
                   disabled={!prompt.trim()}
-                  className="bg-black hover:bg-black/90 dark:bg-white dark:hover:bg-white/90 text-white dark:text-black rounded-xl h-[42px] w-[42px] p-0 flex items-center justify-center transition-transform active:scale-95 disabled:opacity-50 disabled:active:scale-100"
+                  className="bg-black hover:bg-black/90 text-white rounded-xl h-[42px] w-[42px] p-0 flex items-center justify-center transition-transform active:scale-95 disabled:opacity-50 disabled:active:scale-100"
                 >
                   <ArrowUp className="size-5" />
                 </Button>
