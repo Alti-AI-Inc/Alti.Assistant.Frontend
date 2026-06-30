@@ -41,7 +41,7 @@ export default function TasksClient() {
   const [tasks, setTasks] = useState<AutomationTask[]>([]);
   const [runs, setRuns] = useState<TaskRun[]>([]);
   
-  const [isInboxOpen, setIsInboxOpen] = useState(false);
+  const [isInboxOpen, setIsInboxOpen] = useState(true); // Open side-panel by default for side-by-side view
   const [isLogsOpen, setIsLogsOpen] = useState(false);
   const [selectedLogTaskName, setSelectedLogTaskName] = useState('');
 
@@ -52,7 +52,44 @@ export default function TasksClient() {
 
     if (savedTasks) {
       setTasks(JSON.parse(savedTasks));
+    } else {
+      // Default tasks
+      const defaultTasks: AutomationTask[] = [
+        {
+          id: 'task-1',
+          prompt: 'Audit and summarize GCP cost reports from Vertex AI and compile an automated markdown daily usage summary.',
+          taskType: 'recurring',
+          triggerType: 'scheduled',
+          schedule: 'Every day at 9 AM',
+          event: '',
+          active: true,
+          createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+        },
+        {
+          id: 'task-2',
+          prompt: 'Summarize key questions in the incoming client email, draft a professional response draft matching our brand guidelines, and save it in drafts.',
+          taskType: 'recurring',
+          triggerType: 'event',
+          schedule: '',
+          event: 'When a new email arrives from @client.com',
+          active: true,
+          createdAt: new Date(Date.now() - 86400000).toISOString(),
+        },
+        {
+          id: 'task-3',
+          prompt: 'Generate Q2 earnings call market summary report and compile comparison charts against competitor benchmarks.',
+          taskType: 'one-time',
+          triggerType: 'scheduled',
+          schedule: 'Tomorrow at 3 PM',
+          event: '',
+          active: true,
+          createdAt: new Date().toISOString(),
+        }
+      ];
+      setTasks(defaultTasks);
+      localStorage.setItem('alti_automations', JSON.stringify(defaultTasks));
     }
+
     if (savedRuns) {
       setRuns(JSON.parse(savedRuns));
     } else {
@@ -142,7 +179,7 @@ export default function TasksClient() {
     };
 
     saveRuns([newRun, ...runs]);
-    setIsInboxOpen(true); // Automatically open the inbox side-panel
+    setIsInboxOpen(true); // Ensure side-panel is open to see progress
 
     setTimeout(() => {
       let finalSummary = 'Successfully executed automated agent run. Output: Completed all actions specified in the prompt.';
@@ -189,160 +226,162 @@ export default function TasksClient() {
   const activeRunsCount = runs.filter(r => r.status === 'running').length;
 
   return (
-    <div className="flex h-full w-full flex-col bg-[#F5F5F7] dark:bg-zinc-950 items-center justify-center p-6 md:p-8 relative overflow-hidden">
+    <div className="flex h-full w-full bg-[#F5F5F7] dark:bg-zinc-950 flex-row overflow-hidden relative">
       
-      {/* Top Right Runs Inbox trigger */}
-      <div className="absolute top-6 right-6 z-20 select-none">
-        <Button
-          onClick={() => setIsInboxOpen(true)}
-          className="bg-white hover:bg-gray-50 dark:bg-zinc-900 dark:hover:bg-zinc-800/80 border border-black/5 dark:border-white/5 text-gray-800 dark:text-white rounded-xl shadow-sm h-11 px-4 flex items-center gap-2 transition-all duration-200"
-        >
-          <div className="relative">
-            <Inbox className="size-4" />
-            {activeRunsCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-              </span>
-            )}
-          </div>
-          <span className="text-xs font-semibold">Runs Inbox</span>
-          {runs.length > 0 && (
-            <span className="bg-gray-100 dark:bg-zinc-800 text-[10px] px-1.5 py-0.5 rounded-md font-bold text-gray-500 dark:text-zinc-400">
-              {runs.length}
-            </span>
-          )}
-        </Button>
-      </div>
-
       {/* Main Centered Container */}
-      <div className="w-full max-w-3xl flex flex-col items-center z-10">
-        <h1 className="text-4xl font-medium tracking-tight text-center mb-8 text-gray-900 dark:text-white select-none">
-          Create an Automated Task
-        </h1>
+      <div className="flex-1 flex flex-col items-center justify-center p-6 md:p-8 relative overflow-hidden h-full">
         
-        {/* Task Creator Form (White Card) */}
-        <div className="w-full bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-3xl shadow-sm overflow-hidden flex flex-col transition-shadow">
-          <Textarea
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Describe the task you want the assistant to perform automatically..."
-            className="min-h-[140px] border-none focus-visible:ring-0 resize-none bg-transparent px-6 pt-6 text-base placeholder:text-gray-400 dark:placeholder:text-zinc-500 text-gray-900 dark:text-white"
-          />
+        {/* Top Right Runs Inbox trigger */}
+        <div className="absolute top-6 right-6 z-20 select-none">
+          <Button
+            onClick={() => setIsInboxOpen(!isInboxOpen)}
+            className="bg-white hover:bg-gray-50 dark:bg-zinc-900 dark:hover:bg-zinc-800/80 border border-black/5 dark:border-white/5 text-gray-800 dark:text-white rounded-xl shadow-sm h-11 px-4 flex items-center gap-2 transition-all duration-200"
+          >
+            <div className="relative">
+              <Inbox className="size-4" />
+              {activeRunsCount > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                </span>
+              )}
+            </div>
+            <span className="text-xs font-semibold">
+              {isInboxOpen ? 'Hide Inbox' : 'Runs Inbox'}
+            </span>
+          </Button>
+        </div>
 
-          <div className="px-5 pb-5 pt-2">
-            <div className="flex flex-col gap-4">
-              
-              {/* Controls Toggle Row */}
-              <div className="flex flex-wrap items-center gap-3">
+        {/* Creator Form */}
+        <div className="w-full max-w-2xl flex flex-col items-center z-10">
+          <h1 className="text-4xl font-medium tracking-tight text-center mb-8 text-gray-900 dark:text-white select-none">
+            Create an Automated Task
+          </h1>
+          
+          {/* Task Creator Form (White Card) */}
+          <div className="w-full bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-3xl shadow-sm overflow-hidden flex flex-col transition-shadow">
+            <Textarea
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="Describe the task you want the assistant to perform automatically..."
+              className="min-h-[140px] border-none focus-visible:ring-0 resize-none bg-transparent px-6 pt-6 text-base placeholder:text-gray-400 dark:placeholder:text-zinc-500 text-gray-900 dark:text-white"
+            />
+
+            <div className="px-5 pb-5 pt-2">
+              <div className="flex flex-col gap-4">
                 
-                {/* Task Type Switcher */}
-                <div className="flex bg-gray-100 dark:bg-zinc-950 p-1 rounded-xl border border-black/5 dark:border-zinc-800/80">
-                  <button
-                    type="button"
-                    onClick={() => setTaskType('one-time')}
-                    className={cn(
-                      'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5',
-                      taskType === 'one-time'
-                        ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
-                        : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                    )}
-                  >
-                    <Clock className="size-3.5" />
-                    One-time
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setTaskType('recurring')}
-                    className={cn(
-                      'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5',
-                      taskType === 'recurring'
-                        ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
-                        : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                    )}
-                  >
-                    <Repeat className="size-3.5" />
-                    Recurring
-                  </button>
+                {/* Controls Toggle Row */}
+                <div className="flex flex-wrap items-center gap-3">
+                  
+                  {/* Task Type Switcher */}
+                  <div className="flex bg-gray-100 dark:bg-zinc-950 p-1 rounded-xl border border-black/5 dark:border-zinc-800/80">
+                    <button
+                      type="button"
+                      onClick={() => setTaskType('one-time')}
+                      className={cn(
+                        'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5',
+                        taskType === 'one-time'
+                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
+                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                      )}
+                    >
+                      <Clock className="size-3.5" />
+                      One-time
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setTaskType('recurring')}
+                      className={cn(
+                        'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5',
+                        taskType === 'recurring'
+                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
+                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                      )}
+                    >
+                      <Repeat className="size-3.5" />
+                      Recurring
+                    </button>
+                  </div>
+
+                  {/* Trigger Type Switcher */}
+                  <div className="flex bg-gray-100 dark:bg-zinc-950 p-1 rounded-xl border border-black/5 dark:border-zinc-800/80">
+                    <button
+                      type="button"
+                      onClick={() => setTriggerType('scheduled')}
+                      className={cn(
+                        'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5',
+                        triggerType === 'scheduled'
+                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
+                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                      )}
+                    >
+                      <CalendarClock className="size-3.5" />
+                      Scheduled
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setTriggerType('event')}
+                      className={cn(
+                        'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5',
+                        triggerType === 'event'
+                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
+                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                      )}
+                    >
+                      <Zap className="size-3.5" />
+                      Event
+                    </button>
+                  </div>
+
                 </div>
 
-                {/* Trigger Type Switcher */}
-                <div className="flex bg-gray-100 dark:bg-zinc-950 p-1 rounded-xl border border-black/5 dark:border-zinc-800/80">
-                  <button
-                    type="button"
-                    onClick={() => setTriggerType('scheduled')}
-                    className={cn(
-                      'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5',
-                      triggerType === 'scheduled'
-                        ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
-                        : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                {/* Input Row */}
+                <div className="flex items-center gap-3">
+                  <div className="flex-1">
+                    {triggerType === 'scheduled' ? (
+                      <input
+                        type="text"
+                        value={scheduledTime}
+                        onChange={(e) => setScheduledTime(e.target.value)}
+                        placeholder={taskType === 'recurring' ? 'Cron expression (e.g. Every Monday at 9AM)' : 'Execution time (e.g. Tomorrow 3PM)'}
+                        className="w-full bg-gray-50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        value={eventTrigger}
+                        onChange={(e) => setEventTrigger(e.target.value)}
+                        placeholder="Trigger event (e.g. When a new email arrives from @client.com)"
+                        className="w-full bg-gray-50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                      />
                     )}
+                  </div>
+                  
+                  {/* Submit Button */}
+                  <Button 
+                    onClick={handleCreateTask}
+                    disabled={!prompt.trim()}
+                    className="bg-black hover:bg-black/90 text-white rounded-xl h-[42px] w-[42px] p-0 flex items-center justify-center transition-transform active:scale-95 disabled:opacity-50 disabled:active:scale-100"
                   >
-                    <CalendarClock className="size-3.5" />
-                    Scheduled
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setTriggerType('event')}
-                    className={cn(
-                      'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5',
-                      triggerType === 'event'
-                        ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
-                        : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                    )}
-                  >
-                    <Zap className="size-3.5" />
-                    Event
-                  </button>
+                    <ArrowUp className="size-5" />
+                  </Button>
                 </div>
 
               </div>
-
-              {/* Input Row */}
-              <div className="flex items-center gap-3">
-                <div className="flex-1">
-                  {triggerType === 'scheduled' ? (
-                    <input
-                      type="text"
-                      value={scheduledTime}
-                      onChange={(e) => setScheduledTime(e.target.value)}
-                      placeholder={taskType === 'recurring' ? 'Cron expression (e.g. Every Monday at 9AM)' : 'Execution time (e.g. Tomorrow 3PM)'}
-                      className="w-full bg-gray-50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                    />
-                  ) : (
-                    <input
-                      type="text"
-                      value={eventTrigger}
-                      onChange={(e) => setEventTrigger(e.target.value)}
-                      placeholder="Trigger event (e.g. When a new email arrives from @client.com)"
-                      className="w-full bg-gray-50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                    />
-                  )}
-                </div>
-                
-                {/* Submit Button */}
-                <Button 
-                  onClick={handleCreateTask}
-                  disabled={!prompt.trim()}
-                  className="bg-black hover:bg-black/90 text-white rounded-xl h-[42px] w-[42px] p-0 flex items-center justify-center transition-transform active:scale-95 disabled:opacity-50 disabled:active:scale-100"
-                >
-                  <ArrowUp className="size-5" />
-                </Button>
-              </div>
-
             </div>
           </div>
         </div>
       </div>
 
-      {/* Slide-over Inbox Panel */}
-      <TaskInboxPanel
-        isOpen={isInboxOpen}
-        onOpenChange={setIsInboxOpen}
-        runs={runs}
-        onViewLogs={handleViewLogs}
-        onClearRuns={handleClearRuns}
-      />
+      {/* Persistent Collapsible Right Side Runs Inbox */}
+      {isInboxOpen && (
+        <TaskInboxPanel
+          runs={runs}
+          onViewLogs={handleViewLogs}
+          onClearRuns={handleClearRuns}
+          onClose={() => setIsInboxOpen(false)}
+        />
+      )}
 
       {/* Terminal logs Modal */}
       <TaskHistoryLogs
