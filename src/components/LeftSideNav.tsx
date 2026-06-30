@@ -221,6 +221,29 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const [logoHovered, setLogoHovered] = useState(false);
   const [botToDelete, setBotToDelete] = useState<string | null>(null);
 
+  const [tasks, setTasks] = useState<any[]>([]);
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const savedTasks = localStorage.getItem('alti_automations');
+      if (savedTasks) {
+        setTasks(JSON.parse(savedTasks));
+      } else {
+        setTasks([]);
+      }
+    };
+
+    handleStorageChange();
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('alti_automations_updated', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('alti_automations_updated', handleStorageChange);
+    };
+  }, [pathname]);
+
   const isAdminMode = pathname.startsWith('/admin');
   const isManagerSection = pathname.startsWith('/admin/data') || 
                            pathname.startsWith('/admin/instructions') || 
@@ -380,6 +403,15 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
   const getPlusButtonProps = () => {
     switch (activeTab) {
+      case 'tasks':
+        return {
+          visible: true,
+          tooltip: 'New Task',
+          onClick: () => {
+            router.push('/tasks');
+            window.dispatchEvent(new Event('alti_new_task_click'));
+          },
+        };
       case 'search':
         return {
           visible: true,
@@ -709,6 +741,35 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               ).length === 0 && (
                 <div className="py-4 text-center text-xs text-gray-500">
                   No workspaces found.
+                </div>
+              )}
+            </div>
+          ) : activeTab === 'tasks' ? (
+            <div className="space-y-1.5 py-1 pb-4 mt-2 animate-in fade-in duration-200 px-3">
+              {tasks.filter(task => 
+                (task.prompt || '').toLowerCase().includes(searchQuery.toLowerCase())
+              ).map((task) => (
+                <button
+                  key={task.id}
+                  onClick={() => {
+                    router.push('/tasks');
+                  }}
+                  className="w-full flex flex-col gap-1 px-3 py-2 text-xs font-medium rounded-lg text-gray-700 hover:bg-black/5 hover:text-black dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left border border-transparent hover:border-black/5 dark:hover:border-white/5 bg-white dark:bg-zinc-900 shadow-xs mb-1.5"
+                >
+                  <p className="font-semibold text-gray-900 dark:text-white line-clamp-1 leading-snug">
+                    {task.prompt}
+                  </p>
+                  <div className="flex items-center justify-between w-full text-[10px] text-gray-400 dark:text-zinc-500 font-medium">
+                    <span className="capitalize">{task.taskType}</span>
+                    <span>{task.triggerType === 'scheduled' ? task.schedule : task.event}</span>
+                  </div>
+                </button>
+              ))}
+              {tasks.filter(task => 
+                (task.prompt || '').toLowerCase().includes(searchQuery.toLowerCase())
+              ).length === 0 && (
+                <div className="py-8 text-center text-xs text-gray-400 dark:text-zinc-500 italic">
+                  No automated tasks found.
                 </div>
               )}
             </div>

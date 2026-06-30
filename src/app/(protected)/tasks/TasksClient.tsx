@@ -3,24 +3,17 @@
 import React, { useState, useEffect } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
 import { 
   Clock, 
   Zap, 
   ArrowUp, 
   Repeat, 
   CalendarClock, 
-  Play, 
-  Trash2, 
-  Inbox,
-  Sparkles,
-  LayoutGrid,
-  Bell
+  Inbox
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
-import TaskPresets from './_components/TaskPresets';
 import TaskInboxPanel, { TaskRun } from './_components/TaskInboxPanel';
 import TaskHistoryLogs from './_components/TaskHistoryLogs';
 
@@ -59,34 +52,7 @@ export default function TasksClient() {
 
     if (savedTasks) {
       setTasks(JSON.parse(savedTasks));
-    } else {
-      // Default tasks
-      const defaultTasks: AutomationTask[] = [
-        {
-          id: 'task-1',
-          prompt: 'Audit and summarize GCP cost reports from Vertex AI and compile an automated markdown daily usage summary.',
-          taskType: 'recurring',
-          triggerType: 'scheduled',
-          schedule: 'Every day at 9 AM',
-          event: '',
-          active: true,
-          createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-        },
-        {
-          id: 'task-2',
-          prompt: 'Summarize key questions in the incoming client email, draft a professional response draft matching our brand guidelines, and save it in drafts.',
-          taskType: 'recurring',
-          triggerType: 'event',
-          schedule: '',
-          event: 'When a new email arrives from @client.com',
-          active: true,
-          createdAt: new Date(Date.now() - 86400000).toISOString(),
-        }
-      ];
-      setTasks(defaultTasks);
-      localStorage.setItem('alti_automations', JSON.stringify(defaultTasks));
     }
-
     if (savedRuns) {
       setRuns(JSON.parse(savedRuns));
     } else {
@@ -114,9 +80,25 @@ export default function TasksClient() {
     }
   }, []);
 
+  // Listen to new task trigger from sidebar
+  useEffect(() => {
+    const handleNewTaskClick = () => {
+      setPrompt('');
+      setScheduledTime('');
+      setEventTrigger('');
+      toast.info('Form cleared for a new task!');
+    };
+
+    window.addEventListener('alti_new_task_click', handleNewTaskClick);
+    return () => {
+      window.removeEventListener('alti_new_task_click', handleNewTaskClick);
+    };
+  }, []);
+
   const saveTasks = (newTasks: AutomationTask[]) => {
     setTasks(newTasks);
     localStorage.setItem('alti_automations', JSON.stringify(newTasks));
+    window.dispatchEvent(new Event('alti_automations_updated'));
   };
 
   const saveRuns = (newRuns: TaskRun[]) => {
@@ -146,52 +128,11 @@ export default function TasksClient() {
     toast.success('Task created successfully!', {
       description: `Your ${taskType} task will be triggered by ${triggerType}.`
     });
-    
-    setPrompt('');
-    setScheduledTime('');
-    setEventTrigger('');
-  };
 
-  const handleSelectPreset = (preset: {
-    prompt: string;
-    taskType: 'one-time' | 'recurring';
-    triggerType: 'scheduled' | 'event';
-    schedule: string;
-    event: string;
-  }) => {
-    setPrompt(preset.prompt);
-    setTaskType(preset.taskType);
-    setTriggerType(preset.triggerType);
-    if (preset.triggerType === 'scheduled') {
-      setScheduledTime(preset.schedule);
-      setEventTrigger('');
-    } else {
-      setEventTrigger(preset.event);
-      setScheduledTime('');
-    }
-    toast.success('Template loaded successfully!');
-  };
-
-  const toggleTaskActive = (id: string) => {
-    const updated = tasks.map(t => t.id === id ? { ...t, active: !t.active } : t);
-    saveTasks(updated);
-    const task = tasks.find(t => t.id === id);
-    if (task) {
-      toast.success(task.active ? 'Task paused' : 'Task resumed');
-    }
-  };
-
-  const deleteTask = (id: string) => {
-    const updated = tasks.filter(t => t.id !== id);
-    saveTasks(updated);
-    toast.success('Task deleted successfully');
-  };
-
-  const handleRunNow = (task: AutomationTask) => {
+    // Automatically trigger the run simulation
     const runId = `run-${Date.now()}`;
-    const taskTitle = task.prompt.length > 30 ? task.prompt.slice(0, 30) + '...' : task.prompt;
+    const taskTitle = newTask.prompt.length > 35 ? newTask.prompt.slice(0, 35) + '...' : newTask.prompt;
     
-    // Create new running record
     const newRun: TaskRun = {
       id: runId,
       taskName: taskTitle,
@@ -203,10 +144,9 @@ export default function TasksClient() {
     saveRuns([newRun, ...runs]);
     setIsInboxOpen(true); // Automatically open the inbox side-panel
 
-    // Simulate completion after 3 seconds
     setTimeout(() => {
       let finalSummary = 'Successfully executed automated agent run. Output: Completed all actions specified in the prompt.';
-      const p = task.prompt.toLowerCase();
+      const p = newTask.prompt.toLowerCase();
       if (p.includes('gcp') || p.includes('cost') || p.includes('report')) {
         finalSummary = 'Generated daily GCP usage and cost optimization report. Compiled 4 recommendation metrics, reducing computed Vertex AI endpoint waste by 12%.';
       } else if (p.includes('email') || p.includes('reply') || p.includes('responder')) {
@@ -230,6 +170,10 @@ export default function TasksClient() {
         description: `Task: ${taskTitle}`
       });
     }, 3000);
+    
+    setPrompt('');
+    setScheduledTime('');
+    setEventTrigger('');
   };
 
   const handleViewLogs = (taskName: string) => {
@@ -245,19 +189,10 @@ export default function TasksClient() {
   const activeRunsCount = runs.filter(r => r.status === 'running').length;
 
   return (
-    <div className="flex h-full flex-col bg-[#F5F5F7] dark:bg-zinc-950 overflow-y-auto p-6 md:p-8">
-      {/* Top Header */}
-      <div className="w-full max-w-5xl mx-auto flex items-center justify-between mb-8 select-none">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-medium tracking-tight text-gray-900 dark:text-white">
-            Automation Tasks
-          </h1>
-          <p className="text-xs text-gray-500 dark:text-zinc-400">
-            Design and schedule background agent loops to run on intervals or events.
-          </p>
-        </div>
-
-        {/* Runs Inbox trigger */}
+    <div className="flex h-full w-full flex-col bg-[#F5F5F7] dark:bg-zinc-950 items-center justify-center p-6 md:p-8 relative overflow-hidden">
+      
+      {/* Top Right Runs Inbox trigger */}
+      <div className="absolute top-6 right-6 z-20 select-none">
         <Button
           onClick={() => setIsInboxOpen(true)}
           className="bg-white hover:bg-gray-50 dark:bg-zinc-900 dark:hover:bg-zinc-800/80 border border-black/5 dark:border-white/5 text-gray-800 dark:text-white rounded-xl shadow-sm h-11 px-4 flex items-center gap-2 transition-all duration-200"
@@ -280,13 +215,14 @@ export default function TasksClient() {
         </Button>
       </div>
 
-      <div className="w-full max-w-5xl mx-auto grid grid-cols-1 gap-8">
+      {/* Main Centered Container */}
+      <div className="w-full max-w-3xl flex flex-col items-center z-10">
+        <h1 className="text-4xl font-medium tracking-tight text-center mb-8 text-gray-900 dark:text-white select-none">
+          Create an Automated Task
+        </h1>
         
-        {/* Quick Templates presets */}
-        <TaskPresets onSelectPreset={handleSelectPreset} />
-
         {/* Task Creator Form (White Card) */}
-        <div className="bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-3xl shadow-sm overflow-hidden flex flex-col transition-shadow">
+        <div className="w-full bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-3xl shadow-sm overflow-hidden flex flex-col transition-shadow">
           <Textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -397,98 +333,6 @@ export default function TasksClient() {
             </div>
           </div>
         </div>
-
-        {/* Active Automations List */}
-        <div className="w-full select-none">
-          <h2 className="text-sm font-semibold text-gray-500 dark:text-zinc-400 uppercase tracking-wider mb-3">
-            Active Automations
-          </h2>
-
-          <div className="bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-3xl overflow-hidden shadow-sm">
-            {tasks.length > 0 ? (
-              <div className="divide-y divide-black/5 dark:divide-zinc-800/80">
-                {tasks.map((task) => (
-                  <div key={task.id} className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-50/50 dark:hover:bg-zinc-800/20 transition-colors">
-                    
-                    <div className="space-y-1.5 flex-1 max-w-xl">
-                      <p className="text-sm font-medium text-gray-800 dark:text-zinc-200 leading-relaxed">
-                        {task.prompt}
-                      </p>
-                      
-                      <div className="flex flex-wrap items-center gap-3">
-                        <span className="bg-gray-100 dark:bg-zinc-800 text-[10px] font-bold px-2 py-0.5 rounded text-gray-500 dark:text-zinc-400 uppercase">
-                          {task.taskType}
-                        </span>
-                        
-                        <span className="text-xs text-gray-400 dark:text-zinc-500 flex items-center gap-1">
-                          {task.triggerType === 'scheduled' ? (
-                            <>
-                              <CalendarClock className="size-3" />
-                              Runs: {task.schedule || 'Scheduled'}
-                            </>
-                          ) : (
-                            <>
-                              <Zap className="size-3" />
-                              Trigger: {task.event || 'On Event'}
-                            </>
-                          )}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                      {/* Active Toggle Switch */}
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-400 dark:text-zinc-500 font-medium">
-                          {task.active ? 'Active' : 'Paused'}
-                        </span>
-                        <Switch 
-                          checked={task.active} 
-                          onCheckedChange={() => toggleTaskActive(task.id)} 
-                        />
-                      </div>
-
-                      {/* Action buttons */}
-                      <div className="flex items-center gap-1.5 border-l border-black/5 dark:border-zinc-800/80 pl-4">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          disabled={!task.active}
-                          onClick={() => handleRunNow(task)}
-                          className="h-9 px-3 rounded-xl text-xs text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-indigo-950/20 flex items-center gap-1.5 font-semibold"
-                        >
-                          <Play className="size-3.5 fill-indigo-600 dark:fill-indigo-400" />
-                          Run Now
-                        </Button>
-
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => deleteTask(task.id)}
-                          className="h-9 w-9 p-0 rounded-xl text-gray-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20"
-                        >
-                          <Trash2 className="size-4" />
-                        </Button>
-                      </div>
-                    </div>
-
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center text-center p-12">
-                <LayoutGrid className="size-10 text-gray-300 dark:text-zinc-700 mb-3 animate-pulse" />
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                  No automated tasks
-                </h3>
-                <p className="text-xs text-gray-500 dark:text-zinc-400 max-w-[280px] leading-relaxed">
-                  Design a custom prompt or load a template preset above to schedule background automation pipelines.
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-
       </div>
 
       {/* Slide-over Inbox Panel */}
