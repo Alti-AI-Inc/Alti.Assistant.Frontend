@@ -37,9 +37,9 @@ export default function TasksClient() {
   };
 
   return (
-    <div className="flex h-full flex-col bg-white dark:bg-zinc-950 items-center justify-center p-4">
+    <div className="flex h-full flex-col bg-[#F5F5F7] dark:bg-zinc-950 items-center justify-center p-4">
       <div className="w-full max-w-3xl">
-        <h1 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">
+        <h1 className="text-4xl font-medium tracking-tight text-center mb-8 text-gray-900 dark:text-white">
           Create an Automated Task
         </h1>
         
