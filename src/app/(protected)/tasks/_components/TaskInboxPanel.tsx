@@ -66,9 +66,9 @@ export default function TaskInboxPanel({
               <PanelRightClose className="size-5 text-gray-600 dark:text-zinc-400" />
             </button>
 
-            {/* Title "Tasks" on top right */}
+            {/* Title "Inbox" on top right */}
             <span className="text-[11px] font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider select-none">
-              Tasks
+              Inbox
             </span>
           </>
         ) : (
