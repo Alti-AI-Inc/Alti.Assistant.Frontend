@@ -94,17 +94,17 @@ export default function TaskInboxPanel({
         )}
       </div>
 
-      {/* Search Bar - Only visible when open */}
+      {/* Search Bar - Matches Left Sidebar style exactly with solid bottom line */}
       {isOpen && (
-        <div className="px-5 pt-4 pb-1 shrink-0 bg-white dark:bg-zinc-900">
-          <div className="relative">
-            <Search className="absolute left-3 top-2.5 size-4 text-gray-400 dark:text-zinc-500" />
+        <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-all duration-300 flex-none">
+          <div className="flex h-8 w-full items-center gap-2 rounded-lg border border-black/10 dark:border-zinc-800/80 bg-[#F5F5F7] dark:bg-zinc-800/50 px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 dark:focus-within:ring-white/10">
+            <Search className="size-3.5 flex-none text-zinc-500 dark:text-zinc-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search runs..."
-              className="w-full bg-gray-50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl pl-9 pr-4 py-2 text-xs text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+              placeholder="Search..."
+              className="w-full bg-transparent text-xs text-black dark:text-zinc-100 outline-none placeholder:text-zinc-500 dark:placeholder:text-zinc-400"
             />
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function TaskInboxPanel({
         {filteredRuns.map((run) => (
           <div 
             key={run.id}
-            className="bg-gray-50/50 dark:bg-zinc-800/40 rounded-xl p-3.5 space-y-2.5 relative overflow-hidden"
+            className="bg-[#F5F5F7] dark:bg-zinc-950/60 rounded-xl p-3.5 space-y-2.5 relative overflow-hidden"
           >
             {run.status === 'running' && (
               <div className="absolute top-0 left-0 right-0 h-0.5 bg-indigo-500/20 overflow-hidden">
@@ -186,7 +186,7 @@ export default function TaskInboxPanel({
         ))}
 
         {filteredRuns.length === 0 && (
-          <div className="flex flex-col items-center justify-center text-center p-8 border border-dashed border-black/10 dark:border-white/10 rounded-2xl min-h-[200px] bg-gray-50 dark:bg-zinc-800/20">
+          <div className="flex flex-col items-center justify-center text-center p-8 border border-dashed border-black/10 dark:border-white/10 rounded-2xl min-h-[200px] bg-[#F5F5F7] dark:bg-zinc-800/20">
             <span className="text-[11px] font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider select-none mb-1">
               {searchQuery ? 'No matches found' : 'No runs recorded'}
             </span>
