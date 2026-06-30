@@ -1,31 +1,147 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Clock, Zap, ArrowUp, Repeat, CalendarClock, Globe, LayoutGrid } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { 
+  Clock, 
+  Zap, 
+  ArrowUp, 
+  Repeat, 
+  CalendarClock, 
+  Play, 
+  Trash2, 
+  Inbox,
+  Sparkles,
+  LayoutGrid,
+  Bell
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import { useRouter, usePathname } from 'next/navigation';
+
+import TaskPresets from './_components/TaskPresets';
+import TaskInboxPanel, { TaskRun } from './_components/TaskInboxPanel';
+import TaskHistoryLogs from './_components/TaskHistoryLogs';
 
 type TaskType = 'one-time' | 'recurring';
 type TriggerType = 'scheduled' | 'event';
 
+interface AutomationTask {
+  id: string;
+  prompt: string;
+  taskType: TaskType;
+  triggerType: TriggerType;
+  schedule: string;
+  event: string;
+  active: boolean;
+  createdAt: string;
+}
+
 export default function TasksClient() {
-  const router = useRouter();
-  const pathname = usePathname();
   const [prompt, setPrompt] = useState('');
   const [taskType, setTaskType] = useState<TaskType>('one-time');
   const [triggerType, setTriggerType] = useState<TriggerType>('scheduled');
-  
   const [scheduledTime, setScheduledTime] = useState('');
   const [eventTrigger, setEventTrigger] = useState('');
+
+  const [tasks, setTasks] = useState<AutomationTask[]>([]);
+  const [runs, setRuns] = useState<TaskRun[]>([]);
+  
+  const [isInboxOpen, setIsInboxOpen] = useState(false);
+  const [isLogsOpen, setIsLogsOpen] = useState(false);
+  const [selectedLogTaskName, setSelectedLogTaskName] = useState('');
+
+  // Hydrate states from localStorage on mount
+  useEffect(() => {
+    const savedTasks = localStorage.getItem('alti_automations');
+    const savedRuns = localStorage.getItem('alti_task_runs');
+
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks));
+    } else {
+      // Default tasks
+      const defaultTasks: AutomationTask[] = [
+        {
+          id: 'task-1',
+          prompt: 'Audit and summarize GCP cost reports from Vertex AI and compile an automated markdown daily usage summary.',
+          taskType: 'recurring',
+          triggerType: 'scheduled',
+          schedule: 'Every day at 9 AM',
+          event: '',
+          active: true,
+          createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+        },
+        {
+          id: 'task-2',
+          prompt: 'Summarize key questions in the incoming client email, draft a professional response draft matching our brand guidelines, and save it in drafts.',
+          taskType: 'recurring',
+          triggerType: 'event',
+          schedule: '',
+          event: 'When a new email arrives from @client.com',
+          active: true,
+          createdAt: new Date(Date.now() - 86400000).toISOString(),
+        }
+      ];
+      setTasks(defaultTasks);
+      localStorage.setItem('alti_automations', JSON.stringify(defaultTasks));
+    }
+
+    if (savedRuns) {
+      setRuns(JSON.parse(savedRuns));
+    } else {
+      // Default runs
+      const defaultRuns: TaskRun[] = [
+        {
+          id: 'run-1',
+          taskName: 'Daily Report Summary',
+          timestamp: new Date(Date.now() - 3600000 * 4).toISOString(),
+          status: 'success',
+          duration: 3200,
+          summary: 'Generated daily GCP usage and cost optimization report. Compiled 4 recommendation metrics, reducing computed Vertex AI endpoint waste by 12%.',
+        },
+        {
+          id: 'run-2',
+          taskName: 'Email Auto-Responder',
+          timestamp: new Date(Date.now() - 3600000 * 24).toISOString(),
+          status: 'success',
+          duration: 2800,
+          summary: 'Drafted context-aware auto-response to client query. Summarized action points and saved in Gmail Drafts (ID: d_10f8b3c84).',
+        }
+      ];
+      setRuns(defaultRuns);
+      localStorage.setItem('alti_task_runs', JSON.stringify(defaultRuns));
+    }
+  }, []);
+
+  const saveTasks = (newTasks: AutomationTask[]) => {
+    setTasks(newTasks);
+    localStorage.setItem('alti_automations', JSON.stringify(newTasks));
+  };
+
+  const saveRuns = (newRuns: TaskRun[]) => {
+    setRuns(newRuns);
+    localStorage.setItem('alti_task_runs', JSON.stringify(newRuns));
+  };
 
   const handleCreateTask = () => {
     if (!prompt.trim()) {
       toast.error('Please enter a task prompt.');
       return;
     }
+
+    const newTask: AutomationTask = {
+      id: `task-${Date.now()}`,
+      prompt: prompt.trim(),
+      taskType,
+      triggerType,
+      schedule: triggerType === 'scheduled' ? scheduledTime || 'Every hour' : '',
+      event: triggerType === 'event' ? eventTrigger || 'When trigger matches' : '',
+      active: true,
+      createdAt: new Date().toISOString(),
+    };
+
+    saveTasks([newTask, ...tasks]);
     
     toast.success('Task created successfully!', {
       description: `Your ${taskType} task will be triggered by ${triggerType}.`
@@ -36,39 +152,163 @@ export default function TasksClient() {
     setEventTrigger('');
   };
 
-  return (
-    <div className="flex h-full flex-col bg-[#F5F5F7] dark:bg-zinc-950 items-center justify-center p-4">
-      <div className="w-full max-w-3xl">
-        <h1 className="text-4xl font-medium tracking-tight text-center mb-8 text-gray-900 dark:text-white">
-          Create an Automated Task
-        </h1>
-        
+  const handleSelectPreset = (preset: {
+    prompt: string;
+    taskType: 'one-time' | 'recurring';
+    triggerType: 'scheduled' | 'event';
+    schedule: string;
+    event: string;
+  }) => {
+    setPrompt(preset.prompt);
+    setTaskType(preset.taskType);
+    setTriggerType(preset.triggerType);
+    if (preset.triggerType === 'scheduled') {
+      setScheduledTime(preset.schedule);
+      setEventTrigger('');
+    } else {
+      setEventTrigger(preset.event);
+      setScheduledTime('');
+    }
+    toast.success('Template loaded successfully!');
+  };
 
-        <div className="bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-3xl shadow-sm overflow-hidden flex flex-col focus-within:ring-2 focus-within:ring-indigo-500/50 transition-shadow">
-          
+  const toggleTaskActive = (id: string) => {
+    const updated = tasks.map(t => t.id === id ? { ...t, active: !t.active } : t);
+    saveTasks(updated);
+    const task = tasks.find(t => t.id === id);
+    if (task) {
+      toast.success(task.active ? 'Task paused' : 'Task resumed');
+    }
+  };
+
+  const deleteTask = (id: string) => {
+    const updated = tasks.filter(t => t.id !== id);
+    saveTasks(updated);
+    toast.success('Task deleted successfully');
+  };
+
+  const handleRunNow = (task: AutomationTask) => {
+    const runId = `run-${Date.now()}`;
+    const taskTitle = task.prompt.length > 30 ? task.prompt.slice(0, 30) + '...' : task.prompt;
+    
+    // Create new running record
+    const newRun: TaskRun = {
+      id: runId,
+      taskName: taskTitle,
+      timestamp: new Date().toISOString(),
+      status: 'running',
+      summary: 'Task is executing in background environment...',
+    };
+
+    saveRuns([newRun, ...runs]);
+    setIsInboxOpen(true); // Automatically open the inbox side-panel
+
+    // Simulate completion after 3 seconds
+    setTimeout(() => {
+      let finalSummary = 'Successfully executed automated agent run. Output: Completed all actions specified in the prompt.';
+      const p = task.prompt.toLowerCase();
+      if (p.includes('gcp') || p.includes('cost') || p.includes('report')) {
+        finalSummary = 'Generated daily GCP usage and cost optimization report. Compiled 4 recommendation metrics, reducing computed Vertex AI endpoint waste by 12%.';
+      } else if (p.includes('email') || p.includes('reply') || p.includes('responder')) {
+        finalSummary = 'Drafted context-aware auto-response to client query. Summarized action points and saved in Gmail Drafts (ID: d_10f8b3c84).';
+      } else if (p.includes('storage') || p.includes('database') || p.includes('audit')) {
+        finalSummary = 'Completed database cleanup run. Purged 1,402 expired session tokens and reclaimed 4.2 GB of temporary storage.';
+      }
+
+      setRuns(prevRuns => {
+        const updated = prevRuns.map(r => r.id === runId ? {
+          ...r,
+          status: 'success' as const,
+          duration: 2000 + Math.floor(Math.random() * 2000),
+          summary: finalSummary,
+        } : r);
+        localStorage.setItem('alti_task_runs', JSON.stringify(updated));
+        return updated;
+      });
+
+      toast.success(`Automation run complete!`, {
+        description: `Task: ${taskTitle}`
+      });
+    }, 3000);
+  };
+
+  const handleViewLogs = (taskName: string) => {
+    setSelectedLogTaskName(taskName);
+    setIsLogsOpen(true);
+  };
+
+  const handleClearRuns = () => {
+    saveRuns([]);
+    toast.success('Run history cleared');
+  };
+
+  const activeRunsCount = runs.filter(r => r.status === 'running').length;
+
+  return (
+    <div className="flex h-full flex-col bg-[#F5F5F7] dark:bg-zinc-950 overflow-y-auto p-6 md:p-8">
+      {/* Top Header */}
+      <div className="w-full max-w-5xl mx-auto flex items-center justify-between mb-8 select-none">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-medium tracking-tight text-gray-900 dark:text-white">
+            Automation Tasks
+          </h1>
+          <p className="text-xs text-gray-500 dark:text-zinc-400">
+            Design and schedule background agent loops to run on intervals or events.
+          </p>
+        </div>
+
+        {/* Runs Inbox trigger */}
+        <Button
+          onClick={() => setIsInboxOpen(true)}
+          className="bg-white hover:bg-gray-50 dark:bg-zinc-900 dark:hover:bg-zinc-800/80 border border-black/5 dark:border-white/5 text-gray-800 dark:text-white rounded-xl shadow-sm h-11 px-4 flex items-center gap-2 transition-all duration-200"
+        >
+          <div className="relative">
+            <Inbox className="size-4" />
+            {activeRunsCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+              </span>
+            )}
+          </div>
+          <span className="text-xs font-semibold">Runs Inbox</span>
+          {runs.length > 0 && (
+            <span className="bg-gray-100 dark:bg-zinc-800 text-[10px] px-1.5 py-0.5 rounded-md font-bold text-gray-500 dark:text-zinc-400">
+              {runs.length}
+            </span>
+          )}
+        </Button>
+      </div>
+
+      <div className="w-full max-w-5xl mx-auto grid grid-cols-1 gap-8">
+        
+        {/* Quick Templates presets */}
+        <TaskPresets onSelectPreset={handleSelectPreset} />
+
+        {/* Task Creator Form (White Card) */}
+        <div className="bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-3xl shadow-sm overflow-hidden flex flex-col focus-within:ring-2 focus-within:ring-indigo-500/50 transition-shadow">
           <Textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Describe the task you want the assistant to perform automatically..."
-            className="min-h-[160px] border-none focus-visible:ring-0 resize-none bg-transparent px-6 pt-6 text-lg placeholder:text-gray-400 dark:placeholder:text-zinc-500"
+            className="min-h-[140px] border-none focus-visible:ring-0 resize-none bg-transparent px-6 pt-6 text-base placeholder:text-gray-400 dark:placeholder:text-zinc-500 text-gray-900 dark:text-white"
           />
 
-          <div className="px-4 pb-4 pt-2">
-            {/* Options Area */}
-            <div className="flex flex-col gap-3">
+          <div className="px-5 pb-5 pt-2">
+            <div className="flex flex-col gap-4">
               
-              {/* Settings Row */}
-              <div className="flex flex-wrap items-center gap-2">
+              {/* Controls Toggle Row */}
+              <div className="flex flex-wrap items-center gap-3">
                 
-                {/* Task Type Toggle */}
-                <div className="flex bg-gray-100 dark:bg-zinc-800 p-1 rounded-xl">
+                {/* Task Type Switcher */}
+                <div className="flex bg-gray-100 dark:bg-zinc-950 p-1 rounded-xl border border-black/5 dark:border-zinc-800/80">
                   <button
                     type="button"
                     onClick={() => setTaskType('one-time')}
                     className={cn(
-                      'px-3 py-1.5 text-xs font-medium rounded-lg transition-all flex items-center gap-1.5',
+                      'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5',
                       taskType === 'one-time'
-                        ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
+                        ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
                         : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                     )}
                   >
@@ -79,9 +319,9 @@ export default function TasksClient() {
                     type="button"
                     onClick={() => setTaskType('recurring')}
                     className={cn(
-                      'px-3 py-1.5 text-xs font-medium rounded-lg transition-all flex items-center gap-1.5',
+                      'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5',
                       taskType === 'recurring'
-                        ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
+                        ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
                         : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                     )}
                   >
@@ -90,15 +330,15 @@ export default function TasksClient() {
                   </button>
                 </div>
 
-                {/* Trigger Type Toggle */}
-                <div className="flex bg-gray-100 dark:bg-zinc-800 p-1 rounded-xl">
+                {/* Trigger Type Switcher */}
+                <div className="flex bg-gray-100 dark:bg-zinc-950 p-1 rounded-xl border border-black/5 dark:border-zinc-800/80">
                   <button
                     type="button"
                     onClick={() => setTriggerType('scheduled')}
                     className={cn(
-                      'px-3 py-1.5 text-xs font-medium rounded-lg transition-all flex items-center gap-1.5',
+                      'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5',
                       triggerType === 'scheduled'
-                        ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
+                        ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
                         : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                     )}
                   >
@@ -109,9 +349,9 @@ export default function TasksClient() {
                     type="button"
                     onClick={() => setTriggerType('event')}
                     className={cn(
-                      'px-3 py-1.5 text-xs font-medium rounded-lg transition-all flex items-center gap-1.5',
+                      'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5',
                       triggerType === 'event'
-                        ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-sm'
+                        ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
                         : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                     )}
                   >
@@ -122,8 +362,8 @@ export default function TasksClient() {
 
               </div>
 
-              {/* Dynamic Input Row */}
-              <div className="flex items-center gap-2">
+              {/* Input Row */}
+              <div className="flex items-center gap-3">
                 <div className="flex-1">
                   {triggerType === 'scheduled' ? (
                     <input
@@ -131,7 +371,7 @@ export default function TasksClient() {
                       value={scheduledTime}
                       onChange={(e) => setScheduledTime(e.target.value)}
                       placeholder={taskType === 'recurring' ? 'Cron expression (e.g. Every Monday at 9AM)' : 'Execution time (e.g. Tomorrow 3PM)'}
-                      className="w-full bg-gray-50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500"
+                      className="w-full bg-gray-50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                     />
                   ) : (
                     <input
@@ -139,7 +379,7 @@ export default function TasksClient() {
                       value={eventTrigger}
                       onChange={(e) => setEventTrigger(e.target.value)}
                       placeholder="Trigger event (e.g. When a new email arrives from @client.com)"
-                      className="w-full bg-gray-50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500"
+                      className="w-full bg-gray-50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                     />
                   )}
                 </div>
@@ -157,7 +397,115 @@ export default function TasksClient() {
             </div>
           </div>
         </div>
+
+        {/* Active Automations List */}
+        <div className="w-full select-none">
+          <h2 className="text-sm font-semibold text-gray-500 dark:text-zinc-400 uppercase tracking-wider mb-3">
+            Active Automations
+          </h2>
+
+          <div className="bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-3xl overflow-hidden shadow-sm">
+            {tasks.length > 0 ? (
+              <div className="divide-y divide-black/5 dark:divide-zinc-800/80">
+                {tasks.map((task) => (
+                  <div key={task.id} className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-gray-50/50 dark:hover:bg-zinc-800/20 transition-colors">
+                    
+                    <div className="space-y-1.5 flex-1 max-w-xl">
+                      <p className="text-sm font-medium text-gray-800 dark:text-zinc-200 leading-relaxed">
+                        {task.prompt}
+                      </p>
+                      
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className="bg-gray-100 dark:bg-zinc-800 text-[10px] font-bold px-2 py-0.5 rounded text-gray-500 dark:text-zinc-400 uppercase">
+                          {task.taskType}
+                        </span>
+                        
+                        <span className="text-xs text-gray-400 dark:text-zinc-500 flex items-center gap-1">
+                          {task.triggerType === 'scheduled' ? (
+                            <>
+                              <CalendarClock className="size-3" />
+                              Runs: {task.schedule || 'Scheduled'}
+                            </>
+                          ) : (
+                            <>
+                              <Zap className="size-3" />
+                              Trigger: {task.event || 'On Event'}
+                            </>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                      {/* Active Toggle Switch */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-400 dark:text-zinc-500 font-medium">
+                          {task.active ? 'Active' : 'Paused'}
+                        </span>
+                        <Switch 
+                          checked={task.active} 
+                          onCheckedChange={() => toggleTaskActive(task.id)} 
+                        />
+                      </div>
+
+                      {/* Action buttons */}
+                      <div className="flex items-center gap-1.5 border-l border-black/5 dark:border-zinc-800/80 pl-4">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          disabled={!task.active}
+                          onClick={() => handleRunNow(task)}
+                          className="h-9 px-3 rounded-xl text-xs text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-indigo-950/20 flex items-center gap-1.5 font-semibold"
+                        >
+                          <Play className="size-3.5 fill-indigo-600 dark:fill-indigo-400" />
+                          Run Now
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => deleteTask(task.id)}
+                          className="h-9 w-9 p-0 rounded-xl text-gray-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20"
+                        >
+                          <Trash2 className="size-4" />
+                        </Button>
+                      </div>
+                    </div>
+
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center text-center p-12">
+                <LayoutGrid className="size-10 text-gray-300 dark:text-zinc-700 mb-3 animate-pulse" />
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                  No automated tasks
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-zinc-400 max-w-[280px] leading-relaxed">
+                  Design a custom prompt or load a template preset above to schedule background automation pipelines.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
       </div>
+
+      {/* Slide-over Inbox Panel */}
+      <TaskInboxPanel
+        isOpen={isInboxOpen}
+        onOpenChange={setIsInboxOpen}
+        runs={runs}
+        onViewLogs={handleViewLogs}
+        onClearRuns={handleClearRuns}
+      />
+
+      {/* Terminal logs Modal */}
+      <TaskHistoryLogs
+        isOpen={isLogsOpen}
+        onOpenChange={setIsLogsOpen}
+        taskName={selectedLogTaskName}
+      />
     </div>
   );
 }
