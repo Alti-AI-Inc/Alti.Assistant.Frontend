@@ -552,7 +552,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               onClick={side === 'right' ? toggleRightSidebar : toggleLeftSidebar}
             />
           ) : (
-            <Link href="/" className="flex items-center pt-[2px] ml-1.5">
+            <Link href="/" className="flex items-center pt-[2px]">
               <Image
                 src="/assets/logo-icon.png"
                 alt="logo"
