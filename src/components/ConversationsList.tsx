@@ -249,10 +249,10 @@ export default function ConversationsList({
         return (
           <div
             className={cn(
-              "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal transition-all duration-150 border mb-1.5",
+              "group flex h-9 w-full items-center justify-between rounded-md text-xs font-normal transition-colors duration-150",
               isActive
-                ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs"
-                : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                ? "bg-white/10 text-white font-semibold"
+                : "text-zinc-300 hover:bg-white/5 hover:text-white"
             )}
             key={chat._id}
           >
