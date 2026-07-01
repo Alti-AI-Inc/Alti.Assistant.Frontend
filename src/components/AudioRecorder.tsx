@@ -212,7 +212,7 @@ export default function AudioRecorder({
             />
           </TooltipTrigger>
           <TooltipContent side="bottom">
-            <p>Speech-to-Text</p>
+            <p>Speech to Text</p>
           </TooltipContent>
         </Tooltip>
       ) : (
