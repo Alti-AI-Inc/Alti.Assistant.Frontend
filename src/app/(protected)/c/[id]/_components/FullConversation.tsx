@@ -1054,7 +1054,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   return (
     <div
       className={cn(
-        'flex w-full flex-col',
+        'flex w-full flex-col bg-[#e1e1e1] dark:bg-zinc-950',
         (activeConversation?.messages?.length || isLoadingResponse) &&
           'h-[calc(100vh-70px)] lg:h-screen',
         isLoading && activeConversation?.messages?.length && 'h-[calc(100vh-70px)] lg:h-screen',
