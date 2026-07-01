@@ -714,7 +714,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                           router.push(`/my-chatbots?bot=${bot.id}`);
                         }}
                       >
-                        <Folder className={cn(
+                        <LayoutGrid className={cn(
                           "h-3.5 w-3.5 flex-shrink-0 transition-colors",
                           isSelected ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
                         )} />
