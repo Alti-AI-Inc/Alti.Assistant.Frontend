@@ -232,7 +232,7 @@ export default function ConversationsList({
   }
 
   return (
-    <div className="mt-2 space-y-1 py-1 pb-4">
+    <div className="space-y-1.5">
       {filteredConversations.length === 0 && status === 'success' && (
         <div className="mt-6 flex flex-col items-center gap-1 px-2 text-center">
           <p className="text-xs text-gray-400">
