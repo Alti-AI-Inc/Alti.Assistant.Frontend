@@ -759,7 +759,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 <button
                   key={task.id}
                   onClick={() => {
-                    router.push('/tasks');
+                    router.push(`/tasks?taskId=${task.id}`);
                   }}
                   className="w-full flex flex-col gap-1 px-3 py-2 text-xs font-medium rounded-lg text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left border border-white/[0.04] bg-white/[0.06] shadow-xs mb-1.5"
                 >

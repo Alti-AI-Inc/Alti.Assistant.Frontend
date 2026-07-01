@@ -1,9 +1,10 @@
-// Server component — force-dynamic is correctly honoured here, preventing
-// Next.js from pre-rendering and caching this route at build time.
-export const dynamic = 'force-dynamic';
-
+import { Suspense } from 'react';
 import TasksClient from './TasksClient';
 
 export default function TasksDashboardPage() {
-  return <TasksClient />;
+  return (
+    <Suspense fallback={<div className="flex-1 h-full flex items-center justify-center text-sm text-gray-500">Loading tasks...</div>}>
+      <TasksClient />
+    </Suspense>
+  );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { 
@@ -32,11 +33,15 @@ interface AutomationTask {
 }
 
 export default function TasksClient() {
+  const searchParams = useSearchParams();
+  const taskId = searchParams.get('taskId');
+  
   const [prompt, setPrompt] = useState('');
   const [taskType, setTaskType] = useState<TaskType>('one-time');
   const [triggerType, setTriggerType] = useState<TriggerType>('scheduled');
   const [scheduledTime, setScheduledTime] = useState('');
   const [eventTrigger, setEventTrigger] = useState('');
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
 
   const [tasks, setTasks] = useState<AutomationTask[]>([]);
   const [runs, setRuns] = useState<TaskRun[]>([]);
@@ -123,6 +128,8 @@ export default function TasksClient() {
       setPrompt('');
       setScheduledTime('');
       setEventTrigger('');
+      setEditingTaskId(null);
+      window.history.replaceState(null, '', '/tasks');
       toast.info('Form cleared for a new task!');
     };
 
@@ -131,6 +138,29 @@ export default function TasksClient() {
       window.removeEventListener('alti_new_task_click', handleNewTaskClick);
     };
   }, []);
+
+  // Sync state when taskId parameter changes
+  useEffect(() => {
+    if (!taskId || tasks.length === 0) return;
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+      setPrompt(task.prompt);
+      setTaskType(task.taskType);
+      setTriggerType(task.triggerType);
+      if (task.triggerType === 'scheduled') {
+        setScheduledTime(task.schedule);
+        setEventTrigger('');
+      } else {
+        setEventTrigger(task.event);
+        setScheduledTime('');
+      }
+      setEditingTaskId(task.id);
+      
+      // Auto open logs for this task name
+      const taskTitle = task.prompt.length > 35 ? task.prompt.slice(0, 35) + '...' : task.prompt;
+      handleViewLogs(taskTitle);
+    }
+  }, [taskId, tasks]);
 
   const saveTasks = (newTasks: AutomationTask[]) => {
     setTasks(newTasks);
@@ -146,6 +176,25 @@ export default function TasksClient() {
   const handleCreateTask = () => {
     if (!prompt.trim()) {
       toast.error('Please enter a task prompt.');
+      return;
+    }
+
+    if (editingTaskId) {
+      const updatedTasks = tasks.map(t => t.id === editingTaskId ? {
+        ...t,
+        prompt: prompt.trim(),
+        taskType,
+        triggerType,
+        schedule: triggerType === 'scheduled' ? scheduledTime || 'Every hour' : '',
+        event: triggerType === 'event' ? eventTrigger || 'When trigger matches' : '',
+      } : t);
+      saveTasks(updatedTasks);
+      toast.success('Task updated successfully!');
+      setEditingTaskId(null);
+      setPrompt('');
+      setScheduledTime('');
+      setEventTrigger('');
+      window.history.replaceState(null, '', '/tasks');
       return;
     }
 
@@ -234,7 +283,7 @@ export default function TasksClient() {
         {/* Creator Form */}
         <div className="w-full max-w-2xl flex flex-col items-center z-10">
           <h1 className="text-4xl font-medium tracking-tight text-center mb-8 text-gray-900 dark:text-white select-none">
-            Create an Automated Task
+            {editingTaskId ? 'Edit Automated Task' : 'Create an Automated Task'}
           </h1>
           
           {/* Task Creator Form (White Card) */}
@@ -335,6 +384,23 @@ export default function TasksClient() {
                       />
                     )}
                   </div>
+                  
+                  {editingTaskId && (
+                    <Button 
+                      variant="ghost"
+                      onClick={() => {
+                        setEditingTaskId(null);
+                        setPrompt('');
+                        setScheduledTime('');
+                        setEventTrigger('');
+                        window.history.replaceState(null, '', '/tasks');
+                        toast.info('Edit cancelled');
+                      }}
+                      className="text-xs text-zinc-550 hover:text-gray-900 dark:hover:text-white"
+                    >
+                      Cancel
+                    </Button>
+                  )}
                   
                   <Button 
                     onClick={handleCreateTask}
