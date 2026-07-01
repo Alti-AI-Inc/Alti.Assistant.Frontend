@@ -32,7 +32,7 @@ const SharedConversation = ({ id }: { id: string }) => {
                     <div className="flex items-center justify-end">
                       <div
                         className={cn(
-                          'w-fit max-w-[85%] rounded-2xl bg-white dark:bg-white px-4 py-2.5 text-zinc-900 dark:text-zinc-900 border border-black/10 shadow-sm transition-colors duration-300 leading-relaxed text-sm font-medium',
+                          'w-fit max-w-[85%] rounded-2xl bg-[#0c1120] dark:bg-[#0c1120] px-4 py-2.5 text-white dark:text-white border border-white/10 shadow-sm transition-colors duration-300 leading-relaxed text-sm font-medium',
                         )}
                       >
                         {message.content}
@@ -47,8 +47,8 @@ const SharedConversation = ({ id }: { id: string }) => {
                         {containsYouTubeUrl(message.content) ? (
                           <VideoComponentForContent content={message.content} />
                         ) : (
-                          <div>
-                            <Streamdown className="w-full max-w-[85%] rounded-lg">
+                          <div className="relative group w-fit max-w-[85%] rounded-2xl bg-white dark:bg-white px-4 py-2.5 text-zinc-900 dark:text-zinc-900 border border-black/10 shadow-sm transition-colors duration-300">
+                            <Streamdown className="w-full rounded-lg leading-relaxed text-sm">
                               {message.content}
                             </Streamdown>
 

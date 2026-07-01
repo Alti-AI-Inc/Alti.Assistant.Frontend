@@ -817,7 +817,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   >
                     <div
                       className={cn(
-                        'w-fit max-w-[85%] rounded-2xl bg-white dark:bg-white px-4 py-2.5 text-zinc-900 dark:text-zinc-900 border border-black/10 shadow-sm transition-colors duration-300 leading-relaxed text-sm font-medium',
+                        'w-fit max-w-[85%] rounded-2xl bg-[#0c1120] dark:bg-[#0c1120] px-4 py-2.5 text-white dark:text-white border border-white/10 shadow-sm transition-colors duration-300 leading-relaxed text-sm font-medium',
                         showStartLastMessage && 'mt-8',
                       )}
                     >
@@ -850,7 +850,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                       {containsYouTubeUrl(displayContent) ? (
                         <VideoComponentForContent content={displayContent} />
                       ) : (
-                        <div className="relative group">
+                        <div className="relative group w-fit max-w-[85%] rounded-2xl bg-white dark:bg-white px-4 py-2.5 text-zinc-900 dark:text-zinc-900 border border-black/10 shadow-sm transition-colors duration-300">
                           <Streamdown className="w-full rounded-lg leading-relaxed text-sm">
                             {displayContent}
                           </Streamdown>
