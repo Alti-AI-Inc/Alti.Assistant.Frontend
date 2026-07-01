@@ -578,7 +578,7 @@ const LeftSideNavMobile = () => {
   return (
     <div className="bg-[#0c1120] dark:bg-[#0c1120] flex h-full flex-col">
       {/* 6-Icon Toggle Row / Space Toggles */}
-      {!isSuperAdmin && (
+      {!isSuperAdmin && activeTab !== 'account' && (
         <div className="border-b border-zinc-800/60 px-4 py-2 bg-[#0c1120] dark:bg-[#0c1120] flex-none">
           <div className="flex bg-white/[0.06] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-white/[0.03] dark:border-white/[0.03]">
             {/* Chat */}

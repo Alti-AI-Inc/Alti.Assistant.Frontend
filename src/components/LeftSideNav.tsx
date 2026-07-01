@@ -587,7 +587,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         )}
       </div>
       {/* 6-Icon Toggle Row / Space Toggles */}
-      {!hideSidebar && side !== 'right' && !isSuperAdmin && (
+      {!hideSidebar && side !== 'right' && !isSuperAdmin && activeTab !== 'account' && (
         <div className="h-[52px] flex items-center border-b border-zinc-800/60 px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-colors duration-300">
           <div className="flex bg-white/[0.06] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-white/[0.03] dark:border-white/[0.03]">
             {/* Chat */}
