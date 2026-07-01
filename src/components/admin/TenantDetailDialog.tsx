@@ -188,7 +188,7 @@ export function TenantDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[min(85vh,700px)] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-md rounded-2xl border border-black/10 dark:border-white/10 bg-[#F5F5F7] dark:bg-zinc-950">
+      <DialogContent className="flex max-h-[min(85vh,700px)] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-md rounded-2xl border border-black/10 dark:border-white/10 bg-[#e1e1e1] dark:bg-zinc-950">
         <DialogHeader className="shrink-0 border-b border-black/10 dark:border-white/10 px-6 pt-6 pr-12 pb-4 bg-white dark:bg-zinc-900">
           <DialogTitle className="text-lg font-semibold text-gray-900 dark:text-white">
             Team Members

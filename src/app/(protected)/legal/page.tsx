@@ -607,7 +607,7 @@ export default function page() {
 
   return (
     <SpacesLayout showColumnPanels={false}>
-      <Tabs defaultValue="privacyPolicy" className="h-full flex flex-col gap-0 bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden">
+      <Tabs defaultValue="privacyPolicy" className="h-full flex flex-col gap-0 bg-[#e1e1e1] dark:bg-gray-955 overflow-hidden">
         {/* Dynamic Header */}
         <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-white dark:bg-gray-950">
           <h1 className="text-base font-semibold text-gray-900 dark:text-white">
@@ -615,19 +615,19 @@ export default function page() {
           </h1>
           <TabsList className="bg-white dark:bg-zinc-800 p-[3px] rounded-lg h-9 border border-black/10 dark:border-white/10 shadow-xs">
             <TabsTrigger
-              className="cursor-pointer px-4 text-xs data-[state=active]:bg-[#F5F5F7] dark:data-[state=active]:bg-zinc-700 data-[state=active]:text-black dark:data-[state=active]:text-white data-[state=active]:shadow-xs transition-all duration-200"
+              className="cursor-pointer px-4 text-xs data-[state=active]:bg-[#e1e1e1] dark:data-[state=active]:bg-zinc-700 data-[state=active]:text-black dark:data-[state=active]:text-white data-[state=active]:shadow-xs transition-all duration-200"
               value="privacyPolicy"
             >
               Privacy Policy
             </TabsTrigger>
             <TabsTrigger
-              className="cursor-pointer px-4 text-xs data-[state=active]:bg-[#F5F5F7] dark:data-[state=active]:bg-zinc-700 data-[state=active]:text-black dark:data-[state=active]:text-white data-[state=active]:shadow-xs transition-all duration-200"
+              className="cursor-pointer px-4 text-xs data-[state=active]:bg-[#e1e1e1] dark:data-[state=active]:bg-zinc-700 data-[state=active]:text-black dark:data-[state=active]:text-white data-[state=active]:shadow-xs transition-all duration-200"
               value="termsOfUsage"
             >
               Terms of Use
             </TabsTrigger>
             <TabsTrigger
-              className="cursor-pointer px-4 text-xs data-[state=active]:bg-[#F5F5F7] dark:data-[state=active]:bg-zinc-700 data-[state=active]:text-black dark:data-[state=active]:text-white data-[state=active]:shadow-xs transition-all duration-200"
+              className="cursor-pointer px-4 text-xs data-[state=active]:bg-[#e1e1e1] dark:data-[state=active]:bg-zinc-700 data-[state=active]:text-black dark:data-[state=active]:text-white data-[state=active]:shadow-xs transition-all duration-200"
               value="cookiesPolicy"
             >
               Cookies Policy

@@ -144,7 +144,7 @@ export default function CustomerDetailPage() {
   }
 
   return (
-    <div className="h-full flex flex-col bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden">
+    <div className="h-full flex flex-col bg-[#e1e1e1] dark:bg-gray-955 overflow-hidden">
       {/* Dynamic Header */}
       <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-white dark:bg-gray-950">
         <div className="flex items-center gap-4">

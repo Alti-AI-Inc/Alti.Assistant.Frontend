@@ -299,15 +299,15 @@ export const AppsPanelsContainer = () => {
   const isSelectedAppConnected = selectedApp && connectedAppSlugs.has(selectedApp.app_name.toLowerCase());
 
   return (
-    <div className="flex h-full w-full flex-row overflow-hidden bg-[#F5F5F7] dark:bg-gray-955">
+    <div className="flex h-full w-full flex-row overflow-hidden bg-[#e1e1e1] dark:bg-gray-955">
       
       {/* =========================================================
           RIGHT WORKSPACE - ACTIVE DETAIL OR CHATVIEW CONSOLE
           ========================================================= */}
-      <main className="flex-1 flex flex-row bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden relative">
+      <main className="flex-1 flex flex-row bg-[#e1e1e1] dark:bg-gray-955 overflow-hidden relative">
         
         {isFetchingStatus && !connections ? (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-4 bg-[#F5F5F7] dark:bg-gray-955">
+          <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-4 bg-[#e1e1e1] dark:bg-gray-955">
             <RefreshCw className="h-8 w-8 text-blue-600 animate-spin" />
             <p className="text-sm text-gray-500 animate-pulse">Loading workspace status...</p>
           </div>
@@ -426,7 +426,7 @@ export const AppsPanelsContainer = () => {
               </div>
 
               {/* Scoped Message List */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#F5F5F7] dark:bg-gray-955">
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#e1e1e1] dark:bg-gray-955">
                 {(!chatHistories[selectedApp.app_name] || chatHistories[selectedApp.app_name].length === 0) ? (
                   <div className="h-full flex flex-col items-center justify-center text-center max-w-sm mx-auto space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-350">
                     <div className="h-11 w-11 rounded-full bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center text-blue-500">
@@ -507,7 +507,7 @@ export const AppsPanelsContainer = () => {
               </div>
 
               {/* Scoped Input Box sticky */}
-              <div className="p-4 border-t border-black/10 dark:border-white/10 bg-[#F5F5F7] dark:bg-gray-955 flex-none">
+              <div className="p-4 border-t border-black/10 dark:border-white/10 bg-[#e1e1e1] dark:bg-gray-955 flex-none">
                 <div className="flex gap-2">
                   <Input
                     placeholder={`Ask ${selectedApp.title} agent to execute an action...`}

@@ -103,7 +103,7 @@ function RegisterPageContent() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#F5F5F7] px-4 dark:bg-zinc-950">
+    <div className="flex min-h-screen items-center justify-center bg-[#e1e1e1] px-4 dark:bg-zinc-950">
       <div className="w-full max-w-md space-y-8 rounded-2xl border border-black/10 bg-white p-8 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900">
         <div className="flex flex-col items-center space-y-2 text-center">
           <Link href="/">
@@ -141,7 +141,7 @@ function RegisterPageContent() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email Address"
-                className="w-full rounded-xl border-none bg-[#F5F5F7] bg-auth-input p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
+                className="w-full rounded-xl border-none bg-[#e1e1e1] bg-auth-input p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
               />
 
               <div className="relative">
@@ -152,7 +152,7 @@ function RegisterPageContent() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
-                  className="w-full rounded-xl border-none bg-[#F5F5F7] bg-auth-input p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
+                  className="w-full rounded-xl border-none bg-[#e1e1e1] bg-auth-input p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
                 />
                 <button
                   type="button"
@@ -175,7 +175,7 @@ function RegisterPageContent() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm Password"
-                  className="w-full rounded-xl border-none bg-[#F5F5F7] bg-auth-input p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
+                  className="w-full rounded-xl border-none bg-[#e1e1e1] bg-auth-input p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
                 />
                 <button
                   type="button"
@@ -226,7 +226,7 @@ function RegisterPageContent() {
                 value={verifyCode}
                 onChange={(e) => setVerifyCode(e.target.value)}
                 placeholder="6-Digit Verification Code"
-                className="w-full rounded-xl border-none bg-[#F5F5F7] bg-auth-input p-3 text-center text-lg font-bold tracking-widest text-black outline-none placeholder:text-zinc-400 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-500 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
+                className="w-full rounded-xl border-none bg-[#e1e1e1] bg-auth-input p-3 text-center text-lg font-bold tracking-widest text-black outline-none placeholder:text-zinc-400 focus:ring-0 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-500 autofill:shadow-[0_0_0_1000px_#F5F5F7_inset] dark:autofill:shadow-[0_0_0_1000px_#27272a_inset]"
               />
 
               <button
@@ -259,7 +259,7 @@ export default function RegisterPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-[#F5F5F7] px-4 dark:bg-zinc-950">
+        <div className="flex min-h-screen items-center justify-center bg-[#e1e1e1] px-4 dark:bg-zinc-950">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-black" />
         </div>
       }

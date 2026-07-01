@@ -137,7 +137,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
         >
           <div className="flex items-center justify-between gap-2">
              {/* Search Bar Input */}
-            <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-[#F5F5F7] px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">
+            <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-[#e1e1e1] px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">
               <Search className="size-3.5 flex-none text-black" />
               <input
                 type="text"
@@ -155,7 +155,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   <Button
                     variant="outline"
                     size="icon"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#F5F5F7] text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black flex-none dark:bg-zinc-800/50 dark:text-white"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#e1e1e1] text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black flex-none dark:bg-zinc-800/50 dark:text-white"
                     onClick={handleNewChat}
                   >
                     <Plus className="size-4 text-black dark:text-white" />
@@ -171,7 +171,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
           {/* Toggle with 4 space configuration items */}
           <div className="h-px w-[calc(100%+2rem)] -ml-4 bg-black/10 mt-2" />
           <div className="h-10 mt-2 flex items-center bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300 w-full">
-            <div className="flex bg-[#F5F5F7] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
+            <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
               
               {/* Chat History */}
               <Tooltip>

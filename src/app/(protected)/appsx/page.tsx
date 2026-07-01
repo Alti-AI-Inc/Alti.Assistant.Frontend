@@ -45,9 +45,9 @@ export default function AppIntegrationsGrid() {
   }, [resolvedApps, query]);
 
   return (
-    <div className="h-full overflow-y-auto bg-[#F5F5F7] dark:bg-zinc-950 p-6 md:p-10 space-y-8 relative transition-colors duration-300">
+    <div className="h-full overflow-y-auto bg-[#e1e1e1] dark:bg-zinc-950 p-6 md:p-10 space-y-8 relative transition-colors duration-300">
       {/* Sticky Solid Header Shelf */}
-      <div className="sticky top-0 z-20 -mx-6 md:-mx-10 -mt-6 md:-mt-10 px-6 md:px-10 pt-6 md:pt-10 pb-4 bg-[#F5F5F7] dark:bg-zinc-950 transition-colors duration-300">
+      <div className="sticky top-0 z-20 -mx-6 md:-mx-10 -mt-6 md:-mt-10 px-6 md:px-10 pt-6 md:pt-10 pb-4 bg-[#e1e1e1] dark:bg-zinc-950 transition-colors duration-300">
         <div className="relative w-full rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900 p-2 flex items-center justify-between">
           <Input
             value={query}

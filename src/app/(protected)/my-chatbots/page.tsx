@@ -1026,8 +1026,7 @@ function MyChatbotsContent() {
     <div className="flex h-full w-full bg-[#e1e1e1] dark:bg-zinc-950 overflow-hidden">
       {/* Center Panel (Conversation / Interface) */}
       <div
-        className="flex-1 flex flex-col min-w-0 h-full relative"
-        style={{ backgroundColor: '#e1e1e1' }}
+        className="flex-1 flex flex-col min-w-0 h-full relative bg-[#e1e1e1] dark:bg-zinc-950"
       >
         {/* Chatbot Content Body */}
         <div className={cn(

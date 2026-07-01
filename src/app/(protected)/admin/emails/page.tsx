@@ -125,7 +125,7 @@ export default function AdminEmailsPage() {
     );
 
   return (
-    <div className="h-full flex flex-col bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden">
+    <div className="h-full flex flex-col bg-[#e1e1e1] dark:bg-gray-955 overflow-hidden">
       {/* Dynamic Header */}
       <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-white dark:bg-gray-950">
         <h1 className="text-base font-semibold text-gray-900 dark:text-white">
@@ -163,7 +163,7 @@ export default function AdminEmailsPage() {
                     Create New Email Account
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-lg rounded-[20px] bg-[#F5F5F7] dark:bg-zinc-900 border-none shadow-xl animate-in fade-in-50 duration-150">
+                <DialogContent className="max-w-lg rounded-[20px] bg-[#e1e1e1] dark:bg-zinc-900 border-none shadow-xl animate-in fade-in-50 duration-150">
                   <DialogHeader>
                     <DialogTitle>Create New Email Account</DialogTitle>
                     <DialogDescription className="text-gray-500 dark:text-gray-400 text-sm">
@@ -327,7 +327,7 @@ export default function AdminEmailsPage() {
                               <Pencil className="h-4 w-4" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-lg rounded-[20px] bg-[#F5F5F7] dark:bg-zinc-900 border-none shadow-xl animate-in fade-in-50 duration-150">
+                          <DialogContent className="max-w-lg rounded-[20px] bg-[#e1e1e1] dark:bg-zinc-900 border-none shadow-xl animate-in fade-in-50 duration-150">
                             <DialogHeader>
                               <DialogTitle>Edit Email Account</DialogTitle>
                               <DialogDescription className="text-gray-500 dark:text-gray-400 text-sm">

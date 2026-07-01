@@ -191,7 +191,7 @@ export default function TeamMembersPage() {
   }, [members, ownerEmail, searchTerm]);
 
   return (
-    <div className="h-full flex flex-col bg-[#F5F5F7] dark:bg-zinc-950 overflow-hidden">
+    <div className="h-full flex flex-col bg-[#e1e1e1] dark:bg-zinc-950 overflow-hidden">
       {/* Header */}
       <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-white dark:bg-gray-950">
         <h1 className="text-base font-semibold text-gray-900 dark:text-white truncate">
@@ -279,7 +279,7 @@ export default function TeamMembersPage() {
 
               {/* Pricing Edit Dialog */}
               <Dialog open={isEditingPrice} onOpenChange={setIsEditingPrice}>
-                <DialogContent className="max-w-md rounded-2xl border border-black/10 dark:border-white/10 bg-[#F5F5F7] dark:bg-zinc-950 p-6 flex flex-col gap-4">
+                <DialogContent className="max-w-md rounded-2xl border border-black/10 dark:border-white/10 bg-[#e1e1e1] dark:bg-zinc-950 p-6 flex flex-col gap-4">
                   <DialogHeader>
                     <DialogTitle className="text-lg font-semibold text-gray-900 dark:text-white">
                       Edit Team Pricing

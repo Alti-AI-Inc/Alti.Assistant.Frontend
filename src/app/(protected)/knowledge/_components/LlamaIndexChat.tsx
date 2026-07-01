@@ -508,7 +508,7 @@ export const LlamaIndexChat = () => {
   }, [showDiagnostics]);
 
   return (
-    <div className="w-full flex-1 flex flex-col h-[calc(100vh-53px)] bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden relative">
+    <div className="w-full flex-1 flex flex-col h-[calc(100vh-53px)] bg-[#e1e1e1] dark:bg-gray-955 overflow-hidden relative">
       
       {/* Diagnostics Panel overlay */}
       <AnimatePresence>

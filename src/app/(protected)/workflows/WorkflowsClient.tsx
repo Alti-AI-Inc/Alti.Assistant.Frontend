@@ -17,10 +17,9 @@ function WorkflowsClient() {
   return (
     <div
       className={cn(
-        'flex h-full w-full flex-1 flex-col items-center justify-center',
+        'flex h-full w-full flex-1 flex-col items-center justify-center bg-[#e1e1e1] dark:bg-zinc-950',
         !activeConversation && 'pb-20',
       )}
-      style={{ backgroundColor: '#F5F5F7' }}
     >
       {!activeConversation?.messages?.length && (
         <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">

@@ -1183,7 +1183,7 @@ const ChatInput = ({
                   className={cn(
                     'flex flex-col items-center justify-center px-4 py-2 min-w-[130px] sm:min-w-[140px] rounded-xl transition-all duration-300 ease-out',
                     researchTier === tier.id 
-                      ? 'bg-[#F5F5F7] dark:bg-zinc-800 shadow-sm ring-1 ring-black/5 scale-[1.02]' 
+                      ? 'bg-[#e1e1e1] dark:bg-zinc-800 shadow-sm ring-1 ring-black/5 scale-[1.02]' 
                       : 'hover:bg-zinc-50 dark:hover:bg-zinc-800/50 opacity-80 hover:opacity-100'
                   )}
                 >

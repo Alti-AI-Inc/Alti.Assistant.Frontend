@@ -94,11 +94,11 @@ const DashboardLeftSideNav = () => {
           ) : (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full bg-[#F5F5F7] hover:bg-[#EAEAEB] dark:bg-zinc-800 dark:hover:bg-zinc-700/80">
+                <Button variant="outline" className="w-full bg-[#e1e1e1] hover:bg-[#EAEAEB] dark:bg-zinc-800 dark:hover:bg-zinc-700/80">
                   My Account
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 bg-[#F5F5F7] dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-2xl shadow-xl" align="start">
+              <DropdownMenuContent className="w-56 bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-2xl shadow-xl" align="start">
                 <DropdownMenuGroup>
                   {isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/admin')}>

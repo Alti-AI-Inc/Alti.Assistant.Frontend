@@ -339,9 +339,9 @@ function MyChatbotsContent() {
   // Render Focused Projects Workspace Dashboard (when no active bot)
   if (!activeBot) {
     return (
-      <div className="flex h-full w-full bg-[#F5F5F7] dark:bg-zinc-950 overflow-hidden">
+      <div className="flex h-full w-full bg-[#e1e1e1] dark:bg-zinc-950 overflow-hidden">
         {renderProjectsSidebar()}
-        <div className="flex-grow w-full bg-[#F5F5F7] dark:bg-zinc-950 h-full flex flex-col relative animate-in fade-in duration-500 overflow-y-auto">
+        <div className="flex-grow w-full bg-[#e1e1e1] dark:bg-zinc-950 h-full flex flex-col relative animate-in fade-in duration-500 overflow-y-auto">
         
         {/* Stepper Progress Bar */}
         <div className="absolute top-14 left-1/2 -translate-x-1/2 w-full max-w-[796px] select-none px-4 z-20">
@@ -995,12 +995,11 @@ function MyChatbotsContent() {
 
   // Render 3-Column Chatbot Workspace
   return (
-    <div className="flex h-full w-full bg-[#F5F5F7] dark:bg-zinc-950 overflow-hidden">
+    <div className="flex h-full w-full bg-[#e1e1e1] dark:bg-zinc-950 overflow-hidden">
       {renderProjectsSidebar()}
       {/* Center Panel (Conversation / Interface) */}
       <div
-        className="flex-1 flex flex-col min-w-0 h-full relative"
-        style={{ backgroundColor: '#F5F5F7' }}
+        className="flex-1 flex flex-col min-w-0 h-full relative bg-[#e1e1e1] dark:bg-zinc-950"
       >
         {/* Chatbot Content Body */}
         <div className={cn(
@@ -1036,7 +1035,7 @@ function MyChatbotsContent() {
 export default function MyChatbotsPage() {
   return (
     <Suspense fallback={
-      <div className="flex-1 bg-[#F5F5F7] dark:bg-zinc-950 min-h-screen flex items-center justify-center">
+      <div className="flex-1 bg-[#e1e1e1] dark:bg-zinc-950 min-h-screen flex items-center justify-center">
         <div className="flex items-center gap-2 text-gray-500 font-semibold text-sm">
           <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
           Loading Chatbot Workspace...

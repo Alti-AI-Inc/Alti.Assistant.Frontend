@@ -100,7 +100,7 @@ function InboxClient() {
   const remainingMinutes = timeSavedMinutes % 60;
 
   return (
-    <div className="flex h-full w-full overflow-hidden bg-[#F5F5F7] dark:bg-zinc-950 relative">
+    <div className="flex h-full w-full overflow-hidden bg-[#e1e1e1] dark:bg-zinc-950 relative">
 
       {isLoading ? (
         <div className="flex-1 flex flex-col items-center justify-center relative z-10">

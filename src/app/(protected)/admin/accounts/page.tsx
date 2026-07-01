@@ -126,7 +126,7 @@ export default function AdminAccountsPage() {
     );
 
   return (
-    <div className="h-full flex flex-col bg-[#F5F5F7] dark:bg-gray-955 overflow-hidden">
+    <div className="h-full flex flex-col bg-[#e1e1e1] dark:bg-gray-955 overflow-hidden">
       {/* Dynamic Header */}
       <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-white dark:bg-gray-950">
         <h1 className="text-base font-semibold text-gray-900 dark:text-white">
@@ -164,7 +164,7 @@ export default function AdminAccountsPage() {
                     Create New Account
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-lg rounded-[20px] bg-[#F5F5F7] dark:bg-zinc-900 border-none shadow-xl animate-in fade-in-50 duration-150">
+                <DialogContent className="max-w-lg rounded-[20px] bg-[#e1e1e1] dark:bg-zinc-900 border-none shadow-xl animate-in fade-in-50 duration-150">
                   <DialogHeader>
                     <DialogTitle>Create New Account</DialogTitle>
                     <DialogDescription className="text-gray-500 dark:text-gray-400 text-sm">
@@ -328,7 +328,7 @@ export default function AdminAccountsPage() {
                               <Pencil className="h-4 w-4" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-lg rounded-[20px] bg-[#F5F5F7] dark:bg-zinc-900 border-none shadow-xl animate-in fade-in-50 duration-150">
+                          <DialogContent className="max-w-lg rounded-[20px] bg-[#e1e1e1] dark:bg-zinc-900 border-none shadow-xl animate-in fade-in-50 duration-150">
                             <DialogHeader>
                               <DialogTitle>Edit Account</DialogTitle>
                               <DialogDescription className="text-gray-500 dark:text-gray-400 text-sm">
