@@ -359,7 +359,7 @@ export default function TasksClient() {
         {/* Creator Form */}
         <div className="w-full max-w-2xl flex flex-col items-center z-10">
           <h1 className="text-4xl font-medium tracking-tight text-center mb-8 text-gray-900 dark:text-white select-none">
-            {editingTaskId ? 'Edit Automated Task' : 'Create an Automated Task'}
+            {editingTaskId ? 'Edit Automated Task' : 'Create Automated Task'}
           </h1>
           
           {/* Task Creator Form (White Card) */}
