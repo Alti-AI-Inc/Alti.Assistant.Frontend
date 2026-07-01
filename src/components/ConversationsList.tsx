@@ -249,18 +249,17 @@ export default function ConversationsList({
         return (
           <div
             className={cn(
-              "group flex h-9 w-full items-center justify-between rounded-md text-xs font-normal transition-colors duration-150",
+              "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal transition-all duration-150 border mb-1.5",
               isActive
-                ? "bg-white/10 text-white font-semibold"
-                : "text-zinc-300 hover:bg-white/5 hover:text-white"
+                ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs"
+                : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
             )}
             key={chat._id}
           >
             <span
-              className="flex-1 cursor-pointer truncate px-3 py-2 text-xs font-normal flex items-center gap-2.5"
+              className="flex-1 cursor-pointer truncate px-3 py-2 text-xs font-normal block"
               onClick={() => handleConversationClick(chat.conversationId)}
             >
-              {getDisplayIcon(chat)}
               <span className="truncate">{getDisplayTitle(chat.title)}</span>
             </span>
 
