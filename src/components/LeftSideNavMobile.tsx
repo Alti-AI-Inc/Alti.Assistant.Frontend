@@ -686,10 +686,10 @@ const LeftSideNavMobile = () => {
                     <div
                       key={bot.id}
                       className={cn(
-                        "group flex h-9 w-full items-center justify-between rounded-md text-xs font-semibold text-black text-left transition-all",
+                        "group flex h-9 w-full items-center justify-between rounded-md text-xs font-semibold text-left transition-colors duration-150",
                         isSelected 
-                          ? "bg-black/10" 
-                          : "hover:bg-black/5"
+                          ? "bg-white/10 text-white" 
+                          : "text-zinc-300 hover:bg-white/5 hover:text-white"
                       )}
                     >
                       <span
@@ -700,12 +700,18 @@ const LeftSideNavMobile = () => {
                           close();
                         }}
                       >
-                        <Folder className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />
+                        <Folder className={cn(
+                          "h-3.5 w-3.5 flex-shrink-0 transition-colors",
+                          isSelected ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
+                        )} />
                         <span className="truncate">{bot.name}</span>
                       </span>
                       <DropdownMenu>
                         <DropdownMenuTrigger className="focus-visible:outline-none">
-                          <EllipsisVertical className="mr-2 rotate-90 h-3.5 w-3.5 text-black transition-opacity" />
+                          <EllipsisVertical className={cn(
+                            "mr-2 rotate-90 h-3.5 w-3.5 transition-colors",
+                            isSelected ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
+                          )} />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="rounded-2xl">
                           <DropdownMenuItem
@@ -732,7 +738,7 @@ const LeftSideNavMobile = () => {
               )}
             </div>
           ) : activeTab === 'tasks' ? (
-            <div className="space-y-1.5 py-1 pb-4 mt-2 animate-in fade-in duration-200 px-3">
+            <div className="space-y-1.5 py-1 pb-4 mt-2 animate-in fade-in duration-200">
               {tasks.filter(task => 
                 (task.prompt || '').toLowerCase().includes(searchQuery.toLowerCase())
               ).map((task) => (
@@ -742,12 +748,12 @@ const LeftSideNavMobile = () => {
                     router.push('/tasks');
                     close();
                   }}
-                  className="w-full flex flex-col gap-1 px-3 py-2 text-xs font-medium rounded-lg text-gray-700 hover:bg-black/5 hover:text-black dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left border border-transparent hover:border-black/5 dark:hover:border-white/5 bg-white dark:bg-zinc-900 shadow-xs mb-1.5"
+                  className="w-full flex flex-col gap-1 px-3 py-2 text-xs font-medium rounded-lg text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left border border-white/[0.04] bg-white/[0.06] shadow-xs mb-1.5"
                 >
-                  <p className="font-semibold text-gray-900 dark:text-white line-clamp-1 leading-snug">
+                  <p className="font-semibold text-white line-clamp-1 leading-snug">
                     {task.prompt}
                   </p>
-                  <div className="flex items-center justify-between w-full text-[10px] text-gray-400 dark:text-zinc-500 font-medium">
+                  <div className="flex items-center justify-between w-full text-[10px] text-zinc-400 font-medium">
                     <span className="capitalize">{task.taskType}</span>
                     <span>
                       {task.triggerType === 'scheduled' 
