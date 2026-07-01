@@ -75,7 +75,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (credentials.invitationToken) {
             body.invitationToken = credentials.invitationToken as string;
           }
-          const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
+          const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://www.insoai.com/api/v1';
           const response = await fetch(`${apiUrl}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

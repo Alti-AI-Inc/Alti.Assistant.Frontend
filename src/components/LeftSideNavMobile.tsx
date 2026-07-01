@@ -191,7 +191,7 @@ const LeftSideNavMobile = () => {
   const isTenantOwner = mode === 'tenant' && (currentTenant?.role === 'admin' || currentTenant?.role === 'owner');
   const isTenantAdmin = mode === 'tenant' && currentTenant?.role === 'manager';
 
-  const isAdmin = userEmail === 'admin@altihq.com' || isGlobalAdmin || isTenantOwner;
+  const isAdmin = userEmail === 'admin@insoai.com' || isGlobalAdmin || isTenantOwner;
   const isManager = isGlobalAdmin || isTenantOwner || isTenantAdmin;
   const isSuperAdmin = data?.user?.role === 'super_admin';
 

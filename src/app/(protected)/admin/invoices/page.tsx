@@ -44,7 +44,7 @@ export default function AdminInvoicesPage() {
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);
       doc.setTextColor(lightGray[0], lightGray[1], lightGray[2]);
-      doc.text('www.altihq.com', 20, 31);
+      doc.text('www.insoai.com', 20, 31);
 
       // Invoice Title and Info Card
       doc.setFont('helvetica', 'bold');
@@ -108,7 +108,7 @@ export default function AdminInvoicesPage() {
       doc.setFontSize(8);
       doc.setTextColor(150, 150, 150);
       doc.text(
-        'Thank you for partnering with Alti! If you have any billing queries, reach out at support@altihq.com',
+        'Thank you for partnering with Alti! If you have any billing queries, reach out at support@insoai.com',
         20,
         150
       );

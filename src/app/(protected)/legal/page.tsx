@@ -9,7 +9,7 @@ export default function page() {
   const privacyPolicy = {
     title: 'Privacy Policy',
     intro:
-      'This Privacy Policy describes how Alti ("Alti," "we," "us," or "our") collects, uses, stores, shares, and protects information when you access or use our website at altihq.com, our mobile applications, and any related services (collectively, the "Platform"). By using the Platform, you agree to the collection and use of information in accordance with this policy. If you do not agree with this Privacy Policy, please do not use the Platform.',
+      'This Privacy Policy describes how Alti ("Alti," "we," "us," or "our") collects, uses, stores, shares, and protects information when you access or use our website at insoai.com, our mobile applications, and any related services (collectively, the "Platform"). By using the Platform, you agree to the collection and use of information in accordance with this policy. If you do not agree with this Privacy Policy, please do not use the Platform.',
     sections: [
       {
         heading: '1. Information We Collect',
@@ -195,7 +195,7 @@ export default function page() {
           {
             text: '6.3 Deletion.',
             description:
-              'You may request the deletion of your account and personal data by using the account deletion feature in your settings or by contacting us at legal@altihq.com. We will process deletion requests within thirty (30) days.',
+              'You may request the deletion of your account and personal data by using the account deletion feature in your settings or by contacting us at legal@insoai.com. We will process deletion requests within thirty (30) days.',
           },
           {
             text: '6.4 Opt-Out of Communications.',
@@ -210,14 +210,14 @@ export default function page() {
           {
             text: '6.6 Rights Under Specific Jurisdictions.',
             description:
-              'Depending on your location, you may have additional rights under laws such as the California Consumer Privacy Act (CCPA), the General Data Protection Regulation (GDPR), or other applicable data protection laws. These may include the right to object to processing, the right to restrict processing, and the right to lodge a complaint with a supervisory authority. To exercise any of these rights, please contact us at legal@altihq.com.',
+              'Depending on your location, you may have additional rights under laws such as the California Consumer Privacy Act (CCPA), the General Data Protection Regulation (GDPR), or other applicable data protection laws. These may include the right to object to processing, the right to restrict processing, and the right to lodge a complaint with a supervisory authority. To exercise any of these rights, please contact us at legal@insoai.com.',
           },
         ],
       },
       {
         heading: '7. Children\'s Privacy',
         content:
-          'The Platform is not intended for individuals under the age of eighteen (18). We do not knowingly collect personal information from children. If we become aware that we have collected personal information from a child under 18, we will take steps to delete that information promptly. If you believe a child has provided us with personal information, please contact us at legal@altihq.com.',
+          'The Platform is not intended for individuals under the age of eighteen (18). We do not knowingly collect personal information from children. If we become aware that we have collected personal information from a child under 18, we will take steps to delete that information promptly. If you believe a child has provided us with personal information, please contact us at legal@insoai.com.',
       },
       {
         heading: '8. International Data Transfers',
@@ -232,7 +232,7 @@ export default function page() {
       {
         heading: '10. Contact Us',
         content:
-          'If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at: legal@altihq.com, or by mail at: Alti, 280 N Old Woodward, Birmingham, MI 48009.',
+          'If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at: legal@insoai.com, or by mail at: Alti, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
     conclusion: '',
@@ -241,7 +241,7 @@ export default function page() {
   const terms = {
     title: 'Terms of Use',
     intro:
-      'These Terms of Use ("Terms") constitute a legally binding agreement between you ("you," "your," or "User") and Alti ("Alti," "we," "us," or "our") governing your access to and use of the Platform at altihq.com, our mobile applications, and all related services (collectively, the "Platform"). By creating an account or using the Platform, you agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, do not use the Platform.',
+      'These Terms of Use ("Terms") constitute a legally binding agreement between you ("you," "your," or "User") and Alti ("Alti," "we," "us," or "our") governing your access to and use of the Platform at insoai.com, our mobile applications, and all related services (collectively, the "Platform"). By creating an account or using the Platform, you agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, do not use the Platform.',
     sections: [
       {
         heading: '1. Acceptance of Terms',
@@ -256,7 +256,7 @@ export default function page() {
       {
         heading: '3. Account Registration and Security',
         content:
-          'To access certain features of the Platform, you must create an account by providing a valid email address and creating a password, or by authenticating through a supported third-party provider (Google, Facebook, Apple, Microsoft, GitHub, Discord, or Twitter/X). You are responsible for maintaining the confidentiality of your account credentials, for all activities that occur under your account, and for notifying us immediately at legal@altihq.com if you suspect any unauthorized use of your account. We reserve the right to suspend or terminate accounts that we reasonably believe have been compromised.',
+          'To access certain features of the Platform, you must create an account by providing a valid email address and creating a password, or by authenticating through a supported third-party provider (Google, Facebook, Apple, Microsoft, GitHub, Discord, or Twitter/X). You are responsible for maintaining the confidentiality of your account credentials, for all activities that occur under your account, and for notifying us immediately at legal@insoai.com if you suspect any unauthorized use of your account. We reserve the right to suspend or terminate accounts that we reasonably believe have been compromised.',
       },
       {
         heading: '4. Description of the Platform',
@@ -451,7 +451,7 @@ export default function page() {
       {
         heading: '19. Contact Information',
         content:
-          'If you have any questions about these Terms of Use, please contact us at: legal@altihq.com, or by mail at: Alti, 280 N Old Woodward, Birmingham, MI 48009.',
+          'If you have any questions about these Terms of Use, please contact us at: legal@insoai.com, or by mail at: Alti, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
     conclusion: '',
@@ -460,7 +460,7 @@ export default function page() {
   const cookiesPolicy = {
     title: 'Cookies Policy',
     intro:
-      'This Cookies Policy explains how Alti ("Alti," "we," "us," or "our") uses cookies and similar technologies when you use our Platform at altihq.com and our mobile applications. This policy should be read in conjunction with our Privacy Policy and Terms of Use.',
+      'This Cookies Policy explains how Alti ("Alti," "we," "us," or "our") uses cookies and similar technologies when you use our Platform at insoai.com and our mobile applications. This policy should be read in conjunction with our Privacy Policy and Terms of Use.',
     sections: [
       {
         heading: '1. What Are Cookies?',
@@ -599,7 +599,7 @@ export default function page() {
       {
         heading: '8. Contact Us',
         content:
-          'If you have any questions about our use of cookies or this Cookies Policy, please contact us at: legal@altihq.com, or by mail at: Alti, 280 N Old Woodward, Birmingham, MI 48009.',
+          'If you have any questions about our use of cookies or this Cookies Policy, please contact us at: legal@insoai.com, or by mail at: Alti, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
     conclusion: '',

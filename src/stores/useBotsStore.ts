@@ -50,7 +50,7 @@ interface BotsState {
   fetchBots: (token?: string) => Promise<void>;
 }
 
-const getApiUrl = () => process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
+const getApiUrl = () => process.env.NEXT_PUBLIC_API_URL || 'https://www.insoai.com/api/v1';
 
 const PRELOADED_BOTS: Chatbot[] = [
   {

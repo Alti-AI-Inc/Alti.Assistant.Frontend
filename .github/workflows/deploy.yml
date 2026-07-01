@@ -38,7 +38,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            --build-arg NEXT_PUBLIC_API_URL=https://altihq.com/api/v1 \
+            --build-arg NEXT_PUBLIC_API_URL=https://www.insoai.com/api/v1 \
             --build-arg NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }} \
             -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE }}:${{ github.sha }} \
             -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE }}:latest \
@@ -61,7 +61,7 @@ jobs:
             --cpu 1 \
             --min-instances 1 \
             --max-instances 10 \
-            --set-env-vars "NODE_ENV=production,NEXT_PUBLIC_API_URL=https://altihq.com/api/v1,API_URL=https://altihq.com/api/v1,AUTH_TRUST_HOST=true,AUTH_URL=https://altiassistant.com" \
+            --set-env-vars "NODE_ENV=production,NEXT_PUBLIC_API_URL=https://www.insoai.com/api/v1,API_URL=https://www.insoai.com/api/v1,AUTH_TRUST_HOST=true,AUTH_URL=https://www.insoai.com" \
             --set-secrets "AUTH_SECRET=AUTH_SECRET:latest,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:latest,STRIPE_PUBLISHABLE_KEY=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:latest" \
             --project ${{ env.PROJECT_ID }}
 

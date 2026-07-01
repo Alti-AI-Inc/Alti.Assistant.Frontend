@@ -504,7 +504,7 @@ const ChatInput = ({
         }
 
         try {
-          const base = process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
+          const base = process.env.NEXT_PUBLIC_API_URL || 'https://www.insoai.com/api/v1';
           const res = await fetch(
             `${base}/openai/anonymous-response`,
             {

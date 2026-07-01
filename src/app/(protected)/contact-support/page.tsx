@@ -20,7 +20,7 @@ const SupportContent = () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
       const now = new Date();
-      const userEmail = session?.user?.email || 'user@altihq.com';
+      const userEmail = session?.user?.email || 'user@insoai.com';
       const newRequest = {
         id: `req-${Math.random().toString(36).substring(2, 9)}`,
         email: userEmail,
