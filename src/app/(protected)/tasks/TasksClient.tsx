@@ -97,13 +97,78 @@ export default function TasksClient() {
     }
 
     if (savedRuns) {
-      setRuns(JSON.parse(savedRuns));
+      try {
+        const parsed = JSON.parse(savedRuns);
+        const hasOldFormat = parsed.some((r: any) => r.taskName === 'Daily Report Summary' || r.taskName === 'Email Auto-Responder');
+        if (parsed.length === 0 || hasOldFormat) {
+          const defaultRuns: TaskRun[] = [
+            {
+              id: 'run-1',
+              taskName: 'Audit and summarize GCP cost rep...',
+              timestamp: new Date(Date.now() - 3600000 * 4).toISOString(),
+              status: 'success',
+              duration: 3200,
+              summary: 'Generated daily GCP usage and cost optimization report. Compiled 4 recommendation metrics, reducing computed Vertex AI endpoint waste by 12%.',
+            },
+            {
+              id: 'run-2',
+              taskName: 'Summarize key questions in the in...',
+              timestamp: new Date(Date.now() - 3600000 * 24).toISOString(),
+              status: 'success',
+              duration: 2800,
+              summary: 'Drafted context-aware auto-response to client query. Summarized action points and saved in Gmail Drafts (ID: d_10f8b3c84).',
+            },
+            {
+              id: 'run-3',
+              taskName: 'Generate Q2 earnings call market su...',
+              timestamp: new Date(Date.now() - 3600000 * 48).toISOString(),
+              status: 'success',
+              duration: 4100,
+              summary: 'Compiled Q2 earnings call market summary report. Generated comparative tables and performance charts against competitor metrics.',
+            }
+          ];
+          setRuns(defaultRuns);
+          localStorage.setItem('alti_task_runs', JSON.stringify(defaultRuns));
+        } else {
+          setRuns(parsed);
+        }
+      } catch (e) {
+        // Fallback if parsing failed
+        const defaultRuns: TaskRun[] = [
+          {
+            id: 'run-1',
+            taskName: 'Audit and summarize GCP cost rep...',
+            timestamp: new Date(Date.now() - 3600000 * 4).toISOString(),
+            status: 'success',
+            duration: 3200,
+            summary: 'Generated daily GCP usage and cost optimization report. Compiled 4 recommendation metrics, reducing computed Vertex AI endpoint waste by 12%.',
+          },
+          {
+            id: 'run-2',
+            taskName: 'Summarize key questions in the in...',
+            timestamp: new Date(Date.now() - 3600000 * 24).toISOString(),
+            status: 'success',
+            duration: 2800,
+            summary: 'Drafted context-aware auto-response to client query. Summarized action points and saved in Gmail Drafts (ID: d_10f8b3c84).',
+          },
+          {
+            id: 'run-3',
+            taskName: 'Generate Q2 earnings call market su...',
+            timestamp: new Date(Date.now() - 3600000 * 48).toISOString(),
+            status: 'success',
+            duration: 4100,
+            summary: 'Compiled Q2 earnings call market summary report. Generated comparative tables and performance charts against competitor metrics.',
+          }
+        ];
+        setRuns(defaultRuns);
+        localStorage.setItem('alti_task_runs', JSON.stringify(defaultRuns));
+      }
     } else {
-      // Default runs
+      // Default runs matching the default tasks
       const defaultRuns: TaskRun[] = [
         {
           id: 'run-1',
-          taskName: 'Daily Report Summary',
+          taskName: 'Audit and summarize GCP cost rep...',
           timestamp: new Date(Date.now() - 3600000 * 4).toISOString(),
           status: 'success',
           duration: 3200,
@@ -111,11 +176,19 @@ export default function TasksClient() {
         },
         {
           id: 'run-2',
-          taskName: 'Email Auto-Responder',
+          taskName: 'Summarize key questions in the in...',
           timestamp: new Date(Date.now() - 3600000 * 24).toISOString(),
           status: 'success',
           duration: 2800,
           summary: 'Drafted context-aware auto-response to client query. Summarized action points and saved in Gmail Drafts (ID: d_10f8b3c84).',
+        },
+        {
+          id: 'run-3',
+          taskName: 'Generate Q2 earnings call market su...',
+          timestamp: new Date(Date.now() - 3600000 * 48).toISOString(),
+          status: 'success',
+          duration: 4100,
+          summary: 'Compiled Q2 earnings call market summary report. Generated comparative tables and performance charts against competitor metrics.',
         }
       ];
       setRuns(defaultRuns);
