@@ -138,7 +138,7 @@ function MyChatbotsContent() {
     if (!activeBot || activeBot.metadata?.status !== 'tuning' || !session?.accessToken) return;
 
     let isSubscribed = true;
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://www.insoai.com/api/v1';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
 
     const checkStatus = async () => {
       try {
@@ -206,7 +206,7 @@ function MyChatbotsContent() {
     setIsRetryingTuning(true);
     try {
       toast.info('Initiating model training retry...');
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://www.insoai.com/api/v1';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
       const res = await fetch(`${apiUrl}/chatbots/${activeBot.id}/tune`, {
         method: 'POST',
         headers: {
@@ -302,7 +302,7 @@ function MyChatbotsContent() {
       // 4. Trigger model tuning if it is a Model tab creation and we have backend access
       if (projectTab === 'team' && newBot && newBot.id && !newBot.id.startsWith('bot_') && session?.accessToken) {
         try {
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://www.insoai.com/api/v1';
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
           const tuneRes = await fetch(`${apiUrl}/chatbots/${newBot.id}/tune`, {
             method: 'POST',
             headers: {
