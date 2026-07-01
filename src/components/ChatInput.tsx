@@ -1298,15 +1298,15 @@ const ChatInput = ({
                       aria-label="More Options"
                     >
                       {selectedOption === OPTIONS.RESEARCH ? (
-                        <Globe className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1.5 text-white transition-colors" style={{ backgroundColor: '#0c1120' }} />
+                        <Globe className="size-7 flex-shrink-0 rounded-lg border-2 border-[#003a73] p-1.5 text-white transition-colors" style={{ backgroundColor: '#004687' }} />
                       ) : selectedOption === OPTIONS.DRAFT_DOCUMENT ? (
-                        <FileText className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1.5 text-white transition-colors" style={{ backgroundColor: '#0c1120' }} />
+                        <FileText className="size-7 flex-shrink-0 rounded-lg border-2 border-[#003a73] p-1.5 text-white transition-colors" style={{ backgroundColor: '#004687' }} />
                       ) : selectedOption === OPTIONS.CODE ? (
-                        <Code className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1.5 text-white transition-colors" style={{ backgroundColor: '#0c1120' }} />
+                        <Code className="size-7 flex-shrink-0 rounded-lg border-2 border-[#003a73] p-1.5 text-white transition-colors" style={{ backgroundColor: '#004687' }} />
                       ) : selectedOption === OPTIONS.IMAGE ? (
-                        <ImageIcon className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1.5 text-white transition-colors" style={{ backgroundColor: '#0c1120' }} />
+                        <ImageIcon className="size-7 flex-shrink-0 rounded-lg border-2 border-[#003a73] p-1.5 text-white transition-colors" style={{ backgroundColor: '#004687' }} />
                       ) : (
-                        <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1.5 text-white transition-colors" style={{ backgroundColor: '#0c1120' }} />
+                        <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-[#003a73] p-1.5 text-white transition-colors" style={{ backgroundColor: '#004687' }} />
                       )}
                     </button>
                   </DropdownMenuTrigger>
