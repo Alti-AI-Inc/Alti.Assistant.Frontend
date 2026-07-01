@@ -1298,15 +1298,15 @@ const ChatInput = ({
                       aria-label="More Options"
                     >
                       {selectedOption === OPTIONS.RESEARCH ? (
-                        <Globe className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                        <Globe className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1.5 text-white transition-colors hover:bg-[#161f36] dark:bg-[#0c1120] dark:hover:bg-[#161f36]" />
                       ) : selectedOption === OPTIONS.DRAFT_DOCUMENT ? (
-                        <FileText className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                        <FileText className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1.5 text-white transition-colors hover:bg-[#161f36] dark:bg-[#0c1120] dark:hover:bg-[#161f36]" />
                       ) : selectedOption === OPTIONS.CODE ? (
-                        <Code className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                        <Code className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1.5 text-white transition-colors hover:bg-[#161f36] dark:bg-[#0c1120] dark:hover:bg-[#161f36]" />
                       ) : selectedOption === OPTIONS.IMAGE ? (
-                        <ImageIcon className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                        <ImageIcon className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1.5 text-white transition-colors hover:bg-[#161f36] dark:bg-[#0c1120] dark:hover:bg-[#161f36]" />
                       ) : (
-                        <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+                        <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1.5 text-white transition-colors hover:bg-[#161f36] dark:bg-[#0c1120] dark:hover:bg-[#161f36]" />
                       )}
                     </button>
                   </DropdownMenuTrigger>
