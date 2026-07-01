@@ -367,8 +367,8 @@ export default function TasksClient() {
             <Textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Describe the task you want the assistant to perform automatically..."
-              className="min-h-[140px] border-none focus-visible:ring-0 resize-none bg-transparent px-6 pt-6 text-base placeholder:text-gray-400 dark:placeholder:text-zinc-500 text-gray-900 dark:text-white"
+              placeholder="Describe the task you want to automate..."
+              className="min-h-[72px] border-none focus-visible:ring-0 resize-none bg-transparent px-6 pt-6 text-base placeholder:text-gray-400 dark:placeholder:text-zinc-500 text-gray-900 dark:text-white"
             />
 
             <div className="px-5 pb-5 pt-2">
