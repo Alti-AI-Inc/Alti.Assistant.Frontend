@@ -533,7 +533,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     <>
       <div
         className={cn(
-          'sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-black/10 dark:border-zinc-800/80 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300 flex-none',
+          'sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] transition-colors duration-300 flex-none',
           hideSidebar ? 'justify-center px-0' : 'px-4',
           side === 'right' && 'flex-row-reverse',
         )}
@@ -546,7 +546,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           {hideSidebar && !isSuperAdmin ? (
             <PanelLeftClose
               className={cn(
-                'size-5 cursor-pointer text-gray-600 dark:text-zinc-400 transition-transform duration-300',
+                'size-5 cursor-pointer text-zinc-400 hover:text-white transition-transform duration-300',
                 side === 'right' ? '' : 'scale-x-[-1]'
               )}
               onClick={side === 'right' ? toggleRightSidebar : toggleLeftSidebar}
@@ -554,7 +554,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           ) : (
             <Link href="/">
               <Image
-                src="/assets/logo-icon.png"
+                src="/assets/logo-white.png"
                 alt="logo"
                 height={20}
                 width={20}
@@ -567,7 +567,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           !isSuperAdmin && (
             <PanelRightClose
               className={cn(
-                'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
+                'size-5 cursor-pointer text-zinc-400 hover:text-white transition-transform duration-300',
                 hideSidebar && 'hidden',
               )}
               onClick={toggleRightSidebar}
@@ -577,7 +577,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           !isSuperAdmin && (
             <PanelLeftClose
               className={cn(
-                'size-5 cursor-pointer text-gray-600 transition-transform duration-300',
+                'size-5 cursor-pointer text-zinc-400 hover:text-white transition-transform duration-300',
                 hideSidebar && 'hidden',
               )}
               onClick={toggleLeftSidebar}
@@ -587,8 +587,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       </div>
       {/* 6-Icon Toggle Row / Space Toggles */}
       {!hideSidebar && side !== 'right' && !isSuperAdmin && (
-        <div className="h-[52px] flex items-center border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300">
-          <div className="flex bg-[#F5F5F7] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
+        <div className="h-[52px] flex items-center border-b border-zinc-800/60 px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-colors duration-300">
+          <div className="flex bg-white/[0.06] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-white/[0.03] dark:border-white/[0.03]">
             {/* Chat */}
             <button
               type="button"
@@ -596,8 +596,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               className={cn(
                 'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'search'
-                  ? 'bg-white border-black/10 text-black shadow-xs scale-[1.02] dark:bg-zinc-800 dark:border-white/10 dark:text-white'
-                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
+                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                  : 'bg-transparent border-transparent text-zinc-450 hover:bg-white/[0.04] hover:text-white',
               )}
             >
               <Globe className="size-4" />
@@ -611,8 +611,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               className={cn(
                 'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'bots'
-                  ? 'bg-white border-black/10 text-black shadow-xs scale-[1.02] dark:bg-zinc-800 dark:border-white/10 dark:text-white'
-                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
+                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                  : 'bg-transparent border-transparent text-zinc-450 hover:bg-white/[0.04] hover:text-white',
               )}
             >
               <LayoutGrid className="size-4" />
@@ -626,8 +626,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               className={cn(
                 'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'tasks'
-                  ? 'bg-white border-black/10 text-black shadow-xs scale-[1.02] dark:bg-zinc-800 dark:border-white/10 dark:text-white'
-                  : 'bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800 dark:text-zinc-400 dark:hover:text-zinc-200',
+                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                  : 'bg-transparent border-transparent text-zinc-450 hover:bg-white/[0.04] hover:text-white',
               )}
             >
               <Zap className="size-4" />
@@ -639,16 +639,16 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
       {/* Enclosed Search & Actions Row */}
       {!hideSidebar && activeTab !== 'account' && (
-        <div className="h-[52px] flex items-center justify-between gap-2 border-b border-black/10 dark:border-zinc-800/80 px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-all duration-300 flex-none">
+        <div className="h-[52px] flex items-center justify-between gap-2 border-b border-zinc-800/60 px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none">
           {/* Search Bar Input */}
-          <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 dark:border-zinc-800/80 bg-[#F5F5F7] dark:bg-zinc-800/50 px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20 dark:focus-within:ring-white/10">
-            <Search className="size-3.5 flex-none text-zinc-500 dark:text-zinc-400" />
+          <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.06] px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-white/20">
+            <Search className="size-3.5 flex-none text-zinc-400" />
             <input
               type="text"
               placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-transparent text-xs text-black dark:text-zinc-100 outline-none placeholder:text-zinc-500 dark:placeholder:text-zinc-400"
+              className="w-full bg-transparent text-xs text-zinc-100 outline-none placeholder:text-zinc-400"
             />
           </div>
 
@@ -662,10 +662,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#F5F5F7] text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black dark:bg-zinc-800/50 dark:text-white"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.06] text-white shadow-xs transition-all hover:bg-white/[0.12]"
                       onClick={plusProps.onClick}
                     >
-                      <Plus className="size-4 text-black" />
+                      <Plus className="size-4 text-white" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
@@ -682,7 +682,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {/* Fixed Apps Filter Toggle Button Bar */}
         <div
           className={cn(
-            'flex flex-1 flex-col overflow-y-scroll px-4 bg-[#FFFFFF] dark:bg-zinc-900 transition-colors duration-300',
+            'flex flex-1 flex-col overflow-y-scroll px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-colors duration-300',
             hideSidebar && 'hidden',
             side === 'right' && 'pb-8',
           )}
@@ -787,106 +787,106 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               {isSuperAdmin && (
                 <button
                   onClick={() => router.push('/admin')}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left"
                 >
-                  <Shield className="w-4 h-4 text-black dark:text-white" /> Owner Platform
+                  <Shield className="w-4 h-4 text-zinc-300 dark:text-white" /> Owner Platform
                 </button>
               )}
               {isAdmin && !isSuperAdmin && (
                 <button
                   onClick={() => router.push('/admin/platform-admin')}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left"
                 >
-                  <Shield className="w-4 h-4 text-black dark:text-white" /> Platform Admin
+                  <Shield className="w-4 h-4 text-zinc-300 dark:text-white" /> Platform Admin
                 </button>
               )}
               {(isAdmin || isManager) && !isSuperAdmin && (
                 <button
                   onClick={() => router.push('/admin/platform-manager')}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left"
                 >
-                  <LayoutDashboard className="w-4 h-4 text-black dark:text-white" /> Platform Manager
+                  <LayoutDashboard className="w-4 h-4 text-zinc-300 dark:text-white" /> Platform Manager
                 </button>
               )}
 
               {!isSuperAdmin && (
                 <button
                   onClick={() => router.push('/appsx')}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left"
                 >
-                  <Blocks className="w-4 h-4 text-black dark:text-white" /> Platform Connectors
+                  <Blocks className="w-4 h-4 text-zinc-300 dark:text-white" /> Platform Connectors
                 </button>
               )}
 
               {!isSuperAdmin && (
                 <button
                   onClick={() => router.push('/platform-memory')}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left"
                 >
-                  <Brain className="w-4 h-4 text-black dark:text-white" /> Platform Memory
+                  <Brain className="w-4 h-4 text-zinc-300 dark:text-white" /> Platform Memory
                 </button>
               )}
               
               {!isSuperAdmin && (
                 <button
                   onClick={() => router.push('/platform-knowledge')}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left"
                 >
-                  <Database className="w-4 h-4 text-black dark:text-white" /> Platform Knowledge
+                  <Database className="w-4 h-4 text-zinc-300 dark:text-white" /> Platform Knowledge
                 </button>
               )}
 
               {!isSuperAdmin && (
                 <button
                   onClick={() => router.push('/instructions')}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left"
                 >
-                  <SlidersHorizontal className="w-4 h-4 text-black dark:text-white" /> Platform Instructions
+                  <SlidersHorizontal className="w-4 h-4 text-zinc-300 dark:text-white" /> Platform Instructions
                 </button>
               )}
 
               {!isSuperAdmin && (
                 <button
                   onClick={() => router.push('/guardrails')}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left"
                 >
-                  <ShieldAlert className="w-4 h-4 text-black dark:text-white" /> Platform Guardrails
+                  <ShieldAlert className="w-4 h-4 text-zinc-300 dark:text-white" /> Platform Guardrails
                 </button>
               )}
 
               {!isSuperAdmin && (
                 <button
                   onClick={() => router.push('/invite-friends')}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left"
                 >
-                  <UserPlus className="w-4 h-4 text-black dark:text-white" /> Invite Friends
+                  <UserPlus className="w-4 h-4 text-zinc-300 dark:text-white" /> Invite Friends
                 </button>
               )}
 
               {!isSuperAdmin && (
                 <button
                   onClick={() => router.push('/change-password')}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left"
                 >
-                  <KeyRound className="w-4 h-4 text-black dark:text-white" /> Change Password
+                  <KeyRound className="w-4 h-4 text-zinc-300 dark:text-white" /> Change Password
                 </button>
               )}
 
               {!isSuperAdmin && (
                 <button
                   onClick={() => router.push('/contact-support')}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left"
                 >
-                  <Mail className="w-4 h-4 text-black dark:text-white" /> Contact Support
+                  <Mail className="w-4 h-4 text-zinc-300 dark:text-white" /> Contact Support
                 </button>
               )}
 
               {!isSuperAdmin && (
                 <button
                   onClick={() => router.push('/legal')}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left"
                 >
-                  <Scale className="w-4 h-4 text-black dark:text-white" /> Legal Documents
+                  <Scale className="w-4 h-4 text-zinc-300 dark:text-white" /> Legal Documents
                 </button>
               )}
             </div>
@@ -899,15 +899,15 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             'sticky bottom-0 z-30 flex flex-col w-full',
             hideSidebar && 'hidden',
           )}
-          style={{ backgroundColor: '#FFFFFF' }}
+          style={{ backgroundColor: '#0c1120' }}
         >
           {isLoggedIn && activeTab === 'account' ? (
             <div className="flex flex-col w-full">
               {!isSuperAdmin && (
-                <div className="flex h-20 w-full items-center justify-center border-t border-black/10 dark:border-zinc-800/80 p-4 py-1.5">
+                <div className="flex h-20 w-full items-center justify-center border-t border-zinc-800/60 p-4 py-1.5">
                   <Button
                     variant="default"
-                    className="w-full justify-center gap-2 bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 border border-transparent"
+                    className="w-full justify-center gap-2 bg-white text-black hover:bg-white/90 border border-transparent"
                     onClick={() => {
                       setActiveTab('search');
                       router.push('/');
@@ -917,7 +917,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   </Button>
                 </div>
               )}
-              <div className="flex h-20 w-full items-center justify-center border-t border-black/10 dark:border-zinc-800/80 p-4 py-1.5">
+              <div className="flex h-20 w-full items-center justify-center border-t border-zinc-800/60 p-4 py-1.5">
                 <Button
                   variant="outline"
                   onClick={() => onOpen({ type: 'logout' })}
@@ -928,19 +928,19 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </div>
             </div>
           ) : (
-            <div className="flex h-20 w-full items-center justify-center border-t border-black/10 dark:border-zinc-800/80 p-4 py-1.5">
+            <div className="flex h-20 w-full items-center justify-center border-t border-zinc-800/60 p-4 py-1.5">
             {!isLoggedIn ? (
               <div className="flex w-full items-center gap-2">
                 <Button
                   variant="default"
-                  className="flex-1 bg-black px-0 text-white hover:bg-black/90"
+                  className="flex-1 bg-white px-0 text-black hover:bg-white/90"
                   asChild
                 >
                   <Link href="/login">Login</Link>
                 </Button>
                 <Button
                   variant="default"
-                  className="flex-1 bg-black px-0 text-white hover:bg-black/90"
+                  className="flex-1 bg-white px-0 text-black hover:bg-white/90"
                   asChild
                 >
                   <Link href="/register">Register</Link>
@@ -950,7 +950,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               <Button
                 variant="outline"
                 onClick={() => setActiveTab('account')}
-                className="w-full transition-all duration-200 outline-none select-none cursor-pointer border border-black/5 dark:border-white/5 bg-[#F5F5F7] hover:bg-[#EAEAEB] dark:bg-zinc-800 dark:hover:bg-zinc-700/80"
+                className="w-full transition-all duration-200 outline-none select-none cursor-pointer border border-white/5 bg-white/[0.06] hover:bg-white/[0.12] text-white"
               >
                 My Account
               </Button>

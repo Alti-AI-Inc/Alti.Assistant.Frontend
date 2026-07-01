@@ -108,10 +108,10 @@ export default function ProtectedLayoutClient({
         {!isSuperAdmin && (
           <div
             className={cn(
-              'sticky top-0 left-0 hidden h-full flex-col transition-all duration-300 ease-in-out sm:hidden md:flex border-r border-black/10 shrink-0 z-20',
+              'sticky top-0 left-0 hidden h-full flex-col transition-all duration-300 ease-in-out sm:hidden md:flex border-r border-zinc-800/50 shrink-0 z-20',
               isLeftSidebarOpen ? 'w-76' : 'w-10',
             )}
-            style={{ backgroundColor: '#FFFFFF' }}
+            style={{ backgroundColor: '#0c1120' }}
           >
             <Suspense fallback={null}>
               <LeftSideNav />
@@ -127,7 +127,7 @@ export default function ProtectedLayoutClient({
         {/* Main content */}
         <main
           className="bg-background w-full flex-1 min-w-0 overflow-hidden flex flex-col"
-          style={{ backgroundColor: '#F5F5F7' }}
+          style={{ backgroundColor: '#e1e1e1' }}
         >
           {children}
         </main>

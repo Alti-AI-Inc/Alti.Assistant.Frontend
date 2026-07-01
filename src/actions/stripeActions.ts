@@ -1710,6 +1710,50 @@ export async function createBillingPortalSessionAction(
 }
 
 /**
+ * Delete (detach) a payment method.
+ * DELETE /api/v1/stripe/payment-method/:paymentMethodId
+ */
+export async function deletePaymentMethodAction(
+  paymentMethodId: string,
+  accessToken: string,
+): Promise<ApiResponse<void>> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/stripe/payment-method/${paymentMethodId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData.message || 'Failed to delete payment method',
+        statusCode: response.status,
+      };
+    }
+
+    return {
+      success: true,
+      message: 'Payment method deleted successfully',
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return {
+      success: false,
+      message: 'Failed to delete payment method',
+      debugMessage: errorMessage,
+      statusCode: 500,
+    };
+  }
+}
+
+/**
  * Get the Stripe Publishable Key from server-side environment.
  * Checks multiple env var names to handle production deployments where
  * NEXT_PUBLIC_ vars are baked at build time and may be stale/placeholder.

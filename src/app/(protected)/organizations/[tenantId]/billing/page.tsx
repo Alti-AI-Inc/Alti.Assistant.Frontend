@@ -7,6 +7,7 @@ import {
   addSeatToSubscription,
   removeSeatFromSubscription,
   createBillingPortalSessionAction,
+  deletePaymentMethodAction,
 } from '@/actions/stripeActions';
 import { getCurrentTenant, getTenantUsage } from '@/actions/tenantActions';
 import {
@@ -14,6 +15,7 @@ import {
   type OrganizationPlan,
 } from '@/components/organizations/OrganizationPricingCards';
 import { PaymentConfirmationModal } from '@/components/stripe/PaymentConfirmationModal';
+import { AddPaymentMethodModal } from '@/components/stripe/AddPaymentMethodModal';
 import { StripeProviderWithErrorBoundary } from '@/components/stripe/StripeProvider';
 import { Button } from '@/components/ui/button';
 import {
@@ -69,6 +71,7 @@ export default function OrganizationBillingPage({
     null,
   );
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showAddMethodModal, setShowAddMethodModal] = useState(false);
   const [paymentMethods, setPaymentMethods] = useState<StripePaymentMethod[]>(
     [],
   );
@@ -486,8 +489,7 @@ export default function OrganizationBillingPage({
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  // TODO: Add payment method modal
-                  toast.info('Add payment method functionality coming soon');
+                  setShowAddMethodModal(true);
                 }}
               >
                 <CreditCard className="mr-2 size-4" />
@@ -530,11 +532,32 @@ export default function OrganizationBillingPage({
                       variant="ghost"
                       size="icon"
                       className="text-muted-foreground hover:text-destructive"
-                      onClick={() => {
-                        // TODO: Implement delete payment method
-                        toast.info(
-                          'Delete payment method functionality coming soon',
+                      onClick={async () => {
+                        if (!session?.accessToken) return;
+                        const confirmed = window.confirm(
+                          'Are you sure you want to delete this payment method?'
                         );
+                        if (!confirmed) return;
+
+                        try {
+                          const response = await deletePaymentMethodAction(
+                            method.id,
+                            session.accessToken
+                          );
+                          if (response.success) {
+                            toast.success('Payment method deleted successfully!');
+                            fetchBillingData(false);
+                          } else {
+                            toast.error(
+                              response.message || 'Failed to delete payment method'
+                            );
+                          }
+                        } catch (err) {
+                          console.error(err);
+                          toast.error(
+                            'An unexpected error occurred while deleting payment method'
+                          );
+                        }
                       }}
                     >
                       <Trash2 className="size-4" />
@@ -659,6 +682,13 @@ export default function OrganizationBillingPage({
             }}
           />
         )}
+
+        {/* Add Payment Method Modal */}
+        <AddPaymentMethodModal
+          isOpen={showAddMethodModal}
+          onClose={() => setShowAddMethodModal(false)}
+          onSuccess={() => fetchBillingData(false)}
+        />
 
         {/* Cancellation Confirmation Modal */}
         {showCancelModal && (
