@@ -30,7 +30,7 @@ function AssistantWorkspaceContent() {
   const hasMessages = !!activeConversation?.messages?.length;
 
   return (
-    <div className="flex h-full w-full overflow-hidden bg-[#F5F5F7] dark:bg-zinc-950 relative">
+    <div className="flex h-full w-full overflow-hidden bg-[#e1e1e1] dark:bg-zinc-950 relative">
       {/* Middle Interactive Workspace */}
       <div className={cn(
         "flex h-full w-full flex-1 flex-col items-center justify-center relative z-10",
@@ -51,7 +51,7 @@ function AssistantWorkspaceContent() {
 function AssistantWorkspace() {
   return (
     <Suspense fallback={
-      <div className="flex-1 bg-[#F5F5F7] dark:bg-zinc-950 min-h-screen flex items-center justify-center">
+      <div className="flex-1 bg-[#e1e1e1] dark:bg-zinc-950 min-h-screen flex items-center justify-center">
         <div className="flex items-center gap-2 text-gray-500 font-semibold text-sm">
           <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
           Loading Tasks Workspace...

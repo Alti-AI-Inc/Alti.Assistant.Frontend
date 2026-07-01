@@ -275,7 +275,7 @@ export default function TasksClient() {
   const activeRunsCount = runs.filter(r => r.status === 'running').length;
 
   return (
-    <div className="flex h-full w-full bg-[#F5F5F7] dark:bg-zinc-950 flex-row overflow-hidden relative">
+    <div className="flex h-full w-full bg-[#e1e1e1] dark:bg-zinc-950 flex-row overflow-hidden relative">
       
       {/* Main Centered Container */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 md:p-8 relative overflow-hidden h-full">
