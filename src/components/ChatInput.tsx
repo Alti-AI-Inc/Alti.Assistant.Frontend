@@ -1298,15 +1298,15 @@ const ChatInput = ({
                       aria-label="More Options"
                     >
                       {selectedOption === OPTIONS.RESEARCH ? (
-                        <Globe className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-sidebar p-1.5 text-white transition-colors hover:bg-sidebar/80" />
+                        <Globe className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1.5 text-white transition-colors" style={{ backgroundColor: '#0c1120' }} />
                       ) : selectedOption === OPTIONS.DRAFT_DOCUMENT ? (
-                        <FileText className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-sidebar p-1.5 text-white transition-colors hover:bg-sidebar/80" />
+                        <FileText className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1.5 text-white transition-colors" style={{ backgroundColor: '#0c1120' }} />
                       ) : selectedOption === OPTIONS.CODE ? (
-                        <Code className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-sidebar p-1.5 text-white transition-colors hover:bg-sidebar/80" />
+                        <Code className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1.5 text-white transition-colors" style={{ backgroundColor: '#0c1120' }} />
                       ) : selectedOption === OPTIONS.IMAGE ? (
-                        <ImageIcon className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-sidebar p-1.5 text-white transition-colors hover:bg-sidebar/80" />
+                        <ImageIcon className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1.5 text-white transition-colors" style={{ backgroundColor: '#0c1120' }} />
                       ) : (
-                        <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-sidebar p-1.5 text-white transition-colors hover:bg-sidebar/80" />
+                        <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1.5 text-white transition-colors" style={{ backgroundColor: '#0c1120' }} />
                       )}
                     </button>
                   </DropdownMenuTrigger>
