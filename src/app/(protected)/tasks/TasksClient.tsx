@@ -49,6 +49,7 @@ export default function TasksClient() {
   const [isInboxOpen, setIsInboxOpen] = useState(true); // Open side-panel by default for side-by-side view
   const [isLogsOpen, setIsLogsOpen] = useState(false);
   const [selectedLogTaskName, setSelectedLogTaskName] = useState('');
+  const [selectedTaskTitleFilter, setSelectedTaskTitleFilter] = useState<string | null>(null);
 
   // Hydrate states from localStorage on mount
   useEffect(() => {
@@ -129,8 +130,8 @@ export default function TasksClient() {
       setScheduledTime('');
       setEventTrigger('');
       setEditingTaskId(null);
+      setSelectedTaskTitleFilter(null);
       window.history.replaceState(null, '', '/tasks');
-      toast.info('Form cleared for a new task!');
     };
 
     window.addEventListener('alti_new_task_click', handleNewTaskClick);
@@ -141,7 +142,10 @@ export default function TasksClient() {
 
   // Sync state when taskId parameter changes
   useEffect(() => {
-    if (!taskId || tasks.length === 0) return;
+    if (!taskId || tasks.length === 0) {
+      setSelectedTaskTitleFilter(null);
+      return;
+    }
     const task = tasks.find(t => t.id === taskId);
     if (task) {
       setPrompt(task.prompt);
@@ -156,9 +160,8 @@ export default function TasksClient() {
       }
       setEditingTaskId(task.id);
       
-      // Auto open logs for this task name
       const taskTitle = task.prompt.length > 35 ? task.prompt.slice(0, 35) + '...' : task.prompt;
-      handleViewLogs(taskTitle);
+      setSelectedTaskTitleFilter(taskTitle);
     }
   }, [taskId, tasks]);
 
@@ -420,7 +423,7 @@ export default function TasksClient() {
       {/* Persistent Collapsible Right Side Runs Inbox */}
       <TaskInboxPanel
         isOpen={isInboxOpen}
-        runs={runs}
+        runs={selectedTaskTitleFilter ? runs.filter(r => r.taskName === selectedTaskTitleFilter) : runs}
         onViewLogs={handleViewLogs}
         onClearRuns={handleClearRuns}
         onClose={() => setIsInboxOpen(false)}
