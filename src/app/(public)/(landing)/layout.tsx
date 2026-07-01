@@ -70,7 +70,7 @@ export default function PublicLayout({
             'bg-white dark:bg-zinc-900 sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out md:flex',
             !isLeftSidebarOpen ? 'w-10' : 'w-76',
           )}
-          style={{ backgroundColor: '#FFFFFF' }}
+          style={{ backgroundColor: '#0c1120' }}
         >
           <Suspense fallback={null}>
             <LeftSideNav />
