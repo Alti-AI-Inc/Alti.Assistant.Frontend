@@ -558,6 +558,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 alt="logo"
                 height={20}
                 width={20}
+                className="brightness-0 invert"
               />
             </Link>
           )}
