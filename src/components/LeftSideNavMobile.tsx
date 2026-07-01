@@ -589,7 +589,7 @@ const LeftSideNavMobile = () => {
                 'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'search'
                   ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
-                  : 'bg-transparent border-transparent text-zinc-450 hover:bg-white/[0.04] hover:text-white',
+                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
               )}
             >
               <Globe className="size-4" />
@@ -604,7 +604,7 @@ const LeftSideNavMobile = () => {
                 'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'bots'
                   ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
-                  : 'bg-transparent border-transparent text-zinc-450 hover:bg-white/[0.04] hover:text-white',
+                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
               )}
             >
               <LayoutGrid className="size-4" />
@@ -619,7 +619,7 @@ const LeftSideNavMobile = () => {
                 'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'tasks'
                   ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
-                  : 'bg-transparent border-transparent text-zinc-450 hover:bg-white/[0.04] hover:text-white',
+                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
               )}
             >
               <Zap className="size-4" />

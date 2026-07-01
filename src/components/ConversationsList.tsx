@@ -6,7 +6,7 @@
 
 import { Conversation } from '@/actions/conversationsAction';
 import { useConversations } from '@/hooks/useConversations';
-import { formatConversationTitle } from '@/lib/utils';
+import { cn, formatConversationTitle } from '@/lib/utils';
 import { OPTIONS } from '@/types/conversation';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
@@ -92,17 +92,20 @@ export default function ConversationsList({
 
   const getDisplayIcon = (chat: Conversation) => {
     // Override icon for the currently active conversation based on selectedOption
-    if (activeConversation && chat.conversationId === (activeConversation as any).conversationId) {
+    const isActive = activeConversation && chat.conversationId === (activeConversation as any).conversationId;
+    const iconColorClass = isActive ? "text-white flex-shrink-0" : "text-zinc-400 flex-shrink-0";
+    
+    if (isActive) {
       if (selectedOption === OPTIONS.RESEARCH) {
-        return <Microscope className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+        return <Microscope className={cn("h-3.5 w-3.5", iconColorClass)} />;
       } else if (selectedOption === OPTIONS.CODE || selectedOption === OPTIONS.DEBUG_CODE) {
-        return <Code2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+        return <Code2 className={cn("h-3.5 w-3.5", iconColorClass)} />;
       } else if (selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) {
-        return <ImageIcon className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+        return <ImageIcon className={cn("h-3.5 w-3.5", iconColorClass)} />;
       } else if (selectedOption === OPTIONS.AUDIO) {
-        return <Volume2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+        return <Volume2 className={cn("h-3.5 w-3.5", iconColorClass)} />;
       } else if (selectedOption === OPTIONS.VIDEO) {
-        return <VideoIcon className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+        return <VideoIcon className={cn("h-3.5 w-3.5", iconColorClass)} />;
       } else if (
         selectedOption === OPTIONS.DRAFT_DOCUMENT ||
         selectedOption === OPTIONS.REWRITE ||
@@ -117,13 +120,13 @@ export default function ConversationsList({
         selectedOption === OPTIONS.GENERATE_PLAN ||
         selectedOption === OPTIONS.BRAINSTORM
       ) {
-        return <FileText className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+        return <FileText className={cn("h-3.5 w-3.5", iconColorClass)} />;
       } else if (selectedOption) {
         // Any other selected option fallback
-        return <Sparkles className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+        return <Sparkles className={cn("h-3.5 w-3.5", iconColorClass)} />;
       } else {
         // If selectedOption is null, they are explicitly in standard Chat mode
-        return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+        return <MessageSquare className={cn("h-3.5 w-3.5", iconColorClass)} />;
       }
     }
 
@@ -132,19 +135,19 @@ export default function ConversationsList({
     const lower = cleanTitle.toLowerCase();
 
     if (lower.includes('search') || lower.includes('google') || lower.includes('web')) {
-      return <Search className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      return <Search className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />;
     } else if (lower.includes('code') || lower.includes('write') || lower.includes('debug') || lower.includes('python') || lower.includes('rust') || lower.includes('go')) {
-      return <Code2 className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      return <Code2 className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />;
     } else if (lower.includes('email') || lower.includes('mail') || lower.includes('send') || lower.includes('draft')) {
-      return <Mail className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      return <Mail className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />;
     } else if (lower.includes('notion') || lower.includes('doc') || lower.includes('file') || lower.includes('summarize') || lower.includes('pdf')) {
-      return <FileText className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      return <FileText className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />;
     } else if (lower.includes('contract') || lower.includes('legal') || lower.includes('agreement')) {
-      return <Scale className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      return <Scale className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />;
     } else if (lower.includes('image') || lower.includes('draw') || lower.includes('photo') || lower.includes('generation')) {
-      return <Palette className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+      return <Palette className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />;
     }
-    return <MessageSquare className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />;
+    return <MessageSquare className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />;
   };
 
   const getDisplayTitle = (title: string) => {
@@ -241,70 +244,81 @@ export default function ConversationsList({
           </p>
         </div>
       )}
-      {filteredConversations.map(chat => (
-        <div
-          className="group flex h-9 w-full items-center justify-between rounded-md text-xs font-normal text-black hover:bg-black/5"
-          key={chat._id}
-        >
-          <span
-            className="flex-1 cursor-pointer truncate px-3 py-2 text-xs font-normal flex items-center gap-2.5"
-            onClick={() => handleConversationClick(chat.conversationId)}
+      {filteredConversations.map(chat => {
+        const isActive = activeConversation && chat.conversationId === (activeConversation as any).conversationId;
+        return (
+          <div
+            className={cn(
+              "group flex h-9 w-full items-center justify-between rounded-md text-xs font-normal transition-colors duration-150",
+              isActive
+                ? "bg-white/10 text-white font-semibold"
+                : "text-zinc-300 hover:bg-white/5 hover:text-white"
+            )}
+            key={chat._id}
           >
-            {getDisplayIcon(chat)}
-            <span className="truncate">{getDisplayTitle(chat.title)}</span>
-          </span>
+            <span
+              className="flex-1 cursor-pointer truncate px-3 py-2 text-xs font-normal flex items-center gap-2.5"
+              onClick={() => handleConversationClick(chat.conversationId)}
+            >
+              {getDisplayIcon(chat)}
+              <span className="truncate">{getDisplayTitle(chat.title)}</span>
+            </span>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger className="focus-visible:outline-none">
-              <EllipsisVertical className="mr-2 rotate-90 text-black opacity-100 md:opacity-0 md:group-hover:opacity-100" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="rounded-2xl">
-              <DropdownMenuItem
-                onClick={() => {
-                  setTimeout(() => {
-                    onOpen({
-                      type: 'share-conversation',
-                      actionId: chat._id,
-                    });
-                  }, 0);
-                }}
-              >
-                <Share className="text-black" /> Share
-              </DropdownMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="focus-visible:outline-none">
+                <EllipsisVertical className={cn(
+                  "mr-2 rotate-90 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-colors",
+                  isActive ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
+                )} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="rounded-2xl">
+                <DropdownMenuItem
+                  onClick={() => {
+                    setTimeout(() => {
+                      onOpen({
+                        type: 'share-conversation',
+                        actionId: chat._id,
+                      });
+                    }, 0);
+                  }}
+                >
+                  <Share className="text-black" /> Share
+                </DropdownMenuItem>
 
-              <DropdownMenuItem
-                onClick={() => {
-                  setTimeout(() => {
-                    onOpen({
-                      type: 'rename-chat',
-                      actionId: chat.conversationId,
-                      title: formatConversationTitle(chat.title),
-                    });
-                  }, 0);
-                }}
-              >
-                <Pencil className="text-black" /> Rename
-              </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setTimeout(() => {
+                      onOpen({
+                        type: 'rename-chat',
+                        actionId: chat.conversationId,
+                        title: formatConversationTitle(chat.title),
+                      });
+                    }, 0);
+                  }}
+                >
+                  <Pencil className="text-black" /> Rename
+                </DropdownMenuItem>
 
-              <DropdownMenuSeparator />
+                <DropdownMenuSeparator />
 
-              <DropdownMenuItem
-                onClick={() => {
-                  setTimeout(() => {
-                    onOpen({
-                      type: 'delete-conversation',
-                      actionId: chat._id,
-                    });
-                  }, 0);
-                }}
-              >
-                <Trash2 className="text-black" />
-                <span className="text-black">Delete</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      ))}
+                <DropdownMenuItem
+                  onClick={() => {
+                    setTimeout(() => {
+                      onOpen({
+                        type: 'delete-conversation',
+                        actionId: chat._id,
+                      });
+                    }, 0);
+                  }}
+                >
+                  <Trash2 className="text-black" />
+                  <span className="text-black">Delete</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        );
+      })}
 
       {hasNextPage && (
         <div
