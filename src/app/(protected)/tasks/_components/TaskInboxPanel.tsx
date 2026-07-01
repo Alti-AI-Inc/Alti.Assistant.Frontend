@@ -126,23 +126,24 @@ export default function TaskInboxPanel({
               </div>
             )}
 
-            {/* Title & Status */}
+             {/* Title & Status */}
             <div className="flex items-center justify-between gap-2">
-              <span className="font-semibold text-gray-900 dark:text-white text-xs truncate">
+              <span className="font-semibold text-gray-900 dark:text-white text-xs line-clamp-2">
                 {run.taskName}
               </span>
-              <span className={cn(
-                "text-[9px] font-bold px-1.5 py-0.5 rounded-md border select-none shrink-0",
-                run.status === 'running' && "bg-indigo-500/10 text-indigo-655 dark:text-indigo-400 border-indigo-500/20 animate-pulse",
-                run.status === 'success' && "bg-emerald-500/10 text-emerald-655 dark:text-emerald-455 border-emerald-500/20",
-                run.status === 'failed' && "bg-rose-500/10 text-rose-655 dark:text-rose-455 border-rose-500/20"
-              )}>
-                {run.status === 'running' ? 'Running' : run.status === 'success' ? 'Success' : 'Failed'}
-              </span>
+              {run.status !== 'success' && (
+                <span className={cn(
+                  "text-[9px] font-bold px-1.5 py-0.5 rounded-md border select-none shrink-0",
+                  run.status === 'running' && "bg-indigo-500/10 text-indigo-655 dark:text-indigo-400 border-indigo-500/20 animate-pulse",
+                  run.status === 'failed' && "bg-rose-500/10 text-rose-655 dark:text-rose-455 border-rose-500/20"
+                )}>
+                  {run.status === 'running' ? 'Running' : 'Failed'}
+                </span>
+              )}
             </div>
 
             {/* Summary Text (flat, directly inside card) */}
-            <p className="text-[11px] text-gray-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-[11px] text-gray-600 dark:text-zinc-400 leading-relaxed line-clamp-3">
               {run.summary}
             </p>
 
