@@ -20,11 +20,8 @@ const SharedConversation = ({ id }: { id: string }) => {
     <div>
       {activeConversation?.messages.length && (
         <div className="flex-1 overflow-y-auto">
-          <div
-            className={cn(
-              'mx-auto w-full max-w-[796px] space-y-6 px-4 py-6 lg:pr-2',
-            )}
-          >
+          <div className="w-full px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto w-full max-w-[796px] space-y-6 py-6">
             {activeConversation?.messages.length &&
               activeConversation.messages.map((message, idx) => (
                 <div key={idx} className="space-y-4">
@@ -80,6 +77,7 @@ const SharedConversation = ({ id }: { id: string }) => {
                   )}
                 </div>
               ))}
+            </div>
           </div>
         </div>
       )}

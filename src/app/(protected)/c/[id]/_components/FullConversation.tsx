@@ -792,12 +792,13 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     }
 
     return (
-      <div
-        className={cn(
-          'space-y-6 py-6 px-4 sm:px-6',
-          isSplit ? 'w-full' : 'mx-auto w-full max-w-[796px] lg:px-8',
-        )}
-      >
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div
+          className={cn(
+            'space-y-6 py-6 mx-auto w-full',
+            isSplit ? '' : 'max-w-[796px]',
+          )}
+        >
         {activeConversation?.messages.length &&
           activeConversation.messages.map((message, idx) => {
             const isLastAssistant = message === lastAssistantMessage;
@@ -1043,6 +1044,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
           )}
         ></div>
         <div ref={messagesEndRef} />
+        </div>
       </div>
     );
   };
