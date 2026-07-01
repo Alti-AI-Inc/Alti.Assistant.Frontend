@@ -918,7 +918,7 @@ export const LlamaIndexChat = () => {
                     <div
                       className={`max-w-xl rounded-2xl px-4 py-3 shadow-sm text-sm text-left ${
                         isUser
-                          ? 'bg-[#0c1120] text-white rounded-br-none border border-white/10'
+                          ? 'bg-[#1e3a8a] text-white rounded-br-none border border-white/10'
                           : 'bg-white text-gray-900 border border-gray-150 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-100 rounded-bl-none'
                       }`}
                     >
