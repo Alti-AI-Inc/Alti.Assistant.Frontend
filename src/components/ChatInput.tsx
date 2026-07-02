@@ -694,7 +694,7 @@ const ChatInput = ({
         audioUrl = `data:audio/mp3;base64,${response.data.audioBase64}`;
       }
       
-      let reference = response.data?.responseMessage?.reference;
+      let reference = response.data?.responseMessage?.reference || response.data?.reference || response.data?.citations;
       if (response.data?.sources) {
         reference = response.data.sources;
       }

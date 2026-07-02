@@ -87,6 +87,8 @@ export type ConversationMessage = {
     timestamp?: string;
     model?: string;
     reference?: Reference[];
+    sources?: any[];
+    citations?: any[];
     images?: null | string;
     imageUrl?: string; // New property to align with backend
     audioUrl?: string;

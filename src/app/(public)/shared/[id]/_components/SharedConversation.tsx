@@ -72,8 +72,8 @@ const SharedConversation = ({ id }: { id: string }) => {
                       audioUrl={message.metadata.audioUrl}
                     />
                   )}
-                  {!!message.metadata?.reference?.length && (
-                    <ReferencesList references={message.metadata.reference} />
+                  {!!(message.metadata?.reference?.length || message.metadata?.sources?.length || message.metadata?.citations?.length) && (
+                    <ReferencesList references={message.metadata.reference || message.metadata.sources || message.metadata.citations || []} />
                   )}
                 </div>
               ))}

@@ -925,9 +925,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 {message.metadata?.document && (
                   <FileDownloadCard document={message.metadata.document} />
                 )}
-                {!!message.metadata?.reference?.length && (
+                {!!(message.metadata?.reference?.length || message.metadata?.sources?.length || message.metadata?.citations?.length) && (
                   <ReferencesList 
-                    references={message.metadata.reference} 
+                    references={message.metadata.reference || message.metadata.sources || message.metadata.citations || []} 
                     webSearchQueries={(message.metadata as any).webSearchQueries}
                     searchEntryPoint={(message.metadata as any).searchEntryPoint}
                   />
