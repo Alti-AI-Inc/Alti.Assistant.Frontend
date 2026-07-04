@@ -1066,18 +1066,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
   return (
     <div
-      className={cn(
-        'flex w-full flex-col bg-[#e1e1e1] dark:bg-zinc-950',
-        (activeConversation?.messages?.length || isLoadingResponse) &&
-          'h-[calc(100vh-70px)] lg:h-screen',
-        isLoading && activeConversation?.messages?.length && 'h-[calc(100vh-70px)] lg:h-screen',
-      )}
+      className="flex w-full h-full flex-col bg-[#e1e1e1] dark:bg-zinc-950"
     >
       {isLoading ? (
         <div
-          className={cn(
-            'flex h-[calc()100vh_-110px] flex-grow items-center justify-center py-4 bg-transparent',
-          )}
+          className="flex flex-grow items-center justify-center py-4 bg-transparent"
         >
           <div className="flex items-center space-x-2.5 text-zinc-500 dark:text-zinc-400">
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-500/10 border-t-indigo-500"></div>
@@ -1143,12 +1136,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
         {/* Chat input - OUTSIDE scroll container, fixed at bottom as flex sibling */}
         <div
-          className={cn(
-            'shrink-0 w-full px-4 sm:px-6 lg:px-8',
-            hasMessages
-              ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-800 bg-[#e1e1e1] dark:bg-zinc-900'
-              : 'py-4 bg-transparent border-t-0',
-          )}
+          className="shrink-0 w-full px-4 sm:px-6 lg:px-8 mt-auto flex items-center justify-center py-2 border-t border-black/5 dark:border-zinc-800 bg-[#e1e1e1] dark:bg-zinc-900"
         >
           <div className="mx-auto w-full max-w-[796px]">
             <ChatInput
