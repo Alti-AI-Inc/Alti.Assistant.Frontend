@@ -1063,10 +1063,14 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   };
 
   const hasMessages = !!activeConversation?.messages?.length;
+  const showAsNewChat = !hasMessages && !isLoadingResponse;
 
   return (
     <div
-      className="flex w-full h-full flex-col bg-[#e1e1e1] dark:bg-zinc-950"
+      className={cn(
+        "flex w-full h-full flex-col bg-[#e1e1e1] dark:bg-zinc-950",
+        showAsNewChat ? "justify-center" : ""
+      )}
     >
       {isLoading ? (
         <div
@@ -1127,7 +1131,10 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         ) : (
           /* Standard Column: full scroll container */
           <div
-            className="relative flex-grow overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col"
+            className={cn(
+              "relative overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col",
+              showAsNewChat ? "flex-none" : "flex-grow"
+            )}
             ref={messagesContainerRef}
           >
             {renderMessagesContent(false)}
@@ -1136,7 +1143,12 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
         {/* Chat input - OUTSIDE scroll container, fixed at bottom as flex sibling */}
         <div
-          className="shrink-0 w-full px-4 sm:px-6 lg:px-8 mt-auto flex items-center justify-center py-2 border-t border-black/5 dark:border-zinc-800 bg-[#e1e1e1] dark:bg-zinc-900"
+          className={cn(
+            'shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300',
+            !showAsNewChat
+              ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-800 bg-[#e1e1e1] dark:bg-zinc-900 mt-auto'
+              : 'py-4 bg-transparent border-t-0'
+          )}
         >
           <div className="mx-auto w-full max-w-[796px]">
             <ChatInput
