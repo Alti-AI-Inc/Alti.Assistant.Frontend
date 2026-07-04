@@ -39,7 +39,7 @@ export default function AdminInvoicesPage() {
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(22);
       doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text('ALTI', 20, 25);
+      doc.text('INSO AI', 20, 25);
 
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);

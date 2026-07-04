@@ -78,7 +78,7 @@ export default function PublicLayout({
         </div>
 
         {/* Main content */}
-        <main className="bg-background w-full flex-1">{children}</main>
+        <main className="bg-background w-full flex-1 flex flex-col min-h-0 overflow-hidden">{children}</main>
       </div>
     </div>
   );

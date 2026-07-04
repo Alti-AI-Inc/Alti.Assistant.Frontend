@@ -199,7 +199,7 @@ export default function FinancialWidget({ ticker, liveData }: FinancialWidgetPro
             
             {/* 100% White-Label Cover! Overlay covering the TradingView bottom-left watermark */}
             <div className="absolute bottom-0 left-0 z-10 flex h-7 w-[120px] items-center bg-[#131722] pl-3">
-              <span className="text-[10px] font-bold tracking-widest text-[#5d606b]">ALTI CORE</span>
+              <span className="text-[10px] font-bold tracking-widest text-[#5d606b]">INSO AI CORE</span>
             </div>
             
             {/* Right bottom logo cover */}
@@ -220,7 +220,7 @@ export default function FinancialWidget({ ticker, liveData }: FinancialWidgetPro
             {/* White-Label Cover for gauge widget footer links */}
             <div className="absolute bottom-0 left-0 right-0 z-10 h-[30px] bg-[#131722] flex items-center justify-center">
               <span className="text-[10px] font-semibold tracking-wider text-[#5d606b]">
-                ALTI REAL-TIME ALGORITHMIC GAUGES
+                INSO AI REAL-TIME ALGORITHMIC GAUGES
               </span>
             </div>
           </div>

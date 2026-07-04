@@ -38,23 +38,23 @@ export default function TaskHistoryLogs({
 
     if (taskName.includes('Report') || taskName.includes('GCP')) {
       lines.push(
-        `[${new Date().toISOString()}] [fetch] GET secure connection to https://monitoring.googleapis.com/v3...`,
-        `[${new Date().toISOString()}] [status] 200 OK - connection established with Google Cloud Monitoring API`,
-        `[${new Date().toISOString()}] [parse] Auditing active GCP compute instance profiles...`,
-        `[${new Date().toISOString()}] [parse] Auditing active GCP Vertex AI resource endpoints...`,
+        `[${new Date().toISOString()}] [fetch] GET secure connection to https://monitoring.cloud.insoai.com/v3...`,
+        `[${new Date().toISOString()}] [status] 200 OK - connection established with Inso AI Cloud Monitoring API`,
+        `[${new Date().toISOString()}] [parse] Auditing active cloud compute instance profiles...`,
+        `[${new Date().toISOString()}] [parse] Auditing active AI resource endpoints...`,
         `[${new Date().toISOString()}] [compute] Aggregating cost data and compiling lifecycle metrics...`,
         `[${new Date().toISOString()}] [synthesis] Generating markdown cost optimization report...`,
         `[${new Date().toISOString()}] [system] Report compiled. Sending summary dashboard to user workspace.`
       );
     } else if (taskName.includes('Email') || taskName.includes('auto-responder')) {
       lines.push(
-        `[${new Date().toISOString()}] [fetch] Connecting to IMAP server imap.gmail.com...`,
+        `[${new Date().toISOString()}] [fetch] Connecting to IMAP server mail.client.com...`,
         `[${new Date().toISOString()}] [status] 200 OK - Authentication successful`,
         `[${new Date().toISOString()}] [search] Scanning INBOX for unread messages from domain "@client.com"...`,
         `[${new Date().toISOString()}] [fetch] Retrieved 1 unread message. Thread ID: t_8f7cee025...`,
         `[${new Date().toISOString()}] [agent] Running LLM analysis on message body to extract action items...`,
         `[${new Date().toISOString()}] [agent] Drafting context-aware reply using professional brand tone presets...`,
-        `[${new Date().toISOString()}] [write] Writing reply to Gmail Drafts (Draft ID: d_10f8b3c84)...`,
+        `[${new Date().toISOString()}] [write] Writing reply to Drafts (Draft ID: d_10f8b3c84)...`,
         `[${new Date().toISOString()}] [system] Email draft saved successfully.`
       );
     } else if (taskName.includes('Storage') || taskName.includes('Database')) {
