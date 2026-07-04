@@ -66,6 +66,101 @@ export async function PostConversation(
   }
 }
 
+export async function PostConversationStream(
+  apiUrl: string,
+  message: string,
+  accessToken: string,
+  conversationId?: string,
+  knowledgebaseId?: string,
+  extraParams?: Record<string, any>,
+  onChunk?: (chunk: { type: string; content?: string; reference?: any[]; citations?: any[]; conversationId?: string }) => void,
+): Promise<ApiResponse> {
+  try {
+    const response = await apiClient(apiUrl, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        message,
+        prompt: message,
+        stream: true,
+        ...(conversationId && { conversationId }),
+        ...(knowledgebaseId && { knowledgebaseId }),
+        timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
+        localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+        localTime: new Date().toLocaleTimeString('en-US'),
+        ...extraParams,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('PostConversationStream API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText,
+      });
+      return {
+        success: false,
+        message:
+          JSON.parse(errorText)?.message ||
+          'This is not you this is an error on our side, please try again later.',
+        debugMessage: `HTTP Error ${response.status}: ${errorText}`,
+        statusCode: response.status,
+      };
+    }
+
+    const reader = response.body?.getReader();
+    if (!reader) {
+      return {
+        success: false,
+        message: 'Response body is not readable.',
+      };
+    }
+
+    const decoder = new TextDecoder('utf-8');
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || ''; // Keep the last partial line in buffer
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+
+        if (trimmed.startsWith('data: ')) {
+          const rawData = trimmed.slice(6);
+          try {
+            const parsed = JSON.parse(rawData);
+            if (onChunk) {
+              onChunk(parsed);
+            }
+          } catch (err) {
+            console.error('Failed to parse SSE JSON:', rawData, err);
+          }
+        }
+      }
+    }
+
+    return { success: true, message: 'Success' };
+  } catch (error: any) {
+    console.error('PostConversationStream Error:', error);
+    return {
+      success: false,
+      message: 'An unexpected error occurred. Please try again.',
+      debugMessage: error.message || String(error),
+    };
+  }
+}
+
+
 export async function PostConversationWithFile(
   formData: FormData,
   accessToken: string,

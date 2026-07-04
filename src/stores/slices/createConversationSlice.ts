@@ -72,6 +72,11 @@ export interface ConversationSlice {
       reportData?: any;
     },
   ) => void;
+  streamActiveConversation: (
+    chunkText: string,
+    conversationId?: string,
+    metadata?: any,
+  ) => void;
   setLoadingActiveConversation: (loading: boolean) => void;
   setLoadingResponse: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -194,6 +199,44 @@ export const createConversationSlice: StateCreator<
           option: state.activeConversation?.option || state.selectedOption || undefined,
           messages: newMessages,
           updatedAt: timestamp,
+        },
+      };
+    }),
+
+  streamActiveConversation: (chunkText, conversationId, metadata) =>
+    set(state => {
+      if (!state.activeConversation) return {};
+
+      const messages = [...(state.activeConversation.messages || [])];
+      const lastMessageIndex = messages.length - 1;
+
+      if (lastMessageIndex >= 0 && messages[lastMessageIndex].role === ROLES.ASSISTANT) {
+        const lastMessage = messages[lastMessageIndex];
+        const newMetadata = metadata
+          ? { ...(lastMessage.metadata || {}), ...metadata }
+          : lastMessage.metadata;
+
+        messages[lastMessageIndex] = {
+          ...lastMessage,
+          content: lastMessage.content + chunkText,
+          ...(newMetadata && { metadata: newMetadata }),
+        };
+      } else {
+        messages.push({
+          role: ROLES.ASSISTANT,
+          content: chunkText,
+          ...(metadata && { metadata }),
+          timestamp: new Date().toISOString(),
+        });
+      }
+
+      return {
+        ...state,
+        activeConversation: {
+          ...state.activeConversation,
+          ...(conversationId && { conversationId }),
+          messages,
+          updatedAt: new Date().toISOString(),
         },
       };
     }),

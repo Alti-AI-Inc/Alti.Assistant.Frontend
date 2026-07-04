@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 
 import {
   PostConversation,
+  PostConversationStream,
   PostConversationWithFile,
 } from '@/actions/conversationsAction';
 import {
@@ -623,6 +624,57 @@ const ChatInput = ({
       const categoryVal = getCategoryFromOption(selectedOption);
       if (categoryVal) {
         extraParams.category = categoryVal;
+      }
+
+      const isOrchestrator = targetApiUrl.endsWith('/orchestrator/route-prompt');
+
+      if (isOrchestrator) {
+        let resolvedConversationId = conversationId;
+        // Seed initial empty assistant response placeholder in store so we can stream into it
+        useConversationsStore.getState().streamActiveConversation('', resolvedConversationId === 'new-chat' ? undefined : resolvedConversationId);
+
+        const result = await PostConversationStream(
+          targetApiUrl,
+          userMessage,
+          data.accessToken,
+          conversationId === 'new-chat'
+            ? activeConversation?.conversationId || undefined
+            : conversationId,
+          targetKbId,
+          extraParams,
+          (chunk) => {
+            if (chunk.type === 'connected' && chunk.conversationId) {
+              resolvedConversationId = chunk.conversationId;
+            } else if (chunk.type === 'text' && chunk.content) {
+              setLoadingResponse(false);
+              useConversationsStore.getState().streamActiveConversation(chunk.content, resolvedConversationId);
+            } else if (chunk.type === 'metadata') {
+              useConversationsStore.getState().streamActiveConversation('', resolvedConversationId, {
+                reference: chunk.reference,
+                citations: chunk.citations
+              });
+            }
+          }
+        );
+
+        if (!result.success) {
+          return result;
+        }
+
+        const messages = useConversationsStore.getState().activeConversation?.messages || [];
+        const lastMessage = messages[messages.length - 1];
+
+        return {
+          success: true,
+          message: 'Success',
+          data: {
+            conversationId: resolvedConversationId,
+            responseMessage: {
+              answer: lastMessage?.content || '',
+              reference: lastMessage?.metadata?.reference || [],
+            }
+          }
+        };
       }
 
       return await PostConversation(
