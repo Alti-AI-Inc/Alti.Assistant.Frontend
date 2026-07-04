@@ -30,7 +30,7 @@ function App() {
     <div
       className={cn(
         'flex h-full w-full flex-1 flex-col bg-[#e1e1e1] dark:bg-zinc-950',
-        !activeConversation && 'pb-40',
+        !activeConversation && 'pb-16',
       )}
     >
       {activeConversation?.knowledgebaseId && (

@@ -30,7 +30,7 @@ export default function ReferencesList({ references, webSearchQueries, searchEnt
     <div className="w-full mt-4 mb-6">
       <Accordion type="single" collapsible className="border-none">
         <AccordionItem value="references" className="border-none">
-          <AccordionTrigger className="flex items-center gap-2 py-2.5 px-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 dark:bg-zinc-900/50 dark:border-zinc-800 dark:hover:bg-zinc-900/80 transition-all duration-300 text-sm font-semibold tracking-wide text-zinc-300 dark:text-zinc-200 focus-visible:ring-0 focus-visible:ring-offset-0 focus:no-underline hover:no-underline">
+          <AccordionTrigger className="flex items-center gap-2 py-2.5 px-4 rounded-xl bg-white border border-black/10 hover:bg-zinc-50 dark:bg-zinc-900/50 dark:border-zinc-800 dark:hover:bg-zinc-900/80 transition-all duration-300 text-sm font-semibold tracking-wide text-zinc-800 dark:text-zinc-200 focus-visible:ring-0 focus-visible:ring-offset-0 focus:no-underline hover:no-underline">
             <div className="flex items-center justify-between w-full pr-4">
               <div className="flex items-center gap-2">
                 <svg
@@ -68,7 +68,7 @@ export default function ReferencesList({ references, webSearchQueries, searchEnt
                   {webSearchQueries.map((query, qIdx) => (
                     <div
                       key={qIdx}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100 border border-black/5 dark:bg-zinc-900/60 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-xs backdrop-blur-md transition-all duration-300 hover:border-teal-500/30"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-black/10 dark:bg-zinc-900/60 dark:border-zinc-800 text-xs font-semibold text-zinc-800 dark:text-zinc-300 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-teal-500/30"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -139,13 +139,13 @@ export default function ReferencesList({ references, webSearchQueries, searchEnt
                             </svg>
                           )}
                         </div>
-                        <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 truncate group-hover:text-primary dark:group-hover:text-emerald-400 transition-colors duration-200">
+                        <span className="text-[10px] font-semibold text-zinc-500 dark:text-zinc-400 truncate group-hover:text-primary dark:group-hover:text-emerald-400 transition-colors duration-200">
                           {domain}
                         </span>
                       </div>
                       
                       {/* Title */}
-                      <span className="text-xs font-semibold leading-relaxed text-zinc-200 dark:text-zinc-300 group-hover:text-white dark:group-hover:text-zinc-100 transition-colors duration-200 truncate">
+                      <span className="text-xs font-semibold leading-relaxed text-zinc-800 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors duration-200 truncate">
                         {title}
                       </span>
                       {/* Page number indicator for documents */}
@@ -178,7 +178,7 @@ export default function ReferencesList({ references, webSearchQueries, searchEnt
                   </>
                 );
 
-                const cardClassName = "group relative flex items-start gap-3 p-3.5 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.01] hover:from-white/10 hover:to-white/5 border border-white/10 hover:border-white/20 dark:from-zinc-900/30 dark:to-zinc-950/20 dark:border-zinc-800/80 dark:hover:border-zinc-700/80 hover:-translate-y-1 shadow-lg shadow-black/5 hover:shadow-black/10 hover:shadow-primary/5 transition-all duration-300 ease-out overflow-hidden";
+                const cardClassName = "group relative flex items-start gap-3 p-3.5 rounded-2xl bg-white hover:bg-zinc-50 border border-black/10 hover:border-black/20 dark:bg-gradient-to-br dark:from-zinc-900/30 dark:to-zinc-950/20 dark:border-zinc-800/80 dark:hover:border-zinc-700/80 hover:-translate-y-1 shadow-lg shadow-black/5 hover:shadow-black/10 hover:shadow-primary/5 transition-all duration-300 ease-out overflow-hidden";
 
                 if (isWeb) {
                   return (
