@@ -34,7 +34,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
       if (isChunkLoadError) {
         console.warn(
-          'Inso AI Shield: Detected chunk loading or Server Action mismatch. Performing automatic recovery refresh...',
+          'Alti Assistant Shield: Detected chunk loading or Server Action mismatch. Performing automatic recovery refresh...',
         );
         window.location.reload();
       }
@@ -54,7 +54,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
       if (isChunkLoadError) {
         console.warn(
-          'Inso AI Shield: Detected unhandled chunk/Server Action rejection. Performing automatic recovery refresh...',
+          'Alti Assistant Shield: Detected unhandled chunk/Server Action rejection. Performing automatic recovery refresh...',
         );
         window.location.reload();
       }

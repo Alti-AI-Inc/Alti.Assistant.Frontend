@@ -37,7 +37,7 @@ const verifyBackendJwt = (token: string): jwt.JwtPayload | null => {
 
   if (!secret) {
     console.error(
-      'Inso AI Auth: Neither JWT_ACCESS_TOKEN nor AUTH_SECRET is defined. Cannot verify backend JWT signature.'
+      'Alti Assistant Auth: Neither JWT_ACCESS_TOKEN nor AUTH_SECRET is defined. Cannot verify backend JWT signature.'
     );
     return null;
   }
@@ -45,7 +45,7 @@ const verifyBackendJwt = (token: string): jwt.JwtPayload | null => {
   try {
     return jwt.verify(token, secret) as jwt.JwtPayload;
   } catch (error) {
-    console.error('Inso AI Auth: Failed to verify backend JWT signature:', error);
+    console.error('Alti Assistant Auth: Failed to verify backend JWT signature:', error);
     return null;
   }
 };
@@ -75,7 +75,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (credentials.invitationToken) {
             body.invitationToken = credentials.invitationToken as string;
           }
-          const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://insoai.com/api/v1';
+          const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
           const response = await fetch(`${apiUrl}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

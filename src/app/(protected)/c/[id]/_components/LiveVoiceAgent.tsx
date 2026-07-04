@@ -17,7 +17,7 @@ interface LiveVoiceAgentProps {
   roomName?: string;
 }
 
-export default function LiveVoiceAgent({ roomName = 'insoai-ai-room' }: LiveVoiceAgentProps) {
+export default function LiveVoiceAgent({ roomName = 'alti-ai-room' }: LiveVoiceAgentProps) {
   const [token, setToken] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -25,7 +25,7 @@ export default function LiveVoiceAgent({ roomName = 'insoai-ai-room' }: LiveVoic
   const startConversation = useCallback(async () => {
     try {
       setIsFetching(true);
-      // Calls the Inso AI Streaming Controller to generate a LiveKit JWT
+      // Calls the Alti Assistant Streaming Controller to generate a LiveKit JWT
       const response = await fetch(`/api/v1/streaming/token?room=${roomName}`);
       const data = await response.json();
       
@@ -51,9 +51,9 @@ export default function LiveVoiceAgent({ roomName = 'insoai-ai-room' }: LiveVoic
       <div className="flex items-center justify-between px-5 py-3 bg-zinc-50 dark:bg-zinc-900 border-b border-black/5 dark:border-zinc-800">
         <span className="font-semibold flex items-center gap-2 text-zinc-800 dark:text-zinc-200">
           <Sparkles className="size-4 text-indigo-500 animate-pulse" />
-          Inso AI Voice Assistant
+          Alti Assistant Voice Assistant
         </span>
-        <div className="text-xs font-mono text-zinc-500">Inso AI Cloud powered</div>
+        <div className="text-xs font-mono text-zinc-500">Alti Assistant Cloud powered</div>
       </div>
 
       {/* Main Content Area */}
@@ -65,7 +65,7 @@ export default function LiveVoiceAgent({ roomName = 'insoai-ai-room' }: LiveVoic
               <Mic className="size-8 text-indigo-600 dark:text-indigo-400" />
             </div>
             <p className="text-sm text-center text-zinc-600 dark:text-zinc-400 max-w-xs mb-2">
-              Start a real-time conversation with Inso AI using your microphone.
+              Start a real-time conversation with Alti Assistant using your microphone.
             </p>
             <button
               onClick={startConversation}

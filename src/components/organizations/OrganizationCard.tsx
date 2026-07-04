@@ -80,7 +80,7 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
               {organization.name}
             </h3>
             <p className="text-muted-foreground truncate text-sm">
-              {organization.subdomain}.insoai.ai
+              {organization.subdomain}.alti.ai
             </p>
           </div>
         </div>

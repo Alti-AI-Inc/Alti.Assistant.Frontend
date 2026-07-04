@@ -29,7 +29,7 @@ const GuardrailsContent = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const storedGuard = localStorage.getItem('insoai_guardrails');
+    const storedGuard = localStorage.getItem('alti_guardrails');
     if (storedGuard) {
       setGuardrailsList(JSON.parse(storedGuard));
     } else {
@@ -51,7 +51,7 @@ const GuardrailsContent = () => {
         }
       ];
       setGuardrailsList(defaults);
-      localStorage.setItem('insoai_guardrails', JSON.stringify(defaults));
+      localStorage.setItem('alti_guardrails', JSON.stringify(defaults));
     }
   }, []);
 
@@ -78,7 +78,7 @@ const GuardrailsContent = () => {
 
       const updatedList = [newItem, ...guardrailsList];
       setGuardrailsList(updatedList);
-      localStorage.setItem('insoai_guardrails', JSON.stringify(updatedList));
+      localStorage.setItem('alti_guardrails', JSON.stringify(updatedList));
       setInputVal('');
       setIsSaving(false);
     }, 300);
@@ -87,7 +87,7 @@ const GuardrailsContent = () => {
   const handleDeleteGuardrail = (id: string) => {
     const updatedList = guardrailsList.filter(item => item.id !== id);
     setGuardrailsList(updatedList);
-    localStorage.setItem('insoai_guardrails', JSON.stringify(updatedList));
+    localStorage.setItem('alti_guardrails', JSON.stringify(updatedList));
   };
 
   const filteredGuardrails = guardrailsList.filter(item =>

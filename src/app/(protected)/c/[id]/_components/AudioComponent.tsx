@@ -95,7 +95,7 @@ export default function AudioComponent({ audioUrl }: AudioComponentProps) {
   return (
     <div className="flex flex-col gap-6 w-full">
       {/* New Real-time Interactive Agent */}
-      <LiveVoiceAgent roomName="insoai-ai-room" />
+      <LiveVoiceAgent roomName="alti-ai-room" />
 
       {/* Legacy Static Audio Synthesizer */}
       <div className="w-full max-w-xl mx-auto my-4 overflow-hidden rounded-2xl border border-black/10 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-lg select-none">
@@ -112,7 +112,7 @@ export default function AudioComponent({ audioUrl }: AudioComponentProps) {
           {/* Download button */}
           <a
             href={audioUrl}
-            download="insoai_synthesized_voice.mp3"
+            download="alti_synthesized_voice.mp3"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => toast.success('Downloading MP3 audio...')}

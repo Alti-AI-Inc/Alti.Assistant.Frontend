@@ -620,7 +620,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Autodesk BIM 360",
-    "description": "Integrate Autodesk BIM 360 to seamlessly execute automated workflows, synchronize sheets, coordinate grid models, and manage construction RFIs directly within Inso AI.",
+    "description": "Integrate Autodesk BIM 360 to seamlessly execute automated workflows, synchronize sheets, coordinate grid models, and manage construction RFIs directly within Alti Assistant.",
     "image": "https://logos.composio.dev/api/autodesk",
     "app_name": "autodesk",
     "isAvailable": true
@@ -2754,7 +2754,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Fiserv",
-    "description": "Integrate Fiserv commercial banking core system to seamlessly manage cash balances, query ledger accounts, and execute wire transfers directly within Inso AI.",
+    "description": "Integrate Fiserv commercial banking core system to seamlessly manage cash balances, query ledger accounts, and execute wire transfers directly within Alti Assistant.",
     "image": "https://logos.composio.dev/api/fiserv",
     "app_name": "fiserv",
     "isAvailable": true
@@ -5744,7 +5744,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "RealPage",
-    "description": "Integrate RealPage to optimize multifamily rent analytics, vacancy availability checkups, and verify leasing compliance lists directly within Inso AI.",
+    "description": "Integrate RealPage to optimize multifamily rent analytics, vacancy availability checkups, and verify leasing compliance lists directly within Alti Assistant.",
     "image": "https://logos.composio.dev/api/realpage",
     "app_name": "realpage",
     "isAvailable": true
@@ -7122,10 +7122,10 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Tipinsoai",
+    "title": "Tipalti",
     "description": "Global accounts payable automation, supplier onboarding and compliance, multi-currency vendor payments, and tax reconciliation.",
-    "image": "https://logos.composio.dev/api/tipinsoai",
-    "app_name": "tipinsoai",
+    "image": "https://logos.composio.dev/api/tipalti",
+    "app_name": "tipalti",
     "isAvailable": true
   },
   {

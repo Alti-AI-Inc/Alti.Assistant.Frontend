@@ -225,7 +225,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
   useEffect(() => {
     const handleStorageChange = () => {
-      const savedTasks = localStorage.getItem('insoai_automations');
+      const savedTasks = localStorage.getItem('alti_automations');
       if (savedTasks) {
         setTasks(JSON.parse(savedTasks));
       } else {
@@ -236,11 +236,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     handleStorageChange();
 
     window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('insoai_automations_updated', handleStorageChange);
+    window.addEventListener('alti_automations_updated', handleStorageChange);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('insoai_automations_updated', handleStorageChange);
+      window.removeEventListener('alti_automations_updated', handleStorageChange);
     };
   }, [pathname]);
 
@@ -257,7 +257,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const isTenantOwner = mode === 'tenant' && (currentTenant?.role === 'admin' || currentTenant?.role === 'owner');
   const isTenantAdmin = mode === 'tenant' && currentTenant?.role === 'manager';
 
-  const isAdmin = userEmail === 'admin@insoai.com' || isGlobalAdmin || isTenantOwner;
+  const isAdmin = userEmail === 'admin@altihq.com' || isGlobalAdmin || isTenantOwner;
   const isManager = isGlobalAdmin || isTenantOwner || isTenantAdmin;
   const isSuperAdmin = data?.user?.role === 'super_admin';
 
@@ -409,7 +409,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           tooltip: 'New Task',
           onClick: () => {
             router.push('/tasks');
-            window.dispatchEvent(new Event('insoai_new_task_click'));
+            window.dispatchEvent(new Event('alti_new_task_click'));
           },
         };
       case 'search':

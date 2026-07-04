@@ -9,7 +9,7 @@ export default function page() {
   const privacyPolicy = {
     title: 'Privacy Policy',
     intro:
-      'This Privacy Policy describes how Inso AI ("Inso AI," "we," "us," or "our") collects, uses, stores, shares, and protects information when you access or use our website at insoai.com, our mobile applications, and any related services (collectively, the "Platform"). By using the Platform, you agree to the collection and use of information in accordance with this policy. If you do not agree with this Privacy Policy, please do not use the Platform.',
+      'This Privacy Policy describes how Alti Assistant ("Alti Assistant," "we," "us," or "our") collects, uses, stores, shares, and protects information when you access or use our website at altihq.com, our mobile applications, and any related services (collectively, the "Platform"). By using the Platform, you agree to the collection and use of information in accordance with this policy. If you do not agree with this Privacy Policy, please do not use the Platform.',
     sections: [
       {
         heading: '1. Information We Collect',
@@ -195,7 +195,7 @@ export default function page() {
           {
             text: '6.3 Deletion.',
             description:
-              'You may request the deletion of your account and personal data by using the account deletion feature in your settings or by contacting us at legal@insoai.com. We will process deletion requests within thirty (30) days.',
+              'You may request the deletion of your account and personal data by using the account deletion feature in your settings or by contacting us at legal@altihq.com. We will process deletion requests within thirty (30) days.',
           },
           {
             text: '6.4 Opt-Out of Communications.',
@@ -210,14 +210,14 @@ export default function page() {
           {
             text: '6.6 Rights Under Specific Jurisdictions.',
             description:
-              'Depending on your location, you may have additional rights under laws such as the California Consumer Privacy Act (CCPA), the General Data Protection Regulation (GDPR), or other applicable data protection laws. These may include the right to object to processing, the right to restrict processing, and the right to lodge a complaint with a supervisory authority. To exercise any of these rights, please contact us at legal@insoai.com.',
+              'Depending on your location, you may have additional rights under laws such as the California Consumer Privacy Act (CCPA), the General Data Protection Regulation (GDPR), or other applicable data protection laws. These may include the right to object to processing, the right to restrict processing, and the right to lodge a complaint with a supervisory authority. To exercise any of these rights, please contact us at legal@altihq.com.',
           },
         ],
       },
       {
         heading: '7. Children\'s Privacy',
         content:
-          'The Platform is not intended for individuals under the age of eighteen (18). We do not knowingly collect personal information from children. If we become aware that we have collected personal information from a child under 18, we will take steps to delete that information promptly. If you believe a child has provided us with personal information, please contact us at legal@insoai.com.',
+          'The Platform is not intended for individuals under the age of eighteen (18). We do not knowingly collect personal information from children. If we become aware that we have collected personal information from a child under 18, we will take steps to delete that information promptly. If you believe a child has provided us with personal information, please contact us at legal@altihq.com.',
       },
       {
         heading: '8. International Data Transfers',
@@ -232,7 +232,7 @@ export default function page() {
       {
         heading: '10. Contact Us',
         content:
-          'If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at: legal@insoai.com, or by mail at: Inso AI, 280 N Old Woodward, Birmingham, MI 48009.',
+          'If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at: legal@altihq.com, or by mail at: Alti Assistant, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
     conclusion: '',
@@ -241,7 +241,7 @@ export default function page() {
   const terms = {
     title: 'Terms of Use',
     intro:
-      'These Terms of Use ("Terms") constitute a legally binding agreement between you ("you," "your," or "User") and Inso AI ("Inso AI," "we," "us," or "our") governing your access to and use of the Platform at insoai.com, our mobile applications, and all related services (collectively, the "Platform"). By creating an account or using the Platform, you agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, do not use the Platform.',
+      'These Terms of Use ("Terms") constitute a legally binding agreement between you ("you," "your," or "User") and Alti Assistant ("Alti Assistant," "we," "us," or "our") governing your access to and use of the Platform at altihq.com, our mobile applications, and all related services (collectively, the "Platform"). By creating an account or using the Platform, you agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, do not use the Platform.',
     sections: [
       {
         heading: '1. Acceptance of Terms',
@@ -256,12 +256,12 @@ export default function page() {
       {
         heading: '3. Account Registration and Security',
         content:
-          'To access certain features of the Platform, you must create an account by providing a valid email address and creating a password, or by authenticating through a supported third-party provider (Google, Facebook, Apple, Microsoft, GitHub, Discord, or Twitter/X). You are responsible for maintaining the confidentiality of your account credentials, for all activities that occur under your account, and for notifying us immediately at legal@insoai.com if you suspect any unauthorized use of your account. We reserve the right to suspend or terminate accounts that we reasonably believe have been compromised.',
+          'To access certain features of the Platform, you must create an account by providing a valid email address and creating a password, or by authenticating through a supported third-party provider (Google, Facebook, Apple, Microsoft, GitHub, Discord, or Twitter/X). You are responsible for maintaining the confidentiality of your account credentials, for all activities that occur under your account, and for notifying us immediately at legal@altihq.com if you suspect any unauthorized use of your account. We reserve the right to suspend or terminate accounts that we reasonably believe have been compromised.',
       },
       {
         heading: '4. Description of the Platform',
         content:
-          'Inso AI is an AI-powered productivity and intelligence platform that provides access to advanced artificial intelligence capabilities including, but not limited to, conversational AI chat, deep research, web search, image and video generation, audio transcription, code generation, writing and editing tools, legal contract review, presentation creation, report generation, knowledge base management with retrieval-augmented generation (RAG), and third-party integrations. The Platform routes and processes your requests exclusively using Google native AI models (Gemini and Imagen) hosted on Google Cloud Platform to deliver responses.',
+          'Alti Assistant is an AI-powered productivity and intelligence platform that provides access to advanced artificial intelligence capabilities including, but not limited to, conversational AI chat, deep research, web search, image and video generation, audio transcription, code generation, writing and editing tools, legal contract review, presentation creation, report generation, knowledge base management with retrieval-augmented generation (RAG), and third-party integrations. The Platform routes and processes your requests exclusively using Google native AI models (Gemini and Imagen) hosted on Google Cloud Platform to deliver responses.',
       },
       {
         heading: '5. Subscription Plans and Payments',
@@ -386,7 +386,7 @@ export default function page() {
               <strong>7.4 Platform Intellectual Property.</strong> The Platform,
               including its design, software, features, branding, logos,
               documentation, and all underlying technology, is and remains the
-              exclusive property of Inso AI and is protected by United States and
+              exclusive property of Alti Assistant and is protected by United States and
               international intellectual property laws, including copyright,
               trademark, patent, and trade secret laws.
             </p>
@@ -411,17 +411,17 @@ export default function page() {
       {
         heading: '11. Disclaimer of Warranties',
         content:
-          'THE PLATFORM IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, INSO AI DISCLAIMS ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, AND ACCURACY. WE DO NOT WARRANT THAT (A) THE PLATFORM WILL BE UNINTERRUPTED, ERROR-FREE, OR FREE OF HARMFUL COMPONENTS; (B) AI-GENERATED OUTPUTS WILL BE ACCURATE, COMPLETE, RELIABLE, OR SUITABLE FOR ANY PARTICULAR PURPOSE; (C) ANY DEFECTS OR ERRORS WILL BE CORRECTED; OR (D) THE PLATFORM WILL MEET YOUR SPECIFIC REQUIREMENTS. YOU ACKNOWLEDGE THAT AI-GENERATED CONTENT MAY CONTAIN ERRORS, HALLUCINATIONS, OR INACCURACIES, AND YOU ASSUME ALL RESPONSIBILITY FOR EVALUATING AND RELYING UPON SUCH CONTENT.',
+          'THE PLATFORM IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, ALTI DISCLAIMS ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, AND ACCURACY. WE DO NOT WARRANT THAT (A) THE PLATFORM WILL BE UNINTERRUPTED, ERROR-FREE, OR FREE OF HARMFUL COMPONENTS; (B) AI-GENERATED OUTPUTS WILL BE ACCURATE, COMPLETE, RELIABLE, OR SUITABLE FOR ANY PARTICULAR PURPOSE; (C) ANY DEFECTS OR ERRORS WILL BE CORRECTED; OR (D) THE PLATFORM WILL MEET YOUR SPECIFIC REQUIREMENTS. YOU ACKNOWLEDGE THAT AI-GENERATED CONTENT MAY CONTAIN ERRORS, HALLUCINATIONS, OR INACCURACIES, AND YOU ASSUME ALL RESPONSIBILITY FOR EVALUATING AND RELYING UPON SUCH CONTENT.',
       },
       {
         heading: '12. Limitation of Liability',
         content:
-          'TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL INSO AI, ITS OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, OR AFFILIATES BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES (INCLUDING, BUT NOT LIMITED TO, DAMAGES FOR LOSS OF PROFITS, REVENUE, DATA, GOODWILL, OR OTHER INTANGIBLE LOSSES) ARISING OUT OF OR RELATING TO YOUR USE OF OR INABILITY TO USE THE PLATFORM, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. OUR TOTAL AGGREGATE LIABILITY TO YOU FOR ALL CLAIMS ARISING FROM OR RELATING TO THESE TERMS OR YOUR USE OF THE PLATFORM SHALL NOT EXCEED THE GREATER OF (A) THE AMOUNT YOU PAID TO US IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM, OR (B) ONE HUNDRED DOLLARS ($100).',
+          'TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL ALTI, ITS OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, OR AFFILIATES BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES (INCLUDING, BUT NOT LIMITED TO, DAMAGES FOR LOSS OF PROFITS, REVENUE, DATA, GOODWILL, OR OTHER INTANGIBLE LOSSES) ARISING OUT OF OR RELATING TO YOUR USE OF OR INABILITY TO USE THE PLATFORM, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. OUR TOTAL AGGREGATE LIABILITY TO YOU FOR ALL CLAIMS ARISING FROM OR RELATING TO THESE TERMS OR YOUR USE OF THE PLATFORM SHALL NOT EXCEED THE GREATER OF (A) THE AMOUNT YOU PAID TO US IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM, OR (B) ONE HUNDRED DOLLARS ($100).',
       },
       {
         heading: '13. Indemnification',
         content:
-          'You agree to indemnify, defend, and hold harmless Inso AI and its officers, directors, employees, agents, and affiliates from and against any and all claims, liabilities, damages, losses, costs, and expenses (including reasonable attorneys\' fees) arising out of or relating to: (a) your use of the Platform; (b) your User Content; (c) your violation of these Terms; (d) your violation of any applicable law or regulation; or (e) your violation of any rights of a third party.',
+          'You agree to indemnify, defend, and hold harmless Alti Assistant and its officers, directors, employees, agents, and affiliates from and against any and all claims, liabilities, damages, losses, costs, and expenses (including reasonable attorneys\' fees) arising out of or relating to: (a) your use of the Platform; (b) your User Content; (c) your violation of these Terms; (d) your violation of any applicable law or regulation; or (e) your violation of any rights of a third party.',
       },
       {
         heading: '14. Termination',
@@ -446,12 +446,12 @@ export default function page() {
       {
         heading: '18. Entire Agreement',
         content:
-          'These Terms, together with our Privacy Policy and Cookies Policy, constitute the entire agreement between you and Inso AI regarding your use of the Platform and supersede all prior and contemporaneous agreements, representations, and understandings, whether written or oral.',
+          'These Terms, together with our Privacy Policy and Cookies Policy, constitute the entire agreement between you and Alti Assistant regarding your use of the Platform and supersede all prior and contemporaneous agreements, representations, and understandings, whether written or oral.',
       },
       {
         heading: '19. Contact Information',
         content:
-          'If you have any questions about these Terms of Use, please contact us at: legal@insoai.com, or by mail at: Inso AI, 280 N Old Woodward, Birmingham, MI 48009.',
+          'If you have any questions about these Terms of Use, please contact us at: legal@altihq.com, or by mail at: Alti Assistant, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
     conclusion: '',
@@ -460,7 +460,7 @@ export default function page() {
   const cookiesPolicy = {
     title: 'Cookies Policy',
     intro:
-      'This Cookies Policy explains how Inso AI ("Inso AI," "we," "us," or "our") uses cookies and similar technologies when you use our Platform at insoai.com and our mobile applications. This policy should be read in conjunction with our Privacy Policy and Terms of Use.',
+      'This Cookies Policy explains how Alti Assistant ("Alti Assistant," "we," "us," or "our") uses cookies and similar technologies when you use our Platform at altihq.com and our mobile applications. This policy should be read in conjunction with our Privacy Policy and Terms of Use.',
     sections: [
       {
         heading: '1. What Are Cookies?',
@@ -599,7 +599,7 @@ export default function page() {
       {
         heading: '8. Contact Us',
         content:
-          'If you have any questions about our use of cookies or this Cookies Policy, please contact us at: legal@insoai.com, or by mail at: Inso AI, 280 N Old Woodward, Birmingham, MI 48009.',
+          'If you have any questions about our use of cookies or this Cookies Policy, please contact us at: legal@altihq.com, or by mail at: Alti Assistant, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
     conclusion: '',

@@ -116,7 +116,7 @@ export function AddModelModal() {
                   setName(e.target.value);
                   if (error) setError('');
                 }}
-                placeholder="e.g. Inso AI Financial Analyst, Legal Copilot"
+                placeholder="e.g. Alti Assistant Financial Analyst, Legal Copilot"
                 className="rounded-xl border-gray-200/80 bg-white/50 backdrop-blur-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:bg-gray-900/50 dark:border-gray-800 focus-visible:ring-0 focus-visible:ring-offset-0 text-sm py-5"
               />
             </div>

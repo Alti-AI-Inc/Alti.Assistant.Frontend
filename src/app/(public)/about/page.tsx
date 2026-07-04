@@ -8,7 +8,7 @@ export default function Page() {
         </h4>
         <div>
           <p>
-            Inso is where the power of AI meets unmatched privacy and security.
+            Alti is where the power of AI meets unmatched privacy and security.
             We give users the
           </p>
           <p>
@@ -20,7 +20,7 @@ export default function Page() {
             With zero data collection and
           </p>
           <p>
-            full support for bring your own data, inso is built for enterprises
+            full support for bring your own data, alti is built for enterprises
             and organizations that prioritize
           </p>
           <p>

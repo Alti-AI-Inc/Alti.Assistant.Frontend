@@ -1,4 +1,4 @@
-# Inso AI Admin Panel — Implementation Plan
+# Alti Assistant Admin Panel — Implementation Plan
 
 > Standalone Next.js application that connects to the existing
 > ASON-Core-Service-Backend. Lives at its own repo / deployment URL (e.g.
@@ -62,7 +62,7 @@ embedded** in `Alti.Assistant.Frontend`.
 ## 3. Project Structure
 
 ```
-insoai-admin/
+alti-admin/
 ├── package.json
 ├── next.config.ts
 ├── tsconfig.json
@@ -636,7 +636,7 @@ with distinct colour
 
 ### Phase 0 — Scaffold New Project
 
-- [x] `pnpm create next-app insoai-admin --typescript --tailwind --app --src-dir --import-alias "@/*"`
+- [x] `pnpm create next-app alti-admin --typescript --tailwind --app --src-dir --import-alias "@/*"`
 - [x] Install dependencies:
       `next-auth shadcn-ui @tanstack/react-query @tanstack/react-table recharts react-hook-form zod sonner lucide-react`
 - [x] Initialise ShadCN: `pnpm dlx shadcn@latest init`
@@ -759,16 +759,16 @@ NEXTAUTH_URL=https://admin.asonai.com
 # cloudbuild.yaml (same pattern as main frontend)
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/insoai-admin', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/alti-admin', '.']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/insoai-admin']
+    args: ['push', 'gcr.io/$PROJECT_ID/alti-admin']
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     args:
       - gcloud
       - run
       - deploy
-      - insoai-admin
-      - --image=gcr.io/$PROJECT_ID/insoai-admin
+      - alti-admin
+      - --image=gcr.io/$PROJECT_ID/alti-admin
       - --region=us-central1
       - --platform=managed
       - --allow-unauthenticated

@@ -104,7 +104,7 @@ export default function AdminDashboardPage() {
         if (token) headers['Authorization'] = `Bearer ${token}`;
 
         const base =
-          process.env.NEXT_PUBLIC_API_URL || 'https://insoai.com/api/v1';
+          process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
         const [usersRes, paymentsRes, subsRes, tenantsRes] = await Promise.all([
           fetch(`${base}/admin/all-user`, { headers }),
           fetch(`${base}/admin/all-payment`, { headers }),

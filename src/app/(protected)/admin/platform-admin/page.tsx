@@ -16,7 +16,7 @@ export default function PlatformAdminLandingPage() {
       <div className="flex-1 flex flex-col items-center justify-center p-8 select-none pointer-events-none">
         <Image
           src="/assets/logo-icon.png"
-          alt="Inso AI Logo"
+          alt="Alti Assistant Logo"
           width={120}
           height={120}
           className="opacity-15 grayscale contrast-50 dark:opacity-10 dark:invert transition-all duration-300"
