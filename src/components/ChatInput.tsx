@@ -659,10 +659,15 @@ const ChatInput = ({
           response?.message || 'An unexpected error occurred.',
           ROLES.ASSISTANT,
         );
+        setShowStartLastMessage(false);
         setLoadingResponse(false);
         return;
       }
-      if (!response?.data) return;
+      if (!response?.data) {
+        setShowStartLastMessage(false);
+        setLoadingResponse(false);
+        return;
+      }
       setShowStartLastMessage(false);
       const newId =
         conversationId === 'new-chat'
@@ -774,10 +779,11 @@ const ChatInput = ({
     },
     onError: error => {
       console.error('Message post failed:', error);
+      setShowStartLastMessage(false);
       setLoadingResponse(false);
     },
     onSettled: () => {
-      // setMessage('');
+      setShowStartLastMessage(false);
       setLoadingResponse(false);
     },
   });

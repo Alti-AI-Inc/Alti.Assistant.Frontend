@@ -53,7 +53,7 @@ export default function LiveVoiceAgent({ roomName = 'alti-ai-room' }: LiveVoiceA
           <Sparkles className="size-4 text-indigo-500 animate-pulse" />
           Alti Voice Assistant
         </span>
-        <div className="text-xs font-mono text-zinc-500">Google Cloud powered</div>
+        <div className="text-xs font-mono text-zinc-500">Alti Cloud powered</div>
       </div>
 
       {/* Main Content Area */}

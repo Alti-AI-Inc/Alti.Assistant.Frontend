@@ -34,7 +34,7 @@ export function VideoStudioWidget({ currentVideoUrl, status = 'idle', progress =
           </div>
           <div>
             <h3 className="font-semibold text-sm">Video Studio</h3>
-            <p className="text-xs text-slate-400">Powered by Google Veo & Gemini 3.1 Pro</p>
+            <p className="text-xs text-slate-400">Powered by Alti Cinematic & Advanced Reasoning Models</p>
           </div>
         </div>
         

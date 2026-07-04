@@ -266,7 +266,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     }
 
     if (sources.length === 0) {
-      sources.push({ name: 'Google Cloud Grounding', domain: 'googleapis.com', status: 'idle' });
+      sources.push({ name: 'Alti Global Grounding', domain: 'grounding.altihq.com', status: 'idle' });
       sources.push({ name: 'Public registries', domain: 'comtrade.un.org', status: 'idle' });
     }
 
@@ -414,8 +414,8 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const hasScrolledToUserMessage = useRef(false);
   const isFirstLoad = useRef(true);
+  const prevShowStartLastMessage = useRef(showStartLastMessage);
 
   // Auto-scroll to bottom function
   const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
@@ -444,8 +444,6 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
   // Auto-scroll when messages change or loading state changes
   useEffect(() => {
-    if (showStartLastMessage || hasScrolledToUserMessage.current) return;
-
     if (activeConversation?.messages?.length) {
       if (isFirstLoad.current) {
         // Handle lazy images/content
@@ -466,11 +464,33 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
         forceScrollLoop();
       } else {
+        // Always scroll to bottom when messages change
         scrollToBottom('smooth');
       }
     }
-  }, [activeConversation?.messages, showStartLastMessage]);
+  }, [activeConversation?.messages]);
 
+  // When response finishes loading, ensure we scroll to see the new content
+  useEffect(() => {
+    if (!isLoadingResponse && activeConversation?.messages?.length) {
+      // Small delay to let the DOM update with the new assistant message
+      const timer = setTimeout(() => scrollToBottom('smooth'), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoadingResponse, activeConversation?.messages?.length]);
+
+  // When showStartLastMessage transitions from true -> false (response arrived),
+  // scroll to bottom so the user can see the assistant response
+  useEffect(() => {
+    if (prevShowStartLastMessage.current && !showStartLastMessage) {
+      const timer = setTimeout(() => scrollToBottom('smooth'), 150);
+      prevShowStartLastMessage.current = showStartLastMessage;
+      return () => clearTimeout(timer);
+    }
+    prevShowStartLastMessage.current = showStartLastMessage;
+  }, [showStartLastMessage]);
+
+  // When showStartLastMessage is set, scroll to the user's message
   useEffect(() => {
     if (showStartLastMessage) {
       scrollToLastUserMessage();
@@ -1036,13 +1056,6 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             </div>
           )
         )}
-        <div
-          className={cn(
-            showStartLastMessage &&
-              isLoadingResponse &&
-              'h-[50dvh] md:h-[65dvh] lg:h-[70dvh]',
-          )}
-        ></div>
         <div ref={messagesEndRef} />
         </div>
       </div>
