@@ -29,7 +29,7 @@ function App() {
   return (
     <div
       className={cn(
-        'flex h-full w-full flex-1 flex-col items-center justify-center bg-[#e1e1e1] dark:bg-zinc-950',
+        'flex h-full w-full flex-1 flex-col bg-[#e1e1e1] dark:bg-zinc-950',
         !activeConversation && 'pb-40',
       )}
     >
@@ -38,25 +38,6 @@ function App() {
           Chat with {activeKnowledgeBaseName}
         </h1>
       )}
-      {!activeConversation?.knowledgebaseId &&
-        !activeConversation?.messages?.length && (
-          <h1 className="mb-2 mt-12 text-4xl font-medium text-gray-900 dark:text-white tracking-tight">
-            {selectedOption === OPTIONS.RESEARCH
-              ? 'Deep Research'
-              : selectedOption === OPTIONS.IMAGE
-              ? 'Design The Future'
-              : selectedOption === OPTIONS.CODE
-              ? 'Your Engineering Partner'
-              : selectedOption === OPTIONS.VIDEO
-              ? 'Create Moving Art'
-              : selectedOption === OPTIONS.AUDIO
-              ? "Let's Make Some Noise"
-              : selectedOption === OPTIONS.DRAFT_DOCUMENT
-              ? "Let's Write Together"
-              : 'Real-Time Intelligence'}
-          </h1>
-        )}
-
       <FullConversation conversationId="new-chat" />
     </div>
   );
