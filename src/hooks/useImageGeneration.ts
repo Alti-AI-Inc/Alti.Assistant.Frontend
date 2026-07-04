@@ -449,10 +449,8 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         return null;
       }
 
-      // TODO: Add backend sync API here to push conversation to backend
-      // This should be called BEFORE finalizePrompt to ensure conversation is saved
-      // Example:
-      // await syncConversationToBackend(currentConvId, currentUserId, accessToken);
+      // The conversation is already synchronized to the backend database
+      // since the evaluatePrompt and addDetail APIs save their messages in real-time.
 
       console.log('[useImageGeneration] finalizePrompt - sending:', {
         conversationId: currentConvId,
