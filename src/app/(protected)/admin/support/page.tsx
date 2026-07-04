@@ -89,18 +89,18 @@ export default function AdminSupportInboxPage() {
 
 
   useEffect(() => {
-    const existing = localStorage.getItem('alti_support_requests');
+    const existing = localStorage.getItem('insoai_support_requests');
     if (existing) {
       try {
         setRequests(JSON.parse(existing));
       } catch (e) {
         console.error(e);
         setRequests(DEFAULT_SUPPORT_REQUESTS);
-        localStorage.setItem('alti_support_requests', JSON.stringify(DEFAULT_SUPPORT_REQUESTS));
+        localStorage.setItem('insoai_support_requests', JSON.stringify(DEFAULT_SUPPORT_REQUESTS));
       }
     } else {
       setRequests(DEFAULT_SUPPORT_REQUESTS);
-      localStorage.setItem('alti_support_requests', JSON.stringify(DEFAULT_SUPPORT_REQUESTS));
+      localStorage.setItem('insoai_support_requests', JSON.stringify(DEFAULT_SUPPORT_REQUESTS));
     }
   }, []);
 
@@ -123,7 +123,7 @@ export default function AdminSupportInboxPage() {
       });
 
       setRequests(updatedRequests);
-      localStorage.setItem('alti_support_requests', JSON.stringify(updatedRequests));
+      localStorage.setItem('insoai_support_requests', JSON.stringify(updatedRequests));
       toast.success(`Response sent successfully to ${viewingRequest.email}`);
       setIsSubmittingResponse(false);
       setViewingRequest(null);

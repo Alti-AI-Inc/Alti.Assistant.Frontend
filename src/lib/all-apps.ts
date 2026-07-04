@@ -620,7 +620,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Autodesk BIM 360",
-    "description": "Integrate Autodesk BIM 360 to seamlessly execute automated workflows, synchronize sheets, coordinate grid models, and manage construction RFIs directly within Alti.",
+    "description": "Integrate Autodesk BIM 360 to seamlessly execute automated workflows, synchronize sheets, coordinate grid models, and manage construction RFIs directly within Inso AI.",
     "image": "https://logos.composio.dev/api/autodesk",
     "app_name": "autodesk",
     "isAvailable": true
@@ -2754,7 +2754,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "Fiserv",
-    "description": "Integrate Fiserv commercial banking core system to seamlessly manage cash balances, query ledger accounts, and execute wire transfers directly within Alti.",
+    "description": "Integrate Fiserv commercial banking core system to seamlessly manage cash balances, query ledger accounts, and execute wire transfers directly within Inso AI.",
     "image": "https://logos.composio.dev/api/fiserv",
     "app_name": "fiserv",
     "isAvailable": true
@@ -3298,7 +3298,7 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Google Search Console",
+    "title": "Web Search Console",
     "description": "",
     "image": "https://logos.composio.dev/api/google_search_console",
     "app_name": "google_search_console",
@@ -5744,7 +5744,7 @@ export const allApps: APP[] = [
   },
   {
     "title": "RealPage",
-    "description": "Integrate RealPage to optimize multifamily rent analytics, vacancy availability checkups, and verify leasing compliance lists directly within Alti.",
+    "description": "Integrate RealPage to optimize multifamily rent analytics, vacancy availability checkups, and verify leasing compliance lists directly within Inso AI.",
     "image": "https://logos.composio.dev/api/realpage",
     "app_name": "realpage",
     "isAvailable": true
@@ -7122,10 +7122,10 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Tipalti",
+    "title": "Tipinsoai",
     "description": "Global accounts payable automation, supplier onboarding and compliance, multi-currency vendor payments, and tax reconciliation.",
-    "image": "https://logos.composio.dev/api/tipalti",
-    "app_name": "tipalti",
+    "image": "https://logos.composio.dev/api/tipinsoai",
+    "app_name": "tipinsoai",
     "isAvailable": true
   },
   {

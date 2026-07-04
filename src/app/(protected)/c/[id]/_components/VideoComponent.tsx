@@ -7,7 +7,7 @@ import { Download, RefreshCw, CheckCircle2, Loader2, PlayCircle, Eye, AlertCircl
 import { toast } from 'sonner';
 
 const telemetrySteps = [
-  { label: 'Connecting to Alti Cinematic Engine...', duration: 6000 },
+  { label: 'Connecting to Inso AI Cinematic Engine...', duration: 6000 },
   { label: 'Analyzing motion vectors & text prompt alignment...', duration: 12000 },
   { label: 'Initializing diffusion pipeline (30 FPS keyframes)...', duration: 18000 },
   { label: 'Synthesizing high-fidelity frame buffer streams...', duration: 24000 },

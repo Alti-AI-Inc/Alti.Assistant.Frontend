@@ -107,7 +107,7 @@ const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bg
   concur: { category: 'Expense & AP Core', color: 'border-yellow-500/40 text-yellow-600 dark:text-yellow-400 bg-yellow-50/50 dark:bg-yellow-950/20', bgGlow: 'shadow-[0_0_15px_rgba(234,179,8,0.15)]', badge: 'Concur Spend', hoverBorder: 'border-yellow-500/60' },
   expensify: { category: 'Expense & AP Core', color: 'border-yellow-500/40 text-yellow-600 dark:text-yellow-400 bg-yellow-50/50 dark:bg-yellow-950/20', bgGlow: 'shadow-[0_0_15px_rgba(234,179,8,0.15)]', badge: 'AP Audit', hoverBorder: 'border-yellow-500/60' },
   bill: { category: 'Expense & AP Core', color: 'border-yellow-500/40 text-yellow-600 dark:text-yellow-400 bg-yellow-50/50 dark:bg-yellow-950/20', bgGlow: 'shadow-[0_0_15px_rgba(234,179,8,0.15)]', badge: 'Bill.com Payable', hoverBorder: 'border-yellow-500/60' },
-  tipalti: { category: 'Expense & AP Core', color: 'border-yellow-500/40 text-yellow-600 dark:text-yellow-400 bg-yellow-50/50 dark:bg-yellow-950/20', bgGlow: 'shadow-[0_0_15px_rgba(234,179,8,0.15)]', badge: 'Global AP', hoverBorder: 'border-yellow-500/60' },
+  tipinsoai: { category: 'Expense & AP Core', color: 'border-yellow-500/40 text-yellow-600 dark:text-yellow-400 bg-yellow-50/50 dark:bg-yellow-950/20', bgGlow: 'shadow-[0_0_15px_rgba(234,179,8,0.15)]', badge: 'Global AP', hoverBorder: 'border-yellow-500/60' },
   ramp: { category: 'Expense & AP Core', color: 'border-yellow-500/40 text-yellow-600 dark:text-yellow-400 bg-yellow-50/50 dark:bg-yellow-950/20', bgGlow: 'shadow-[0_0_15px_rgba(234,179,8,0.15)]', badge: 'Smart Card', hoverBorder: 'border-yellow-500/60' },
 
   // Cohort 3: Phase 15 – HR Tech, Talent Acquisition & Performance (Violet Glow)
@@ -376,7 +376,7 @@ const AppCard = ({
               </h3>
               
               <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed">
-                {app.description || `Integrate ${app.title} tools seamlessly to expand Alti's automation triggers and actions.`}
+                {app.description || `Integrate ${app.title} tools seamlessly to expand Inso AI's automation triggers and actions.`}
               </p>
             </div>
           </div>

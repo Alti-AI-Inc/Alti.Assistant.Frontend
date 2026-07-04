@@ -138,7 +138,7 @@ export default function FinancialWidget({ ticker, liveData }: FinancialWidgetPro
 
   return (
     <div className="relative my-4 overflow-hidden rounded-2xl border border-[#2b2f3a] bg-[#131722] text-[#d1d4dc] shadow-2xl transition-all duration-300 hover:border-[#3f4556]">
-      {/* Alti Custom Premium Banner & Header */}
+      {/* Inso AI Custom Premium Banner & Header */}
       <div className="flex flex-col items-start justify-between border-b border-[#2b2f3a] bg-[#1c2030] px-6 py-4 sm:flex-row sm:items-center">
         <div className="flex items-center space-x-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-primary to-accent text-white shadow-lg shadow-primary/25">
@@ -226,7 +226,7 @@ export default function FinancialWidget({ ticker, liveData }: FinancialWidgetPro
           </div>
         )}
 
-        {/* Tab 3: Google Material & Alti Core macro metrics */}
+        {/* Tab 3: Google Material & Inso AI Core macro metrics */}
         {activeTab === 'metrics' && (
           <div className="grid h-full grid-cols-1 gap-4 p-2 sm:grid-cols-2 md:grid-cols-3">
             {/* Card 1: Last Price / Bid Ask */}
@@ -277,7 +277,7 @@ export default function FinancialWidget({ ticker, liveData }: FinancialWidgetPro
             <div className="col-span-1 rounded-xl border border-[#2b2f3a] bg-[#1c2030]/50 p-4 sm:col-span-2 md:col-span-3">
               <div className="flex items-center space-x-2">
                 <Award className="h-4 w-4 text-primary" />
-                <span className="text-xs font-semibold uppercase tracking-wide text-white">Alti Intelligence Disclaimer</span>
+                <span className="text-xs font-semibold uppercase tracking-wide text-white">Inso AI Intelligence Disclaimer</span>
               </div>
               <p className="mt-1 text-[11px] leading-relaxed text-[#868997]">
                 Real-time stock, crypto, and forex tick feeds are processed in collaboration with our institutional partner <strong>Massive.com</strong>.

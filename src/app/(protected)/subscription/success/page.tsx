@@ -59,7 +59,7 @@ export default function SubscriptionSuccessPage() {
             )}
           </div>
           <CardTitle className="text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-zinc-200 to-zinc-400">
-            {isActivating ? 'Activating Pro Access' : 'Welcome to Alti Pro!'}
+            {isActivating ? 'Activating Pro Access' : 'Welcome to Inso AI Pro!'}
           </CardTitle>
           <CardDescription className="text-zinc-400 text-sm mt-2">
             {isActivating
@@ -107,7 +107,7 @@ export default function SubscriptionSuccessPage() {
               </>
             ) : (
               <>
-                Launch Alti Workspace
+                Launch Inso AI Workspace
                 <ArrowRight className="ml-2 h-4 w-4" />
               </>
             )}

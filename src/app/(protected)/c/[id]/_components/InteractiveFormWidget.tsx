@@ -24,7 +24,7 @@ interface InteractiveFormWidgetProps {
 }
 
 export default function InteractiveFormWidget({ formData }: InteractiveFormWidgetProps) {
-  const { title, description, fields, submitLabel = 'Submit to Alti Swarm' } = formData;
+  const { title, description, fields, submitLabel = 'Submit to Inso AI Swarm' } = formData;
   const [formValues, setFormValues] = useState<Record<string, any>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);

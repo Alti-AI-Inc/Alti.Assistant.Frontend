@@ -19,7 +19,7 @@ function PopupCallbackHandler() {
     if (window.opener) {
       // Running inside popup — relay to parent and close
       window.opener.postMessage(
-        { type: 'alti-google-auth', token, error },
+        { type: 'insoai-google-auth', token, error },
         window.location.origin,
       );
       window.close();

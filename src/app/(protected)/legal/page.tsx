@@ -9,7 +9,7 @@ export default function page() {
   const privacyPolicy = {
     title: 'Privacy Policy',
     intro:
-      'This Privacy Policy describes how Alti ("Alti," "we," "us," or "our") collects, uses, stores, shares, and protects information when you access or use our website at insoai.com, our mobile applications, and any related services (collectively, the "Platform"). By using the Platform, you agree to the collection and use of information in accordance with this policy. If you do not agree with this Privacy Policy, please do not use the Platform.',
+      'This Privacy Policy describes how Inso AI ("Inso AI," "we," "us," or "our") collects, uses, stores, shares, and protects information when you access or use our website at insoai.com, our mobile applications, and any related services (collectively, the "Platform"). By using the Platform, you agree to the collection and use of information in accordance with this policy. If you do not agree with this Privacy Policy, please do not use the Platform.',
     sections: [
       {
         heading: '1. Information We Collect',
@@ -67,7 +67,7 @@ export default function page() {
           {
             text: '2.3 Search and Research Features.',
             description:
-              'When you use search-enabled or research features, your queries may be transmitted to Google Custom Search and Google Search Grounding to retrieve relevant web results.',
+              'When you use search-enabled or research features, your queries may be transmitted to Google Custom Search and Live Web Grounding to retrieve relevant web results.',
           },
           {
             text: '2.4 Billing and Payments.',
@@ -159,7 +159,7 @@ export default function page() {
               </li>
               <li>
                 <strong>Search Services:</strong> Google Custom Search and
-                Google Search Grounding process search queries when you use research
+                Live Web Grounding process search queries when you use research
                 and web search features.
               </li>
               <li>
@@ -232,7 +232,7 @@ export default function page() {
       {
         heading: '10. Contact Us',
         content:
-          'If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at: legal@insoai.com, or by mail at: Alti, 280 N Old Woodward, Birmingham, MI 48009.',
+          'If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at: legal@insoai.com, or by mail at: Inso AI, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
     conclusion: '',
@@ -241,7 +241,7 @@ export default function page() {
   const terms = {
     title: 'Terms of Use',
     intro:
-      'These Terms of Use ("Terms") constitute a legally binding agreement between you ("you," "your," or "User") and Alti ("Alti," "we," "us," or "our") governing your access to and use of the Platform at insoai.com, our mobile applications, and all related services (collectively, the "Platform"). By creating an account or using the Platform, you agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, do not use the Platform.',
+      'These Terms of Use ("Terms") constitute a legally binding agreement between you ("you," "your," or "User") and Inso AI ("Inso AI," "we," "us," or "our") governing your access to and use of the Platform at insoai.com, our mobile applications, and all related services (collectively, the "Platform"). By creating an account or using the Platform, you agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, do not use the Platform.',
     sections: [
       {
         heading: '1. Acceptance of Terms',
@@ -261,7 +261,7 @@ export default function page() {
       {
         heading: '4. Description of the Platform',
         content:
-          'Alti is an AI-powered productivity and intelligence platform that provides access to advanced artificial intelligence capabilities including, but not limited to, conversational AI chat, deep research, web search, image and video generation, audio transcription, code generation, writing and editing tools, legal contract review, presentation creation, report generation, knowledge base management with retrieval-augmented generation (RAG), and third-party integrations. The Platform routes and processes your requests exclusively using Google native AI models (Gemini and Imagen) hosted on Google Cloud Platform to deliver responses.',
+          'Inso AI is an AI-powered productivity and intelligence platform that provides access to advanced artificial intelligence capabilities including, but not limited to, conversational AI chat, deep research, web search, image and video generation, audio transcription, code generation, writing and editing tools, legal contract review, presentation creation, report generation, knowledge base management with retrieval-augmented generation (RAG), and third-party integrations. The Platform routes and processes your requests exclusively using Google native AI models (Gemini and Imagen) hosted on Google Cloud Platform to deliver responses.',
       },
       {
         heading: '5. Subscription Plans and Payments',
@@ -386,7 +386,7 @@ export default function page() {
               <strong>7.4 Platform Intellectual Property.</strong> The Platform,
               including its design, software, features, branding, logos,
               documentation, and all underlying technology, is and remains the
-              exclusive property of Alti and is protected by United States and
+              exclusive property of Inso AI and is protected by United States and
               international intellectual property laws, including copyright,
               trademark, patent, and trade secret laws.
             </p>
@@ -421,7 +421,7 @@ export default function page() {
       {
         heading: '13. Indemnification',
         content:
-          'You agree to indemnify, defend, and hold harmless Alti and its officers, directors, employees, agents, and affiliates from and against any and all claims, liabilities, damages, losses, costs, and expenses (including reasonable attorneys\' fees) arising out of or relating to: (a) your use of the Platform; (b) your User Content; (c) your violation of these Terms; (d) your violation of any applicable law or regulation; or (e) your violation of any rights of a third party.',
+          'You agree to indemnify, defend, and hold harmless Inso AI and its officers, directors, employees, agents, and affiliates from and against any and all claims, liabilities, damages, losses, costs, and expenses (including reasonable attorneys\' fees) arising out of or relating to: (a) your use of the Platform; (b) your User Content; (c) your violation of these Terms; (d) your violation of any applicable law or regulation; or (e) your violation of any rights of a third party.',
       },
       {
         heading: '14. Termination',
@@ -446,12 +446,12 @@ export default function page() {
       {
         heading: '18. Entire Agreement',
         content:
-          'These Terms, together with our Privacy Policy and Cookies Policy, constitute the entire agreement between you and Alti regarding your use of the Platform and supersede all prior and contemporaneous agreements, representations, and understandings, whether written or oral.',
+          'These Terms, together with our Privacy Policy and Cookies Policy, constitute the entire agreement between you and Inso AI regarding your use of the Platform and supersede all prior and contemporaneous agreements, representations, and understandings, whether written or oral.',
       },
       {
         heading: '19. Contact Information',
         content:
-          'If you have any questions about these Terms of Use, please contact us at: legal@insoai.com, or by mail at: Alti, 280 N Old Woodward, Birmingham, MI 48009.',
+          'If you have any questions about these Terms of Use, please contact us at: legal@insoai.com, or by mail at: Inso AI, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
     conclusion: '',
@@ -460,7 +460,7 @@ export default function page() {
   const cookiesPolicy = {
     title: 'Cookies Policy',
     intro:
-      'This Cookies Policy explains how Alti ("Alti," "we," "us," or "our") uses cookies and similar technologies when you use our Platform at insoai.com and our mobile applications. This policy should be read in conjunction with our Privacy Policy and Terms of Use.',
+      'This Cookies Policy explains how Inso AI ("Inso AI," "we," "us," or "our") uses cookies and similar technologies when you use our Platform at insoai.com and our mobile applications. This policy should be read in conjunction with our Privacy Policy and Terms of Use.',
     sections: [
       {
         heading: '1. What Are Cookies?',
@@ -599,7 +599,7 @@ export default function page() {
       {
         heading: '8. Contact Us',
         content:
-          'If you have any questions about our use of cookies or this Cookies Policy, please contact us at: legal@insoai.com, or by mail at: Alti, 280 N Old Woodward, Birmingham, MI 48009.',
+          'If you have any questions about our use of cookies or this Cookies Policy, please contact us at: legal@insoai.com, or by mail at: Inso AI, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
     conclusion: '',

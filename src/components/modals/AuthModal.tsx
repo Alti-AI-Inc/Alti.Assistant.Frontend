@@ -78,7 +78,7 @@ export function AuthModal() {
 
     const onMessage = async (event: MessageEvent) => {
       if (event.origin !== window.location.origin) return;
-      if (event.data?.type !== 'alti-google-auth') return;
+      if (event.data?.type !== 'insoai-google-auth') return;
       window.removeEventListener('message', onMessage);
       setIsGoogleLoading(false);
 

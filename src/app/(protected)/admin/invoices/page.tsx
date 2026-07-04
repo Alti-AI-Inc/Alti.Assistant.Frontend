@@ -35,7 +35,7 @@ export default function AdminInvoicesPage() {
       const primaryColor = [24, 24, 27]; // Zinc 900
       const lightGray = [120, 120, 120];
 
-      // Header Alti Branding
+      // Header Inso AI Branding
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(22);
       doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
@@ -75,7 +75,7 @@ export default function AdminInvoicesPage() {
       doc.text('Vendor details:', 120, 60);
 
       doc.setFont('helvetica', 'normal');
-      doc.text('Alti AI Inc.', 120, 66);
+      doc.text('Inso AI Inc.', 120, 66);
       doc.text('Delaware, USA', 120, 71);
 
       // Invoice Item Table Header Row
@@ -90,7 +90,7 @@ export default function AdminInvoicesPage() {
 
       // Line item row representing the subscription
       doc.setFont('helvetica', 'normal');
-      doc.text(`Alti Pro Subscription - ${invoice.month}`, 25, 102);
+      doc.text(`Inso AI Pro Subscription - ${invoice.month}`, 25, 102);
       doc.text('1', 120, 102);
       doc.text(`$${invoice.amount.toFixed(2)}`, 145, 102);
       doc.text(`$${invoice.amount.toFixed(2)}`, 170, 102);
@@ -108,7 +108,7 @@ export default function AdminInvoicesPage() {
       doc.setFontSize(8);
       doc.setTextColor(150, 150, 150);
       doc.text(
-        'Thank you for partnering with Alti! If you have any billing queries, reach out at support@insoai.com',
+        'Thank you for partnering with Inso AI! If you have any billing queries, reach out at support@insoai.com',
         20,
         150
       );

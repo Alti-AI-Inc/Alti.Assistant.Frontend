@@ -40,7 +40,7 @@ interface MembersListProps {
 const getInvitedName = (email: string) => {
   if (typeof window === 'undefined') return { firstName: '', lastName: '' };
   try {
-    const saved = localStorage.getItem('alti_invited_names');
+    const saved = localStorage.getItem('insoai_invited_names');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (parsed[email.toLowerCase()]) {

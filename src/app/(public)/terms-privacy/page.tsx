@@ -6,7 +6,7 @@ export default function page() {
   const privacyPolicy = {
     title: 'Privacy Policy',
     intro:
-      'This Privacy Policy describes how Alti ("Alti," "we," "us," or "our") collects, uses, stores, shares, and protects information when you access or use our website at insoai.com, our mobile applications, and any related services (collectively, the "Platform"). By using the Platform, you agree to the collection and use of information in accordance with this policy. If you do not agree with this Privacy Policy, please do not use the Platform.',
+      'This Privacy Policy describes how Inso AI ("Inso AI," "we," "us," or "our") collects, uses, stores, shares, and protects information when you access or use our website at insoai.com, our mobile applications, and any related services (collectively, the "Platform"). By using the Platform, you agree to the collection and use of information in accordance with this policy. If you do not agree with this Privacy Policy, please do not use the Platform.',
     sections: [
       {
         heading: '1. Information We Collect',
@@ -126,7 +126,7 @@ export default function page() {
       {
         heading: '8. Contact Us',
         content:
-          'If you have questions about this Privacy Policy, contact us at: legal@insoai.com, or by mail at: Alti, 280 N Old Woodward, Birmingham, MI 48009.',
+          'If you have questions about this Privacy Policy, contact us at: legal@insoai.com, or by mail at: Inso AI, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
     conclusion: '',
@@ -135,7 +135,7 @@ export default function page() {
   const termsOfUse = {
     title: 'Terms of Use',
     intro:
-      'These Terms of Use ("Terms") govern your access to and use of the Alti platform at insoai.com and all related services. By using the Platform, you agree to be bound by these Terms.',
+      'These Terms of Use ("Terms") govern your access to and use of the Inso AI platform at insoai.com and all related services. By using the Platform, you agree to be bound by these Terms.',
     sections: [
       {
         heading: '1. Acceptance of Terms',
@@ -160,7 +160,7 @@ export default function page() {
       {
         heading: '5. Intellectual Property',
         content:
-          'You retain ownership of your content. You own AI-generated outputs subject to these Terms. The Platform and its underlying technology remain the exclusive property of Alti, protected by intellectual property laws. We do not use your content to train AI models.',
+          'You retain ownership of your content. You own AI-generated outputs subject to these Terms. The Platform and its underlying technology remain the exclusive property of Inso AI, protected by intellectual property laws. We do not use your content to train AI models.',
       },
       {
         heading: '6. Subscriptions and Payments',
@@ -190,7 +190,7 @@ export default function page() {
       {
         heading: '11. Contact',
         content:
-          'Questions about these Terms may be directed to: legal@insoai.com, or by mail at: Alti, 280 N Old Woodward, Birmingham, MI 48009.',
+          'Questions about these Terms may be directed to: legal@insoai.com, or by mail at: Inso AI, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
     conclusion: '',

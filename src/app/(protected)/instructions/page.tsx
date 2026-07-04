@@ -29,7 +29,7 @@ const InstructionsContent = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const storedInst = localStorage.getItem('alti_instructions');
+    const storedInst = localStorage.getItem('insoai_instructions');
     if (storedInst) {
       setInstructionsList(JSON.parse(storedInst));
     } else {
@@ -51,7 +51,7 @@ const InstructionsContent = () => {
         }
       ];
       setInstructionsList(defaults);
-      localStorage.setItem('alti_instructions', JSON.stringify(defaults));
+      localStorage.setItem('insoai_instructions', JSON.stringify(defaults));
     }
   }, []);
 
@@ -78,7 +78,7 @@ const InstructionsContent = () => {
       
       const updatedList = [newItem, ...instructionsList];
       setInstructionsList(updatedList);
-      localStorage.setItem('alti_instructions', JSON.stringify(updatedList));
+      localStorage.setItem('insoai_instructions', JSON.stringify(updatedList));
       setInputVal('');
       setIsSaving(false);
     }, 300);
@@ -87,7 +87,7 @@ const InstructionsContent = () => {
   const handleDeleteInstruction = (id: string) => {
     const updatedList = instructionsList.filter(item => item.id !== id);
     setInstructionsList(updatedList);
-    localStorage.setItem('alti_instructions', JSON.stringify(updatedList));
+    localStorage.setItem('insoai_instructions', JSON.stringify(updatedList));
   };
 
   const filteredInstructions = instructionsList.filter(item =>

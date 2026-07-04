@@ -16,7 +16,7 @@ const AiBuiltFor = ({ className }: { className?: string }) => {
             AI Built for the Economy
           </h2>
           <p className="mt-2 md:mt-6 md:text-lg">
-            Alti is a secure, enterprise grade AI platform built to power heavy
+            Inso AI is a secure, enterprise grade AI platform built to power heavy
             industrial intelligence. It helps organizations transform how they
             manage, access, and act on complex technical data, turning
             information into instant, actionable insight.

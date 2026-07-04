@@ -31,10 +31,10 @@ const SupportContent = () => {
         status: 'Pending',
       };
 
-      const existing = localStorage.getItem('alti_support_requests');
+      const existing = localStorage.getItem('insoai_support_requests');
       const requests = existing ? JSON.parse(existing) : [];
       requests.unshift(newRequest);
-      localStorage.setItem('alti_support_requests', JSON.stringify(requests));
+      localStorage.setItem('insoai_support_requests', JSON.stringify(requests));
 
       toast.success('Your message has been sent to our support team.');
       setSubject('');

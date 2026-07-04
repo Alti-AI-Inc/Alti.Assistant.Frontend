@@ -156,13 +156,13 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   const getStatusMessage = () => {
     switch (workflow) {
       case 'evaluating':
-        return 'alti is evaluating...';
+        return 'insoai is evaluating...';
       case 'finalizing':
-        return 'alti is finalizing...';
+        return 'insoai is finalizing...';
       case 'generating':
-        return 'alti is generating...';
+        return 'insoai is generating...';
       default:
-        return 'alti is thinking...';
+        return 'inso ai is thinking...';
     }
   };
 
@@ -173,7 +173,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     status: 'idle' | 'scanning' | 'completed';
   }
 
-  const [scanningStatus, setScanningStatus] = useState('alti is thinking...');
+  const [scanningStatus, setScanningStatus] = useState('inso ai is thinking...');
   const [scannedSources, setScannedSources] = useState<ScannedSource[]>([]);
   const [logs, setLogs] = useState<string[]>([]);
   const consoleEndRef = useRef<HTMLDivElement>(null);
@@ -186,7 +186,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
   useEffect(() => {
     if (!isLoadingResponse) {
-      setScanningStatus('alti is thinking...');
+      setScanningStatus('inso ai is thinking...');
       setScannedSources([]);
       setLogs([]);
       return;
@@ -266,7 +266,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     }
 
     if (sources.length === 0) {
-      sources.push({ name: 'Alti Global Grounding', domain: 'grounding.altihq.com', status: 'idle' });
+      sources.push({ name: 'Inso AI Grounding', domain: 'grounding.insoai.com', status: 'idle' });
       sources.push({ name: 'Public registries', domain: 'comtrade.un.org', status: 'idle' });
     }
 
@@ -288,7 +288,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     allLogs.push('[synthesis] Stream compiled. Dispatching live response synthesis...');
 
     setLogs([allLogs[0]]);
-    setScanningStatus(sources[0] ? `searching ${sources[0].name}...` : 'alti is thinking...');
+    setScanningStatus(sources[0] ? `searching ${sources[0].name}...` : 'inso ai is thinking...');
 
     let currentLogIndex = 1;
     const interval = setInterval(() => {
@@ -1051,7 +1051,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 <div className="h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '300ms' }} />
               </div>
               <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
-                {scanningStatus === 'alti is thinking...' ? 'Thinking...' : scanningStatus}
+                {scanningStatus === 'inso ai is thinking...' ? 'Thinking...' : scanningStatus}
               </span>
             </div>
           )

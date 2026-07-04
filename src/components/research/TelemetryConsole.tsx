@@ -35,7 +35,7 @@ export default function TelemetryConsole({ conversationId, active, onComplete }:
     setCurrentStep('Initiating');
     setCurrentMessage('Connecting telemetry pipeline...');
 
-    const base = process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
+    const base = process.env.NEXT_PUBLIC_API_URL || 'https://insoai.com/api/v1';
     const sseUrl = `${base}/deep-research/telemetry?conversationId=${conversationId}`;
     
     console.log('[TelemetryConsole] Connecting to SSE stream:', sseUrl);

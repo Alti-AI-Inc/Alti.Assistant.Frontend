@@ -131,7 +131,7 @@ export function ReportData({ report, sections }: ReportDataProps) {
       <body>
         <div class="cover-page">
           <div class="cover-header">
-            <div class="logo-text">Alti Workspace platform</div>
+            <div class="logo-text">Inso AI Workspace platform</div>
           </div>
           <div class="cover-body">
             <h1 class="cover-title">${report.title || 'Generated Report'}</h1>

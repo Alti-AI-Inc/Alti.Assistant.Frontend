@@ -1,7 +1,7 @@
 substitutions:
-  _SERVICE_NAME: alti-assistant-frontend
+  _SERVICE_NAME: insoai-assistant-frontend
   _REGION: us-central1
-  _ARTIFACT_REPO: alti-assistant
+  _ARTIFACT_REPO: insoai-assistant
   # Override these when triggering the build, or set in trigger config
   _NEXT_PUBLIC_API_URL: https://your-api-url/api/v1
   _NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_placeholder
@@ -61,7 +61,7 @@ steps:
       # Runtime env vars — secrets are injected via Secret Manager bindings below.
       # Non-secret vars can be added with --set-env-vars.
       - --set-env-vars
-      - NODE_ENV=production,NEXT_PUBLIC_API_URL=${_NEXT_PUBLIC_API_URL},API_URL=${_NEXT_PUBLIC_API_URL},AUTH_TRUST_HOST=true,AUTH_URL=https://altiassistant.com
+      - NODE_ENV=production,NEXT_PUBLIC_API_URL=${_NEXT_PUBLIC_API_URL},API_URL=${_NEXT_PUBLIC_API_URL},AUTH_TRUST_HOST=true,AUTH_URL=https://insoaiassistant.com
       # Bind secrets from Secret Manager (create them first):
       #   gcloud secrets create AUTH_SECRET --data-file=-
       #   gcloud secrets create NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY --data-file=-
