@@ -1151,6 +1151,11 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
           )}
         >
           <div className="mx-auto w-full max-w-[796px]">
+            {showAsNewChat && (
+              <h1 className="mb-8 text-4xl font-medium text-center text-gray-900 dark:text-white tracking-tight">
+                How can I help you?
+              </h1>
+            )}
             <ChatInput
               conversationId={conversationId}
               imageGenHook={imageGenHook}
