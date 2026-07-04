@@ -8,11 +8,11 @@ on:
   workflow_dispatch:
 
 env:
-  PROJECT_ID: insoai-assistant-prod
+  PROJECT_ID: alti-assistant-prod
   REGION: us-central1
   REGISTRY: us-central1-docker.pkg.dev
-  REPO: insoai-assistant
-  SERVICE: insoai-assistant-frontend
+  REPO: alti-assistant
+  SERVICE: alti-assistant-frontend
 
 jobs:
   deploy:
