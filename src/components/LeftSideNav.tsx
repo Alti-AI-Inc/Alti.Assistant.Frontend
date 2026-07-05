@@ -601,7 +601,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
               )}
             >
-              <Globe className="size-4" />
+              <MessageSquare className="size-4" />
               <span>Chat</span>
             </button>
 

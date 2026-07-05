@@ -41,6 +41,7 @@ import {
   FileType,
   Code,
   Globe,
+  Microscope,
   Image as ImageIcon,
   Paperclip,
   Plus,
@@ -1272,11 +1273,11 @@ const ChatInput = ({
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
         {!isExistingConversation && (
-          <div className="absolute bottom-full left-0 right-0 mb-4 flex justify-center pointer-events-none">
-            <div className="pointer-events-auto flex w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1 rounded-[1.25rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-1 overflow-x-auto">
+          <div className="absolute bottom-full left-0 right-0 mb-8 flex justify-center pointer-events-none">
+            <div className="pointer-events-auto flex w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto">
               {[
                 { id: 'search', name: 'Search', icon: Globe, value: null },
-                { id: 'research', name: 'Research', icon: Globe, value: OPTIONS.RESEARCH },
+                { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
                 { id: 'write', name: 'Write', icon: FileText, value: OPTIONS.DRAFT_DOCUMENT },
                 { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE }
               ].map((tab) => {
@@ -1287,7 +1288,7 @@ const ChatInput = ({
                     type="button"
                     onClick={() => setSelectedOption(tab.value)}
                     className={cn(
-                      'flex items-center gap-2 px-3 py-1.5 rounded-2xl transition-all duration-200 ease-out font-medium text-sm',
+                      'flex items-center gap-2 px-5 py-2 rounded-2xl transition-all duration-200 ease-out font-medium text-sm',
                       isSelected 
                         ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
                         : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
@@ -1404,10 +1405,10 @@ const ChatInput = ({
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex cursor-pointer items-center justify-center rounded-lg border-2 border-gray-300 p-1 text-gray-500 hover:text-gray-700 hover:border-gray-400 transition-colors focus:outline-none dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                  className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-gray-300 bg-black p-1 text-white transition-opacity focus:outline-none hover:opacity-80"
                   aria-label="Attach Files"
                 >
-                  <Paperclip className="size-5" />
+                  <Paperclip className="size-full" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="top">
