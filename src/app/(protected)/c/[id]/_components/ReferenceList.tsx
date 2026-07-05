@@ -91,19 +91,7 @@ export default function ReferencesList({ references, webSearchQueries, searchEnt
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               {references.map((ref, index) => {
                 const title = (ref as any).extractedTitle || ref.title || (ref as any).docId || 'Document Source';
-                const getShortTitle = (raw: string) => {
-                  if (!raw) return '';
-                  let clean = raw.trim();
-                  const words = clean.split(/\s+/);
-                  if (words.length > 5) {
-                    clean = words.slice(0, 5).join(' ');
-                  }
-                  if (clean.length > 32) {
-                    clean = clean.substring(0, 32).trim();
-                  }
-                  return clean;
-                };
-                const shortTitle = getShortTitle(title);
+
                 const isWeb = !!ref.url;
                 const domain = ref.domain || (isWeb ? getDomain(ref.url) : 'Document');
                 const faviconUrl = isWeb ? `https://www.google.com/s2/favicons?sz=64&domain=${domain}` : '';
@@ -146,15 +134,17 @@ export default function ReferencesList({ references, webSearchQueries, searchEnt
                             </svg>
                           )}
                         </div>
-                        <span className="text-[10px] font-semibold text-zinc-500 dark:text-zinc-400 truncate group-hover:text-primary dark:group-hover:text-emerald-400 transition-colors duration-200">
+                        <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-primary dark:group-hover:text-emerald-400 transition-colors duration-200">
                           {domain}
                         </span>
                       </div>
                       
-                      {/* Title */}
-                      <span className="text-xs font-semibold leading-relaxed text-zinc-800 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition-colors duration-200">
-                        {shortTitle}
-                      </span>
+                      {/* Title - Document only */}
+                      {!isWeb && (
+                        <span className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400 truncate">
+                          {title}
+                        </span>
+                      )}
                       {/* Page number indicator for documents */}
                       {(ref as any).pageNumber && (
                         <span className="text-[9px] text-zinc-500 dark:text-zinc-400">
