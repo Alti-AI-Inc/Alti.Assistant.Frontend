@@ -1453,8 +1453,8 @@ const ChatInput = ({
               className={cn(
                 'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1 text-white transition-opacity',
                 (isLoadingResponse || !message?.trim())
-                  ? 'cursor-not-allowed opacity-30'
-                  : 'cursor-pointer',
+                  ? 'cursor-not-allowed'
+                  : 'cursor-pointer hover:opacity-80',
               )}
             />
           </div>
