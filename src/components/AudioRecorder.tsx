@@ -31,7 +31,6 @@ export default function AudioRecorder({
     audioChunks.current = [];
     if (setIsRecording) setIsRecording(true);
 
-    // 1. Try Browser SpeechRecognition (provides live streaming, zero-latency Speech-to-Text)
     const SpeechRecognition =
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
@@ -69,13 +68,12 @@ export default function AudioRecorder({
 
         recognitionRef.current = recognition;
         recognition.start();
+        setRecording(true);
       } catch (err) {
         console.warn('Failed to start SpeechRecognition:', err);
       }
-    }
-
-    // 2. Concurrently record raw audio for server-side GCP STT backup
-    if (navigator.mediaDevices) {
+    } else if (navigator.mediaDevices) {
+      // Fallback path: record raw audio and upload on stop
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         const recorder = new MediaRecorder(stream);
@@ -92,43 +90,37 @@ export default function AudioRecorder({
             return;
           }
 
-          // If browser didn't support live recognition, we fall back to uploading the file to the GCP backend
-          if (!SpeechRecognition) {
-            const blob = new Blob(audioChunks.current, { type: 'audio/webm' });
-            audioChunks.current = [];
+          const blob = new Blob(audioChunks.current, { type: 'audio/webm' });
+          audioChunks.current = [];
 
-            const formData = new FormData();
-            formData.append('file', blob, 'recording.webm');
-            formData.append('user', data?.user.id as string);
+          const formData = new FormData();
+          formData.append('file', blob, 'recording.webm');
+          formData.append('user', data?.user.id as string);
 
-            try {
-              setLoadingText(true);
-              const res = await getTranscription(formData);
-              console.log({ res });
+          try {
+            setLoadingText(true);
+            const res = await getTranscription(formData);
+            console.log({ res });
 
-              if (!res.success) {
-                console.error('Transcription failed:', res.debugMessage);
-              } else if (res.data && res.data.transcription) {
-                setMessage(res.data.transcription);
-              }
-            } catch (err) {
-              console.error('❌ Error uploading:', err);
-            } finally {
-              setLoadingText(false);
-              if (setIsRecording) setIsRecording(false);
+            if (!res.success) {
+              console.error('Transcription failed:', res.debugMessage);
+            } else if (res.data && res.data.transcription) {
+              setMessage(res.data.transcription);
             }
-          } else {
-            audioChunks.current = [];
+          } catch (err) {
+            console.error('❌ Error uploading:', err);
+          } finally {
+            setLoadingText(false);
+            if (setIsRecording) setIsRecording(false);
           }
         };
 
         recorder.start();
+        setRecording(true);
       } catch (err) {
         console.error('Failed to get media devices for backup recording:', err);
       }
     }
-
-    setRecording(true);
   };
 
   const stopRecording = () => {
