@@ -479,11 +479,13 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
 
         forceScrollLoop();
       } else {
-        // Always scroll to bottom when messages change
-        scrollToBottom('smooth');
+        // Only scroll to bottom if we are not loading/streaming a response
+        if (!isLoadingResponse && !showStartLastMessage) {
+          scrollToBottom('smooth');
+        }
       }
     }
-  }, [activeConversation?.messages]);
+  }, [activeConversation?.messages, isLoadingResponse, showStartLastMessage]);
 
   // When response finishes loading, ensure we scroll to see the new content
   useEffect(() => {
@@ -512,9 +514,13 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     }
   }, [activeConversation?.messages, showStartLastMessage]);
 
-  const lastUserMessage = activeConversation?.messages
-    .filter(message => message.role === 'user')
-    .pop();
+  const messagesList = activeConversation?.messages || [];
+  const lastUserMessageIndex = (() => {
+    for (let i = messagesList.length - 1; i >= 0; i--) {
+      if (messagesList[i].role === 'user') return i;
+    }
+    return -1;
+  })();
 
   // console.log('activeConversation?.messages', activeConversation?.messages);
   // const lastMessageRole = activeConversation?.messages.at(-1)?.role;
@@ -846,7 +852,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                   <div
                     className="flex items-center justify-end"
                     ref={
-                      message.content === lastUserMessage?.content
+                      idx === lastUserMessageIndex
                         ? lastMessageRef
                         : null
                     }
