@@ -1323,7 +1323,7 @@ const ChatInput = ({
           {isDragging && (
             <div className="absolute inset-0 flex items-center justify-center bg-indigo-500/10 backdrop-blur-xs rounded-2xl pointer-events-none z-50 animate-in fade-in duration-200">
               <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
-                <Paperclip className="size-4 animate-bounce" />
+                <Paperclip className="size-3.5 animate-bounce" />
                 Drop files to upload
               </span>
             </div>
@@ -1409,7 +1409,7 @@ const ChatInput = ({
                   className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-gray-300 bg-black p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
                   aria-label="Attach Files"
                 >
-                  <Paperclip className="size-4" />
+                  <Paperclip className="size-3.5" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="top">
