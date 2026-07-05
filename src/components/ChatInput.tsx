@@ -716,6 +716,7 @@ const ChatInput = ({
         return {
           success: true,
           message: 'Success',
+          isStreamed: true,
           data: {
             conversationId: resolvedConversationId,
             responseMessage: {
@@ -848,19 +849,20 @@ const ChatInput = ({
         }
       };
 
-      updateActiveConversation(
-        getResponseText(),
-        ROLES.ASSISTANT,
-
-        newId,
-        {
-          ...(imageUrl && { imageUrl }),
-          ...(name && { video: { name } }),
-          ...(reference && { reference }),
-          ...(document && { document }),
-          ...(audioUrl && { audioUrl }),
-        },
-      );
+      if (!response.isStreamed) {
+        updateActiveConversation(
+          getResponseText(),
+          ROLES.ASSISTANT,
+          newId,
+          {
+            ...(imageUrl && { imageUrl }),
+            ...(name && { video: { name } }),
+            ...(reference && { reference }),
+            ...(document && { document }),
+            ...(audioUrl && { audioUrl }),
+          },
+        );
+      }
 
       if (response?.data) {
         setTimeout(() => {
