@@ -1085,7 +1085,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     <div
       className={cn(
         "flex w-full h-full flex-1 flex-col bg-[#e1e1e1] dark:bg-zinc-950",
-        showAsNewChat ? "justify-center pt-8" : ""
+        showAsNewChat ? "justify-center" : ""
       )}
     >
       {isLoading ? (
