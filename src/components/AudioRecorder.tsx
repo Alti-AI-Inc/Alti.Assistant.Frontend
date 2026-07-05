@@ -97,7 +97,12 @@ export default function AudioRecorder({
       window.location.hostname === '127.0.0.1';
 
     if (!isSecureContext) {
-      toast.error('Speech to Text requires a secure HTTPS connection or localhost.');
+      const isIPAddress = /^[0-9.]+$/.test(window.location.hostname);
+      if (isIPAddress) {
+        toast.error('Microphone access requires HTTPS on IP addresses. Please test on http://localhost:3000 instead.');
+      } else {
+        toast.error('Speech to Text requires a secure HTTPS connection or localhost.');
+      }
       if (setIsRecording) setIsRecording(false);
       setRecording(false);
       return;
