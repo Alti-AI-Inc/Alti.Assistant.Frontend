@@ -48,7 +48,9 @@ export default function ReferencesList({ references, webSearchQueries, searchEnt
                 <path d="M2 12h20" />
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
               </svg>
-              <span>Sources</span>
+              <span>
+                {references.length} {references.length === 1 ? 'Source' : 'Sources'}
+              </span>
             </div>
           </AccordionTrigger>
           <AccordionContent className="pt-3 pb-1">
