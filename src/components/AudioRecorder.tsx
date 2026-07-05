@@ -26,6 +26,64 @@ export default function AudioRecorder({
   const cancelRef = useRef(false);
   const recognitionRef = useRef<any>(null);
 
+  const startMediaRecorderFallback = async () => {
+    if (!navigator.mediaDevices) {
+      console.error('navigator.mediaDevices not supported');
+      if (setIsRecording) setIsRecording(false);
+      setRecording(false);
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      setMediaRecorder(recorder);
+
+      recorder.ondataavailable = e => {
+        audioChunks.current.push(e.data);
+      };
+
+      recorder.onstop = async () => {
+        stream.getTracks().forEach(track => track.stop());
+        if (cancelRef.current) {
+          audioChunks.current = [];
+          return;
+        }
+
+        const blob = new Blob(audioChunks.current, { type: 'audio/webm' });
+        audioChunks.current = [];
+
+        const formData = new FormData();
+        formData.append('file', blob, 'recording.webm');
+        formData.append('user', data?.user.id as string);
+
+        try {
+          setLoadingText(true);
+          const res = await getTranscription(formData);
+          console.log({ res });
+
+          if (!res.success) {
+            console.error('Transcription failed:', res.debugMessage);
+          } else if (res.data && res.data.transcription) {
+            setMessage(res.data.transcription);
+          }
+        } catch (err) {
+          console.error('❌ Error uploading:', err);
+        } finally {
+          setLoadingText(false);
+          if (setIsRecording) setIsRecording(false);
+        }
+      };
+
+      recorder.start();
+      setRecording(true);
+    } catch (err) {
+      console.error('Failed to get media devices for backup recording:', err);
+      if (setIsRecording) setIsRecording(false);
+      setRecording(false);
+    }
+  };
+
   const startRecording = async () => {
     cancelRef.current = false;
     audioChunks.current = [];
@@ -33,6 +91,8 @@ export default function AudioRecorder({
 
     const SpeechRecognition =
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    let startedLive = false;
 
     if (SpeechRecognition) {
       try {
@@ -58,8 +118,16 @@ export default function AudioRecorder({
           }
         };
 
-        recognition.onerror = (event: any) => {
+        recognition.onerror = async (event: any) => {
           console.error('Speech recognition error:', event.error);
+          if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+            console.warn('SpeechRecognition permission denied, trying MediaRecorder fallback...');
+            try {
+              recognition.abort();
+            } catch (abortErr) {}
+            recognitionRef.current = null;
+            await startMediaRecorderFallback();
+          }
         };
 
         recognition.onend = () => {
@@ -69,57 +137,14 @@ export default function AudioRecorder({
         recognitionRef.current = recognition;
         recognition.start();
         setRecording(true);
+        startedLive = true;
       } catch (err) {
-        console.warn('Failed to start SpeechRecognition:', err);
+        console.warn('Failed to start SpeechRecognition, trying fallback:', err);
       }
-    } else if (navigator.mediaDevices) {
-      // Fallback path: record raw audio and upload on stop
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const recorder = new MediaRecorder(stream);
-        setMediaRecorder(recorder);
+    }
 
-        recorder.ondataavailable = e => {
-          audioChunks.current.push(e.data);
-        };
-
-        recorder.onstop = async () => {
-          stream.getTracks().forEach(track => track.stop());
-          if (cancelRef.current) {
-            audioChunks.current = [];
-            return;
-          }
-
-          const blob = new Blob(audioChunks.current, { type: 'audio/webm' });
-          audioChunks.current = [];
-
-          const formData = new FormData();
-          formData.append('file', blob, 'recording.webm');
-          formData.append('user', data?.user.id as string);
-
-          try {
-            setLoadingText(true);
-            const res = await getTranscription(formData);
-            console.log({ res });
-
-            if (!res.success) {
-              console.error('Transcription failed:', res.debugMessage);
-            } else if (res.data && res.data.transcription) {
-              setMessage(res.data.transcription);
-            }
-          } catch (err) {
-            console.error('❌ Error uploading:', err);
-          } finally {
-            setLoadingText(false);
-            if (setIsRecording) setIsRecording(false);
-          }
-        };
-
-        recorder.start();
-        setRecording(true);
-      } catch (err) {
-        console.error('Failed to get media devices for backup recording:', err);
-      }
+    if (!startedLive) {
+      await startMediaRecorderFallback();
     }
   };
 
