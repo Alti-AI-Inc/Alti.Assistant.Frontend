@@ -1093,6 +1093,9 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             </div>
           )
         )}
+        {(isLoadingResponse || showStartLastMessage) && (
+          <div className="h-[80vh]" />
+        )}
         <div ref={messagesEndRef} />
         </div>
       </div>
