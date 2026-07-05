@@ -863,18 +863,20 @@ const ChatInput = ({
       );
 
       if (response?.data) {
-        queryClient.invalidateQueries({
-          queryKey: ['conversations', data?.accessToken],
-        });
-        const targetId =
-          conversationId === 'new-chat'
-            ? response.data.conversationId
-            : conversationId;
-        if (targetId) {
+        setTimeout(() => {
           queryClient.invalidateQueries({
-            queryKey: ['activeConversation', targetId, data?.accessToken],
+            queryKey: ['conversations', data?.accessToken],
           });
-        }
+          const targetId =
+            conversationId === 'new-chat'
+              ? response.data.conversationId
+              : conversationId;
+          if (targetId) {
+            queryClient.invalidateQueries({
+              queryKey: ['activeConversation', targetId, data?.accessToken],
+            });
+          }
+        }, 1000);
       }
       setLoadingResponse(false);
     },

@@ -344,9 +344,22 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   // Sync query result into Zustand
   useEffect(() => {
     if (queryConversation && !showStartLastMessage) {
-      setActiveConversation(queryConversation);
+      const queryLen = queryConversation.messages?.length || 0;
+      const activeLen = activeConversation?.messages?.length || 0;
+      if (
+        queryConversation.conversationId !== activeConversation?.conversationId ||
+        queryLen >= activeLen
+      ) {
+        setActiveConversation(queryConversation);
+      }
     }
-  }, [queryConversation, setActiveConversation, showStartLastMessage]);
+  }, [
+    queryConversation,
+    setActiveConversation,
+    showStartLastMessage,
+    activeConversation?.conversationId,
+    activeConversation?.messages?.length
+  ]);
 
   // Track which conversation's presentation metadata we've already processed
   const processedPresentationRef = useRef<string | null>(null);
@@ -428,18 +441,20 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
   };
 
   const scrollToLastUserMessage = () => {
-    if (messagesContainerRef.current && lastMessageRef.current) {
-      const container = messagesContainerRef.current;
-      const element = lastMessageRef.current;
-      const containerRect = container.getBoundingClientRect();
-      const elementRect = element.getBoundingClientRect();
-      const relativeTop = elementRect.top - containerRect.top + container.scrollTop;
+    setTimeout(() => {
+      if (messagesContainerRef.current && lastMessageRef.current) {
+        const container = messagesContainerRef.current;
+        const element = lastMessageRef.current;
+        const containerRect = container.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+        const relativeTop = elementRect.top - containerRect.top + container.scrollTop;
 
-      container.scrollTo({
-        top: relativeTop,
-        behavior: 'smooth',
-      });
-    }
+        container.scrollTo({
+          top: relativeTop,
+          behavior: 'smooth',
+        });
+      }
+    }, 100);
   };
 
   // Auto-scroll when messages change or loading state changes
@@ -1088,7 +1103,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         showAsNewChat ? "justify-center" : ""
       )}
     >
-      {isLoading ? (
+      {isLoading && !(activeConversation?.conversationId === conversationId && activeConversation?.messages?.length > 0) ? (
         <div
           className="flex flex-grow items-center justify-center py-4 bg-transparent"
         >
