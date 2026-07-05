@@ -1441,15 +1441,22 @@ const ChatInput = ({
               className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
               autoFocus
             />
-            <ArrowUp
-              onClick={handleSubmit}
-              className={cn(
-                'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1 text-white transition-opacity',
-                (isLoadingResponse || !message?.trim())
-                  ? 'cursor-not-allowed'
-                  : 'cursor-pointer hover:opacity-80',
-              )}
-            />
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <ArrowUp
+                  onClick={handleSubmit}
+                  className={cn(
+                    'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1 text-white transition-opacity focus:outline-none',
+                    (isLoadingResponse || !message?.trim())
+                      ? 'cursor-not-allowed'
+                      : 'cursor-pointer hover:opacity-80',
+                  )}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p>Send Prompt</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       </div>
