@@ -110,17 +110,34 @@ export default function AudioRecorder({
       return;
     }
 
-    // 2. Explicitly request microphone permission first to avoid race conditions with SpeechRecognition
+    // 2. Check if microphone permission is already granted via Permissions API
+    let permissionGranted = false;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      // Release microphone temporarily so that SpeechRecognition can capture it
-      stream.getTracks().forEach(track => track.stop());
-    } catch (permissionErr) {
-      console.warn('Microphone permission denied:', permissionErr);
-      toast.error('Microphone permission denied. Please allow microphone access.');
-      if (setIsRecording) setIsRecording(false);
-      setRecording(false);
-      return;
+      if (navigator.permissions && navigator.permissions.query) {
+        const permissionStatus = await navigator.permissions.query({ name: 'microphone' as any });
+        if (permissionStatus.state === 'granted') {
+          permissionGranted = true;
+        }
+      }
+    } catch (e) {
+      console.warn('Permissions API query failed:', e);
+    }
+
+    if (!permissionGranted) {
+      // Explicitly request microphone permission first to avoid race conditions with SpeechRecognition
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        // Release microphone temporarily so that SpeechRecognition can capture it
+        stream.getTracks().forEach(track => track.stop());
+        // Wait 300ms to allow browser audio hardware to release cleanly
+        await new Promise(resolve => setTimeout(resolve, 300));
+      } catch (permissionErr) {
+        console.warn('Microphone permission denied:', permissionErr);
+        toast.error('Microphone permission denied. Please allow microphone access.');
+        if (setIsRecording) setIsRecording(false);
+        setRecording(false);
+        return;
+      }
     }
 
     // 3. Microphone is authorized. Now instantiate SpeechRecognition
