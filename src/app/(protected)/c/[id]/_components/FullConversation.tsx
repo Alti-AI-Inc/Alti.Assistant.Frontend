@@ -1186,7 +1186,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
           className={cn(
             'shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300',
             !showAsNewChat
-              ? 'flex h-20 items-center justify-center py-1.5 border-t border-black/5 dark:border-zinc-800 bg-[#e1e1e1] dark:bg-zinc-900 mt-auto'
+              ? 'flex min-h-[88px] items-center justify-center py-4 border-t border-black/5 dark:border-zinc-800 bg-[#e1e1e1] dark:bg-zinc-900 mt-auto'
               : 'py-4 bg-transparent border-t-0'
           )}
         >
