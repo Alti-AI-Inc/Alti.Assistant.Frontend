@@ -1,5 +1,4 @@
 'use client';
-import AudioRecorder from '@/components/AudioRecorder';
 import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
 import { cn } from '@/lib/utils';
@@ -1511,19 +1510,15 @@ const ChatInput = ({
               className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
               autoFocus
             />
-            {message && !isAudioRecording ? (
-              <ArrowUp
-                onClick={handleSubmit}
-                className={cn(
-                  'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1 text-white transition-opacity',
-                  isLoadingResponse
-                    ? 'cursor-not-allowed opacity-50'
-                    : 'cursor-pointer',
-                )}
-              />
-            ) : (
-              <AudioRecorder setMessage={setMessage} setIsRecording={setIsAudioRecording} />
-            )}
+            <ArrowUp
+              onClick={handleSubmit}
+              className={cn(
+                'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1 text-white transition-opacity',
+                (isLoadingResponse || !message?.trim())
+                  ? 'cursor-not-allowed opacity-30'
+                  : 'cursor-pointer',
+              )}
+            />
           </div>
         </div>
       </div>
