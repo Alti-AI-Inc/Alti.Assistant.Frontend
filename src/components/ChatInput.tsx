@@ -203,6 +203,55 @@ const ChatInput = ({
     setImageBase64,
   } = externalImageGenHook || internalImageGenHook;
 
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const filesArray = Array.from(e.dataTransfer.files);
+      
+      if (selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) {
+        const imageFiles = filesArray.filter(file => file.type.startsWith('image/'));
+        if (imageFiles.length > 0) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setImageBase64(reader.result as string);
+            setSelectedOption(OPTIONS.EDIT_IMAGE);
+          };
+          reader.readAsDataURL(imageFiles[0]);
+          toast.success('Image loaded for editing!');
+        } else {
+          toast.error('Only image files are allowed in this mode.');
+        }
+      } else {
+        const validFiles = filesArray.filter(file => {
+          const ext = '.' + file.name.split('.').pop()?.toLowerCase();
+          return ALLOWED_DOC_EXTENSIONS.includes(ext);
+        });
+        
+        if (validFiles.length > 0) {
+          setSelectedFiles([...(selectedFiles || []), ...validFiles]);
+          toast.success(`${validFiles.length} file(s) attached successfully!`);
+        } else {
+          toast.error('Supported document types: PDF, DOCX, XLSX, CSV, PPTX.');
+        }
+      }
+    }
+  }, [selectedOption, selectedFiles, setSelectedFiles, setImageBase64, setSelectedOption]);
+
+
   // Document hook
   const {
     drafting,
@@ -1266,13 +1315,27 @@ const ChatInput = ({
 
 
         <div
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
           className={cn(
-            'flex flex-col rounded-2xl border border-gray-300 bg-white px-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-800 sm:px-4',
+            'relative flex flex-col rounded-2xl border bg-white px-3 shadow-sm sm:px-4 transition-all duration-300',
+            isDragging 
+              ? 'border-indigo-500 border-dashed bg-indigo-50/30 dark:bg-indigo-950/20 scale-[1.01]' 
+              : 'border-gray-300 dark:border-zinc-700 dark:bg-zinc-800',
             activeConversation?.knowledgebaseId &&
               message.length < 100 &&
               'flex',
           )}
         >
+          {isDragging && (
+            <div className="absolute inset-0 flex items-center justify-center bg-indigo-500/10 backdrop-blur-xs rounded-2xl pointer-events-none z-50 animate-in fade-in duration-200">
+              <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
+                <Paperclip className="size-4 animate-bounce" />
+                Drop files to upload
+              </span>
+            </div>
+          )}
           {/* Image Preview */}
           {imageBase64 && (
             <div className="relative mt-2 w-fit">

@@ -21,7 +21,7 @@ import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useQueryClient } from '@tanstack/react-query';
-import { EllipsisVertical, Share, Trash2, Brain, Download, Edit3 } from 'lucide-react';
+import { EllipsisVertical, Share, Trash2, Brain, Download, Edit3, Code, FileText } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -876,7 +876,41 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                             {displayContent}
                           </Streamdown>
 
-                          <CopyButton content={displayContent} />
+                          <div className="flex items-center gap-2 mt-2">
+                            <CopyButton content={displayContent} />
+                            
+                            {displayContent?.includes('```') && (
+                              <button
+                                onClick={() => {
+                                  setSelectedOption(OPTIONS.CODE);
+                                  toast.success('Code opened in Sandbox!');
+                                }}
+                                className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-zinc-500 dark:text-zinc-400 text-[11px] font-semibold transition-all duration-200"
+                                title="Open in Sandbox"
+                              >
+                                <Code className="size-3.5" />
+                                <span>Open in Sandbox</span>
+                              </button>
+                            )}
+
+                            <button
+                              onClick={() => {
+                                const blob = new Blob([displayContent], { type: 'text/markdown' });
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = `alti_conversation_export_${idx + 1}.md`;
+                                a.click();
+                                URL.revokeObjectURL(url);
+                                toast.success('Message exported as Markdown!');
+                              }}
+                              className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-zinc-500 dark:text-zinc-400 text-[11px] font-semibold transition-all duration-200"
+                              title="Export to Markdown"
+                            >
+                              <FileText className="size-3.5" />
+                              <span>Export Markdown</span>
+                            </button>
+                          </div>
                         </div>
                       )}
                     </div>
