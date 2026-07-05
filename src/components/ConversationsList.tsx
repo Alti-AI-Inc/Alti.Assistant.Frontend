@@ -269,7 +269,7 @@ export default function ConversationsList({
                   isActive ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
                 )} />
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="rounded-2xl">
+              <DropdownMenuContent align="end" className="rounded-2xl">
                 <DropdownMenuItem
                   onClick={() => {
                     setTimeout(() => {
