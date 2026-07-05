@@ -1466,14 +1466,6 @@ const ChatInput = ({
                   <span className="flex-1">Code Assistant</span>
                   {selectedOption === OPTIONS.CODE && <Check className="ml-2 size-4 text-black dark:text-black" />}
                 </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => setSelectedOption(selectedOption === OPTIONS.IMAGE ? null : OPTIONS.IMAGE)} 
-                  className={cn("cursor-pointer", selectedOption === OPTIONS.IMAGE && "!bg-blue-100 dark:!bg-blue-500/20")}
-                >
-                  <ImageIcon className="mr-2 size-4" />
-                  <span className="flex-1">Image Generation</span>
-                  {selectedOption === OPTIONS.IMAGE && <Check className="ml-2 size-4 text-black dark:text-black" />}
-                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
