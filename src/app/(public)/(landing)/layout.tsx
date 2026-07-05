@@ -25,7 +25,7 @@ export default function PublicLayout({
   const { isLeftSidebarOpen } = useSidebarStore();
 
   return (
-    <div className="flex h-screen h-[100dvh] flex-col overflow-hidden">
+    <div className="fixed inset-0 flex flex-col overflow-hidden bg-background">
       {/* Header - Mobile only */}
       <header className="bg-white dark:bg-zinc-900 border-b border-black/10 dark:border-zinc-800 text-foreground fixed top-0 left-0 z-50 flex w-full items-center justify-between px-4 py-3 md:hidden">
         {/* Mobile Drawer (Sheet) */}

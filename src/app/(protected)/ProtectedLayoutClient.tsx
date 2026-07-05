@@ -42,7 +42,7 @@ export default function ProtectedLayoutClient({
   } = useConversationsStore();
 
   return (
-    <div className="flex h-screen h-[100dvh] flex-col overflow-hidden">
+    <div className="fixed inset-0 flex flex-col overflow-hidden bg-background">
       {/* Header - Mobile only */}
       <header className="bg-white dark:bg-zinc-900 border-b border-black/10 dark:border-zinc-800 text-foreground sticky top-0 z-50 flex shrink-0 items-center justify-between px-4 py-3 md:hidden">
         {/* Left Sidebar Mobile Drawer */}
