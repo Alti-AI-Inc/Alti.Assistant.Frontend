@@ -1102,8 +1102,13 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     );
   };
 
+  const isNewChatRoute =
+    conversationId === 'new-chat' ||
+    pathname === '/' ||
+    pathname === '/c/new-chat';
+
   const hasMessages = !!activeConversation?.messages?.length;
-  const showAsNewChat = !hasMessages && !isLoadingResponse;
+  const showAsNewChat = isNewChatRoute && !hasMessages && !isLoadingResponse;
 
   return (
     <div
