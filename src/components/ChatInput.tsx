@@ -742,7 +742,7 @@ const ChatInput = ({
       updateActiveConversation(userMessage, ROLES.USER);
       setLoadingResponse(true);
     },
-    onSuccess: (response, { message: userMessage }) => {
+    onSuccess: (response: any, { message: userMessage }) => {
       if (!response || !response.success) {
         console.error(
           'PostConversation failed:',
