@@ -1113,7 +1113,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     <div
       className={cn(
         "flex w-full h-full flex-1 flex-col min-h-0 overflow-hidden bg-[#e1e1e1] dark:bg-zinc-950",
-        showAsNewChat ? "justify-center" : ""
+        showAsNewChat ? "justify-center pb-[5vh]" : ""
       )}
     >
       {isLoading && !(activeConversation?.conversationId === conversationId && activeConversation?.messages?.length > 0) ? (
