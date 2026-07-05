@@ -8,6 +8,7 @@ import { ArrowUp, LoaderCircle, Mic, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRef, useState } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { toast } from 'sonner';
 
 export default function AudioRecorder({
   setMessage,
@@ -89,10 +90,42 @@ export default function AudioRecorder({
     audioChunks.current = [];
     if (setIsRecording) setIsRecording(true);
 
+    // 1. Check secure context first to prevent silent failures on HTTP staging environments
+    const isSecureContext =
+      window.location.protocol === 'https:' ||
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1';
+
+    if (!isSecureContext) {
+      toast.error('Speech to Text requires a secure HTTPS connection or localhost.');
+      if (setIsRecording) setIsRecording(false);
+      setRecording(false);
+      return;
+    }
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      toast.error('Microphone access is not supported by your browser.');
+      if (setIsRecording) setIsRecording(false);
+      setRecording(false);
+      return;
+    }
+
+    // 2. Explicitly request microphone permission first to avoid race conditions with SpeechRecognition
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Release microphone temporarily so that SpeechRecognition can capture it
+      stream.getTracks().forEach(track => track.stop());
+    } catch (permissionErr) {
+      console.warn('Microphone permission denied:', permissionErr);
+      toast.error('Microphone permission denied. Please allow microphone access.');
+      if (setIsRecording) setIsRecording(false);
+      setRecording(false);
+      return;
+    }
+
+    // 3. Microphone is authorized. Now instantiate SpeechRecognition
     const SpeechRecognition =
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-
-    let startedLive = false;
 
     if (SpeechRecognition) {
       try {
@@ -118,32 +151,28 @@ export default function AudioRecorder({
           }
         };
 
-        recognition.onerror = async (event: any) => {
+        recognition.onerror = (event: any) => {
           console.error('Speech recognition error:', event.error);
-          if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-            console.warn('SpeechRecognition permission denied, trying MediaRecorder fallback...');
-            try {
-              recognition.abort();
-            } catch (abortErr) {}
-            recognitionRef.current = null;
-            await startMediaRecorderFallback();
+          if (event.error !== 'no-speech') {
+            if (setIsRecording) setIsRecording(false);
+            setRecording(false);
           }
         };
 
         recognition.onend = () => {
           console.log('Speech recognition ended');
+          if (setIsRecording) setIsRecording(false);
+          setRecording(false);
         };
 
         recognitionRef.current = recognition;
         recognition.start();
         setRecording(true);
-        startedLive = true;
       } catch (err) {
-        console.warn('Failed to start SpeechRecognition, trying fallback:', err);
+        console.warn('Failed to start SpeechRecognition, trying backup:', err);
+        await startMediaRecorderFallback();
       }
-    }
-
-    if (!startedLive) {
+    } else {
       await startMediaRecorderFallback();
     }
   };

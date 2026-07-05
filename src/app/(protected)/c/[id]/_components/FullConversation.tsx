@@ -1121,91 +1121,87 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             <span className="text-xs font-semibold">loading chat...</span>
           </div>
         </div>
-      ) : (
-        <>
-        {isSplitScreen ? (
-          <div className="relative flex-grow flex flex-row min-h-0 bg-transparent transition-colors duration-300">
-            {/* Left Column: Chat history (45%) */}
-            <div
-              className="w-[45%] h-full overflow-y-auto min-h-0 border-r border-black/5 dark:border-zinc-800/80 flex flex-col"
-              ref={messagesContainerRef}
-            >
-              {renderMessagesContent(true)}
-            </div>
-            {/* Right Column: IDE panel (55%) */}
-            <div className="w-[55%] h-full overflow-y-auto min-h-0 p-6 flex flex-col justify-start bg-zinc-950/20">
-              {codeData ? (
-                <CodeIDEWidget
-                  code={codeData.code}
-                  language={codeData.language}
-                  guideText={codeData.guideText}
-                />
-              ) : (selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) ? (
-                <DesignStudioWidget 
-                  currentImageUrl={imageGenHook.imageBase64 || (() => {
-                    const img = lastAssistantMessage?.metadata?.imageUrl || lastAssistantMessage?.metadata?.images;
-                    return typeof img === 'string' ? img : Array.isArray(img) ? (typeof img[0] === 'string' ? img[0] : (img as any[])[0]?.url) : (img as any)?.url;
-                  })()}
-                  onUpload={(file) => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                      imageGenHook.setImageBase64(reader.result as string);
-                      setSelectedOption(OPTIONS.EDIT_IMAGE);
-                    };
-                    reader.readAsDataURL(file);
-                  }}
-                  isGenerating={isImageGenLoading}
-                />
-              ) : selectedOption === OPTIONS.VIDEO ? (
-                <VideoStudioWidget 
-                  currentVideoUrl={(() => {
-                    const video = lastAssistantMessage?.metadata?.video as any;
-                    return typeof video === 'string' ? video : video?.url || video?.name || null;
-                  })()}
-                  status={isLoadingResponse ? 'processing' : 'idle'}
-                  progress={isLoadingResponse ? 45 : 0}
-                />
-              ) : null}
-            </div>
-          </div>
-        ) : (
-          /* Standard Column: full scroll container */
+      ) : isSplitScreen ? (
+        <div className="relative flex-grow flex flex-row min-h-0 bg-transparent transition-colors duration-300">
+          {/* Left Column: Chat history (45%) */}
           <div
-            className={cn(
-              "relative overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col",
-              showAsNewChat ? "flex-none" : "flex-grow"
-            )}
+            className="w-[45%] h-full overflow-y-auto min-h-0 border-r border-black/5 dark:border-zinc-800/80 flex flex-col"
             ref={messagesContainerRef}
           >
-            {renderMessagesContent(false)}
+            {renderMessagesContent(true)}
           </div>
-        )}
-
-        {/* Chat input - OUTSIDE scroll container, fixed at bottom as flex sibling */}
-        <div
-          className={cn(
-            'shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300',
-            !showAsNewChat
-              ? 'flex min-h-[88px] items-center justify-center py-4 border-t border-black/5 dark:border-zinc-800 bg-[#e1e1e1] dark:bg-zinc-900 mt-auto'
-              : 'py-4 bg-transparent border-t-0'
-          )}
-        >
-          <div className="mx-auto w-full max-w-[796px]">
-            {showAsNewChat && (
-              <h1 className="mb-8 text-4xl font-medium text-center text-gray-900 dark:text-white tracking-tight">
-                How can I help you?
-              </h1>
-            )}
-            <ChatInput
-              conversationId={conversationId}
-              imageGenHook={imageGenHook}
-              selectedFiles={selectedFiles}
-              onFilesChange={setSelectedFiles}
-            />
+          {/* Right Column: IDE panel (55%) */}
+          <div className="w-[55%] h-full overflow-y-auto min-h-0 p-6 flex flex-col justify-start bg-zinc-950/20">
+            {codeData ? (
+              <CodeIDEWidget
+                code={codeData.code}
+                language={codeData.language}
+                guideText={codeData.guideText}
+              />
+            ) : (selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) ? (
+              <DesignStudioWidget 
+                currentImageUrl={imageGenHook.imageBase64 || (() => {
+                  const img = lastAssistantMessage?.metadata?.imageUrl || lastAssistantMessage?.metadata?.images;
+                  return typeof img === 'string' ? img : Array.isArray(img) ? (typeof img[0] === 'string' ? img[0] : (img as any[])[0]?.url) : (img as any)?.url;
+                })()}
+                onUpload={(file) => {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    imageGenHook.setImageBase64(reader.result as string);
+                    setSelectedOption(OPTIONS.EDIT_IMAGE);
+                  };
+                  reader.readAsDataURL(file);
+                }}
+                isGenerating={isImageGenLoading}
+              />
+            ) : selectedOption === OPTIONS.VIDEO ? (
+              <VideoStudioWidget 
+                currentVideoUrl={(() => {
+                  const video = lastAssistantMessage?.metadata?.video as any;
+                  return typeof video === 'string' ? video : video?.url || video?.name || null;
+                })()}
+                status={isLoadingResponse ? 'processing' : 'idle'}
+                progress={isLoadingResponse ? 45 : 0}
+              />
+            ) : null}
           </div>
         </div>
-        </>
+      ) : (
+        /* Standard Column: full scroll container */
+        <div
+          className={cn(
+            "relative overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col flex-grow",
+            showAsNewChat ? "flex-none" : "flex-grow"
+          )}
+          ref={messagesContainerRef}
+        >
+          {renderMessagesContent(false)}
+        </div>
       )}
+
+      {/* Chat input - OUTSIDE scroll container, fixed at bottom as flex sibling */}
+      <div
+        className={cn(
+          'shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300',
+          !showAsNewChat
+            ? 'flex min-h-[88px] items-center justify-center py-4 border-t border-black/5 dark:border-zinc-800 bg-[#e1e1e1] dark:bg-zinc-900 mt-auto'
+            : 'py-4 bg-transparent border-t-0'
+        )}
+      >
+        <div className="mx-auto w-full max-w-[796px]">
+          {showAsNewChat && (
+            <h1 className="mb-8 text-4xl font-medium text-center text-gray-900 dark:text-white tracking-tight">
+              How can I help you?
+            </h1>
+          )}
+          <ChatInput
+            conversationId={conversationId}
+            imageGenHook={imageGenHook}
+            selectedFiles={selectedFiles}
+            onFilesChange={setSelectedFiles}
+          />
+        </div>
+      </div>
     </div>
   );
 };
