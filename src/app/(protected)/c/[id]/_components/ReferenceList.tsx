@@ -31,29 +31,24 @@ export default function ReferencesList({ references, webSearchQueries, searchEnt
       <Accordion type="single" collapsible className="border-none">
         <AccordionItem value="references" className="border-none">
           <AccordionTrigger className="flex items-center gap-2 py-2.5 px-4 rounded-xl bg-white border border-black/10 hover:bg-zinc-50 dark:bg-zinc-900/50 dark:border-zinc-800 dark:hover:bg-zinc-900/80 transition-all duration-300 text-sm font-semibold tracking-wide text-zinc-800 dark:text-zinc-200 focus-visible:ring-0 focus-visible:ring-offset-0 focus:no-underline hover:no-underline">
-            <div className="flex items-center justify-between w-full pr-4">
-              <div className="flex items-center gap-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-primary animate-pulse"
-                >
-                  <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
-                  <path d="M2 12h20" />
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                </svg>
-                <span>Sources & Intelligence Grounding</span>
-                <span className="ml-1 text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary-light font-bold dark:bg-emerald-500/10 dark:text-emerald-400 border border-primary/20 dark:border-emerald-500/20">
-                  {references.length} verified
-                </span>
-              </div>
+            <div className="flex items-center gap-2">
+              <svg
+                xmlns="http://www.w3.org/2050/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-primary animate-pulse"
+              >
+                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+                <path d="M2 12h20" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              </svg>
+              <span>Sources</span>
             </div>
           </AccordionTrigger>
           <AccordionContent className="pt-3 pb-1">
