@@ -42,6 +42,7 @@ import {
   Code,
   Globe,
   Microscope,
+  FileSearch,
   Image as ImageIcon,
   Paperclip,
   Plus,
@@ -1278,7 +1279,8 @@ const ChatInput = ({
               {[
                 { id: 'search', name: 'Search', icon: Globe, value: null },
                 { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
-                { id: 'write', name: 'Write', icon: FileText, value: OPTIONS.DRAFT_DOCUMENT }
+                { id: 'write', name: 'Write', icon: FileText, value: OPTIONS.DRAFT_DOCUMENT },
+                { id: 'review', name: 'Review', icon: FileSearch, value: OPTIONS.REVIEW_DOCUMENTS }
               ].map((tab) => {
                 const isSelected = selectedOption === tab.value;
                 return (
