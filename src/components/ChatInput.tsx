@@ -1278,8 +1278,7 @@ const ChatInput = ({
               {[
                 { id: 'search', name: 'Search', icon: Globe, value: null },
                 { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
-                { id: 'write', name: 'Write', icon: FileText, value: OPTIONS.DRAFT_DOCUMENT },
-                { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE }
+                { id: 'write', name: 'Write', icon: FileText, value: OPTIONS.DRAFT_DOCUMENT }
               ].map((tab) => {
                 const isSelected = selectedOption === tab.value;
                 return (
