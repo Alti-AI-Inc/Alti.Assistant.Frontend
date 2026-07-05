@@ -231,7 +231,6 @@ const ChatInput = ({
             setSelectedOption(OPTIONS.EDIT_IMAGE);
           };
           reader.readAsDataURL(imageFiles[0]);
-          toast.success('Image loaded for editing!');
         } else {
           toast.error('Only image files are allowed in this mode.');
         }
@@ -243,7 +242,6 @@ const ChatInput = ({
         
         if (validFiles.length > 0) {
           setSelectedFiles([...(selectedFiles || []), ...validFiles]);
-          toast.success(`${validFiles.length} file(s) attached successfully!`);
         } else {
           toast.error('Supported document types: PDF, DOCX, XLSX, CSV, PPTX.');
         }
