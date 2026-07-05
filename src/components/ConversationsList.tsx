@@ -15,7 +15,6 @@ import {
   EllipsisVertical,
   LoaderCircle,
   Pencil,
-  Share,
   Trash2,
   MessageSquare,
   Search,
@@ -271,19 +270,6 @@ export default function ConversationsList({
                 )} />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="rounded-2xl">
-                <DropdownMenuItem
-                  onClick={() => {
-                    setTimeout(() => {
-                      onOpen({
-                        type: 'share-conversation',
-                        actionId: chat._id,
-                      });
-                    }, 0);
-                  }}
-                >
-                  <Share className="text-black" /> Share
-                </DropdownMenuItem>
-
                 <DropdownMenuItem
                   onClick={() => {
                     setTimeout(() => {
