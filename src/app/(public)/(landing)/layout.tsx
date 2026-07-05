@@ -25,7 +25,7 @@ export default function PublicLayout({
   const { isLeftSidebarOpen } = useSidebarStore();
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex h-screen h-[100dvh] flex-col overflow-hidden">
       {/* Header - Mobile only */}
       <header className="bg-white dark:bg-zinc-900 border-b border-black/10 dark:border-zinc-800 text-foreground fixed top-0 left-0 z-50 flex w-full items-center justify-between px-4 py-3 md:hidden">
         {/* Mobile Drawer (Sheet) */}
@@ -63,7 +63,7 @@ export default function PublicLayout({
         <div /> {/* placeholder for spacing */}
       </header>
 
-      <div className="flex flex-1 pt-[56px] md:pt-0">
+      <div className="relative flex flex-1 min-h-0 overflow-hidden pt-[56px] md:pt-0">
         {/* Sidebar - Desktop only */}
         <div
           className={cn(
