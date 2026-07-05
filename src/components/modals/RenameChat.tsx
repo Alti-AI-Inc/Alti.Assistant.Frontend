@@ -58,7 +58,7 @@ const RenameChat = () => {
           disabled={isPending}
           autoFocus
           placeholder="New title"
-          className="w-full px-3 py-2 shadow-none focus:ring-0 focus-visible:ring-0"
+          className="w-full px-3 py-2 shadow-none focus:ring-0 focus-visible:ring-0 bg-white text-black"
           onKeyPress={e => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
@@ -67,7 +67,7 @@ const RenameChat = () => {
           }}
         />
         <DialogFooter className="justify-end">
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="outline" onClick={onClose} className="bg-white text-black hover:bg-zinc-100 hover:text-black border-zinc-200">
             Cancel
           </Button>
           <Button
