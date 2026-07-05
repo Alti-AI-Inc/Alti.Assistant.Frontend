@@ -1451,20 +1451,20 @@ const ChatInput = ({
                   {selectedOption === OPTIONS.RESEARCH && <Check className="ml-2 size-4 text-black dark:text-black" />}
                 </DropdownMenuItem>
                 <DropdownMenuItem 
-                  onClick={() => setSelectedOption(selectedOption === OPTIONS.DRAFT_DOCUMENT ? null : OPTIONS.DRAFT_DOCUMENT)} 
-                  className={cn("cursor-pointer", selectedOption === OPTIONS.DRAFT_DOCUMENT && "!bg-blue-100 dark:!bg-blue-500/20")}
-                >
-                  <FileText className="mr-2 size-4" />
-                  <span className="flex-1">Writing Assistant</span>
-                  {selectedOption === OPTIONS.DRAFT_DOCUMENT && <Check className="ml-2 size-4 text-black dark:text-black" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem 
                   onClick={() => setSelectedOption(selectedOption === OPTIONS.CODE ? null : OPTIONS.CODE)} 
                   className={cn("cursor-pointer", selectedOption === OPTIONS.CODE && "!bg-blue-100 dark:!bg-blue-500/20")}
                 >
                   <Code className="mr-2 size-4" />
                   <span className="flex-1">Code Assistant</span>
                   {selectedOption === OPTIONS.CODE && <Check className="ml-2 size-4 text-black dark:text-black" />}
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => setSelectedOption(selectedOption === OPTIONS.DRAFT_DOCUMENT ? null : OPTIONS.DRAFT_DOCUMENT)} 
+                  className={cn("cursor-pointer", selectedOption === OPTIONS.DRAFT_DOCUMENT && "!bg-blue-100 dark:!bg-blue-500/20")}
+                >
+                  <FileText className="mr-2 size-4" />
+                  <span className="flex-1">Writing Assistant</span>
+                  {selectedOption === OPTIONS.DRAFT_DOCUMENT && <Check className="ml-2 size-4 text-black dark:text-black" />}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
