@@ -1109,7 +1109,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
     <div
       className={cn(
         "flex w-full h-full flex-1 flex-col bg-[#e1e1e1] dark:bg-zinc-950",
-        showAsNewChat ? "justify-center" : ""
+        showAsNewChat ? "justify-start pt-[15vh] sm:pt-[20vh]" : ""
       )}
     >
       {isLoading && !(activeConversation?.conversationId === conversationId && activeConversation?.messages?.length > 0) ? (
@@ -1170,7 +1170,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
         /* Standard Column: full scroll container */
         <div
           className={cn(
-            "relative overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col flex-grow",
+            "relative overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col",
             showAsNewChat ? "flex-none" : "flex-grow"
           )}
           ref={messagesContainerRef}
