@@ -1434,14 +1434,6 @@ const ChatInput = ({
                     ? `Chat with ${activeKnowledgeBaseName}`
                     : (pathname === '/workflows' || pathname?.startsWith('/workflows')
                       ? 'Describe your workflow...'
-                      : selectedOption === OPTIONS.RESEARCH
-                      ? 'What would you like to research?'
-                      : selectedOption === OPTIONS.DRAFT_DOCUMENT
-                      ? 'What would you like to write?'
-                      : selectedOption === OPTIONS.CODE
-                      ? 'What would you like to code?'
-                      : selectedOption === OPTIONS.IMAGE
-                      ? 'Describe the image you want to generate...'
                       : 'Enter prompt here...')
               }
               style={{ backgroundColor: 'transparent' }}
