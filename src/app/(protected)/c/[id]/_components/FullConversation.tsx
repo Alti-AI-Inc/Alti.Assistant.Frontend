@@ -851,6 +851,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
                 {message.role === 'user' && (
                   <div
                     className="flex items-center justify-end"
+                    data-role="user"
                     ref={
                       idx === lastUserMessageIndex
                         ? lastMessageRef

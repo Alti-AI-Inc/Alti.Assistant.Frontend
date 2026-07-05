@@ -398,11 +398,12 @@ export function useDeleteConversation() {
         );
       });
 
-      queryClient.invalidateQueries({
-        predicate: q =>
-          q.queryKey[0] === 'conversations' ||
-          q.queryKey[0] === 'saved-conversations',
-      });
+      // queryClient.invalidateQueries({
+      //   predicate: q =>
+      //     q.queryKey[0] === 'conversations' ||
+      //     q.queryKey[0] === 'saved-conversations',
+      // });
+
       onClose();
     },
   });
