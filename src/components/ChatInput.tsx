@@ -13,12 +13,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+
 import { useBrainstorm } from '@/hooks/useBrainstorm';
 import { useContractReview } from '@/hooks/useContractReview';
 import { useDocument } from '@/hooks/useDocument';
@@ -1276,39 +1271,33 @@ const ChatInput = ({
       )}
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
-        {selectedOption === OPTIONS.RESEARCH && !isExistingConversation && (
-          <div className="absolute bottom-full left-0 right-0 mb-6 flex justify-center pointer-events-none">
-            <div className="pointer-events-auto flex w-full sm:w-auto bg-white dark:bg-zinc-900 backdrop-blur-md p-1.5 rounded-2xl shadow-inner border border-gray-200/50 dark:border-zinc-800/50 gap-1 overflow-x-auto">
+        {!isExistingConversation && (
+          <div className="absolute bottom-full left-0 right-0 mb-4 flex justify-center pointer-events-none">
+            <div className="pointer-events-auto flex w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1 rounded-[1.25rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-1 overflow-x-auto">
               {[
-                { id: 'bachelors', name: 'Bachelors', desc: 'Fast (~3-5 pages)' },
-                { id: 'masters', name: 'Masters', desc: 'Deep (~10-15 pages)' },
-                { id: 'phd', name: 'PhD', desc: 'Exhaustive (~20-25 pages)' }
-              ].map((tier) => (
-                <button
-                  key={tier.id}
-                  type="button"
-                  onClick={() => setResearchTier(tier.id as any)}
-                  className={cn(
-                    'flex flex-col items-center justify-center px-4 py-2 min-w-[130px] sm:min-w-[140px] rounded-xl transition-all duration-300 ease-out',
-                    researchTier === tier.id 
-                      ? 'bg-[#e1e1e1] dark:bg-zinc-800 shadow-sm ring-1 ring-black/5 scale-[1.02]' 
-                      : 'hover:bg-zinc-50 dark:hover:bg-zinc-800/50 opacity-80 hover:opacity-100'
-                  )}
-                >
-                  <span className={cn(
-                    "text-sm font-bold tracking-tight transition-colors duration-300",
-                    researchTier === tier.id ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-600 dark:text-zinc-400"
-                  )}>
-                    {tier.name}
-                  </span>
-                  <span className={cn(
-                    "text-[10px] uppercase tracking-wider font-semibold mt-0.5 transition-colors duration-300",
-                    researchTier === tier.id ? "text-zinc-600 dark:text-zinc-400" : "text-zinc-400 dark:text-zinc-500"
-                  )}>
-                    {tier.desc}
-                  </span>
-                </button>
-              ))}
+                { id: 'search', name: 'Search', icon: Globe, value: null },
+                { id: 'research', name: 'Research', icon: Globe, value: OPTIONS.RESEARCH },
+                { id: 'write', name: 'Write', icon: FileText, value: OPTIONS.DRAFT_DOCUMENT },
+                { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE }
+              ].map((tab) => {
+                const isSelected = selectedOption === tab.value;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setSelectedOption(tab.value)}
+                    className={cn(
+                      'flex items-center gap-2 px-3 py-1.5 rounded-2xl transition-all duration-200 ease-out font-medium text-sm',
+                      isSelected 
+                        ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
+                        : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
+                    )}
+                  >
+                    <tab.icon className={cn("size-4", isSelected ? "text-blue-500" : "")} />
+                    <span>{tab.name}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -1410,65 +1399,21 @@ const ChatInput = ({
 
           {/* Input container with active icon inside */}
           <div className="relative flex items-center gap-2 py-2">
-            <DropdownMenu>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <DropdownMenuTrigger asChild>
-                    <button
-                      type="button"
-                      className="flex cursor-pointer items-center focus:outline-none"
-                      aria-label="More Options"
-                    >
-                      {selectedOption === OPTIONS.RESEARCH ? (
-                        <Globe className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1 text-white transition-colors" style={{ backgroundColor: '#0000FF' }} />
-                      ) : selectedOption === OPTIONS.DRAFT_DOCUMENT ? (
-                        <FileText className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1 text-white transition-colors" style={{ backgroundColor: '#0000FF' }} />
-                      ) : selectedOption === OPTIONS.CODE ? (
-                        <Code className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1 text-white transition-colors" style={{ backgroundColor: '#0000FF' }} />
-                      ) : selectedOption === OPTIONS.IMAGE ? (
-                        <ImageIcon className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1 text-white transition-colors" style={{ backgroundColor: '#0000FF' }} />
-                      ) : (
-                        <Plus className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 p-1 text-white transition-colors" style={{ backgroundColor: '#0000FF' }} />
-                      )}
-                    </button>
-                  </DropdownMenuTrigger>
-                </TooltipTrigger>
-                <TooltipContent side="top">
-                  <p>More Options</p>
-                </TooltipContent>
-              </Tooltip>
-              <DropdownMenuContent align="start" className="w-56 mb-2">
-                <DropdownMenuItem onClick={() => fileInputRef.current?.click()} className="cursor-pointer">
-                  <Paperclip className="mr-2 size-4" />
-                  <span className="flex-1">Attach Files</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => setSelectedOption(selectedOption === OPTIONS.RESEARCH ? null : OPTIONS.RESEARCH)} 
-                  className={cn("cursor-pointer", selectedOption === OPTIONS.RESEARCH && "!bg-blue-100 dark:!bg-blue-500/20")}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex cursor-pointer items-center justify-center rounded-lg border-2 border-gray-300 p-1 text-gray-500 hover:text-gray-700 hover:border-gray-400 transition-colors focus:outline-none dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                  aria-label="Attach Files"
                 >
-                  <Globe className="mr-2 size-4" />
-                  <span className="flex-1">Deep Research</span>
-                  {selectedOption === OPTIONS.RESEARCH && <Check className="ml-2 size-4 text-black dark:text-black" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => setSelectedOption(selectedOption === OPTIONS.CODE ? null : OPTIONS.CODE)} 
-                  className={cn("cursor-pointer", selectedOption === OPTIONS.CODE && "!bg-blue-100 dark:!bg-blue-500/20")}
-                >
-                  <Code className="mr-2 size-4" />
-                  <span className="flex-1">Code Assistant</span>
-                  {selectedOption === OPTIONS.CODE && <Check className="ml-2 size-4 text-black dark:text-black" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => setSelectedOption(selectedOption === OPTIONS.DRAFT_DOCUMENT ? null : OPTIONS.DRAFT_DOCUMENT)} 
-                  className={cn("cursor-pointer", selectedOption === OPTIONS.DRAFT_DOCUMENT && "!bg-blue-100 dark:!bg-blue-500/20")}
-                >
-                  <FileText className="mr-2 size-4" />
-                  <span className="flex-1">Writing Assistant</span>
-                  {selectedOption === OPTIONS.DRAFT_DOCUMENT && <Check className="ml-2 size-4 text-black dark:text-black" />}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
+                  <Paperclip className="size-5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p>Attach Files</p>
+              </TooltipContent>
+            </Tooltip>
 
             <Textarea
               name="message"
