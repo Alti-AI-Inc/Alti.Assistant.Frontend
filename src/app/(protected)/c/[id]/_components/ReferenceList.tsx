@@ -98,10 +98,7 @@ export default function ReferencesList({ references, webSearchQueries, searchEnt
                     {/* Glowing highlight indicator */}
                     <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-primary/30 dark:via-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     
-                    {/* Citation Number Badge */}
-                    <div className="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-primary/10 text-primary dark:bg-emerald-500/10 dark:text-emerald-400 text-[10px] font-bold border border-primary/20 dark:border-emerald-500/20 group-hover:scale-110 transition-transform duration-300">
-                      {index + 1}
-                    </div>
+
 
                     {/* Favicon & Content Container */}
                     <div className="flex-grow min-w-0 flex flex-col gap-1">
