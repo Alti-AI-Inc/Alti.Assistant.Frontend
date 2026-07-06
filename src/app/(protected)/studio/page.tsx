@@ -3,16 +3,19 @@ import { useEffect } from 'react';
 
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useConversationsStore, OPTIONS } from '@/stores/useConverstionsStore';
 import { useSession } from 'next-auth/react';
 
 function StudioApp() {
   const { data } = useSession();
-  const { activeConversation, setActiveConversation } = useConversationsStore();
+  const { activeConversation, setActiveConversation, selectedOption, setSelectedOption } = useConversationsStore();
 
   useEffect(() => {
     setActiveConversation(null);
-  }, [setActiveConversation]);
+    if (!selectedOption || ![OPTIONS.CODE, OPTIONS.IMAGE, OPTIONS.VIDEO, OPTIONS.AUDIO].includes(selectedOption)) {
+      setSelectedOption(OPTIONS.CODE);
+    }
+  }, [setActiveConversation, selectedOption, setSelectedOption]);
 
   const { data: knowledgeBases } = useKnowledgeBases(data?.accessToken);
 

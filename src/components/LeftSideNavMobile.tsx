@@ -417,8 +417,11 @@ const LeftSideNavMobile = () => {
       }
       close();
     } else if (tab === 'studio') {
-      setActiveConversation(null);
-      router.push('/studio');
+      setSelectedOption(OPTIONS.CODE);
+      if (pathname !== '/studio') {
+        setActiveConversation(null);
+        router.push('/studio');
+      }
       close();
     } else if (tab === 'code') {
       setSelectedOption(OPTIONS.CODE);

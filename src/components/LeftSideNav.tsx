@@ -371,8 +371,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         router.push('/');
       }
     } else if (tab === 'studio') {
-      setActiveConversation(null);
-      router.push('/studio');
+      setSelectedOption(OPTIONS.CODE);
+      if (pathname !== '/studio') {
+        setActiveConversation(null);
+        router.push('/studio');
+      }
     } else if (tab === 'code') {
       setSelectedOption(OPTIONS.CODE);
       if (pathname !== '/') {
