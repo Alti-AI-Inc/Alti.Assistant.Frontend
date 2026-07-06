@@ -16,7 +16,8 @@ import {
   Upload, 
   Clock, 
   Code,
-  ListTodo
+  ListTodo,
+  BookOpen
 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { OPTIONS } from '@/types/conversation';
@@ -51,6 +52,12 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   const [activeTab, setActiveTab] = useState<TabType>('ai');
   const [runs, setRuns] = useState<any[]>([]);
 
+  // Dialog States for adding config items
+  const [isAddInstructionOpen, setIsAddInstructionOpen] = useState(false);
+  const [newInstruction, setNewInstruction] = useState('');
+  const [isAddGuardrailOpen, setIsAddGuardrailOpen] = useState(false);
+  const [newGuardrail, setNewGuardrail] = useState('');
+
   // Sync activeTab with global selectedOption
   useEffect(() => {
     if (selectedOption === null) {
@@ -82,6 +89,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
   if (!bot) return null;
 
+  // Filter threads for history tabs
   const filteredThreads = botThreads.filter((t) => {
     const titleMatch = (t.title || 'Untitled Chat').toLowerCase().includes(searchQuery.toLowerCase());
     if (!titleMatch) return false;
@@ -118,9 +126,62 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
     toast.success('Run history cleared');
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      
+      let filesList: { name: string, size: number }[] = [];
+      if (bot.data) {
+        try {
+          filesList = JSON.parse(bot.data);
+        } catch {
+          filesList = [{ name: bot.data, size: 0 }];
+        }
+      }
+      
+      if (filesList.some(f => f.name === file.name)) {
+        toast.error('File already exists in Knowledge');
+        return;
+      }
+
+      filesList.push({ name: file.name, size: file.size });
+      editBot(botId, { data: JSON.stringify(filesList) });
+      toast.success(`${file.name} uploaded successfully to Knowledge`);
+    }
+  };
+
   const hideSidebar = !isRightSidebarOpen;
   const parsedInstructions = bot.instructions ? bot.instructions.split('\n\n').filter(Boolean) : [];
   const parsedGuardrails = bot.guardrails ? bot.guardrails.split('\n\n').filter(Boolean) : [];
+
+  // Filter instructions based on search query
+  const filteredInstructions = parsedInstructions.filter(inst => 
+    inst.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Filter guardrails based on search query
+  const filteredGuardrails = parsedGuardrails.filter(guard => 
+    guard.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Parse knowledge files
+  let knowledgeFiles: { name: string, size: number }[] = [];
+  if (bot.data) {
+    try {
+      knowledgeFiles = JSON.parse(bot.data);
+    } catch {
+      knowledgeFiles = [{ name: bot.data, size: 0 }];
+    }
+  }
+  const filteredKnowledge = knowledgeFiles.filter(file => 
+    file.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Filter runs logs
+  const filteredRuns = runs.filter(run => 
+    run.taskName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    run.summary.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <aside
@@ -154,41 +215,9 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
       </header>
 
       {!hideSidebar && (
-        <div className="flex-1 flex flex-col min-h-0 overflow-y-auto bg-white">
+        <div className="flex-1 flex flex-col min-h-0 bg-white">
           
-          {/* Search & Actions Row for Chat Tabs */}
-          {(activeTab === 'ai' || activeTab === 'studio' || activeTab === 'tasks') && (
-            <div className="flex items-center justify-between gap-2 px-4 pt-4 shrink-0">
-              <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-[#e1e1e1] px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">
-                <Search className="size-3.5 flex-none text-black" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-transparent text-xs text-black outline-none placeholder:text-gray-500"
-                />
-              </div>
-
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#e1e1e1] text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black flex-none dark:bg-zinc-800/50 dark:text-white"
-                    onClick={handleNewChat}
-                  >
-                    <Plus className="size-4 text-black dark:text-white" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>{activeTab === 'studio' ? 'New Code' : 'New Search'}</p>
-                </TooltipContent>
-              </Tooltip>
-            </div>
-          )}
-
-          {/* Consolidated Single Toggle List */}
+          {/* Consolidated Single Toggle List (top) */}
           <div className="px-4 pt-4 shrink-0">
             <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03] flex-wrap justify-between">
               
@@ -340,7 +369,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                         : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
                     )}
                   >
-                    <Upload className="size-4" />
+                    <BookOpen className="size-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
@@ -351,16 +380,83 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
             </div>
           </div>
 
-          {/* Active Content Area below the search bar */}
+          {/* Straight line below the toggle */}
+          <div className="h-px w-[calc(100%+2rem)] -ml-4 bg-black/10 mt-4 shrink-0" />
+
+          {/* Search & Actions Row below toggle */}
+          <div className="flex items-center justify-between gap-2 px-4 pt-4 shrink-0">
+            <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-[#e1e1e1] px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">
+              <Search className="size-3.5 flex-none text-black" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-transparent text-xs text-black outline-none placeholder:text-gray-500"
+              />
+            </div>
+
+            {/* Render + button for all tabs EXCEPT Inbox */}
+            {activeTab !== 'inbox' && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#e1e1e1] text-black shadow-xs transition-all hover:bg-black/[0.03] hover:text-black flex-none dark:bg-zinc-800/50 dark:text-white"
+                    onClick={() => {
+                      if (activeTab === 'instructions') {
+                        setIsAddInstructionOpen(true);
+                      } else if (activeTab === 'guardrails') {
+                        setIsAddGuardrailOpen(true);
+                      } else if (activeTab === 'knowledge') {
+                        document.getElementById('sidebar-file-upload')?.click();
+                      } else {
+                        handleNewChat();
+                      }
+                    }}
+                  >
+                    <Plus className="size-4 text-black dark:text-white" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>
+                    {activeTab === 'instructions' 
+                      ? 'Add Instruction' 
+                      : activeTab === 'guardrails' 
+                      ? 'Add Guardrail' 
+                      : activeTab === 'knowledge' 
+                      ? 'Upload File' 
+                      : activeTab === 'studio' 
+                      ? 'New Code' 
+                      : 'New Search'}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+          </div>
+
+          {/* Straight line below search & plus */}
+          <div className="h-px w-[calc(100%+2rem)] -ml-4 bg-black/10 mt-4 shrink-0" />
+
+          {/* Hidden File Input for Knowledge uploads */}
+          <input 
+            type="file" 
+            id="sidebar-file-upload" 
+            className="hidden" 
+            onChange={handleFileUpload} 
+          />
+
+          {/* Active Content Area below the straight line */}
           <div className="flex-1 overflow-y-auto p-4 min-h-0">
             {activeTab === 'instructions' && (
               <div className="space-y-1 animate-in fade-in zoom-in-95 duration-200">
-                {parsedInstructions.length === 0 ? (
+                {filteredInstructions.length === 0 ? (
                   <div className="py-8 text-center text-xs text-gray-400">
-                    No instructions added yet.
+                    {searchQuery ? 'No matching instructions.' : 'No instructions added yet.'}
                   </div>
                 ) : (
-                  parsedInstructions.map((inst, index) => (
+                  filteredInstructions.map((inst, index) => (
                     <div
                       key={index}
                       className="group flex h-9 w-full items-center justify-between rounded-md text-xs font-normal text-black text-left transition-all hover:bg-black/5"
@@ -413,12 +509,12 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
             {activeTab === 'guardrails' && (
               <div className="space-y-1 animate-in fade-in zoom-in-95 duration-200">
-                {parsedGuardrails.length === 0 ? (
+                {filteredGuardrails.length === 0 ? (
                   <div className="py-8 text-center text-xs text-gray-400">
-                    No guardrails added yet.
+                    {searchQuery ? 'No matching guardrails.' : 'No guardrails added yet.'}
                   </div>
                 ) : (
-                  parsedGuardrails.map((guard, index) => (
+                  filteredGuardrails.map((guard, index) => (
                     <div
                       key={index}
                       className="group flex h-9 w-full items-center justify-between rounded-md text-xs font-normal text-black text-left transition-all hover:bg-black/5"
@@ -471,80 +567,63 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
             {activeTab === 'knowledge' && (
               <div className="space-y-1 animate-in fade-in zoom-in-95 duration-200">
-                {bot.data ? (
-                  (() => {
-                    let files: { name: string, size: number }[] = [];
-                    try {
-                      files = JSON.parse(bot.data);
-                    } catch (e) {
-                      files = [{ name: bot.data, size: 0 }];
-                    }
-                    
-                    if (files.length === 0) {
-                      return (
-                        <div className="py-8 text-center text-xs text-gray-400">
-                          No data connected.
+                {filteredKnowledge.length === 0 ? (
+                  <div className="py-8 text-center text-xs text-gray-400">
+                    {searchQuery ? 'No matching connected knowledge.' : 'No data connected.'}
+                  </div>
+                ) : (
+                  filteredKnowledge.map((file, idx) => {
+                    const IconComponent = getFileIconComponent(file.name);
+                    return (
+                      <div key={idx} className="group flex h-9 w-full items-center justify-between rounded-md text-xs font-normal text-black text-left transition-all hover:bg-black/5">
+                        <div className="flex items-center flex-1 min-w-0 px-2 py-1">
+                          <IconComponent className="size-3.5 mr-2 flex-shrink-0 text-blue-600 opacity-70" />
+                          <span className="truncate">{file.name}</span>
+                        </div>
+                      
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <button
+                              onClick={(e) => e.stopPropagation()}
+                              className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
+                              title="Disconnect Data"
+                            >
+                              <Trash2 className="size-3.5 text-black" />
+                            </button>
+                          </DialogTrigger>
+                          <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+                            <div className="p-5 text-center">
+                                <h2 className="text-base font-semibold text-black dark:text-white leading-tight">Disconnect Data</h2>
+                                <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400 leading-normal">
+                                  Are you sure you want to remove this data file?
+                                </p>
+                              </div>
+                              <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+                                <DialogClose asChild>
+                                  <button className="flex-1 text-sm font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 h-full border-r border-black/10 dark:border-white/10 outline-none">Cancel</button>
+                                </DialogClose>
+                                <DialogClose asChild>
+                                  <button 
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      const merged = knowledgeFiles.filter((_, i) => i !== idx);
+                                      if (merged.length === 0) {
+                                        editBot(botId, { data: undefined });
+                                      } else {
+                                        editBot(botId, { data: JSON.stringify(merged) });
+                                      }
+                                    }}
+                                    className="flex-1 text-sm font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 h-full outline-none"
+                                  >
+                                    Delete
+                                  </button>
+                                </DialogClose>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
                         </div>
                       );
-                    }
-
-                    return files.map((file, idx) => {
-                      const IconComponent = getFileIconComponent(file.name);
-                      return (
-                        <div key={idx} className="group flex h-9 w-full items-center justify-between rounded-md text-xs font-normal text-black text-left transition-all hover:bg-black/5">
-                          <div className="flex items-center flex-1 min-w-0 px-2 py-1">
-                            <IconComponent className="size-3.5 mr-2 flex-shrink-0 text-blue-600 opacity-70" />
-                            <span className="truncate">{file.name}</span>
-                          </div>
-                        
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <button
-                                onClick={(e) => e.stopPropagation()}
-                                className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
-                                title="Disconnect Data"
-                              >
-                                <Trash2 className="size-3.5 text-black" />
-                              </button>
-                            </DialogTrigger>
-                            <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
-                              <div className="p-5 text-center">
-                                  <h2 className="text-base font-semibold text-black dark:text-white leading-tight">Disconnect Data</h2>
-                                  <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400 leading-normal">
-                                    Are you sure you want to remove this data file?
-                                  </p>
-                                </div>
-                                <div className="border-t border-black/10 dark:border-white/10 flex h-11">
-                                  <DialogClose asChild>
-                                    <button className="flex-1 text-sm font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 h-full border-r border-black/10 dark:border-white/10 outline-none">Cancel</button>
-                                  </DialogClose>
-                                  <DialogClose asChild>
-                                    <button 
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        const merged = files.filter((_, i) => i !== idx);
-                                        if (merged.length === 0) {
-                                          editBot(botId, { data: undefined });
-                                        } else {
-                                          editBot(botId, { data: JSON.stringify(merged) });
-                                        }
-                                      }}
-                                      className="flex-1 text-sm font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 h-full outline-none"
-                                    >
-                                      Delete
-                                    </button>
-                                  </DialogClose>
-                                </div>
-                              </DialogContent>
-                            </Dialog>
-                          </div>
-                        );
-                      });
-                    })()
-                  ) : (
-                    <div className="py-8 text-center text-xs text-gray-400">
-                      No data connected.
-                    </div>
+                    })
                   )}
               </div>
             )}
@@ -564,12 +643,12 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 </div>
                 
                 <div className="space-y-3">
-                  {runs.length === 0 ? (
+                  {filteredRuns.length === 0 ? (
                     <div className="py-8 text-center text-xs text-gray-400">
-                      No executions yet. Run a task to see logs.
+                      {searchQuery ? 'No matching executions.' : 'No executions yet. Run a task to see logs.'}
                     </div>
                   ) : (
-                    runs.map((run) => (
+                    filteredRuns.map((run) => (
                       <div 
                         key={run.id}
                         className="bg-[#e1e1e1]/50 dark:bg-zinc-800/40 rounded-xl p-3 space-y-1.5 border border-black/[0.03] dark:border-white/[0.03]"
@@ -673,6 +752,74 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
         </div>
       )}
+
+      {/* Dialog for adding instruction */}
+      <Dialog open={isAddInstructionOpen} onOpenChange={setIsAddInstructionOpen}>
+        <DialogContent className="p-6 bg-white dark:bg-zinc-900 border-none rounded-[20px] max-w-[400px] shadow-xl [&>button]:hidden">
+          <div className="space-y-4">
+            <h3 className="text-base font-semibold text-black dark:text-white">Add Instruction</h3>
+            <textarea
+              className="w-full h-24 p-3 bg-gray-50 dark:bg-zinc-955 border border-black/15 dark:border-zinc-800 rounded-xl text-xs resize-none focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              placeholder="Enter new instruction..."
+              value={newInstruction}
+              onChange={(e) => setNewInstruction(e.target.value)}
+            />
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" size="sm" onClick={() => {
+                setIsAddInstructionOpen(false);
+                setNewInstruction('');
+              }}>
+                Cancel
+              </Button>
+              <Button size="sm" onClick={() => {
+                if (newInstruction.trim()) {
+                  const newList = [...parsedInstructions, newInstruction.trim()];
+                  editBot(botId, { instructions: newList.join('\n\n') });
+                  setIsAddInstructionOpen(false);
+                  setNewInstruction('');
+                  toast.success('Instruction added');
+                }
+              }}>
+                Add
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog for adding guardrail */}
+      <Dialog open={isAddGuardrailOpen} onOpenChange={setIsAddGuardrailOpen}>
+        <DialogContent className="p-6 bg-white dark:bg-zinc-900 border-none rounded-[20px] max-w-[400px] shadow-xl [&>button]:hidden">
+          <div className="space-y-4">
+            <h3 className="text-base font-semibold text-black dark:text-white">Add Guardrail</h3>
+            <textarea
+              className="w-full h-24 p-3 bg-gray-50 dark:bg-zinc-955 border border-black/15 dark:border-zinc-800 rounded-xl text-xs resize-none focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              placeholder="Enter new guardrail..."
+              value={newGuardrail}
+              onChange={(e) => setNewGuardrail(e.target.value)}
+            />
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" size="sm" onClick={() => {
+                setIsAddGuardrailOpen(false);
+                setNewGuardrail('');
+              }}>
+                Cancel
+              </Button>
+              <Button size="sm" onClick={() => {
+                if (newGuardrail.trim()) {
+                  const newList = [...parsedGuardrails, newGuardrail.trim()];
+                  editBot(botId, { guardrails: newList.join('\n\n') });
+                  setIsAddGuardrailOpen(false);
+                  setNewGuardrail('');
+                  toast.success('Guardrail added');
+                }
+              }}>
+                Add
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </aside>
   );
 }
