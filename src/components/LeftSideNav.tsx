@@ -319,6 +319,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       setActiveTab('tasks');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       setActiveTab('search');
+    } else if (pathname === '/studio' || pathname.startsWith('/studio/')) {
+      setActiveTab('studio');
     } else if (pathname.startsWith('/instructions') || 
                pathname.startsWith('/guardrails') || 
                pathname.startsWith('/platform-knowledge') || 
