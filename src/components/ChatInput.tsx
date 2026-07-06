@@ -1412,25 +1412,29 @@ export default function ChatInput({
               )}
 
               {/* Child Toggle */}
-              {!isLocalTasks && (
-                <div className="flex w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto">
-                  {(isLocalStudio ? [
-                    { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE },
-                    { id: 'image', name: 'Image', icon: ImageIcon, value: OPTIONS.IMAGE },
-                    { id: 'video', name: 'Video', icon: Film, value: OPTIONS.VIDEO },
-                    { id: 'audio', name: 'Audio', icon: Headphones, value: OPTIONS.AUDIO }
-                  ] : [
-                    { id: 'search', name: 'Chat', icon: MessageSquare, value: null },
-                    { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
-                    { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
-                    { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS }
-                  ]).map((tab) => {
+              <div 
+                className={cn(
+                  "flex w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto transition-opacity duration-300",
+                  isLocalTasks ? "opacity-0 pointer-events-none select-none" : "opacity-100"
+                )}
+              >
+                {(isLocalStudio ? [
+                  { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE },
+                  { id: 'image', name: 'Image', icon: ImageIcon, value: OPTIONS.IMAGE },
+                  { id: 'video', name: 'Video', icon: Film, value: OPTIONS.VIDEO },
+                  { id: 'audio', name: 'Audio', icon: Headphones, value: OPTIONS.AUDIO }
+                ] : [
+                  { id: 'search', name: 'Chat', icon: MessageSquare, value: null },
+                  { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
+                  { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
+                  { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS }
+                ]).map((tab) => {
                   const isSelected = selectedOption === tab.value;
                   return (
                     <button
                       key={tab.id}
                       type="button"
-                      onClick={() => setSelectedOption(tab.value)}
+                      onClick={() => !isLocalTasks && setSelectedOption(tab.value)}
                       className={cn(
                         'flex items-center gap-2 px-5 py-2 rounded-2xl transition-all duration-200 ease-out font-medium text-sm',
                         isSelected 
@@ -1443,8 +1447,7 @@ export default function ChatInput({
                     </button>
                   );
                 })}
-                </div>
-              )}
+              </div>
             </div>
           </div>
         )}
