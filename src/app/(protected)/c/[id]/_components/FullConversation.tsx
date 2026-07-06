@@ -1122,7 +1122,7 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
     <div
       className={cn(
         "flex w-full h-full flex-1 flex-col min-h-0 overflow-hidden bg-[#e1e1e1] dark:bg-zinc-950",
-        (showAsNewChat && selectedOption !== OPTIONS.TASK) ? "justify-center pb-[5vh]" : ""
+        showAsNewChat ? "justify-center pb-[5vh]" : ""
       )}
     >
       {isLoading && !(activeConversation?.conversationId === conversationId && activeConversation?.messages?.length > 0) ? (
@@ -1135,7 +1135,10 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
           </div>
         </div>
       ) : selectedOption === OPTIONS.TASK ? (
-        <div className="flex-grow min-h-0 w-full bg-transparent" />
+        <div className={cn(
+          "min-h-0 w-full bg-transparent",
+          showAsNewChat ? "flex-none" : "flex-grow"
+        )} />
       ) : isSplitScreen ? (
         <div className="relative flex-grow flex flex-row min-h-0 bg-transparent transition-colors duration-300">
           {/* Left Column: Chat history (45%) */}
