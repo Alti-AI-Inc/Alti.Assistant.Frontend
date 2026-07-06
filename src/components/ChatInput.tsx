@@ -49,6 +49,8 @@ import {
   Presentation,
   X,
   Check,
+  Film,
+  Headphones,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -64,6 +66,7 @@ interface ChatInputProps {
   imageGenHook?: ReturnType<typeof useImageGeneration>;
   selectedFiles?: File[];
   onFilesChange?: (files: File[]) => void;
+  isStudio?: boolean;
 }
 
 // Helper function to get file icon based on extension
@@ -129,7 +132,8 @@ const ChatInput = ({
   conversationId,
   imageGenHook: externalImageGenHook,
   selectedFiles: externalSelectedFiles,
-  onFilesChange,
+  onFilesChange: externalOnFilesChange,
+  isStudio,
 }: ChatInputProps) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -1276,12 +1280,17 @@ const ChatInput = ({
         {!isExistingConversation && (
           <div className="absolute bottom-full left-0 right-0 mb-8 flex justify-center pointer-events-none">
             <div className="pointer-events-auto flex w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto">
-              {[
+              {(isStudio ? [
+                { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE },
+                { id: 'image', name: 'Image', icon: ImageIcon, value: OPTIONS.IMAGE },
+                { id: 'video', name: 'Video', icon: Film, value: OPTIONS.VIDEO },
+                { id: 'audio', name: 'Audio', icon: Headphones, value: OPTIONS.AUDIO }
+              ] : [
                 { id: 'search', name: 'Search', icon: Globe, value: null },
                 { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
                 { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
                 { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS }
-              ].map((tab) => {
+              ]).map((tab) => {
                 const isSelected = selectedOption === tab.value;
                 return (
                   <button

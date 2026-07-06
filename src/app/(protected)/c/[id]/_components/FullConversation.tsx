@@ -107,7 +107,7 @@ function parseCodeFromMessage(content: string): ParsedCode | null {
   return null;
 }
 
-const FullConversation = ({ conversationId }: { conversationId: string }) => {
+const FullConversation = ({ conversationId, isStudio }: { conversationId: string; isStudio?: boolean }) => {
   const { data } = useSession();
   const pathname = usePathname();
   const router = useRouter(); // Explicit usage for imageGen
@@ -1198,6 +1198,7 @@ const FullConversation = ({ conversationId }: { conversationId: string }) => {
             imageGenHook={imageGenHook}
             selectedFiles={selectedFiles}
             onFilesChange={setSelectedFiles}
+            isStudio={isStudio}
           />
         </div>
       </div>

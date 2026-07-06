@@ -150,7 +150,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'tasks' | 'none' | 'account';
+type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'tasks' | 'studio' | 'none' | 'account';
 
 const AVAILABLE_MCP_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -416,6 +416,10 @@ const LeftSideNavMobile = () => {
         router.push('/');
       }
       close();
+    } else if (tab === 'studio') {
+      setActiveConversation(null);
+      router.push('/studio');
+      close();
     } else if (tab === 'code') {
       setSelectedOption(OPTIONS.CODE);
       if (pathname !== '/') {
@@ -592,8 +596,21 @@ const LeftSideNavMobile = () => {
                   : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
               )}
             >
-              <MessageSquare className="size-4" />
               <span>Chat</span>
+            </button>
+
+            {/* Studio */}
+            <button
+              type="button"
+              onClick={() => handleTabChange('studio')}
+              className={cn(
+                'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
+                activeTab === 'studio'
+                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
+              )}
+            >
+              <span>Studio</span>
             </button>
 
             {/* Spaces */}
@@ -607,7 +624,6 @@ const LeftSideNavMobile = () => {
                   : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
               )}
             >
-              <LayoutGrid className="size-4" />
               <span>Spaces</span>
             </button>
 
@@ -622,7 +638,6 @@ const LeftSideNavMobile = () => {
                   : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
               )}
             >
-              <Zap className="size-4" />
               <span>Tasks</span>
             </button>
           </div>
