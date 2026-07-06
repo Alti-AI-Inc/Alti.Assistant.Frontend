@@ -40,7 +40,7 @@ import {
   FileText,
   FileType,
   Code,
-  Globe,
+  MessageSquare,
   Microscope,
   PenLine,
   Image as ImageIcon,
@@ -1338,7 +1338,7 @@ export default function ChatInput({
                   { id: 'video', name: 'Video', icon: Film, value: OPTIONS.VIDEO },
                   { id: 'audio', name: 'Audio', icon: Headphones, value: OPTIONS.AUDIO }
                 ] : [
-                  { id: 'search', name: 'Search', icon: Globe, value: null },
+                  { id: 'search', name: 'Chat', icon: MessageSquare, value: null },
                   { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
                   { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
                   { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS }
