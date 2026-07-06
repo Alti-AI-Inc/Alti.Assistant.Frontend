@@ -128,13 +128,19 @@ const extractAssistantText = (payload: any): string => {
   return JSON.stringify(target);
 };
 
-const ChatInput = ({
+export default function ChatInput({
   conversationId,
   imageGenHook: externalImageGenHook,
   selectedFiles: externalSelectedFiles,
   onFilesChange,
+  activeBotThreadId,
   isStudio,
-}: ChatInputProps) => {
+}: ChatInputProps) {
+  const [isLocalStudio, setIsLocalStudio] = useState(isStudio || false);
+  useEffect(() => {
+    setIsLocalStudio(isStudio || false);
+  }, [isStudio]);
+
   const router = useRouter();
   const pathname = usePathname();
   const { data } = useSession();
@@ -1279,18 +1285,49 @@ const ChatInput = ({
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
         {!isExistingConversation && (
           <div className="absolute bottom-full left-0 right-0 mb-8 flex justify-center pointer-events-none">
-            <div className="pointer-events-auto flex w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto">
-              {(isStudio ? [
-                { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE },
-                { id: 'image', name: 'Image', icon: ImageIcon, value: OPTIONS.IMAGE },
-                { id: 'video', name: 'Video', icon: Film, value: OPTIONS.VIDEO },
-                { id: 'audio', name: 'Audio', icon: Headphones, value: OPTIONS.AUDIO }
-              ] : [
-                { id: 'search', name: 'Search', icon: Globe, value: null },
-                { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
-                { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
-                { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS }
-              ]).map((tab) => {
+            <div className="flex flex-col items-center gap-3 pointer-events-auto">
+              
+              {/* Parent Toggle */}
+              <div className="flex bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1 rounded-full shadow-sm border border-gray-200/50 dark:border-zinc-800/50">
+                <button
+                  type="button"
+                  onClick={() => setIsLocalStudio(false)}
+                  className={cn(
+                    'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
+                    !isLocalStudio 
+                      ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
+                      : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
+                  )}
+                >
+                  Chat
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsLocalStudio(true)}
+                  className={cn(
+                    'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
+                    isLocalStudio 
+                      ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
+                      : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
+                  )}
+                >
+                  Studio
+                </button>
+              </div>
+
+              {/* Child Toggle */}
+              <div className="flex w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto">
+                {(isLocalStudio ? [
+                  { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE },
+                  { id: 'image', name: 'Image', icon: ImageIcon, value: OPTIONS.IMAGE },
+                  { id: 'video', name: 'Video', icon: Film, value: OPTIONS.VIDEO },
+                  { id: 'audio', name: 'Audio', icon: Headphones, value: OPTIONS.AUDIO }
+                ] : [
+                  { id: 'search', name: 'Search', icon: Globe, value: null },
+                  { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
+                  { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
+                  { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS }
+                ]).map((tab) => {
                 const isSelected = selectedOption === tab.value;
                 return (
                   <button
@@ -1309,6 +1346,7 @@ const ChatInput = ({
                   </button>
                 );
               })}
+              </div>
             </div>
           </div>
         )}
@@ -1471,5 +1509,4 @@ const ChatInput = ({
       </div>
     </>
   );
-};
-export default ChatInput;
+}
