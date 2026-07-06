@@ -193,7 +193,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     : "text-gray-500 hover:text-gray-800"
                 )}
               >
-                Data
+                Knowledge
               </button>
             </div>
 
