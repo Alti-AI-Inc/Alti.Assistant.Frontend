@@ -54,7 +54,7 @@ import {
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { ALLOWED_DOC_EXTENSIONS } from './constants';
 import { Textarea } from './ui/textarea';
