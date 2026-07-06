@@ -61,7 +61,9 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   // Sync activeTab with global selectedOption
   useEffect(() => {
     if (selectedOption === null) {
-      setActiveTab('ai');
+      if (activeTab !== 'inbox') {
+        setActiveTab('ai');
+      }
     } else if (selectedOption === OPTIONS.CODE) {
       setActiveTab('studio');
     } else if (selectedOption === OPTIONS.TASK) {
@@ -110,11 +112,13 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   const handleNewChat = () => {
     setActiveBotThreadId(null);
     setActiveConversation(null);
+    setActiveTab('ai');
     router.push(`${basePath}?bot=${botId}`);
   };
 
   const handleThreadSelect = (threadId: string) => {
     setActiveBotThreadId(threadId);
+    setActiveTab('ai');
     router.push(`${basePath}?bot=${botId}&thread=${threadId}`);
   };
 
