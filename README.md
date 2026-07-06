@@ -25,6 +25,7 @@ A premium, enterprise-grade Next.js client dashboard powering autonomous agent i
 - **iOS-style Invite Sent success modal**: Widened with dynamic layout adjustments to present long email addresses on a clean second line with balanced vertical spacing.
 - **iOS-style delete confirmation popups**: Intercepts delete triggers for system instructions and safety guardrails, offering a premium 380px blur/dim layout to confirm removals.
 - **Zero-Banners Guardrail Updates**: Instantaneous instruction updates listing rules directly under the search bar with zero annoying popup toasts.
+- **Chat vs Studio Spaces Page Toggle**: Situates a premium sliding selector for switching between "Chat" and "Studio" sub-modes inside individual Spaces. It dynamically updates the child category tracks: **Chat** displays Search (default), Research, Write, Review; **Studio** displays Code (default), Image, Video, Audio. Features high-fidelity micro-interactions with even 24px vertical alignment spacing.
 
 ### 4. Interactive Swarm & Research Panels
 - **Telemetry Console**: Live streaming token logs, latency trackers, and evaluation scores.

@@ -90,7 +90,7 @@ const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bg
   pingidentity: { category: 'Cybersecurity & IAM', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'SSO Federation', hoverBorder: 'border-emerald-500/60' },
 
   // AI & Machine Learning
-  openai: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'LLM API Core', hoverBorder: 'border-cyan-500/60' },
+  gemini: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'LLM API Core', hoverBorder: 'border-cyan-500/60' },
   weights_biases: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'ML Experimentation', hoverBorder: 'border-cyan-500/60' },
   huggingface: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Model Repository', hoverBorder: 'border-cyan-500/60' },
   pinecone: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Vector Database', hoverBorder: 'border-cyan-500/60' },

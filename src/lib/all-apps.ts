@@ -5073,13 +5073,7 @@ export const allApps: APP[] = [
     "app_name": "open_sea",
     "isAvailable": true
   },
-  {
-    "title": "OpenAI Enterprise APIs",
-    "description": "Large language model intelligence engines, custom GPT assistant telemetry, and secure fine-tuning hyperparameters.",
-    "image": "https://logos.composio.dev/api/openai",
-    "app_name": "openai",
-    "isAvailable": true
-  },
+
   {
     "title": "Opencage",
     "description": "",
