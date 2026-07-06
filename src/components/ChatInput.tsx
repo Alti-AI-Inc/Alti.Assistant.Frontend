@@ -1219,14 +1219,6 @@ export default function ChatInput({
   const warningConfig = useMemo(
     () => [
       {
-        condition:
-          selectedOption === OPTIONS.REVIEW_DOCUMENTS &&
-          !selectedFile &&
-          !isExistingConversation,
-        title: 'Add File',
-        description: 'Please upload a file to continue with document review.',
-      },
-      {
         condition: selectedOption === OPTIONS.EDIT_IMAGE && !imageBase64,
         title: 'Upload Image',
         description: 'Please upload an image to continue with editing.',
