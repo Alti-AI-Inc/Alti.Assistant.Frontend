@@ -132,7 +132,7 @@ const ChatInput = ({
   conversationId,
   imageGenHook: externalImageGenHook,
   selectedFiles: externalSelectedFiles,
-  onFilesChange: externalOnFilesChange,
+  onFilesChange,
   isStudio,
 }: ChatInputProps) => {
   const router = useRouter();
