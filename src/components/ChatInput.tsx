@@ -51,6 +51,7 @@ import {
   Check,
   Film,
   Headphones,
+  ListTodo,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -136,6 +137,7 @@ export default function ChatInput({
   isStudio,
 }: ChatInputProps) {
   const [isLocalStudio, setIsLocalStudio] = useState(isStudio || false);
+  const [isLocalTasks, setIsLocalTasks] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -325,6 +327,7 @@ export default function ChatInput({
 
   useEffect(() => {
     setIsLocalStudio(isStudio || false);
+    setIsLocalTasks(false);
     if (!isExistingConversation) {
       if (isStudio) {
         setSelectedOption(OPTIONS.CODE);
@@ -1293,11 +1296,12 @@ export default function ChatInput({
                   type="button"
                   onClick={() => {
                     setIsLocalStudio(false);
+                    setIsLocalTasks(false);
                     setSelectedOption(null); // Auto select 'Search'
                   }}
                   className={cn(
                     'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
-                    !isLocalStudio 
+                    (!isLocalStudio && !isLocalTasks)
                       ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
                       : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
                   )}
@@ -1308,23 +1312,43 @@ export default function ChatInput({
                   type="button"
                   onClick={() => {
                     setIsLocalStudio(true);
+                    setIsLocalTasks(false);
                     setSelectedOption(OPTIONS.CODE); // Auto select 'Code'
                   }}
                   className={cn(
                     'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
-                    isLocalStudio 
+                    (isLocalStudio && !isLocalTasks)
                       ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
                       : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
                   )}
                 >
                   Studio
                 </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsLocalStudio(false);
+                    setIsLocalTasks(true);
+                    setSelectedOption(OPTIONS.TASK); // Auto select 'Task Automation'
+                  }}
+                  className={cn(
+                    'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
+                    (!isLocalStudio && isLocalTasks)
+                      ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
+                      : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
+                  )}
+                >
+                  Tasks
+                </button>
               </div>
               )}
 
               {/* Child Toggle */}
               <div className="flex w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto">
-                {(isLocalStudio ? [
+                {(isLocalTasks ? [
+                  { id: 'task', name: 'Task Automation', icon: ListTodo, value: OPTIONS.TASK },
+                  { id: 'plan', name: 'Plan Generation', icon: Presentation, value: OPTIONS.GENERATE_PLAN }
+                ] : isLocalStudio ? [
                   { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE },
                   { id: 'image', name: 'Image', icon: ImageIcon, value: OPTIONS.IMAGE },
                   { id: 'video', name: 'Video', icon: Film, value: OPTIONS.VIDEO },
