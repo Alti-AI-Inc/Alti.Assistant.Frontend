@@ -511,6 +511,19 @@ const LeftSideNavMobile = () => {
             router.push('/');
           },
         };
+      case 'studio':
+        return {
+          visible: true,
+          label: 'New Studio',
+          onClick: () => {
+            setActiveConversation(null);
+            setShowStartLastMessage(false);
+            setUserMessage('');
+            setSelectedOption(OPTIONS.CODE);
+            close();
+            router.push('/studio');
+          },
+        };
       case 'code':
         return {
           visible: true,
