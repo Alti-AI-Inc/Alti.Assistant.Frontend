@@ -1287,7 +1287,7 @@ export default function ChatInput({
             <div className="flex flex-col items-center gap-4 pointer-events-auto">
               
               {/* Parent Toggle */}
-              {pathname?.startsWith('/c/') && (
+              {(pathname?.startsWith('/c/') || pathname?.startsWith('/knowledge/')) && (
               <div className="flex bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1 rounded-full shadow-sm border border-gray-200/50 dark:border-zinc-800/50">
                 <button
                   type="button"
