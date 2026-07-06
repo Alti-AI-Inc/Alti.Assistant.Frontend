@@ -40,7 +40,7 @@ interface WaitForConnectionResponse {
       id: string;
       authConfig: {
         id: string;
-        isComposioManaged: boolean;
+        isMcpManaged: boolean;
         isDisabled: boolean;
       };
       data: {

@@ -305,7 +305,7 @@ const AppCard = ({
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleClick = () => {
-    // Legacy Composio connection removed
+    // Legacy connection removed
     // Native MCP connections should be configured via the MCP settings panel
     setErrorMessage('Please configure this integration directly in the MCP Platform settings.');
   };

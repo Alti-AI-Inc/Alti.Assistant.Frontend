@@ -184,7 +184,7 @@ export const AppsPanelsContainer = () => {
     }
   };
 
-  // --- Connect/OAuth flow for standard Composio apps ---
+  // --- Connect/OAuth flow for standard MCP apps ---
   const handleConnectApp = async (app: APP) => {
     if (!app.app_name) return;
     return handleConnectMcpServer(app);
@@ -220,7 +220,7 @@ export const AppsPanelsContainer = () => {
 
 
 
-    // B. Standard Composio scoped chat logic
+    // B. Standard MCP scoped chat logic
     const currentConvId = activeConversationIds[appSlug] || null;
 
     const response = await apiClientJson<{ response: string; conversationId: string; toolsUsed?: string[] }>(

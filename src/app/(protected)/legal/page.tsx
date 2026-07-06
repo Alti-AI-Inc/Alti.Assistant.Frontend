@@ -165,7 +165,7 @@ export default function page() {
               <li>
                 <strong>External Integrations (Optional):</strong> If you choose
                 to connect third-party services through our integration features
-                (such as Gmail, GitHub, Slack, or Salesforce via Composio), data
+                (such as Gmail, GitHub, Slack, or Salesforce via MCP), data
                 will be shared with those services according to the permissions
                 you grant. These connections are entirely optional and
                 user-initiated.
