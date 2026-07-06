@@ -1283,14 +1283,17 @@ export default function ChatInput({
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
         {!isExistingConversation && (
-          <div className="absolute bottom-full left-0 right-0 mb-8 flex justify-center pointer-events-none">
-            <div className="flex flex-col items-center gap-3 pointer-events-auto">
+          <div className="absolute bottom-full left-0 right-0 mb-10 flex justify-center pointer-events-none">
+            <div className="flex flex-col items-center gap-4 pointer-events-auto">
               
               {/* Parent Toggle */}
               <div className="flex bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1 rounded-full shadow-sm border border-gray-200/50 dark:border-zinc-800/50">
                 <button
                   type="button"
-                  onClick={() => setIsLocalStudio(false)}
+                  onClick={() => {
+                    setIsLocalStudio(false);
+                    setSelectedOption(null); // Auto select 'Search'
+                  }}
                   className={cn(
                     'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
                     !isLocalStudio 
@@ -1302,7 +1305,10 @@ export default function ChatInput({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setIsLocalStudio(true)}
+                  onClick={() => {
+                    setIsLocalStudio(true);
+                    setSelectedOption(OPTIONS.CODE); // Auto select 'Code'
+                  }}
                   className={cn(
                     'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
                     isLocalStudio 
