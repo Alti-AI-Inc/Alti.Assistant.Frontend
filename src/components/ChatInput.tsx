@@ -1302,7 +1302,7 @@ export default function ChatInput({
                       : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
                   )}
                 >
-                  Chat
+                  AI
                 </button>
                 <button
                   type="button"
