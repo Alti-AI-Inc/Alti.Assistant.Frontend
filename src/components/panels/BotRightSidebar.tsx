@@ -158,9 +158,6 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
           
           {/* Section 1: Space Configuration */}
           <div className="flex-none flex flex-col p-4 bg-white">
-            <span className="text-[10px] font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-2 select-none">
-              Space Config
-            </span>
             <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03] mb-3">
               <button 
                 type="button"
@@ -401,9 +398,6 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
           {/* Section 2: Workspace & Activity */}
           <div className="flex-1 flex flex-col p-4 bg-white min-h-0">
-            <span className="text-[10px] font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-2 select-none">
-              Workspace & Activity
-            </span>
             
             <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03] mb-3 shrink-0">
               <button 
