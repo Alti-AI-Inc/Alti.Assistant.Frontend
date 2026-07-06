@@ -136,9 +136,6 @@ export default function ChatInput({
   isStudio,
 }: ChatInputProps) {
   const [isLocalStudio, setIsLocalStudio] = useState(isStudio || false);
-  useEffect(() => {
-    setIsLocalStudio(isStudio || false);
-  }, [isStudio]);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -325,6 +322,17 @@ export default function ChatInput({
     activeConversation?.conversationId &&
     activeConversation?.conversationId !== 'new-chat' &&
     pathname?.startsWith('/c/');
+
+  useEffect(() => {
+    setIsLocalStudio(isStudio || false);
+    if (!isExistingConversation) {
+      if (isStudio) {
+        setSelectedOption(OPTIONS.CODE);
+      } else {
+        setSelectedOption(null);
+      }
+    }
+  }, [isStudio, isExistingConversation, setSelectedOption]);
 
   const { onOpen } = useModalStore();
 
@@ -559,7 +567,7 @@ export default function ChatInput({
         try {
           const base = process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
           const res = await fetch(
-            `${base}/openai/anonymous-response`,
+            `${base}/vertex/anonymous-response`,
             {
               method: 'POST',
               headers: {
@@ -1283,7 +1291,7 @@ export default function ChatInput({
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
         {!isExistingConversation && (
-          <div className="absolute bottom-full left-0 right-0 mb-10 flex justify-center pointer-events-none">
+          <div className="absolute bottom-full left-0 right-0 mb-14 flex justify-center pointer-events-none">
             <div className="flex flex-col items-center gap-4 pointer-events-auto">
               
               {/* Parent Toggle */}
