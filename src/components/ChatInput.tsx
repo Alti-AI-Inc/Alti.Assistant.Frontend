@@ -133,7 +133,6 @@ export default function ChatInput({
   imageGenHook: externalImageGenHook,
   selectedFiles: externalSelectedFiles,
   onFilesChange,
-  activeBotThreadId,
   isStudio,
 }: ChatInputProps) {
   const [isLocalStudio, setIsLocalStudio] = useState(isStudio || false);
