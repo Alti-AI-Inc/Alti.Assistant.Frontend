@@ -241,7 +241,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>AI Chat</p>
+                  <p>AI</p>
                 </TooltipContent>
               </Tooltip>
 
@@ -310,7 +310,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <p>Inbox Logs</p>
+                  <p>Inbox</p>
                 </TooltipContent>
               </Tooltip>
 
