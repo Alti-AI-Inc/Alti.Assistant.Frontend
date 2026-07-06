@@ -66,6 +66,12 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
       setActiveTab('studio');
     } else if (selectedOption === OPTIONS.TASK) {
       setActiveTab('tasks');
+    } else if (selectedOption === OPTIONS.INSTRUCTIONS) {
+      setActiveTab('instructions');
+    } else if (selectedOption === OPTIONS.GUARDRAILS) {
+      setActiveTab('guardrails');
+    } else if (selectedOption === OPTIONS.KNOWLEDGE) {
+      setActiveTab('knowledge');
     }
   }, [selectedOption]);
 
@@ -298,7 +304,16 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => setActiveTab('inbox')}
+                    onClick={() => {
+                      if (
+                        selectedOption === OPTIONS.INSTRUCTIONS ||
+                        selectedOption === OPTIONS.GUARDRAILS ||
+                        selectedOption === OPTIONS.KNOWLEDGE
+                      ) {
+                        setSelectedOption(null);
+                      }
+                      setActiveTab('inbox');
+                    }}
                     className={cn(
                       "flex h-7 w-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
                       activeTab === 'inbox'
@@ -319,7 +334,10 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => setActiveTab('instructions')}
+                    onClick={() => {
+                      setSelectedOption(OPTIONS.INSTRUCTIONS);
+                      setActiveTab('instructions');
+                    }}
                     className={cn(
                       "flex h-7 w-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
                       activeTab === 'instructions'
@@ -340,7 +358,10 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => setActiveTab('guardrails')}
+                    onClick={() => {
+                      setSelectedOption(OPTIONS.GUARDRAILS);
+                      setActiveTab('guardrails');
+                    }}
                     className={cn(
                       "flex h-7 w-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
                       activeTab === 'guardrails'
@@ -361,7 +382,10 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    onClick={() => setActiveTab('knowledge')}
+                    onClick={() => {
+                      setSelectedOption(OPTIONS.KNOWLEDGE);
+                      setActiveTab('knowledge');
+                    }}
                     className={cn(
                       "flex h-7 w-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
                       activeTab === 'knowledge'

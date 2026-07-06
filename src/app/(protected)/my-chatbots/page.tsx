@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, Suspense, useState, useRef } from 'react';
 import { useBotsStore } from '@/stores/useBotsStore';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useConversationsStore, OPTIONS } from '@/stores/useConverstionsStore';
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
 import BotRightSidebar from '@/components/panels/BotRightSidebar';
 import { InstructionsEditor, GuardrailsEditor, DataEditor } from '@/components/panels/ProjectEditors';
@@ -87,7 +87,7 @@ function MyChatbotsContent() {
   const queryClient = useQueryClient();
 
   const { bots, activeBotId, activeBotThreadId, setActiveBotId, setActiveBotThreadId, addBotAsync, projectTab } = useBotsStore();
-  const { setActiveConversation, activeConversation } = useConversationsStore();
+  const { setActiveConversation, activeConversation, selectedOption, setSelectedOption } = useConversationsStore();
 
   const hasMessages = !!activeConversation?.messages?.length;
 
@@ -1031,13 +1031,16 @@ function MyChatbotsContent() {
         {/* Chatbot Content Body */}
         <div className={cn(
           "flex-1 flex flex-col items-center justify-center overflow-hidden relative",
-          viewParam !== 'instructions' && viewParam !== 'guardrails' && viewParam !== 'data' && !hasMessages && "pb-40"
+          (viewParam !== 'instructions' && selectedOption !== OPTIONS.INSTRUCTIONS) && 
+          (viewParam !== 'guardrails' && selectedOption !== OPTIONS.GUARDRAILS) && 
+          (viewParam !== 'data' && selectedOption !== OPTIONS.KNOWLEDGE) && 
+          !hasMessages && "pb-40"
         )}>
-          {viewParam === 'instructions' ? (
+          {viewParam === 'instructions' || selectedOption === OPTIONS.INSTRUCTIONS ? (
             <InstructionsEditor bot={activeBot} />
-          ) : viewParam === 'guardrails' ? (
+          ) : viewParam === 'guardrails' || selectedOption === OPTIONS.GUARDRAILS ? (
             <GuardrailsEditor bot={activeBot} />
-          ) : viewParam === 'data' ? (
+          ) : viewParam === 'data' || selectedOption === OPTIONS.KNOWLEDGE ? (
             <DataEditor bot={activeBot} />
           ) : activeBot.metadata?.status === 'tuning' ? (
             <div className="flex flex-col items-center justify-center p-8 text-center max-w-lg mx-auto h-full animate-in fade-in duration-300">

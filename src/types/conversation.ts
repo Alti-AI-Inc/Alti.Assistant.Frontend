@@ -47,6 +47,10 @@ export enum OPTIONS {
 
   AUDIO = 'audio-generation',
   VIDEO = 'video-generation',
+
+  INSTRUCTIONS = 'instructions',
+  GUARDRAILS = 'guardrails',
+  KNOWLEDGE = 'knowledge',
 }
 
 export interface Reference {

@@ -1110,6 +1110,14 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
   const hasMessages = !!activeConversation?.messages?.length;
   const showAsNewChat = isNewChatRoute && !hasMessages && !isLoadingResponse;
 
+  if (
+    selectedOption === OPTIONS.INSTRUCTIONS ||
+    selectedOption === OPTIONS.GUARDRAILS ||
+    selectedOption === OPTIONS.KNOWLEDGE
+  ) {
+    return null;
+  }
+
   return (
     <div
       className={cn(
