@@ -1287,6 +1287,7 @@ export default function ChatInput({
             <div className="flex flex-col items-center gap-4 pointer-events-auto">
               
               {/* Parent Toggle */}
+              {pathname?.startsWith('/c/') && (
               <div className="flex bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1 rounded-full shadow-sm border border-gray-200/50 dark:border-zinc-800/50">
                 <button
                   type="button"
@@ -1319,6 +1320,7 @@ export default function ChatInput({
                   Studio
                 </button>
               </div>
+              )}
 
               {/* Child Toggle */}
               <div className="flex w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto">
