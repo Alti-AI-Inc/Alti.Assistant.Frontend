@@ -163,7 +163,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 <Search className="size-3.5 flex-none text-black" />
                 <input
                   type="text"
-                  placeholder="Search chats..."
+                  placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full bg-transparent text-xs text-black outline-none placeholder:text-gray-500"
