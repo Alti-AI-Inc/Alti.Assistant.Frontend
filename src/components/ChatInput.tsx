@@ -1355,8 +1355,8 @@ export default function ChatInput({
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
         {!isExistingConversation && (
           <div className={cn(
-            "flex flex-col items-center gap-6 w-full",
-            isLocalTasks ? "mb-6" : "mb-14"
+            "flex flex-col items-center w-full mb-6",
+            isLocalTasks ? "gap-6" : "gap-12"
           )}>
               
               {/* Parent Toggle */}
