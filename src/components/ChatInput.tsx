@@ -1291,8 +1291,8 @@ export default function ChatInput({
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
         {!isExistingConversation && (
-          <div className="absolute bottom-full left-0 right-0 mb-14 flex justify-center pointer-events-none">
-            <div className="flex flex-col items-center gap-4 pointer-events-auto">
+          <div className="absolute bottom-full left-0 right-0 mb-6 flex justify-center pointer-events-none">
+            <div className="flex flex-col items-center gap-6 pointer-events-auto">
               
               {/* Parent Toggle */}
               {(pathname?.startsWith('/my-chatbots') || pathname?.startsWith('/knowledge/')) && (
