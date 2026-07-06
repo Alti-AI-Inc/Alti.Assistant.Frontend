@@ -1288,62 +1288,7 @@ export default function ChatInput({
   const activeWarning = warningConfig.find(w => w.condition);
 
   if (isLocalTasks) {
-    return (
-      <div className="mx-auto w-full max-w-[796px] flex justify-center py-2 z-20">
-        {(pathname?.startsWith('/my-chatbots') || pathname?.startsWith('/knowledge/')) && (
-          <div className="flex bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1 rounded-full shadow-sm border border-gray-200/50 dark:border-zinc-800/50">
-            <button
-              type="button"
-              onClick={() => {
-                setIsLocalStudio(false);
-                setIsLocalTasks(false);
-                setSelectedOption(null); // Auto select 'Search'
-              }}
-              className={cn(
-                'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
-                (!isLocalStudio && !isLocalTasks)
-                  ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
-                  : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
-              )}
-            >
-              AI
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setIsLocalStudio(true);
-                setIsLocalTasks(false);
-                setSelectedOption(OPTIONS.CODE); // Auto select 'Code'
-              }}
-              className={cn(
-                'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
-                (isLocalStudio && !isLocalTasks)
-                  ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
-                  : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
-              )}
-            >
-              Studio
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setIsLocalStudio(false);
-                setIsLocalTasks(true);
-                setSelectedOption(OPTIONS.TASK); // Auto select 'Task Automation'
-              }}
-              className={cn(
-                'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
-                (!isLocalStudio && isLocalTasks)
-                  ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
-                  : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
-              )}
-            >
-              Tasks
-            </button>
-          </div>
-        )}
-      </div>
-    );
+    return null;
   }
 
   return (

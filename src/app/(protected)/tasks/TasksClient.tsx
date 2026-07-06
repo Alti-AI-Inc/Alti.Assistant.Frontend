@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, usePathname } from 'next/navigation';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { 
@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 
 import TaskInboxPanel, { TaskRun } from './_components/TaskInboxPanel';
 import TaskHistoryLogs from './_components/TaskHistoryLogs';
+import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
 
 type TaskType = 'one-time' | 'recurring';
 type TriggerType = 'scheduled' | 'event';
@@ -34,7 +35,10 @@ interface AutomationTask {
 
 export default function TasksClient() {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const isSpacesPage = pathname?.startsWith('/my-chatbots') || pathname?.startsWith('/knowledge/');
   const taskId = searchParams.get('taskId');
+  const { selectedOption, setSelectedOption } = useConversationsStore();
   
   const [prompt, setPrompt] = useState('');
   const [taskType, setTaskType] = useState<TaskType>('one-time');
@@ -358,9 +362,43 @@ export default function TasksClient() {
 
         {/* Creator Form */}
         <div className="w-full max-w-2xl flex flex-col items-center z-10">
-          <h1 className="text-4xl font-medium tracking-tight text-center mb-8 text-gray-900 dark:text-white select-none">
-            {editingTaskId ? 'Edit Automated Task' : 'Create Automated Task'}
-          </h1>
+          {isSpacesPage ? (
+            <div className="mb-8 flex justify-center">
+              <div className="flex bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1 rounded-full shadow-sm border border-gray-200/50 dark:border-zinc-800/50">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedOption(null); // Auto select 'Search'
+                  }}
+                  className="px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                >
+                  AI
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedOption(OPTIONS.CODE); // Auto select 'Code'
+                  }}
+                  className="px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                >
+                  Studio
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedOption(OPTIONS.TASK); // Auto select 'Task Automation'
+                  }}
+                  className="px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm"
+                >
+                  Tasks
+                </button>
+              </div>
+            </div>
+          ) : (
+            <h1 className="text-4xl font-medium tracking-tight text-center mb-8 text-gray-900 dark:text-white select-none">
+              {editingTaskId ? 'Edit Automated Task' : 'Create Automated Task'}
+            </h1>
+          )}
           
           {/* Task Creator Form (White Card) */}
           <div className="w-full bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-3xl shadow-sm overflow-hidden flex flex-col transition-shadow">
@@ -494,14 +532,16 @@ export default function TasksClient() {
       </div>
 
       {/* Persistent Collapsible Right Side Runs Inbox */}
-      <TaskInboxPanel
-        isOpen={isInboxOpen}
-        runs={selectedTaskTitleFilter ? runs.filter(r => r.taskName === selectedTaskTitleFilter) : runs}
-        onViewLogs={handleViewLogs}
-        onClearRuns={handleClearRuns}
-        onClose={() => setIsInboxOpen(false)}
-        onOpen={() => setIsInboxOpen(true)}
-      />
+      {!isSpacesPage && (
+        <TaskInboxPanel
+          isOpen={isInboxOpen}
+          runs={selectedTaskTitleFilter ? runs.filter(r => r.taskName === selectedTaskTitleFilter) : runs}
+          onViewLogs={handleViewLogs}
+          onClearRuns={handleClearRuns}
+          onClose={() => setIsInboxOpen(false)}
+          onOpen={() => setIsInboxOpen(true)}
+        />
+      )}
 
       {/* Terminal logs Modal */}
       <TaskHistoryLogs

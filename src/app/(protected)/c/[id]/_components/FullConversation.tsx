@@ -1114,7 +1114,7 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
     <div
       className={cn(
         "flex w-full h-full flex-1 flex-col min-h-0 overflow-hidden bg-[#e1e1e1] dark:bg-zinc-950",
-        showAsNewChat ? "justify-center pb-[5vh]" : ""
+        (showAsNewChat && selectedOption !== OPTIONS.TASK) ? "justify-center pb-[5vh]" : ""
       )}
     >
       {isLoading && !(activeConversation?.conversationId === conversationId && activeConversation?.messages?.length > 0) ? (
@@ -1189,24 +1189,26 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
       )}
 
       {/* Chat input - OUTSIDE scroll container, fixed at bottom as flex sibling */}
-      <div
-        className={cn(
-          'shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300',
-          !showAsNewChat
-            ? 'flex min-h-[88px] items-center justify-center py-4 border-t border-black/5 dark:border-zinc-800 bg-[#e1e1e1] dark:bg-zinc-900 mt-auto'
-            : 'py-4 bg-transparent border-t-0'
-        )}
-      >
-        <div className="mx-auto w-full max-w-[796px]">
-          <ChatInput
-            conversationId={conversationId}
-            imageGenHook={imageGenHook}
-            selectedFiles={selectedFiles}
-            onFilesChange={setSelectedFiles}
-            isStudio={isStudio}
-          />
+      {selectedOption !== OPTIONS.TASK && (
+        <div
+          className={cn(
+            'shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300',
+            !showAsNewChat
+              ? 'flex min-h-[88px] items-center justify-center py-4 border-t border-black/5 dark:border-zinc-800 bg-[#e1e1e1] dark:bg-zinc-900 mt-auto'
+              : 'py-4 bg-transparent border-t-0'
+          )}
+        >
+          <div className="mx-auto w-full max-w-[796px]">
+            <ChatInput
+              conversationId={conversationId}
+              imageGenHook={imageGenHook}
+              selectedFiles={selectedFiles}
+              onFilesChange={setSelectedFiles}
+              isStudio={isStudio}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
