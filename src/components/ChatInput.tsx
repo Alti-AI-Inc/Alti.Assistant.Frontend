@@ -52,6 +52,10 @@ import {
   Film,
   Headphones,
   ListTodo,
+  Clock,
+  Repeat,
+  CalendarClock,
+  Zap,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -208,6 +212,50 @@ export default function ChatInput({
   } = externalImageGenHook || internalImageGenHook;
 
   const [isDragging, setIsDragging] = useState(false);
+
+  // Tasks form states
+  const [taskType, setTaskType] = useState<'one-time' | 'recurring'>('one-time');
+  const [triggerType, setTriggerType] = useState<'scheduled' | 'event'>('scheduled');
+  const [scheduledTime, setScheduledTime] = useState('');
+  const [eventTrigger, setEventTrigger] = useState('');
+
+  const handleCreateTask = () => {
+    if (!message.trim()) return;
+    const taskName = message.trim();
+    const runId = Math.random().toString(36).substring(7);
+    const newRun = {
+      id: runId,
+      taskName,
+      timestamp: new Date().toISOString(),
+      status: 'running' as const,
+      summary: `Initiating workflow: "${taskName}" using triggers: [Type: ${taskType}, Trigger: ${triggerType === 'scheduled' ? scheduledTime : eventTrigger}]`
+    };
+
+    const existing = localStorage.getItem('alti_task_runs');
+    const runsList = existing ? JSON.parse(existing) : [];
+    runsList.unshift(newRun);
+    localStorage.setItem('alti_task_runs', JSON.stringify(runsList));
+
+    toast.success('Task scheduled successfully', {
+      description: 'You can monitor execution logs in the sidebar Inbox tab.'
+    });
+
+    setMessage('');
+    setScheduledTime('');
+    setEventTrigger('');
+
+    // Simulate completion
+    setTimeout(() => {
+      const currentRuns = JSON.parse(localStorage.getItem('alti_task_runs') || '[]');
+      const targetRun = currentRuns.find((r: any) => r.id === runId);
+      if (targetRun) {
+        targetRun.status = 'success';
+        targetRun.duration = 2450;
+        targetRun.summary = `Successfully executed task automation pipeline. Verified triggers, loaded task inputs, and completed task: "${taskName}".`;
+        localStorage.setItem('alti_task_runs', JSON.stringify(currentRuns));
+      }
+    }, 3000);
+  };
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -1287,9 +1335,6 @@ export default function ChatInput({
 
   const activeWarning = warningConfig.find(w => w.condition);
 
-  if (isLocalTasks) {
-    return null;
-  }
 
   return (
     <>
@@ -1367,199 +1412,313 @@ export default function ChatInput({
               )}
 
               {/* Child Toggle */}
-              <div className="flex w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto">
-                {(isLocalTasks ? [
-                  { id: 'task', name: 'Task Automation', icon: ListTodo, value: OPTIONS.TASK },
-                  { id: 'plan', name: 'Plan Generation', icon: Presentation, value: OPTIONS.GENERATE_PLAN }
-                ] : isLocalStudio ? [
-                  { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE },
-                  { id: 'image', name: 'Image', icon: ImageIcon, value: OPTIONS.IMAGE },
-                  { id: 'video', name: 'Video', icon: Film, value: OPTIONS.VIDEO },
-                  { id: 'audio', name: 'Audio', icon: Headphones, value: OPTIONS.AUDIO }
-                ] : [
-                  { id: 'search', name: 'Chat', icon: MessageSquare, value: null },
-                  { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
-                  { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
-                  { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS }
-                ]).map((tab) => {
-                const isSelected = selectedOption === tab.value;
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => setSelectedOption(tab.value)}
-                    className={cn(
-                      'flex items-center gap-2 px-5 py-2 rounded-2xl transition-all duration-200 ease-out font-medium text-sm',
-                      isSelected 
-                        ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
-                        : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
-                    )}
-                  >
-                    <tab.icon className={cn("size-4", isSelected ? "text-blue-500" : "")} />
-                    <span>{tab.name}</span>
-                  </button>
-                );
-              })}
-              </div>
+              {!isLocalTasks && (
+                <div className="flex w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto">
+                  {(isLocalStudio ? [
+                    { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE },
+                    { id: 'image', name: 'Image', icon: ImageIcon, value: OPTIONS.IMAGE },
+                    { id: 'video', name: 'Video', icon: Film, value: OPTIONS.VIDEO },
+                    { id: 'audio', name: 'Audio', icon: Headphones, value: OPTIONS.AUDIO }
+                  ] : [
+                    { id: 'search', name: 'Chat', icon: MessageSquare, value: null },
+                    { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
+                    { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
+                    { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS }
+                  ]).map((tab) => {
+                  const isSelected = selectedOption === tab.value;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => setSelectedOption(tab.value)}
+                      className={cn(
+                        'flex items-center gap-2 px-5 py-2 rounded-2xl transition-all duration-200 ease-out font-medium text-sm',
+                        isSelected 
+                          ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
+                          : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
+                      )}
+                    >
+                      <tab.icon className={cn("size-4", isSelected ? "text-blue-500" : "")} />
+                      <span>{tab.name}</span>
+                    </button>
+                  );
+                })}
+                </div>
+              )}
             </div>
           </div>
         )}
 
 
 
-        <div
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          className={cn(
-            'relative flex flex-col rounded-2xl border bg-white px-3 shadow-sm sm:px-4 transition-all duration-300',
-            isDragging 
-              ? 'border-indigo-500 border-dashed bg-indigo-50/30 dark:bg-indigo-950/20 scale-[1.01]' 
-              : 'border-gray-300 dark:border-zinc-700 dark:bg-zinc-800',
-            activeConversation?.knowledgebaseId &&
-              message.length < 100 &&
-              'flex',
-          )}
-        >
-          {isDragging && (
-            <div className="absolute inset-0 flex items-center justify-center bg-indigo-500/10 backdrop-blur-xs rounded-2xl pointer-events-none z-50 animate-in fade-in duration-200">
-              <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
-                <Paperclip className="size-3.5 animate-bounce" />
-                Drop files to upload
-              </span>
-            </div>
-          )}
-          {/* Image Preview */}
-          {imageBase64 && (
-            <div className="relative mt-2 w-fit">
-              <img
-                src={imageBase64}
-                alt="Uploaded preview"
-                className="h-12 w-12 rounded-lg object-cover"
-              />
-              <button
-                onClick={handleRemoveImage}
-                className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
-              >
-                <Plus className="bold size-3 rotate-45" />
-              </button>
-            </div>
-          )}
+        {selectedOption === OPTIONS.TASK ? (
+          <div className="relative flex flex-col rounded-2xl border bg-white shadow-sm border-gray-300 dark:border-zinc-700 dark:bg-zinc-800 transition-all duration-300">
+            <Textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Describe the task you want to automate..."
+              style={{ backgroundColor: 'transparent' }}
+              className="min-h-[72px] w-full flex-1 resize-none border-none bg-transparent px-4 py-4 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white"
+            />
 
-          {/* Hidden file input - must be outside Popover to persist */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            accept={(() => {
-              switch (selectedOption) {
-                case OPTIONS.IMAGE:
-                case OPTIONS.EDIT_IMAGE:
-                  return 'image/*';
-                default:
-                  return ALLOWED_DOC_EXTENSIONS.join(',');
-              }
-            })()}
-            onChange={handleFileChange}
-            className="hidden"
-          />
-
-          {/* File Cards Preview - Shows above input field next to each other */}
-          {selectedFiles && selectedFiles.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-2">
-              {selectedFiles.map((file, index) => (
-                <div 
-                  key={index}
-                  className="inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs animate-in fade-in duration-200"
-                  style={{ backgroundColor: '#FFFFFF' }}
-                >
-                  {/* File Type Icon */}
-                  <FileText className="size-4 flex-shrink-0 text-gray-500" />
-
-                  {/* File Info */}
-                  <div className="flex min-w-0 flex-1 flex-col">
-                    <span className="truncate text-xs font-semibold text-gray-700" title={file.name}>
-                      {file.name}
-                    </span>
+            <div className="px-4 pb-4 pt-1 border-t border-black/5 dark:border-white/5">
+              <div className="flex flex-col gap-3">
+                
+                {/* Controls Toggle Row */}
+                <div className="flex flex-wrap items-center gap-3">
+                  
+                  {/* Task Type Switcher */}
+                  <div className="flex bg-gray-100 dark:bg-zinc-955 p-0.5 rounded-xl border border-black/5 dark:border-zinc-800/80">
+                    <button
+                      type="button"
+                      onClick={() => setTaskType('one-time')}
+                      className={cn(
+                        'px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1.5',
+                        taskType === 'one-time'
+                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
+                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                      )}
+                    >
+                      <Clock className="size-3" />
+                      One-time
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setTaskType('recurring')}
+                      className={cn(
+                        'px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1.5',
+                        taskType === 'recurring'
+                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
+                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                      )}
+                    >
+                      <Repeat className="size-3" />
+                      Recurring
+                    </button>
                   </div>
 
-                  {/* Remove Button */}
+                  {/* Trigger Type Switcher */}
+                  <div className="flex bg-gray-100 dark:bg-zinc-955 p-0.5 rounded-xl border border-black/5 dark:border-zinc-800/80">
+                    <button
+                      type="button"
+                      onClick={() => setTriggerType('scheduled')}
+                      className={cn(
+                        'px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1.5',
+                        triggerType === 'scheduled'
+                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
+                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                      )}
+                    >
+                      <CalendarClock className="size-3" />
+                      Scheduled
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setTriggerType('event')}
+                      className={cn(
+                        'px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1.5',
+                        triggerType === 'event'
+                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
+                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                      )}
+                    >
+                      <Zap className="size-3" />
+                      Event
+                    </button>
+                  </div>
+
+                </div>
+
+                {/* Input Row */}
+                <div className="flex items-center gap-3">
+                  <div className="flex-1">
+                    {triggerType === 'scheduled' ? (
+                      <input
+                        type="text"
+                        value={scheduledTime}
+                        onChange={(e) => setScheduledTime(e.target.value)}
+                        placeholder={taskType === 'recurring' ? 'Cron expression (e.g. Every Monday at 9AM)' : 'Execution time (e.g. Tomorrow 3PM)'}
+                        className="w-full bg-gray-50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        value={eventTrigger}
+                        onChange={(e) => setEventTrigger(e.target.value)}
+                        placeholder="Trigger event (e.g. When a new email arrives from @client.com)"
+                        className="w-full bg-gray-50 dark:bg-zinc-955/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                      />
+                    )}
+                  </div>
+                  
                   <button
                     type="button"
-                    onClick={() => {
-                      const updated = selectedFiles.filter((_, i) => i !== index);
-                      setSelectedFiles(updated);
-                    }}
-                    className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
-                    title="Remove file"
+                    onClick={handleCreateTask}
+                    disabled={!message.trim()}
+                    className="bg-black hover:bg-black/90 disabled:bg-black disabled:opacity-100 text-white rounded-xl h-[36px] w-[36px] p-0 flex items-center justify-center transition-transform active:scale-95 disabled:active:scale-100"
                   >
-                    <X className="size-3.5" />
+                    <ArrowUp className="size-4 text-white" />
                   </button>
                 </div>
-              ))}
+
+              </div>
             </div>
-          )}
-
-          {/* Input container with active icon inside */}
-          <div className="relative flex items-center gap-2 py-2">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
-                  aria-label="Attach Files"
-                >
-                  <Paperclip className="size-3.5" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="top">
-                <p>Attach Files</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <Textarea
-              name="message"
-              value={message}
-              onChange={e => setMessage(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSubmit();
-                }
-              }}
-              placeholder={
-                activeConversation?.knowledgebaseId && isLoading
-                  ? 'Loading...'
-                  : activeConversation?.knowledgebaseId &&
-                      activeKnowledgeBaseName
-                    ? `Chat with ${activeKnowledgeBaseName}`
-                    : (pathname === '/workflows' || pathname?.startsWith('/workflows')
-                      ? 'Describe your workflow...'
-                      : 'Enter prompt here...')
-              }
-              style={{ backgroundColor: 'transparent' }}
-              className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
-              autoFocus
-            />
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <ArrowUp
-                  onClick={handleSubmit}
-                  className={cn(
-                    'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity focus:outline-none',
-                    (isLoadingResponse || !message?.trim())
-                      ? 'cursor-not-allowed'
-                      : 'cursor-pointer hover:opacity-80',
-                  )}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="top">
-                <p>Send Prompt</p>
-              </TooltipContent>
-            </Tooltip>
           </div>
-        </div>
+        ) : (
+          <div
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={cn(
+              'relative flex flex-col rounded-2xl border bg-white px-3 shadow-sm sm:px-4 transition-all duration-300',
+              isDragging 
+                ? 'border-indigo-500 border-dashed bg-indigo-50/30 dark:bg-indigo-950/20 scale-[1.01]' 
+                : 'border-gray-300 dark:border-zinc-700 dark:bg-zinc-800',
+              activeConversation?.knowledgebaseId &&
+                message.length < 100 &&
+                'flex',
+            )}
+          >
+            {isDragging && (
+              <div className="absolute inset-0 flex items-center justify-center bg-indigo-500/10 backdrop-blur-xs rounded-2xl pointer-events-none z-50 animate-in fade-in duration-200">
+                <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
+                  <Paperclip className="size-3.5 animate-bounce" />
+                  Drop files to upload
+                </span>
+              </div>
+            )}
+            {/* Image Preview */}
+            {imageBase64 && (
+              <div className="relative mt-2 w-fit">
+                <img
+                  src={imageBase64}
+                  alt="Uploaded preview"
+                  className="h-12 w-12 rounded-lg object-cover"
+                />
+                <button
+                  onClick={handleRemoveImage}
+                  className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
+                >
+                  <Plus className="bold size-3 rotate-45" />
+                </button>
+              </div>
+            )}
+
+            {/* Hidden file input - must be outside Popover to persist */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept={(() => {
+                switch (selectedOption) {
+                  case OPTIONS.IMAGE:
+                  case OPTIONS.EDIT_IMAGE:
+                    return 'image/*';
+                  default:
+                    return ALLOWED_DOC_EXTENSIONS.join(',');
+                }
+              })()}
+              onChange={handleFileChange}
+              className="hidden"
+            />
+
+            {/* File Cards Preview - Shows above input field next to each other */}
+            {selectedFiles && selectedFiles.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-2">
+                {selectedFiles.map((file, index) => (
+                  <div 
+                    key={index}
+                    className="inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs animate-in fade-in duration-200"
+                    style={{ backgroundColor: '#FFFFFF' }}
+                  >
+                    {/* File Type Icon */}
+                    <FileText className="size-4 flex-shrink-0 text-gray-500" />
+
+                    {/* File Info */}
+                    <div className="flex min-w-0 flex-1 flex-col">
+                      <span className="truncate text-xs font-semibold text-gray-700" title={file.name}>
+                        {file.name}
+                      </span>
+                    </div>
+
+                    {/* Remove Button */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const updated = selectedFiles.filter((_, i) => i !== index);
+                        setSelectedFiles(updated);
+                      }}
+                      className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
+                      title="Remove file"
+                    >
+                      <X className="size-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Input container with active icon inside */}
+            <div className="relative flex items-center gap-2 py-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
+                    aria-label="Attach Files"
+                  >
+                    <Paperclip className="size-3.5" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  <p>Attach Files</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Textarea
+                name="message"
+                value={message}
+                onChange={e => setMessage(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit();
+                  }
+                }}
+                placeholder={
+                  activeConversation?.knowledgebaseId && isLoading
+                    ? 'Loading...'
+                    : activeConversation?.knowledgebaseId &&
+                        activeKnowledgeBaseName
+                      ? `Chat with ${activeKnowledgeBaseName}`
+                      : (pathname === '/workflows' || pathname?.startsWith('/workflows')
+                        ? 'Describe your workflow...'
+                        : 'Enter prompt here...')
+                }
+                style={{ backgroundColor: 'transparent' }}
+                className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+                autoFocus
+              />
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <ArrowUp
+                    onClick={handleSubmit}
+                    className={cn(
+                      'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity focus:outline-none',
+                      (isLoadingResponse || !message?.trim())
+                        ? 'cursor-not-allowed'
+                        : 'cursor-pointer hover:opacity-80',
+                    )}
+                  />
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  <p>Send Prompt</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

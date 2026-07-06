@@ -1127,9 +1127,7 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
           </div>
         </div>
       ) : selectedOption === OPTIONS.TASK ? (
-        <div className="flex-grow min-h-0 w-full overflow-hidden">
-          <TasksClient />
-        </div>
+        <div className="flex-grow min-h-0 w-full bg-transparent" />
       ) : isSplitScreen ? (
         <div className="relative flex-grow flex flex-row min-h-0 bg-transparent transition-colors duration-300">
           {/* Left Column: Chat history (45%) */}
