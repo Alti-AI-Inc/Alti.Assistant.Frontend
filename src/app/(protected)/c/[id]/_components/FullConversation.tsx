@@ -34,6 +34,7 @@ import { toast } from 'sonner';
 import CodeIDEWidget from './CodeIDEWidget';
 import DesignStudioWidget from './DesignStudioWidget';
 import { VideoStudioWidget } from './VideoStudioWidget';
+import TasksClient from '@/app/(protected)/tasks/TasksClient';
 
 import FileDownloadCard from './FileDownloadCard';
 import VideoComponent from './VideoComponent';
@@ -1124,6 +1125,10 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-500/10 border-t-indigo-500"></div>
             <span className="text-xs font-semibold">loading chat...</span>
           </div>
+        </div>
+      ) : selectedOption === OPTIONS.TASK ? (
+        <div className="flex-grow min-h-0 w-full overflow-hidden">
+          <TasksClient />
         </div>
       ) : isSplitScreen ? (
         <div className="relative flex-grow flex flex-row min-h-0 bg-transparent transition-colors duration-300">
