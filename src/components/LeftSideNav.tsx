@@ -639,20 +639,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               <span>Studio</span>
             </button>
 
-            {/* Spaces */}
-            <button
-              type="button"
-              onClick={() => handleTabChange('bots')}
-              className={cn(
-                'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
-                activeTab === 'bots'
-                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
-                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
-              )}
-            >
-              <span>Spaces</span>
-            </button>
-
             {/* Tasks */}
             <button
               type="button"
@@ -665,6 +651,20 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               )}
             >
               <span>Tasks</span>
+            </button>
+
+            {/* Spaces */}
+            <button
+              type="button"
+              onClick={() => handleTabChange('bots')}
+              className={cn(
+                'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
+                activeTab === 'bots'
+                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
+              )}
+            >
+              <span>Spaces</span>
             </button>
           </div>
         </div>
