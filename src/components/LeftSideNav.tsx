@@ -622,7 +622,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
               )}
             >
-              <span>Chat</span>
+              <span>AI</span>
             </button>
 
             {/* Studio */}
