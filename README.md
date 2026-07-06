@@ -13,7 +13,7 @@ A premium, enterprise-grade Next.js client dashboard powering autonomous agent i
 
 ### 2. Premium Navigation & Sidebar Console
 - **Premium Sliding Menu**: A consolidated five-tab icon-track navbar featuring:
-  - **Chat**: Standard multi-turn conversions and grounding.
+  - **AI**: Standard multi-turn conversions and grounding.
   - **Projects (Agents)**: Dynamic listings and project creation workflows.
   - **Models**: Management of custom enterprise neural models.
   - **Apps**: Direct Composio integration exposing over 893 connectable web applications.
