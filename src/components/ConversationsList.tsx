@@ -29,6 +29,9 @@ import {
   Volume2,
   Zap,
   Microscope,
+  PenTool,
+  ClipboardCheck,
+  Music,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -46,7 +49,7 @@ export default function ConversationsList({
   activeTab = 'chat',
 }: {
   searchQuery?: string;
-  activeTab?: 'chat' | 'search' | 'write' | 'research' | 'assistant' | 'code' | 'image' | 'audio' | 'video' | 'media';
+  activeTab?: 'chat' | 'search' | 'write' | 'research' | 'assistant' | 'code' | 'image' | 'audio' | 'video' | 'media' | 'studio';
 }) {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
@@ -90,21 +93,55 @@ export default function ConversationsList({
     );
 
   const getDisplayIcon = (chat: Conversation) => {
-    // Override icon for the currently active conversation based on selectedOption
     const isActive = activeConversation && chat.conversationId === (activeConversation as any).conversationId;
-    const iconColorClass = isActive ? "text-white flex-shrink-0" : "text-zinc-400 flex-shrink-0";
+    const iconColorClass = isActive 
+      ? "h-3.5 w-3.5 text-white flex-shrink-0" 
+      : "h-3.5 w-3.5 text-zinc-450 flex-shrink-0 group-hover:text-zinc-200 transition-colors";
     
+    const title = chat.title || '';
+    const cleanTitle = formatConversationTitle(title);
+    const lower = cleanTitle.toLowerCase();
+
+    // If activeTab is studio, map to Code, Image, Video, Audio
+    if (activeTab === 'studio') {
+      if (lower.includes('image') || lower.includes('art') || lower.includes('draw') || lower.includes('logo') || lower.includes('paint') || lower.includes('picture') || lower.includes('photo') || lower.includes('canvas')) {
+        return <ImageIcon className={iconColorClass} />;
+      }
+      if (lower.includes('video') || lower.includes('movie') || lower.includes('clip') || lower.includes('animate') || lower.includes('mp4')) {
+        return <VideoIcon className={iconColorClass} />;
+      }
+      if (lower.includes('audio') || lower.includes('voice') || lower.includes('music') || lower.includes('sound') || lower.includes('transcribe') || lower.includes('speech') || lower.includes('mp3')) {
+        return <Music className={iconColorClass} />;
+      }
+      return <Code2 className={iconColorClass} />;
+    }
+
+    // If activeTab is search (AI), map to Chat, Research, Write, Review
+    if (activeTab === 'search') {
+      if (lower.includes('search') || lower.includes('google') || lower.includes('web') || lower.includes('research') || lower.includes('find') || lower.includes('query')) {
+        return <Search className={iconColorClass} />;
+      }
+      if (lower.includes('write') || lower.includes('draft') || lower.includes('email') || lower.includes('article') || lower.includes('copy') || lower.includes('text') || lower.includes('essay')) {
+        return <PenTool className={iconColorClass} />;
+      }
+      if (lower.includes('review') || lower.includes('contract') || lower.includes('check') || lower.includes('audit') || lower.includes('guardrail')) {
+        return <ClipboardCheck className={iconColorClass} />;
+      }
+      return <MessageSquare className={iconColorClass} />;
+    }
+
+    // Default fallbacks for other tabs
     if (isActive) {
       if (selectedOption === OPTIONS.RESEARCH) {
-        return <Microscope className={cn("h-3.5 w-3.5", iconColorClass)} />;
+        return <Microscope className={iconColorClass} />;
       } else if (selectedOption === OPTIONS.CODE || selectedOption === OPTIONS.DEBUG_CODE) {
-        return <Code2 className={cn("h-3.5 w-3.5", iconColorClass)} />;
+        return <Code2 className={iconColorClass} />;
       } else if (selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) {
-        return <ImageIcon className={cn("h-3.5 w-3.5", iconColorClass)} />;
+        return <ImageIcon className={iconColorClass} />;
       } else if (selectedOption === OPTIONS.AUDIO) {
-        return <Volume2 className={cn("h-3.5 w-3.5", iconColorClass)} />;
+        return <Volume2 className={iconColorClass} />;
       } else if (selectedOption === OPTIONS.VIDEO) {
-        return <VideoIcon className={cn("h-3.5 w-3.5", iconColorClass)} />;
+        return <VideoIcon className={iconColorClass} />;
       } else if (
         selectedOption === OPTIONS.DRAFT_DOCUMENT ||
         selectedOption === OPTIONS.REWRITE ||
@@ -119,34 +156,28 @@ export default function ConversationsList({
         selectedOption === OPTIONS.GENERATE_PLAN ||
         selectedOption === OPTIONS.BRAINSTORM
       ) {
-        return <FileText className={cn("h-3.5 w-3.5", iconColorClass)} />;
+        return <FileText className={iconColorClass} />;
       } else if (selectedOption) {
-        // Any other selected option fallback
-        return <Sparkles className={cn("h-3.5 w-3.5", iconColorClass)} />;
+        return <Sparkles className={iconColorClass} />;
       } else {
-        // If selectedOption is null, they are explicitly in standard Chat mode
-        return <MessageSquare className={cn("h-3.5 w-3.5", iconColorClass)} />;
+        return <MessageSquare className={iconColorClass} />;
       }
     }
 
-    const title = chat.title || '';
-    const cleanTitle = formatConversationTitle(title);
-    const lower = cleanTitle.toLowerCase();
-
     if (lower.includes('search') || lower.includes('google') || lower.includes('web')) {
-      return <Search className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />;
+      return <Search className={iconColorClass} />;
     } else if (lower.includes('code') || lower.includes('write') || lower.includes('debug') || lower.includes('python') || lower.includes('rust') || lower.includes('go')) {
-      return <Code2 className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />;
+      return <Code2 className={iconColorClass} />;
     } else if (lower.includes('email') || lower.includes('mail') || lower.includes('send') || lower.includes('draft')) {
-      return <Mail className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />;
+      return <Mail className={iconColorClass} />;
     } else if (lower.includes('notion') || lower.includes('doc') || lower.includes('file') || lower.includes('summarize') || lower.includes('pdf')) {
-      return <FileText className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />;
+      return <FileText className={iconColorClass} />;
     } else if (lower.includes('contract') || lower.includes('legal') || lower.includes('agreement')) {
-      return <Scale className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />;
+      return <Scale className={iconColorClass} />;
     } else if (lower.includes('image') || lower.includes('draw') || lower.includes('photo') || lower.includes('generation')) {
-      return <Palette className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />;
+      return <Palette className={iconColorClass} />;
     }
-    return <MessageSquare className="h-3.5 w-3.5 text-zinc-400 flex-shrink-0" />;
+    return <MessageSquare className={iconColorClass} />;
   };
 
   const getDisplayTitle = (title: string) => {
@@ -184,10 +215,52 @@ export default function ConversationsList({
     return true;
   });
 
-  // Search filter only — tab filtering is done server-side via isDeepSearch
-  const filteredConversations = searchQuery
-    ? conversations.filter(chat => chat.title?.toLowerCase().includes(searchQuery.toLowerCase()))
-    : conversations;
+  // Partition threads client-side between AI (search) and Studio categories
+  const filteredConversations = conversations.filter(chat => {
+    // Search filter
+    if (searchQuery && !chat.title?.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
+
+    // Partition
+    const title = chat.title || '';
+    const lower = title.toLowerCase();
+    const isStudio = (
+      lower.includes('code') ||
+      lower.includes('debug') ||
+      lower.includes('python') ||
+      lower.includes('rust') ||
+      lower.includes('js') ||
+      lower.includes('ts') ||
+      lower.includes('html') ||
+      lower.includes('css') ||
+      lower.includes('image') ||
+      lower.includes('art') ||
+      lower.includes('draw') ||
+      lower.includes('logo') ||
+      lower.includes('paint') ||
+      lower.includes('picture') ||
+      lower.includes('photo') ||
+      lower.includes('canvas') ||
+      lower.includes('video') ||
+      lower.includes('movie') ||
+      lower.includes('clip') ||
+      lower.includes('animate') ||
+      lower.includes('mp4') ||
+      lower.includes('audio') ||
+      lower.includes('voice') ||
+      lower.includes('music') ||
+      lower.includes('sound') ||
+      lower.includes('transcribe') ||
+      lower.includes('speech') ||
+      lower.includes('mp3')
+    );
+
+    if (activeTab === 'studio') return isStudio;
+    if (activeTab === 'search') return !isStudio;
+
+    return true;
+  });
 
   useEffect(() => {
     if (!hasNextPage || isFetchingNextPage) return;
@@ -248,17 +321,18 @@ export default function ConversationsList({
         return (
           <div
             className={cn(
-              "group flex h-9 w-full items-center justify-between rounded-md text-xs font-normal transition-colors duration-150",
+              "group flex h-9 w-full items-center justify-between rounded-xl text-xs font-normal text-left transition-all duration-150 border mb-1.5 cursor-pointer select-none px-3",
               isActive
-                ? "bg-white/10 text-white font-semibold"
-                : "text-zinc-300 hover:bg-white/5 hover:text-white"
+                ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs"
+                : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
             )}
             key={chat._id}
           >
             <span
-              className="flex-1 cursor-pointer truncate px-3 py-2 text-xs font-normal block"
+              className="flex-1 cursor-pointer truncate py-2 flex items-center gap-2.5"
               onClick={() => handleConversationClick(chat.conversationId)}
             >
+              {getDisplayIcon(chat)}
               <span className="truncate">{getDisplayTitle(chat.title)}</span>
             </span>
 
