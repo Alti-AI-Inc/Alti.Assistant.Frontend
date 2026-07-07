@@ -636,24 +636,22 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                         key={index}
                         className="group relative bg-white/[0.06] border border-white/[0.04] text-zinc-300 rounded-lg p-3 pr-8 flex items-center gap-2.5"
                       >
-                        <FileText className="size-4 text-zinc-400 flex-none" />
-                        <div className="min-w-0 flex-1">
-                          <p className="text-xs text-white font-medium truncate">
-                            {file.name}
-                          </p>
-                          {file.size > 0 && (
-                            <p className="text-[9px] text-zinc-500 mt-0.5">
-                              {Math.round(file.size / 1024)} KB
-                            </p>
-                          )}
-                        </div>
+                        <FileText className="size-3.5 text-zinc-400 flex-none" />
+                        <span className="text-xs text-white font-medium truncate flex-1 min-w-0">
+                          {file.name}
+                        </span>
+                        {file.size > 0 && (
+                          <span className="text-[9px] text-zinc-500 flex-none ml-auto select-none">
+                            {Math.round(file.size / 1024)} KB
+                          </span>
+                        )}
                         <button
                           onClick={() => {
                             const newList = knowledgeFiles.filter((_, i) => file.name ? i !== index : false);
                             editBot(botId, { data: JSON.stringify(newList) });
                             toast.success('File deleted');
                           }}
-                          className="absolute right-2 top-2 p-1 rounded-md text-zinc-400 hover:text-red-400 hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-150"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md text-zinc-400 hover:text-red-400 hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-150"
                           title="Delete File"
                         >
                           <Trash2 className="size-3" />
