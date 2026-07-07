@@ -988,7 +988,7 @@ function MyChatbotsContent() {
                               className="flex items-center gap-1.5 px-6 py-3 rounded-full text-sm font-semibold bg-black hover:bg-gray-800 text-white shadow-sm transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               {isCreating ? <Loader2 className="size-4 animate-spin" /> : null}
-                              {isCreating ? "Creating..." : projectTab === 'team' ? "Create Model" : "Create Project"}
+                              {isCreating ? "Creating..." : projectTab === 'team' ? "Create Model" : "Create Space"}
                             </button>
                           </div>
                         </div>
