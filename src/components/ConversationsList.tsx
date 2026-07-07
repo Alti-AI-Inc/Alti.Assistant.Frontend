@@ -285,6 +285,8 @@ export default function ConversationsList({
     setUserMessage('');
     if (activeTab === 'assistant') {
       router.push(`/assistant?c=${id}`);
+    } else if (activeTab === 'studio') {
+      router.push(`/studio?c=${id}`);
     } else {
       router.push(`/c/${id}`);
     }

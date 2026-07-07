@@ -1,21 +1,26 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
 import { useConversationsStore, OPTIONS } from '@/stores/useConverstionsStore';
 import { useSession } from 'next-auth/react';
 
-function StudioApp() {
+function StudioAppContent() {
   const { data } = useSession();
   const { activeConversation, setActiveConversation, selectedOption, setSelectedOption } = useConversationsStore();
+  const searchParams = useSearchParams();
+  const cParam = searchParams.get('c');
 
   useEffect(() => {
-    setActiveConversation(null);
+    if (!cParam) {
+      setActiveConversation(null);
+    }
     if (!selectedOption || ![OPTIONS.CODE, OPTIONS.IMAGE, OPTIONS.VIDEO, OPTIONS.AUDIO].includes(selectedOption)) {
       setSelectedOption(OPTIONS.CODE);
     }
-  }, [setActiveConversation, selectedOption, setSelectedOption]);
+  }, [setActiveConversation, selectedOption, setSelectedOption, cParam]);
 
   const { data: knowledgeBases } = useKnowledgeBases(data?.accessToken);
 
@@ -30,8 +35,16 @@ function StudioApp() {
           Chat with {activeKnowledgeBaseName}
         </h1>
       )}
-      <FullConversation conversationId="new-chat" isStudio={true} />
+      <FullConversation conversationId={cParam || "new-chat"} isStudio={true} />
     </div>
+  );
+}
+
+function StudioApp() {
+  return (
+    <Suspense fallback={null}>
+      <StudioAppContent />
+    </Suspense>
   );
 }
 
