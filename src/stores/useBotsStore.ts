@@ -108,7 +108,7 @@ export const useBotsStore = create<BotsState>()(
           createdAt: new Date().toISOString(),
         };
         set((state) => ({
-          bots: [...state.bots, newBot],
+          bots: [newBot, ...state.bots],
           activeBotId: id,
         }));
         
@@ -147,7 +147,7 @@ export const useBotsStore = create<BotsState>()(
           createdAt: new Date().toISOString(),
         };
         set((state) => ({
-          bots: [...state.bots, tempBot],
+          bots: [tempBot, ...state.bots],
           activeBotId: tempId,
         }));
         
@@ -273,10 +273,15 @@ export const useBotsStore = create<BotsState>()(
                 ...bot,
                 id: bot.id || bot._id,
               }));
-              const merged = [...PRELOADED_BOTS];
-              mapped.forEach((b: Chatbot) => {
-                if (!merged.some((p) => p.id === b.id)) {
-                  merged.push(b);
+              // Sort custom bots so newest is first
+              const customBots = mapped.filter((b: Chatbot) => !PRELOADED_BOTS.some((p) => p.id === b.id));
+              customBots.sort((a: Chatbot, b: Chatbot) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+              
+              // Place custom bots at the top, followed by preloaded bots
+              const merged = [...customBots];
+              PRELOADED_BOTS.forEach((p) => {
+                if (!merged.some((b) => b.id === p.id)) {
+                  merged.push(p);
                 }
               });
               set({ bots: merged });
