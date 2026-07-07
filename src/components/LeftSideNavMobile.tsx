@@ -674,16 +674,16 @@ const LeftSideNavMobile = () => {
       {/* 6-Icon Toggle Row / Space Toggles */}
       {!isSuperAdmin && activeTab !== 'account' && (
         <div className="pt-3 px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none">
-          <div className="flex flex-col bg-white/[0.04] dark:bg-white/[0.02] rounded-xl w-full border border-white/[0.03] dark:border-white/[0.03] overflow-hidden divide-y divide-white/[0.05]">
+          <div className="space-y-1.5 w-full">
             {/* Chat */}
             <button
               type="button"
               onClick={() => handleTabChange('search')}
               className={cn(
-                'flex h-7 w-full items-center gap-2.5 px-3 text-[11px] font-medium transition-all duration-150 focus:outline-none select-none text-left',
+                'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                 activeTab === 'search'
-                  ? 'bg-white/[0.06] text-white shadow-xs'
-                  : 'bg-transparent text-zinc-400 hover:bg-white/[0.02] hover:text-white',
+                  ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
+                  : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
               )}
             >
               <Sparkles className="h-3.5 w-3.5 flex-shrink-0" />
@@ -695,10 +695,10 @@ const LeftSideNavMobile = () => {
               type="button"
               onClick={() => handleTabChange('studio')}
               className={cn(
-                'flex h-7 w-full items-center gap-2.5 px-3 text-[11px] font-medium transition-all duration-150 focus:outline-none select-none text-left',
+                'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                 activeTab === 'studio'
-                  ? 'bg-white/[0.06] text-white shadow-xs'
-                  : 'bg-transparent text-zinc-400 hover:bg-white/[0.02] hover:text-white',
+                  ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
+                  : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
               )}
             >
               <Palette className="h-3.5 w-3.5 flex-shrink-0" />
@@ -710,10 +710,10 @@ const LeftSideNavMobile = () => {
               type="button"
               onClick={() => handleTabChange('apps')}
               className={cn(
-                'flex h-7 w-full items-center gap-2.5 px-3 text-[11px] font-medium transition-all duration-150 focus:outline-none select-none text-left',
+                'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                 activeTab === 'apps'
-                  ? 'bg-white/[0.06] text-white shadow-xs'
-                  : 'bg-transparent text-zinc-400 hover:bg-white/[0.02] hover:text-white',
+                  ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
+                  : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
               )}
             >
               <Blocks className="h-3.5 w-3.5 flex-shrink-0" />
@@ -725,10 +725,10 @@ const LeftSideNavMobile = () => {
               type="button"
               onClick={() => handleTabChange('tasks')}
               className={cn(
-                'flex h-7 w-full items-center gap-2.5 px-3 text-[11px] font-medium transition-all duration-150 focus:outline-none select-none text-left',
+                'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                 activeTab === 'tasks'
-                  ? 'bg-white/[0.06] text-white shadow-xs'
-                  : 'bg-transparent text-zinc-400 hover:bg-white/[0.02] hover:text-white',
+                  ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
+                  : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
               )}
             >
               <ListTodo className="h-3.5 w-3.5 flex-shrink-0" />
@@ -740,10 +740,10 @@ const LeftSideNavMobile = () => {
               type="button"
               onClick={() => handleTabChange('bots')}
               className={cn(
-                'flex h-7 w-full items-center gap-2.5 px-3 text-[11px] font-medium transition-all duration-150 focus:outline-none select-none text-left',
+                'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                 activeTab === 'bots'
-                  ? 'bg-white/[0.06] text-white shadow-xs'
-                  : 'bg-transparent text-zinc-400 hover:bg-white/[0.02] hover:text-white',
+                  ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
+                  : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
               )}
             >
               <LayoutGrid className="h-3.5 w-3.5 flex-shrink-0" />
