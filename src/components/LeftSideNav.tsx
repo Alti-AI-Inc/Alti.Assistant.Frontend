@@ -679,8 +679,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               className={cn(
                 'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'search'
-                  ? 'bg-indigo-500/15 border-indigo-500/20 text-indigo-400 shadow-[0_0_12px_rgba(99,102,241,0.2)] scale-[1.02]'
-                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-indigo-500/5 hover:text-indigo-300',
+                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
               )}
             >
               <span>AI</span>
@@ -693,8 +693,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               className={cn(
                 'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'studio'
-                  ? 'bg-indigo-500/15 border-indigo-500/20 text-indigo-400 shadow-[0_0_12px_rgba(99,102,241,0.2)] scale-[1.02]'
-                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-indigo-500/5 hover:text-indigo-300',
+                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
               )}
             >
               <span>Studio</span>
@@ -707,8 +707,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               className={cn(
                 'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'apps'
-                  ? 'bg-indigo-500/15 border-indigo-500/20 text-indigo-400 shadow-[0_0_12px_rgba(99,102,241,0.2)] scale-[1.02]'
-                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-indigo-500/5 hover:text-indigo-300',
+                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
               )}
             >
               <span>Apps</span>
@@ -721,8 +721,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               className={cn(
                 'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'tasks'
-                  ? 'bg-indigo-500/15 border-indigo-500/20 text-indigo-400 shadow-[0_0_12px_rgba(99,102,241,0.2)] scale-[1.02]'
-                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-indigo-500/5 hover:text-indigo-300',
+                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
               )}
             >
               <span>Tasks</span>
@@ -735,8 +735,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               className={cn(
                 'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'bots'
-                  ? 'bg-indigo-500/15 border-indigo-500/20 text-indigo-400 shadow-[0_0_12px_rgba(99,102,241,0.2)] scale-[1.02]'
-                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-indigo-500/5 hover:text-indigo-300',
+                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
               )}
             >
               <span>Spaces</span>
@@ -754,14 +754,14 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {!hideSidebar && activeTab !== 'account' && (
         <div className="pb-3 flex items-center justify-between gap-2 border-b border-zinc-800/60 px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none">
           {/* Search Bar Input */}
-          <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-indigo-500/20 bg-indigo-500/5 px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-indigo-500/30 focus-within:border-indigo-500/40 focus-within:shadow-[0_0_12px_rgba(99,102,241,0.15)]">
-            <Search className="size-3.5 flex-none text-indigo-400" />
+          <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.06] px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-white/20">
+            <Search className="size-3.5 flex-none text-zinc-400" />
             <input
               type="text"
               placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-transparent text-xs text-indigo-200 outline-none placeholder:text-indigo-400/50"
+              className="w-full bg-transparent text-xs text-zinc-100 outline-none placeholder:text-zinc-400"
             />
           </div>
 
@@ -872,8 +872,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         className={cn(
                           "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border mb-1.5 cursor-grab active:cursor-grabbing select-none",
                           isSelected 
-                            ? "bg-indigo-500/15 border-indigo-500/35 text-indigo-400 font-semibold shadow-[0_0_12px_rgba(99,102,241,0.25)]" 
-                            : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-indigo-500/10 hover:border-indigo-500/15 hover:text-indigo-300 hover:shadow-[0_0_10px_rgba(99,102,241,0.1)]",
+                            ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs" 
+                            : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white",
                           isBeingDragged && "opacity-40 scale-95 border-dashed border-zinc-500 bg-white/[0.02]"
                         )}
                       >
@@ -887,7 +887,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         >
                           <LayoutGrid className={cn(
                             "h-3.5 w-3.5 flex-shrink-0 transition-colors",
-                            isSelected ? "text-indigo-400" : "text-zinc-400 group-hover:text-indigo-300"
+                            isSelected ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
                           )} />
                           <span className="truncate">{bot.name}</span>
                         </span>
@@ -998,8 +998,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         className={cn(
                           "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border mb-1.5 cursor-grab active:cursor-grabbing select-none",
                           isSelected 
-                            ? "bg-indigo-500/15 border-indigo-500/35 text-indigo-400 font-semibold shadow-[0_0_12px_rgba(99,102,241,0.25)]" 
-                            : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-indigo-500/10 hover:border-indigo-500/15 hover:text-indigo-300 hover:shadow-[0_0_10px_rgba(99,102,241,0.1)]",
+                            ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs" 
+                            : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white",
                           isBeingDragged && "opacity-40 scale-95 border-dashed border-zinc-500 bg-white/[0.02]"
                         )}
                       >
@@ -1045,9 +1045,9 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   onClick={() => {
                     router.push(`/tasks?taskId=${task.id}`);
                   }}
-                  className="group w-full flex flex-col gap-1 px-3 py-2 text-xs font-medium rounded-lg text-zinc-350 hover:bg-indigo-500/10 hover:border-indigo-500/15 hover:text-indigo-300 hover:shadow-[0_0_10px_rgba(99,102,241,0.1)] transition-all text-left border border-white/[0.04] bg-white/[0.06] mb-1.5"
+                  className="w-full flex flex-col gap-1 px-3 py-2 text-xs font-medium rounded-lg text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left border border-white/[0.04] bg-white/[0.06] shadow-xs mb-1.5"
                 >
-                  <p className="font-semibold text-indigo-400 group-hover:text-indigo-300 line-clamp-1 leading-snug">
+                  <p className="font-semibold text-white line-clamp-1 leading-snug">
                     {task.prompt}
                   </p>
                   <div className="flex items-center justify-between w-full text-[10px] text-zinc-400 font-medium">
