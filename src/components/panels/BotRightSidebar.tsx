@@ -323,8 +323,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   className={cn(
                     'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                     activeTab === 'ai' && selectedOption !== OPTIONS.INBOX
-                      ? 'bg-black/[0.06] border-black/10 text-black dark:bg-white/12 dark:border-white/10 dark:text-white font-semibold shadow-xs'
-                      : 'bg-black/[0.02] border-black/[0.03] text-black/80 hover:bg-black/[0.04] hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:text-white',
+                      ? 'bg-zinc-300/80 border-transparent text-black dark:bg-zinc-800 dark:border-transparent dark:text-white font-semibold shadow-xs'
+                      : 'bg-[#e1e1e1] border-transparent text-black/80 hover:bg-zinc-250 hover:text-black dark:bg-zinc-900/60 dark:border-transparent dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white',
                   )}
                 >
                   <Sparkles className="h-3.5 w-3.5 flex-shrink-0" />
@@ -341,8 +341,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   className={cn(
                     'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                     activeTab === 'studio' && selectedOption !== OPTIONS.INBOX
-                      ? 'bg-black/[0.06] border-black/10 text-black dark:bg-white/12 dark:border-white/10 dark:text-white font-semibold shadow-xs'
-                      : 'bg-black/[0.02] border-black/[0.03] text-black/80 hover:bg-black/[0.04] hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:text-white',
+                      ? 'bg-zinc-300/80 border-transparent text-black dark:bg-zinc-800 dark:border-transparent dark:text-white font-semibold shadow-xs'
+                      : 'bg-[#e1e1e1] border-transparent text-black/80 hover:bg-zinc-250 hover:text-black dark:bg-zinc-900/60 dark:border-transparent dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white',
                   )}
                 >
                   <Palette className="h-3.5 w-3.5 flex-shrink-0" />
@@ -359,8 +359,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   className={cn(
                     'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                     activeTab === 'tasks' && selectedOption !== OPTIONS.INBOX
-                      ? 'bg-black/[0.06] border-black/10 text-black dark:bg-white/12 dark:border-white/10 dark:text-white font-semibold shadow-xs'
-                      : 'bg-black/[0.02] border-black/[0.03] text-black/80 hover:bg-black/[0.04] hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:border-white/5 dark:hover:text-white',
+                      ? 'bg-zinc-300/80 border-transparent text-black dark:bg-zinc-800 dark:border-transparent dark:text-white font-semibold shadow-xs'
+                      : 'bg-[#e1e1e1] border-transparent text-black/80 hover:bg-zinc-250 hover:text-black dark:bg-zinc-900/60 dark:border-transparent dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white',
                   )}
                 >
                   <ListTodo className="h-3.5 w-3.5 flex-shrink-0" />
@@ -377,8 +377,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   className={cn(
                     'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                     activeTab === 'instructions' && selectedOption !== OPTIONS.INBOX
-                      ? 'bg-black/[0.06] border-black/10 text-black dark:bg-white/12 dark:border-white/10 dark:text-white font-semibold shadow-xs'
-                      : 'bg-black/[0.02] border-black/[0.03] text-black/80 hover:bg-black/[0.04] hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:border-white/5 dark:hover:text-white',
+                      ? 'bg-zinc-300/80 border-transparent text-black dark:bg-zinc-800 dark:border-transparent dark:text-white font-semibold shadow-xs'
+                      : 'bg-[#e1e1e1] border-transparent text-black/80 hover:bg-zinc-250 hover:text-black dark:bg-zinc-900/60 dark:border-transparent dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white',
                   )}
                 >
                   <SlidersHorizontal className="h-3.5 w-3.5 flex-shrink-0" />
@@ -395,8 +395,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   className={cn(
                     'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                     activeTab === 'guardrails' && selectedOption !== OPTIONS.INBOX
-                      ? 'bg-black/[0.06] border-black/10 text-black dark:bg-white/12 dark:border-white/10 dark:text-white font-semibold shadow-xs'
-                      : 'bg-black/[0.02] border-black/[0.03] text-black/80 hover:bg-black/[0.04] hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:border-white/5 dark:hover:text-white',
+                      ? 'bg-zinc-300/80 border-transparent text-black dark:bg-zinc-800 dark:border-transparent dark:text-white font-semibold shadow-xs'
+                      : 'bg-[#e1e1e1] border-transparent text-black/80 hover:bg-zinc-250 hover:text-black dark:bg-zinc-900/60 dark:border-transparent dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white',
                   )}
                 >
                   <Shield className="h-3.5 w-3.5 flex-shrink-0" />
@@ -413,8 +413,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   className={cn(
                     'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                     activeTab === 'knowledge' && selectedOption !== OPTIONS.INBOX
-                      ? 'bg-black/[0.06] border-black/10 text-black dark:bg-white/12 dark:border-white/10 dark:text-white font-semibold shadow-xs'
-                      : 'bg-black/[0.02] border-black/[0.03] text-black/80 hover:bg-black/[0.04] hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:border-white/5 dark:hover:text-white',
+                      ? 'bg-zinc-300/80 border-transparent text-black dark:bg-zinc-800 dark:border-transparent dark:text-white font-semibold shadow-xs'
+                      : 'bg-[#e1e1e1] border-transparent text-black/80 hover:bg-zinc-250 hover:text-black dark:bg-zinc-900/60 dark:border-transparent dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white',
                   )}
                 >
                   <BookOpen className="h-3.5 w-3.5 flex-shrink-0" />
@@ -425,7 +425,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
             {/* Enclosed Search & Actions Row */}
             <div className="pt-1.5 pb-1.5 flex items-center px-4 bg-white dark:bg-zinc-950 transition-all duration-300 flex-none w-full">
-              <div className="flex h-9 w-full items-center rounded-lg border border-black/10 dark:border-white/[0.04] bg-black/[0.02] dark:bg-white/[0.06] shadow-xs overflow-hidden focus-within:ring-1 focus-within:ring-black/15 dark:focus-within:ring-white/20 transition-all duration-150">
+              <div className="flex h-9 w-full items-center rounded-lg border border-transparent bg-[#e1e1e1] dark:bg-zinc-900/60 shadow-xs overflow-hidden transition-all duration-150">
                 {/* Search segment */}
                 <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
                   <Search className="size-3.5 flex-none text-zinc-700 dark:text-white" />
@@ -434,12 +434,12 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-transparent text-xs font-normal font-sans text-zinc-850 dark:text-white outline-none placeholder:text-zinc-400 dark:placeholder:text-white/60"
+                    className="w-full bg-transparent text-xs font-normal font-sans text-zinc-850 dark:text-white outline-none placeholder:text-zinc-450 dark:placeholder:text-white/60"
                   />
                 </div>
 
                 {/* Vertical Separator */}
-                <div className="w-px h-4 bg-black/10 dark:bg-white/10 flex-none" />
+                <div className="w-px h-4 bg-transparent dark:bg-white/10 flex-none" />
 
                 {/* Inbox segment */}
                 <Tooltip>
@@ -447,8 +447,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     <button
                       type="button"
                       className={cn(
-                        "flex h-full w-9 items-center justify-center transition-all hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-700 dark:text-white focus:outline-none",
-                        selectedOption === OPTIONS.INBOX && "bg-black/[0.06] dark:bg-white/[0.08]"
+                        "flex h-full w-9 items-center justify-center transition-all hover:bg-black/[0.06] dark:hover:bg-white/[0.06] text-zinc-700 dark:text-white focus:outline-none",
+                        selectedOption === OPTIONS.INBOX && "bg-black/[0.08] dark:bg-white/[0.08]"
                       )}
                       onClick={() => {
                         if (selectedOption === OPTIONS.INBOX) {
@@ -469,7 +469,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
                 {/* Vertical Separator (only if plus is visible) */}
                 {selectedOption !== OPTIONS.INBOX && (
-                  <div className="w-px h-4 bg-black/10 dark:bg-white/10 flex-none" />
+                  <div className="w-px h-4 bg-transparent dark:bg-white/10 flex-none" />
                 )}
 
                 {/* Plus segment */}
@@ -478,7 +478,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     <TooltipTrigger asChild>
                       <button
                         type="button"
-                        className="flex h-full w-9 items-center justify-center transition-all hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-700 dark:text-white focus:outline-none"
+                        className="flex h-full w-9 items-center justify-center transition-all hover:bg-black/[0.06] dark:hover:bg-white/[0.06] text-zinc-700 dark:text-white focus:outline-none"
                         onClick={() => {
                           if (activeTab === 'instructions') {
                             setIsAddInstructionOpen(true);
@@ -532,10 +532,10 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     filteredRuns.map((run) => (
                       <div 
                         key={run.id}
-                        className="w-full bg-white/[0.06] border border-white/[0.04] text-zinc-300 rounded-lg p-3 space-y-1.5"
+                        className="w-full bg-[#e1e1e1] dark:bg-zinc-900/60 border border-transparent text-zinc-800 dark:text-zinc-300 rounded-lg p-3 space-y-1.5"
                       >
                         <div className="flex items-center justify-between gap-3">
-                          <span className="font-semibold text-white text-xs truncate">
+                          <span className="font-semibold text-zinc-900 dark:text-white text-xs truncate">
                             {run.taskName}
                           </span>
                         </div>
@@ -561,9 +561,9 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     filteredInstructions.map((inst, index) => (
                       <div 
                         key={index}
-                        className="group relative bg-white/[0.06] border border-white/[0.04] text-zinc-300 rounded-lg p-3 pr-8"
+                        className="group relative bg-[#e1e1e1] dark:bg-zinc-900/60 border border-transparent text-zinc-800 dark:text-zinc-300 rounded-lg p-3 pr-8"
                       >
-                        <p className="text-xs text-zinc-300 truncate">
+                        <p className="text-xs text-zinc-900 dark:text-zinc-300 truncate">
                           {inst}
                         </p>
                         <button
@@ -592,9 +592,9 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     filteredGuardrails.map((gr, index) => (
                       <div 
                         key={index}
-                        className="group relative bg-white/[0.06] border border-white/[0.04] text-zinc-300 rounded-lg p-3 pr-8"
+                        className="group relative bg-[#e1e1e1] dark:bg-zinc-900/60 border border-transparent text-zinc-800 dark:text-zinc-300 rounded-lg p-3 pr-8"
                       >
-                        <p className="text-xs text-zinc-300 truncate">
+                        <p className="text-xs text-zinc-900 dark:text-zinc-300 truncate">
                           {gr}
                         </p>
                         <button
@@ -634,10 +634,10 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     filteredKnowledge.map((file, index) => (
                       <div 
                         key={index}
-                        className="group relative bg-white/[0.06] border border-white/[0.04] text-zinc-300 rounded-lg p-3 pr-8 flex items-center gap-2.5"
+                        className="group relative bg-[#e1e1e1] dark:bg-zinc-900/60 border border-transparent text-zinc-800 dark:text-zinc-300 rounded-lg p-3 pr-8 flex items-center gap-2.5"
                       >
                         <FileText className="size-3.5 text-zinc-400 flex-none" />
-                        <span className="text-xs text-white font-medium truncate flex-1 min-w-0">
+                        <span className="text-xs text-zinc-900 dark:text-white font-medium truncate flex-1 min-w-0">
                           {file.name}
                         </span>
                         {file.size > 0 && (
@@ -680,8 +680,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                           className={cn(
                             "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border cursor-pointer select-none",
                             isSelected 
-                              ? "bg-black/[0.06] border-black/10 text-black font-semibold shadow-xs dark:bg-white/12 dark:border-white/10 dark:text-white" 
-                              : "bg-black/[0.02] border-black/[0.03] text-gray-700 hover:bg-black/[0.04] hover:border-black/5 hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:border-white/5 dark:hover:text-white",
+                              ? "bg-zinc-300/80 border-transparent text-black font-semibold shadow-xs dark:bg-zinc-800 dark:border-transparent dark:text-white" 
+                              : "bg-[#e1e1e1] border-transparent text-zinc-800 hover:bg-zinc-300/50 hover:text-black dark:bg-zinc-900/60 dark:border-transparent dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white",
                           )}
                         >
                           <span
@@ -744,7 +744,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
           <div className="space-y-4">
             <h3 className="text-base font-semibold text-black dark:text-white">Add Instruction</h3>
             <textarea
-              className="w-full h-24 p-3 bg-gray-50 dark:bg-zinc-955 border border-black/15 dark:border-zinc-800 rounded-xl text-xs resize-none focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full h-24 p-3 bg-gray-50 dark:bg-zinc-950 border border-black/15 dark:border-zinc-800 rounded-xl text-xs resize-none focus:outline-none focus:ring-1 focus:ring-indigo-500"
               placeholder="Enter new instruction..."
               value={newInstruction}
               onChange={(e) => setNewInstruction(e.target.value)}
@@ -778,7 +778,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
           <div className="space-y-4">
             <h3 className="text-base font-semibold text-black dark:text-white">Add Guardrail</h3>
             <textarea
-              className="w-full h-24 p-3 bg-gray-50 dark:bg-zinc-955 border border-black/15 dark:border-zinc-800 rounded-xl text-xs resize-none focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full h-24 p-3 bg-gray-50 dark:bg-zinc-950 border border-black/15 dark:border-zinc-800 rounded-xl text-xs resize-none focus:outline-none focus:ring-1 focus:ring-indigo-500"
               placeholder="Enter new guardrail..."
               value={newGuardrail}
               onChange={(e) => setNewGuardrail(e.target.value)}
