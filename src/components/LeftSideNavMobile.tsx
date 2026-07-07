@@ -688,11 +688,18 @@ const LeftSideNavMobile = () => {
                   size="icon"
                   className={cn(
                     "flex h-8 w-8 items-center justify-center rounded-lg border shadow-xs transition-all",
-                    isGlobalInboxOpen
+                    pathname === '/inbox'
                       ? "bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]"
                       : "bg-white/[0.06] border-white/[0.08] text-white hover:bg-white/[0.12]"
                   )}
-                  onClick={toggleGlobalInbox}
+                  onClick={() => {
+                    if (pathname === '/my-chatbots') {
+                      if (!isRightSidebarOpen) toggleRightSidebar();
+                      window.dispatchEvent(new Event('alti_inbox_click'));
+                    } else {
+                      router.push('/inbox');
+                    }
+                  }}
                 >
                   <Inbox className="size-4 text-white" />
                 </Button>

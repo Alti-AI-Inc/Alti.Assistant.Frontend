@@ -82,6 +82,22 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
     }
   }, [selectedOption]);
 
+  // Listen to global inbox click events (e.g. from LeftSideNav)
+  useEffect(() => {
+    const handleInboxClick = () => {
+      if (
+        selectedOption === OPTIONS.INSTRUCTIONS ||
+        selectedOption === OPTIONS.GUARDRAILS ||
+        selectedOption === OPTIONS.KNOWLEDGE
+      ) {
+        setSelectedOption(null);
+      }
+      setActiveTab('inbox');
+    };
+    window.addEventListener('alti_inbox_click', handleInboxClick);
+    return () => window.removeEventListener('alti_inbox_click', handleInboxClick);
+  }, [selectedOption, setSelectedOption]);
+
   // Fetch runs for Inbox
   useEffect(() => {
     const fetchRuns = () => {
