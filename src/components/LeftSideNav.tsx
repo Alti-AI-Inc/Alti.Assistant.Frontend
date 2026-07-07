@@ -842,7 +842,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                                 setBotToRename(bot.id);
                               }}
                             >
-                              <Pencil className="h-4 w-4 mr-2" /> Rename Space
+                              <Pencil className="h-4 w-4 mr-2" /> Rename
                             </DropdownMenuItem>
                             <DropdownMenuSeparator className="border-black/5 dark:border-white/5" />
                             <DropdownMenuItem
