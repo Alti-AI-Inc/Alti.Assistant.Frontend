@@ -650,7 +650,7 @@ export default function TasksClient() {
       <div className="flex-1 flex flex-col items-center justify-center p-6 md:p-8 relative overflow-hidden h-full">
 
         {/* Creator Form */}
-        <div className="w-full max-w-2xl flex flex-col items-center z-10 -translate-y-16">
+        <div className="w-full max-w-[796px] flex flex-col items-center z-10 -translate-y-16">
           {isSpacesPage && (
             <div className="mb-8 flex justify-center">
               <div className="flex bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1 rounded-full shadow-sm border border-gray-200/50 dark:border-zinc-800/50">
