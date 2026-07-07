@@ -324,7 +324,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                     activeTab === 'ai' && selectedOption !== OPTIONS.INBOX
                       ? 'bg-black/[0.06] border-black/10 text-black dark:bg-white/12 dark:border-white/10 dark:text-white font-semibold shadow-xs'
-                      : 'bg-black/[0.02] border-black/[0.03] text-gray-700 hover:bg-black/[0.04] hover:border-black/5 hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:border-white/5 dark:hover:text-white',
+                      : 'bg-black/[0.02] border-black/[0.03] text-black/80 hover:bg-black/[0.04] hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:text-white',
                   )}
                 >
                   <Sparkles className="h-3.5 w-3.5 flex-shrink-0" />
@@ -341,8 +341,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   className={cn(
                     'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                     activeTab === 'studio' && selectedOption !== OPTIONS.INBOX
-                      ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
-                      : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+                      ? 'bg-black/[0.06] border-black/10 text-black dark:bg-white/12 dark:border-white/10 dark:text-white font-semibold shadow-xs'
+                      : 'bg-black/[0.02] border-black/[0.03] text-black/80 hover:bg-black/[0.04] hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:text-white',
                   )}
                 >
                   <Palette className="h-3.5 w-3.5 flex-shrink-0" />
@@ -359,8 +359,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   className={cn(
                     'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                     activeTab === 'tasks' && selectedOption !== OPTIONS.INBOX
-                      ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
-                      : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+                      ? 'bg-black/[0.06] border-black/10 text-black dark:bg-white/12 dark:border-white/10 dark:text-white font-semibold shadow-xs'
+                      : 'bg-black/[0.02] border-black/[0.03] text-black/80 hover:bg-black/[0.04] hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:border-white/5 dark:hover:text-white',
                   )}
                 >
                   <ListTodo className="h-3.5 w-3.5 flex-shrink-0" />
@@ -377,8 +377,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   className={cn(
                     'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                     activeTab === 'instructions' && selectedOption !== OPTIONS.INBOX
-                      ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
-                      : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+                      ? 'bg-black/[0.06] border-black/10 text-black dark:bg-white/12 dark:border-white/10 dark:text-white font-semibold shadow-xs'
+                      : 'bg-black/[0.02] border-black/[0.03] text-black/80 hover:bg-black/[0.04] hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:border-white/5 dark:hover:text-white',
                   )}
                 >
                   <SlidersHorizontal className="h-3.5 w-3.5 flex-shrink-0" />
@@ -395,8 +395,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   className={cn(
                     'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                     activeTab === 'guardrails' && selectedOption !== OPTIONS.INBOX
-                      ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
-                      : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+                      ? 'bg-black/[0.06] border-black/10 text-black dark:bg-white/12 dark:border-white/10 dark:text-white font-semibold shadow-xs'
+                      : 'bg-black/[0.02] border-black/[0.03] text-black/80 hover:bg-black/[0.04] hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:border-white/5 dark:hover:text-white',
                   )}
                 >
                   <Shield className="h-3.5 w-3.5 flex-shrink-0" />
@@ -413,8 +413,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   className={cn(
                     'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                     activeTab === 'knowledge' && selectedOption !== OPTIONS.INBOX
-                      ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
-                      : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+                      ? 'bg-black/[0.06] border-black/10 text-black dark:bg-white/12 dark:border-white/10 dark:text-white font-semibold shadow-xs'
+                      : 'bg-black/[0.02] border-black/[0.03] text-black/80 hover:bg-black/[0.04] hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:border-white/5 dark:hover:text-white',
                   )}
                 >
                   <BookOpen className="h-3.5 w-3.5 flex-shrink-0" />
