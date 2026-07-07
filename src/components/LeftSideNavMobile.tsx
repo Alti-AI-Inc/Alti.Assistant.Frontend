@@ -688,8 +688,16 @@ const LeftSideNavMobile = () => {
                   size="icon"
                   className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.06] text-white shadow-xs transition-all hover:bg-white/[0.12]"
                   onClick={() => {
-                    if (!isRightSidebarOpen) toggleRightSidebar();
-                    window.dispatchEvent(new Event('alti_inbox_click'));
+                    if (pathname !== '/my-chatbots' && !pathname?.startsWith('/admin/projects')) {
+                      router.push('/my-chatbots');
+                      setTimeout(() => {
+                        useSidebarStore.getState().setRightSidebarOpen(true);
+                        window.dispatchEvent(new Event('alti_inbox_click'));
+                      }, 300);
+                    } else {
+                      if (!isRightSidebarOpen) toggleRightSidebar();
+                      window.dispatchEvent(new Event('alti_inbox_click'));
+                    }
                   }}
                 >
                   <Inbox className="size-4 text-white" />
