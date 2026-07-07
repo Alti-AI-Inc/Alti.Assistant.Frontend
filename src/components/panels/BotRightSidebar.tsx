@@ -17,7 +17,10 @@ import {
   Clock, 
   Code,
   ListTodo,
-  BookOpen
+  BookOpen,
+  Sparkles,
+  Wand2,
+  Inbox
 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { OPTIONS } from '@/types/conversation';
@@ -247,7 +250,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                         : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
                     )}
                   >
-                    <MessageSquare className="size-4" />
+                    <Sparkles className="size-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
@@ -271,7 +274,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                         : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
                     )}
                   >
-                    <Code className="size-4" />
+                    <Wand2 className="size-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
@@ -325,7 +328,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                         : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
                     )}
                   >
-                    <Clock className="size-4" />
+                    <Inbox className="size-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
