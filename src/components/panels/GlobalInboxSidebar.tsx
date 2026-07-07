@@ -50,8 +50,8 @@ export default function GlobalInboxSidebar() {
   return (
     <aside
       className={cn(
-        "flex-none flex flex-col border-l border-black/10 h-full overflow-hidden transition-all duration-300 ease-in-out z-30 bg-[#F9FAFB] dark:bg-zinc-950",
-        isGlobalInboxOpen ? "w-76" : "w-0 border-l-0"
+        "fixed top-0 right-0 h-full flex flex-col border-l border-black/10 overflow-hidden transition-all duration-300 ease-in-out z-50 bg-[#F9FAFB] dark:bg-zinc-950 shadow-2xl",
+        isGlobalInboxOpen ? "w-76 pointer-events-auto" : "w-0 border-l-0 pointer-events-none"
       )}
     >
       <div className="flex-1 flex flex-col min-h-0 p-4 space-y-4 w-76">

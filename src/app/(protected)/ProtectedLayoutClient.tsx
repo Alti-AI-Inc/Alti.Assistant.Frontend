@@ -4,7 +4,11 @@ import { Suspense } from 'react';
 import LeftSideNav from '@/components/LeftSideNav';
 import LeftSideNavMobile from '@/components/LeftSideNavMobile';
 import AdminSecondarySidebar from '@/components/sidebars/AdminSecondarySidebar';
-import GlobalInboxSidebar from '@/components/panels/GlobalInboxSidebar';
+import dynamic from 'next/dynamic';
+
+const GlobalInboxSidebar = dynamic(() => import('@/components/panels/GlobalInboxSidebar'), {
+  ssr: false,
+});
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -133,9 +137,7 @@ export default function ProtectedLayoutClient({
         </main>
 
         {/* Global Inbox Sidebar */}
-        <Suspense fallback={null}>
-          <GlobalInboxSidebar />
-        </Suspense>
+        <GlobalInboxSidebar />
       </div>
     </div>
   );
