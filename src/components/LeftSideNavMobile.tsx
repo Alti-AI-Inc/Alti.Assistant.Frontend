@@ -209,7 +209,7 @@ const LeftSideNavMobile = () => {
 
   const isLoggedIn = data?.accessToken;
   const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab } = useBotsStore();
-  const { isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox } = useSidebarStore();
+  const { isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen } = useSidebarStore();
   
   const { data: inboxItems = [] } = useInboxQuery(
     data?.user?.id,
@@ -686,7 +686,12 @@ const LeftSideNavMobile = () => {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.06] text-white shadow-xs transition-all hover:bg-white/[0.12]"
+                  className={cn(
+                    "flex h-8 w-8 items-center justify-center rounded-lg border shadow-xs transition-all",
+                    isGlobalInboxOpen
+                      ? "bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]"
+                      : "bg-white/[0.06] border-white/[0.08] text-white hover:bg-white/[0.12]"
+                  )}
                   onClick={toggleGlobalInbox}
                 >
                   <Inbox className="size-4 text-white" />
