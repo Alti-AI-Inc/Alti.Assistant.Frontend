@@ -223,6 +223,7 @@ const LeftSideNavMobile = () => {
   const [activeTab, setActiveTab] = useState<SidebarTab>('search');
   const [searchQuery, setSearchQuery] = useState('');
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const [tasks, setTasks] = useState<any[]>([]);
 
@@ -748,68 +749,86 @@ const LeftSideNavMobile = () => {
                 .map(({ bot, idx }) => {
                   const isSelected = activeBotId === bot.id && pathname === '/my-chatbots';
                   const isBeingDragged = draggedIndex === idx;
+                  const showTopLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex > idx;
+                  const showBottomLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex < idx;
+
                   return (
-                    <div
-                      key={bot.id}
-                      draggable
-                      onDragStart={(e) => {
-                        setDraggedIndex(idx);
-                        e.dataTransfer.effectAllowed = 'move';
-                      }}
-                      onDragOver={(e) => {
-                        e.preventDefault();
-                      }}
-                      onDrop={(e) => {
-                        e.preventDefault();
-                        if (draggedIndex !== null && draggedIndex !== idx) {
-                          reorderBots(draggedIndex, idx);
-                        }
-                        setDraggedIndex(null);
-                      }}
-                      onDragEnd={() => {
-                        setDraggedIndex(null);
-                      }}
-                      className={cn(
-                        "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-semibold text-left transition-all duration-150 border mb-1.5 cursor-grab active:cursor-grabbing select-none",
-                        isSelected 
-                          ? "bg-white/12 border-white/10 text-white shadow-xs" 
-                          : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white",
-                        isBeingDragged && "opacity-40 scale-95 border-dashed border-zinc-500 bg-white/[0.02]"
+                    <div key={bot.id}>
+                      {showTopLine && (
+                        <div className="h-[2px] w-full bg-indigo-500 rounded-full mb-1 animate-pulse" />
                       )}
-                    >
-                      <span
-                        className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
-                        onClick={() => {
-                          setActiveBotId(bot.id);
-                          router.push(`/my-chatbots?bot=${bot.id}`);
-                          close();
+                      <div
+                        draggable
+                        onDragStart={(e) => {
+                          setDraggedIndex(idx);
+                          e.dataTransfer.effectAllowed = 'move';
                         }}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          if (draggedIndex !== idx) {
+                            setDragOverIndex(idx);
+                          }
+                        }}
+                        onDragLeave={() => {
+                          setDragOverIndex(null);
+                        }}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          if (draggedIndex !== null && draggedIndex !== idx) {
+                            reorderBots(draggedIndex, idx);
+                          }
+                          setDraggedIndex(null);
+                          setDragOverIndex(null);
+                        }}
+                        onDragEnd={() => {
+                          setDraggedIndex(null);
+                          setDragOverIndex(null);
+                        }}
+                        className={cn(
+                          "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-semibold text-left transition-all duration-150 border mb-1.5 cursor-grab active:cursor-grabbing select-none",
+                          isSelected 
+                            ? "bg-white/12 border-white/10 text-white shadow-xs" 
+                            : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white",
+                          isBeingDragged && "opacity-40 scale-95 border-dashed border-zinc-500 bg-white/[0.02]"
+                        )}
                       >
-                        <LayoutGrid className={cn(
-                          "h-3.5 w-3.5 flex-shrink-0 transition-colors",
-                          isSelected ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
-                        )} />
-                        <span className="truncate">{bot.name}</span>
-                      </span>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger className="focus-visible:outline-none">
-                          <EllipsisVertical className={cn(
-                            "mr-2 rotate-90 h-3.5 w-3.5 transition-colors",
+                        <span
+                          className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
+                          onClick={() => {
+                            setActiveBotId(bot.id);
+                            router.push(`/my-chatbots?bot=${bot.id}`);
+                            close();
+                          }}
+                        >
+                          <LayoutGrid className={cn(
+                            "h-3.5 w-3.5 flex-shrink-0 transition-colors",
                             isSelected ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
                           )} />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="rounded-2xl">
-                          <DropdownMenuItem
-                            onClick={() => {
-                              setActiveBotId(bot.id);
-                              router.push(`/my-chatbots?bot=${bot.id}`);
-                              close();
-                            }}
-                          >
-                            <Folder className="text-black h-4 w-4 mr-2" /> Open
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                          <span className="truncate">{bot.name}</span>
+                        </span>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger className="focus-visible:outline-none">
+                            <EllipsisVertical className={cn(
+                              "mr-2 rotate-90 h-3.5 w-3.5 transition-colors",
+                              isSelected ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
+                            )} />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="rounded-2xl">
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setActiveBotId(bot.id);
+                                router.push(`/my-chatbots?bot=${bot.id}`);
+                                close();
+                              }}
+                            >
+                              <Folder className="text-black h-4 w-4 mr-2" /> Open
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                      {showBottomLine && (
+                        <div className="h-[2px] w-full bg-indigo-500 rounded-full mt-1 mb-1.5 animate-pulse" />
+                      )}
                     </div>
                   );
                 })}
