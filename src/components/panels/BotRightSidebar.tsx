@@ -428,13 +428,13 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
               <div className="flex h-9 w-full items-center rounded-lg border border-black/10 dark:border-white/[0.04] bg-black/[0.02] dark:bg-white/[0.06] shadow-xs overflow-hidden focus-within:ring-1 focus-within:ring-black/15 dark:focus-within:ring-white/20 transition-all duration-150">
                 {/* Search segment */}
                 <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
-                  <Search className="size-3.5 flex-none text-zinc-400" />
+                  <Search className="size-3.5 flex-none text-zinc-700 dark:text-white" />
                   <input
                     type="text"
                     placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-transparent text-xs text-zinc-800 dark:text-zinc-100 outline-none placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
+                    className="w-full bg-transparent text-xs text-zinc-850 dark:text-white outline-none placeholder:text-zinc-400 dark:placeholder:text-white/60"
                   />
                 </div>
 

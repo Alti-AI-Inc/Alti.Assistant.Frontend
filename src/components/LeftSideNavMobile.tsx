@@ -759,13 +759,13 @@ const LeftSideNavMobile = () => {
           <div className="flex h-9 w-full items-center rounded-lg border border-white/[0.04] bg-white/[0.06] shadow-xs overflow-hidden focus-within:ring-1 focus-within:ring-white/20 transition-all duration-150">
             {/* Search segment */}
             <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
-              <Search className="size-3.5 flex-none text-zinc-400" />
+              <Search className="size-3.5 flex-none text-white" />
               <input
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent text-xs text-zinc-100 outline-none placeholder:text-zinc-400"
+                className="w-full bg-transparent text-xs text-white outline-none placeholder:text-white/60"
               />
             </div>
 
