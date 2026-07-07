@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { APP } from '@/lib/all-apps';
 import { cn } from '@/lib/utils';
-import { LoaderCircle, ShieldCheck, Zap } from 'lucide-react';
+import { LoaderCircle, ShieldCheck, Zap, User, Lock, Mail, Server } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import AppImage from '@/components/AppImage';
@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface AppBlueprint {
   requiredEnv: string[];
@@ -591,16 +592,40 @@ const AppCard = ({
   const queryClient = useQueryClient();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'oauth' | 'credentials' | 'apikey'>('oauth');
   const [isConnecting, setIsConnecting] = useState(false);
   const [isDisconnecting, setIsDisconnecting] = useState(false);
   const [envInputs, setEnvInputs] = useState<Record<string, string>>({});
   const [dbUrlInput, setDbUrlInput] = useState('');
   const [advancedJsonInput, setAdvancedJsonInput] = useState('');
+  
+  // Direct Credentials states
+  const [emailInput, setEmailInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
+  const [hostInput, setHostInput] = useState('');
+  const [portInput, setPortInput] = useState('');
+  const [dbNameInput, setDbNameInput] = useState('');
+  
   const [errorMessage, setErrorMessage] = useState('');
 
   const slug = app.app_name?.toLowerCase() || '';
   const strategicStyle = STRATEGIC_APPS_STYLE[slug];
   const blueprint = MCP_BLUEPRINTS[slug];
+
+  const supportsOAuth = slug === 'slack' || 
+    slug === 'notion' || 
+    slug === 'github' || 
+    slug === 'gitlab' || 
+    slug === 'google-drive' || 
+    slug === 'gcal' || 
+    slug === 'google-calendar' || 
+    slug === 'hubspot' || 
+    slug === 'linear' || 
+    slug === 'salesforce' || 
+    slug === 'asana' || 
+    slug === 'clickup' || 
+    slug === 'trello' || 
+    slug === 'zendesk';
 
   const isDatabaseApp = blueprint?.needsDatabaseUrl || 
     slug.includes('postgres') || 
@@ -619,7 +644,13 @@ const AppCard = ({
     setEnvInputs(initialEnv);
     setDbUrlInput('');
     setAdvancedJsonInput('');
+    setEmailInput('');
+    setPasswordInput('');
+    setHostInput('');
+    setPortInput('');
+    setDbNameInput('');
     setErrorMessage('');
+    setActiveTab(supportsOAuth ? 'oauth' : 'credentials');
     setIsModalOpen(true);
   };
 
@@ -659,6 +690,111 @@ const AppCard = ({
     } finally {
       setIsConnecting(false);
     }
+  };
+
+  const handleCredentialsConnect = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsConnecting(true);
+    setErrorMessage('');
+
+    try {
+      const finalEnv: Record<string, string> = {};
+      let databaseUrl: string | undefined = undefined;
+
+      if (isDatabaseApp) {
+        const host = hostInput.trim() || 'localhost';
+        const port = portInput.trim() || (slug.includes('postgres') ? '5432' : slug.includes('mongodb') ? '27017' : '3306');
+        const dbName = dbNameInput.trim() || 'default';
+        const username = emailInput.trim();
+        const password = passwordInput;
+        
+        if (slug.includes('mongodb')) {
+          databaseUrl = `mongodb://${encodeURIComponent(username)}:${encodeURIComponent(password)}@${host}:${port}/${dbName}`;
+        } else {
+          databaseUrl = `postgresql://${encodeURIComponent(username)}:${encodeURIComponent(password)}@${host}:${port}/${dbName}`;
+        }
+      } else {
+        finalEnv['USERNAME'] = emailInput.trim();
+        finalEnv['PASSWORD'] = passwordInput;
+        finalEnv['EMAIL'] = emailInput.trim();
+      }
+
+      if (advancedJsonInput.trim()) {
+        try {
+          const parsed = JSON.parse(advancedJsonInput.trim());
+          if (typeof parsed === 'object' && parsed !== null) {
+            Object.assign(finalEnv, parsed);
+          }
+        } catch (err: any) {
+          setErrorMessage(`Invalid JSON in advanced variables: ${err.message}`);
+          setIsConnecting(false);
+          return;
+        }
+      }
+
+      const res = await installApp(session?.accessToken, app.app_name, finalEnv, databaseUrl);
+      if (res.success) {
+        toast.success(`Successfully connected ${app.title}!`);
+        setIsModalOpen(false);
+        queryClient.invalidateQueries({ queryKey: ['connections'] });
+      } else {
+        setErrorMessage(res.debugMessage || res.message || 'Failed to authenticate with credentials.');
+      }
+    } catch (err: any) {
+      setErrorMessage(err.message || 'An unexpected error occurred.');
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  const handleOAuthConnect = async () => {
+    setIsConnecting(true);
+    setErrorMessage('');
+    
+    const width = 600;
+    const height = 650;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+    
+    const oauthUrl = `${process.env.NEXT_PUBLIC_API_URL}/mcp-toolbox/oauth/connect/${app.app_name}?token=${session?.accessToken}`;
+    
+    const popup = window.open(
+      oauthUrl,
+      `Connect ${app.title}`,
+      `width=${width},height=${height},left=${left},top=${top},status=no,resizable=yes`
+    );
+    
+    if (!popup) {
+      setErrorMessage('Popup blocker enabled. Please allow popups to authenticate.');
+      setIsConnecting(false);
+      return;
+    }
+    
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin && event.origin !== process.env.NEXT_PUBLIC_API_URL) return;
+      
+      if (event.data === 'oauth-success') {
+        toast.success(`Successfully connected ${app.title} via OAuth!`);
+        setIsModalOpen(false);
+        queryClient.invalidateQueries({ queryKey: ['connections'] });
+        window.removeEventListener('message', handleMessage);
+        setIsConnecting(false);
+      } else if (event.data && event.data.startsWith('oauth-error:')) {
+        const error = event.data.replace('oauth-error:', '');
+        setErrorMessage(`OAuth failed: ${error}`);
+        window.removeEventListener('message', handleMessage);
+        setIsConnecting(false);
+      }
+    };
+    
+    window.addEventListener('message', handleMessage);
+    
+    const timer = setInterval(() => {
+      if (popup.closed) {
+        clearInterval(timer);
+        setIsConnecting(false);
+      }
+    }, 1000);
   };
 
   const handleDisconnect = async () => {
@@ -771,88 +907,251 @@ const AppCard = ({
       </Card>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-md rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/80 shadow-2xl">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2.5">
-              <Zap className="size-5 text-indigo-500" />
-              Configure {app.title}
-            </DialogTitle>
-          </DialogHeader>
+        <DialogContent className="max-w-md rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/80 shadow-2xl p-0 overflow-hidden">
+          <div className="p-6 pb-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <DialogHeader className="p-0">
+              <DialogTitle className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2.5">
+                <Zap className="size-5 text-indigo-500" />
+                Configure {app.title}
+              </DialogTitle>
+            </DialogHeader>
+          </div>
 
-          <form onSubmit={handleConnect} className="space-y-5 mt-4">
+          <div className="p-6 pt-4 space-y-4">
             {errorMessage && (
-              <p className="text-xs text-red-500 font-medium bg-red-50 dark:bg-red-950/20 p-2.5 rounded-xl border border-red-200/30">
+              <p className="text-xs text-red-500 font-medium bg-red-50 dark:bg-red-950/20 p-3 rounded-xl border border-red-200/30">
                 {errorMessage}
               </p>
             )}
 
-            {blueprint && blueprint.requiredEnv.length > 0 && (
-              <div className="space-y-4">
-                {blueprint.requiredEnv.map(key => (
-                  <div key={key} className="space-y-1.5">
+            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)} className="w-full">
+              <TabsList className="grid w-full grid-cols-3 rounded-xl bg-slate-100 dark:bg-slate-950 p-1 mb-4">
+                <TabsTrigger
+                  value="oauth"
+                  disabled={!supportsOAuth}
+                  className="rounded-lg text-xs font-semibold data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm"
+                >
+                  OAuth SSO
+                </TabsTrigger>
+                <TabsTrigger
+                  value="credentials"
+                  className="rounded-lg text-xs font-semibold data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm"
+                >
+                  Account Login
+                </TabsTrigger>
+                <TabsTrigger
+                  value="apikey"
+                  className="rounded-lg text-xs font-semibold data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:shadow-sm"
+                >
+                  API Token
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="oauth" className="space-y-4 pt-1">
+                <div className="text-center py-6 px-4 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-950/20 space-y-4">
+                  <div className="mx-auto size-12 rounded-full bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center">
+                    <ShieldCheck className="size-6 text-indigo-600 dark:text-indigo-400" />
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">Simple & Secure Single Sign-On</h4>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-[280px] mx-auto">
+                      Log in directly with your {app.title} credentials. Your password is never shared with us.
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={handleOAuthConnect}
+                    disabled={isConnecting}
+                    className="rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 px-6 py-5 font-semibold text-xs flex items-center justify-center gap-2 mx-auto"
+                  >
+                    {isConnecting ? (
+                      <LoaderCircle className="size-4 animate-spin text-white" />
+                    ) : (
+                      <Zap className="size-3.5 fill-current" />
+                    )}
+                    Log in with {app.title}
+                  </Button>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="credentials" className="space-y-4 pt-1">
+                <form onSubmit={handleCredentialsConnect} className="space-y-4">
+                  <div className="space-y-1.5">
                     <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                      {blueprint.labels[key] || key}
+                      Email or Username
                     </Label>
-                    <Input
-                      type="password"
-                      placeholder={blueprint.placeholders[key] || "Enter credentials..."}
-                      value={envInputs[key] || ''}
-                      onChange={e => setEnvInputs(prev => ({ ...prev, [key]: e.target.value }))}
-                      required
-                      className="rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus-visible:ring-1 focus-visible:ring-indigo-500"
+                    <div className="relative">
+                      <User className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-slate-450" />
+                      <Input
+                        type="text"
+                        placeholder="username@email.com"
+                        value={emailInput}
+                        onChange={(e) => setEmailInput(e.target.value)}
+                        required
+                        className="pl-10 rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus-visible:ring-1 focus-visible:ring-indigo-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      Password
+                    </Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-slate-450" />
+                      <Input
+                        type="password"
+                        placeholder="••••••••••••"
+                        value={passwordInput}
+                        onChange={(e) => setPasswordInput(e.target.value)}
+                        required
+                        className="pl-10 rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus-visible:ring-1 focus-visible:ring-indigo-500"
+                      />
+                    </div>
+                  </div>
+
+                  {isDatabaseApp && (
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="col-span-2 space-y-1.5">
+                        <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                          Host / Endpoint
+                        </Label>
+                        <Input
+                          type="text"
+                          placeholder="localhost"
+                          value={hostInput}
+                          onChange={(e) => setHostInput(e.target.value)}
+                          className="rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                          Port
+                        </Label>
+                        <Input
+                          type="text"
+                          placeholder={slug.includes('postgres') ? '5432' : '27017'}
+                          value={portInput}
+                          onChange={(e) => setPortInput(e.target.value)}
+                          className="rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {isDatabaseApp && (
+                    <div className="space-y-1.5">
+                      <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                        Database / Schema Name
+                      </Label>
+                      <Input
+                        type="text"
+                        placeholder="default"
+                        value={dbNameInput}
+                        onChange={(e) => setDbNameInput(e.target.value)}
+                        className="rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs"
+                      />
+                    </div>
+                  )}
+
+                  <div className="pt-2 flex justify-end gap-2.5">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setIsModalOpen(false)}
+                      className="rounded-xl text-slate-500 dark:text-slate-400"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={isConnecting}
+                      className="rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 px-5 flex items-center justify-center gap-2"
+                    >
+                      {isConnecting && <LoaderCircle className="size-4 animate-spin text-white" />}
+                      Authenticate & Save
+                    </Button>
+                  </div>
+                </form>
+              </TabsContent>
+
+              <TabsContent value="apikey" className="space-y-4 pt-1">
+                <form onSubmit={handleConnect} className="space-y-4">
+                  {blueprint && blueprint.requiredEnv.length > 0 && (
+                    <div className="space-y-4">
+                      {blueprint.requiredEnv.map(key => (
+                        <div key={key} className="space-y-1.5">
+                          <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                            {blueprint.labels[key] || key}
+                          </Label>
+                          <Input
+                            type="password"
+                            placeholder={blueprint.placeholders[key] || "Enter credentials..."}
+                            value={envInputs[key] || ''}
+                            onChange={e => setEnvInputs(prev => ({ ...prev, [key]: e.target.value }))}
+                            required
+                            className="rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus-visible:ring-1 focus-visible:ring-indigo-500"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {isDatabaseApp && (
+                    <div className="space-y-1.5">
+                      <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                        Database Connection URI
+                      </Label>
+                      <Input
+                        type="text"
+                        placeholder="postgresql://username:password@localhost:5432/dbname"
+                        value={dbUrlInput}
+                        onChange={e => setDbUrlInput(e.target.value)}
+                        required
+                        className="rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus-visible:ring-1 focus-visible:ring-indigo-500"
+                      />
+                    </div>
+                  )}
+
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex justify-between">
+                      <span>Advanced Custom Environment Variables (Optional JSON)</span>
+                    </Label>
+                    <Textarea
+                      placeholder='{ "CUSTOM_API_KEY": "your_value" }'
+                      value={advancedJsonInput}
+                      onChange={e => setAdvancedJsonInput(e.target.value)}
+                      className="rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 min-h-[80px] font-mono text-xs focus-visible:ring-1 focus-visible:ring-indigo-500"
                     />
                   </div>
-                ))}
-              </div>
-            )}
 
-            {isDatabaseApp && (
-              <div className="space-y-1.5">
-                <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                  Database Connection URI
-                </Label>
-                <Input
-                  type="text"
-                  placeholder="postgresql://username:password@localhost:5432/dbname"
-                  value={dbUrlInput}
-                  onChange={e => setDbUrlInput(e.target.value)}
-                  required
-                  className="rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus-visible:ring-1 focus-visible:ring-indigo-500"
-                />
-              </div>
-            )}
+                  <div className="pt-2 flex justify-end gap-2.5">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setIsModalOpen(false)}
+                      className="rounded-xl text-slate-500 dark:text-slate-400"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={isConnecting}
+                      className="rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 px-5 flex items-center justify-center gap-2"
+                    >
+                      {isConnecting && <LoaderCircle className="size-4 animate-spin text-white" />}
+                      Connect Integration
+                    </Button>
+                  </div>
+                </form>
+              </TabsContent>
+            </Tabs>
+          </div>
 
-            <div className="space-y-1.5">
-              <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex justify-between">
-                <span>Advanced Custom Environment Variables (Optional JSON)</span>
-              </Label>
-              <Textarea
-                placeholder='{ "CUSTOM_API_KEY": "your_value" }'
-                value={advancedJsonInput}
-                onChange={e => setAdvancedJsonInput(e.target.value)}
-                className="rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 min-h-[80px] font-mono text-xs focus-visible:ring-1 focus-visible:ring-indigo-500"
-              />
-            </div>
-
-            <DialogFooter className="pt-2">
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => setIsModalOpen(false)}
-                className="rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={isConnecting}
-                className="rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 px-5 flex items-center justify-center gap-2"
-              >
-                {isConnecting && <LoaderCircle className="size-4 animate-spin text-white" />}
-                Connect Integration
-              </Button>
-            </DialogFooter>
-          </form>
+          <div className="px-6 py-4 bg-slate-50 dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-2 justify-center text-[10px] font-semibold text-slate-450">
+            <ShieldCheck className="size-3.5 text-emerald-500" />
+            <span>AES-256 local configuration encryption & secure TLS transit active</span>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
