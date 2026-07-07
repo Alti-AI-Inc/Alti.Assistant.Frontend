@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import LeftSideNav from '@/components/LeftSideNav';
 import LeftSideNavMobile from '@/components/LeftSideNavMobile';
 import AdminSecondarySidebar from '@/components/sidebars/AdminSecondarySidebar';
+import GlobalInboxSidebar from '@/components/panels/GlobalInboxSidebar';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -130,6 +131,11 @@ export default function ProtectedLayoutClient({
         >
           {children}
         </main>
+
+        {/* Global Inbox Sidebar */}
+        <Suspense fallback={null}>
+          <GlobalInboxSidebar />
+        </Suspense>
       </div>
     </div>
   );

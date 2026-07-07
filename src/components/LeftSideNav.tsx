@@ -201,7 +201,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     setShowStartLastMessage,
     setUserMessage,
   } = useConversationsStore();
-  const { isLeftSidebarOpen, toggleLeftSidebar, isRightSidebarOpen, toggleRightSidebar } = useSidebarStore();
+  const { isLeftSidebarOpen, toggleLeftSidebar, isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox } = useSidebarStore();
   const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, deleteBot } = useBotsStore();
 
   const { data: inboxItems = [] } = useInboxQuery(
@@ -693,18 +693,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   variant="outline"
                   size="icon"
                   className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.06] text-white shadow-xs transition-all hover:bg-white/[0.12]"
-                  onClick={() => {
-                    if (pathname !== '/my-chatbots' && !pathname?.startsWith('/admin/projects')) {
-                      router.push('/my-chatbots');
-                      setTimeout(() => {
-                        useSidebarStore.getState().setRightSidebarOpen(true);
-                        window.dispatchEvent(new Event('alti_inbox_click'));
-                      }, 300);
-                    } else {
-                      if (!isRightSidebarOpen) toggleRightSidebar();
-                      window.dispatchEvent(new Event('alti_inbox_click'));
-                    }
-                  }}
+                  onClick={toggleGlobalInbox}
                 >
                   <Inbox className="size-4 text-white" />
                 </Button>

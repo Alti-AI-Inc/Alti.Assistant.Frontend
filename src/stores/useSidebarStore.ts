@@ -10,6 +10,8 @@ interface SidebarStore {
   isRightSidebar2Open: boolean;
   // Settings sidebar state
   isSettingsSidebarOpen: boolean;
+  // Global Inbox panel state
+  isGlobalInboxOpen: boolean;
 
   setRightSidebarOpen: (isOpen: boolean) => void;
   setLeftSidebarOpen: (isOpen: boolean) => void;
@@ -26,6 +28,9 @@ interface SidebarStore {
   // Settings sidebar methods
   setSettingsSidebarOpen: (isOpen: boolean) => void;
   toggleSettingsSidebar: () => void;
+  // Global Inbox methods
+  setGlobalInboxOpen: (isOpen: boolean) => void;
+  toggleGlobalInbox: () => void;
 }
 
 export const useSidebarStore = create<SidebarStore>(set => ({
@@ -35,6 +40,7 @@ export const useSidebarStore = create<SidebarStore>(set => ({
   isLeftSidebar3Open: true,
   isRightSidebar2Open: true,
   isSettingsSidebarOpen: true,
+  isGlobalInboxOpen: false,
 
   setRightSidebarOpen: (isOpen: boolean) =>
     set({
@@ -94,5 +100,15 @@ export const useSidebarStore = create<SidebarStore>(set => ({
   toggleSettingsSidebar: () =>
     set(state => ({
       isSettingsSidebarOpen: !state.isSettingsSidebarOpen,
+    })),
+
+  setGlobalInboxOpen: (isOpen: boolean) =>
+    set({
+      isGlobalInboxOpen: isOpen,
+    }),
+
+  toggleGlobalInbox: () =>
+    set(state => ({
+      isGlobalInboxOpen: !state.isGlobalInboxOpen,
     })),
 }));
