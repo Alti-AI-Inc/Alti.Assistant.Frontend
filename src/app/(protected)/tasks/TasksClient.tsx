@@ -617,7 +617,7 @@ export default function TasksClient() {
                     <Button 
                       onClick={handleCreateTask}
                       disabled={!prompt.trim()}
-                      className="bg-black hover:bg-black/90 disabled:bg-black disabled:opacity-100 text-white rounded-xl h-[36px] w-[36px] p-0 flex items-center justify-center transition-transform active:scale-95 disabled:active:scale-100"
+                      className="bg-[#0c1120] hover:bg-[#0c1120]/90 disabled:bg-[#0c1120] disabled:opacity-100 text-white rounded-xl h-[36px] w-[36px] p-0 flex items-center justify-center transition-transform active:scale-95 disabled:active:scale-100"
                     >
                       <ArrowUp className="size-4 text-white" />
                     </Button>
@@ -646,8 +646,8 @@ export default function TasksClient() {
       <div className="flex-1 flex flex-col items-center justify-center p-6 md:p-8 relative overflow-hidden h-full">
 
         {/* Creator Form */}
-        <div className="w-full max-w-2xl flex flex-col items-center z-10">
-          {isSpacesPage ? (
+        <div className="w-full max-w-2xl flex flex-col items-center z-10 -translate-y-16">
+          {isSpacesPage && (
             <div className="mb-8 flex justify-center">
               <div className="flex bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1 rounded-full shadow-sm border border-gray-200/50 dark:border-zinc-800/50">
                 <button
@@ -679,10 +679,6 @@ export default function TasksClient() {
                 </button>
               </div>
             </div>
-          ) : (
-            <h1 className="text-4xl font-medium tracking-tight text-center mb-8 text-gray-900 dark:text-white select-none">
-              {editingTaskId ? 'Edit Automated Task' : 'Create Automated Task'}
-            </h1>
           )}
           
           {/* Task Creator Form (White Card) */}
@@ -804,7 +800,7 @@ export default function TasksClient() {
                   <Button 
                     onClick={handleCreateTask}
                     disabled={!prompt.trim()}
-                    className="bg-black hover:bg-black/90 disabled:bg-black disabled:opacity-100 text-white rounded-xl h-[42px] w-[42px] p-0 flex items-center justify-center transition-transform active:scale-95 disabled:active:scale-100"
+                    className="bg-[#0c1120] hover:bg-[#0c1120]/90 disabled:bg-[#0c1120] disabled:opacity-100 text-white rounded-xl h-[42px] w-[42px] p-0 flex items-center justify-center transition-transform active:scale-95 disabled:active:scale-100"
                   >
                     <ArrowUp className="size-5 text-white" />
                   </Button>
