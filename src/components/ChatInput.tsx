@@ -1413,8 +1413,8 @@ export default function ChatInput({
               {/* Child Toggle */}
               <div 
                 className={cn(
-                  "flex w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto transition-opacity duration-300",
-                  isLocalTasks ? "opacity-0 pointer-events-none select-none" : "opacity-100"
+                  "w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto transition-opacity duration-300",
+                  isLocalTasks ? "hidden" : "flex"
                 )}
               >
                 {(isLocalStudio ? [
