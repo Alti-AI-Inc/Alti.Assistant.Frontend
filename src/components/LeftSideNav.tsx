@@ -753,7 +753,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
       {/* Enclosed Search & Actions Row */}
       {!hideSidebar && activeTab !== 'account' && (
-        <div className="pt-1.5 pb-3 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none w-full">
+        <div className="pt-1.5 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none w-full">
           <div className="flex h-9 w-full items-center rounded-lg border border-white/[0.04] bg-white/[0.06] shadow-xs overflow-hidden focus-within:ring-1 focus-within:ring-white/20 transition-all duration-150">
             {/* Search segment */}
             <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
@@ -825,7 +825,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           )}
         >
           {activeTab === 'bots' ? (
-            <div className="mt-2 space-y-1 py-1 pb-4">
+            <div className="space-y-1.5 pb-4">
               {bots
                 .map((bot, idx) => ({ bot, idx }))
                 .filter(({ bot }) =>
@@ -938,7 +938,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               )}
             </div>
           ) : activeTab === 'apps' ? (
-            <div className="mt-2 space-y-1 py-1 pb-4 animate-in fade-in duration-200">
+            <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
               
               {/* Connect Apps row */}
               <div
@@ -1037,7 +1037,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               )}
             </div>
           ) : activeTab === 'tasks' ? (
-            <div className="space-y-1.5 py-1 pb-4 mt-2 animate-in fade-in duration-200">
+            <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
               {tasks.filter(task => 
                 (task.prompt || '').toLowerCase().includes(searchQuery.toLowerCase())
               ).map((task) => (
@@ -1070,11 +1070,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               )}
             </div>
           ) : activeTab === 'search' ? (
-            <div className="space-y-1.5 py-1 pb-4 mt-2 animate-in fade-in duration-200">
+            <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
               <ConversationsList searchQuery={searchQuery} activeTab="search" />
             </div>
           ) : activeTab === 'studio' ? (
-            <div className="space-y-1.5 py-1 pb-4 mt-2 animate-in fade-in duration-200">
+            <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
               <ConversationsList searchQuery={searchQuery} activeTab="studio" />
             </div>
           ) : isLoggedIn && activeTab === 'account' ? (
