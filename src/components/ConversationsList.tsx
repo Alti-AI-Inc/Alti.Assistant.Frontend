@@ -95,8 +95,8 @@ export default function ConversationsList({
   const getDisplayIcon = (chat: Conversation) => {
     const isActive = activeConversation && chat.conversationId === (activeConversation as any).conversationId;
     const iconColorClass = isActive 
-      ? "h-3.5 w-3.5 text-white flex-shrink-0" 
-      : "h-3.5 w-3.5 text-zinc-450 flex-shrink-0 group-hover:text-zinc-200 transition-colors";
+      ? "h-3.5 w-3.5 text-indigo-400 flex-shrink-0" 
+      : "h-3.5 w-3.5 text-zinc-450 flex-shrink-0 group-hover:text-indigo-300 transition-colors";
     
     const title = chat.title || '';
     const cleanTitle = formatConversationTitle(title);
@@ -325,8 +325,8 @@ export default function ConversationsList({
             className={cn(
               "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border mb-1.5 cursor-pointer select-none",
               isActive
-                ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs"
-                : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                ? "bg-indigo-500/15 border-indigo-500/35 text-indigo-400 font-semibold shadow-[0_0_12px_rgba(99,102,241,0.25)]"
+                : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-indigo-500/10 hover:border-indigo-500/15 hover:text-indigo-300 hover:shadow-[0_0_10px_rgba(99,102,241,0.1)]"
             )}
             key={chat._id}
           >
