@@ -1152,7 +1152,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       </Dialog>
 
       <Dialog open={!!botToRename} onOpenChange={() => setBotToRename(null)}>
-        <DialogContent className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden">
+        <DialogContent 
+          className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <div className="space-y-4">
             <input
               type="text"
