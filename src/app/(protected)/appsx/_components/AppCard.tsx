@@ -690,6 +690,224 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
     placeholders: {
       "DROPBOX_ACCESS_TOKEN": "dbx_token_xyz"
     }
+  },
+  "vault": {
+    requiredEnv: ["VAULT_ADDR", "VAULT_TOKEN"],
+    labels: {
+      "VAULT_ADDR": "HashiCorp Vault Server Address",
+      "VAULT_TOKEN": "Vault Client Token"
+    },
+    placeholders: {
+      "VAULT_ADDR": "https://vault.company.com:8200",
+      "VAULT_TOKEN": "hvs.xxxxxxxx"
+    }
+  },
+  "onelogin": {
+    requiredEnv: ["ONELOGIN_CLIENT_ID", "ONELOGIN_CLIENT_SECRET", "ONELOGIN_REGION"],
+    labels: {
+      "ONELOGIN_CLIENT_ID": "OneLogin Client ID",
+      "ONELOGIN_CLIENT_SECRET": "OneLogin Client Secret",
+      "ONELOGIN_REGION": "OneLogin region (us or eu)"
+    },
+    placeholders: {
+      "ONELOGIN_CLIENT_ID": "ol_client_id_xyz",
+      "ONELOGIN_CLIENT_SECRET": "ol_client_secret_xyz",
+      "ONELOGIN_REGION": "us"
+    }
+  },
+  "pingidentity": {
+    requiredEnv: ["PING_CLIENT_ID", "PING_CLIENT_SECRET", "PING_ENV_ID"],
+    labels: {
+      "PING_CLIENT_ID": "Ping Identity Client ID",
+      "PING_CLIENT_SECRET": "Ping Identity Client Secret",
+      "PING_ENV_ID": "Ping environment (Tenant) ID"
+    },
+    placeholders: {
+      "PING_CLIENT_ID": "ping_client_id_xyz",
+      "PING_CLIENT_SECRET": "ping_client_secret_xyz",
+      "PING_ENV_ID": "ping_env_id_xyz"
+    }
+  },
+  "cyberark": {
+    requiredEnv: ["CYBERARK_URL", "CYBERARK_USERNAME", "CYBERARK_PASSWORD"],
+    labels: {
+      "CYBERARK_URL": "CyberArk Vault API Server URL",
+      "CYBERARK_USERNAME": "Vault API Username",
+      "CYBERARK_PASSWORD": "Vault API Password"
+    },
+    placeholders: {
+      "CYBERARK_URL": "https://cyberark.company.com/aimtemplates",
+      "CYBERARK_USERNAME": "alti_svc",
+      "CYBERARK_PASSWORD": "password_xyz"
+    }
+  },
+  "sharepoint": {
+    requiredEnv: ["SHAREPOINT_CLIENT_ID", "SHAREPOINT_CLIENT_SECRET", "SHAREPOINT_TENANT"],
+    labels: {
+      "SHAREPOINT_CLIENT_ID": "SharePoint Client ID",
+      "SHAREPOINT_CLIENT_SECRET": "SharePoint Client Secret",
+      "SHAREPOINT_TENANT": "SharePoint Domain Name (e.g. company.sharepoint.com)"
+    },
+    placeholders: {
+      "SHAREPOINT_CLIENT_ID": "sp_client_id_xyz",
+      "SHAREPOINT_CLIENT_SECRET": "sp_client_secret_xyz",
+      "SHAREPOINT_TENANT": "company.sharepoint.com"
+    }
+  },
+  "confluence": {
+    requiredEnv: ["CONFLUENCE_URL", "CONFLUENCE_USERNAME", "CONFLUENCE_API_TOKEN"],
+    labels: {
+      "CONFLUENCE_URL": "Confluence Base URL (e.g. company.atlassian.net)",
+      "CONFLUENCE_USERNAME": "Atlassian Username (Email Address)",
+      "CONFLUENCE_API_TOKEN": "Atlassian Developer API Key"
+    },
+    placeholders: {
+      "CONFLUENCE_URL": "company.atlassian.net",
+      "CONFLUENCE_USERNAME": "admin@company.com",
+      "CONFLUENCE_API_TOKEN": "atlassian_api_token_xyz"
+    }
+  },
+  "onedrive": {
+    requiredEnv: ["ONEDRIVE_CLIENT_ID", "ONEDRIVE_CLIENT_SECRET"],
+    labels: {
+      "ONEDRIVE_CLIENT_ID": "OneDrive Client ID",
+      "ONEDRIVE_CLIENT_SECRET": "OneDrive Client Secret"
+    },
+    placeholders: {
+      "ONEDRIVE_CLIENT_ID": "od_client_id_xyz",
+      "ONEDRIVE_CLIENT_SECRET": "od_client_secret_xyz"
+    }
+  },
+  "databricks": {
+    requiredEnv: ["DATABRICKS_HOST", "DATABRICKS_TOKEN"],
+    labels: {
+      "DATABRICKS_HOST": "Databricks Workspace Host URL",
+      "DATABRICKS_TOKEN": "Databricks Personal Access Token"
+    },
+    placeholders: {
+      "DATABRICKS_HOST": "https://adb-1234567.8.azuredatabricks.net",
+      "DATABRICKS_TOKEN": "dapi_xxxxxxxx"
+    }
+  },
+  "redshift": {
+    requiredEnv: ["REDSHIFT_HOST", "REDSHIFT_PORT", "REDSHIFT_USER", "REDSHIFT_PASSWORD", "REDSHIFT_DB"],
+    labels: {
+      "REDSHIFT_HOST": "Redshift Cluster Endpoint Address",
+      "REDSHIFT_PORT": "Port",
+      "REDSHIFT_USER": "Database Admin Username",
+      "REDSHIFT_PASSWORD": "Database Admin Password",
+      "REDSHIFT_DB": "Target Database Name"
+    },
+    placeholders: {
+      "REDSHIFT_HOST": "myredshiftcluster.abc123xyz.us-east-1.redshift.amazonaws.com",
+      "REDSHIFT_PORT": "5439",
+      "REDSHIFT_USER": "awsuser",
+      "REDSHIFT_PASSWORD": "password_xyz",
+      "REDSHIFT_DB": "dev"
+    }
+  },
+  "elasticsearch": {
+    requiredEnv: ["ELASTICSEARCH_URL", "ELASTICSEARCH_API_KEY"],
+    labels: {
+      "ELASTICSEARCH_URL": "Elasticsearch Connection Address",
+      "ELASTICSEARCH_API_KEY": "Elasticsearch API Key"
+    },
+    placeholders: {
+      "ELASTICSEARCH_URL": "https://myelastic.company.com:9200",
+      "ELASTICSEARCH_API_KEY": "es_api_key_xyz"
+    }
+  },
+  "kafka": {
+    requiredEnv: ["KAFKA_BROKERS", "KAFKA_CLIENT_ID"],
+    labels: {
+      "KAFKA_BROKERS": "Kafka Broker Addresses (comma separated)",
+      "KAFKA_CLIENT_ID": "Kafka Client ID Identifier"
+    },
+    placeholders: {
+      "KAFKA_BROKERS": "localhost:9092,localhost:9093",
+      "KAFKA_CLIENT_ID": "alti-mcp-client"
+    }
+  },
+  "aws": {
+    requiredEnv: ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_REGION"],
+    labels: {
+      "AWS_ACCESS_KEY_ID": "AWS Access Key ID",
+      "AWS_SECRET_ACCESS_KEY": "AWS Secret Access Key",
+      "AWS_REGION": "AWS Region"
+    },
+    placeholders: {
+      "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+      "AWS_SECRET_ACCESS_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+      "AWS_REGION": "us-east-1"
+    }
+  },
+  "gcp": {
+    requiredEnv: ["GCP_PROJECT_ID", "GCP_SA_KEY"],
+    labels: {
+      "GCP_PROJECT_ID": "Google Cloud Project ID Name",
+      "GCP_SA_KEY": "Google Cloud Service Account JSON Key"
+    },
+    placeholders: {
+      "GCP_PROJECT_ID": "my-gcp-project",
+      "GCP_SA_KEY": "{\"type\": \"service_account\", ..."
+    }
+  },
+  "terraform": {
+    requiredEnv: ["TERRAFORM_TOKEN", "TERRAFORM_ORG"],
+    labels: {
+      "TERRAFORM_TOKEN": "Terraform Cloud User/Team API Token",
+      "TERRAFORM_ORG": "Terraform Cloud Organization Name"
+    },
+    placeholders: {
+      "TERRAFORM_TOKEN": "tf_token_xyz",
+      "TERRAFORM_ORG": "my-organization"
+    }
+  },
+  "jenkins": {
+    requiredEnv: ["JENKINS_URL", "JENKINS_USER", "JENKINS_TOKEN"],
+    labels: {
+      "JENKINS_URL": "Jenkins Server Base URL",
+      "JENKINS_USER": "Jenkins Username",
+      "JENKINS_TOKEN": "Jenkins API Token / Credentials"
+    },
+    placeholders: {
+      "JENKINS_URL": "https://jenkins.company.com:8080",
+      "JENKINS_USER": "admin",
+      "JENKINS_TOKEN": "jenkins_token_xyz"
+    }
+  },
+  "stripe": {
+    requiredEnv: ["STRIPE_API_KEY"],
+    labels: {
+      "STRIPE_API_KEY": "Stripe Private API Key (sk_live/sk_test)"
+    },
+    placeholders: {
+      "STRIPE_API_KEY": "sk_live_xxxxxxxx"
+    }
+  },
+  "chargebee": {
+    requiredEnv: ["CHARGEBEE_SITE", "CHARGEBEE_API_KEY"],
+    labels: {
+      "CHARGEBEE_SITE": "Chargebee Site Name subdomain",
+      "CHARGEBEE_API_KEY": "Chargebee Private API Key"
+    },
+    placeholders: {
+      "CHARGEBEE_SITE": "company-test",
+      "CHARGEBEE_API_KEY": "cb_api_key_xyz"
+    }
+  },
+  "zuora": {
+    requiredEnv: ["ZUORA_CLIENT_ID", "ZUORA_CLIENT_SECRET", "ZUORA_SUBDOMAIN"],
+    labels: {
+      "ZUORA_CLIENT_ID": "Zuora API Client ID",
+      "ZUORA_CLIENT_SECRET": "Zuora API Client Secret",
+      "ZUORA_SUBDOMAIN": "Zuora Subdomain Environment (sandbox/apisandbox)"
+    },
+    placeholders: {
+      "ZUORA_CLIENT_ID": "zuora_client_id_xyz",
+      "ZUORA_CLIENT_SECRET": "zuora_client_secret_xyz",
+      "ZUORA_SUBDOMAIN": "sandbox"
+    }
   }
 };
 
@@ -1034,7 +1252,13 @@ const AppCard = ({
     slug === 'rippling' ||
     slug === 'gusto' ||
     slug === 'box' ||
-    slug === 'dropbox';
+    slug === 'dropbox' ||
+    slug === 'sharepoint' ||
+    slug === 'confluence' ||
+    slug === 'onedrive' ||
+    slug === 'databricks' ||
+    slug === 'stripe' ||
+    slug === 'chargebee';
 
   const isDatabaseApp = blueprint?.needsDatabaseUrl || 
     slug.includes('postgres') || 

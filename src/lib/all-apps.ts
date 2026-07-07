@@ -483,6 +483,132 @@ export const allApps: APP[] = [
     "image": "https://logos.composio.dev/api/dropbox",
     "app_name": "dropbox",
     "isAvailable": true
+  },
+  {
+    "title": "HashiCorp Vault",
+    "description": "Securely read, write, update, and manage sensitive credentials, tokens, and encryption keys inside Vault instances.",
+    "image": "https://logos.composio.dev/api/vault",
+    "app_name": "vault",
+    "isAvailable": true
+  },
+  {
+    "title": "OneLogin",
+    "description": "Read, query, and manage users, application security groups, and logins policies inside OneLogin IAM directories.",
+    "image": "https://logos.composio.dev/api/onelogin",
+    "app_name": "onelogin",
+    "isAvailable": true
+  },
+  {
+    "title": "Ping Identity",
+    "description": "Inspect, search, and manage corporate employee directories, single sign-on logs, and application permissions inside Ping Identity.",
+    "image": "https://logos.composio.dev/api/ping_identity",
+    "app_name": "pingidentity",
+    "isAvailable": true
+  },
+  {
+    "title": "CyberArk",
+    "description": "Retrieve corporate developer passwords, private SSH keys, and system API secrets securely from CyberArk vault stores.",
+    "image": "https://logos.composio.dev/api/cyberark",
+    "app_name": "cyberark",
+    "isAvailable": true
+  },
+  {
+    "title": "SharePoint",
+    "description": "Access, query, organize, download, and manage document libraries, page content, and site lists inside SharePoint sites.",
+    "image": "https://logos.composio.dev/api/sharepoint",
+    "app_name": "sharepoint",
+    "isAvailable": true
+  },
+  {
+    "title": "Confluence",
+    "description": "Read, query, write, and structure wiki spaces, layout templates, and page directories inside Confluence sites.",
+    "image": "https://logos.composio.dev/api/confluence",
+    "app_name": "confluence",
+    "isAvailable": true
+  },
+  {
+    "title": "OneDrive",
+    "description": "Read, list, search, download, and manage folders and corporate documents inside OneDrive drives securely.",
+    "image": "https://logos.composio.dev/api/onedrive",
+    "app_name": "onedrive",
+    "isAvailable": true
+  },
+  {
+    "title": "Databricks",
+    "description": "Execute queries, trigger analytical jobs, list schemas, and read database notebooks inside Databricks clusters.",
+    "image": "https://logos.composio.dev/api/databricks",
+    "app_name": "databricks",
+    "isAvailable": true
+  },
+  {
+    "title": "Amazon Redshift",
+    "description": "Execute high-performance analytics, map schema tables, and read database columns inside Amazon Redshift clusters.",
+    "image": "https://logos.composio.dev/api/redshift",
+    "app_name": "redshift",
+    "isAvailable": true
+  },
+  {
+    "title": "Elasticsearch",
+    "description": "Perform full-text searches, filter document indexes, retrieve indices, and map document templates inside Elasticsearch.",
+    "image": "https://logos.composio.dev/api/elasticsearch",
+    "app_name": "elasticsearch",
+    "isAvailable": true
+  },
+  {
+    "title": "Apache Kafka",
+    "description": "Consume live stream messages, publish messages to topics, and check broker connections inside Apache Kafka instances.",
+    "image": "https://logos.composio.dev/api/kafka",
+    "app_name": "kafka",
+    "isAvailable": true
+  },
+  {
+    "title": "AWS Console",
+    "description": "List active instances, read EC2 console logs, query S3 buckets, and view CloudWatch alert metrics inside AWS console panels.",
+    "image": "https://logos.composio.dev/api/aws",
+    "app_name": "aws",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Cloud Platform",
+    "description": "Inspect GCP VM profiles, query cloud storage buckets, retrieve cloud logging events, and audit project metrics inside Google Cloud.",
+    "image": "https://logos.composio.dev/api/google",
+    "app_name": "gcp",
+    "isAvailable": true
+  },
+  {
+    "title": "Terraform Cloud",
+    "description": "Trigger workspace plan runs, check state status, approve resource runs, and read workspace outputs inside Terraform Cloud.",
+    "image": "https://logos.composio.dev/api/terraform",
+    "app_name": "terraform",
+    "isAvailable": true
+  },
+  {
+    "title": "Jenkins",
+    "description": "List build jobs, trigger pipeline runs, download console output logs, and verify build state inside Jenkins CI/CD servers.",
+    "image": "https://logos.composio.dev/api/jenkins",
+    "app_name": "jenkins",
+    "isAvailable": true
+  },
+  {
+    "title": "Stripe",
+    "description": "Create, query, refund, and manage customer transaction invoices, subscriptions, and payouts inside Stripe.",
+    "image": "https://logos.composio.dev/api/stripe",
+    "app_name": "stripe",
+    "isAvailable": true
+  },
+  {
+    "title": "Chargebee",
+    "description": "Query subscriptions, create discount coupons, manage customer invoices, and audit customer accounts inside Chargebee.",
+    "image": "https://logos.composio.dev/api/chargebee",
+    "app_name": "chargebee",
+    "isAvailable": true
+  },
+  {
+    "title": "Zuora",
+    "description": "Manage, check subscriptions, query accounts, and track complex billing transactions programmatically inside Zuora.",
+    "image": "https://logos.composio.dev/api/zuora",
+    "app_name": "zuora",
+    "isAvailable": true
   }
 ];
 
