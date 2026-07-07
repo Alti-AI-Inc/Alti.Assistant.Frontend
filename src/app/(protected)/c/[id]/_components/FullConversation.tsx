@@ -21,7 +21,7 @@ import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useQueryClient } from '@tanstack/react-query';
-import { EllipsisVertical, Share, Trash2, Brain, Download, Edit3, Code, FileText } from 'lucide-react';
+import { EllipsisVertical, Share, Trash2, Brain, Download, Edit3, Code, FileText, ShieldCheck } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -818,6 +818,7 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
   };
 
   const renderMessagesContent = (isSplit: boolean) => {
+    const mcpServerId = activeConversation?.metadata?.customData?.mcpServerId || queryConversation?.metadata?.customData?.mcpServerId;
     const showMessages =
       !!activeConversation?.messages.length ||
       drafting.isActive ||
@@ -841,6 +842,24 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
             isSplit ? '' : 'max-w-[796px]',
           )}
         >
+        {mcpServerId && (
+          <div className="mb-6 p-4 rounded-2xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/50 dark:border-indigo-900/50 shadow-xs flex items-start gap-3.5 animate-in fade-in duration-300">
+            <div className="flex size-9 items-center justify-center rounded-xl bg-indigo-100 dark:bg-indigo-900/50 text-indigo-650 dark:text-indigo-400 flex-shrink-0">
+              <ShieldCheck className="size-5" />
+            </div>
+            <div className="space-y-1">
+              <h4 className="text-xs font-bold text-indigo-950 dark:text-indigo-100 uppercase tracking-wide flex items-center gap-1.5">
+                Direct Local Security Badging
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-800/30">
+                  Active
+                </span>
+              </h4>
+              <p className="text-xs text-indigo-950/80 dark:text-indigo-300 leading-relaxed font-medium">
+                This chat space is 100% isolated and direct-connected to your local <span className="font-extrabold uppercase text-indigo-700 dark:text-indigo-400">{mcpServerId}</span> client. All operations and credential handshakes occur locally with no middleware, ensuring absolute data sovereignty.
+              </p>
+            </div>
+          </div>
+        )}
         {activeConversation?.messages.length &&
           activeConversation.messages.map((message, idx) => {
             const isLastAssistant = message === lastAssistantMessage;

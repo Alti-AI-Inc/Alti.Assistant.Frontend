@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useRouter } from 'next/navigation';
 
 interface AppBlueprint {
   requiredEnv: string[];
@@ -1205,6 +1206,7 @@ const AppCard = ({
 }) => {
   const { data: session } = useSession();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'oauth' | 'credentials' | 'apikey'>('oauth');
@@ -1516,25 +1518,37 @@ const AppCard = ({
 
           {/* Action Trigger */}
           <div className="mt-5 space-y-2">
-            <Button
-              className={cn(
-                "w-full transition-all duration-300 font-medium shadow-sm border-none",
-                isAlreadyConnected
-                  ? "bg-red-500 hover:bg-red-650 text-white dark:bg-red-600 dark:hover:bg-red-750"
-                  : "bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:text-white"
-              )}
-              variant="default"
-              disabled={isConnecting || isDisconnecting}
-              onClick={isAlreadyConnected ? handleDisconnect : handleOpenModal}
-            >
-              {isConnecting || isDisconnecting ? (
-                <LoaderCircle className="size-4 animate-spin mx-auto text-white" />
-              ) : isAlreadyConnected ? (
-                'Disconnect Integration'
-              ) : (
-                'Establish Integration'
-              )}
-            </Button>
+            {isAlreadyConnected ? (
+              <div className="flex gap-2.5">
+                <Button
+                  className="flex-1 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-semibold transition-all duration-200 rounded-xl"
+                  onClick={() => router.push(`/assistant?app=${app.app_name}`)}
+                >
+                  Chat with App
+                </Button>
+                <Button
+                  className="bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-250 dark:border-red-900/50 rounded-xl px-3 transition-all duration-200"
+                  variant="outline"
+                  disabled={isConnecting || isDisconnecting}
+                  onClick={handleDisconnect}
+                >
+                  Disconnect
+                </Button>
+              </div>
+            ) : (
+              <Button
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:text-white transition-all duration-300 font-medium shadow-sm border-none rounded-xl"
+                variant="default"
+                disabled={isConnecting || isDisconnecting}
+                onClick={handleOpenModal}
+              >
+                {isConnecting ? (
+                  <LoaderCircle className="size-4 animate-spin mx-auto text-white" />
+                ) : (
+                  'Establish Integration'
+                )}
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>

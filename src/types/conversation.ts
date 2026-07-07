@@ -143,6 +143,14 @@ export type ActiveConversation = {
   updatedAt?: string;
   is_deep_search?: boolean;
   option?: OPTIONS;
+  metadata?: {
+    category?: string;
+    customData?: {
+      mcpServerId?: string;
+      [key: string]: any;
+    };
+    [key: string]: any;
+  };
 };
 
 // Presentation task for async generation with polling

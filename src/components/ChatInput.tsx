@@ -58,7 +58,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { ALLOWED_DOC_EXTENSIONS } from './constants';
@@ -145,6 +145,8 @@ export default function ChatInput({
 
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const appParam = searchParams.get('app');
   const { data } = useSession();
 
   const queryClient = useQueryClient();
@@ -736,8 +738,13 @@ export default function ChatInput({
             : conversationId;
         if (convId) formData.append('conversationId', convId);
         
-        const categoryVal = getCategoryFromOption(selectedOption);
+        const categoryVal = appParam ? 'mcp' : getCategoryFromOption(selectedOption);
         if (categoryVal) formData.append('category', categoryVal);
+        if (appParam) {
+          formData.append('metadata', JSON.stringify({
+            customData: { mcpServerId: appParam.toLowerCase() }
+          }));
+        }
 
         return await PostConversationWithFile(formData, data.accessToken);
       }
@@ -752,9 +759,16 @@ export default function ChatInput({
         Object.assign(extraParams, researchSettings);
         extraParams.researchTier = researchTier;
       }
-      const categoryVal = getCategoryFromOption(selectedOption);
+      const categoryVal = appParam ? 'mcp' : getCategoryFromOption(selectedOption);
       if (categoryVal) {
         extraParams.category = categoryVal;
+      }
+      if (appParam) {
+        extraParams.metadata = {
+          customData: {
+            mcpServerId: appParam.toLowerCase()
+          }
+        };
       }
 
       const isOrchestrator = targetApiUrl.endsWith('/orchestrator/route-prompt');
@@ -1567,7 +1581,32 @@ export default function ChatInput({
             </div>
           </div>
         ) : (
-          <div
+          <>
+            {appParam && (
+              <div className="mb-3 px-4 py-2.5 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/50 dark:border-indigo-900/50 flex items-center justify-between shadow-xs animate-in fade-in duration-300">
+                <div className="flex items-center gap-2.5">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-600 dark:bg-indigo-400"></span>
+                  </span>
+                  <p className="text-xs font-semibold text-indigo-950 dark:text-indigo-200">
+                    Isolated Chat Space: <span className="font-extrabold uppercase text-indigo-600 dark:text-indigo-400">{appParam}</span>
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const params = new URLSearchParams(window.location.search);
+                    params.delete('app');
+                    router.push(`${pathname}?${params.toString()}`);
+                  }}
+                  className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors uppercase tracking-wider"
+                >
+                  Exit Space
+                </button>
+              </div>
+            )}
+            <div
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
@@ -1720,7 +1759,8 @@ export default function ChatInput({
               </Tooltip>
             </div>
           </div>
-        )}
+        </>
+      )}
       </div>
     </>
   );
