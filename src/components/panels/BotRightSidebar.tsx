@@ -21,7 +21,12 @@ import {
   Sparkles,
   Wand2,
   Inbox,
-  SlidersHorizontal
+  SlidersHorizontal,
+  PenTool,
+  ClipboardCheck,
+  Image as ImageIcon,
+  Video as VideoIcon,
+  Music
 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { OPTIONS } from '@/types/conversation';
@@ -117,6 +122,38 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   }, [activeTab]);
 
   if (!bot) return null;
+
+  const getThreadIcon = (threadTitle: string, tab: TabType) => {
+    const lower = (threadTitle || '').toLowerCase();
+    
+    if (tab === 'ai') {
+      if (lower.includes('search') || lower.includes('google') || lower.includes('web') || lower.includes('research') || lower.includes('find') || lower.includes('query')) {
+        return Search;
+      }
+      if (lower.includes('write') || lower.includes('draft') || lower.includes('email') || lower.includes('article') || lower.includes('copy') || lower.includes('text') || lower.includes('essay')) {
+        return PenTool;
+      }
+      if (lower.includes('review') || lower.includes('contract') || lower.includes('check') || lower.includes('audit') || lower.includes('guardrail')) {
+        return ClipboardCheck;
+      }
+      return MessageSquare; // Default for Chat
+    }
+
+    if (tab === 'studio') {
+      if (lower.includes('image') || lower.includes('art') || lower.includes('draw') || lower.includes('logo') || lower.includes('paint') || lower.includes('picture') || lower.includes('photo') || lower.includes('canvas')) {
+        return ImageIcon;
+      }
+      if (lower.includes('video') || lower.includes('movie') || lower.includes('clip') || lower.includes('animate') || lower.includes('mp4')) {
+        return VideoIcon;
+      }
+      if (lower.includes('audio') || lower.includes('voice') || lower.includes('music') || lower.includes('sound') || lower.includes('transcribe') || lower.includes('speech') || lower.includes('mp3')) {
+        return Music;
+      }
+      return Code; // Default for Code
+    }
+
+    return MessageSquare;
+  };
 
   // Filter threads for history tabs
   const filteredThreads = botThreads.filter((t) => {
@@ -723,7 +760,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 )}
 
                 {(activeTab === 'ai' || activeTab === 'studio') && (
-                  <div className="space-y-1 animate-in fade-in zoom-in-95 duration-200">
+                  <div className="space-y-1.5 animate-in fade-in zoom-in-95 duration-200">
                     {filteredThreads.length === 0 ? (
                       <div className="py-8 text-center text-xs text-gray-400">
                         {searchQuery ? 'No matching chats.' : 'No conversations yet. Start a new chat!'}
@@ -731,19 +768,26 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     ) : (
                       filteredThreads.map((thread) => {
                         const isSelected = activeThreadId === thread.id;
+                        const ThreadIcon = getThreadIcon(thread.title, activeTab);
                         return (
                           <div
                             key={thread.id}
                             className={cn(
-                              "group flex h-9 w-full items-center justify-between rounded-md text-sm font-normal text-black text-left transition-all",
-                              isSelected ? "bg-black/10 font-medium" : "hover:bg-black/5"
+                              "group flex h-9 w-full items-center justify-between rounded-xl text-xs font-normal text-left transition-all duration-150 border cursor-pointer select-none px-3",
+                              isSelected 
+                                ? "bg-black/[0.06] border-black/10 text-black font-semibold shadow-xs dark:bg-white/10 dark:border-white/10 dark:text-white" 
+                                : "bg-black/[0.02] border-black/[0.03] text-gray-700 hover:bg-black/[0.04] hover:border-black/5 hover:text-black dark:bg-white/[0.03] dark:border-white/[0.03] dark:text-zinc-300 dark:hover:bg-white/[0.06] dark:hover:border-white/5 dark:hover:text-white",
                             )}
                           >
                             <span
-                              className="flex-1 cursor-pointer truncate px-2 py-2"
+                              className="flex-1 cursor-pointer truncate py-2 flex items-center gap-2.5"
                               onClick={() => handleThreadSelect(thread.id)}
                             >
-                              {thread.title || 'Untitled Chat'}
+                              <ThreadIcon className={cn(
+                                "size-3.5 flex-shrink-0 transition-colors",
+                                isSelected ? "text-black dark:text-white" : "text-gray-400 group-hover:text-gray-700 dark:text-zinc-400 dark:group-hover:text-zinc-200"
+                              )} />
+                              <span className="truncate">{thread.title || 'Untitled Chat'}</span>
                             </span>
                             
                             <Dialog>
