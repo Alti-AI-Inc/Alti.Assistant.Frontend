@@ -295,7 +295,7 @@ const LeftSideNavMobile = () => {
       );
 
       // Seed sample apps for testing if this is meram.michael@gmail.com
-      if (data?.user?.email === 'meram.michael@gmail.com') {
+      if (data?.user?.email?.toLowerCase() === 'meram.michael@gmail.com') {
         const sampleSlugs = ['slack', 'google-maps', 'postgres', 'evernote'];
         sampleSlugs.forEach(slug => activeSlugs.add(slug));
       }
