@@ -8,6 +8,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogClose,
+} from '@/components/ui/dialog';
 import { useTenant } from '@/contexts/TenantContext';
 import { cn } from '@/lib/utils';
 import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
@@ -60,6 +65,8 @@ import {
   Volume2,
   ShieldAlert,
   Blocks,
+  Pencil,
+  Trash2,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -208,7 +215,7 @@ const LeftSideNavMobile = () => {
 
 
   const isLoggedIn = data?.accessToken;
-  const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, reorderBots } = useBotsStore();
+  const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, reorderBots, editBot, deleteBot } = useBotsStore();
   const { isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen } = useSidebarStore();
   
   const { data: inboxItems = [] } = useInboxQuery(
@@ -224,6 +231,16 @@ const LeftSideNavMobile = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [botToDelete, setBotToDelete] = useState<string | null>(null);
+  const [botToRename, setBotToRename] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState('');
+
+  useEffect(() => {
+    if (botToRename) {
+      const targetBot = bots.find(b => b.id === botToRename);
+      setRenameValue(targetBot?.name || '');
+    }
+  }, [botToRename, bots]);
 
   const [tasks, setTasks] = useState<any[]>([]);
 
@@ -813,7 +830,7 @@ const LeftSideNavMobile = () => {
                               isSelected ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
                             )} />
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent className="rounded-2xl">
+                          <DropdownMenuContent className="rounded-2xl" align="end">
                             <DropdownMenuItem
                               onClick={() => {
                                 setActiveBotId(bot.id);
@@ -822,6 +839,26 @@ const LeftSideNavMobile = () => {
                               }}
                             >
                               <Folder className="text-black h-4 w-4 mr-2" /> Open
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator className="border-black/5 dark:border-white/5" />
+                            <DropdownMenuItem
+                              className="text-zinc-700 dark:text-zinc-200 focus:bg-zinc-100 dark:focus:bg-zinc-800"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setBotToRename(bot.id);
+                              }}
+                            >
+                              <Pencil className="h-4 w-4 mr-2" /> Rename Space
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator className="border-black/5 dark:border-white/5" />
+                            <DropdownMenuItem
+                              className="text-red-500 focus:text-red-600 focus:bg-red-50"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setBotToDelete(bot.id);
+                              }}
+                            >
+                              <Trash2 className="text-red-500 h-4 w-4 mr-2" /> Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -1217,6 +1254,103 @@ const LeftSideNavMobile = () => {
           </div>
         )}
       </div>
+
+      {/* Delete chatbot dialog */}
+      <Dialog open={!!botToDelete} onOpenChange={() => setBotToDelete(null)}>
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+          <div className="flex flex-col items-center justify-center p-6 text-center">
+            <div className="size-12 rounded-full bg-red-50 dark:bg-red-950/30 flex items-center justify-center mb-4">
+              <Trash2 className="size-6 text-red-500" />
+            </div>
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">Delete Space</h3>
+            <p className="text-xs text-gray-500 dark:text-zinc-400 max-w-[280px] leading-relaxed">
+              Are you sure you want to delete this space? All associated conversation history will be permanently lost.
+            </p>
+            <div className="flex border-t border-black/10 dark:border-white/10 w-[calc(100%+3rem)] h-11 -mb-6 mt-6">
+              <DialogClose asChild>
+                <button
+                  type="button"
+                  className="flex-1 py-4 text-sm font-medium text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors focus:outline-none focus:ring-0"
+                >
+                  Cancel
+                </button>
+              </DialogClose>
+              <div className="w-[1px] bg-gray-100 dark:bg-zinc-800" />
+              <button
+                type="button"
+                className="flex-1 py-4 text-sm font-semibold text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors focus:outline-none focus:ring-0"
+                onClick={async () => {
+                  if (botToDelete) {
+                    const token = data?.accessToken;
+                    if (token) {
+                      try {
+                        const apiUrl = buildApiUrl(`/chatbots/${botToDelete}`);
+                        await fetch(apiUrl, {
+                          method: 'DELETE',
+                          headers: {
+                            'Authorization': `Bearer ${token}`
+                          }
+                        });
+                      } catch (err) {
+                        console.error("Failed to delete bot on backend", err);
+                      }
+                    }
+                    deleteBot(botToDelete, token);
+                    if (activeBotId === botToDelete) {
+                      setActiveBotId(null);
+                      router.push('/spaces');
+                    }
+                    setBotToDelete(null);
+                  }
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Rename space dialog */}
+      <Dialog open={!!botToRename} onOpenChange={() => setBotToRename(null)}>
+        <DialogContent className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Rename Space</h3>
+            <div className="space-y-2">
+              <label className="text-xs text-zinc-550 dark:text-zinc-400">New Name</label>
+              <input
+                type="text"
+                value={renameValue}
+                onChange={(e) => setRenameValue(e.target.value)}
+                placeholder="Enter space name..."
+                className="w-full bg-gray-50 dark:bg-zinc-955 border border-black/15 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-900 dark:text-white"
+                autoFocus
+              />
+            </div>
+            <div className="flex border-t border-black/10 dark:border-white/10 h-11 -mx-6 -mb-6 mt-4">
+              <button 
+                className="flex-1 text-sm font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 h-full border-r border-black/10 dark:border-white/10 outline-none"
+                onClick={() => setBotToRename(null)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="flex-1 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:bg-black/5 dark:hover:bg-white/5 h-full outline-none disabled:opacity-50"
+                onClick={() => {
+                  if (renameValue.trim() && botToRename) {
+                    const token = data?.accessToken;
+                    editBot(botToRename, { name: renameValue.trim() }, token);
+                    setBotToRename(null);
+                  }
+                }}
+                disabled={!renameValue.trim()}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

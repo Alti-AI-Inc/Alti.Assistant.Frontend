@@ -37,6 +37,7 @@ import {
   ArrowLeft,
   User,
   Trash2,
+  Pencil,
   Users,
   UserPlus,
   UsersRound,
@@ -202,7 +203,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     setUserMessage,
   } = useConversationsStore();
   const { isLeftSidebarOpen, toggleLeftSidebar, isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen } = useSidebarStore();
-  const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, deleteBot, reorderBots } = useBotsStore();
+  const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, deleteBot, reorderBots, editBot } = useBotsStore();
 
   const { data: inboxItems = [] } = useInboxQuery(
     data?.user?.id,
@@ -222,6 +223,15 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const [botToDelete, setBotToDelete] = useState<string | null>(null);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [botToRename, setBotToRename] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState('');
+
+  useEffect(() => {
+    if (botToRename) {
+      const targetBot = bots.find(b => b.id === botToRename);
+      setRenameValue(targetBot?.name || '');
+    }
+  }, [botToRename, bots]);
 
   const [tasks, setTasks] = useState<any[]>([]);
 
@@ -824,7 +834,17 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                               isSelected ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
                             )} />
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent className="rounded-2xl">
+                          <DropdownMenuContent className="rounded-2xl" align="end">
+                            <DropdownMenuItem
+                              className="text-zinc-700 dark:text-zinc-200 focus:bg-zinc-100 dark:focus:bg-zinc-800"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setBotToRename(bot.id);
+                              }}
+                            >
+                              <Pencil className="h-4 w-4 mr-2" /> Rename Space
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator className="border-black/5 dark:border-white/5" />
                             <DropdownMenuItem
                               className="text-red-500 focus:text-red-600 focus:bg-red-50"
                               onClick={(e) => {
@@ -1125,6 +1145,47 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 }}
               >
                 Delete
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Rename space dialog */}
+      <Dialog open={!!botToRename} onOpenChange={() => setBotToRename(null)}>
+        <DialogContent className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Rename Space</h3>
+            <div className="space-y-2">
+              <label className="text-xs text-zinc-550 dark:text-zinc-400">New Name</label>
+              <input
+                type="text"
+                value={renameValue}
+                onChange={(e) => setRenameValue(e.target.value)}
+                placeholder="Enter space name..."
+                className="w-full bg-gray-50 dark:bg-zinc-955 border border-black/15 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-900 dark:text-white"
+                autoFocus
+              />
+            </div>
+            <div className="flex border-t border-black/10 dark:border-white/10 h-11 -mx-6 -mb-6 mt-4">
+              <button 
+                className="flex-1 text-sm font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 h-full border-r border-black/10 dark:border-white/10 outline-none"
+                onClick={() => setBotToRename(null)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="flex-1 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:bg-black/5 dark:hover:bg-white/5 h-full outline-none disabled:opacity-50"
+                onClick={() => {
+                  if (renameValue.trim() && botToRename) {
+                    const token = data?.accessToken;
+                    editBot(botToRename, { name: renameValue.trim() }, token);
+                    setBotToRename(null);
+                  }
+                }}
+                disabled={!renameValue.trim()}
+              >
+                Save
               </button>
             </div>
           </div>
