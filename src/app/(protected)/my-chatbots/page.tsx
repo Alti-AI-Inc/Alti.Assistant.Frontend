@@ -382,7 +382,7 @@ function MyChatbotsContent() {
               { step: 1, label: 'Name', icon: User },
               { step: 2, label: 'Instructions', icon: FileText },
               { step: 3, label: 'Guardrails', icon: Shield },
-              { step: 4, label: 'Data', icon: Upload },
+              { step: 4, label: 'Knowledge', icon: Upload },
             ].map(({ step, label, icon: Icon }) => {
               const isCompleted = currentStep > step;
               const isActive = currentStep === step;
@@ -837,11 +837,11 @@ function MyChatbotsContent() {
               </>
             )}
 
-            {/* Step 4: Data Ingestion */}
+            {/* Step 4: Knowledge Ingestion */}
             {currentStep === 4 && (
               <>
                 <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
-                  Upload Data
+                  Upload Knowledge
                 </h1>
 
                 <div className="flex w-full flex-col">
