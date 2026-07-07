@@ -286,14 +286,6 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     <span className="font-semibold text-gray-955 dark:text-white text-xs truncate">
                       {run.taskName}
                     </span>
-                    <span className={cn(
-                      "text-[9px] font-bold px-2 py-0.5 rounded-md border select-none shrink-0",
-                      run.status === 'running' && "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20 animate-pulse",
-                      run.status === 'success' && "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20",
-                      run.status === 'failed' && "bg-rose-500/10 text-rose-600 dark:text-rose-455 border-rose-500/20"
-                    )}>
-                      {run.status === 'running' ? 'Running' : run.status === 'success' ? 'Success' : 'Failed'}
-                    </span>
                   </div>
                   
                   <p className="text-xs text-gray-600 dark:text-zinc-400 leading-relaxed">
