@@ -1123,7 +1123,7 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
       className={cn(
         "flex w-full h-full flex-1 flex-col min-h-0 overflow-hidden bg-[#e1e1e1] dark:bg-zinc-950",
         showAsNewChat 
-          ? (selectedOption === OPTIONS.TASK ? "pt-[24vh] items-center" : "pt-[30vh] items-center")
+          ? (selectedOption === OPTIONS.TASK ? "pt-[24vh] items-center" : "pt-[32vh] items-center")
           : ""
       )}
     >

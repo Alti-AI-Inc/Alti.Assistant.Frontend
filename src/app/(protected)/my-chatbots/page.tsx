@@ -1021,6 +1021,16 @@ function MyChatbotsContent() {
     );
   }
 
+  const isEditorView = 
+    viewParam === 'instructions' || selectedOption === OPTIONS.INSTRUCTIONS ||
+    viewParam === 'guardrails' || selectedOption === OPTIONS.GUARDRAILS ||
+    viewParam === 'data' || selectedOption === OPTIONS.KNOWLEDGE;
+
+  const isChatView = 
+    !isEditorView && 
+    activeBot.metadata?.status !== 'tuning' && 
+    activeBot.metadata?.status !== 'failed';
+
   // Render 3-Column Chatbot Workspace
   return (
     <div className="flex h-full w-full bg-[#e1e1e1] dark:bg-zinc-950 overflow-hidden">
@@ -1030,11 +1040,16 @@ function MyChatbotsContent() {
       >
         {/* Chatbot Content Body */}
         <div className={cn(
-          "flex-1 flex flex-col items-center justify-center overflow-hidden relative",
-          (viewParam !== 'instructions' && selectedOption !== OPTIONS.INSTRUCTIONS) && 
-          (viewParam !== 'guardrails' && selectedOption !== OPTIONS.GUARDRAILS) && 
-          (viewParam !== 'data' && selectedOption !== OPTIONS.KNOWLEDGE) && 
-          !hasMessages && "pb-40"
+          "flex-1 flex flex-col overflow-hidden relative",
+          isChatView
+            ? "w-full h-full items-stretch justify-start"
+            : cn(
+                "items-center justify-center",
+                (viewParam !== 'instructions' && selectedOption !== OPTIONS.INSTRUCTIONS) && 
+                (viewParam !== 'guardrails' && selectedOption !== OPTIONS.GUARDRAILS) && 
+                (viewParam !== 'data' && selectedOption !== OPTIONS.KNOWLEDGE) && 
+                !hasMessages && "pb-40"
+              )
         )}>
           {viewParam === 'instructions' || selectedOption === OPTIONS.INSTRUCTIONS ? (
             <InstructionsEditor bot={activeBot} />
