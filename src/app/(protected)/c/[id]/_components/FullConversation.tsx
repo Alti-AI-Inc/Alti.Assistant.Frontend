@@ -1123,11 +1123,7 @@ return (
       className={cn(
         "flex w-full h-full flex-1 flex-col min-h-0 overflow-hidden bg-[#e1e1e1] dark:bg-zinc-950",
         showAsNewChat 
-          ? (
-              pathname?.startsWith('/my-chatbots')
-                ? (selectedOption === OPTIONS.TASK ? "pt-[20vh] items-center" : "pt-[28vh] items-center")
-                : (selectedOption === OPTIONS.TASK ? "pt-[24vh] items-center" : "pt-[32vh] items-center")
-            )
+          ? (pathname?.startsWith('/my-chatbots') ? "pt-[28vh] items-center" : "pt-[32vh] items-center")
           : ""
       )}
     >
