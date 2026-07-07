@@ -333,7 +333,7 @@ function MyChatbotsContent() {
 
       // 5. Select new bot and route to active view
       setActiveBotId(newBot.id);
-      router.push(`/my-chatbots?bot=${newBot.id}`);
+      router.push(`/spaces?bot=${newBot.id}`);
     } catch (err: any) {
       console.error('Error creating space:', err);
       setError(err.message || 'An error occurred during space workspace creation.');

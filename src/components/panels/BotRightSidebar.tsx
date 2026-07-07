@@ -42,7 +42,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const basePath = pathname?.startsWith('/admin') ? '/admin/projects' : '/my-chatbots';
+  const basePath = pathname?.startsWith('/admin') ? '/admin/projects' : '/spaces';
   const { bots, threads, deleteThread, setActiveBotThreadId, editBot } = useBotsStore();
   const { setActiveConversation, selectedOption, setSelectedOption } = useConversationsStore();
   const { isRightSidebarOpen, toggleRightSidebar } = useSidebarStore();

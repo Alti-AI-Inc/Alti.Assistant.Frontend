@@ -858,9 +858,9 @@ export default function ChatInput({
           : conversationId;
 
       if (conversationId === 'new-chat' && response.data.conversationId) {
-        if (activeBotId && pathname.startsWith('/my-chatbots')) {
+        if (activeBotId && pathname.startsWith('/spaces')) {
           useBotsStore.getState().addThread(activeBotId, response.data.conversationId, userMessage.slice(0, 50) || 'New Chat');
-          router.replace(`/my-chatbots?bot=${activeBotId}&thread=${response.data.conversationId}`);
+          router.replace(`/spaces?bot=${activeBotId}&thread=${response.data.conversationId}`);
         } else {
           router.replace(`/c/${response.data.conversationId}`);
         }
@@ -1357,7 +1357,7 @@ export default function ChatInput({
           <div className="flex flex-col items-center gap-6 w-full mb-6">
               
               {/* Parent Toggle */}
-              {(pathname?.startsWith('/my-chatbots') || pathname?.startsWith('/knowledge/')) && (
+              {(pathname?.startsWith('/spaces') || pathname?.startsWith('/knowledge/')) && (
               <div className="flex bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1 rounded-full shadow-sm border border-gray-200/50 dark:border-zinc-800/50">
                 <button
                   type="button"

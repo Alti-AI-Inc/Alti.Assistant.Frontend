@@ -44,7 +44,7 @@ interface AutomationTask {
 export default function TasksClient() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const isSpacesPage = pathname?.startsWith('/my-chatbots') || pathname?.startsWith('/knowledge/');
+  const isSpacesPage = pathname?.startsWith('/spaces') || pathname?.startsWith('/knowledge/');
   const taskId = searchParams.get('taskId');
   const { selectedOption, setSelectedOption } = useConversationsStore();
   

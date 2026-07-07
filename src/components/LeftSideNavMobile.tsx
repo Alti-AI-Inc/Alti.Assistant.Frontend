@@ -291,7 +291,7 @@ const LeftSideNavMobile = () => {
       setActiveTab('account');
       return;
     }
-    if (pathname === '/my-chatbots' || pathname.startsWith('/my-chatbots')) {
+    if (pathname === '/spaces' || pathname.startsWith('/spaces')) {
       setActiveTab('bots');
     } else if (pathname === '/tasks' || pathname.startsWith('/tasks')) {
       setActiveTab('tasks');
@@ -359,8 +359,8 @@ const LeftSideNavMobile = () => {
       } else {
         // Only set to search if not on the bots page or apps page or data page or assistant/workflows
         if (
-          pathname !== '/my-chatbots' &&
-          !pathname.startsWith('/my-chatbots') &&
+          pathname !== '/spaces' &&
+          !pathname.startsWith('/spaces') &&
           pathname !== '/tasks' &&
           !pathname.startsWith('/tasks') &&
           pathname !== '/apps' &&
@@ -399,7 +399,7 @@ const LeftSideNavMobile = () => {
     setActiveTab(tab);
     if (tab === 'bots') {
       setActiveConversation(null);
-      router.push('/my-chatbots');
+      router.push('/spaces');
       close();
     } else if (tab === 'search') {
       setSelectedOption(null);
@@ -586,7 +586,7 @@ const LeftSideNavMobile = () => {
           label: 'New Space',
           onClick: () => {
             setActiveBotId(null);
-            router.push('/my-chatbots');
+            router.push('/spaces');
             close();
           },
         };
@@ -695,7 +695,7 @@ const LeftSideNavMobile = () => {
                       : "bg-white/[0.06] border-white/[0.08] text-white hover:bg-white/[0.12]"
                   )}
                   onClick={() => {
-                    if (pathname === '/my-chatbots') {
+                    if (pathname === '/spaces') {
                       if (!isRightSidebarOpen) toggleRightSidebar();
                       window.dispatchEvent(new Event('alti_inbox_click'));
                     } else {
@@ -747,7 +747,7 @@ const LeftSideNavMobile = () => {
                   (bot.description || '').toLowerCase().includes(searchQuery.toLowerCase())
                 )
                 .map(({ bot, idx }) => {
-                  const isSelected = activeBotId === bot.id && pathname === '/my-chatbots';
+                  const isSelected = activeBotId === bot.id && pathname === '/spaces';
                   const isBeingDragged = draggedIndex === idx;
                   const showTopLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex > idx;
                   const showBottomLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex < idx;
@@ -796,7 +796,7 @@ const LeftSideNavMobile = () => {
                           className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
                           onClick={() => {
                             setActiveBotId(bot.id);
-                            router.push(`/my-chatbots?bot=${bot.id}`);
+                            router.push(`/spaces?bot=${bot.id}`);
                             close();
                           }}
                         >
@@ -817,7 +817,7 @@ const LeftSideNavMobile = () => {
                             <DropdownMenuItem
                               onClick={() => {
                                 setActiveBotId(bot.id);
-                                router.push(`/my-chatbots?bot=${bot.id}`);
+                                router.push(`/spaces?bot=${bot.id}`);
                                 close();
                               }}
                             >

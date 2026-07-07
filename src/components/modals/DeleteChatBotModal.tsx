@@ -25,7 +25,7 @@ export function DeleteChatbotModal() {
 
   const handleDelete = () => {
     deleteBot(bot.id);
-    router.push('/my-chatbots');
+    router.push('/spaces');
     onClose();
   };
 

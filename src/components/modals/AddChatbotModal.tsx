@@ -56,7 +56,7 @@ export function AddChatbotModal() {
     });
 
     setActiveBotId(newBot.id);
-    router.push(`/my-chatbots?bot=${newBot.id}`);
+    router.push(`/spaces?bot=${newBot.id}`);
     onClose();
   };
 
