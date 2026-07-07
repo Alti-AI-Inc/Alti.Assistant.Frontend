@@ -344,7 +344,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                         }}
                         className={cn(
                           "flex h-7 w-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                          activeTab === 'ai'
+                          activeTab === 'ai' && selectedOption !== OPTIONS.INBOX
                             ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
                             : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
                         )}

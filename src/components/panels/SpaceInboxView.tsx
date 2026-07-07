@@ -1,6 +1,6 @@
 'use client';
 
-import { Search, Inbox, Clock, Trash2 } from 'lucide-react';
+import { Search, Inbox, Clock } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -58,28 +58,29 @@ export default function SpaceInboxView({ botId }: SpaceInboxViewProps) {
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-[#e1e1e1] dark:bg-zinc-955 p-6 space-y-4 overflow-hidden">
-      {/* Floating Search Bar with Actions */}
-      <div className="flex items-center gap-4 w-full max-w-4xl mx-auto flex-none">
-        <div className="relative flex-1 flex items-center h-12 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 px-4 shadow-sm focus-within:ring-2 focus-within:ring-black/5 transition-all">
-          <Search className="size-4 text-gray-400 mr-2 flex-none" />
-          <input
-            type="text"
-            placeholder="Search this Space's Inbox..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-transparent text-sm text-black dark:text-white outline-none placeholder:text-gray-400"
-          />
-        </div>
-        {runs.length > 0 && (
-          <button
-            onClick={handleClearSpaceRuns}
-            className="flex items-center gap-1.5 px-4 h-12 bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 text-red-500 hover:text-red-600 rounded-2xl text-xs font-semibold shadow-sm hover:shadow-md transition-all select-none cursor-pointer"
+      {/* Floating Search Bar */}
+      <div className="relative flex items-center h-12 w-full max-w-4xl mx-auto rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 px-4 shadow-sm focus-within:ring-2 focus-within:ring-black/5 transition-all flex-none">
+        <Search className="size-4 text-gray-400 mr-2 flex-none" />
+        <input
+          type="text"
+          placeholder="Search Inbox..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full bg-transparent text-sm text-black dark:text-white outline-none placeholder:text-gray-400"
+        />
+      </div>
+
+      {/* Header with Clear Action */}
+      {runs.length > 0 && (
+        <div className="flex items-center justify-end max-w-4xl mx-auto w-full px-1 flex-none">
+          <button 
+            onClick={handleClearSpaceRuns} 
+            className="text-xs text-zinc-400 hover:text-red-500 transition-colors font-medium"
           >
-            <Trash2 className="size-4" />
             Clear Space History
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Inbox List Area */}
       <div className="flex-1 overflow-y-auto space-y-3 min-h-0 max-w-4xl mx-auto w-full pb-8">
