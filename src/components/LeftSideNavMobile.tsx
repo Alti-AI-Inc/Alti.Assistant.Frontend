@@ -765,7 +765,7 @@ const LeftSideNavMobile = () => {
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent text-xs text-white outline-none placeholder:text-white/60"
+                className="w-full bg-transparent text-xs font-normal font-sans text-white outline-none placeholder:text-white/60"
               />
             </div>
 

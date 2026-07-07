@@ -434,7 +434,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-transparent text-xs text-zinc-850 dark:text-white outline-none placeholder:text-zinc-400 dark:placeholder:text-white/60"
+                    className="w-full bg-transparent text-xs font-normal font-sans text-zinc-850 dark:text-white outline-none placeholder:text-zinc-400 dark:placeholder:text-white/60"
                   />
                 </div>
 
