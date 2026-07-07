@@ -673,74 +673,99 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         <div className="pt-3 px-4 flex-none bg-[#0c1120] dark:bg-[#0c1120] transition-colors duration-300">
           <div className="flex bg-white/[0.06] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-white/[0.03] dark:border-white/[0.03]">
             {/* Chat */}
-            <button
-              type="button"
-              onClick={() => handleTabChange('search')}
-              className={cn(
-                'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
-                activeTab === 'search'
-                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
-                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
-              )}
-            >
-              <span>AI</span>
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('search')}
+                  className={cn(
+                    'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'search'
+                      ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                      : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
+                  )}
+                >
+                  <MessageSquare className="h-3.5 w-3.5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>AI Chat</TooltipContent>
+            </Tooltip>
 
             {/* Studio */}
-            <button
-              type="button"
-              onClick={() => handleTabChange('studio')}
-              className={cn(
-                'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
-                activeTab === 'studio'
-                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
-                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
-              )}
-            >
-              <span>Studio</span>
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('studio')}
+                  className={cn(
+                    'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'studio'
+                      ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                      : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
+                  )}
+                >
+                  <Cpu className="h-3.5 w-3.5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Studio</TooltipContent>
+            </Tooltip>
 
             {/* Apps */}
-            <button
-              type="button"
-              onClick={() => handleTabChange('apps')}
-              className={cn(
-                'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
-                activeTab === 'apps'
-                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
-                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
-              )}
-            >
-              <span>Apps</span>
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('apps')}
+                  className={cn(
+                    'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'apps'
+                      ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                      : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
+                  )}
+                >
+                  <Blocks className="h-3.5 w-3.5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Connected Apps</TooltipContent>
+            </Tooltip>
 
             {/* Tasks */}
-            <button
-              type="button"
-              onClick={() => handleTabChange('tasks')}
-              className={cn(
-                'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
-                activeTab === 'tasks'
-                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
-                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
-              )}
-            >
-              <span>Tasks</span>
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('tasks')}
+                  className={cn(
+                    'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'tasks'
+                      ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                      : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
+                  )}
+                >
+                  <ListTodo className="h-3.5 w-3.5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Automations</TooltipContent>
+            </Tooltip>
 
             {/* Spaces */}
-            <button
-              type="button"
-              onClick={() => handleTabChange('bots')}
-              className={cn(
-                'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
-                activeTab === 'bots'
-                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
-                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
-              )}
-            >
-              <span>Spaces</span>
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('bots')}
+                  className={cn(
+                    'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
+                    activeTab === 'bots'
+                      ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                      : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
+                  )}
+                >
+                  <LayoutGrid className="h-3.5 w-3.5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Workspaces</TooltipContent>
+            </Tooltip>
           </div>
         </div>
       )}
