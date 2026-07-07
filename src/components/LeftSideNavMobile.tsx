@@ -293,6 +293,13 @@ const LeftSideNavMobile = () => {
       const activeSlugs = new Set(
         connections.map(account => account.toolkit?.slug?.toLowerCase()).filter(Boolean)
       );
+
+      // Seed sample apps for testing if this is meram.michael@gmail.com
+      if (data?.user?.email === 'meram.michael@gmail.com') {
+        const sampleSlugs = ['slack', 'google-maps', 'postgres', 'evernote'];
+        sampleSlugs.forEach(slug => activeSlugs.add(slug));
+      }
+
       setConnectedAppSlugs(activeSlugs);
 
       // Resolve connected apps
@@ -318,7 +325,7 @@ const LeftSideNavMobile = () => {
       }
       setLocalAppsOrder(sorted);
     }
-  }, [connections]);
+  }, [connections, data?.user?.email]);
 
   const filteredApps = useMemo(() => {
     return AVAILABLE_MCP_APPS.filter(app =>
@@ -939,6 +946,22 @@ const LeftSideNavMobile = () => {
             </div>
           ) : activeTab === 'apps' ? (
             <div className="mt-2 space-y-1 py-1 pb-4 animate-in fade-in duration-200">
+              
+              {/* Connect Apps row */}
+              <div
+                onClick={() => {
+                  router.push('/appsx');
+                  close();
+                }}
+                className="group flex h-9 w-full items-center justify-between rounded-lg text-xs font-semibold text-left transition-all duration-150 border border-indigo-500/20 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 hover:text-indigo-300 cursor-pointer select-none mb-2 px-3 py-2 gap-2.5"
+              >
+                <span className="flex items-center gap-2.5 truncate">
+                  <Blocks className="h-4 w-4 text-indigo-400 group-hover:text-indigo-300 flex-shrink-0" />
+                  <span className="truncate">Connect Apps</span>
+                </span>
+                <ChevronRight className="h-3.5 w-3.5 opacity-60" />
+              </div>
+
               {localAppsOrder
                 .map((app, idx) => ({ app, idx }))
                 .filter(({ app }) =>
