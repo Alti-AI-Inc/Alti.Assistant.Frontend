@@ -15,7 +15,15 @@ import {
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
-import TaskInboxPanel, { TaskRun } from './_components/TaskInboxPanel';
+export interface TaskRun {
+  id: string;
+  taskName: string;
+  timestamp: string;
+  status: 'running' | 'success' | 'failed';
+  summary: string;
+  duration?: number;
+}
+
 import TaskHistoryLogs from './_components/TaskHistoryLogs';
 import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
 
@@ -50,7 +58,6 @@ export default function TasksClient() {
   const [tasks, setTasks] = useState<AutomationTask[]>([]);
   const [runs, setRuns] = useState<TaskRun[]>([]);
   
-  const [isInboxOpen, setIsInboxOpen] = useState(true); // Open side-panel by default for side-by-side view
   const [isLogsOpen, setIsLogsOpen] = useState(false);
   const [selectedLogTaskName, setSelectedLogTaskName] = useState('');
   const [selectedTaskTitleFilter, setSelectedTaskTitleFilter] = useState<string | null>(null);
@@ -308,7 +315,6 @@ export default function TasksClient() {
     };
 
     saveRuns([newRun, ...runs]);
-    setIsInboxOpen(true); // Ensure side-panel is open to see progress
 
     setTimeout(() => {
       let finalSummary = 'Successfully executed automated agent run. Output: Completed all actions specified in the prompt.';
@@ -810,17 +816,7 @@ export default function TasksClient() {
         </div>
       </div>
 
-      {/* Persistent Collapsible Right Side Runs Inbox */}
-      {!isSpacesPage && (
-        <TaskInboxPanel
-          isOpen={isInboxOpen}
-          runs={selectedTaskTitleFilter ? runs.filter(r => r.taskName === selectedTaskTitleFilter) : runs}
-          onViewLogs={handleViewLogs}
-          onClearRuns={handleClearRuns}
-          onClose={() => setIsInboxOpen(false)}
-          onOpen={() => setIsInboxOpen(true)}
-        />
-      )}
+
 
       {/* Terminal logs Modal */}
       <TaskHistoryLogs
