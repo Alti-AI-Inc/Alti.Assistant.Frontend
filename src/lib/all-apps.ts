@@ -357,6 +357,132 @@ export const allApps: APP[] = [
     "image": "https://logos.composio.dev/api/openai",
     "app_name": "openai",
     "isAvailable": true
+  },
+  {
+    "title": "Oracle NetSuite",
+    "description": "Access, query, and synchronize financial ledgers, customer directories, invoices, and corporate entities in NetSuite ERP.",
+    "image": "https://logos.composio.dev/api/netsuite",
+    "app_name": "netsuite",
+    "isAvailable": true
+  },
+  {
+    "title": "Workday",
+    "description": "Read, query, and manage employee directories, organizational charts, recruiting data, and benefit reports inside Workday.",
+    "image": "https://logos.composio.dev/api/workday",
+    "app_name": "workday",
+    "isAvailable": true
+  },
+  {
+    "title": "Snowflake",
+    "description": "Execute high-performance analytical queries, map tables, and inspect schemas inside Snowflake warehouses.",
+    "image": "https://logos.composio.dev/api/snowflake",
+    "app_name": "snowflake",
+    "isAvailable": true
+  },
+  {
+    "title": "Google BigQuery",
+    "description": "Query Google BigQuery databases, list datasets, map table columns, and extract structural facts.",
+    "image": "https://logos.composio.dev/api/bigquery",
+    "app_name": "google-bigquery",
+    "isAvailable": true
+  },
+  {
+    "title": "QuickBooks Online",
+    "description": "Query, synchronize, and report bookkeeping accounts, invoices, payments, and vendor ledger databases inside QuickBooks.",
+    "image": "https://logos.composio.dev/api/quickbooks",
+    "app_name": "quickbooks",
+    "isAvailable": true
+  },
+  {
+    "title": "Xero",
+    "description": "Read, query, write, and manage corporate banking ledger accounts, invoices, and bank statements inside Xero.",
+    "image": "https://logos.composio.dev/api/xero",
+    "app_name": "xero",
+    "isAvailable": true
+  },
+  {
+    "title": "ServiceNow",
+    "description": "Create, query, update, and route corporate service tickets, incident requests, and hardware assets inside ServiceNow.",
+    "image": "https://logos.composio.dev/api/servicenow",
+    "app_name": "servicenow",
+    "isAvailable": true
+  },
+  {
+    "title": "Okta",
+    "description": "Inspect user directory logins, manage application groups, revoke access policies, and audit authentication logs in Okta.",
+    "image": "https://logos.composio.dev/api/okta",
+    "app_name": "okta",
+    "isAvailable": true
+  },
+  {
+    "title": "ADP",
+    "description": "Access, query, and synchronize corporate payroll profiles, benefit schedules, and tax reports inside ADP directories.",
+    "image": "https://logos.composio.dev/api/adp",
+    "app_name": "adp",
+    "isAvailable": true
+  },
+  {
+    "title": "Rippling",
+    "description": "Read, synchronize, and update corporate payroll profiles, hardware inventory, and employee benefits inside Rippling.",
+    "image": "https://logos.composio.dev/api/rippling",
+    "app_name": "rippling",
+    "isAvailable": true
+  },
+  {
+    "title": "Gusto",
+    "description": "Access payroll profiles, calculate tax withholding, and schedule employee payroll payouts inside Gusto.",
+    "image": "https://logos.composio.dev/api/gusto",
+    "app_name": "gusto",
+    "isAvailable": true
+  },
+  {
+    "title": "BambooHR",
+    "description": "Read employee directories, approve time-off bookings, and sync organizational files inside BambooHR.",
+    "image": "https://logos.composio.dev/api/bamboohr",
+    "app_name": "bamboohr",
+    "isAvailable": true
+  },
+  {
+    "title": "Microsoft Dynamics 365",
+    "description": "Access, search, and manage leads, accounts, contacts, and custom CRM objects inside Microsoft Dynamics 365.",
+    "image": "https://logos.composio.dev/api/dynamics365",
+    "app_name": "dynamics365",
+    "isAvailable": true
+  },
+  {
+    "title": "Marketo",
+    "description": "Query, synchronize, and update marketing campaigns, leads databases, and newsletter subscribers inside Marketo.",
+    "image": "https://logos.composio.dev/api/marketo",
+    "app_name": "marketo",
+    "isAvailable": true
+  },
+  {
+    "title": "Klaviyo",
+    "description": "Create and track email segments, query newsletter subscribers, and trigger marketing flows inside Klaviyo.",
+    "image": "https://logos.composio.dev/api/klaviyo",
+    "app_name": "klaviyo",
+    "isAvailable": true
+  },
+  {
+    "title": "Azure AD (Entra ID)",
+    "description": "Access, query, and manage Microsoft Entra ID (Azure Active Directory) users, groups, and security roles.",
+    "image": "https://logos.composio.dev/api/azure",
+    "app_name": "azure-ad",
+    "isAvailable": true
+  },
+  {
+    "title": "Box",
+    "description": "Securely list, read, upload, and format directories and documents programmatically inside Box storage.",
+    "image": "https://logos.composio.dev/api/box",
+    "app_name": "box",
+    "isAvailable": true
+  },
+  {
+    "title": "Dropbox",
+    "description": "Access, search, download, and manage folders and documents programmatically inside Dropbox.",
+    "image": "https://logos.composio.dev/api/dropbox",
+    "app_name": "dropbox",
+    "isAvailable": true
   }
 ];
 

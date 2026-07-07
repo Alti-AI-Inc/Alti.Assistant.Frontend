@@ -472,6 +472,224 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
     placeholders: {
       "OPENAI_API_KEY": "sk-proj-xxxxxxxx"
     }
+  },
+  "netsuite": {
+    requiredEnv: ["NETSUITE_ACCOUNT", "NETSUITE_CONSUMER_KEY", "NETSUITE_CONSUMER_SECRET", "NETSUITE_TOKEN_ID", "NETSUITE_TOKEN_SECRET"],
+    labels: {
+      "NETSUITE_ACCOUNT": "NetSuite Account ID (e.g. 1234567_SB1)",
+      "NETSUITE_CONSUMER_KEY": "OAuth 1.0 Consumer Key",
+      "NETSUITE_CONSUMER_SECRET": "OAuth 1.0 Consumer Secret",
+      "NETSUITE_TOKEN_ID": "Token ID",
+      "NETSUITE_TOKEN_SECRET": "Token Secret"
+    },
+    placeholders: {
+      "NETSUITE_ACCOUNT": "1234567_SB1",
+      "NETSUITE_CONSUMER_KEY": "ns_consumer_key_xyz",
+      "NETSUITE_CONSUMER_SECRET": "ns_consumer_secret_xyz",
+      "NETSUITE_TOKEN_ID": "ns_token_id_xyz",
+      "NETSUITE_TOKEN_SECRET": "ns_token_secret_xyz"
+    }
+  },
+  "workday": {
+    requiredEnv: ["WORKDAY_TENANT", "WORKDAY_USERNAME", "WORKDAY_PASSWORD", "WORKDAY_CLIENT_ID", "WORKDAY_CLIENT_SECRET"],
+    labels: {
+      "WORKDAY_TENANT": "Workday Tenant Name",
+      "WORKDAY_USERNAME": "Workday Integration Username",
+      "WORKDAY_PASSWORD": "Workday Integration Password",
+      "WORKDAY_CLIENT_ID": "OAuth Client ID",
+      "WORKDAY_CLIENT_SECRET": "OAuth Client Secret"
+    },
+    placeholders: {
+      "WORKDAY_TENANT": "mycompany",
+      "WORKDAY_USERNAME": "isvc_alti",
+      "WORKDAY_PASSWORD": "password_xyz",
+      "WORKDAY_CLIENT_ID": "client_id_xyz",
+      "WORKDAY_CLIENT_SECRET": "client_secret_xyz"
+    }
+  },
+  "snowflake": {
+    requiredEnv: ["SNOWFLAKE_ACCOUNT", "SNOWFLAKE_USERNAME", "SNOWFLAKE_PASSWORD", "SNOWFLAKE_DATABASE", "SNOWFLAKE_SCHEMA"],
+    labels: {
+      "SNOWFLAKE_ACCOUNT": "Snowflake Account Locator",
+      "SNOWFLAKE_USERNAME": "Snowflake Username",
+      "SNOWFLAKE_PASSWORD": "Snowflake Password",
+      "SNOWFLAKE_DATABASE": "Database Name",
+      "SNOWFLAKE_SCHEMA": "Schema Name"
+    },
+    placeholders: {
+      "SNOWFLAKE_ACCOUNT": "xy12345.us-east-1",
+      "SNOWFLAKE_USERNAME": "ALTI_USER",
+      "SNOWFLAKE_PASSWORD": "password_xyz",
+      "SNOWFLAKE_DATABASE": "ANALYTICS_DB",
+      "SNOWFLAKE_SCHEMA": "PUBLIC"
+    }
+  },
+  "google-bigquery": {
+    requiredEnv: ["BIGQUERY_CREDENTIALS"],
+    labels: {
+      "BIGQUERY_CREDENTIALS": "BigQuery Google Service Account JSON"
+    },
+    placeholders: {
+      "BIGQUERY_CREDENTIALS": "{\"type\": \"service_account\", ..."
+    }
+  },
+  "quickbooks": {
+    requiredEnv: ["QUICKBOOKS_CLIENT_ID", "QUICKBOOKS_CLIENT_SECRET", "QUICKBOOKS_REALM_ID"],
+    labels: {
+      "QUICKBOOKS_CLIENT_ID": "QuickBooks OAuth Client ID",
+      "QUICKBOOKS_CLIENT_SECRET": "QuickBooks OAuth Client Secret",
+      "QUICKBOOKS_REALM_ID": "QuickBooks Company Realm ID"
+    },
+    placeholders: {
+      "QUICKBOOKS_CLIENT_ID": "qb_client_id_xyz",
+      "QUICKBOOKS_CLIENT_SECRET": "qb_client_secret_xyz",
+      "QUICKBOOKS_REALM_ID": "1234567890"
+    }
+  },
+  "xero": {
+    requiredEnv: ["XERO_CLIENT_ID", "XERO_CLIENT_SECRET", "XERO_TENANT_ID"],
+    labels: {
+      "XERO_CLIENT_ID": "Xero OAuth Client ID",
+      "XERO_CLIENT_SECRET": "Xero OAuth Client Secret",
+      "XERO_TENANT_ID": "Xero Active Tenant ID"
+    },
+    placeholders: {
+      "XERO_CLIENT_ID": "xero_client_id_xyz",
+      "XERO_CLIENT_SECRET": "xero_client_secret_xyz",
+      "XERO_TENANT_ID": "00000000-0000-0000-0000-000000000000"
+    }
+  },
+  "servicenow": {
+    requiredEnv: ["SERVICENOW_INSTANCE", "SERVICENOW_USERNAME", "SERVICENOW_PASSWORD"],
+    labels: {
+      "SERVICENOW_INSTANCE": "ServiceNow Instance Name (e.g. dev12345)",
+      "SERVICENOW_USERNAME": "ServiceNow Username",
+      "SERVICENOW_PASSWORD": "ServiceNow Password"
+    },
+    placeholders: {
+      "SERVICENOW_INSTANCE": "dev12345",
+      "SERVICENOW_USERNAME": "admin",
+      "SERVICENOW_PASSWORD": "password_xyz"
+    }
+  },
+  "okta": {
+    requiredEnv: ["OKTA_DOMAIN", "OKTA_API_TOKEN"],
+    labels: {
+      "OKTA_DOMAIN": "Okta Domain (e.g. company.okta.com)",
+      "OKTA_API_TOKEN": "Okta API Token"
+    },
+    placeholders: {
+      "OKTA_DOMAIN": "company.okta.com",
+      "OKTA_API_TOKEN": "okta_token_xyz"
+    }
+  },
+  "adp": {
+    requiredEnv: ["ADP_CLIENT_ID", "ADP_CLIENT_SECRET"],
+    labels: {
+      "ADP_CLIENT_ID": "ADP Gateway Client ID",
+      "ADP_CLIENT_SECRET": "ADP Gateway Client Secret"
+    },
+    placeholders: {
+      "ADP_CLIENT_ID": "adp_client_id_xyz",
+      "ADP_CLIENT_SECRET": "adp_client_secret_xyz"
+    }
+  },
+  "rippling": {
+    requiredEnv: ["RIPPLING_ACCESS_TOKEN"],
+    labels: {
+      "RIPPLING_ACCESS_TOKEN": "Rippling API Access Token"
+    },
+    placeholders: {
+      "RIPPLING_ACCESS_TOKEN": "rippling_token_xyz"
+    }
+  },
+  "gusto": {
+    requiredEnv: ["GUSTO_ACCESS_TOKEN"],
+    labels: {
+      "GUSTO_ACCESS_TOKEN": "Gusto API Access Token"
+    },
+    placeholders: {
+      "GUSTO_ACCESS_TOKEN": "gusto_token_xyz"
+    }
+  },
+  "bamboohr": {
+    requiredEnv: ["BAMBOOHR_SUBDOMAIN", "BAMBOOHR_API_KEY"],
+    labels: {
+      "BAMBOOHR_SUBDOMAIN": "BambooHR Company Subdomain",
+      "BAMBOOHR_API_KEY": "BambooHR API Token"
+    },
+    placeholders: {
+      "BAMBOOHR_SUBDOMAIN": "company",
+      "BAMBOOHR_API_KEY": "bamboohr_api_key_xyz"
+    }
+  },
+  "dynamics365": {
+    requiredEnv: ["DYNAMICS_ORG_URL", "DYNAMICS_CLIENT_ID", "DYNAMICS_CLIENT_SECRET", "DYNAMICS_TENANT_ID"],
+    labels: {
+      "DYNAMICS_ORG_URL": "Dynamics Instance URL",
+      "DYNAMICS_CLIENT_ID": "OAuth Client ID",
+      "DYNAMICS_CLIENT_SECRET": "OAuth Client Secret",
+      "DYNAMICS_TENANT_ID": "Entra Directory Tenant ID"
+    },
+    placeholders: {
+      "DYNAMICS_ORG_URL": "https://company.crm.dynamics.com",
+      "DYNAMICS_CLIENT_ID": "00000000-0000-0000-0000-000000000000",
+      "DYNAMICS_CLIENT_SECRET": "client_secret_xyz",
+      "DYNAMICS_TENANT_ID": "00000000-0000-0000-0000-000000000000"
+    }
+  },
+  "marketo": {
+    requiredEnv: ["MARKETO_ENDPOINT", "MARKETO_CLIENT_ID", "MARKETO_CLIENT_SECRET"],
+    labels: {
+      "MARKETO_ENDPOINT": "Marketo REST API Endpoint Base URL",
+      "MARKETO_CLIENT_ID": "Marketo API Client ID",
+      "MARKETO_CLIENT_SECRET": "Marketo API Client Secret"
+    },
+    placeholders: {
+      "MARKETO_ENDPOINT": "https://123-abc-456.mktorest.com",
+      "MARKETO_CLIENT_ID": "marketo_client_id_xyz",
+      "MARKETO_CLIENT_SECRET": "marketo_client_secret_xyz"
+    }
+  },
+  "klaviyo": {
+    requiredEnv: ["KLAVIYO_API_KEY"],
+    labels: {
+      "KLAVIYO_API_KEY": "Klaviyo Private API Key"
+    },
+    placeholders: {
+      "KLAVIYO_API_KEY": "pk_xxxxxxxx"
+    }
+  },
+  "azure-ad": {
+    requiredEnv: ["AZURE_AD_CLIENT_ID", "AZURE_AD_CLIENT_SECRET", "AZURE_AD_TENANT_ID"],
+    labels: {
+      "AZURE_AD_CLIENT_ID": "Azure Application (Client) ID",
+      "AZURE_AD_CLIENT_SECRET": "Azure Client Secret Credentials",
+      "AZURE_AD_TENANT_ID": "Azure Directory (Tenant) ID"
+    },
+    placeholders: {
+      "AZURE_AD_CLIENT_ID": "00000000-0000-0000-0000-000000000000",
+      "AZURE_AD_CLIENT_SECRET": "client_secret_xyz",
+      "AZURE_AD_TENANT_ID": "00000000-0000-0000-0000-000000000000"
+    }
+  },
+  "box": {
+    requiredEnv: ["BOX_DEVELOPER_TOKEN"],
+    labels: {
+      "BOX_DEVELOPER_TOKEN": "Box Developer Access Token"
+    },
+    placeholders: {
+      "BOX_DEVELOPER_TOKEN": "box_token_xyz"
+    }
+  },
+  "dropbox": {
+    requiredEnv: ["DROPBOX_ACCESS_TOKEN"],
+    labels: {
+      "DROPBOX_ACCESS_TOKEN": "Dropbox App OAuth Access Token"
+    },
+    placeholders: {
+      "DROPBOX_ACCESS_TOKEN": "dbx_token_xyz"
+    }
   }
 };
 
@@ -809,7 +1027,14 @@ const AppCard = ({
     slug === 'google-docs' ||
     slug === 'microsoft-teams' ||
     slug === 'outlook' ||
-    slug === 'zoom';
+    slug === 'zoom' ||
+    slug === 'quickbooks' ||
+    slug === 'xero' ||
+    slug === 'bamboohr' ||
+    slug === 'rippling' ||
+    slug === 'gusto' ||
+    slug === 'box' ||
+    slug === 'dropbox';
 
   const isDatabaseApp = blueprint?.needsDatabaseUrl || 
     slug.includes('postgres') || 
