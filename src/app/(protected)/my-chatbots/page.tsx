@@ -459,10 +459,6 @@ function MyChatbotsContent() {
             {/* Step 1: Space/Project/Model Name */}
             {currentStep === 1 && (
               <>
-                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
-                  {projectTab === 'team' ? 'Enter Model Name' : 'Enter Space Name'}
-                </h1>
-
                 <div className="flex w-full flex-col">
                   <div className="sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8 py-4 bg-transparent border-t-0">
                     <div className="mx-auto w-full max-w-[796px]">
@@ -516,10 +512,6 @@ function MyChatbotsContent() {
             {/* Step 2: System Instructions */}
             {currentStep === 2 && (
               <>
-                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
-                  Enter Instructions
-                </h1>
-
                 <div className="flex w-full flex-col">
                   <div className="sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8 py-4 bg-transparent border-t-0">
                     <div className="mx-auto w-full max-w-[796px]">
@@ -678,10 +670,6 @@ function MyChatbotsContent() {
             {/* Step 3: Guardrails */}
             {currentStep === 3 && (
               <>
-                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
-                  Enter Guardrails
-                </h1>
-
                 <div className="flex w-full flex-col">
                   <div className="sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8 py-4 bg-transparent border-t-0">
                     <div className="mx-auto w-full max-w-[796px]">
@@ -840,10 +828,6 @@ function MyChatbotsContent() {
             {/* Step 4: Knowledge Ingestion */}
             {currentStep === 4 && (
               <>
-                <h1 className="mb-8 text-4xl font-medium text-gray-900 dark:text-white tracking-tight text-center">
-                  Upload Knowledge
-                </h1>
-
                 <div className="flex w-full flex-col">
                   <div className="sticky bottom-0 z-10 w-full px-4 transition-all duration-300 sm:px-6 lg:px-8 py-4 bg-transparent border-t-0">
                     <div className="mx-auto w-full max-w-[796px]">
