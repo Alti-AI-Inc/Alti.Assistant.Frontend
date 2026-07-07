@@ -712,12 +712,7 @@ const LeftSideNavMobile = () => {
                       : "bg-white/[0.06] border-white/[0.08] text-white hover:bg-white/[0.12]"
                   )}
                   onClick={() => {
-                    if (pathname === '/spaces') {
-                      if (!isRightSidebarOpen) toggleRightSidebar();
-                      window.dispatchEvent(new Event('alti_inbox_click'));
-                    } else {
-                      router.push('/inbox');
-                    }
+                    router.push('/inbox');
                   }}
                 >
                   <Inbox className="size-4 text-white" />
