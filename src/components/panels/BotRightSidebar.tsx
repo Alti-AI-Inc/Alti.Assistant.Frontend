@@ -331,83 +331,6 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
               
               {/* Consolidated Toggle Lists (Runtime & Configuration) */}
               <div className="px-4 pt-4 shrink-0 space-y-2">
-                {/* Configuration Toggle Row */}
-                <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
-                  {/* Instructions Toggle */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedOption(OPTIONS.INSTRUCTIONS);
-                          setActiveTab('instructions');
-                        }}
-                        className={cn(
-                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                          activeTab === 'instructions'
-                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
-                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
-                        )}
-                      >
-                        <SlidersHorizontal className="size-4" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>Instructions</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  {/* Guardrails Toggle */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedOption(OPTIONS.GUARDRAILS);
-                          setActiveTab('guardrails');
-                        }}
-                        className={cn(
-                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                          activeTab === 'guardrails'
-                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
-                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
-                        )}
-                      >
-                        <Shield className="size-4" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>Guardrails</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  {/* Knowledge Toggle */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedOption(OPTIONS.KNOWLEDGE);
-                          setActiveTab('knowledge');
-                        }}
-                        className={cn(
-                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                          activeTab === 'knowledge'
-                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
-                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
-                        )}
-                      >
-                        <BookOpen className="size-4" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>Knowledge</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-
-                <div className="h-px w-[calc(100%+2rem)] -ml-4 bg-black/10 dark:bg-white/10 my-3 shrink-0" />
-
                 {/* Runtime Toggle Row */}
                 <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
                   {/* AI Toggle */}
@@ -479,6 +402,83 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     </TooltipTrigger>
                     <TooltipContent side="bottom">
                       <p>Tasks</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+
+                <div className="h-px w-[calc(100%+2rem)] -ml-4 bg-black/10 dark:bg-white/10 my-3 shrink-0" />
+
+                {/* Configuration Toggle Row */}
+                <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
+                  {/* Instructions Toggle */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedOption(OPTIONS.INSTRUCTIONS);
+                          setActiveTab('instructions');
+                        }}
+                        className={cn(
+                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
+                          activeTab === 'instructions'
+                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
+                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
+                        )}
+                      >
+                        <SlidersHorizontal className="size-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Instructions</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  {/* Guardrails Toggle */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedOption(OPTIONS.GUARDRAILS);
+                          setActiveTab('guardrails');
+                        }}
+                        className={cn(
+                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
+                          activeTab === 'guardrails'
+                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
+                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
+                        )}
+                      >
+                        <Shield className="size-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Guardrails</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  {/* Knowledge Toggle */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedOption(OPTIONS.KNOWLEDGE);
+                          setActiveTab('knowledge');
+                        }}
+                        className={cn(
+                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
+                          activeTab === 'knowledge'
+                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
+                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
+                        )}
+                      >
+                        <BookOpen className="size-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Knowledge</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -565,6 +565,9 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   </TooltipContent>
                 </Tooltip>
               </div>
+
+              {/* Straight line below search & action row */}
+              <div className="h-px w-[calc(100%+2rem)] -ml-4 bg-black/10 dark:bg-white/10 mt-4 shrink-0" />
 
               {/* Scrollable container for items */}
               <div className="flex-1 overflow-y-auto px-4 pb-4 min-h-0 mt-4">
