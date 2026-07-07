@@ -1155,7 +1155,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       <Dialog open={!!botToRename} onOpenChange={() => setBotToRename(null)}>
         <DialogContent className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Rename Space</h3>
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Rename</h3>
             <div className="space-y-2">
               <label className="text-xs text-zinc-550 dark:text-zinc-400">New Name</label>
               <input
