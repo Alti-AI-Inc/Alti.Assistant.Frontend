@@ -563,7 +563,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                         key={index}
                         className="group relative bg-white/[0.06] border border-white/[0.04] text-zinc-300 rounded-lg p-3 pr-8"
                       >
-                        <p className="text-xs text-zinc-300 leading-relaxed whitespace-pre-wrap">
+                        <p className="text-xs text-zinc-300 truncate">
                           {inst}
                         </p>
                         <button
@@ -594,7 +594,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                         key={index}
                         className="group relative bg-white/[0.06] border border-white/[0.04] text-zinc-300 rounded-lg p-3 pr-8"
                       >
-                        <p className="text-xs text-zinc-300 leading-relaxed whitespace-pre-wrap">
+                        <p className="text-xs text-zinc-300 truncate">
                           {gr}
                         </p>
                         <button
