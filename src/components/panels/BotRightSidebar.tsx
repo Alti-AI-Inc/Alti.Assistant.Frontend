@@ -331,81 +331,6 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
               
               {/* Consolidated Toggle Lists (Runtime & Configuration) */}
               <div className="px-4 pt-4 shrink-0 space-y-2">
-                {/* Runtime Toggle Row */}
-                <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
-                  {/* AI Toggle */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedOption(null);
-                          setActiveTab('ai');
-                        }}
-                        className={cn(
-                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                          activeTab === 'ai' && selectedOption !== OPTIONS.INBOX
-                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
-                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
-                        )}
-                      >
-                        <Sparkles className="size-4" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>AI</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  {/* Studio Toggle */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedOption(OPTIONS.CODE);
-                          setActiveTab('studio');
-                        }}
-                        className={cn(
-                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                          activeTab === 'studio'
-                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
-                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
-                        )}
-                      >
-                        <Wand2 className="size-4" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>Studio</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  {/* Tasks Toggle */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedOption(OPTIONS.TASK);
-                          setActiveTab('tasks');
-                        }}
-                        className={cn(
-                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                          activeTab === 'tasks'
-                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
-                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
-                        )}
-                      >
-                        <ListTodo className="size-4" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>Tasks</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-
                 {/* Configuration Toggle Row */}
                 <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
                   {/* Instructions Toggle */}
@@ -477,6 +402,81 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     </TooltipTrigger>
                     <TooltipContent side="bottom">
                       <p>Knowledge</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+
+                {/* Runtime Toggle Row */}
+                <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
+                  {/* AI Toggle */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedOption(null);
+                          setActiveTab('ai');
+                        }}
+                        className={cn(
+                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
+                          activeTab === 'ai' && selectedOption !== OPTIONS.INBOX
+                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
+                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
+                        )}
+                      >
+                        <Sparkles className="size-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>AI</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  {/* Studio Toggle */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedOption(OPTIONS.CODE);
+                          setActiveTab('studio');
+                        }}
+                        className={cn(
+                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
+                          activeTab === 'studio'
+                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
+                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
+                        )}
+                      >
+                        <Wand2 className="size-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Studio</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  {/* Tasks Toggle */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedOption(OPTIONS.TASK);
+                          setActiveTab('tasks');
+                        }}
+                        className={cn(
+                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
+                          activeTab === 'tasks'
+                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
+                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
+                        )}
+                      >
+                        <ListTodo className="size-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Tasks</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
