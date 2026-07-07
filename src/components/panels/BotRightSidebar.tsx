@@ -503,16 +503,18 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     <Button
                       variant="outline"
                       size="icon"
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 text-black shadow-xs transition-all flex-none dark:text-white bg-[#e1e1e1] hover:bg-black/[0.03] dark:bg-zinc-800/50"
+                      className={cn(
+                        "flex h-8 w-8 items-center justify-center rounded-lg border shadow-xs transition-all flex-none",
+                        selectedOption === OPTIONS.INBOX
+                          ? "bg-white border-black/10 text-black dark:bg-zinc-800 dark:border-white/10 dark:text-white"
+                          : "bg-[#e1e1e1] border-black/10 text-black hover:bg-black/[0.03] dark:bg-zinc-800/50 dark:text-white"
+                      )}
                       onClick={() => {
-                        if (
-                          selectedOption === OPTIONS.INSTRUCTIONS ||
-                          selectedOption === OPTIONS.GUARDRAILS ||
-                          selectedOption === OPTIONS.KNOWLEDGE
-                        ) {
+                        if (selectedOption === OPTIONS.INBOX) {
                           setSelectedOption(null);
+                        } else {
+                          setSelectedOption(OPTIONS.INBOX);
                         }
-                        setActiveTab('inbox');
                       }}
                     >
                       <Inbox className="size-4" />

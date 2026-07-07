@@ -228,7 +228,8 @@ export default function ChatInput({
       taskName,
       timestamp: new Date().toISOString(),
       status: 'running' as const,
-      summary: `Initiating workflow: "${taskName}" using triggers: [Type: ${taskType}, Trigger: ${triggerType === 'scheduled' ? scheduledTime : eventTrigger}]`
+      summary: `Initiating workflow: "${taskName}" using triggers: [Type: ${taskType}, Trigger: ${triggerType === 'scheduled' ? scheduledTime : eventTrigger}]`,
+      botId: activeBotId || undefined
     };
 
     const existing = localStorage.getItem('alti_task_runs');

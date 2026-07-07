@@ -51,6 +51,7 @@ export enum OPTIONS {
   INSTRUCTIONS = 'instructions',
   GUARDRAILS = 'guardrails',
   KNOWLEDGE = 'knowledge',
+  INBOX = 'inbox',
 }
 
 export interface Reference {

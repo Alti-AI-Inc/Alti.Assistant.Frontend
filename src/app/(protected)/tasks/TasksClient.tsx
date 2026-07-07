@@ -22,10 +22,12 @@ export interface TaskRun {
   status: 'running' | 'success' | 'failed';
   summary: string;
   duration?: number;
+  botId?: string;
 }
 
 import TaskHistoryLogs from './_components/TaskHistoryLogs';
 import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
+import { useBotsStore } from '@/stores/useBotsStore';
 
 type TaskType = 'one-time' | 'recurring';
 type TriggerType = 'scheduled' | 'event';
@@ -306,12 +308,14 @@ export default function TasksClient() {
     const runId = `run-${Date.now()}`;
     const taskTitle = newTask.prompt.length > 35 ? newTask.prompt.slice(0, 35) + '...' : newTask.prompt;
     
+    const activeBotId = useBotsStore.getState().activeBotId;
     const newRun: TaskRun = {
       id: runId,
       taskName: taskTitle,
       timestamp: new Date().toISOString(),
       status: 'running',
       summary: 'Task is executing in background environment...',
+      botId: activeBotId || undefined,
     };
 
     saveRuns([newRun, ...runs]);

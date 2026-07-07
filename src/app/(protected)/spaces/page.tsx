@@ -10,6 +10,7 @@ import { useConversationsStore, OPTIONS } from '@/stores/useConverstionsStore';
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
 import BotRightSidebar from '@/components/panels/BotRightSidebar';
 import { InstructionsEditor, GuardrailsEditor, DataEditor } from '@/components/panels/ProjectEditors';
+import SpaceInboxView from '@/components/panels/SpaceInboxView';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
@@ -1008,7 +1009,8 @@ function MyChatbotsContent() {
   const isEditorView = 
     viewParam === 'instructions' || selectedOption === OPTIONS.INSTRUCTIONS ||
     viewParam === 'guardrails' || selectedOption === OPTIONS.GUARDRAILS ||
-    viewParam === 'data' || selectedOption === OPTIONS.KNOWLEDGE;
+    viewParam === 'data' || selectedOption === OPTIONS.KNOWLEDGE ||
+    selectedOption === OPTIONS.INBOX;
 
   const isChatView = 
     !isEditorView && 
@@ -1032,6 +1034,7 @@ function MyChatbotsContent() {
                 (viewParam !== 'instructions' && selectedOption !== OPTIONS.INSTRUCTIONS) && 
                 (viewParam !== 'guardrails' && selectedOption !== OPTIONS.GUARDRAILS) && 
                 (viewParam !== 'data' && selectedOption !== OPTIONS.KNOWLEDGE) && 
+                selectedOption !== OPTIONS.INBOX &&
                 !hasMessages && "pb-40"
               )
         )}>
@@ -1041,6 +1044,8 @@ function MyChatbotsContent() {
             <GuardrailsEditor bot={activeBot} />
           ) : viewParam === 'data' || selectedOption === OPTIONS.KNOWLEDGE ? (
             <DataEditor bot={activeBot} />
+          ) : selectedOption === OPTIONS.INBOX ? (
+            <SpaceInboxView botId={activeBot.id} />
           ) : activeBot.metadata?.status === 'tuning' ? (
             <div className="flex flex-col items-center justify-center p-8 text-center max-w-lg mx-auto h-full animate-in fade-in duration-300">
               <div className="relative mb-8 flex items-center justify-center">
