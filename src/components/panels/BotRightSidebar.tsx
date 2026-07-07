@@ -514,17 +514,16 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
             <div className="flex-1 overflow-y-auto px-4 pb-4 min-h-0">
               {selectedOption === OPTIONS.INBOX ? (
                 <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
-                  <div className="flex items-center justify-between shrink-0 mb-1.5">
-                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider select-none">Execution Logs</span>
-                    {runs.length > 0 && (
+                  {runs.length > 0 && (
+                    <div className="flex justify-end mb-1.5 shrink-0">
                       <button 
                         onClick={handleClearRuns} 
-                        className="text-[10px] text-zinc-400 hover:text-red-400 transition-colors font-medium"
+                        className="text-[10px] text-zinc-400 hover:text-red-400 transition-colors font-medium select-none"
                       >
                         Clear History
                       </button>
-                    )}
-                  </div>
+                    </div>
+                  )}
                   {filteredRuns.length === 0 ? (
                     <div className="py-8 text-center text-xs text-zinc-500 select-none">
                       {searchQuery ? 'No matching executions.' : 'No executions yet.'}
@@ -553,15 +552,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 </div>
               ) : activeTab === 'instructions' ? (
                 <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
-                  <div className="flex items-center justify-between shrink-0 mb-1.5">
-                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider select-none">System Prompts</span>
-                    <button 
-                      onClick={() => setIsAddInstructionOpen(true)} 
-                      className="text-[10px] text-zinc-400 hover:text-white transition-colors font-medium"
-                    >
-                      Add New
-                    </button>
-                  </div>
+
                   {filteredInstructions.length === 0 ? (
                     <div className="py-8 text-center text-xs text-zinc-500">
                       {searchQuery ? 'No matching instructions.' : 'No instructions yet.'}
@@ -592,15 +583,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 </div>
               ) : activeTab === 'guardrails' ? (
                 <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
-                  <div className="flex items-center justify-between shrink-0 mb-1.5">
-                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider select-none">Safety Rules</span>
-                    <button 
-                      onClick={() => setIsAddGuardrailOpen(true)} 
-                      className="text-[10px] text-zinc-400 hover:text-white transition-colors font-medium"
-                    >
-                      Add New
-                    </button>
-                  </div>
+
                   {filteredGuardrails.length === 0 ? (
                     <div className="py-8 text-center text-xs text-zinc-500">
                       {searchQuery ? 'No matching guardrails.' : 'No guardrails defined.'}
@@ -631,25 +614,18 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 </div>
               ) : activeTab === 'knowledge' ? (
                 <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
-                  <div className="flex items-center justify-between shrink-0 mb-1.5">
-                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider select-none">Uploaded Files</span>
-                    <div>
-                      <input
-                        id="sidebar-file-upload"
-                        type="file"
-                        className="hidden"
-                        onChange={handleFileUpload}
-                        disabled={isUploading}
-                      />
-                      <button 
-                        onClick={() => document.getElementById('sidebar-file-upload')?.click()}
-                        disabled={isUploading}
-                        className="text-[10px] text-zinc-400 hover:text-white transition-colors font-medium disabled:opacity-50"
-                      >
-                        {isUploading ? 'Uploading...' : 'Upload File'}
-                      </button>
+                  <input
+                    id="sidebar-file-upload"
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileUpload}
+                    disabled={isUploading}
+                  />
+                  {isUploading && (
+                    <div className="py-2 text-center text-xs text-zinc-450 font-medium">
+                      Uploading file...
                     </div>
-                  </div>
+                  )}
                   {filteredKnowledge.length === 0 ? (
                     <div className="py-8 text-center text-xs text-zinc-500">
                       {searchQuery ? 'No matching files.' : 'No files uploaded yet.'}
