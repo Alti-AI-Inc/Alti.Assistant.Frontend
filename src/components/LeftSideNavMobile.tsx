@@ -71,7 +71,7 @@ import {
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import ConversationsList from './ConversationsList';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
@@ -235,10 +235,20 @@ const LeftSideNavMobile = () => {
   const [botToRename, setBotToRename] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState('');
 
+  const renameInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (botToRename) {
       const targetBot = bots.find(b => b.id === botToRename);
       setRenameValue(targetBot?.name || '');
+      setTimeout(() => {
+        if (renameInputRef.current) {
+          renameInputRef.current.focus();
+          const val = renameInputRef.current.value;
+          renameInputRef.current.value = '';
+          renameInputRef.current.value = val;
+        }
+      }, 50);
     }
   }, [botToRename, bots]);
 
@@ -1311,17 +1321,16 @@ const LeftSideNavMobile = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Rename space dialog */}
       <Dialog open={!!botToRename} onOpenChange={() => setBotToRename(null)}>
-        <DialogContent className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+        <DialogContent className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden">
           <div className="space-y-4">
             <input
+              ref={renameInputRef}
               type="text"
               value={renameValue}
               onChange={(e) => setRenameValue(e.target.value)}
               placeholder="Enter space name..."
-              className="w-full bg-gray-50 dark:bg-zinc-955 border border-black/15 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-900 dark:text-white"
-              autoFocus
+              className="w-full bg-[#f4f4f5] dark:bg-zinc-900 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none rounded-xl px-3 py-2 text-xs text-gray-900 dark:text-white"
             />
             <div className="flex border-t border-black/10 dark:border-white/10 h-11 -mx-6 -mb-6 mt-4">
               <button 
