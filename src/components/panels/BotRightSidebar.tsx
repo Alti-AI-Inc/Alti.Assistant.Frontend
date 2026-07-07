@@ -304,7 +304,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
               className="size-5 cursor-pointer text-zinc-400 hover:text-white transition-transform duration-300 flex-none scale-x-[-1]"
               onClick={toggleRightSidebar}
             />
-            <span className="text-sm font-semibold truncate max-w-[180px] text-white">
+            <span className="text-sm font-normal truncate max-w-[180px] text-white">
               {bot.name}
             </span>
           </header>
