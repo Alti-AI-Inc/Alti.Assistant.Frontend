@@ -417,121 +417,141 @@ export const AppsPanelsContainer = () => {
                     variant="ghost"
                     size="sm"
                     className="h-8 text-xs font-medium text-gray-500 hover:text-red-600 hover:bg-red-50/50 dark:hover:bg-red-950/20 px-2 rounded-lg gap-1.5"
-                    title="Clear chat session"
+                    title="Reset Session"
                   >
-                    <Trash2 className="h-3.5 w-3.5" />
-                    Clear
+                    <RefreshCw className="h-3.5 w-3.5" />
+                    Reset Session
                   </Button>
                 </div>
               </div>
 
-              {/* Scoped Message List */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#e1e1e1] dark:bg-gray-955">
-                {(!chatHistories[selectedApp.app_name] || chatHistories[selectedApp.app_name].length === 0) ? (
-                  <div className="h-full flex flex-col items-center justify-center text-center max-w-sm mx-auto space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-350">
-                    <div className="h-11 w-11 rounded-full bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center text-blue-500">
-                      <MessageSquare className="h-5 w-5" />
+              {/* Scoped Message List / Centered prompt box */}
+              {(!chatHistories[selectedApp.app_name] || chatHistories[selectedApp.app_name].length === 0) ? (
+                // Centered landing state prompt box
+                <div className="flex-1 flex flex-col items-center justify-center px-6 max-w-2xl mx-auto w-full space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="h-16 w-16 rounded-2xl border border-black/10 dark:border-white/10 bg-white p-3.5 flex items-center justify-center shadow-md">
+                      <AppImage src={selectedApp.image} alt={selectedApp.title} className="h-full w-full object-contain" fallbackSizeClass="text-2xl" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-gray-900 dark:text-gray-50">
-                        Beginning Scoped Session
-                      </h4>
-                      <p className="text-[11px] text-gray-500 mt-1 leading-normal">
-                        Ask your isolated {selectedApp.title} agent to execute operations. Only {selectedApp.title} operations are available in this console.
+                      <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50 text-center">Isolated {selectedApp.title} Agent</h2>
+                      <p className="mt-2 text-xs text-gray-600 dark:text-gray-400 max-w-md text-center">
+                        Prompt your isolated {selectedApp.title} agent directly with zero-hallucinations. Only tools for this application are enabled.
                       </p>
                     </div>
                   </div>
-                ) : (
-                  chatHistories[selectedApp.app_name].map(message => {
-                    const isUser = message.type === 'user';
-                    
-                    return (
-                      <div
-                        key={message.id}
-                        className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}
-                      >
+                  
+                  {/* Centered input box */}
+                  <div className="w-full bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-2xl p-2.5 shadow-lg flex items-center gap-2">
+                    <Input
+                      placeholder={`Ask ${selectedApp.title} agent to execute an action...`}
+                      value={currentInput}
+                      onChange={e => setCurrentInput(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      disabled={isSendingMessage}
+                      className="flex-1 border-0 shadow-none focus-visible:ring-0 bg-transparent text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus-visible:outline-none focus:outline-none"
+                    />
+                    <Button
+                      onClick={handleSendMessage}
+                      disabled={isSendingMessage || !currentInput.trim()}
+                      className="h-10 px-4 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md dark:bg-blue-700 dark:hover:bg-blue-800 gap-1.5 shrink-0"
+                    >
+                      <span>Prompt App</span>
+                      <Send className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                // Traditional scrolling conversation list (but only for the current in-memory session)
+                <div className="flex-1 flex flex-col overflow-hidden h-full">
+                  <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#e1e1e1] dark:bg-gray-955">
+                    {chatHistories[selectedApp.app_name].map(message => {
+                      const isUser = message.type === 'user';
+                      
+                      return (
                         <div
-                          className={`max-w-lg rounded-2xl px-4 py-2.5 shadow-sm text-sm ${
-                            isUser
-                              ? 'bg-blue-600 text-white rounded-br-none'
-                              : message.error
-                              ? 'bg-red-50 text-red-900 border border-red-150 dark:bg-red-950/20 dark:border-red-900/60 dark:text-red-300 rounded-bl-none'
-                              : 'bg-white text-gray-900 border border-gray-150 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-100 rounded-bl-none'
-                          }`}
+                          key={message.id}
+                          className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}
                         >
-                          <div className="leading-relaxed whitespace-pre-wrap prose prose-sm dark:prose-invert max-w-none">
-                            {message.content}
-                          </div>
-                          
-                          {/* Render active tool logs if present */}
-                          {message.toolsUsed && message.toolsUsed.length > 0 && (
-                            <div className="mt-2.5 pt-2.5 border-t border-gray-100 dark:border-gray-800/80 space-y-1.5 text-[11px] text-gray-500">
-                              <span className="font-bold flex items-center gap-1.5 text-gray-800 dark:text-gray-200">
-                                <Shield className="h-3 w-3 text-emerald-500" /> Actions Log:
-                              </span>
-                              {message.toolsUsed.map((tool, i) => (
-                                <div key={i} className="flex items-center gap-1.5 font-mono text-[10px] bg-gray-50 dark:bg-gray-950 p-1.5 rounded border dark:border-gray-850 text-gray-700 dark:text-gray-300">
-                                  🔧 {tool}
-                                </div>
-                              ))}
-                            </div>
-                          )}
-
-                          <span
-                            className={`block text-[10px] mt-1 text-right ${
-                              isUser ? 'text-blue-150' : 'text-gray-400 dark:text-gray-500'
+                          <div
+                            className={`max-w-lg rounded-2xl px-4 py-2.5 shadow-sm text-sm ${
+                              isUser
+                                ? 'bg-blue-600 text-white rounded-br-none'
+                                : message.error
+                                ? 'bg-red-50 text-red-900 border border-red-150 dark:bg-red-950/20 dark:border-red-900/60 dark:text-red-300 rounded-bl-none'
+                                : 'bg-white text-gray-900 border border-gray-150 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-100 rounded-bl-none'
                             }`}
                           >
-                            {message.timestamp}
-                          </span>
+                            <div className="leading-relaxed whitespace-pre-wrap prose prose-sm dark:prose-invert max-w-none">
+                              {message.content}
+                            </div>
+                            
+                            {/* Render active tool logs if present */}
+                            {message.toolsUsed && message.toolsUsed.length > 0 && (
+                              <div className="mt-2.5 pt-2.5 border-t border-gray-100 dark:border-gray-800/80 space-y-1.5 text-[11px] text-gray-500">
+                                <span className="font-bold flex items-center gap-1.5 text-gray-800 dark:text-gray-200">
+                                  <Shield className="h-3 w-3 text-emerald-500" /> Actions Log:
+                                </span>
+                                {message.toolsUsed.map((tool, i) => (
+                                  <div key={i} className="flex items-center gap-1.5 font-mono text-[10px] bg-gray-50 dark:bg-gray-950 p-1.5 rounded border dark:border-gray-850 text-gray-700 dark:text-gray-300">
+                                    🔧 {tool}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            <span
+                              className={`block text-[10px] mt-1 text-right ${
+                                isUser ? 'text-blue-150' : 'text-gray-400 dark:text-gray-500'
+                              }`}
+                            >
+                              {message.timestamp}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    
+                    {/* Bot loading dynamic indicator */}
+                    {isSendingMessage && (
+                      <div className="flex justify-start">
+                        <div className="rounded-2xl bg-white border border-gray-150 px-4 py-3 dark:bg-gray-900 dark:border-gray-800">
+                          <div className="flex gap-1.5 items-center">
+                            <div className="h-2 w-2 animate-bounce rounded-full bg-blue-500" />
+                            <div className="h-2 w-2 animate-bounce rounded-full bg-blue-500" style={{ animationDelay: '0.15s' }} />
+                            <div className="h-2 w-2 animate-bounce rounded-full bg-blue-500" style={{ animationDelay: '0.3s' }} />
+                          </div>
                         </div>
                       </div>
-                    );
-                  })
-                )}
-                
-                {/* Bot loading dynamic indicator */}
-                {isSendingMessage && (
-                  <div className="flex justify-start">
-                    <div className="rounded-2xl bg-white border border-gray-150 px-4 py-3 dark:bg-gray-900 dark:border-gray-800">
-                      <div className="flex gap-1.5 items-center">
-                        <div className="h-2 w-2 animate-bounce rounded-full bg-blue-500" />
-                        <div className="h-2 w-2 animate-bounce rounded-full bg-blue-500" style={{ animationDelay: '0.15s' }} />
-                        <div className="h-2 w-2 animate-bounce rounded-full bg-blue-500" style={{ animationDelay: '0.3s' }} />
-                      </div>
+                    )}
+                    
+                    <div ref={chatEndRef} />
+                  </div>
+
+                  {/* Scoped Input Box sticky */}
+                  <div className="p-4 border-t border-black/10 dark:border-white/10 bg-[#e1e1e1] dark:bg-gray-955 flex-none">
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder={`Ask ${selectedApp.title} agent to execute another action...`}
+                        value={currentInput}
+                        onChange={e => setCurrentInput(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        disabled={isSendingMessage}
+                        className="flex-1 h-10 text-sm rounded-lg bg-white border border-black/10 dark:border-white/10 dark:bg-gray-955 focus-visible:ring-1 focus-visible:ring-blue-500/30 focus-visible:border-blue-500 focus-visible:bg-white dark:focus-visible:bg-gray-950 text-gray-900 dark:text-gray-100"
+                      />
+
+                      <Button
+                        onClick={handleSendMessage}
+                        disabled={isSendingMessage || !currentInput.trim()}
+                        className="h-10 w-10 flex-none bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-0 flex items-center justify-center shadow-md dark:bg-blue-700 dark:hover:bg-blue-800"
+                      >
+                        <Send className="h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
-                )}
-                
-                <div ref={chatEndRef} />
-              </div>
-
-              {/* Scoped Input Box sticky */}
-              <div className="p-4 border-t border-black/10 dark:border-white/10 bg-[#e1e1e1] dark:bg-gray-955 flex-none">
-                <div className="flex gap-2">
-                  <Input
-                    placeholder={`Ask ${selectedApp.title} agent to execute an action...`}
-                    value={currentInput}
-                    onChange={e => setCurrentInput(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    disabled={isSendingMessage}
-                    className="flex-1 h-10 text-sm rounded-lg bg-white border border-black/10 dark:border-white/10 dark:bg-gray-950 focus-visible:ring-1 focus-visible:ring-blue-500/30 focus-visible:border-blue-500"
-                  />
-
-                  <Button
-                    onClick={handleSendMessage}
-                    disabled={isSendingMessage || !currentInput.trim()}
-                    className="h-10 w-10 flex-none bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-0 flex items-center justify-center shadow-md dark:bg-blue-700 dark:hover:bg-blue-800"
-                  >
-                    <Send className="h-4 w-4" />
-                  </Button>
                 </div>
-              </div>
-
+              )}
             </div>
-
-
-
           </div>
         )}
       </main>

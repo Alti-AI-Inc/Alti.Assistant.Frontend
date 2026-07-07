@@ -158,7 +158,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'tasks' | 'studio' | 'none' | 'account';
+type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'tasks' | 'studio' | 'apps' | 'none' | 'account';
 
 const AVAILABLE_MCP_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -233,6 +233,20 @@ const LeftSideNavMobile = () => {
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [botToDelete, setBotToDelete] = useState<string | null>(null);
   const [botToRename, setBotToRename] = useState<string | null>(null);
+
+  const [localAppsOrder, setLocalAppsOrder] = useState<APP[]>([]);
+  const [draggedAppIndex, setDraggedAppIndex] = useState<number | null>(null);
+  const [dragOverAppIndex, setDragOverAppIndex] = useState<number | null>(null);
+
+  const reorderApps = (fromIdx: number, toIdx: number) => {
+    const updated = [...localAppsOrder];
+    const [removed] = updated.splice(fromIdx, 1);
+    updated.splice(toIdx, 0, removed);
+    setLocalAppsOrder(updated);
+
+    const orderSlugs = updated.map(a => a.app_name.toLowerCase());
+    localStorage.setItem('mcp_app_order', JSON.stringify(orderSlugs));
+  };
   const [renameValue, setRenameValue] = useState('');
 
   useEffect(() => {
@@ -280,6 +294,29 @@ const LeftSideNavMobile = () => {
         connections.map(account => account.toolkit?.slug?.toLowerCase()).filter(Boolean)
       );
       setConnectedAppSlugs(activeSlugs);
+
+      // Resolve connected apps
+      const connected = allApps.filter(app => activeSlugs.has(app.app_name.toLowerCase()));
+      
+      let savedOrder: string[] = [];
+      try {
+        const stored = localStorage.getItem('mcp_app_order');
+        if (stored) savedOrder = JSON.parse(stored);
+      } catch (e) {}
+
+      let sorted: APP[] = [];
+      if (savedOrder && savedOrder.length > 0) {
+        savedOrder.forEach(slug => {
+          const match = connected.find(a => a.app_name.toLowerCase() === slug.toLowerCase());
+          if (match) sorted.push(match);
+        });
+        const remaining = connected.filter(a => !savedOrder.includes(a.app_name.toLowerCase()));
+        remaining.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+        sorted = [...sorted, ...remaining];
+      } else {
+        sorted = connected.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+      }
+      setLocalAppsOrder(sorted);
     }
   }, [connections]);
 
@@ -312,6 +349,8 @@ const LeftSideNavMobile = () => {
       setActiveTab('bots');
     } else if (pathname === '/tasks' || pathname.startsWith('/tasks')) {
       setActiveTab('tasks');
+    } else if (pathname === '/apps' || pathname.startsWith('/apps')) {
+      setActiveTab('apps');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       if (selectedOption === OPTIONS.RESEARCH) {
         setActiveTab('research');
@@ -466,6 +505,10 @@ const LeftSideNavMobile = () => {
         setActiveConversation(null);
         router.push('/');
       }
+      close();
+    } else if (tab === 'apps') {
+      setActiveConversation(null);
+      router.push('/apps');
       close();
     } else if (tab === 'tasks') {
       setActiveConversation(null);
@@ -650,6 +693,20 @@ const LeftSideNavMobile = () => {
               )}
             >
               <span>Studio</span>
+            </button>
+
+            {/* Apps */}
+            <button
+              type="button"
+              onClick={() => handleTabChange('apps')}
+              className={cn(
+                'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
+                activeTab === 'apps'
+                  ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
+                  : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
+              )}
+            >
+              <span>Apps</span>
             </button>
 
             {/* Tasks */}
@@ -877,6 +934,92 @@ const LeftSideNavMobile = () => {
               ).length === 0 && (
                 <div className="py-4 text-center text-xs text-gray-500">
                   No workspaces found.
+                </div>
+              )}
+            </div>
+          ) : activeTab === 'apps' ? (
+            <div className="mt-2 space-y-1 py-1 pb-4 animate-in fade-in duration-200">
+              {localAppsOrder
+                .map((app, idx) => ({ app, idx }))
+                .filter(({ app }) =>
+                  (app.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  (app.app_name || '').toLowerCase().includes(searchQuery.toLowerCase())
+                )
+                .map(({ app, idx }) => {
+                  const isSelected = pathname === '/apps' && searchParams?.get('app')?.toLowerCase() === app.app_name.toLowerCase();
+                  const isBeingDragged = draggedAppIndex === idx;
+                  const showTopLine = draggedAppIndex !== null && dragOverAppIndex === idx && draggedAppIndex > idx;
+                  const showBottomLine = draggedAppIndex !== null && dragOverAppIndex === idx && draggedAppIndex < idx;
+
+                  return (
+                    <div key={app.app_name}>
+                      {showTopLine && (
+                        <div className="h-[2px] w-full bg-indigo-500 rounded-full mb-1 animate-pulse" />
+                      )}
+                      <div
+                        draggable
+                        onDragStart={(e) => {
+                          setDraggedAppIndex(idx);
+                          e.dataTransfer.effectAllowed = 'move';
+                        }}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          if (draggedAppIndex !== idx) {
+                            setDragOverAppIndex(idx);
+                          }
+                        }}
+                        onDragLeave={() => {
+                          setDragOverAppIndex(null);
+                        }}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          if (draggedAppIndex !== null && draggedAppIndex !== idx) {
+                            reorderApps(draggedAppIndex, idx);
+                          }
+                          setDraggedAppIndex(null);
+                          setDragOverAppIndex(null);
+                        }}
+                        onDragEnd={() => {
+                          setDraggedAppIndex(null);
+                          setDragOverAppIndex(null);
+                        }}
+                        className={cn(
+                          "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border mb-1.5 cursor-grab active:cursor-grabbing select-none",
+                          isSelected 
+                            ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs" 
+                            : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white",
+                          isBeingDragged && "opacity-40 scale-95 border-dashed border-zinc-500 bg-white/[0.02]"
+                        )}
+                      >
+                        <span
+                          className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
+                          onClick={() => {
+                            router.push(`/apps?app=${app.app_name}`);
+                          }}
+                        >
+                          <div className="h-4 w-4 rounded overflow-hidden bg-white p-0.5 flex items-center justify-center flex-shrink-0">
+                            <AppImage src={app.image} alt={app.title} className="h-full w-full object-contain" fallbackSizeClass="text-[8px]" />
+                          </div>
+                          <span className="truncate">{app.title}</span>
+                        </span>
+                        
+                        {/* Glow connected active badging */}
+                        <div className="mr-3 flex items-center gap-1.5">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
+                        </div>
+                      </div>
+                      {showBottomLine && (
+                        <div className="h-[2px] w-full bg-indigo-500 rounded-full mt-1 mb-1.5 animate-pulse" />
+                      )}
+                    </div>
+                  );
+                })}
+              {localAppsOrder.filter(app =>
+                (app.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (app.app_name || '').toLowerCase().includes(searchQuery.toLowerCase())
+              ).length === 0 && (
+                <div className="py-8 text-center text-xs text-gray-400 dark:text-zinc-500 italic">
+                  No connected apps found.
                 </div>
               )}
             </div>
