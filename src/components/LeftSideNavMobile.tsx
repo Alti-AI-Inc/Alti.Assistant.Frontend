@@ -622,14 +622,14 @@ const LeftSideNavMobile = () => {
     <div className="bg-[#0c1120] dark:bg-[#0c1120] flex h-full flex-col">
       {/* 6-Icon Toggle Row / Space Toggles */}
       {!isSuperAdmin && activeTab !== 'account' && (
-        <div className="border-b border-zinc-800/60 px-4 py-2 bg-[#0c1120] dark:bg-[#0c1120] flex-none">
+        <div className="pt-3 px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none">
           <div className="flex bg-white/[0.06] dark:bg-white/[0.04] p-1 rounded-xl w-full justify-between items-center gap-1 border border-white/[0.03] dark:border-white/[0.03]">
             {/* Chat */}
             <button
               type="button"
               onClick={() => handleTabChange('search')}
               className={cn(
-                'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
+                'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'search'
                   ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
                   : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
@@ -643,7 +643,7 @@ const LeftSideNavMobile = () => {
               type="button"
               onClick={() => handleTabChange('studio')}
               className={cn(
-                'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
+                'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'studio'
                   ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
                   : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
@@ -657,7 +657,7 @@ const LeftSideNavMobile = () => {
               type="button"
               onClick={() => handleTabChange('tasks')}
               className={cn(
-                'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
+                'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'tasks'
                   ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
                   : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
@@ -671,7 +671,7 @@ const LeftSideNavMobile = () => {
               type="button"
               onClick={() => handleTabChange('bots')}
               className={cn(
-                'flex flex-1 h-8 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all duration-200 focus:outline-none select-none',
+                'flex flex-1 h-7 items-center justify-center gap-2 rounded-lg border text-xs font-medium transition-all duration-200 focus:outline-none select-none',
                 activeTab === 'bots'
                   ? 'bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]'
                   : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
@@ -683,9 +683,14 @@ const LeftSideNavMobile = () => {
         </div>
       )}
 
+      {/* Divider line between toggle and search bar */}
+      {!isSuperAdmin && activeTab !== 'account' && (
+        <div className="h-px w-full bg-zinc-800/60 my-3 shrink-0" />
+      )}
+
       {/* Enclosed Search & Actions Row */}
       {activeTab !== 'account' && (
-        <div className="h-[52px] flex items-center justify-between gap-2 border-b border-zinc-800/60 px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none">
+        <div className="pb-3 flex items-center justify-between gap-2 border-b border-zinc-800/60 px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none">
           {/* Search Bar Input */}
           <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.06] px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-white/20">
             <Search className="size-3.5 flex-none text-zinc-400" />
