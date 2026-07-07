@@ -406,6 +406,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   </Tooltip>
                 </div>
 
+                <div className="h-px w-full bg-black/10 dark:bg-white/10 my-1" />
+
                 {/* Runtime Toggle Row */}
                 <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
                   {/* AI Toggle */}

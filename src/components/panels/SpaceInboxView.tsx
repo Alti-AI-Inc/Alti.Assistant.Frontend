@@ -57,7 +57,7 @@ export default function SpaceInboxView({ botId }: SpaceInboxViewProps) {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 bg-[#e1e1e1] dark:bg-zinc-955 p-6 space-y-4 overflow-hidden">
+    <div className="w-full h-full flex-1 flex flex-col min-h-0 bg-[#e1e1e1] dark:bg-zinc-955 p-6 space-y-4 overflow-hidden">
       {/* Floating Search Bar */}
       <div className="relative flex items-center h-12 w-full max-w-4xl mx-auto rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 px-4 shadow-sm focus-within:ring-2 focus-within:ring-black/5 transition-all flex-none">
         <Search className="size-4 text-gray-400 mr-2 flex-none" />
