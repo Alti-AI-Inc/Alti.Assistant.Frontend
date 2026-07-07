@@ -1321,6 +1321,13 @@ const LeftSideNavMobile = () => {
               type="text"
               value={renameValue}
               onChange={(e) => setRenameValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && renameValue.trim() && botToRename) {
+                  const token = data?.accessToken;
+                  editBot(botToRename, { name: renameValue.trim() }, token);
+                  setBotToRename(null);
+                }
+              }}
               placeholder="Enter space name..."
               className="w-full bg-white dark:bg-zinc-900 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none rounded-xl px-3 py-2 text-xs text-gray-900 dark:text-white"
             />
