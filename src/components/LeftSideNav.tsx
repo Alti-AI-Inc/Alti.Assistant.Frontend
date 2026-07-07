@@ -751,14 +751,9 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         </div>
       )}
 
-      {/* Divider line between toggle and search bar */}
-      {!hideSidebar && side !== 'right' && !isSuperAdmin && activeTab !== 'account' && (
-        <div className="h-px w-full bg-zinc-800/60 my-3 shrink-0" />
-      )}
-
       {/* Enclosed Search & Actions Row */}
       {!hideSidebar && activeTab !== 'account' && (
-        <div className="pb-3 flex items-center border-b border-zinc-800/60 px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none w-full">
+        <div className="pb-3 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none w-full">
           <div className="flex h-8 w-full items-center rounded-lg border border-white/[0.08] bg-white/[0.06] shadow-xs overflow-hidden focus-within:ring-1 focus-within:ring-white/20">
             {/* Search segment */}
             <div className="flex flex-1 items-center gap-2 px-3 h-full">
