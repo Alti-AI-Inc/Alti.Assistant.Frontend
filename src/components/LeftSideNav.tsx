@@ -812,6 +812,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         <span
                           className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
                           onClick={() => {
+                            setSelectedOption(null);
                             setActiveBotId(bot.id);
                             router.push(`/spaces?bot=${bot.id}`);
                           }}
