@@ -715,7 +715,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       if (!isRightSidebarOpen) toggleRightSidebar();
                       window.dispatchEvent(new Event('alti_inbox_click'));
                     } else {
-                      router.push('/spaces');
+                      router.push('/inbox');
                     }
                   }}
                 >
