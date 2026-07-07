@@ -306,35 +306,6 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 </TooltipContent>
               </Tooltip>
 
-              {/* Inbox Toggle */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (
-                        selectedOption === OPTIONS.INSTRUCTIONS ||
-                        selectedOption === OPTIONS.GUARDRAILS ||
-                        selectedOption === OPTIONS.KNOWLEDGE
-                      ) {
-                        setSelectedOption(null);
-                      }
-                      setActiveTab('inbox');
-                    }}
-                    className={cn(
-                      "flex h-7 w-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                      activeTab === 'inbox'
-                        ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
-                        : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
-                    )}
-                  >
-                    <Inbox className="size-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>Inbox</p>
-                </TooltipContent>
-              </Tooltip>
 
               {/* Instructions Toggle */}
               <Tooltip>
@@ -426,6 +397,37 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 className="w-full bg-transparent text-xs text-black outline-none placeholder:text-gray-500"
               />
             </div>
+
+            {/* Inbox Button */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className={cn(
+                    "flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 text-black shadow-xs transition-all flex-none dark:text-white",
+                    activeTab === 'inbox'
+                      ? "bg-white dark:bg-zinc-800"
+                      : "bg-[#e1e1e1] hover:bg-black/[0.03] dark:bg-zinc-800/50"
+                  )}
+                  onClick={() => {
+                    if (
+                      selectedOption === OPTIONS.INSTRUCTIONS ||
+                      selectedOption === OPTIONS.GUARDRAILS ||
+                      selectedOption === OPTIONS.KNOWLEDGE
+                    ) {
+                      setSelectedOption(null);
+                    }
+                    setActiveTab('inbox');
+                  }}
+                >
+                  <Inbox className="size-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Inbox</p>
+              </TooltipContent>
+            </Tooltip>
 
             {/* Render + button for all tabs EXCEPT Inbox */}
             {activeTab !== 'inbox' && (
