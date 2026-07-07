@@ -439,7 +439,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                 </div>
 
                 {/* Vertical Separator */}
-                <div className="w-px h-4 bg-transparent dark:bg-white/10 flex-none" />
+                <div className="w-px h-4 bg-black/10 dark:bg-white/10 flex-none" />
 
                 {/* Inbox segment */}
                 <Tooltip>
@@ -469,7 +469,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
                 {/* Vertical Separator (only if plus is visible) */}
                 {selectedOption !== OPTIONS.INBOX && (
-                  <div className="w-px h-4 bg-transparent dark:bg-white/10 flex-none" />
+                  <div className="w-px h-4 bg-black/10 dark:bg-white/10 flex-none" />
                 )}
 
                 {/* Plus segment */}
