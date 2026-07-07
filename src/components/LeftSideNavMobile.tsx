@@ -75,6 +75,7 @@ import { apiClientJson, buildApiUrl } from '@/lib/api-client';
 import { useBotsStore } from '@/stores/useBotsStore';
 import { useConnectionsQuery } from '@/hooks/useConnectApps';
 import { useInboxQuery } from '@/hooks/useInbox';
+import { useSidebarStore } from '@/stores/useSidebarStore';
 
 interface DataConnector {
   id: string;
@@ -208,6 +209,7 @@ const LeftSideNavMobile = () => {
 
   const isLoggedIn = data?.accessToken;
   const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab } = useBotsStore();
+  const { isRightSidebarOpen, toggleRightSidebar } = useSidebarStore();
   
   const { data: inboxItems = [] } = useInboxQuery(
     data?.user?.id,
@@ -677,8 +679,27 @@ const LeftSideNavMobile = () => {
             />
           </div>
 
-          {/* Action Buttons to the right */}
           <div className="flex flex-none items-center gap-1.5">
+            {/* Inbox Button */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.06] text-white shadow-xs transition-all hover:bg-white/[0.12]"
+                  onClick={() => {
+                    if (!isRightSidebarOpen) toggleRightSidebar();
+                    window.dispatchEvent(new Event('alti_inbox_click'));
+                  }}
+                >
+                  <Inbox className="size-4 text-white" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Inbox</p>
+              </TooltipContent>
+            </Tooltip>
+
             {plusProps.visible && (
               <div>
                 {/* Plus for Dynamic Tab Action */}
