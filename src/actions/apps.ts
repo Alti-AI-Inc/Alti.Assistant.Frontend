@@ -98,3 +98,63 @@ export const getConnections = async (
   }
 };
 
+export const installApp = async (
+  accessToken?: string,
+  appId?: string,
+  env?: Record<string, string>,
+  databaseUrl?: string
+): Promise<ApiResponse> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/mcp-toolbox/install-app`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ appId, env, databaseUrl }),
+      },
+    );
+    const data = await response.json();
+    return data;
+  } catch (error: any) {
+    console.error('installApp Error:', error);
+    return {
+      success: false,
+      message: 'Failed to install application.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
+  }
+};
+
+export const stopApp = async (
+  accessToken?: string,
+  appId?: string
+): Promise<ApiResponse> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/mcp-toolbox/stop-server`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ serverId: appId }),
+      },
+    );
+    const data = await response.json();
+    return data;
+  } catch (error: any) {
+    console.error('stopApp Error:', error);
+    return {
+      success: false,
+      message: 'Failed to stop application.',
+      debugMessage: error.message || String(error),
+      statusCode: 500,
+    };
+  }
+};
+

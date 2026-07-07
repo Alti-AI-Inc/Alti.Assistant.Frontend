@@ -7,6 +7,80 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import AppImage from '@/components/AppImage';
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { installApp, stopApp } from '@/actions/apps';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+
+interface AppBlueprint {
+  requiredEnv: string[];
+  labels: Record<string, string>;
+  placeholders: Record<string, string>;
+  needsDatabaseUrl?: boolean;
+}
+
+const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
+  "google-maps": {
+    requiredEnv: ["MAPS_API_KEY"],
+    labels: {
+      "MAPS_API_KEY": "Google Maps Platform API Key"
+    },
+    placeholders: {
+      "MAPS_API_KEY": "AIzaSy..."
+    }
+  },
+  "slack": {
+    requiredEnv: ["SLACK_BOT_TOKEN"],
+    labels: {
+      "SLACK_BOT_TOKEN": "Slack Bot User OAuth Token"
+    },
+    placeholders: {
+      "SLACK_BOT_TOKEN": "xoxb-..."
+    }
+  },
+  "linear": {
+    requiredEnv: ["LINEAR_API_KEY"],
+    labels: {
+      "LINEAR_API_KEY": "Linear Personal Access Token"
+    },
+    placeholders: {
+      "LINEAR_API_KEY": "lin_api_..."
+    }
+  },
+  "gcal": {
+    requiredEnv: ["GOOGLE_CALENDAR_CREDENTIALS"],
+    labels: {
+      "GOOGLE_CALENDAR_CREDENTIALS": "Google Calendar Credentials JSON"
+    },
+    placeholders: {
+      "GOOGLE_CALENDAR_CREDENTIALS": "{\"installed\": {..."
+    }
+  },
+  "katzilla": {
+    requiredEnv: ["KATZILLA_API_KEY"],
+    labels: {
+      "KATZILLA_API_KEY": "Katzilla Platform API Key"
+    },
+    placeholders: {
+      "KATZILLA_API_KEY": "kat_..."
+    }
+  },
+  "postgres": {
+    requiredEnv: [],
+    labels: {},
+    placeholders: {},
+    needsDatabaseUrl: true
+  },
+  "postgresql": {
+    requiredEnv: [],
+    labels: {},
+    placeholders: {},
+    needsDatabaseUrl: true
+  }
+};
 
 // Premium high-stakes app configuration mapping
 const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bgGlow: string; badge: string; hoverBorder: string }> = {
@@ -301,18 +375,95 @@ const AppCard = ({
   isAlreadyConnected: boolean;
 }) => {
   const { data: session } = useSession();
+  const queryClient = useQueryClient();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [isDisconnecting, setIsDisconnecting] = useState(false);
+  const [envInputs, setEnvInputs] = useState<Record<string, string>>({});
+  const [dbUrlInput, setDbUrlInput] = useState('');
+  const [advancedJsonInput, setAdvancedJsonInput] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
-  const handleClick = () => {
-    // Legacy connection removed
-    // Native MCP connections should be configured via the MCP settings panel
-    setErrorMessage('Please configure this integration directly in the MCP Platform settings.');
-  };
 
   const slug = app.app_name?.toLowerCase() || '';
   const strategicStyle = STRATEGIC_APPS_STYLE[slug];
+  const blueprint = MCP_BLUEPRINTS[slug];
 
+  const isDatabaseApp = blueprint?.needsDatabaseUrl || 
+    slug.includes('postgres') || 
+    slug.includes('postgresql') || 
+    slug.includes('mysql') || 
+    slug.includes('db') || 
+    slug.includes('database');
+
+  const handleOpenModal = () => {
+    const initialEnv: Record<string, string> = {};
+    if (blueprint) {
+      blueprint.requiredEnv.forEach(key => {
+        initialEnv[key] = '';
+      });
+    }
+    setEnvInputs(initialEnv);
+    setDbUrlInput('');
+    setAdvancedJsonInput('');
+    setErrorMessage('');
+    setIsModalOpen(true);
+  };
+
+  const handleConnect = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsConnecting(true);
+    setErrorMessage('');
+
+    try {
+      let finalEnv: Record<string, string> = { ...envInputs };
+
+      if (advancedJsonInput.trim()) {
+        try {
+          const parsed = JSON.parse(advancedJsonInput.trim());
+          if (typeof parsed === 'object' && parsed !== null) {
+            finalEnv = { ...finalEnv, ...parsed };
+          } else {
+            throw new Error('JSON must be a flat key-value object.');
+          }
+        } catch (err: any) {
+          setErrorMessage(`Invalid JSON format: ${err.message}`);
+          setIsConnecting(false);
+          return;
+        }
+      }
+
+      const res = await installApp(session?.accessToken, app.app_name, finalEnv, dbUrlInput || undefined);
+      if (res.success) {
+        toast.success(`Successfully connected ${app.title}!`);
+        setIsModalOpen(false);
+        queryClient.invalidateQueries({ queryKey: ['connections'] });
+      } else {
+        setErrorMessage(res.debugMessage || res.message || 'Failed to install application.');
+      }
+    } catch (err: any) {
+      setErrorMessage(err.message || 'An unexpected error occurred.');
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  const handleDisconnect = async () => {
+    setIsDisconnecting(true);
+    try {
+      const res = await stopApp(session?.accessToken, app.app_name);
+      if (res.success) {
+        toast.success(`Disconnected ${app.title}.`);
+        queryClient.invalidateQueries({ queryKey: ['connections'] });
+      } else {
+        toast.error(res.debugMessage || res.message || 'Failed to disconnect application.');
+      }
+    } catch (err: any) {
+      toast.error(err.message || 'An unexpected error occurred.');
+    } finally {
+      setIsDisconnecting(false);
+    }
+  };
 
   return (
     <div className="h-full group">
@@ -383,29 +534,114 @@ const AppCard = ({
 
           {/* Action Trigger */}
           <div className="mt-5 space-y-2">
-            {errorMessage && (
-              <p className="text-xs text-red-500 font-medium bg-red-50 dark:bg-red-950/20 p-2 rounded-md border border-red-200/30">
-                {errorMessage}
-              </p>
-            )}
             <Button
               className={cn(
-                "w-full transition-all duration-300 font-medium shadow-sm",
+                "w-full transition-all duration-300 font-medium shadow-sm border-none",
                 isAlreadyConnected
-                  ? "bg-slate-100 dark:bg-slate-800 text-slate-450 dark:text-slate-500 cursor-not-allowed hover:bg-slate-100 dark:hover:bg-slate-800 border-none"
-                  : "bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:text-white border-none"
+                  ? "bg-red-500 hover:bg-red-650 text-white dark:bg-red-600 dark:hover:bg-red-750"
+                  : "bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 dark:text-white"
               )}
-              variant={isAlreadyConnected ? "ghost" : "default"}
-              disabled={isAlreadyConnected}
-              onClick={handleClick}
+              variant="default"
+              disabled={isConnecting || isDisconnecting}
+              onClick={isAlreadyConnected ? handleDisconnect : handleOpenModal}
             >
-              {isAlreadyConnected
-                ? 'Authorized & Ready'
-                : 'Establish Integration'}
+              {isConnecting || isDisconnecting ? (
+                <LoaderCircle className="size-4 animate-spin mx-auto text-white" />
+              ) : isAlreadyConnected ? (
+                'Disconnect Integration'
+              ) : (
+                'Establish Integration'
+              )}
             </Button>
           </div>
         </CardContent>
       </Card>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-md rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/80 shadow-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2.5">
+              <Zap className="size-5 text-indigo-500" />
+              Configure {app.title}
+            </DialogTitle>
+          </DialogHeader>
+
+          <form onSubmit={handleConnect} className="space-y-5 mt-4">
+            {errorMessage && (
+              <p className="text-xs text-red-500 font-medium bg-red-50 dark:bg-red-950/20 p-2.5 rounded-xl border border-red-200/30">
+                {errorMessage}
+              </p>
+            )}
+
+            {blueprint && blueprint.requiredEnv.length > 0 && (
+              <div className="space-y-4">
+                {blueprint.requiredEnv.map(key => (
+                  <div key={key} className="space-y-1.5">
+                    <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      {blueprint.labels[key] || key}
+                    </Label>
+                    <Input
+                      type="password"
+                      placeholder={blueprint.placeholders[key] || "Enter credentials..."}
+                      value={envInputs[key] || ''}
+                      onChange={e => setEnvInputs(prev => ({ ...prev, [key]: e.target.value }))}
+                      required
+                      className="rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus-visible:ring-1 focus-visible:ring-indigo-500"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {isDatabaseApp && (
+              <div className="space-y-1.5">
+                <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  Database Connection URI
+                </Label>
+                <Input
+                  type="text"
+                  placeholder="postgresql://username:password@localhost:5432/dbname"
+                  value={dbUrlInput}
+                  onChange={e => setDbUrlInput(e.target.value)}
+                  required
+                  className="rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 focus-visible:ring-1 focus-visible:ring-indigo-500"
+                />
+              </div>
+            )}
+
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex justify-between">
+                <span>Advanced Custom Environment Variables (Optional JSON)</span>
+              </Label>
+              <Textarea
+                placeholder='{ "CUSTOM_API_KEY": "your_value" }'
+                value={advancedJsonInput}
+                onChange={e => setAdvancedJsonInput(e.target.value)}
+                className="rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 min-h-[80px] font-mono text-xs focus-visible:ring-1 focus-visible:ring-indigo-500"
+              />
+            </div>
+
+            <DialogFooter className="pt-2">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setIsModalOpen(false)}
+                className="rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={isConnecting}
+                className="rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 px-5 flex items-center justify-center gap-2"
+              >
+                {isConnecting && <LoaderCircle className="size-4 animate-spin text-white" />}
+                Connect Integration
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
