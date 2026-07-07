@@ -79,6 +79,219 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
     labels: {},
     placeholders: {},
     needsDatabaseUrl: true
+  },
+  "notion": {
+    requiredEnv: ["NOTION_API_KEY"],
+    labels: {
+      "NOTION_API_KEY": "Notion API Key / Internal Integration Token"
+    },
+    placeholders: {
+      "NOTION_API_KEY": "secret_..."
+    }
+  },
+  "jira": {
+    requiredEnv: ["JIRA_URL", "JIRA_API_TOKEN", "JIRA_EMAIL"],
+    labels: {
+      "JIRA_URL": "Jira Site URL",
+      "JIRA_API_TOKEN": "Atlassian API Token",
+      "JIRA_EMAIL": "Atlassian Account Email"
+    },
+    placeholders: {
+      "JIRA_URL": "https://your-domain.atlassian.net",
+      "JIRA_API_TOKEN": "ATATT3xF...",
+      "JIRA_EMAIL": "your-email@company.com"
+    }
+  },
+  "figma": {
+    requiredEnv: ["FIGMA_PERSONAL_ACCESS_TOKEN"],
+    labels: {
+      "FIGMA_PERSONAL_ACCESS_TOKEN": "Figma Personal Access Token (PAT)"
+    },
+    placeholders: {
+      "FIGMA_PERSONAL_ACCESS_TOKEN": "figd_..."
+    }
+  },
+  "resend": {
+    requiredEnv: ["RESEND_API_KEY"],
+    labels: {
+      "RESEND_API_KEY": "Resend API Key"
+    },
+    placeholders: {
+      "RESEND_API_KEY": "re_..."
+    }
+  },
+  "mongodb": {
+    requiredEnv: ["MONGODB_URI"],
+    labels: {
+      "MONGODB_URI": "MongoDB Connection URI"
+    },
+    placeholders: {
+      "MONGODB_URI": "mongodb+srv://username:password@cluster.mongodb.net/dbname"
+    }
+  },
+  "airtable": {
+    requiredEnv: ["AIRTABLE_API_KEY"],
+    labels: {
+      "AIRTABLE_API_KEY": "Airtable Personal Access Token (PAT)"
+    },
+    placeholders: {
+      "AIRTABLE_API_KEY": "pat..."
+    }
+  },
+  "shopify": {
+    requiredEnv: ["SHOPIFY_SHOP_NAME", "SHOPIFY_API_PASSWORD"],
+    labels: {
+      "SHOPIFY_SHOP_NAME": "Shopify Shop Name (Subdomain)",
+      "SHOPIFY_API_PASSWORD": "Shopify Admin API Access Token"
+    },
+    placeholders: {
+      "SHOPIFY_SHOP_NAME": "my-store-name",
+      "SHOPIFY_API_PASSWORD": "shpat_..."
+    }
+  },
+  "hubspot": {
+    requiredEnv: ["HUBSPOT_ACCESS_TOKEN"],
+    labels: {
+      "HUBSPOT_ACCESS_TOKEN": "HubSpot Private App Access Token"
+    },
+    placeholders: {
+      "HUBSPOT_ACCESS_TOKEN": "pat-na1-..."
+    }
+  },
+  "asana": {
+    requiredEnv: ["ASANA_PAT"],
+    labels: {
+      "ASANA_PAT": "Asana Personal Access Token"
+    },
+    placeholders: {
+      "ASANA_PAT": "1/123456789:..."
+    }
+  },
+  "clickup": {
+    requiredEnv: ["CLICKUP_API_TOKEN"],
+    labels: {
+      "CLICKUP_API_TOKEN": "ClickUp Personal API Token"
+    },
+    placeholders: {
+      "CLICKUP_API_TOKEN": "pk_..."
+    }
+  },
+  "zendesk": {
+    requiredEnv: ["ZENDESK_SUBDOMAIN", "ZENDESK_EMAIL", "ZENDESK_API_TOKEN"],
+    labels: {
+      "ZENDESK_SUBDOMAIN": "Zendesk Subdomain",
+      "ZENDESK_EMAIL": "Zendesk Account Email",
+      "ZENDESK_API_TOKEN": "Zendesk API Token"
+    },
+    placeholders: {
+      "ZENDESK_SUBDOMAIN": "your-company",
+      "ZENDESK_EMAIL": "agent@your-company.com",
+      "ZENDESK_API_TOKEN": "abc123xyz..."
+    }
+  },
+  "mailchimp": {
+    requiredEnv: ["MAILCHIMP_API_KEY"],
+    labels: {
+      "MAILCHIMP_API_KEY": "Mailchimp API Key"
+    },
+    placeholders: {
+      "MAILCHIMP_API_KEY": "abc123xyz-usX"
+    }
+  },
+  "intercom": {
+    requiredEnv: ["INTERCOM_ACCESS_TOKEN"],
+    labels: {
+      "INTERCOM_ACCESS_TOKEN": "Intercom Access Token"
+    },
+    placeholders: {
+      "INTERCOM_ACCESS_TOKEN": "dG9rZW46..."
+    }
+  },
+  "pipedrive": {
+    requiredEnv: ["PIPEDRIVE_API_TOKEN"],
+    labels: {
+      "PIPEDRIVE_API_TOKEN": "Pipedrive API Token"
+    },
+    placeholders: {
+      "PIPEDRIVE_API_TOKEN": "abc123xyz..."
+    }
+  },
+  "salesforce": {
+    requiredEnv: ["SALESFORCE_USERNAME", "SALESFORCE_PASSWORD", "SALESFORCE_TOKEN", "SALESFORCE_CLIENT_ID", "SALESFORCE_CLIENT_SECRET"],
+    labels: {
+      "SALESFORCE_USERNAME": "Salesforce Username",
+      "SALESFORCE_PASSWORD": "Salesforce Password",
+      "SALESFORCE_TOKEN": "Salesforce Security Token",
+      "SALESFORCE_CLIENT_ID": "OAuth Client ID (Consumer Key)",
+      "SALESFORCE_CLIENT_SECRET": "OAuth Client Secret (Consumer Secret)"
+    },
+    placeholders: {
+      "SALESFORCE_USERNAME": "user@company.com",
+      "SALESFORCE_PASSWORD": "yourpassword",
+      "SALESFORCE_TOKEN": "securitytoken...",
+      "SALESFORCE_CLIENT_ID": "clientid...",
+      "SALESFORCE_CLIENT_SECRET": "clientsecret..."
+    }
+  },
+  "discord": {
+    requiredEnv: ["DISCORD_BOT_TOKEN"],
+    labels: {
+      "DISCORD_BOT_TOKEN": "Discord Bot Token"
+    },
+    placeholders: {
+      "DISCORD_BOT_TOKEN": "MTIzNDU..."
+    }
+  },
+  "twilio": {
+    requiredEnv: ["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN"],
+    labels: {
+      "TWILIO_ACCOUNT_SID": "Twilio Account SID",
+      "TWILIO_AUTH_TOKEN": "Twilio Auth Token"
+    },
+    placeholders: {
+      "TWILIO_ACCOUNT_SID": "AC...",
+      "TWILIO_AUTH_TOKEN": "your_auth_token"
+    }
+  },
+  "pinecone": {
+    requiredEnv: ["PINECONE_API_KEY"],
+    labels: {
+      "PINECONE_API_KEY": "Pinecone API Key"
+    },
+    placeholders: {
+      "PINECONE_API_KEY": "pcsk_..."
+    }
+  },
+  "supabase": {
+    requiredEnv: ["SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"],
+    labels: {
+      "SUPABASE_URL": "Supabase Project URL",
+      "SUPABASE_SERVICE_ROLE_KEY": "Supabase service_role API Key"
+    },
+    placeholders: {
+      "SUPABASE_URL": "https://yourproject.supabase.co",
+      "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGci..."
+    }
+  },
+  "gmail": {
+    requiredEnv: ["GMAIL_CREDENTIALS"],
+    labels: {
+      "GMAIL_CREDENTIALS": "Gmail Credentials JSON"
+    },
+    placeholders: {
+      "GMAIL_CREDENTIALS": "{\"installed\": {..."
+    }
+  },
+  "trello": {
+    requiredEnv: ["TRELLO_API_KEY", "TRELLO_API_TOKEN"],
+    labels: {
+      "TRELLO_API_KEY": "Trello API Key",
+      "TRELLO_API_TOKEN": "Trello OAuth Token"
+    },
+    placeholders: {
+      "TRELLO_API_KEY": "your_api_key",
+      "TRELLO_API_TOKEN": "your_oauth_token"
+    }
   }
 };
 
