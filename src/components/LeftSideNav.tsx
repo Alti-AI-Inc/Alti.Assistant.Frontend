@@ -52,6 +52,7 @@ import {
   Upload,
   Cpu,
   Sparkles,
+  Palette,
   Microscope,
   EllipsisVertical,
   CreditCard,
@@ -685,10 +686,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
                   )}
                 >
-                  <MessageSquare className="h-3.5 w-3.5" />
+                  <Sparkles className="h-3.5 w-3.5" />
                 </button>
               </TooltipTrigger>
-              <TooltipContent>AI Chat</TooltipContent>
+              <TooltipContent className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 transition-all select-none">AI</TooltipContent>
             </Tooltip>
 
             {/* Studio */}
@@ -704,10 +705,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       : 'bg-transparent border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white',
                   )}
                 >
-                  <Cpu className="h-3.5 w-3.5" />
+                  <Palette className="h-3.5 w-3.5" />
                 </button>
               </TooltipTrigger>
-              <TooltipContent>Studio</TooltipContent>
+              <TooltipContent className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 transition-all select-none">Studio</TooltipContent>
             </Tooltip>
 
             {/* Apps */}
@@ -726,7 +727,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   <Blocks className="h-3.5 w-3.5" />
                 </button>
               </TooltipTrigger>
-              <TooltipContent>Connected Apps</TooltipContent>
+              <TooltipContent className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 transition-all select-none">Apps</TooltipContent>
             </Tooltip>
 
             {/* Tasks */}
@@ -745,7 +746,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   <ListTodo className="h-3.5 w-3.5" />
                 </button>
               </TooltipTrigger>
-              <TooltipContent>Automations</TooltipContent>
+              <TooltipContent className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 transition-all select-none">Tasks</TooltipContent>
             </Tooltip>
 
             {/* Spaces */}
@@ -764,7 +765,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   <LayoutGrid className="h-3.5 w-3.5" />
                 </button>
               </TooltipTrigger>
-              <TooltipContent>Workspaces</TooltipContent>
+              <TooltipContent className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 transition-all select-none">Spaces</TooltipContent>
             </Tooltip>
           </div>
         </div>
