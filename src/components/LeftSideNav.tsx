@@ -1151,22 +1151,17 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         </DialogContent>
       </Dialog>
 
-      {/* Rename space dialog */}
       <Dialog open={!!botToRename} onOpenChange={() => setBotToRename(null)}>
         <DialogContent className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Rename</h3>
-            <div className="space-y-2">
-              <label className="text-xs text-zinc-550 dark:text-zinc-400">New Name</label>
-              <input
-                type="text"
-                value={renameValue}
-                onChange={(e) => setRenameValue(e.target.value)}
-                placeholder="Enter space name..."
-                className="w-full bg-gray-50 dark:bg-zinc-955 border border-black/15 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-900 dark:text-white"
-                autoFocus
-              />
-            </div>
+            <input
+              type="text"
+              value={renameValue}
+              onChange={(e) => setRenameValue(e.target.value)}
+              placeholder="Enter space name..."
+              className="w-full bg-gray-50 dark:bg-zinc-955 border border-black/15 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-900 dark:text-white"
+              autoFocus
+            />
             <div className="flex border-t border-black/10 dark:border-white/10 h-11 -mx-6 -mb-6 mt-4">
               <button 
                 className="flex-1 text-sm font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 h-full border-r border-black/10 dark:border-white/10 outline-none"
