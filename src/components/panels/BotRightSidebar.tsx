@@ -329,10 +329,10 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
           {!hideSidebar && (
             <div className="flex-1 flex flex-col min-h-0 bg-white">
               
-              {/* Consolidated Single Toggle List (top) */}
-              <div className="px-4 pt-4 shrink-0">
-                <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03] flex-wrap justify-between">
-                  
+              {/* Consolidated Toggle Lists (Runtime & Configuration) */}
+              <div className="px-4 pt-4 shrink-0 space-y-2">
+                {/* Runtime Toggle Row */}
+                <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
                   {/* AI Toggle */}
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -343,7 +343,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                           setActiveTab('ai');
                         }}
                         className={cn(
-                          "flex h-7 w-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
+                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
                           activeTab === 'ai' && selectedOption !== OPTIONS.INBOX
                             ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
                             : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
@@ -367,7 +367,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                           setActiveTab('studio');
                         }}
                         className={cn(
-                          "flex h-7 w-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
+                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
                           activeTab === 'studio'
                             ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
                             : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
@@ -391,7 +391,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                           setActiveTab('tasks');
                         }}
                         className={cn(
-                          "flex h-7 w-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
+                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
                           activeTab === 'tasks'
                             ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
                             : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
@@ -404,8 +404,10 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                       <p>Tasks</p>
                     </TooltipContent>
                   </Tooltip>
+                </div>
 
-
+                {/* Configuration Toggle Row */}
+                <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
                   {/* Instructions Toggle */}
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -416,7 +418,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                           setActiveTab('instructions');
                         }}
                         className={cn(
-                          "flex h-7 w-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
+                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
                           activeTab === 'instructions'
                             ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
                             : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
@@ -440,7 +442,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                           setActiveTab('guardrails');
                         }}
                         className={cn(
-                          "flex h-7 w-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
+                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
                           activeTab === 'guardrails'
                             ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
                             : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
@@ -464,7 +466,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                           setActiveTab('knowledge');
                         }}
                         className={cn(
-                          "flex h-7 w-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
+                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
                           activeTab === 'knowledge'
                             ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
                             : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
@@ -477,7 +479,6 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                       <p>Knowledge</p>
                     </TooltipContent>
                   </Tooltip>
-
                 </div>
               </div>
 
