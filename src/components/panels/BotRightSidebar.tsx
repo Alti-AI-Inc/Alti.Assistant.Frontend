@@ -804,14 +804,14 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                           <div
                             key={thread.id}
                             className={cn(
-                              "group flex h-9 w-full items-center justify-between rounded-xl text-xs font-normal text-left transition-all duration-150 border cursor-pointer select-none px-3",
+                              "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border cursor-pointer select-none",
                               isSelected 
                                 ? "bg-black/[0.06] border-black/10 text-black font-semibold shadow-xs dark:bg-white/10 dark:border-white/10 dark:text-white" 
                                 : "bg-black/[0.02] border-black/[0.03] text-gray-700 hover:bg-black/[0.04] hover:border-black/5 hover:text-black dark:bg-white/[0.03] dark:border-white/[0.03] dark:text-zinc-300 dark:hover:bg-white/[0.06] dark:hover:border-white/5 dark:hover:text-white",
                             )}
                           >
                             <span
-                              className="flex-1 cursor-pointer truncate py-2 flex items-center gap-2.5"
+                              className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
                               onClick={() => handleThreadSelect(thread.id)}
                             >
                               <ThreadIcon className={cn(

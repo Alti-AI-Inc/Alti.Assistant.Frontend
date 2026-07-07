@@ -321,7 +321,7 @@ export default function ConversationsList({
         return (
           <div
             className={cn(
-              "group flex h-9 w-full items-center justify-between rounded-xl text-xs font-normal text-left transition-all duration-150 border mb-1.5 cursor-pointer select-none px-3",
+              "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border mb-1.5 cursor-pointer select-none",
               isActive
                 ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs"
                 : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
@@ -329,7 +329,7 @@ export default function ConversationsList({
             key={chat._id}
           >
             <span
-              className="flex-1 cursor-pointer truncate py-2 flex items-center gap-2.5"
+              className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
               onClick={() => handleConversationClick(chat.conversationId)}
             >
               {getDisplayIcon(chat)}
