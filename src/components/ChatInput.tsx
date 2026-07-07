@@ -1556,7 +1556,7 @@ export default function ChatInput({
                     type="button"
                     onClick={handleCreateTask}
                     disabled={!message.trim()}
-                    className="bg-black hover:bg-black/90 disabled:bg-black disabled:opacity-100 text-white rounded-xl h-[36px] w-[36px] p-0 flex items-center justify-center transition-transform active:scale-95 disabled:active:scale-100"
+                    className="bg-[#0c1120] hover:bg-[#0c1120]/90 disabled:bg-[#0c1120] disabled:opacity-100 text-white rounded-xl h-[36px] w-[36px] p-0 flex items-center justify-center transition-transform active:scale-95 disabled:active:scale-100"
                   >
                     <ArrowUp className="size-4 text-white" />
                   </button>
