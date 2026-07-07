@@ -19,7 +19,7 @@ import {
   ListTodo,
   BookOpen,
   Sparkles,
-  Wand2,
+  Palette,
   Inbox,
   SlidersHorizontal,
   PenTool,
@@ -285,341 +285,216 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   return (
     <aside
       className={cn(
-        "flex-none flex flex-col border-l border-black/10 h-full overflow-hidden transition-all duration-300",
+        "flex-none flex flex-col border-l border-zinc-800/60 h-full overflow-hidden transition-all duration-300 bg-[#0c1120] dark:bg-[#0c1120] text-white",
         hideSidebar ? "w-10" : "w-76"
       )}
-      style={{ backgroundColor: '#FFFFFF' }}
     >
       {hideSidebar ? (
-        <header
-          className="sticky top-0 z-30 flex items-center justify-between border-b border-black/10 pt-4 pb-4 flex-none px-0 justify-center"
-          style={{ backgroundColor: '#FFFFFF' }}
-        >
+        <header className="sticky top-0 z-30 flex items-center justify-between border-b border-zinc-800/60 pt-4 pb-4 flex-none px-0 justify-center bg-[#0c1120] dark:bg-[#0c1120] text-white">
           <PanelLeftClose
-            className="size-5 cursor-pointer text-gray-600 transition-transform duration-300 flex-none scale-x-[-1]"
+            className="size-5 cursor-pointer text-zinc-400 hover:text-white transition-transform duration-300 flex-none scale-x-[-1]"
             onClick={toggleRightSidebar}
           />
         </header>
-      ) : activeTab === 'inbox' ? (
-        <div className="flex-1 flex flex-col min-h-0 bg-[#F9FAFB] dark:bg-zinc-950 p-4 space-y-4">
-          {/* Floating Search Bar */}
-          <div className="relative flex items-center h-12 w-full rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 px-4 shadow-sm focus-within:ring-2 focus-within:ring-black/5 transition-all">
-            <Search className="size-4 text-gray-400 mr-2 flex-none" />
-            <input
-              type="text"
-              placeholder="Search Inbox..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-transparent text-sm text-black dark:text-white outline-none placeholder:text-gray-400"
-            />
-            {/* Close/Back button to return to AI tab */}
-            <button
-              onClick={() => {
-                setSelectedOption(null);
-                setActiveTab('ai');
-              }}
-              className="ml-2 p-1.5 rounded-lg text-gray-400 hover:bg-black/5 hover:text-black dark:hover:bg-white/5 dark:hover:text-white transition-colors flex-none"
-              title="Exit Inbox"
-            >
-              <PanelLeftClose className="size-4" />
-            </button>
-          </div>
-
-          {/* Execution Logs Header / Clear History */}
-          <div className="flex items-center justify-between px-1 flex-none">
-            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider select-none">Execution Logs</span>
-            {runs.length > 0 && (
-              <button 
-                onClick={handleClearRuns} 
-                className="text-[10px] text-zinc-400 hover:text-red-500 transition-colors font-medium"
-              >
-                Clear History
-              </button>
-            )}
-          </div>
-
-          {/* Inbox List Area */}
-          <div className="flex-1 overflow-y-auto space-y-3 min-h-0 pr-1 pb-4">
-            {filteredRuns.length === 0 ? (
-              <div className="py-12 text-center text-xs text-gray-400 select-none">
-                {searchQuery ? 'No matching executions.' : 'No executions yet. Run a task to see logs.'}
-              </div>
-            ) : (
-              filteredRuns.map((run) => (
-                <div 
-                  key={run.id}
-                  className="w-full bg-white dark:bg-zinc-900 rounded-xl p-4 space-y-2 border border-black/[0.06] dark:border-white/[0.06] shadow-xs hover:shadow-sm transition-shadow duration-150"
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="font-semibold text-gray-955 dark:text-white text-xs truncate">
-                      {run.taskName}
-                    </span>
-                  </div>
-                  
-                  <p className="text-xs text-gray-600 dark:text-zinc-400 leading-relaxed">
-                    {run.summary}
-                  </p>
-                  
-                  <div className="flex items-center justify-between pt-2 border-t border-black/5 dark:border-white/5 text-[10px] text-gray-400">
-                    <span>{new Date(run.timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
-                    {run.duration && <span>{Math.round(run.duration / 100) / 10}s</span>}
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
       ) : (
         <>
           {/* Header matching left side menu */}
-          <header
-            className={cn(
-              "sticky top-0 z-30 flex items-center justify-between border-b border-black/10 pt-4 pb-4 flex-none",
-              hideSidebar ? "px-0 justify-center" : "px-4"
-            )}
-            style={{ backgroundColor: '#FFFFFF' }}
-          >
+          <header className="sticky top-0 z-30 flex items-center justify-between border-b border-zinc-800/60 pt-4 pb-4 flex-none px-4 bg-[#0c1120] dark:bg-[#0c1120] text-white">
             <PanelLeftClose
-              className={cn(
-                "size-5 cursor-pointer text-gray-600 transition-transform duration-300 flex-none",
-                !hideSidebar && "scale-x-[-1]"
-              )}
+              className="size-5 cursor-pointer text-zinc-400 hover:text-white transition-transform duration-300 flex-none scale-x-[-1]"
               onClick={toggleRightSidebar}
             />
-
-            {!hideSidebar && (
-              <span className="text-sm font-normal text-gray-850 dark:text-gray-200">
-                {bot.name}
-              </span>
-            )}
+            <span className="text-sm font-semibold truncate max-w-[180px] text-white">
+              {bot.name}
+            </span>
           </header>
 
-          {!hideSidebar && (
-            <div className="flex-1 flex flex-col min-h-0 bg-white">
-              
-              {/* Consolidated Toggle Lists (Runtime & Configuration) */}
-              <div className="px-4 pt-4 shrink-0 space-y-2">
-                {/* Runtime Toggle Row */}
-                <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
-                  {/* AI Toggle */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedOption(null);
-                          setActiveTab('ai');
-                        }}
-                        className={cn(
-                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                          activeTab === 'ai' && selectedOption !== OPTIONS.INBOX
-                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
-                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
-                        )}
-                      >
-                        <Sparkles className="size-4" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>AI</p>
-                    </TooltipContent>
-                  </Tooltip>
+          <div className="flex-1 flex flex-col min-h-0 bg-[#0c1120] dark:bg-[#0c1120]">
+            {/* 6-Row Toggles stack */}
+            <div className="pt-3 px-4 flex-none bg-[#0c1120] dark:bg-[#0c1120] transition-colors duration-300">
+              <div className="space-y-1.5 w-full">
+                {/* Assistant */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedOption(null);
+                    setActiveTab('ai');
+                  }}
+                  className={cn(
+                    'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
+                    activeTab === 'ai' && selectedOption !== OPTIONS.INBOX
+                      ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
+                      : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+                  )}
+                >
+                  <Sparkles className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span>Assistant</span>
+                </button>
 
-                  {/* Studio Toggle */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedOption(OPTIONS.CODE);
-                          setActiveTab('studio');
-                        }}
-                        className={cn(
-                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                          activeTab === 'studio'
-                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
-                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
-                        )}
-                      >
-                        <Wand2 className="size-4" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>Studio</p>
-                    </TooltipContent>
-                  </Tooltip>
+                {/* Studio */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedOption(OPTIONS.CODE);
+                    setActiveTab('studio');
+                  }}
+                  className={cn(
+                    'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
+                    activeTab === 'studio' && selectedOption !== OPTIONS.INBOX
+                      ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
+                      : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+                  )}
+                >
+                  <Palette className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span>Studio</span>
+                </button>
 
-                  {/* Tasks Toggle */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedOption(OPTIONS.TASK);
-                          setActiveTab('tasks');
-                        }}
-                        className={cn(
-                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                          activeTab === 'tasks'
-                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
-                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
-                        )}
-                      >
-                        <ListTodo className="size-4" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>Tasks</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
+                {/* Tasks */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedOption(OPTIONS.TASK);
+                    setActiveTab('tasks');
+                  }}
+                  className={cn(
+                    'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
+                    activeTab === 'tasks' && selectedOption !== OPTIONS.INBOX
+                      ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
+                      : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+                  )}
+                >
+                  <ListTodo className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span>Tasks</span>
+                </button>
 
-                <div className="h-px w-[calc(100%+2rem)] -ml-4 bg-black/10 dark:bg-white/10 my-3 shrink-0" />
+                {/* Instructions */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedOption(OPTIONS.INSTRUCTIONS);
+                    setActiveTab('instructions');
+                  }}
+                  className={cn(
+                    'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
+                    activeTab === 'instructions' && selectedOption !== OPTIONS.INBOX
+                      ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
+                      : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+                  )}
+                >
+                  <SlidersHorizontal className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span>Instructions</span>
+                </button>
 
-                {/* Configuration Toggle Row */}
-                <div className="flex bg-[#e1e1e1] dark:bg-white/[0.04] p-1 rounded-xl items-center gap-1 border border-black/[0.03] dark:border-white/[0.03]">
-                  {/* Instructions Toggle */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedOption(OPTIONS.INSTRUCTIONS);
-                          setActiveTab('instructions');
-                        }}
-                        className={cn(
-                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                          activeTab === 'instructions'
-                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
-                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
-                        )}
-                      >
-                        <SlidersHorizontal className="size-4" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>Instructions</p>
-                    </TooltipContent>
-                  </Tooltip>
+                {/* Guardrails */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedOption(OPTIONS.GUARDRAILS);
+                    setActiveTab('guardrails');
+                  }}
+                  className={cn(
+                    'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
+                    activeTab === 'guardrails' && selectedOption !== OPTIONS.INBOX
+                      ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
+                      : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+                  )}
+                >
+                  <Shield className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span>Guardrails</span>
+                </button>
 
-                  {/* Guardrails Toggle */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedOption(OPTIONS.GUARDRAILS);
-                          setActiveTab('guardrails');
-                        }}
-                        className={cn(
-                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                          activeTab === 'guardrails'
-                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
-                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
-                        )}
-                      >
-                        <Shield className="size-4" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>Guardrails</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  {/* Knowledge Toggle */}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedOption(OPTIONS.KNOWLEDGE);
-                          setActiveTab('knowledge');
-                        }}
-                        className={cn(
-                          "flex-1 flex h-7 items-center justify-center rounded-lg border transition-all duration-200 focus:outline-none select-none",
-                          activeTab === 'knowledge'
-                            ? "bg-white border-black/10 text-black shadow-xs dark:bg-zinc-800 dark:border-white/10 dark:text-white"
-                            : "bg-transparent border-transparent text-gray-500 hover:bg-black/[0.03] hover:text-gray-800"
-                        )}
-                      >
-                        <BookOpen className="size-4" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p>Knowledge</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
+                {/* Knowledge */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedOption(OPTIONS.KNOWLEDGE);
+                    setActiveTab('knowledge');
+                  }}
+                  className={cn(
+                    'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
+                    activeTab === 'knowledge' && selectedOption !== OPTIONS.INBOX
+                      ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
+                      : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+                  )}
+                >
+                  <BookOpen className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span>Knowledge</span>
+                </button>
               </div>
+            </div>
 
-              {/* Straight line below the toggle */}
-              <div className="h-px w-[calc(100%+2rem)] -ml-4 bg-black/10 mt-4 shrink-0" />
-
-              {/* Search & Actions Row below toggle */}
-              <div className="flex items-center justify-between gap-2 px-4 pt-4 shrink-0">
-                <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-black/10 bg-[#e1e1e1] px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-black/20">
-                  <Search className="size-3.5 flex-none text-black" />
+            {/* Enclosed Search & Actions Row */}
+            <div className="pt-1.5 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none w-full">
+              <div className="flex h-9 w-full items-center rounded-lg border border-white/[0.04] bg-white/[0.06] shadow-xs overflow-hidden focus-within:ring-1 focus-within:ring-white/20 transition-all duration-150">
+                {/* Search segment */}
+                <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
+                  <Search className="size-3.5 flex-none text-zinc-400" />
                   <input
                     type="text"
                     placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-transparent text-xs text-black outline-none placeholder:text-gray-500"
+                    className="w-full bg-transparent text-xs text-zinc-100 outline-none placeholder:text-zinc-400"
                   />
                 </div>
 
-                {/* Inbox Button */}
+                {/* Vertical Separator */}
+                <div className="w-px h-4 bg-white/10 flex-none" />
+
+                {/* Inbox segment */}
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
+                    <button
+                      type="button"
                       className={cn(
-                        "flex h-8 w-8 items-center justify-center rounded-lg border shadow-xs transition-all flex-none",
-                        selectedOption === OPTIONS.INBOX
-                          ? "bg-white border-black/10 text-black dark:bg-zinc-800 dark:border-white/10 dark:text-white"
-                          : "bg-[#e1e1e1] border-black/10 text-black hover:bg-black/[0.03] dark:bg-zinc-800/50 dark:text-white"
+                        "flex h-full w-9 items-center justify-center transition-all hover:bg-white/[0.06] text-white focus:outline-none",
+                        selectedOption === OPTIONS.INBOX && "bg-white/[0.08]"
                       )}
                       onClick={() => {
                         if (selectedOption === OPTIONS.INBOX) {
                           setSelectedOption(null);
+                          setActiveTab('ai');
                         } else {
                           setSelectedOption(OPTIONS.INBOX);
                         }
                       }}
                     >
-                      <Inbox className="size-4" />
-                    </Button>
+                      <Inbox className="size-3.5 text-white" />
+                    </button>
                   </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>Inbox</p>
+                  <TooltipContent side="bottom" className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
+                    Inbox
                   </TooltipContent>
                 </Tooltip>
 
-                {/* Render + button for all tabs EXCEPT Inbox */}
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-black/10 bg-[#e1e1e1] text-black shadow-xs transition-all hover:bg-white/[0.08] hover:text-black flex-none dark:bg-zinc-800/50 dark:text-white"
-                      onClick={() => {
-                        if (activeTab === 'instructions') {
-                          setIsAddInstructionOpen(true);
-                        } else if (activeTab === 'guardrails') {
-                          setIsAddGuardrailOpen(true);
-                        } else if (activeTab === 'knowledge') {
-                          document.getElementById('sidebar-file-upload')?.click();
-                        } else {
-                          handleNewChat();
-                        }
-                      }}
-                    >
-                      <Plus className="size-4 text-black dark:text-white" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>
+                {/* Vertical Separator (only if plus is visible) */}
+                {selectedOption !== OPTIONS.INBOX && (
+                  <div className="w-px h-4 bg-white/10 flex-none" />
+                )}
+
+                {/* Plus segment */}
+                {selectedOption !== OPTIONS.INBOX && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        className="flex h-full w-9 items-center justify-center transition-all hover:bg-white/[0.06] text-white focus:outline-none"
+                        onClick={() => {
+                          if (activeTab === 'instructions') {
+                            setIsAddInstructionOpen(true);
+                          } else if (activeTab === 'guardrails') {
+                            setIsAddGuardrailOpen(true);
+                          } else if (activeTab === 'knowledge') {
+                            document.getElementById('sidebar-file-upload')?.click();
+                          } else {
+                            handleNewChat();
+                          }
+                        }}
+                      >
+                        <Plus className="size-3.5 text-white" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
                       {activeTab === 'instructions' 
                         ? 'Add Instruction' 
                         : activeTab === 'guardrails' 
@@ -628,241 +503,264 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                         ? 'Upload File' 
                         : activeTab === 'studio' 
                         ? 'New Code' 
-                        : 'New Search'}
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
+                        : 'New Chat'}
+                    </TooltipContent>
+                  </Tooltip>
+                )}
               </div>
+            </div>
 
-              {/* Straight line below search & action row */}
-              <div className="h-px w-[calc(100%+2rem)] -ml-4 bg-black/10 dark:bg-white/10 mt-4 shrink-0" />
-
-              {/* Scrollable container for items */}
-              <div className="flex-1 overflow-y-auto px-4 pb-4 min-h-0 mt-4">
-                
-                {activeTab === 'instructions' && (
-                  <div className="space-y-3 animate-in fade-in zoom-in-95 duration-200">
-                    <div className="flex items-center justify-between shrink-0">
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider select-none">System Prompts</span>
+            {/* Scrollable List Container */}
+            <div className="flex-1 overflow-y-auto px-4 pb-4 min-h-0">
+              {selectedOption === OPTIONS.INBOX ? (
+                <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
+                  <div className="flex items-center justify-between shrink-0 mb-1.5">
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider select-none">Execution Logs</span>
+                    {runs.length > 0 && (
                       <button 
-                        onClick={() => setIsAddInstructionOpen(true)} 
-                        className="text-[10px] text-zinc-400 hover:text-white transition-colors font-medium"
+                        onClick={handleClearRuns} 
+                        className="text-[10px] text-zinc-400 hover:text-red-400 transition-colors font-medium"
                       >
-                        Add New
+                        Clear History
                       </button>
-                    </div>
-                    {parsedInstructions.length === 0 ? (
-                      <div className="py-8 text-center text-xs text-gray-400">
-                        No instructions yet. Click Add to customize behavior.
-                      </div>
-                    ) : (
-                      parsedInstructions.map((inst, index) => (
-                        <div 
-                          key={index}
-                          className="group relative bg-[#e1e1e1]/50 dark:bg-zinc-800/40 rounded-xl p-3 border border-black/[0.03] dark:border-white/[0.03] pr-8"
-                        >
-                          <p className="text-xs text-gray-800 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap">
-                            {inst}
-                          </p>
-                          <button
-                            onClick={() => {
-                              const newList = parsedInstructions.filter((_, i) => i !== index);
-                              editBot(botId, { instructions: newList.join('\n\n') });
-                              toast.success('Instruction deleted');
-                            }}
-                            className="absolute right-2 top-2 p-1 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all duration-150"
-                            title="Delete Instruction"
-                          >
-                            <Trash2 className="size-3" />
-                          </button>
-                        </div>
-                      ))
                     )}
                   </div>
-                )}
-
-                {activeTab === 'guardrails' && (
-                  <div className="space-y-3 animate-in fade-in zoom-in-95 duration-200">
-                    <div className="flex items-center justify-between shrink-0">
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider select-none">Safety Rules</span>
-                      <button 
-                        onClick={() => setIsAddGuardrailOpen(true)} 
-                        className="text-[10px] text-zinc-400 hover:text-white transition-colors font-medium"
-                      >
-                        Add New
-                      </button>
+                  {filteredRuns.length === 0 ? (
+                    <div className="py-8 text-center text-xs text-zinc-500 select-none">
+                      {searchQuery ? 'No matching executions.' : 'No executions yet.'}
                     </div>
-                    {parsedGuardrails.length === 0 ? (
-                      <div className="py-8 text-center text-xs text-gray-400">
-                        No guardrails defined. Add rules to restrict output.
-                      </div>
-                    ) : (
-                      parsedGuardrails.map((gr, index) => (
-                        <div 
-                          key={index}
-                          className="group relative bg-[#e1e1e1]/50 dark:bg-zinc-800/40 rounded-xl p-3 border border-black/[0.03] dark:border-white/[0.03] pr-8"
-                        >
-                          <p className="text-xs text-gray-800 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap">
-                            {gr}
-                          </p>
-                          <button
-                            onClick={() => {
-                              const newList = parsedGuardrails.filter((_, i) => i !== index);
-                              editBot(botId, { guardrails: newList.join('\n\n') });
-                              toast.success('Guardrail deleted');
-                            }}
-                            className="absolute right-2 top-2 p-1 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all duration-150"
-                            title="Delete Guardrail"
-                          >
-                            <Trash2 className="size-3" />
-                          </button>
+                  ) : (
+                    filteredRuns.map((run) => (
+                      <div 
+                        key={run.id}
+                        className="w-full bg-white/[0.06] border border-white/[0.04] text-zinc-300 rounded-lg p-3 space-y-1.5"
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="font-semibold text-white text-xs truncate">
+                            {run.taskName}
+                          </span>
                         </div>
-                      ))
-                    )}
+                        <p className="text-xs text-zinc-400 leading-normal">
+                          {run.summary}
+                        </p>
+                        <div className="flex items-center justify-between pt-1.5 border-t border-white/5 text-[9px] text-zinc-500">
+                          <span>{new Date(run.timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
+                          {run.duration && <span>{Math.round(run.duration / 100) / 10}s</span>}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              ) : activeTab === 'instructions' ? (
+                <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
+                  <div className="flex items-center justify-between shrink-0 mb-1.5">
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider select-none">System Prompts</span>
+                    <button 
+                      onClick={() => setIsAddInstructionOpen(true)} 
+                      className="text-[10px] text-zinc-400 hover:text-white transition-colors font-medium"
+                    >
+                      Add New
+                    </button>
                   </div>
-                )}
-
-                {activeTab === 'knowledge' && (
-                  <div className="space-y-3 animate-in fade-in zoom-in-95 duration-200">
-                    <div className="flex items-center justify-between shrink-0">
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider select-none">Uploaded Files</span>
-                      <div>
-                        <input
-                          id="sidebar-file-upload"
-                          type="file"
-                          className="hidden"
-                          onChange={handleFileUpload}
-                          disabled={isUploading}
-                        />
-                        <button 
-                          onClick={() => document.getElementById('sidebar-file-upload')?.click()}
-                          disabled={isUploading}
-                          className="text-[10px] text-zinc-400 hover:text-white transition-colors font-medium disabled:opacity-50"
+                  {filteredInstructions.length === 0 ? (
+                    <div className="py-8 text-center text-xs text-zinc-500">
+                      {searchQuery ? 'No matching instructions.' : 'No instructions yet.'}
+                    </div>
+                  ) : (
+                    filteredInstructions.map((inst, index) => (
+                      <div 
+                        key={index}
+                        className="group relative bg-white/[0.06] border border-white/[0.04] text-zinc-300 rounded-lg p-3 pr-8"
+                      >
+                        <p className="text-xs text-zinc-300 leading-relaxed whitespace-pre-wrap">
+                          {inst}
+                        </p>
+                        <button
+                          onClick={() => {
+                            const newList = parsedInstructions.filter((_, i) => i !== index);
+                            editBot(botId, { instructions: newList.join('\n\n') });
+                            toast.success('Instruction deleted');
+                          }}
+                          className="absolute right-2 top-2 p-1 rounded-md text-zinc-400 hover:text-red-400 hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-150"
+                          title="Delete Instruction"
                         >
-                          {isUploading ? 'Uploading...' : 'Upload File'}
+                          <Trash2 className="size-3" />
                         </button>
                       </div>
+                    ))
+                  )}
+                </div>
+              ) : activeTab === 'guardrails' ? (
+                <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
+                  <div className="flex items-center justify-between shrink-0 mb-1.5">
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider select-none">Safety Rules</span>
+                    <button 
+                      onClick={() => setIsAddGuardrailOpen(true)} 
+                      className="text-[10px] text-zinc-400 hover:text-white transition-colors font-medium"
+                    >
+                      Add New
+                    </button>
+                  </div>
+                  {filteredGuardrails.length === 0 ? (
+                    <div className="py-8 text-center text-xs text-zinc-500">
+                      {searchQuery ? 'No matching guardrails.' : 'No guardrails defined.'}
                     </div>
-                    {filteredKnowledge.length === 0 ? (
-                      <div className="py-8 text-center text-xs text-gray-400">
-                        {searchQuery ? 'No matching files.' : 'No files uploaded yet. Add files to teach your bot.'}
+                  ) : (
+                    filteredGuardrails.map((gr, index) => (
+                      <div 
+                        key={index}
+                        className="group relative bg-white/[0.06] border border-white/[0.04] text-zinc-300 rounded-lg p-3 pr-8"
+                      >
+                        <p className="text-xs text-zinc-300 leading-relaxed whitespace-pre-wrap">
+                          {gr}
+                        </p>
+                        <button
+                          onClick={() => {
+                            const newList = parsedGuardrails.filter((_, i) => i !== index);
+                            editBot(botId, { guardrails: newList.join('\n\n') });
+                            toast.success('Guardrail deleted');
+                          }}
+                          className="absolute right-2 top-2 p-1 rounded-md text-zinc-400 hover:text-red-400 hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-150"
+                          title="Delete Guardrail"
+                        >
+                          <Trash2 className="size-3" />
+                        </button>
                       </div>
-                    ) : (
-                      filteredKnowledge.map((file, index) => {
-                        return (
-                          <div 
-                            key={index}
-                            className="group relative bg-[#e1e1e1]/50 dark:bg-zinc-800/40 rounded-xl p-3 border border-black/[0.03] dark:border-white/[0.03] pr-8 flex items-center gap-2"
+                    ))
+                  )}
+                </div>
+              ) : activeTab === 'knowledge' ? (
+                <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
+                  <div className="flex items-center justify-between shrink-0 mb-1.5">
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider select-none">Uploaded Files</span>
+                    <div>
+                      <input
+                        id="sidebar-file-upload"
+                        type="file"
+                        className="hidden"
+                        onChange={handleFileUpload}
+                        disabled={isUploading}
+                      />
+                      <button 
+                        onClick={() => document.getElementById('sidebar-file-upload')?.click()}
+                        disabled={isUploading}
+                        className="text-[10px] text-zinc-400 hover:text-white transition-colors font-medium disabled:opacity-50"
+                      >
+                        {isUploading ? 'Uploading...' : 'Upload File'}
+                      </button>
+                    </div>
+                  </div>
+                  {filteredKnowledge.length === 0 ? (
+                    <div className="py-8 text-center text-xs text-zinc-500">
+                      {searchQuery ? 'No matching files.' : 'No files uploaded yet.'}
+                    </div>
+                  ) : (
+                    filteredKnowledge.map((file, index) => (
+                      <div 
+                        key={index}
+                        className="group relative bg-white/[0.06] border border-white/[0.04] text-zinc-300 rounded-lg p-3 pr-8 flex items-center gap-2.5"
+                      >
+                        <FileText className="size-4 text-zinc-400 flex-none" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs text-white font-medium truncate">
+                            {file.name}
+                          </p>
+                          {file.size > 0 && (
+                            <p className="text-[9px] text-zinc-500 mt-0.5">
+                              {Math.round(file.size / 1024)} KB
+                            </p>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => {
+                            const newList = knowledgeFiles.filter((_, i) => file.name ? i !== index : false);
+                            editBot(botId, { data: JSON.stringify(newList) });
+                            toast.success('File deleted');
+                          }}
+                          className="absolute right-2 top-2 p-1 rounded-md text-zinc-400 hover:text-red-400 hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-150"
+                          title="Delete File"
+                        >
+                          <Trash2 className="size-3" />
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              ) : activeTab === 'tasks' ? (
+                <div className="py-8 text-center text-xs text-zinc-500 select-none animate-in fade-in duration-200">
+                  Describe automation tasks in the prompt box to trigger runs.
+                </div>
+              ) : (
+                <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
+                  {filteredThreads.length === 0 ? (
+                    <div className="py-8 text-center text-xs text-zinc-500">
+                      {searchQuery ? 'No matching chats.' : 'No conversations yet.'}
+                    </div>
+                  ) : (
+                    filteredThreads.map((thread) => {
+                      const isSelected = activeThreadId === thread.id;
+                      const ThreadIcon = getThreadIcon(thread.title, activeTab);
+                      return (
+                        <div
+                          key={thread.id}
+                          className={cn(
+                            "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border cursor-pointer select-none",
+                            isSelected 
+                              ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs" 
+                              : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white",
+                          )}
+                        >
+                          <span
+                            className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
+                            onClick={() => handleThreadSelect(thread.id)}
                           >
-                            <FileText className="size-4 text-zinc-400 flex-none" />
-                            <div className="min-w-0 flex-1">
-                              <p className="text-xs text-gray-850 dark:text-zinc-200 font-medium truncate">
-                                {file.name}
-                              </p>
-                              {file.size > 0 && (
-                                <p className="text-[9px] text-gray-400 mt-0.5">
-                                  {Math.round(file.size / 1024)} KB
+                            <ThreadIcon className={cn(
+                              "size-3.5 flex-shrink-0 transition-colors",
+                              isSelected ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
+                            )} />
+                            <span className="truncate">{thread.title || 'Untitled Chat'}</span>
+                          </span>
+                          
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <button
+                                onClick={(e) => e.stopPropagation()}
+                                className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-white/5 hover:text-red-400 p-1.5 rounded-md transition-all flex-none mr-1"
+                                title="Delete Thread"
+                              >
+                                <Trash2 className="size-3.5" />
+                              </button>
+                            </DialogTrigger>
+                            <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+                              <div className="p-5 text-center">
+                                <h2 className="text-base font-semibold text-black dark:text-white leading-tight">Delete Thread</h2>
+                                <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400 leading-normal">
+                                  Are you sure you want to delete this thread?
                                 </p>
-                              )}
-                            </div>
-                            <button
-                              onClick={() => {
-                                const newList = knowledgeFiles.filter((_, i) => file.name ? i !== index : false);
-                                editBot(botId, { data: JSON.stringify(newList) });
-                                toast.success('File deleted');
-                              }}
-                              className="absolute right-2 top-2 p-1 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all duration-150"
-                              title="Delete File"
-                            >
-                              <Trash2 className="size-3" />
-                            </button>
-                          </div>
-                        )
-                      })
-                    )}
-                  </div>
-                )}
-
-
-                {activeTab === 'tasks' && (
-                  <div className="py-8 text-center text-xs text-gray-400 select-none animate-in fade-in zoom-in-95 duration-200">
-                    Describe automation tasks in the prompt box to trigger runs.
-                  </div>
-                )}
-
-                {(activeTab === 'ai' || activeTab === 'studio') && (
-                  <div className="space-y-1.5 animate-in fade-in zoom-in-95 duration-200">
-                    {filteredThreads.length === 0 ? (
-                      <div className="py-8 text-center text-xs text-gray-400">
-                        {searchQuery ? 'No matching chats.' : 'No conversations yet. Start a new chat!'}
-                      </div>
-                    ) : (
-                      filteredThreads.map((thread) => {
-                        const isSelected = activeThreadId === thread.id;
-                        const ThreadIcon = getThreadIcon(thread.title, activeTab);
-                        return (
-                          <div
-                            key={thread.id}
-                            className={cn(
-                              "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border cursor-pointer select-none",
-                              isSelected 
-                                ? "bg-black/[0.06] border-black/10 text-black font-semibold shadow-xs dark:bg-white/10 dark:border-white/10 dark:text-white" 
-                                : "bg-black/[0.02] border-black/[0.03] text-gray-700 hover:bg-black/[0.04] hover:border-black/5 hover:text-black dark:bg-white/[0.03] dark:border-white/[0.03] dark:text-zinc-300 dark:hover:bg-white/[0.06] dark:hover:border-white/5 dark:hover:text-white",
-                            )}
-                          >
-                            <span
-                              className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
-                              onClick={() => handleThreadSelect(thread.id)}
-                            >
-                              <ThreadIcon className={cn(
-                                "size-3.5 flex-shrink-0 transition-colors",
-                                isSelected ? "text-black dark:text-white" : "text-gray-400 group-hover:text-gray-700 dark:text-zinc-400 dark:group-hover:text-zinc-200"
-                              )} />
-                              <span className="truncate">{thread.title || 'Untitled Chat'}</span>
-                            </span>
-                            
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <button
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 p-1.5 rounded-md transition-all flex-none mr-1"
-                                  title="Delete Thread"
-                                >
-                                  <Trash2 className="size-3.5 text-black" />
-                                </button>
-                              </DialogTrigger>
-                              <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
-                                <div className="p-5 text-center">
-                                  <h2 className="text-base font-semibold text-black dark:text-white leading-tight">Delete Thread</h2>
-                                  <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400 leading-normal">
-                                    Are you sure you want to delete this thread?
-                                  </p>
-                                </div>
-                                <div className="border-t border-black/10 dark:border-white/10 flex h-11">
-                                  <DialogClose asChild>
-                                    <button className="flex-1 text-sm font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 h-full border-r border-black/10 dark:border-white/10 outline-none">Cancel</button>
-                                  </DialogClose>
-                                  <DialogClose asChild>
-                                    <button 
-                                      onClick={(e) => handleThreadDelete(e, thread.id)}
-                                      className="flex-1 text-sm font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 h-full outline-none"
-                                    >
-                                      Delete
-                                    </button>
-                                  </DialogClose>
-                                </div>
-                              </DialogContent>
-                            </Dialog>
-                          </div>
-                        );
-                      })
-                    )}
-                  </div>
-                )}
-              </div>
-
+                              </div>
+                              <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+                                <DialogClose asChild>
+                                  <button className="flex-1 text-sm font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 h-full border-r border-black/10 dark:border-white/10 outline-none">Cancel</button>
+                                </DialogClose>
+                                <DialogClose asChild>
+                                  <button 
+                                    onClick={(e) => handleThreadDelete(e, thread.id)}
+                                    className="flex-1 text-sm font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 h-full outline-none"
+                                  >
+                                    Delete
+                                  </button>
+                                </DialogClose>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </>
       )}
 
