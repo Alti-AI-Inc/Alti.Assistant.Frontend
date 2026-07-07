@@ -312,16 +312,15 @@ export const AppsPanelsContainer = () => {
             <p className="text-sm text-gray-500 animate-pulse">Loading workspace status...</p>
           </div>
         ) : !selectedApp ? (
-          /* STATE 0: Welcome Screen / Dashboard overview */
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center max-w-xl mx-auto space-y-6">
-            <div className="h-16 w-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-              <Sparkles className="h-8 w-8 text-white animate-pulse" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50">Isolated Action Hub</h2>
-              <p className="mt-3 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                Connect and prompt individual web applications securely. Select an application in the sidebar to configure authentication and interact with its tools in a focused, zero-hallucination agent session.
-              </p>
+          /* STATE 0: Welcome Screen / Dashboard overview - centered white logo icon only */
+          <div className="flex-1 flex items-center justify-center bg-[#e1e1e1] dark:bg-gray-955">
+            <div className="flex flex-col items-center justify-center animate-in fade-in zoom-in-95 duration-500">
+              <img
+                src="/assets/logo-icon.png"
+                alt="Alti Logo"
+                className="h-16 w-16 select-none pointer-events-none opacity-40 dark:opacity-30"
+                style={{ filter: 'brightness(0) invert(1)' }}
+              />
             </div>
           </div>
         ) : !isSelectedAppConnected ? (
