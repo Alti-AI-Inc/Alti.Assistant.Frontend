@@ -24,7 +24,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { EllipsisVertical, Share, Trash2, Brain, Download, Edit3, Code, FileText, ShieldCheck } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, Suspense } from 'react';
 import { Streamdown } from 'streamdown';
 import ReferencesList from './ReferenceList';
 import TelemetryConsole from '@/components/research/TelemetryConsole';
