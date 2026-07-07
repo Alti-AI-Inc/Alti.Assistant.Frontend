@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
@@ -36,7 +36,9 @@ function App() {
           Chat with {activeKnowledgeBaseName}
         </h1>
       )}
-      <FullConversation conversationId="new-chat" />
+      <Suspense fallback={null}>
+        <FullConversation conversationId="new-chat" />
+      </Suspense>
     </div>
   );
 }
