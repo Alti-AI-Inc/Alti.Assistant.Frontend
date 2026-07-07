@@ -285,33 +285,33 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   return (
     <aside
       className={cn(
-        "flex-none flex flex-col border-l border-zinc-800/60 h-full overflow-hidden transition-all duration-300 bg-[#0c1120] dark:bg-[#0c1120] text-white",
+        "flex-none flex flex-col border-l border-black/10 dark:border-zinc-800/50 h-full overflow-hidden transition-all duration-300 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100",
         hideSidebar ? "w-10" : "w-76"
       )}
     >
       {hideSidebar ? (
-        <header className="sticky top-0 z-30 flex items-center justify-between border-b border-zinc-800/60 pt-4 pb-4 flex-none px-0 justify-center bg-[#0c1120] dark:bg-[#0c1120] text-white">
+        <header className="sticky top-0 z-30 flex items-center justify-between border-b border-black/10 dark:border-zinc-800/50 pt-4 pb-4 flex-none px-0 justify-center bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white">
           <PanelLeftClose
-            className="size-5 cursor-pointer text-zinc-400 hover:text-white transition-transform duration-300 flex-none scale-x-[-1]"
+            className="size-5 cursor-pointer text-zinc-400 hover:text-zinc-700 dark:hover:text-white transition-transform duration-300 flex-none scale-x-[-1]"
             onClick={toggleRightSidebar}
           />
         </header>
       ) : (
         <>
           {/* Header matching left side menu */}
-          <header className="sticky top-0 z-30 flex items-center justify-between border-b border-zinc-800/60 pt-4 pb-4 flex-none px-4 bg-[#0c1120] dark:bg-[#0c1120] text-white">
+          <header className="sticky top-0 z-30 flex items-center justify-between border-b border-black/10 dark:border-zinc-800/50 pt-4 pb-4 flex-none px-4 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white">
             <PanelLeftClose
-              className="size-5 cursor-pointer text-zinc-400 hover:text-white transition-transform duration-300 flex-none scale-x-[-1]"
+              className="size-5 cursor-pointer text-zinc-400 hover:text-zinc-700 dark:hover:text-white transition-transform duration-300 flex-none scale-x-[-1]"
               onClick={toggleRightSidebar}
             />
-            <span className="text-sm font-normal truncate max-w-[180px] text-white">
+            <span className="text-sm font-normal truncate max-w-[180px] text-zinc-800 dark:text-white">
               {bot.name}
             </span>
           </header>
 
-          <div className="flex-1 flex flex-col min-h-0 bg-[#0c1120] dark:bg-[#0c1120]">
+          <div className="flex-1 flex flex-col min-h-0 bg-white dark:bg-zinc-950">
             {/* 6-Row Toggles stack */}
-            <div className="pt-3 px-4 flex-none bg-[#0c1120] dark:bg-[#0c1120] transition-colors duration-300">
+            <div className="pt-3 px-4 flex-none bg-white dark:bg-zinc-950 transition-colors duration-300">
               <div className="space-y-1.5 w-full">
                 {/* Assistant */}
                 <button
@@ -323,8 +323,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                   className={cn(
                     'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                     activeTab === 'ai' && selectedOption !== OPTIONS.INBOX
-                      ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
-                      : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+                      ? 'bg-black/[0.06] border-black/10 text-black dark:bg-white/12 dark:border-white/10 dark:text-white font-semibold shadow-xs'
+                      : 'bg-black/[0.02] border-black/[0.03] text-gray-700 hover:bg-black/[0.04] hover:border-black/5 hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:border-white/5 dark:hover:text-white',
                   )}
                 >
                   <Sparkles className="h-3.5 w-3.5 flex-shrink-0" />
@@ -424,8 +424,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
             </div>
 
             {/* Enclosed Search & Actions Row */}
-            <div className="pt-1.5 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none w-full">
-              <div className="flex h-9 w-full items-center rounded-lg border border-white/[0.04] bg-white/[0.06] shadow-xs overflow-hidden focus-within:ring-1 focus-within:ring-white/20 transition-all duration-150">
+            <div className="pt-1.5 pb-1.5 flex items-center px-4 bg-white dark:bg-zinc-950 transition-all duration-300 flex-none w-full">
+              <div className="flex h-9 w-full items-center rounded-lg border border-black/10 dark:border-white/[0.04] bg-black/[0.02] dark:bg-white/[0.06] shadow-xs overflow-hidden focus-within:ring-1 focus-within:ring-black/15 dark:focus-within:ring-white/20 transition-all duration-150">
                 {/* Search segment */}
                 <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
                   <Search className="size-3.5 flex-none text-zinc-400" />
@@ -434,12 +434,12 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-transparent text-xs text-zinc-100 outline-none placeholder:text-zinc-400"
+                    className="w-full bg-transparent text-xs text-zinc-800 dark:text-zinc-100 outline-none placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
                   />
                 </div>
 
                 {/* Vertical Separator */}
-                <div className="w-px h-4 bg-white/10 flex-none" />
+                <div className="w-px h-4 bg-black/10 dark:bg-white/10 flex-none" />
 
                 {/* Inbox segment */}
                 <Tooltip>
@@ -447,8 +447,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     <button
                       type="button"
                       className={cn(
-                        "flex h-full w-9 items-center justify-center transition-all hover:bg-white/[0.06] text-white focus:outline-none",
-                        selectedOption === OPTIONS.INBOX && "bg-white/[0.08]"
+                        "flex h-full w-9 items-center justify-center transition-all hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-700 dark:text-white focus:outline-none",
+                        selectedOption === OPTIONS.INBOX && "bg-black/[0.06] dark:bg-white/[0.08]"
                       )}
                       onClick={() => {
                         if (selectedOption === OPTIONS.INBOX) {
@@ -459,7 +459,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                         }
                       }}
                     >
-                      <Inbox className="size-3.5 text-white" />
+                      <Inbox className="size-3.5 text-zinc-700 dark:text-white" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
@@ -469,7 +469,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
 
                 {/* Vertical Separator (only if plus is visible) */}
                 {selectedOption !== OPTIONS.INBOX && (
-                  <div className="w-px h-4 bg-white/10 flex-none" />
+                  <div className="w-px h-4 bg-black/10 dark:bg-white/10 flex-none" />
                 )}
 
                 {/* Plus segment */}
@@ -478,7 +478,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                     <TooltipTrigger asChild>
                       <button
                         type="button"
-                        className="flex h-full w-9 items-center justify-center transition-all hover:bg-white/[0.06] text-white focus:outline-none"
+                        className="flex h-full w-9 items-center justify-center transition-all hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-zinc-700 dark:text-white focus:outline-none"
                         onClick={() => {
                           if (activeTab === 'instructions') {
                             setIsAddInstructionOpen(true);
@@ -491,7 +491,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                           }
                         }}
                       >
-                        <Plus className="size-3.5 text-white" />
+                        <Plus className="size-3.5 text-zinc-700 dark:text-white" />
                       </button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom" className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
@@ -680,8 +680,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                           className={cn(
                             "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border cursor-pointer select-none",
                             isSelected 
-                              ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs" 
-                              : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white",
+                              ? "bg-black/[0.06] border-black/10 text-black font-semibold shadow-xs dark:bg-white/12 dark:border-white/10 dark:text-white" 
+                              : "bg-black/[0.02] border-black/[0.03] text-gray-700 hover:bg-black/[0.04] hover:border-black/5 hover:text-black dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.10] dark:hover:border-white/5 dark:hover:text-white",
                           )}
                         >
                           <span
@@ -690,7 +690,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                           >
                             <ThreadIcon className={cn(
                               "size-3.5 flex-shrink-0 transition-colors",
-                              isSelected ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
+                              isSelected ? "text-black dark:text-white" : "text-zinc-400 group-hover:text-zinc-700 dark:text-zinc-400 dark:group-hover:text-zinc-100"
                             )} />
                             <span className="truncate">{thread.title || 'Untitled Chat'}</span>
                           </span>
@@ -699,10 +699,10 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                             <DialogTrigger asChild>
                               <button
                                 onClick={(e) => e.stopPropagation()}
-                                className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-white/5 hover:text-red-400 p-1.5 rounded-md transition-all flex-none mr-1"
+                                className="opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-black/5 hover:text-red-500 dark:hover:bg-white/5 dark:hover:text-red-400 p-1.5 rounded-md transition-all flex-none mr-1"
                                 title="Delete Thread"
                               >
-                                <Trash2 className="size-3.5" />
+                                <Trash2 className="size-3.5 text-current" />
                               </button>
                             </DialogTrigger>
                             <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
