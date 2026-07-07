@@ -208,7 +208,7 @@ const LeftSideNavMobile = () => {
 
 
   const isLoggedIn = data?.accessToken;
-  const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab } = useBotsStore();
+  const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, reorderBots } = useBotsStore();
   const { isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen } = useSidebarStore();
   
   const { data: inboxItems = [] } = useInboxQuery(
@@ -222,6 +222,7 @@ const LeftSideNavMobile = () => {
 
   const [activeTab, setActiveTab] = useState<SidebarTab>('search');
   const [searchQuery, setSearchQuery] = useState('');
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
   const [tasks, setTasks] = useState<any[]>([]);
 
@@ -739,20 +740,41 @@ const LeftSideNavMobile = () => {
           {activeTab === 'bots' ? (
             <div className="mt-2 space-y-1 py-1 pb-4">
               {bots
-                .filter(bot =>
+                .map((bot, idx) => ({ bot, idx }))
+                .filter(({ bot }) =>
                   (bot.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
                   (bot.description || '').toLowerCase().includes(searchQuery.toLowerCase())
                 )
-                .map(bot => {
+                .map(({ bot, idx }) => {
                   const isSelected = activeBotId === bot.id && pathname === '/my-chatbots';
+                  const isBeingDragged = draggedIndex === idx;
                   return (
                     <div
                       key={bot.id}
+                      draggable
+                      onDragStart={(e) => {
+                        setDraggedIndex(idx);
+                        e.dataTransfer.effectAllowed = 'move';
+                      }}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        if (draggedIndex !== null && draggedIndex !== idx) {
+                          reorderBots(draggedIndex, idx);
+                        }
+                        setDraggedIndex(null);
+                      }}
+                      onDragEnd={() => {
+                        setDraggedIndex(null);
+                      }}
                       className={cn(
-                        "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-semibold text-left transition-all duration-150 border mb-1.5",
+                        "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-semibold text-left transition-all duration-150 border mb-1.5 cursor-grab active:cursor-grabbing select-none",
                         isSelected 
                           ? "bg-white/12 border-white/10 text-white shadow-xs" 
-                          : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                          : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white",
+                        isBeingDragged && "opacity-40 scale-95 border-dashed border-zinc-500 bg-white/[0.02]"
                       )}
                     >
                       <span

@@ -48,6 +48,9 @@ interface BotsState {
   
   // Async initialization
   fetchBots: (token?: string) => Promise<void>;
+  
+  // Rearrange bots
+  reorderBots: (startIndex: number, endIndex: number) => void;
 }
 
 const getApiUrl = () => process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
@@ -258,6 +261,15 @@ export const useBotsStore = create<BotsState>()(
       setActiveBotThreadId: (threadId) => set({ activeBotThreadId: threadId }),
 
       setProjectTab: (tab) => set({ projectTab: tab }),
+
+      reorderBots: (startIndex, endIndex) => {
+        set((state) => {
+          const result = Array.from(state.bots);
+          const [removed] = result.splice(startIndex, 1);
+          result.splice(endIndex, 0, removed);
+          return { bots: result };
+        });
+      },
 
       fetchBots: async (token) => {
         try {
