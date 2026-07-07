@@ -685,7 +685,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               )}
             >
               <Sparkles className="h-3.5 w-3.5 flex-shrink-0" />
-              <span>AI</span>
+              <span>Assistant</span>
             </button>
 
             {/* Studio */}
