@@ -758,63 +758,63 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
       {/* Enclosed Search & Actions Row */}
       {!hideSidebar && activeTab !== 'account' && (
-        <div className="pb-3 flex items-center justify-between gap-2 border-b border-zinc-800/60 px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none">
-          {/* Search Bar Input */}
-          <div className="flex h-8 flex-1 items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.06] px-3 shadow-xs transition-all focus-within:ring-1 focus-within:ring-white/20">
-            <Search className="size-3.5 flex-none text-zinc-400" />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-transparent text-xs text-zinc-100 outline-none placeholder:text-zinc-400"
-            />
-          </div>
+        <div className="pb-3 flex items-center border-b border-zinc-800/60 px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none w-full">
+          <div className="flex h-8 w-full items-center rounded-lg border border-white/[0.08] bg-white/[0.06] shadow-xs overflow-hidden focus-within:ring-1 focus-within:ring-white/20">
+            {/* Search segment */}
+            <div className="flex flex-1 items-center gap-2 px-3 h-full">
+              <Search className="size-3.5 flex-none text-zinc-400" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-transparent text-xs text-zinc-100 outline-none placeholder:text-zinc-400"
+              />
+            </div>
 
-          <div className="flex flex-none items-center gap-1.5">
-            {/* Inbox Button */}
+            {/* Vertical Separator */}
+            <div className="w-px h-4 bg-white/10 flex-none" />
+
+            {/* Inbox segment */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
+                <button
+                  type="button"
                   className={cn(
-                    "flex h-8 w-8 items-center justify-center rounded-lg border shadow-xs transition-all",
-                    pathname === '/inbox'
-                      ? "bg-white/[0.12] border-white/10 text-white shadow-xs scale-[1.02]"
-                      : "bg-white/[0.06] border-white/[0.08] text-white hover:bg-white/[0.12]"
+                    "flex h-full w-9 items-center justify-center transition-all hover:bg-white/[0.06] text-white focus:outline-none",
+                    pathname === '/inbox' && "bg-white/[0.08]"
                   )}
-                  onClick={() => {
-                    router.push('/inbox');
-                  }}
+                  onClick={() => router.push('/inbox')}
                 >
-                  <Inbox className="size-4 text-white" />
-                </Button>
+                  <Inbox className="size-3.5 text-white" />
+                </button>
               </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Inbox</p>
+              <TooltipContent side="bottom" className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
+                Inbox
               </TooltipContent>
             </Tooltip>
 
+            {/* Vertical Separator (only if plus is visible) */}
             {plusProps.visible && (
-              <div>
-                {/* Plus for Dynamic Tab Action */}
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.06] text-white shadow-xs transition-all hover:bg-white/[0.12]"
-                      onClick={plusProps.onClick}
-                    >
-                      <Plus className="size-4 text-white" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>{plusProps.tooltip}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
+              <div className="w-px h-4 bg-white/10 flex-none" />
+            )}
+
+            {/* Plus segment */}
+            {plusProps.visible && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    className="flex h-full w-9 items-center justify-center transition-all hover:bg-white/[0.06] text-white focus:outline-none"
+                    onClick={plusProps.onClick}
+                  >
+                    <Plus className="size-3.5 text-white" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
+                  {plusProps.tooltip}
+                </TooltipContent>
+              </Tooltip>
             )}
           </div>
         </div>
