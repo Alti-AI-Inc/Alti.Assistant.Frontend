@@ -161,8 +161,39 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
     if (!titleMatch) return false;
 
     const lower = (t.title || '').toLowerCase();
-    if (activeTab === 'ai') return lower.includes('search') || lower.includes('google') || lower.includes('web') || !lower.includes('code');
-    if (activeTab === 'studio') return lower.includes('code') || lower.includes('debug') || lower.includes('python') || lower.includes('rust');
+    const isStudioThread = (
+      lower.includes('code') ||
+      lower.includes('debug') ||
+      lower.includes('python') ||
+      lower.includes('rust') ||
+      lower.includes('js') ||
+      lower.includes('ts') ||
+      lower.includes('html') ||
+      lower.includes('css') ||
+      lower.includes('image') ||
+      lower.includes('art') ||
+      lower.includes('draw') ||
+      lower.includes('logo') ||
+      lower.includes('paint') ||
+      lower.includes('picture') ||
+      lower.includes('photo') ||
+      lower.includes('canvas') ||
+      lower.includes('video') ||
+      lower.includes('movie') ||
+      lower.includes('clip') ||
+      lower.includes('animate') ||
+      lower.includes('mp4') ||
+      lower.includes('audio') ||
+      lower.includes('voice') ||
+      lower.includes('music') ||
+      lower.includes('sound') ||
+      lower.includes('transcribe') ||
+      lower.includes('speech') ||
+      lower.includes('mp3')
+    );
+
+    if (activeTab === 'ai') return !isStudioThread;
+    if (activeTab === 'studio') return isStudioThread;
     
     return true;
   });
