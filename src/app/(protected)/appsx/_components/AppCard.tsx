@@ -293,6 +293,185 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
       "TRELLO_API_KEY": "your_api_key",
       "TRELLO_API_TOKEN": "your_oauth_token"
     }
+  },
+  "google-sheets": {
+    requiredEnv: ["GOOGLE_SHEETS_CREDENTIALS"],
+    labels: {
+      "GOOGLE_SHEETS_CREDENTIALS": "Google Sheets Credentials JSON"
+    },
+    placeholders: {
+      "GOOGLE_SHEETS_CREDENTIALS": "{\"installed\": {..."
+    }
+  },
+  "google-docs": {
+    requiredEnv: ["GOOGLE_DOCS_CREDENTIALS"],
+    labels: {
+      "GOOGLE_DOCS_CREDENTIALS": "Google Docs Credentials JSON"
+    },
+    placeholders: {
+      "GOOGLE_DOCS_CREDENTIALS": "{\"installed\": {..."
+    }
+  },
+  "mysql": {
+    requiredEnv: [],
+    labels: {},
+    placeholders: {},
+    needsDatabaseUrl: true
+  },
+  "aws-s3": {
+    requiredEnv: ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_S3_BUCKET", "AWS_REGION"],
+    labels: {
+      "AWS_ACCESS_KEY_ID": "AWS Access Key ID",
+      "AWS_SECRET_ACCESS_KEY": "AWS Secret Access Key",
+      "AWS_S3_BUCKET": "Target AWS S3 Bucket Name",
+      "AWS_REGION": "AWS Region"
+    },
+    placeholders: {
+      "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+      "AWS_SECRET_ACCESS_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+      "AWS_S3_BUCKET": "my-alti-bucket",
+      "AWS_REGION": "us-east-1"
+    }
+  },
+  "microsoft-teams": {
+    requiredEnv: ["TEAMS_CLIENT_ID", "TEAMS_CLIENT_SECRET", "TEAMS_TENANT_ID"],
+    labels: {
+      "TEAMS_CLIENT_ID": "Microsoft Teams OAuth Client ID",
+      "TEAMS_CLIENT_SECRET": "Microsoft Teams OAuth Client Secret",
+      "TEAMS_TENANT_ID": "Microsoft Teams Directory (Tenant) ID"
+    },
+    placeholders: {
+      "TEAMS_CLIENT_ID": "00000000-0000-0000-0000-000000000000",
+      "TEAMS_CLIENT_SECRET": "client_secret_xyz",
+      "TEAMS_TENANT_ID": "00000000-0000-0000-0000-000000000000"
+    }
+  },
+  "outlook": {
+    requiredEnv: ["OUTLOOK_CLIENT_ID", "OUTLOOK_CLIENT_SECRET"],
+    labels: {
+      "OUTLOOK_CLIENT_ID": "Microsoft Outlook OAuth Client ID",
+      "OUTLOOK_CLIENT_SECRET": "Microsoft Outlook OAuth Client Secret"
+    },
+    placeholders: {
+      "OUTLOOK_CLIENT_ID": "00000000-0000-0000-0000-000000000000",
+      "OUTLOOK_CLIENT_SECRET": "client_secret_xyz"
+    }
+  },
+  "sendgrid": {
+    requiredEnv: ["SENDGRID_API_KEY"],
+    labels: {
+      "SENDGRID_API_KEY": "SendGrid Send Token (API Key)"
+    },
+    placeholders: {
+      "SENDGRID_API_KEY": "SG.xxxxxxxx"
+    }
+  },
+  "firecrawl": {
+    requiredEnv: ["FIRECRAWL_API_KEY"],
+    labels: {
+      "FIRECRAWL_API_KEY": "Firecrawl Scraper API Key"
+    },
+    placeholders: {
+      "FIRECRAWL_API_KEY": "fc-xxxxxxxx"
+    }
+  },
+  "tavily": {
+    requiredEnv: ["TAVILY_API_KEY"],
+    labels: {
+      "TAVILY_API_KEY": "Tavily Search API Key"
+    },
+    placeholders: {
+      "TAVILY_API_KEY": "tvly-xxxxxxxx"
+    }
+  },
+  "perplexity": {
+    requiredEnv: ["PERPLEXITY_API_KEY"],
+    labels: {
+      "PERPLEXITY_API_KEY": "Perplexity API Key"
+    },
+    placeholders: {
+      "PERPLEXITY_API_KEY": "pplx-xxxxxxxx"
+    }
+  },
+  "exa": {
+    requiredEnv: ["EXA_API_KEY"],
+    labels: {
+      "EXA_API_KEY": "Exa Neural Search API Key"
+    },
+    placeholders: {
+      "EXA_API_KEY": "exa-xxxxxxxx"
+    }
+  },
+  "serpapi": {
+    requiredEnv: ["SERPAPI_API_KEY"],
+    labels: {
+      "SERPAPI_API_KEY": "SerpApi Google Engine Key"
+    },
+    placeholders: {
+      "SERPAPI_API_KEY": "serp_xxxxxxxx"
+    }
+  },
+  "datadog": {
+    requiredEnv: ["DATADOG_API_KEY", "DATADOG_APP_KEY"],
+    labels: {
+      "DATADOG_API_KEY": "Datadog API Key",
+      "DATADOG_APP_KEY": "Datadog Client Application Key"
+    },
+    placeholders: {
+      "DATADOG_API_KEY": "dd_api_xxxxxxxx",
+      "DATADOG_APP_KEY": "dd_app_xxxxxxxx"
+    }
+  },
+  "activecampaign": {
+    requiredEnv: ["ACTIVECAMPAIGN_API_URL", "ACTIVECAMPAIGN_API_KEY"],
+    labels: {
+      "ACTIVECAMPAIGN_API_URL": "ActiveCampaign Dashboard API URL",
+      "ACTIVECAMPAIGN_API_KEY": "ActiveCampaign Developer API Key"
+    },
+    placeholders: {
+      "ACTIVECAMPAIGN_API_URL": "https://company.api-us1.com",
+      "ACTIVECAMPAIGN_API_KEY": "ac_api_xxxxxxxx"
+    }
+  },
+  "zoom": {
+    requiredEnv: ["ZOOM_ACCOUNT_ID", "ZOOM_CLIENT_ID", "ZOOM_CLIENT_SECRET"],
+    labels: {
+      "ZOOM_ACCOUNT_ID": "Zoom Server Account ID",
+      "ZOOM_CLIENT_ID": "Zoom App Client ID",
+      "ZOOM_CLIENT_SECRET": "Zoom App Client Secret"
+    },
+    placeholders: {
+      "ZOOM_ACCOUNT_ID": "your_zoom_account_id",
+      "ZOOM_CLIENT_ID": "your_zoom_client_id",
+      "ZOOM_CLIENT_SECRET": "your_zoom_client_secret"
+    }
+  },
+  "webflow": {
+    requiredEnv: ["WEBFLOW_API_TOKEN"],
+    labels: {
+      "WEBFLOW_API_TOKEN": "Webflow CMS Access Token"
+    },
+    placeholders: {
+      "WEBFLOW_API_TOKEN": "wf_xxxxxxxx"
+    }
+  },
+  "cal": {
+    requiredEnv: ["CAL_API_KEY"],
+    labels: {
+      "CAL_API_KEY": "Cal.com Scheduler API Key"
+    },
+    placeholders: {
+      "CAL_API_KEY": "cal_xxxxxxxx"
+    }
+  },
+  "openai": {
+    requiredEnv: ["OPENAI_API_KEY"],
+    labels: {
+      "OPENAI_API_KEY": "OpenAI platform API Key"
+    },
+    placeholders: {
+      "OPENAI_API_KEY": "sk-proj-xxxxxxxx"
+    }
   }
 };
 
@@ -625,7 +804,12 @@ const AppCard = ({
     slug === 'asana' || 
     slug === 'clickup' || 
     slug === 'trello' || 
-    slug === 'zendesk';
+    slug === 'zendesk' ||
+    slug === 'google-sheets' ||
+    slug === 'google-docs' ||
+    slug === 'microsoft-teams' ||
+    slug === 'outlook' ||
+    slug === 'zoom';
 
   const isDatabaseApp = blueprint?.needsDatabaseUrl || 
     slug.includes('postgres') || 

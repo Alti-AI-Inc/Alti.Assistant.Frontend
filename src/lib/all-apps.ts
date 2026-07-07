@@ -231,6 +231,132 @@ export const allApps: APP[] = [
     "image": "https://logos.composio.dev/api/gmail",
     "app_name": "gmail",
     "isAvailable": true
+  },
+  {
+    "title": "Google Sheets",
+    "description": "Read, query, write, and manage sheets and spreadsheets inside Google Drive programmatically.",
+    "image": "https://logos.composio.dev/api/googlesheets",
+    "app_name": "google-sheets",
+    "isAvailable": true
+  },
+  {
+    "title": "Google Docs",
+    "description": "Access, read, write, and format documents inside Google Docs programmatically.",
+    "image": "https://logos.composio.dev/api/googledocs",
+    "app_name": "google-docs",
+    "isAvailable": true
+  },
+  {
+    "title": "MySQL",
+    "description": "Read, query, write, and inspect schemas inside MySQL database engines.",
+    "image": "https://logos.composio.dev/api/mysql",
+    "app_name": "mysql",
+    "isAvailable": true
+  },
+  {
+    "title": "AWS S3",
+    "description": "Securely list, read, upload, and manage files inside AWS S3 buckets programmatically.",
+    "image": "https://logos.composio.dev/api/aws",
+    "app_name": "aws-s3",
+    "isAvailable": true
+  },
+  {
+    "title": "Microsoft Teams",
+    "description": "Send channel messages, query chats, and post hooks inside Microsoft Teams workspaces programmatically.",
+    "image": "https://logos.composio.dev/api/microsoft_teams",
+    "app_name": "microsoft-teams",
+    "isAvailable": true
+  },
+  {
+    "title": "Outlook",
+    "description": "Access, search, read, send, and draft emails inside Outlook email accounts securely.",
+    "image": "https://logos.composio.dev/api/outlook",
+    "app_name": "outlook",
+    "isAvailable": true
+  },
+  {
+    "title": "SendGrid",
+    "description": "Send transactional emails, manage contacts, and track delivery stats via SendGrid API.",
+    "image": "https://logos.composio.dev/api/sendgrid",
+    "app_name": "sendgrid",
+    "isAvailable": true
+  },
+  {
+    "title": "Firecrawl",
+    "description": "Crawl entire websites, convert pages to clean markdown, and extract structured data via Firecrawl.",
+    "image": "https://logos.composio.dev/api/firecrawl",
+    "app_name": "firecrawl",
+    "isAvailable": true
+  },
+  {
+    "title": "Tavily",
+    "description": "Conduct deep web search, extract real-time facts, and crawl web content optimized for LLM agents.",
+    "image": "https://logos.composio.dev/api/tavily",
+    "app_name": "tavily",
+    "isAvailable": true
+  },
+  {
+    "title": "Perplexity AI",
+    "description": "Query Perplexity's citation-backed web search engine to gather real-time factual knowledge.",
+    "image": "https://logos.composio.dev/api/perplexityai",
+    "app_name": "perplexity",
+    "isAvailable": true
+  },
+  {
+    "title": "Exa",
+    "description": "Perform semantic, neural web searches, resolve page contents, and retrieve similar URLs.",
+    "image": "https://logos.composio.dev/api/exa",
+    "app_name": "exa",
+    "isAvailable": true
+  },
+  {
+    "title": "SerpApi",
+    "description": "Scrape structured search engine results (SERP) from Google, Bing, Yahoo, and Baidu.",
+    "image": "https://logos.composio.dev/api/serpapi",
+    "app_name": "serpapi",
+    "isAvailable": true
+  },
+  {
+    "title": "Datadog",
+    "description": "Retrieve metrics, logs, traces, and monitor alerts inside Datadog APM consoles.",
+    "image": "https://logos.composio.dev/api/datadog",
+    "app_name": "datadog",
+    "isAvailable": true
+  },
+  {
+    "title": "ActiveCampaign",
+    "description": "Access, search, and manage email campaigns, marketing lists, deals, and contacts in ActiveCampaign.",
+    "image": "https://logos.composio.dev/api/active_campaign",
+    "app_name": "activecampaign",
+    "isAvailable": true
+  },
+  {
+    "title": "Zoom",
+    "description": "Schedule, update, manage, and sync meetings and webinars programmatically inside Zoom.",
+    "image": "https://logos.composio.dev/api/zoom",
+    "app_name": "zoom",
+    "isAvailable": true
+  },
+  {
+    "title": "Webflow",
+    "description": "Read, query, write, and publish CMS collections, pages, and store items inside Webflow domains.",
+    "image": "https://logos.composio.dev/api/webflow",
+    "app_name": "webflow",
+    "isAvailable": true
+  },
+  {
+    "title": "Cal.com",
+    "description": "Manage, check bookings, and schedule appointments programmatically inside Cal.com.",
+    "image": "https://logos.composio.dev/api/cal",
+    "app_name": "cal",
+    "isAvailable": true
+  },
+  {
+    "title": "OpenAI",
+    "description": "Interact with OpenAI assistants, manage file stores, fine-tune models, and track token usage.",
+    "image": "https://logos.composio.dev/api/openai",
+    "app_name": "openai",
+    "isAvailable": true
   }
 ];
 
