@@ -663,11 +663,11 @@ const LeftSideNavMobile = () => {
               className={cn(
                 'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
                 activeTab === 'search'
-                  ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
-                  : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+                  ? 'bg-blue-600/25 border-blue-500/40 text-blue-100 font-semibold shadow-xs'
+                  : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-blue-600/15 hover:border-blue-500/20 hover:text-blue-100',
               )}
             >
-              <Sparkles className="h-3.5 w-3.5 flex-shrink-0" />
+              <Sparkles className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", activeTab === 'search' ? "text-blue-400" : "text-zinc-400 group-hover:text-blue-300")} />
               <span>Assistant</span>
             </button>
 
