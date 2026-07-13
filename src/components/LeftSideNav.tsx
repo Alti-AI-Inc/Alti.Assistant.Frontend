@@ -163,7 +163,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'tasks' | 'studio' | 'apps' | 'none' | 'account';
+type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'tasks' | 'apps' | 'none' | 'account';
 
 const AVAILABLE_MCP_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
@@ -378,8 +378,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       setActiveTab('apps');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       setActiveTab('search');
-    } else if (pathname === '/studio' || pathname.startsWith('/studio/')) {
-      setActiveTab('studio');
+
     } else if (pathname.startsWith('/instructions') || 
                pathname.startsWith('/guardrails') || 
                pathname.startsWith('/platform-knowledge') || 
@@ -431,12 +430,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         setActiveConversation(null);
         router.push('/');
       }
-    } else if (tab === 'studio') {
-      setSelectedOption(OPTIONS.CODE);
-      if (pathname !== '/studio') {
-        setActiveConversation(null);
-        router.push('/studio');
-      }
+
     } else if (tab === 'code') {
       setSelectedOption(OPTIONS.CODE);
       if (pathname !== '/') {
@@ -521,19 +515,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             router.push('/');
           },
         };
-      case 'studio':
-        return {
-          visible: true,
-          tooltip: 'New Studio',
-          onClick: () => {
-            setActiveConversation(null);
-            setShowStartLastMessage(false);
-            setUserMessage('');
-            setSelectedOption(OPTIONS.CODE);
-            close();
-            router.push('/studio');
-          },
-        };
+
       case 'code':
         return {
           visible: true,
@@ -688,20 +670,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               <span>Assistant</span>
             </button>
 
-            {/* Studio */}
-            <button
-              type="button"
-              onClick={() => handleTabChange('studio')}
-              className={cn(
-                'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
-                activeTab === 'studio'
-                  ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
-                  : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
-              )}
-            >
-              <Palette className="h-3.5 w-3.5 flex-shrink-0" />
-              <span>Studio</span>
-            </button>
+
 
             {/* Apps */}
             <button
@@ -1072,10 +1041,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           ) : activeTab === 'search' ? (
             <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
               <ConversationsList searchQuery={searchQuery} activeTab="search" />
-            </div>
-          ) : activeTab === 'studio' ? (
-            <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
-              <ConversationsList searchQuery={searchQuery} activeTab="studio" />
             </div>
           ) : isLoggedIn && activeTab === 'account' ? (
             <div className="mt-4 space-y-1.5 py-1 pb-4">

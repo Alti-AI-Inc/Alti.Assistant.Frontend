@@ -140,7 +140,6 @@ export default function ChatInput({
   onFilesChange,
   isStudio,
 }: ChatInputProps) {
-  const [isLocalStudio, setIsLocalStudio] = useState(isStudio || false);
   const [isLocalTasks, setIsLocalTasks] = useState(false);
 
   const router = useRouter();
@@ -377,32 +376,16 @@ export default function ChatInput({
     pathname?.startsWith('/c/');
 
   useEffect(() => {
-    setIsLocalStudio(isStudio || false);
     setIsLocalTasks(false);
     if (!isExistingConversation) {
-      if (isStudio) {
-        setSelectedOption(OPTIONS.CODE);
-      } else {
-        setSelectedOption(null);
-      }
+      setSelectedOption(null);
     }
-  }, [isStudio, isExistingConversation, setSelectedOption]);
+  }, [isExistingConversation, setSelectedOption]);
 
   useEffect(() => {
     if (selectedOption === OPTIONS.TASK) {
       setIsLocalTasks(true);
-      setIsLocalStudio(false);
-    } else if (
-      selectedOption === OPTIONS.CODE ||
-      selectedOption === OPTIONS.IMAGE ||
-      selectedOption === OPTIONS.EDIT_IMAGE ||
-      selectedOption === OPTIONS.VIDEO ||
-      selectedOption === OPTIONS.AUDIO
-    ) {
-      setIsLocalStudio(true);
-      setIsLocalTasks(false);
-    } else if (selectedOption === null || selectedOption === OPTIONS.RESEARCH || selectedOption === OPTIONS.DRAFT_DOCUMENT || selectedOption === OPTIONS.REVIEW_DOCUMENTS) {
-      setIsLocalStudio(false);
+    } else {
       setIsLocalTasks(false);
     }
   }, [selectedOption]);
@@ -1377,13 +1360,12 @@ export default function ChatInput({
                 <button
                   type="button"
                   onClick={() => {
-                    setIsLocalStudio(false);
                     setIsLocalTasks(false);
                     setSelectedOption(null); // Auto select 'Search'
                   }}
                   className={cn(
                     'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
-                    (!isLocalStudio && !isLocalTasks)
+                    !isLocalTasks
                       ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
                       : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
                   )}
@@ -1393,29 +1375,12 @@ export default function ChatInput({
                 <button
                   type="button"
                   onClick={() => {
-                    setIsLocalStudio(true);
-                    setIsLocalTasks(false);
-                    setSelectedOption(OPTIONS.CODE); // Auto select 'Code'
-                  }}
-                  className={cn(
-                    'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
-                    (isLocalStudio && !isLocalTasks)
-                      ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
-                      : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
-                  )}
-                >
-                  Studio
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsLocalStudio(false);
                     setIsLocalTasks(true);
                     setSelectedOption(OPTIONS.TASK); // Auto select 'Task Automation'
                   }}
                   className={cn(
                     'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
-                    (!isLocalStudio && isLocalTasks)
+                    isLocalTasks
                       ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
                       : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
                   )}
@@ -1432,17 +1397,16 @@ export default function ChatInput({
                   isLocalTasks ? "hidden" : "flex"
                 )}
               >
-                {(isLocalStudio ? [
+                {[
+                  { id: 'search', name: 'Chat', icon: MessageSquare, value: null },
+                  { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
+                  { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
+                  { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS },
                   { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE },
                   { id: 'image', name: 'Image', icon: ImageIcon, value: OPTIONS.IMAGE },
                   { id: 'video', name: 'Video', icon: Film, value: OPTIONS.VIDEO },
                   { id: 'audio', name: 'Audio', icon: Headphones, value: OPTIONS.AUDIO }
-                ] : [
-                  { id: 'search', name: 'Chat', icon: MessageSquare, value: null },
-                  { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
-                  { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
-                  { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS }
-                ]).map((tab) => {
+                ].map((tab) => {
                   const isSelected = selectedOption === tab.value;
                   return (
                     <button
@@ -1450,7 +1414,7 @@ export default function ChatInput({
                       type="button"
                       onClick={() => !isLocalTasks && setSelectedOption(tab.value)}
                       className={cn(
-                        'flex items-center gap-2 px-5 py-2 rounded-2xl transition-all duration-200 ease-out font-medium text-sm',
+                        'flex items-center gap-2 px-5 py-2 rounded-2xl transition-all duration-200 ease-out font-medium text-sm whitespace-nowrap',
                         isSelected 
                           ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
                           : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'

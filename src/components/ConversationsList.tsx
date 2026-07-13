@@ -116,8 +116,20 @@ export default function ConversationsList({
       return <Code2 className={iconColorClass} />;
     }
 
-    // If activeTab is search (AI), map to Chat, Research, Write, Review
+    // If activeTab is search (AI), map to Chat, Research, Write, Review, and Studio types (Code, Image, Video, Audio)
     if (activeTab === 'search') {
+      if (lower.includes('image') || lower.includes('art') || lower.includes('draw') || lower.includes('logo') || lower.includes('paint') || lower.includes('picture') || lower.includes('photo') || lower.includes('canvas')) {
+        return <ImageIcon className={iconColorClass} />;
+      }
+      if (lower.includes('video') || lower.includes('movie') || lower.includes('clip') || lower.includes('animate') || lower.includes('mp4')) {
+        return <VideoIcon className={iconColorClass} />;
+      }
+      if (lower.includes('audio') || lower.includes('voice') || lower.includes('music') || lower.includes('sound') || lower.includes('transcribe') || lower.includes('speech') || lower.includes('mp3')) {
+        return <Music className={iconColorClass} />;
+      }
+      if (lower.includes('code') || lower.includes('debug') || lower.includes('python') || lower.includes('rust') || lower.includes('js') || lower.includes('ts') || lower.includes('html') || lower.includes('css')) {
+        return <Code2 className={iconColorClass} />;
+      }
       if (lower.includes('search') || lower.includes('google') || lower.includes('web') || lower.includes('research') || lower.includes('find') || lower.includes('query')) {
         return <Search className={iconColorClass} />;
       }
@@ -257,7 +269,7 @@ export default function ConversationsList({
     );
 
     if (activeTab === 'studio') return isStudio;
-    if (activeTab === 'search') return !isStudio;
+    if (activeTab === 'search') return true;
 
     return true;
   });
