@@ -1404,8 +1404,7 @@ export default function ChatInput({
                   { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS },
                   { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE },
                   { id: 'image', name: 'Image', icon: ImageIcon, value: OPTIONS.IMAGE },
-                  { id: 'video', name: 'Video', icon: Film, value: OPTIONS.VIDEO },
-                  { id: 'audio', name: 'Audio', icon: Headphones, value: OPTIONS.AUDIO }
+                  { id: 'video', name: 'Video', icon: Film, value: OPTIONS.VIDEO }
                 ].map((tab) => {
                   const isSelected = selectedOption === tab.value;
                   return (
