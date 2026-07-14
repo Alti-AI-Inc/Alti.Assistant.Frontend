@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - prod
+      - dev
   workflow_dispatch:
 
 env:
@@ -12,7 +13,6 @@ env:
   REGION: us-central1
   REGISTRY: us-central1-docker.pkg.dev
   REPO: alti-assistant
-  SERVICE: alti-assistant-frontend
 
 jobs:
   deploy:
@@ -25,6 +25,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set environment variables for branch
+        run: |
+          if [ "${{ github.ref_name }}" = "dev" ]; then
+            echo "SERVICE_NAME=alti-assistant-frontend-dev" >> $GITHUB_ENV
+            echo "AUTH_URL=https://dev.altiassistant.com" >> $GITHUB_ENV
+            echo "IMAGE_TAG=dev" >> $GITHUB_ENV
+          else
+            echo "SERVICE_NAME=alti-assistant-frontend" >> $GITHUB_ENV
+            echo "AUTH_URL=https://altiassistant.com" >> $GITHUB_ENV
+            echo "IMAGE_TAG=latest" >> $GITHUB_ENV
+          fi
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
@@ -40,19 +52,19 @@ jobs:
           docker build \
             --build-arg NEXT_PUBLIC_API_URL=https://altihq.com/api/v1 \
             --build-arg NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }} \
-            -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE }}:${{ github.sha }} \
-            -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE }}:latest \
+            -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
+            -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE_NAME }}:${{ env.IMAGE_TAG }} \
             .
 
       - name: Push Docker image
         run: |
-          docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE }}:${{ github.sha }}
-          docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE }}:latest
+          docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
+          docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE_NAME }}:${{ env.IMAGE_TAG }}
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy ${{ env.SERVICE }} \
-            --image ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE }}:${{ github.sha }} \
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
             --region ${{ env.REGION }} \
             --platform managed \
             --allow-unauthenticated \
@@ -61,13 +73,13 @@ jobs:
             --cpu 1 \
             --min-instances 1 \
             --max-instances 10 \
-            --set-env-vars "NODE_ENV=production,NEXT_PUBLIC_API_URL=https://altihq.com/api/v1,API_URL=https://altihq.com/api/v1,AUTH_TRUST_HOST=true,AUTH_URL=https://altiassistant.com" \
+            --set-env-vars "NODE_ENV=production,NEXT_PUBLIC_API_URL=https://altihq.com/api/v1,API_URL=https://altihq.com/api/v1,AUTH_TRUST_HOST=true,AUTH_URL=${{ env.AUTH_URL }}" \
             --set-secrets "AUTH_SECRET=AUTH_SECRET:latest,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:latest,STRIPE_PUBLISHABLE_KEY=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:latest" \
             --project ${{ env.PROJECT_ID }}
 
       - name: Show Service URL
         run: |
-          gcloud run services describe ${{ env.SERVICE }} \
+          gcloud run services describe ${{ env.SERVICE_NAME }} \
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }} \
             --format="value(status.url)"
