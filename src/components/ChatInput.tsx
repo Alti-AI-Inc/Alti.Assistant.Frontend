@@ -162,6 +162,7 @@ export default function ChatInput({
     userMessage: message,
     setUserMessage: setMessage,
     setShowStartLastMessage,
+    showStartLastMessage,
   } = useConversationsStore();
 
   const { bots, activeBotId } = useBotsStore();
@@ -1342,7 +1343,7 @@ export default function ChatInput({
       )}
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
-        {!isExistingConversation && (
+        {!isExistingConversation && !showStartLastMessage && !isLoadingResponse && (
           <div className="flex flex-col items-center gap-6 w-full mb-6">
               {/* Child Toggle */}
               <div 
