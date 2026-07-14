@@ -737,7 +737,30 @@ const LeftSideNavMobile = () => {
               />
             </div>
 
+            {/* Vertical Separator */}
+            <div className="w-px h-4 bg-white/10 flex-none" />
 
+            {/* Inbox segment */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  className={cn(
+                    "flex h-full w-9 items-center justify-center transition-all hover:bg-white/[0.06] text-white focus:outline-none",
+                    pathname === '/inbox' && "bg-white/[0.08]"
+                  )}
+                  onClick={() => {
+                    router.push('/inbox');
+                    close();
+                  }}
+                >
+                  <Inbox className="size-3.5 text-white" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
+                Inbox
+              </TooltipContent>
+            </Tooltip>
 
             {/* Vertical Separator (only if plus is visible) */}
             {plusProps.visible && (
