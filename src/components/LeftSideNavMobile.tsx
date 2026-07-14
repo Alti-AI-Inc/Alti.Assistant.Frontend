@@ -354,11 +354,11 @@ const LeftSideNavMobile = () => {
       return;
     }
     if (pathname === '/spaces' || pathname.startsWith('/spaces')) {
-      setActiveTab('search');
+      setActiveTab('bots');
     } else if (pathname === '/tasks' || pathname.startsWith('/tasks')) {
-      setActiveTab('search');
+      setActiveTab('tasks');
     } else if (pathname === '/apps' || pathname.startsWith('/apps')) {
-      setActiveTab('search');
+      setActiveTab('apps');
     } else if (pathname === '/' || pathname.startsWith('/c/')) {
       if (selectedOption === OPTIONS.RESEARCH) {
         setActiveTab('research');
@@ -673,7 +673,50 @@ const LeftSideNavMobile = () => {
 
 
 
+            {/* Apps */}
+            <button
+              type="button"
+              onClick={() => handleTabChange('apps')}
+              className={cn(
+                'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
+                activeTab === 'apps'
+                  ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
+                  : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+              )}
+            >
+              <Blocks className="h-3.5 w-3.5 flex-shrink-0" />
+              <span>Apps</span>
+            </button>
 
+            {/* Tasks */}
+            <button
+              type="button"
+              onClick={() => handleTabChange('tasks')}
+              className={cn(
+                'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
+                activeTab === 'tasks'
+                  ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
+                  : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+              )}
+            >
+              <ListTodo className="h-3.5 w-3.5 flex-shrink-0" />
+              <span>Tasks</span>
+            </button>
+
+            {/* Spaces */}
+            <button
+              type="button"
+              onClick={() => handleTabChange('bots')}
+              className={cn(
+                'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
+                activeTab === 'bots'
+                  ? 'bg-white/12 border-white/10 text-white font-semibold shadow-xs'
+                  : 'bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white',
+              )}
+            >
+              <LayoutGrid className="h-3.5 w-3.5 flex-shrink-0" />
+              <span>Spaces</span>
+            </button>
           </div>
         </div>
       )}
