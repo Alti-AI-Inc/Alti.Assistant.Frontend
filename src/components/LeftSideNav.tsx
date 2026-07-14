@@ -479,7 +479,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       case 'search':
         return {
           visible: true,
-          tooltip: 'New Search',
+          tooltip: 'New Chat',
           onClick: () => {
             setActiveConversation(null);
             setShowStartLastMessage(false);
