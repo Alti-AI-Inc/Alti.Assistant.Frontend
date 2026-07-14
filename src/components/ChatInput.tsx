@@ -140,7 +140,7 @@ export default function ChatInput({
   onFilesChange,
   isStudio,
 }: ChatInputProps) {
-  const [isLocalTasks, setIsLocalTasks] = useState(false);
+
 
   const router = useRouter();
   const pathname = usePathname();
@@ -376,19 +376,10 @@ export default function ChatInput({
     pathname?.startsWith('/c/');
 
   useEffect(() => {
-    setIsLocalTasks(false);
     if (!isExistingConversation) {
       setSelectedOption(null);
     }
   }, [isExistingConversation, setSelectedOption]);
-
-  useEffect(() => {
-    if (selectedOption === OPTIONS.TASK) {
-      setIsLocalTasks(true);
-    } else {
-      setIsLocalTasks(false);
-    }
-  }, [selectedOption]);
 
   const { onOpen } = useModalStore();
 
@@ -1353,49 +1344,9 @@ export default function ChatInput({
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
         {!isExistingConversation && (
           <div className="flex flex-col items-center gap-6 w-full mb-6">
-              
-              {/* Parent Toggle */}
-              {(pathname?.startsWith('/spaces') || pathname?.startsWith('/knowledge/')) && (
-              <div className="flex bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1 rounded-full shadow-sm border border-gray-200/50 dark:border-zinc-800/50">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsLocalTasks(false);
-                    setSelectedOption(null); // Auto select 'Search'
-                  }}
-                  className={cn(
-                    'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
-                    !isLocalTasks
-                      ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
-                      : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
-                  )}
-                >
-                  Assistant
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsLocalTasks(true);
-                    setSelectedOption(OPTIONS.TASK); // Auto select 'Task Automation'
-                  }}
-                  className={cn(
-                    'px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
-                    isLocalTasks
-                      ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
-                      : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
-                  )}
-                >
-                  Tasks
-                </button>
-              </div>
-              )}
-
               {/* Child Toggle */}
               <div 
-                className={cn(
-                  "w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto transition-opacity duration-300",
-                  isLocalTasks ? "hidden" : "flex"
-                )}
+                className="w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto transition-opacity duration-300 flex"
               >
                 {[
                   { id: 'search', name: 'Chat', icon: MessageSquare, value: null },
@@ -1411,7 +1362,7 @@ export default function ChatInput({
                     <button
                       key={tab.id}
                       type="button"
-                      onClick={() => !isLocalTasks && setSelectedOption(tab.value)}
+                      onClick={() => setSelectedOption(tab.value)}
                       className={cn(
                         'flex items-center gap-2 px-5 py-2 rounded-2xl transition-all duration-200 ease-out font-medium text-sm whitespace-nowrap',
                         isSelected 
