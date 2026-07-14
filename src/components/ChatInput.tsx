@@ -49,7 +49,6 @@ import {
   Presentation,
   X,
   Check,
-  Film,
   Headphones,
   ListTodo,
   Clock,
@@ -1356,8 +1355,7 @@ export default function ChatInput({
                   { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
                   { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS },
                   { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE },
-                  { id: 'image', name: 'Image', icon: ImageIcon, value: OPTIONS.IMAGE },
-                  { id: 'video', name: 'Video', icon: Film, value: OPTIONS.VIDEO }
+                  { id: 'image', name: 'Image', icon: ImageIcon, value: OPTIONS.IMAGE }
                 ].map((tab) => {
                   const isSelected = selectedOption === tab.value;
                   return (
