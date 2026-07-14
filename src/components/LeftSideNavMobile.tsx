@@ -540,7 +540,7 @@ const LeftSideNavMobile = () => {
       case 'search':
         return {
           visible: true,
-          label: 'New Search',
+          label: 'New Chat',
           onClick: () => {
             setActiveConversation(null);
             setShowStartLastMessage(false);
