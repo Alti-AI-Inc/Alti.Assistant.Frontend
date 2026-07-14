@@ -656,23 +656,6 @@ const LeftSideNavMobile = () => {
       {!isSuperAdmin && activeTab !== 'account' && (
         <div className="pt-3 px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none">
           <div className="space-y-1.5 w-full">
-            {/* Chat */}
-            <button
-              type="button"
-              onClick={() => handleTabChange('search')}
-              className={cn(
-                'group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none',
-                activeTab === 'search'
-                  ? 'bg-blue-600/25 border-blue-500/40 text-blue-100 font-semibold shadow-xs'
-                  : 'bg-blue-600/10 border-blue-500/20 text-zinc-300 hover:bg-blue-600/20 hover:border-blue-500/30 hover:text-blue-100',
-              )}
-            >
-              <Sparkles className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", activeTab === 'search' ? "text-blue-400" : "text-blue-400/70 group-hover:text-blue-300")} />
-              <span>Assistant</span>
-            </button>
-
-
-
             {/* Apps */}
             <button
               type="button"
@@ -723,22 +706,22 @@ const LeftSideNavMobile = () => {
 
       {/* Enclosed Search & Actions Row */}
       {activeTab !== 'account' && (
-        <div className="pt-1.5 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none w-full">
-          <div className="flex h-9 w-full items-center rounded-lg border border-white/[0.04] bg-white/[0.06] shadow-xs overflow-hidden focus-within:ring-1 focus-within:ring-white/20 transition-all duration-150">
+        <div className="pt-3 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none w-full">
+          <div className="flex h-9 w-full items-center rounded-lg border border-blue-500/20 bg-blue-600/10 shadow-xs overflow-hidden focus-within:ring-1 focus-within:ring-blue-500/40 transition-all duration-150">
             {/* Search segment */}
             <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
-              <Search className="size-3.5 flex-none text-white" />
+              <Search className="size-3.5 flex-none text-blue-400" />
               <input
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent text-xs font-normal font-sans text-white outline-none placeholder:text-white/60"
+                className="w-full bg-transparent text-xs font-normal font-sans text-blue-100 outline-none placeholder:text-blue-200/50"
               />
             </div>
 
             {/* Vertical Separator */}
-            <div className="w-px h-4 bg-white/10 flex-none" />
+            <div className="w-px h-4 bg-blue-500/20 flex-none" />
 
             {/* Inbox segment */}
             <Tooltip>
@@ -746,15 +729,15 @@ const LeftSideNavMobile = () => {
                 <button
                   type="button"
                   className={cn(
-                    "flex h-full w-9 items-center justify-center transition-all hover:bg-white/[0.06] text-white focus:outline-none",
-                    pathname === '/inbox' && "bg-white/[0.08]"
+                    "flex h-full w-9 items-center justify-center transition-all hover:bg-blue-500/20 text-blue-100 focus:outline-none",
+                    pathname === '/inbox' && "bg-blue-600/20"
                   )}
                   onClick={() => {
                     router.push('/inbox');
                     close();
                   }}
                 >
-                  <Inbox className="size-3.5 text-white" />
+                  <Inbox className="size-3.5 text-blue-400" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom" className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
@@ -764,7 +747,7 @@ const LeftSideNavMobile = () => {
 
             {/* Vertical Separator (only if plus is visible) */}
             {plusProps.visible && (
-              <div className="w-px h-4 bg-white/10 flex-none" />
+              <div className="w-px h-4 bg-blue-500/20 flex-none" />
             )}
 
             {/* Plus segment */}
@@ -773,10 +756,10 @@ const LeftSideNavMobile = () => {
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="flex h-full w-9 items-center justify-center transition-all hover:bg-white/[0.06] text-white focus:outline-none"
+                    className="flex h-full w-9 items-center justify-center transition-all hover:bg-blue-500/20 text-blue-100 focus:outline-none"
                     onClick={plusProps.onClick}
                   >
-                    <Plus className="size-3.5 text-white" />
+                    <Plus className="size-3.5 text-blue-400" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
