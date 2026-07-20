@@ -1659,7 +1659,7 @@ export default function ChatInput({
                     <p>More Options</p>
                   </TooltipContent>
                 </Tooltip>
-                <DropdownMenuContent className="w-48 bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-xl shadow-xl p-1" align="start" side="top" sideOffset={8}>
+                <DropdownMenuContent className="w-48 bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-xl shadow-xl p-1" align="start" side="bottom" sideOffset={8}>
                   <DropdownMenuItem
                     onClick={() => fileInputRef.current?.click()}
                     className="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors"
