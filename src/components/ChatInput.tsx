@@ -292,7 +292,15 @@ export default function ChatInput({
           };
           reader.readAsDataURL(imageFiles[0]);
         } else {
-          toast.error('Only image files are allowed in this mode.');
+          const validFiles = filesArray.filter(file => {
+            const ext = '.' + file.name.split('.').pop()?.toLowerCase();
+            return ALLOWED_DOC_EXTENSIONS.includes(ext);
+          });
+          if (validFiles.length > 0) {
+            setSelectedFiles([...(selectedFiles || []), ...validFiles]);
+          } else {
+            toast.error('Only image or supported document files are allowed.');
+          }
         }
       } else {
         const validFiles = filesArray.filter(file => {

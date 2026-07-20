@@ -5,9 +5,6 @@
 
 import { OPTIONS } from '@/stores/useConverstionsStore';
 
-/**
- * Options that allow file uploads
- */
 export const FILE_UPLOAD_OPTIONS = [
   OPTIONS.REVIEW_DOCUMENTS,
   OPTIONS.REWRITE,
@@ -17,6 +14,7 @@ export const FILE_UPLOAD_OPTIONS = [
   OPTIONS.IMAGE,
   OPTIONS.EDIT_IMAGE,
   OPTIONS.GENERATE_REPORT,
+  OPTIONS.CODE,
 ] as const;
 
 /**
@@ -29,6 +27,7 @@ export const DOCUMENT_OPTIONS = [
   OPTIONS.GENERATE_PLAN,
   OPTIONS.REVIEW_CONTRACT,
   OPTIONS.GENERATE_REPORT,
+  OPTIONS.CODE,
 ] as const;
 
 /**
