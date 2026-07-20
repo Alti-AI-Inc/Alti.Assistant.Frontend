@@ -970,27 +970,27 @@ const LeftSideNavMobile = () => {
               {isSuperAdmin && (
                 <button
                   onClick={() => { router.push('/admin'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                 >
-                  <Shield className="h-3.5 w-3.5 flex-shrink-0" />
+                  <Shield className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
                   <span>Owner Platform</span>
                 </button>
               )}
               {isAdmin && !isSuperAdmin && (
                 <button
                   onClick={() => { router.push('/admin/platform-admin'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                 >
-                  <Shield className="h-3.5 w-3.5 flex-shrink-0" />
+                  <Shield className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
                   <span>Platform Admin</span>
                 </button>
               )}
               {(isAdmin || isManager) && !isSuperAdmin && (
                 <button
                   onClick={() => { router.push('/admin/platform-manager'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                 >
-                  <LayoutDashboard className="h-3.5 w-3.5 flex-shrink-0" />
+                  <LayoutDashboard className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
                   <span>Platform Manager</span>
                 </button>
               )}
@@ -998,9 +998,9 @@ const LeftSideNavMobile = () => {
               {!isSuperAdmin && (
                 <button
                   onClick={() => { router.push('/appsx'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                 >
-                  <Blocks className="h-3.5 w-3.5 flex-shrink-0" />
+                  <Blocks className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
                   <span>Platform Connectors</span>
                 </button>
               )}
@@ -1008,9 +1008,9 @@ const LeftSideNavMobile = () => {
               {!isSuperAdmin && (
                 <button
                   onClick={() => { router.push('/platform-memory'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                 >
-                  <Brain className="h-3.5 w-3.5 flex-shrink-0" />
+                  <Brain className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
                   <span>Platform Memory</span>
                 </button>
               )}
@@ -1018,9 +1018,9 @@ const LeftSideNavMobile = () => {
               {!isSuperAdmin && (
                 <button
                   onClick={() => { router.push('/platform-knowledge'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                 >
-                  <Database className="h-3.5 w-3.5 flex-shrink-0" />
+                  <Database className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
                   <span>Platform Knowledge</span>
                 </button>
               )}
@@ -1028,9 +1028,9 @@ const LeftSideNavMobile = () => {
               {!isSuperAdmin && (
                 <button
                   onClick={() => { router.push('/instructions'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                 >
-                  <SlidersHorizontal className="h-3.5 w-3.5 flex-shrink-0" />
+                  <SlidersHorizontal className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
                   <span>Platform Instructions</span>
                 </button>
               )}
@@ -1038,9 +1038,9 @@ const LeftSideNavMobile = () => {
               {!isSuperAdmin && (
                 <button
                   onClick={() => { router.push('/guardrails'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                 >
-                  <ShieldAlert className="h-3.5 w-3.5 flex-shrink-0" />
+                  <ShieldAlert className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
                   <span>Platform Guardrails</span>
                 </button>
               )}
@@ -1048,9 +1048,9 @@ const LeftSideNavMobile = () => {
               {!isSuperAdmin && (
                 <button
                   onClick={() => { router.push('/invite-friends'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                 >
-                  <UserPlus className="h-3.5 w-3.5 flex-shrink-0" />
+                  <UserPlus className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
                   <span>Invite Friends</span>
                 </button>
               )}
@@ -1058,9 +1058,9 @@ const LeftSideNavMobile = () => {
               {!isSuperAdmin && (
                 <button
                   onClick={() => { router.push('/change-password'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                 >
-                  <KeyRound className="h-3.5 w-3.5 flex-shrink-0" />
+                  <KeyRound className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
                   <span>Change Password</span>
                 </button>
               )}
@@ -1068,9 +1068,9 @@ const LeftSideNavMobile = () => {
               {!isSuperAdmin && (
                 <button
                   onClick={() => { router.push('/contact-support'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                 >
-                  <Mail className="h-3.5 w-3.5 flex-shrink-0" />
+                  <Mail className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
                   <span>Contact Support</span>
                 </button>
               )}
@@ -1078,9 +1078,9 @@ const LeftSideNavMobile = () => {
               {!isSuperAdmin && (
                 <button
                   onClick={() => { router.push('/legal'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-150 border cursor-pointer select-none text-left focus:outline-none bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                 >
-                  <Scale className="h-3.5 w-3.5 flex-shrink-0" />
+                  <Scale className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
                   <span>Legal Documents</span>
                 </button>
               )}
@@ -1144,13 +1144,13 @@ const LeftSideNavMobile = () => {
                                 href={item.href}
                                 onClick={() => close()}
                                 className={cn(
-                                  'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                                  'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-all duration-300 border mb-1.5 select-none cursor-pointer',
                                   isActive
-                                    ? 'bg-white/12 text-white font-semibold'
-                                    : 'text-zinc-300 hover:bg-white/5 hover:text-white'
+                                    ? 'bg-[#0000ff]/15 border-[#0000ff] text-white font-semibold shadow-[0_0_20px_rgba(0,0,255,0.55)]'
+                                    : 'bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white'
                                 )}
                               >
-                                <Icon className="w-4 h-4 text-zinc-350" />
+                                <Icon className={cn("w-4 h-4 flex-shrink-0 transition-colors", isActive ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
                                 {item.name}
                               </Link>
                             );
@@ -1176,13 +1176,13 @@ const LeftSideNavMobile = () => {
                             href={item.href}
                             onClick={() => close()}
                             className={cn(
-                              'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                              'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-all duration-300 border mb-1.5 select-none cursor-pointer',
                               isActive
-                                ? 'bg-white/12 text-white font-semibold'
-                                : 'text-zinc-300 hover:bg-white/5 hover:text-white'
+                                ? 'bg-[#0000ff]/15 border-[#0000ff] text-white font-semibold shadow-[0_0_20px_rgba(0,0,255,0.55)]'
+                                : 'bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white'
                             )}
                           >
-                            <Icon className="w-4 h-4 text-zinc-350" />
+                            <Icon className={cn("w-4 h-4 flex-shrink-0 transition-colors", isActive ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
                             {item.name}
                           </Link>
                         );
@@ -1206,13 +1206,13 @@ const LeftSideNavMobile = () => {
                               href={item.href}
                               onClick={() => close()}
                               className={cn(
-                                'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                                'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-all duration-300 border mb-1.5 select-none cursor-pointer',
                                 isActive
-                                  ? 'bg-white/12 text-white font-semibold'
-                                  : 'text-zinc-300 hover:bg-white/5 hover:text-white'
+                                  ? 'bg-[#0000ff]/15 border-[#0000ff] text-white font-semibold shadow-[0_0_20px_rgba(0,0,255,0.55)]'
+                                  : 'bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white'
                               )}
                             >
-                              <Icon className="w-4 h-4 text-zinc-350" />
+                              <Icon className={cn("w-4 h-4 flex-shrink-0 transition-colors", isActive ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
                               {item.name}
                             </Link>
                             {item.name === 'Projects' && (
@@ -1228,10 +1228,10 @@ const LeftSideNavMobile = () => {
                                         close();
                                       }}
                                       className={cn(
-                                        "flex h-8 w-full items-center truncate rounded-md px-2 text-xs font-normal transition-all text-left",
+                                        "flex h-8 w-full items-center truncate rounded-md px-3 text-xs font-normal transition-all duration-300 text-left border mb-1 select-none cursor-pointer",
                                         isSelected
-                                          ? "bg-white/12 text-white font-medium"
-                                          : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                                          ? "bg-[#0000ff]/15 border-[#0000ff]/60 text-white font-medium shadow-[0_0_12px_rgba(0,0,255,0.35)]"
+                                          : "bg-[#0000ff]/5 border-[#0000ff]/15 text-zinc-400 hover:bg-[#0000ff]/12 hover:border-[#0000ff]/30 hover:text-white"
                                       )}
                                     >
                                       {bot.name}

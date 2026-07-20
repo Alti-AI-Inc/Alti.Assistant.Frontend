@@ -175,16 +175,16 @@ export const AdminSecondarySidebar = () => {
                       key={item.name}
                       href={item.href}
                       className={cn(
-                        'w-full flex items-center rounded-md transition-colors',
+                        'w-full flex items-center rounded-md transition-all duration-300 border mb-1.5 select-none cursor-pointer',
                         isActive
-                          ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white font-semibold'
-                          : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white',
+                          ? 'bg-[#0000ff]/10 dark:bg-[#0000ff]/15 border-[#0000ff] text-[#0000ff] dark:text-white font-semibold shadow-[0_0_12px_rgba(0,0,255,0.18)] dark:shadow-[0_0_20px_rgba(0,0,255,0.45)]'
+                          : 'bg-transparent border-transparent text-gray-650 dark:text-zinc-300 hover:bg-[#0000ff]/5 dark:hover:bg-[#0000ff]/10 hover:border-[#0000ff]/35 hover:shadow-[0_0_12px_rgba(0,0,255,0.15)] dark:hover:shadow-[0_0_15px_rgba(0,0,255,0.25)] hover:text-[#0000ff] dark:hover:text-white',
                         (isLeftSidebarOpen || !isSuperAdmin) 
                           ? 'gap-3 px-3 py-2 text-sm font-medium' 
                           : 'justify-center p-2.5'
                       )}
                     >
-                      <Icon className="w-4 h-4 text-black dark:text-white flex-shrink-0" />
+                      <Icon className={cn("w-4 h-4 flex-shrink-0 transition-colors", isActive ? "text-[#0000ff] dark:text-white" : "text-gray-550 dark:text-[#8080ff] group-hover:text-[#0000ff] dark:group-hover:text-white")} />
                       {(isLeftSidebarOpen || !isSuperAdmin) && <span className="truncate">{item.name}</span>}
                     </Link>
                   );
@@ -225,13 +225,13 @@ export const AdminSecondarySidebar = () => {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                    'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-all duration-300 border mb-1.5 select-none cursor-pointer',
                     isActive
-                      ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white font-semibold'
-                      : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                      ? 'bg-[#0000ff]/10 dark:bg-[#0000ff]/15 border-[#0000ff] text-[#0000ff] dark:text-white font-semibold shadow-[0_0_12px_rgba(0,0,255,0.18)] dark:shadow-[0_0_20px_rgba(0,0,255,0.45)]'
+                      : 'bg-transparent border-transparent text-gray-650 dark:text-zinc-300 hover:bg-[#0000ff]/5 dark:hover:bg-[#0000ff]/10 hover:border-[#0000ff]/35 hover:shadow-[0_0_12px_rgba(0,0,255,0.15)] dark:hover:shadow-[0_0_15px_rgba(0,0,255,0.25)] hover:text-[#0000ff] dark:hover:text-white'
                   )}
                 >
-                  <Icon className="w-4 h-4 text-black dark:text-white" />
+                  <Icon className={cn("w-4 h-4 flex-shrink-0 transition-colors", isActive ? "text-[#0000ff] dark:text-white" : "text-gray-555 dark:text-[#8080ff] group-hover:text-[#0000ff] dark:group-hover:text-white")} />
                   {item.name}
                 </Link>
               );
@@ -255,13 +255,13 @@ export const AdminSecondarySidebar = () => {
                   <Link
                     href={item.href}
                     className={cn(
-                      'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                      'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-all duration-300 border mb-1.5 select-none cursor-pointer',
                       isActive
-                        ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white font-semibold'
-                        : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                        ? 'bg-[#0000ff]/10 dark:bg-[#0000ff]/15 border-[#0000ff] text-[#0000ff] dark:text-white font-semibold shadow-[0_0_12px_rgba(0,0,255,0.18)] dark:shadow-[0_0_20px_rgba(0,0,255,0.45)]'
+                        : 'bg-transparent border-transparent text-gray-650 dark:text-zinc-300 hover:bg-[#0000ff]/5 dark:hover:bg-[#0000ff]/10 hover:border-[#0000ff]/35 hover:shadow-[0_0_12px_rgba(0,0,255,0.15)] dark:hover:shadow-[0_0_15px_rgba(0,0,255,0.25)] hover:text-[#0000ff] dark:hover:text-white'
                     )}
                   >
-                    <Icon className="w-4 h-4 text-black dark:text-white" />
+                    <Icon className={cn("w-4 h-4 flex-shrink-0 transition-colors", isActive ? "text-[#0000ff] dark:text-white" : "text-gray-555 dark:text-[#8080ff] group-hover:text-[#0000ff] dark:group-hover:text-white")} />
                     {item.name}
                   </Link>
                 </div>
