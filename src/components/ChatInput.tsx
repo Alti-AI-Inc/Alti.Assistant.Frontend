@@ -1551,9 +1551,9 @@ export default function ChatInput({
               <div className="mt-3 flex items-center justify-between rounded-lg bg-zinc-50 dark:bg-zinc-850/60 px-3 py-1.5 border border-zinc-200 dark:border-zinc-800/80 animate-in fade-in duration-200">
                 <div className="flex items-center gap-2">
                   {selectedOption === OPTIONS.CODE ? (
-                    <Code className="size-4 text-blue-500" />
+                    <Code className="size-4 text-black dark:text-white" />
                   ) : (
-                    <ImageIcon className="size-4 text-purple-500" />
+                    <ImageIcon className="size-4 text-black dark:text-white" />
                   )}
                   <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
                     {selectedOption === OPTIONS.CODE ? 'Code Generation Mode' : 'Image Generation Mode'}
