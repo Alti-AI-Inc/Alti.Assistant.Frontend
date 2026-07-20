@@ -13,6 +13,12 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 import { useBrainstorm } from '@/hooks/useBrainstorm';
 import { useContractReview } from '@/hooks/useContractReview';
@@ -1343,40 +1349,6 @@ export default function ChatInput({
       )}
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
-        {!isExistingConversation && !hasMessages && !showStartLastMessage && !isLoadingResponse && (
-          <div className="flex flex-col items-center gap-6 w-full mb-6">
-              {/* Child Toggle */}
-              <div 
-                className="w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto transition-opacity duration-300 flex"
-              >
-                {[
-                  { id: 'search', name: 'Chat', icon: MessageSquare, value: null },
-                  { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
-                  { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
-                  { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS },
-                  { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE }
-                ].map((tab) => {
-                  const isSelected = selectedOption === tab.value;
-                  return (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      onClick={() => setSelectedOption(tab.value)}
-                      className={cn(
-                        'flex items-center gap-2 px-5 py-2 rounded-2xl transition-all duration-200 ease-out font-medium text-sm whitespace-nowrap',
-                        isSelected 
-                          ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
-                          : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
-                      )}
-                    >
-                      <tab.icon className={cn("size-4", isSelected ? "text-blue-500" : "")} />
-                      <span>{tab.name}</span>
-                    </button>
-                  );
-                })}
-              </div>
-          </div>
-        )}
 
 
 
@@ -1541,6 +1513,29 @@ export default function ChatInput({
                 </span>
               </div>
             )}
+            {/* Mode Badge Preview */}
+            {selectedOption && (selectedOption === OPTIONS.CODE || selectedOption === OPTIONS.IMAGE) && (
+              <div className="mt-3 flex items-center justify-between rounded-lg bg-zinc-50 dark:bg-zinc-850/60 px-3 py-1.5 border border-zinc-200 dark:border-zinc-800/80 animate-in fade-in duration-200">
+                <div className="flex items-center gap-2">
+                  {selectedOption === OPTIONS.CODE ? (
+                    <Code className="size-4 text-blue-500" />
+                  ) : (
+                    <ImageIcon className="size-4 text-purple-500" />
+                  )}
+                  <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                    {selectedOption === OPTIONS.CODE ? 'Code Generation Mode' : 'Image Generation Mode'}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedOption(null)}
+                  className="rounded-full hover:bg-black/5 dark:hover:bg-white/5 p-0.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
+                  title="Exit mode"
+                >
+                  <X className="size-3.5" />
+                </button>
+              </div>
+            )}
             {/* Image Preview */}
             {imageBase64 && (
               <div className="relative mt-2 w-fit">
@@ -1614,21 +1609,47 @@ export default function ChatInput({
 
             {/* Input container with active icon inside */}
             <div className="relative flex items-center gap-2 py-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
+              <DropdownMenu>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        type="button"
+                        className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
+                        aria-label="More Options"
+                      >
+                        <Plus className="size-3.5" />
+                      </button>
+                    </DropdownMenuTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    <p>More Options</p>
+                  </TooltipContent>
+                </Tooltip>
+                <DropdownMenuContent className="w-48 bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-xl shadow-xl p-1" align="start" side="top" sideOffset={8}>
+                  <DropdownMenuItem
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
-                    aria-label="Attach Files"
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors"
                   >
-                    <Paperclip className="size-3.5" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="top">
-                  <p>Attach Files</p>
-                </TooltipContent>
-              </Tooltip>
+                    <Paperclip className="size-4 text-zinc-500" />
+                    <span>Attach Files</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setSelectedOption(OPTIONS.CODE)}
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors"
+                  >
+                    <Code className="size-4 text-blue-500" />
+                    <span>Code Generation</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setSelectedOption(OPTIONS.IMAGE)}
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors"
+                  >
+                    <ImageIcon className="size-4 text-purple-500" />
+                    <span>Image Generation</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
               <Textarea
                 name="message"
