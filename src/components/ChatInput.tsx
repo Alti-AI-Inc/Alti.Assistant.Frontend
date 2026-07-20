@@ -1349,6 +1349,39 @@ export default function ChatInput({
       )}
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
+        {!isExistingConversation && !hasMessages && !showStartLastMessage && !isLoadingResponse && (
+          <div className="flex flex-col items-center gap-6 w-full mb-6">
+              {/* Child Toggle */}
+              <div 
+                className="w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto transition-opacity duration-300 flex"
+              >
+                {[
+                  { id: 'search', name: 'Chat', icon: MessageSquare, value: null },
+                  { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
+                  { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
+                  { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS }
+                ].map((tab) => {
+                  const isSelected = selectedOption === tab.value;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => setSelectedOption(tab.value)}
+                      className={cn(
+                        'flex items-center gap-2 px-5 py-2 rounded-2xl transition-all duration-200 ease-out font-medium text-sm whitespace-nowrap',
+                        isSelected 
+                          ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
+                          : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
+                      )}
+                    >
+                      <tab.icon className={cn("size-4", isSelected ? "text-blue-500" : "")} />
+                      <span>{tab.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+          </div>
+        )}
 
 
 
@@ -1615,7 +1648,7 @@ export default function ChatInput({
                     <DropdownMenuTrigger asChild>
                       <button
                         type="button"
-                        className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
+                        className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-[#0000ff] bg-[#0000ff] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
                         aria-label="More Options"
                       >
                         <Plus className="size-3.5" />
