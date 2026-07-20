@@ -362,6 +362,13 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
     activeConversation?.messages?.length
   ]);
 
+  // Reset active conversation state when entering new-chat route to prevent race conditions
+  useEffect(() => {
+    if (conversationId === 'new-chat') {
+      setActiveConversation(null);
+    }
+  }, [conversationId, setActiveConversation]);
+
   // Track which conversation's presentation metadata we've already processed
   const processedPresentationRef = useRef<string | null>(null);
 
