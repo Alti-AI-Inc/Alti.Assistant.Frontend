@@ -1686,29 +1686,17 @@ export default function ChatInput({
 
                   <DropdownMenuItem
                     onClick={() => setSelectedOption(OPTIONS.CODE)}
-                    className={cn(
-                      "flex items-center justify-between px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors",
-                      isExistingConversation && selectedOption === OPTIONS.CODE && "bg-zinc-50 dark:bg-zinc-800/50 font-medium text-zinc-900 dark:text-zinc-100"
-                    )}
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors"
                   >
-                    <div className="flex items-center gap-2">
-                      <Code className={cn("size-4", isExistingConversation && selectedOption === OPTIONS.CODE ? "text-blue-500" : "text-black dark:text-white")} />
-                      <span>Code Generation</span>
-                    </div>
-                    {isExistingConversation && selectedOption === OPTIONS.CODE && <Check className="size-4 text-blue-500" />}
+                    <Code className="size-4 text-black dark:text-white" />
+                    <span>Code Generation</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => setSelectedOption(OPTIONS.IMAGE)}
-                    className={cn(
-                      "flex items-center justify-between px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors",
-                      isExistingConversation && selectedOption === OPTIONS.IMAGE && "bg-zinc-50 dark:bg-zinc-800/50 font-medium text-zinc-900 dark:text-zinc-100"
-                    )}
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors"
                   >
-                    <div className="flex items-center gap-2">
-                      <ImageIcon className={cn("size-4", isExistingConversation && selectedOption === OPTIONS.IMAGE ? "text-blue-500" : "text-black dark:text-white")} />
-                      <span>Image Generation</span>
-                    </div>
-                    {isExistingConversation && selectedOption === OPTIONS.IMAGE && <Check className="size-4 text-blue-500" />}
+                    <ImageIcon className="size-4 text-black dark:text-white" />
+                    <span>Image Generation</span>
                   </DropdownMenuItem>
 
                   {isExistingConversation && (
