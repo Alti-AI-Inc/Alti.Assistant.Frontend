@@ -663,7 +663,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent text-xs font-normal font-sans text-white outline-none placeholder:text-white/60"
+                className="w-full bg-transparent text-xs font-normal text-white outline-none placeholder:text-zinc-300"
+                style={{ fontFamily: 'inherit' }}
               />
             </div>
 
