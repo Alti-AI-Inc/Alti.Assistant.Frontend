@@ -685,7 +685,7 @@ const LeftSideNavMobile = () => {
                     className="flex h-full w-9 items-center justify-center transition-all hover:bg-[#0000ff]/20 text-blue-100 focus:outline-none"
                     onClick={plusProps.onClick}
                   >
-                    <Plus className="size-3.5 text-[#5e5eff]" />
+                    <Plus className="size-3.5 text-white" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
