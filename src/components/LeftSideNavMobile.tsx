@@ -655,16 +655,16 @@ const LeftSideNavMobile = () => {
       {/* Enclosed Search & Actions Row */}
       {activeTab !== 'account' && (
         <div className="pt-3 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none w-full">
-          <div className="flex h-9 w-full items-center rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] overflow-hidden focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40 transition-all duration-300">
+          <div className="flex h-9 w-full items-center rounded-lg border border-zinc-700/50 bg-zinc-800/50 shadow-[0_0_12px_rgba(255,255,255,0.06)] overflow-hidden focus-within:border-zinc-500 focus-within:shadow-[0_0_20px_rgba(255,255,255,0.12)] focus-within:ring-1 focus-within:ring-white/20 transition-all duration-300">
             {/* Search segment */}
             <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
-              <Search className="size-3.5 flex-none text-[#5e5eff]" />
+              <Search className="size-3.5 flex-none text-zinc-400" />
               <input
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent text-xs font-normal font-sans text-blue-100 outline-none placeholder:text-blue-200/50"
+                className="w-full bg-transparent text-xs font-normal font-sans text-zinc-100 outline-none placeholder:text-zinc-450/70"
               />
             </div>
 
@@ -672,7 +672,7 @@ const LeftSideNavMobile = () => {
 
             {/* Vertical Separator (only if plus is visible) */}
             {plusProps.visible && (
-              <div className="w-px h-4 bg-[#0000ff]/30 flex-none" />
+              <div className="w-px h-4 bg-zinc-700/50 flex-none" />
             )}
 
             {/* Plus segment */}
@@ -681,10 +681,10 @@ const LeftSideNavMobile = () => {
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="flex h-full w-9 items-center justify-center transition-all hover:bg-[#0000ff]/20 text-blue-100 focus:outline-none"
+                    className="flex h-full w-9 items-center justify-center transition-all hover:bg-zinc-700/40 text-zinc-100 focus:outline-none"
                     onClick={plusProps.onClick}
                   >
-                    <Plus className="size-3.5 text-[#5e5eff]" />
+                    <Plus className="size-3.5 text-zinc-400" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
@@ -1306,7 +1306,7 @@ const LeftSideNavMobile = () => {
             <Button
               variant="outline"
               onClick={() => setActiveTab('account')}
-              className="w-full transition-all duration-200 outline-none select-none cursor-pointer border border-white/5 bg-white/[0.06] hover:bg-white/[0.12] text-white"
+              className="w-full transition-all duration-300 outline-none select-none cursor-pointer border border-zinc-700/50 bg-zinc-800/50 hover:bg-zinc-800/80 hover:border-zinc-600/80 text-zinc-200 hover:text-white shadow-[0_0_12px_rgba(255,255,255,0.06)] hover:shadow-[0_0_18px_rgba(255,255,255,0.12)]"
             >
               My Account
             </Button>
