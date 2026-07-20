@@ -459,6 +459,7 @@ const LeftSideNavMobile = () => {
   }, [activeConversation, selectedOption, setSelectedOption, pathname]);
 
   const handleTabChange = (tab: SidebarTab) => {
+    const targetPath = isLoggedIn ? '/c/new-chat' : '/';
     setActiveTab(tab);
     if (tab === 'bots') {
       setActiveConversation(null);
@@ -466,45 +467,45 @@ const LeftSideNavMobile = () => {
       close();
     } else if (tab === 'search') {
       setSelectedOption(null);
-      if (pathname !== '/') {
+      if (pathname !== targetPath) {
         setActiveConversation(null);
-        router.push('/');
+        router.push(targetPath);
       }
       close();
     } else if (tab === 'research') {
       setSelectedOption(OPTIONS.RESEARCH);
-      if (pathname !== '/') {
+      if (pathname !== targetPath) {
         setActiveConversation(null);
-        router.push('/');
+        router.push(targetPath);
       }
       close();
     } else if (tab === 'write') {
       setSelectedOption(OPTIONS.DRAFT_DOCUMENT);
-      if (pathname !== '/') {
+      if (pathname !== targetPath) {
         setActiveConversation(null);
-        router.push('/');
+        router.push(targetPath);
       }
       close();
 
     } else if (tab === 'code') {
       setSelectedOption(OPTIONS.CODE);
-      if (pathname !== '/') {
+      if (pathname !== targetPath) {
         setActiveConversation(null);
-        router.push('/');
+        router.push(targetPath);
       }
       close();
     } else if (tab === 'image') {
       setSelectedOption(OPTIONS.IMAGE);
-      if (pathname !== '/') {
+      if (pathname !== targetPath) {
         setActiveConversation(null);
-        router.push('/');
+        router.push(targetPath);
       }
       close();
     } else if (tab === 'audio') {
       setSelectedOption(OPTIONS.AUDIO);
-      if (pathname !== '/') {
+      if (pathname !== targetPath) {
         setActiveConversation(null);
-        router.push('/');
+        router.push(targetPath);
       }
       close();
     } else if (tab === 'apps') {
@@ -517,9 +518,9 @@ const LeftSideNavMobile = () => {
       close();
     } else if (tab === 'video') {
       setSelectedOption(OPTIONS.VIDEO);
-      if (pathname !== '/') {
+      if (pathname !== targetPath) {
         setActiveConversation(null);
-        router.push('/');
+        router.push(targetPath);
       }
       close();
     }
@@ -547,7 +548,7 @@ const LeftSideNavMobile = () => {
             setUserMessage('');
             setSelectedOption(null);
             close();
-            router.push('/');
+            router.push(isLoggedIn ? '/c/new-chat' : '/');
           },
         };
       case 'research':
@@ -560,7 +561,7 @@ const LeftSideNavMobile = () => {
             setUserMessage('');
             setSelectedOption(OPTIONS.RESEARCH);
             close();
-            router.push('/');
+            router.push(isLoggedIn ? '/c/new-chat' : '/');
           },
         };
       case 'write':
@@ -573,7 +574,7 @@ const LeftSideNavMobile = () => {
             setUserMessage('');
             setSelectedOption(OPTIONS.DRAFT_DOCUMENT);
             close();
-            router.push('/');
+            router.push(isLoggedIn ? '/c/new-chat' : '/');
           },
         };
 
@@ -587,7 +588,7 @@ const LeftSideNavMobile = () => {
             setUserMessage('');
             setSelectedOption(OPTIONS.CODE);
             close();
-            router.push('/');
+            router.push(isLoggedIn ? '/c/new-chat' : '/');
           },
         };
       case 'image':
@@ -600,7 +601,7 @@ const LeftSideNavMobile = () => {
             setUserMessage('');
             setSelectedOption(OPTIONS.IMAGE);
             close();
-            router.push('/');
+            router.push(isLoggedIn ? '/c/new-chat' : '/');
           },
         };
       case 'audio':
@@ -613,7 +614,7 @@ const LeftSideNavMobile = () => {
             setUserMessage('');
             setSelectedOption(OPTIONS.AUDIO);
             close();
-            router.push('/');
+            router.push(isLoggedIn ? '/c/new-chat' : '/');
           },
         };
       case 'video':
@@ -626,7 +627,7 @@ const LeftSideNavMobile = () => {
             setUserMessage('');
             setSelectedOption(OPTIONS.VIDEO);
             close();
-            router.push('/');
+            router.push(isLoggedIn ? '/c/new-chat' : '/');
           },
         };
       case 'bots':
@@ -1253,7 +1254,7 @@ const LeftSideNavMobile = () => {
                   className="w-full justify-center gap-2 bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 border border-transparent"
                   onClick={() => {
                     setActiveTab('search');
-                    router.push('/');
+                    router.push(isLoggedIn ? '/c/new-chat' : '/');
                     close();
                   }}
                 >

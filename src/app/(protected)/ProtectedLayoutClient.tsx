@@ -92,7 +92,7 @@ export default function ProtectedLayoutClient({
               setShowStartLastMessage(false);
               setUserMessage('');
               setSelectedOption(null);
-              router.push('/');
+              router.push('/c/new-chat');
               close();
             }}
             className="flex items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
