@@ -96,7 +96,7 @@ export default function ConversationsList({
     const isActive = activeConversation && chat.conversationId === (activeConversation as any).conversationId;
     const iconColorClass = isActive 
       ? "h-3.5 w-3.5 text-white flex-shrink-0" 
-      : "h-3.5 w-3.5 text-zinc-450 flex-shrink-0 group-hover:text-zinc-200 transition-colors";
+      : "h-3.5 w-3.5 text-[#8080ff] flex-shrink-0 group-hover:text-white transition-colors";
     
     const title = chat.title || '';
     const cleanTitle = formatConversationTitle(title);
@@ -335,10 +335,10 @@ export default function ConversationsList({
         return (
           <div
             className={cn(
-              "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border mb-1.5 cursor-pointer select-none",
+              "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-pointer select-none",
               isActive
-                ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs"
-                : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                ? "bg-[#0000ff]/15 border-[#0000ff] text-white font-semibold shadow-[0_0_20px_rgba(0,0,255,0.55)]"
+                : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
             )}
             key={chat._id}
           >
