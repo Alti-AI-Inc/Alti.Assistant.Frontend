@@ -655,10 +655,10 @@ const LeftSideNavMobile = () => {
       {/* Enclosed Search & Actions Row */}
       {activeTab !== 'account' && (
         <div className="pt-3 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none w-full">
-          <div className="flex h-9 w-full items-center rounded-lg border border-blue-500/20 bg-blue-600/10 shadow-xs overflow-hidden focus-within:ring-1 focus-within:ring-blue-500/40 transition-all duration-150">
+          <div className="flex h-9 w-full items-center rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] overflow-hidden focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40 transition-all duration-300">
             {/* Search segment */}
             <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
-              <Search className="size-3.5 flex-none text-blue-400" />
+              <Search className="size-3.5 flex-none text-[#5e5eff]" />
               <input
                 type="text"
                 placeholder="Search..."
@@ -672,7 +672,7 @@ const LeftSideNavMobile = () => {
 
             {/* Vertical Separator (only if plus is visible) */}
             {plusProps.visible && (
-              <div className="w-px h-4 bg-blue-500/20 flex-none" />
+              <div className="w-px h-4 bg-[#0000ff]/30 flex-none" />
             )}
 
             {/* Plus segment */}
@@ -681,10 +681,10 @@ const LeftSideNavMobile = () => {
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="flex h-full w-9 items-center justify-center transition-all hover:bg-blue-500/20 text-blue-100 focus:outline-none"
+                    className="flex h-full w-9 items-center justify-center transition-all hover:bg-[#0000ff]/20 text-blue-100 focus:outline-none"
                     onClick={plusProps.onClick}
                   >
-                    <Plus className="size-3.5 text-blue-400" />
+                    <Plus className="size-3.5 text-[#5e5eff]" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
