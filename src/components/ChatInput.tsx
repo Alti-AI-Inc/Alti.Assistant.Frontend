@@ -18,6 +18,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
 
 import { useBrainstorm } from '@/hooks/useBrainstorm';
@@ -1670,7 +1672,10 @@ export default function ChatInput({
                     <p>More Options</p>
                   </TooltipContent>
                 </Tooltip>
-                <DropdownMenuContent className="w-48 bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-xl shadow-xl p-1" align="start" side="bottom" sideOffset={8}>
+                <DropdownMenuContent className="w-52 bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-xl shadow-xl p-1" align="start" side="bottom" sideOffset={8}>
+                  <DropdownMenuLabel className="px-3 py-1.5 text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                    Actions
+                  </DropdownMenuLabel>
                   <DropdownMenuItem
                     onClick={() => fileInputRef.current?.click()}
                     className="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors"
@@ -1692,6 +1697,39 @@ export default function ChatInput({
                     <ImageIcon className="size-4 text-black dark:text-white" />
                     <span>Image Generation</span>
                   </DropdownMenuItem>
+
+                  {isExistingConversation && (
+                    <>
+                      <DropdownMenuSeparator className="bg-black/5 dark:bg-white/5" />
+                      <DropdownMenuLabel className="px-3 py-1.5 text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                        Select Mode
+                      </DropdownMenuLabel>
+                      {[
+                        { name: 'Chat Mode', icon: MessageSquare, value: null },
+                        { name: 'Research Mode', icon: Microscope, value: OPTIONS.RESEARCH },
+                        { name: 'Write Mode', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
+                        { name: 'Review Mode', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS }
+                      ].map((tab) => {
+                        const isSelected = selectedOption === tab.value;
+                        return (
+                          <DropdownMenuItem
+                            key={tab.name}
+                            onClick={() => setSelectedOption(tab.value)}
+                            className={cn(
+                              "flex items-center justify-between px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors",
+                              isSelected && "bg-zinc-50 dark:bg-zinc-800/50 font-medium text-zinc-900 dark:text-zinc-100"
+                            )}
+                          >
+                            <div className="flex items-center gap-2">
+                              <tab.icon className={cn("size-4", isSelected ? "text-blue-500" : "text-zinc-500")} />
+                              <span>{tab.name}</span>
+                            </div>
+                            {isSelected && <Check className="size-4 text-blue-500" />}
+                          </DropdownMenuItem>
+                        );
+                      })}
+                    </>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
 
