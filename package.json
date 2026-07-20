@@ -1,6 +1,6 @@
 {
   "name": "alti-chat-frontend",
-  "version": "1.29.99",
+  "version": "1.29.100",
   "private": true,
   "scripts": {
     "dev": "next dev",

@@ -654,16 +654,16 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {/* Enclosed Search & Actions Row */}
       {!hideSidebar && activeTab !== 'account' && (
         <div className="pt-3 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none w-full">
-          <div className="flex h-9 w-full items-center rounded-lg border border-zinc-700/50 bg-zinc-800/50 shadow-[0_0_12px_rgba(255,255,255,0.06)] overflow-hidden focus-within:border-zinc-500 focus-within:shadow-[0_0_20px_rgba(255,255,255,0.12)] focus-within:ring-1 focus-within:ring-white/20 transition-all duration-300">
+          <div className="flex h-9 w-full items-center rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 shadow-[0_0_12px_rgba(0,0,0,0.08)] dark:shadow-[0_0_15px_rgba(255,255,255,0.12)] overflow-hidden focus-within:border-zinc-400 dark:focus-within:border-zinc-500 focus-within:shadow-[0_0_20px_rgba(0,0,0,0.12)] dark:focus-within:shadow-[0_0_22px_rgba(255,255,255,0.22)] focus-within:ring-1 focus-within:ring-black/10 dark:focus-within:ring-white/20 transition-all duration-300">
             {/* Search segment */}
             <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
-              <Search className="size-3.5 flex-none text-zinc-400" />
+              <Search className="size-3.5 flex-none text-zinc-550 dark:text-zinc-400" />
               <input
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent text-xs font-normal font-sans text-zinc-100 outline-none placeholder:text-zinc-450/70"
+                className="w-full bg-transparent text-xs font-normal font-sans text-zinc-900 dark:text-zinc-100 outline-none placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
               />
             </div>
 
@@ -671,7 +671,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
             {/* Vertical Separator (only if plus is visible) */}
             {plusProps.visible && (
-              <div className="w-px h-4 bg-zinc-700/50 flex-none" />
+              <div className="w-px h-4 bg-zinc-200 dark:bg-zinc-700 flex-none" />
             )}
 
             {/* Plus segment */}
@@ -680,10 +680,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="flex h-full w-9 items-center justify-center transition-all hover:bg-zinc-700/40 text-zinc-100 focus:outline-none"
+                    className="flex h-full w-9 items-center justify-center transition-all hover:bg-zinc-100 dark:hover:bg-zinc-700/50 text-zinc-650 dark:text-zinc-200 focus:outline-none"
                     onClick={plusProps.onClick}
                   >
-                    <Plus className="size-3.5 text-zinc-400" />
+                    <Plus className="size-3.5 text-zinc-550 dark:text-zinc-400" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
@@ -1134,7 +1134,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               <Button
                 variant="outline"
                 onClick={() => setActiveTab('account')}
-                className="w-full transition-all duration-300 outline-none select-none cursor-pointer border border-zinc-700/50 bg-zinc-800/50 hover:bg-zinc-800/80 hover:border-zinc-600/80 text-zinc-200 hover:text-white shadow-[0_0_12px_rgba(255,255,255,0.06)] hover:shadow-[0_0_18px_rgba(255,255,255,0.12)]"
+                className="w-full transition-all duration-300 outline-none select-none cursor-pointer border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700/80 text-zinc-900 dark:text-zinc-100 shadow-sm"
               >
                 My Account
               </Button>
