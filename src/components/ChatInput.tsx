@@ -1652,7 +1652,7 @@ export default function ChatInput({
             <div className="relative flex items-center gap-2 py-2">
               <DropdownMenu>
                 <Tooltip>
-                  <TooltipTrigger asChild>
+                  <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
                     <DropdownMenuTrigger asChild>
                       <button
                         type="button"
@@ -1717,7 +1717,7 @@ export default function ChatInput({
                 autoFocus
               />
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
                   <ArrowUp
                     onClick={handleSubmit}
                     className={cn(
