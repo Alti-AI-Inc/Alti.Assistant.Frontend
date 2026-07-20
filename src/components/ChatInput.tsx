@@ -1671,14 +1671,14 @@ export default function ChatInput({
                     onClick={() => setSelectedOption(OPTIONS.CODE)}
                     className="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors"
                   >
-                    <Code className="size-4 text-blue-500" />
+                    <Code className="size-4 text-black dark:text-white" />
                     <span>Code Generation</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => setSelectedOption(OPTIONS.IMAGE)}
                     className="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors"
                   >
-                    <ImageIcon className="size-4 text-purple-500" />
+                    <ImageIcon className="size-4 text-black dark:text-white" />
                     <span>Image Generation</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
