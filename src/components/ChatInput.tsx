@@ -77,6 +77,7 @@ interface ChatInputProps {
   selectedFiles?: File[];
   onFilesChange?: (files: File[]) => void;
   isStudio?: boolean;
+  isConversationLoading?: boolean;
 }
 
 // Helper function to get file icon based on extension
@@ -144,6 +145,7 @@ export default function ChatInput({
   selectedFiles: externalSelectedFiles,
   onFilesChange,
   isStudio,
+  isConversationLoading,
 }: ChatInputProps) {
 
 
@@ -385,9 +387,10 @@ export default function ChatInput({
   const { isFreeUser } = useSubscription();
 
   const isExistingConversation =
-    activeConversation?.conversationId &&
-    activeConversation?.conversationId !== 'new-chat' &&
-    pathname?.startsWith('/c/');
+    (activeConversation?.conversationId &&
+      activeConversation?.conversationId !== 'new-chat' &&
+      pathname?.startsWith('/c/')) ||
+    (conversationId && conversationId !== 'new-chat');
 
   useEffect(() => {
     if (!isExistingConversation) {
@@ -1357,7 +1360,7 @@ export default function ChatInput({
       )}
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
-        {!isExistingConversation && !hasMessages && !showStartLastMessage && !isLoadingResponse && (
+        {!isExistingConversation && !hasMessages && !showStartLastMessage && !isLoadingResponse && !isConversationLoading && (
           <div className="flex flex-col items-center gap-6 w-full mb-6">
               {/* Child Toggle */}
               <div 

@@ -1241,6 +1241,7 @@ return (
             selectedFiles={selectedFiles}
             onFilesChange={setSelectedFiles}
             isStudio={isStudio}
+            isConversationLoading={isLoading}
           />
         </div>
       </div>
