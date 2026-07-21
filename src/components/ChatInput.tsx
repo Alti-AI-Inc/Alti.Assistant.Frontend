@@ -1372,7 +1372,8 @@ export default function ChatInput({
                   { id: 'search', name: 'Chat', icon: MessageSquare, value: null },
                   { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
                   { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
-                  { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS }
+                  { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS },
+                  { id: 'code', name: 'Code', icon: Code, value: OPTIONS.CODE }
                 ].map((tab) => {
                   const isSelected = selectedOption === tab.value;
                   return (
@@ -1655,85 +1656,21 @@ export default function ChatInput({
 
             {/* Input container with active icon inside */}
             <div className="relative flex items-center gap-2 py-2">
-              <DropdownMenu>
-                <Tooltip>
-                  <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
-                    <DropdownMenuTrigger asChild>
-                      <button
-                        type="button"
-                        className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-[#0000ff] bg-[#0000ff] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
-                        aria-label="More Options"
-                      >
-                        <Plus className="size-3.5" />
-                      </button>
-                    </DropdownMenuTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent side="top">
-                    <p>More Options</p>
-                  </TooltipContent>
-                </Tooltip>
-                <DropdownMenuContent className="w-52 bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/5 rounded-xl shadow-xl p-1" align="start" side="bottom" sideOffset={8}>
-                  <DropdownMenuLabel className="px-3 py-1.5 text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
-                    Actions
-                  </DropdownMenuLabel>
-                  <DropdownMenuItem
+              <Tooltip>
+                <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
+                  <button
+                    type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors"
+                    className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-[#0000ff] bg-[#0000ff] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
+                    aria-label="Attach Files"
                   >
-                    <Paperclip className="size-4 text-zinc-500" />
-                    <span>Attach Files</span>
-                  </DropdownMenuItem>
-
-                  <DropdownMenuItem
-                    onClick={() => setSelectedOption(OPTIONS.CODE)}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors"
-                  >
-                    <Code className="size-4 text-black dark:text-white" />
-                    <span>Code Generation</span>
-                  </DropdownMenuItem>
-                  {/* Phase 1: Image Generation hidden until backend is ready */}
-                  {/* <DropdownMenuItem
-                    onClick={() => setSelectedOption(OPTIONS.IMAGE)}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors"
-                  >
-                    <ImageIcon className="size-4 text-black dark:text-white" />
-                    <span>Image Generation</span>
-                  </DropdownMenuItem> */}
-
-                  {isExistingConversation && (
-                    <>
-                      <DropdownMenuSeparator className="bg-black/5 dark:bg-white/5" />
-                      <DropdownMenuLabel className="px-3 py-1.5 text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
-                        Select Mode
-                      </DropdownMenuLabel>
-                      {[
-                        { name: 'Chat Mode', icon: MessageSquare, value: null },
-                        { name: 'Research Mode', icon: Microscope, value: OPTIONS.RESEARCH },
-                        { name: 'Write Mode', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
-                        { name: 'Review Mode', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS }
-                      ].map((tab) => {
-                        const isSelected = selectedOption === tab.value;
-                        return (
-                          <DropdownMenuItem
-                            key={tab.name}
-                            onClick={() => setSelectedOption(tab.value)}
-                            className={cn(
-                              "flex items-center justify-between px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer transition-colors",
-                              isSelected && "bg-zinc-50 dark:bg-zinc-800/50 font-medium text-zinc-900 dark:text-zinc-100"
-                            )}
-                          >
-                            <div className="flex items-center gap-2">
-                              <tab.icon className={cn("size-4", isSelected ? "text-blue-500" : "text-zinc-500")} />
-                              <span>{tab.name}</span>
-                            </div>
-                            {isSelected && <Check className="size-4 text-blue-500" />}
-                          </DropdownMenuItem>
-                        );
-                      })}
-                    </>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    <Paperclip className="size-3.5" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  <p>Attach Files</p>
+                </TooltipContent>
+              </Tooltip>
 
               <Textarea
                 name="message"
