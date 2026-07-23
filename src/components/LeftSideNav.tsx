@@ -250,7 +250,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       setNewSpaceName('');
       setActiveBotId(newBot.id);
       router.push(`/spaces?bot=${newBot.id}`);
-      toast.success('Space created successfully!');
     } catch (err: any) {
       console.error(err);
       toast.error('Failed to create space');
