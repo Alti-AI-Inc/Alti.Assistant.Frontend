@@ -1550,7 +1550,7 @@ export default function ChatInput({
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-[#0000ff] bg-[#0000ff] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
+                        className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
                         aria-label="Attach Files"
                       >
                         <Paperclip className="size-3.5" />
