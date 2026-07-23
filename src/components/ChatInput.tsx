@@ -1539,7 +1539,7 @@ export default function ChatInput({
                             : 'Enter prompt here...')
                 }
                 style={{ backgroundColor: 'transparent' }}
-                className="min-h-[48px] w-full flex-1 resize-none border-none bg-transparent px-4 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-5"
+                className="min-h-[48px] w-full flex-1 resize-none border-none bg-transparent px-4 pt-3.5 pb-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-5"
                 autoFocus
               />
 
