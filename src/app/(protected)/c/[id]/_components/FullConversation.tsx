@@ -1234,7 +1234,12 @@ return (
             : 'pt-3 pb-0 bg-transparent border-t-0'
         )}
       >
-        <div className="mx-auto w-full max-w-[796px]">
+         <div className="mx-auto w-full max-w-[796px]">
+          {showAsNewChat && (
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-zinc-900 dark:text-white mb-6 text-center select-none tracking-tight animate-in fade-in duration-300">
+              How can I help you?
+            </h1>
+          )}
           <ChatInput
             conversationId={conversationId}
             imageGenHook={imageGenHook}
