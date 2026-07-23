@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAdminStore } from '@/stores/useAdminStore';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -13,8 +13,17 @@ export function AdminInstructionsEditor() {
   const { instructions, setInstructions } = useAdminStore();
   const [inputValue, setInputValue] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   
   const instructionsList = instructions ? instructions.split('\n\n').filter(Boolean) : [];
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  }, [inputValue]);
 
   const handleAdd = () => {
     if (!inputValue.trim()) return;
@@ -33,6 +42,7 @@ export function AdminInstructionsEditor() {
       <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-4">
         <div className="relative flex items-center gap-2 py-2">
           <Textarea
+            ref={textareaRef}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => {
@@ -144,8 +154,17 @@ export function AdminGuardrailsEditor() {
   const { guardrails, setGuardrails } = useAdminStore();
   const [inputValue, setInputValue] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   
   const guardrailsList = guardrails ? guardrails.split('\n\n').filter(Boolean) : [];
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  }, [inputValue]);
 
   const handleAdd = () => {
     if (!inputValue.trim()) return;
@@ -164,6 +183,7 @@ export function AdminGuardrailsEditor() {
       <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-4">
         <div className="relative flex items-center gap-2 py-2">
           <Textarea
+            ref={textareaRef}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => {

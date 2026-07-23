@@ -31,6 +31,7 @@ export function InstructionsEditor({ bot }: EditorProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [inputValue, setInputValue] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   
   const editIndexParam = searchParams?.get('editIndex');
   const editIndex = editIndexParam !== null && editIndexParam !== undefined ? parseInt(editIndexParam, 10) : -1;
@@ -44,6 +45,14 @@ export function InstructionsEditor({ bot }: EditorProps) {
       setInputValue('');
     }
   }, [editIndex, bot.instructions]);
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  }, [inputValue]);
 
   const handleSave = () => {
     if (!inputValue.trim()) return;
@@ -87,6 +96,7 @@ export function InstructionsEditor({ bot }: EditorProps) {
           <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
             <div className="relative flex items-center gap-2 py-2">
               <Textarea
+                ref={textareaRef}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => {
@@ -96,7 +106,7 @@ export function InstructionsEditor({ bot }: EditorProps) {
                   }
                 }}
                 placeholder={editIndex >= 0 ? "Edit instruction..." : "Enter a new instruction here..."}
-                className="min-h-[38px] h-9 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-3"
+                className="min-h-[38px] w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-3 animate-height"
                 autoFocus
               />
               {editIndex >= 0 && (
@@ -135,6 +145,7 @@ export function GuardrailsEditor({ bot }: EditorProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [inputValue, setInputValue] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   
   const editIndexParam = searchParams?.get('editIndex');
   const editIndex = editIndexParam !== null && editIndexParam !== undefined ? parseInt(editIndexParam, 10) : -1;
@@ -148,6 +159,14 @@ export function GuardrailsEditor({ bot }: EditorProps) {
       setInputValue('');
     }
   }, [editIndex, bot.guardrails]);
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  }, [inputValue]);
 
   const handleSave = () => {
     if (!inputValue.trim()) return;
@@ -191,6 +210,7 @@ export function GuardrailsEditor({ bot }: EditorProps) {
           <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
             <div className="relative flex items-center gap-2 py-2">
               <Textarea
+                ref={textareaRef}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => {
@@ -200,7 +220,7 @@ export function GuardrailsEditor({ bot }: EditorProps) {
                   }
                 }}
                 placeholder={editIndex >= 0 ? "Edit guardrail..." : "Enter a new guardrail here..."}
-                className="min-h-[38px] h-9 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-3"
+                className="min-h-[38px] w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-3 animate-height"
                 autoFocus
               />
               {editIndex >= 0 && (

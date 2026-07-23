@@ -118,6 +118,35 @@ function MyChatbotsContent() {
 
   const [isProjectsSidebarOpen, setIsProjectsSidebarOpen] = useState(true);
   const [projectsSearch, setProjectsSearch] = useState('');
+
+  const projectNameTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const instructionsTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const guardrailsTextareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const textarea = projectNameTextareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  }, [projectName]);
+
+  useEffect(() => {
+    const textarea = instructionsTextareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  }, [instructions]);
+
+  useEffect(() => {
+    const textarea = guardrailsTextareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  }, [guardrails]);
+
   // Sync state with URL params
   useEffect(() => {
     if (botParam) {
@@ -447,6 +476,7 @@ function MyChatbotsContent() {
                         <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
                           <div className="relative flex items-center gap-2 py-2">
                             <Textarea
+                              ref={projectNameTextareaRef}
                               name="projectName"
                               value={projectName}
                               onChange={(e) => {
@@ -462,7 +492,6 @@ function MyChatbotsContent() {
                               placeholder="Enter project name..."
                               className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
                               autoFocus
-                              rows={1}
                             />
 
                             <button
@@ -512,6 +541,7 @@ function MyChatbotsContent() {
                               <ChevronLeft className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
                             </button>
                             <Textarea
+                              ref={instructionsTextareaRef}
                               name="instructions"
                               value={instructions}
                               onChange={(e) => {
@@ -527,7 +557,6 @@ function MyChatbotsContent() {
                               placeholder="Enter instructions here..."
                               className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
                               autoFocus
-                              rows={1}
                             />
 
                             <button
@@ -674,6 +703,7 @@ function MyChatbotsContent() {
                               <ChevronLeft className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
                             </button>
                             <Textarea
+                              ref={guardrailsTextareaRef}
                               name="guardrails"
                               value={guardrails}
                               onChange={(e) => {
@@ -689,7 +719,6 @@ function MyChatbotsContent() {
                               placeholder="Enter guardrails here..."
                               className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
                               autoFocus
-                              rows={1}
                             />
 
                             <button
