@@ -688,7 +688,7 @@ const LeftSideNavMobile = () => {
   return (
     <div className="flex h-full w-full overflow-hidden">
       {/* Column 1: Spaces Switcher (Slack style) */}
-      <div className="w-[60px] h-full bg-[#0c1120] border-r border-zinc-800/60 flex flex-col items-center py-4 gap-3 select-none flex-none">
+      <div className="w-[60px] h-full bg-[#0c1120] border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
         {/* Alti Assistant Home Button */}
         <div className="relative w-full flex flex-col items-center">
           <div
@@ -1106,7 +1106,10 @@ const LeftSideNavMobile = () => {
         </div>
 
         {/* Footer Area */}
-        <div className="sticky bottom-0 z-30 flex flex-col w-full bg-[#0c1120] border-t border-zinc-800/60 p-4 py-1.5 flex-none">
+        <div className={cn(
+          "sticky bottom-0 z-30 flex flex-col w-full bg-[#0c1120] border-t border-zinc-800/60 p-4 py-1.5 flex-none",
+          activeTab !== 'account' && "h-[92px] justify-center"
+        )}>
           {isLoggedIn && activeTab === 'account' ? (
             <div className="flex flex-col w-full">
               <div className="flex h-20 w-full items-center justify-center p-4 py-1.5">
