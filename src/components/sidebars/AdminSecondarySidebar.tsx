@@ -49,12 +49,7 @@ export const AdminSecondarySidebar = () => {
   const isSuperAdmin = data?.user?.role === 'super_admin';
 
   const isAdminMode = pathname.startsWith('/admin');
-  const isManagerSection = pathname.startsWith('/admin/data') || 
-                           pathname.startsWith('/admin/instructions') || 
-                           pathname.startsWith('/admin/guardrails') || 
-                           pathname.startsWith('/admin/projects') ||
-                           pathname.startsWith('/admin/platform-manager');
-  const isAdminSection = !isManagerSection && isAdminMode;
+  const isAdminSection = isAdminMode;
 
   if (!isAdminMode) return null;
 
@@ -62,8 +57,6 @@ export const AdminSecondarySidebar = () => {
   let headerTitle = 'Admin Console';
   if (isSuperAdmin) {
     headerTitle = 'Owner Platform';
-  } else if (isManagerSection) {
-    headerTitle = 'Platform Manager';
   } else if (isAdminSection) {
     headerTitle = 'Platform Admin';
   }
@@ -239,36 +232,7 @@ export const AdminSecondarySidebar = () => {
           </div>
         )}
 
-        {/* Second Section */}
-        {isManagerSection && !isSuperAdmin && (
-          <div className="space-y-1">
-            {[
-              { name: 'Knowledge', href: '/admin/data', icon: Database },
-              { name: 'Instructions', href: '/admin/instructions', icon: FileText },
-              { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
-              { name: 'Projects', href: '/admin/projects', icon: Folder },
-            ].map((item) => {
-              const isActive = pathname === item.href || (item.name === 'Projects' && pathname.startsWith('/admin/projects'));
-              const Icon = item.icon;
-              return (
-                <div key={item.name}>
-                  <Link
-                    href={item.href}
-                    className={cn(
-                      'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-all duration-300 border mb-1.5 select-none cursor-pointer',
-                      isActive
-                        ? 'bg-[#0000ff]/10 dark:bg-[#0000ff]/15 border-[#0000ff] text-[#0000ff] dark:text-white font-semibold shadow-[0_0_12px_rgba(0,0,255,0.18)] dark:shadow-[0_0_20px_rgba(0,0,255,0.45)]'
-                        : 'bg-transparent border-transparent text-gray-650 dark:text-zinc-300 hover:bg-[#0000ff]/5 dark:hover:bg-[#0000ff]/10 hover:border-[#0000ff]/35 hover:shadow-[0_0_12px_rgba(0,0,255,0.15)] dark:hover:shadow-[0_0_15px_rgba(0,0,255,0.25)] hover:text-[#0000ff] dark:hover:text-white'
-                    )}
-                  >
-                    <Icon className={cn("w-4 h-4 flex-shrink-0 transition-colors", isActive ? "text-[#0000ff] dark:text-white" : "text-gray-555 dark:text-[#8080ff] group-hover:text-[#0000ff] dark:group-hover:text-white")} />
-                    {item.name}
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
-        )}
+
       </div>
       {isSuperAdmin && (
         <div className={cn(
