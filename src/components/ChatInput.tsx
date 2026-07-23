@@ -1689,6 +1689,7 @@ export default function ChatInput({
                         <Microscope className="size-3" />
                         <span>Research</span>
                       </button>
+                      {/* Hide Task option for Phase 1 launch
                       <button
                         type="button"
                         onClick={() => setSelectedOption(OPTIONS.TASK)}
@@ -1702,6 +1703,7 @@ export default function ChatInput({
                         <ListTodo className="size-3" />
                         <span>Task</span>
                       </button>
+                      */}
                     </div>
                   )}
                 </div>
