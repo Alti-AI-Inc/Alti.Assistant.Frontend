@@ -1401,7 +1401,7 @@ export default function ChatInput({
                 </button>
               </div>
             )}
-            {hasMessages ? (
+            {isExistingConversation || hasMessages ? (
               /* Compact Single Line Row layout when chat has messages (at bottom) */
               <div className="flex flex-col w-full gap-2 px-4 sm:px-0">
                 {/* File Cards Preview - Shows above input field next to each other */}
