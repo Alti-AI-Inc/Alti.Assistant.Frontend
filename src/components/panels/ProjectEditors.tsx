@@ -27,10 +27,9 @@ interface EditorProps {
 export function InstructionsEditor({ bot }: EditorProps) {
   const { editBot } = useBotsStore();
   const [inputValue, setInputValue] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
   
   const allInstructions = bot.instructions ? bot.instructions.split('\n\n').filter(Boolean) : [];
-  const instructionsList = allInstructions.filter(item => item.toLowerCase().includes(searchQuery.toLowerCase()));
+  const instructionsList = allInstructions;
 
   const handleAdd = () => {
     if (!inputValue.trim()) return;
@@ -40,7 +39,6 @@ export function InstructionsEditor({ bot }: EditorProps) {
   };
 
   const handleDelete = (index: number) => {
-    // We need to find the real index in allInstructions since instructionsList is filtered
     const itemToDelete = instructionsList[index];
     const realIndex = allInstructions.findIndex(item => item === itemToDelete);
     if (realIndex !== -1) {
@@ -79,19 +77,6 @@ export function InstructionsEditor({ bot }: EditorProps) {
                 : "border-gray-200 bg-gray-100 text-gray-400"
             )} />
           </button>
-        </div>
-      </div>
-
-      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
-        <div className="relative flex items-center gap-2 py-2">
-          <Search className="size-5 text-gray-400 flex-shrink-0 ml-1" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search instructions..."
-            className="h-8 w-full flex-1 border-none bg-transparent px-2 py-0 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
-          />
         </div>
       </div>
 
@@ -161,10 +146,9 @@ export function InstructionsEditor({ bot }: EditorProps) {
 export function GuardrailsEditor({ bot }: EditorProps) {
   const { editBot } = useBotsStore();
   const [inputValue, setInputValue] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
   
   const allGuardrails = bot.guardrails ? bot.guardrails.split('\n\n').filter(Boolean) : [];
-  const guardrailsList = allGuardrails.filter(item => item.toLowerCase().includes(searchQuery.toLowerCase()));
+  const guardrailsList = allGuardrails;
 
   const handleAdd = () => {
     if (!inputValue.trim()) return;
@@ -212,19 +196,6 @@ export function GuardrailsEditor({ bot }: EditorProps) {
                 : "border-gray-200 bg-gray-100 text-gray-400"
             )} />
           </button>
-        </div>
-      </div>
-
-      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
-        <div className="relative flex items-center gap-2 py-2">
-          <Search className="size-5 text-gray-400 flex-shrink-0 ml-1" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search guardrails..."
-            className="h-8 w-full flex-1 border-none bg-transparent px-2 py-0 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
-          />
         </div>
       </div>
 
@@ -295,7 +266,6 @@ export function DataEditor({ bot }: EditorProps) {
   const { editBot } = useBotsStore();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragActive, setIsDragActive] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
 
   let allFiles: { name: string; size: number }[] = [];
   try {
@@ -304,7 +274,7 @@ export function DataEditor({ bot }: EditorProps) {
     allFiles = bot.data ? [{ name: bot.data, size: 0 }] : [];
   }
   
-  const selectedFiles = allFiles.filter(file => file.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  const selectedFiles = allFiles;
 
   const addFiles = (newFiles: File[]) => {
     const newItems = newFiles.map(f => ({ name: f.name, size: f.size }));
@@ -338,7 +308,7 @@ export function DataEditor({ bot }: EditorProps) {
           >
             <Paperclip className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
           </button>
-
+ 
           <div 
             className={cn(
               "min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none text-sm cursor-pointer transition-colors flex items-center",
@@ -373,19 +343,6 @@ export function DataEditor({ bot }: EditorProps) {
               }
             }}
             className="hidden"
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-8">
-        <div className="relative flex items-center gap-2 py-2">
-          <Search className="size-5 text-gray-400 flex-shrink-0 ml-1" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search data..."
-            className="h-8 w-full flex-1 border-none bg-transparent px-2 py-0 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
           />
         </div>
       </div>
