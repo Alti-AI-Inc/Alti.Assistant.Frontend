@@ -1147,7 +1147,7 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
 return (
     <div
       className={cn(
-        "flex w-full h-full flex-1 flex-col min-h-0 overflow-hidden bg-[#0c1120] dark:bg-[#0c1120]",
+        "flex w-full h-full flex-1 flex-col min-h-0 overflow-hidden bg-[#e1e1e1] dark:bg-zinc-950",
         showAsNewChat 
           ? (pathname?.startsWith('/spaces') ? "pt-[28vh] items-center" : "pt-[32vh] items-center")
           : ""

@@ -126,7 +126,7 @@ export default function ProtectedLayoutClient({
 
         {/* Main content */}
         <main
-          className="bg-[#0c1120] dark:bg-[#0c1120] w-full flex-1 min-w-0 overflow-hidden flex flex-col"
+          className="bg-[#e1e1e1] dark:bg-zinc-950 w-full flex-1 min-w-0 overflow-hidden flex flex-col"
         >
           {children}
         </main>

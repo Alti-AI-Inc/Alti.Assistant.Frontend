@@ -688,7 +688,7 @@ const LeftSideNavMobile = () => {
   return (
     <div className="flex h-full w-full overflow-hidden">
       {/* Column 1: Spaces Switcher (Slack style) */}
-      <div className="w-[60px] h-full bg-[#080c14] border-r border-zinc-800/60 flex flex-col items-center py-4 gap-3 select-none flex-none">
+      <div className="w-[60px] h-full bg-[#0c1120] border-r border-zinc-800/60 flex flex-col items-center py-4 gap-3 select-none flex-none">
         {/* Alti Assistant Home Button */}
         <div className="relative w-full flex flex-col items-center">
           <div
@@ -709,7 +709,7 @@ const LeftSideNavMobile = () => {
                   activeBotId === null && "bg-white/[0.15] border-white/20"
                 )}
               >
-                <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain" />
+                <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
               </button>
             </TooltipTrigger>
             <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
@@ -814,7 +814,7 @@ const LeftSideNavMobile = () => {
                   router.push('/spaces');
                   close();
                 }}
-                className="relative size-10 flex items-center justify-center rounded-xl bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-400 hover:text-white border border-indigo-500/30 hover:border-indigo-500/50 cursor-pointer hover:rounded-2xl transition-all duration-200"
+                className="relative size-10 flex items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700/80 text-zinc-900 dark:text-zinc-100 shadow-sm cursor-pointer hover:rounded-2xl transition-all duration-200"
               >
                 <Plus className="size-5" />
               </button>
