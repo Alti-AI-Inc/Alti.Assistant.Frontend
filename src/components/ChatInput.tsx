@@ -63,6 +63,7 @@ import {
   Repeat,
   CalendarClock,
   Zap,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -1542,103 +1543,8 @@ export default function ChatInput({
                 autoFocus
               />
 
-              {/* Task Configurations (only shown when Tasks tab is active) */}
-              {selectedOption === OPTIONS.TASK && (
-                <div className="px-4 pb-3 pt-1 border-t border-black/5 dark:border-white/5 sm:px-5">
-                  <div className="flex flex-col gap-3">
-                    
-                    {/* Controls Toggle Row */}
-                    <div className="flex flex-wrap items-center gap-3">
-                      
-                      {/* Task Type Switcher */}
-                      <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50">
-                        <button
-                          type="button"
-                          onClick={() => setTaskType('one-time')}
-                          className={cn(
-                            'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
-                            taskType === 'one-time'
-                              ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
-                              : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
-                          )}
-                        >
-                          <Clock className="size-3" />
-                          <span>One-time</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setTaskType('recurring')}
-                          className={cn(
-                            'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
-                            taskType === 'recurring'
-                              ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
-                              : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
-                          )}
-                        >
-                          <Repeat className="size-3" />
-                          <span>Recurring</span>
-                        </button>
-                      </div>
-
-                      {/* Trigger Type Switcher */}
-                      <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50">
-                        <button
-                          type="button"
-                          onClick={() => setTriggerType('scheduled')}
-                          className={cn(
-                            'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
-                            triggerType === 'scheduled'
-                              ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
-                              : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
-                          )}
-                        >
-                          <CalendarClock className="size-3" />
-                          <span>Scheduled</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setTriggerType('event')}
-                          className={cn(
-                            'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
-                            triggerType === 'event'
-                              ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
-                              : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
-                          )}
-                        >
-                          <Zap className="size-3" />
-                          <span>Event</span>
-                        </button>
-                      </div>
-
-                    </div>
-
-                    {/* Input Row */}
-                    <div className="w-full">
-                      {triggerType === 'scheduled' ? (
-                        <input
-                          type="text"
-                          value={scheduledTime}
-                          onChange={(e) => setScheduledTime(e.target.value)}
-                          placeholder={taskType === 'recurring' ? 'Cron expression (e.g. Every Monday at 9AM)' : 'Execution time (e.g. Tomorrow 3PM)'}
-                          className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl px-4 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                        />
-                      ) : (
-                        <input
-                          type="text"
-                          value={eventTrigger}
-                          onChange={(e) => setEventTrigger(e.target.value)}
-                          placeholder="Trigger event (e.g. When a new email arrives from @client.com)"
-                          className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl px-4 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                        />
-                      )}
-                    </div>
-
-                  </div>
-                </div>
-              )}
-
               <div className="flex items-center justify-between px-4 pb-2.5 pt-2.5 border-t border-black/5 dark:border-white/5 sm:px-5">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
                   <Tooltip>
                     <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
                       <button
@@ -1655,14 +1561,17 @@ export default function ChatInput({
                     </TooltipContent>
                   </Tooltip>
 
-                  {/* Chat / Research / Tasks Switcher inside Prompt Box */}
+                  {/* Chat / Research / Task Switcher inside Prompt Box */}
                   {!hasMessages && !isExistingConversation && (
-                    <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50">
+                    <div className={cn(
+                      "flex items-center bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 transition-all duration-200 min-w-0 max-w-full",
+                      selectedOption === OPTIONS.TASK ? "flex-grow sm:flex-grow-0" : "flex-shrink-0"
+                    )}>
                       <button
                         type="button"
                         onClick={() => setSelectedOption(null)}
                         className={cn(
-                          'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                          'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5 flex-shrink-0',
                           selectedOption === null
                             ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
                             : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
@@ -1675,7 +1584,7 @@ export default function ChatInput({
                         type="button"
                         onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
                         className={cn(
-                          'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                          'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5 flex-shrink-0',
                           selectedOption === OPTIONS.RESEARCH
                             ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
                             : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
@@ -1688,15 +1597,128 @@ export default function ChatInput({
                         type="button"
                         onClick={() => setSelectedOption(OPTIONS.TASK)}
                         className={cn(
-                          'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                          'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5 flex-shrink-0',
                           selectedOption === OPTIONS.TASK
                             ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
                             : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
                         )}
                       >
                         <ListTodo className="size-3" />
-                        <span>Tasks</span>
+                        <span>Task</span>
                       </button>
+
+                      {/* Execution time/configurations inline to the right of the Task toggle inside the pill container */}
+                      {selectedOption === OPTIONS.TASK && (
+                        <div className="flex items-center gap-1.5 border-l border-zinc-200 dark:border-zinc-700/60 pl-2 ml-1 flex-grow min-w-0 max-w-[200px] sm:max-w-[280px]">
+                          {/* Trigger Input Inline */}
+                          <div className="flex-grow min-w-0">
+                            {triggerType === 'scheduled' ? (
+                              <input
+                                type="text"
+                                value={scheduledTime}
+                                onChange={(e) => setScheduledTime(e.target.value)}
+                                placeholder={taskType === 'recurring' ? 'Cron (e.g. Every Mon 9AM)' : 'Time (e.g. Tomorrow 3PM)'}
+                                className="w-full bg-transparent border-none px-1 py-0.5 text-xs text-gray-900 dark:text-white focus:outline-none placeholder:text-[10px] dark:placeholder:text-zinc-500"
+                              />
+                            ) : (
+                              <input
+                                type="text"
+                                value={eventTrigger}
+                                onChange={(e) => setEventTrigger(e.target.value)}
+                                placeholder="Event trigger details..."
+                                className="w-full bg-transparent border-none px-1 py-0.5 text-xs text-gray-900 dark:text-white focus:outline-none placeholder:text-[10px] dark:placeholder:text-zinc-500"
+                              />
+                            )}
+                          </div>
+
+                          {/* Task Settings Dropdown Menu */}
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <button
+                                type="button"
+                                className="flex h-5 items-center gap-1 rounded bg-white hover:bg-zinc-50 dark:bg-zinc-700 dark:hover:bg-zinc-600 px-1.5 text-[9px] font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white transition-all shadow-xs border border-zinc-200 dark:border-zinc-700/50 flex-shrink-0"
+                                title="Task Settings"
+                              >
+                                <SlidersHorizontal className="size-2.5" />
+                                <span className="hidden sm:inline capitalize">
+                                  {taskType}
+                                </span>
+                              </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-48 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-md rounded-lg p-1">
+                              <div className="px-2 py-1 text-[9px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                                Frequency
+                              </div>
+                              <DropdownMenuItem
+                                onClick={() => setTaskType('one-time')}
+                                className={cn(
+                                  "flex items-center justify-between px-2 py-1 text-xs rounded-md cursor-pointer transition-colors focus:bg-zinc-100 dark:focus:bg-zinc-800",
+                                  taskType === 'one-time'
+                                    ? "text-blue-600 dark:text-blue-400 font-medium"
+                                    : "text-zinc-700 dark:text-zinc-300"
+                                )}
+                              >
+                                <span className="flex items-center gap-1.5">
+                                  <Clock className="size-3" />
+                                  One-time
+                                </span>
+                                {taskType === 'one-time' && <span className="text-[10px]">✓</span>}
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => setTaskType('recurring')}
+                                className={cn(
+                                  "flex items-center justify-between px-2 py-1 text-xs rounded-md cursor-pointer transition-colors focus:bg-zinc-100 dark:focus:bg-zinc-800",
+                                  taskType === 'recurring'
+                                    ? "text-blue-600 dark:text-blue-400 font-medium"
+                                    : "text-zinc-700 dark:text-zinc-300"
+                                )}
+                              >
+                                <span className="flex items-center gap-1.5">
+                                  <Repeat className="size-3" />
+                                  Recurring
+                                </span>
+                                {taskType === 'recurring' && <span className="text-[10px]">✓</span>}
+                              </DropdownMenuItem>
+
+                              <DropdownMenuSeparator className="my-1 border-t border-zinc-100 dark:border-zinc-800" />
+
+                              <div className="px-2 py-1 text-[9px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                                Trigger Type
+                              </div>
+                              <DropdownMenuItem
+                                onClick={() => setTriggerType('scheduled')}
+                                className={cn(
+                                  "flex items-center justify-between px-2 py-1 text-xs rounded-md cursor-pointer transition-colors focus:bg-zinc-100 dark:focus:bg-zinc-800",
+                                  triggerType === 'scheduled'
+                                    ? "text-blue-600 dark:text-blue-400 font-medium"
+                                    : "text-zinc-700 dark:text-zinc-300"
+                                )}
+                              >
+                                <span className="flex items-center gap-1.5">
+                                  <CalendarClock className="size-3" />
+                                  Scheduled
+                                </span>
+                                {triggerType === 'scheduled' && <span className="text-[10px]">✓</span>}
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => setTriggerType('event')}
+                                className={cn(
+                                  "flex items-center justify-between px-2 py-1 text-xs rounded-md cursor-pointer transition-colors focus:bg-zinc-100 dark:focus:bg-zinc-800",
+                                  triggerType === 'event'
+                                    ? "text-blue-600 dark:text-blue-400 font-medium"
+                                    : "text-zinc-700 dark:text-zinc-300"
+                                )}
+                              >
+                                <span className="flex items-center gap-1.5">
+                                  <Zap className="size-3" />
+                                  Event
+                                </span>
+                                {triggerType === 'event' && <span className="text-[10px]">✓</span>}
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
