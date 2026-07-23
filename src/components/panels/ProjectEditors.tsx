@@ -39,15 +39,6 @@ export function InstructionsEditor({ bot }: EditorProps) {
 
   return (
     <div className="relative flex w-full h-full flex-grow flex-col min-h-0 overflow-hidden pt-[32vh] items-center">
-      <div className="absolute top-[16vh] left-0 right-0 text-center px-8">
-        <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
-          Space Instructions
-        </h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
-          Add specific guidelines, behaviors, or rules to customize how this space operates.
-        </p>
-      </div>
-
       <div className="relative overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col flex-none">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="space-y-6 py-6 mx-auto w-full max-w-[796px]">
@@ -58,6 +49,15 @@ export function InstructionsEditor({ bot }: EditorProps) {
 
       <div className="shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300 py-3 bg-transparent border-t-0">
         <div className="mx-auto w-full max-w-[796px]">
+          <div className="text-center mb-6">
+            <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
+              Space Instructions
+            </h1>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
+              Add specific guidelines, behaviors, or rules to customize how this space operates.
+            </p>
+          </div>
+
           <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
             <div className="relative flex items-center gap-2 py-2">
               <Textarea
@@ -111,15 +111,6 @@ export function GuardrailsEditor({ bot }: EditorProps) {
 
   return (
     <div className="relative flex w-full h-full flex-grow flex-col min-h-0 overflow-hidden pt-[32vh] items-center">
-      <div className="absolute top-[16vh] left-0 right-0 text-center px-8">
-        <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
-          Space Guardrails
-        </h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
-          Define content constraints and safety boundaries for responses in this space.
-        </p>
-      </div>
-
       <div className="relative overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col flex-none">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="space-y-6 py-6 mx-auto w-full max-w-[796px]">
@@ -130,6 +121,15 @@ export function GuardrailsEditor({ bot }: EditorProps) {
 
       <div className="shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300 py-3 bg-transparent border-t-0">
         <div className="mx-auto w-full max-w-[796px]">
+          <div className="text-center mb-6">
+            <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
+              Space Guardrails
+            </h1>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
+              Define content constraints and safety boundaries for responses in this space.
+            </p>
+          </div>
+
           <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
             <div className="relative flex items-center gap-2 py-2">
               <Textarea
@@ -186,15 +186,6 @@ export function DataEditor({ bot }: EditorProps) {
 
   return (
     <div className="relative flex w-full h-full flex-grow flex-col min-h-0 overflow-hidden pt-[32vh] items-center">
-      <div className="absolute top-[16vh] left-0 right-0 text-center px-8">
-        <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
-          Space Knowledgebase
-        </h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
-          Upload documents or data files to provide source context for this space.
-        </p>
-      </div>
-
       <div className="relative overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col flex-none">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="space-y-6 py-6 mx-auto w-full max-w-[796px]">
@@ -205,6 +196,15 @@ export function DataEditor({ bot }: EditorProps) {
 
       <div className="shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300 py-3 bg-transparent border-t-0">
         <div className="mx-auto w-full max-w-[796px]">
+          <div className="text-center mb-6">
+            <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
+              Space Knowledge
+            </h1>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
+              Upload documents or data files to provide source context for this space.
+            </p>
+          </div>
+
           <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
             <div className="relative flex items-center gap-2 py-2">
               <button
