@@ -1362,37 +1362,7 @@ export default function ChatInput({
       )}
 
       <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
-        {!isExistingConversation && !hasMessages && !showStartLastMessage && !isLoadingResponse && !isConversationLoading && (
-          <div className="flex flex-col items-center gap-6 w-full mb-6">
-              {/* Child Toggle */}
-              <div 
-                className="w-auto bg-white dark:bg-zinc-900/80 backdrop-blur-md p-1.5 rounded-[1.5rem] shadow-sm border border-gray-200/50 dark:border-zinc-800/50 gap-2 overflow-x-auto transition-opacity duration-300 flex"
-              >
-                {[
-                  { id: 'search', name: 'Chat', icon: MessageSquare, value: null },
-                  { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH }
-                ].map((tab) => {
-                  const isSelected = selectedOption === tab.value;
-                  return (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      onClick={() => setSelectedOption(tab.value)}
-                      className={cn(
-                        'flex items-center gap-2 px-5 py-2 rounded-2xl transition-all duration-200 ease-out font-medium text-sm whitespace-nowrap',
-                        isSelected 
-                          ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' 
-                          : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
-                      )}
-                    >
-                      <tab.icon className={cn("size-4", isSelected ? "text-blue-500" : "")} />
-                      <span>{tab.name}</span>
-                    </button>
-                  );
-                })}
-              </div>
-          </div>
-        )}
+
 
 
 
@@ -1679,21 +1649,55 @@ export default function ChatInput({
               />
 
               <div className="flex items-center justify-between px-4 pb-2.5 pt-2.5 border-t border-black/5 dark:border-white/5 sm:px-5">
-                <Tooltip>
-                  <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-[#0000ff] bg-[#0000ff] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
-                      aria-label="Attach Files"
-                    >
-                      <Paperclip className="size-3.5" />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent side="top">
-                    <p>Attach Files</p>
-                  </TooltipContent>
-                </Tooltip>
+                <div className="flex items-center gap-2">
+                  <Tooltip>
+                    <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-[#0000ff] bg-[#0000ff] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
+                        aria-label="Attach Files"
+                      >
+                        <Paperclip className="size-3.5" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Attach Files</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  {/* Chat / Research Switcher inside Prompt Box */}
+                  {!hasMessages && !isExistingConversation && (
+                    <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedOption(null)}
+                        className={cn(
+                          'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                          selectedOption === null
+                            ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
+                            : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
+                        )}
+                      >
+                        <MessageSquare className="size-3" />
+                        <span>Chat</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
+                        className={cn(
+                          'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                          selectedOption === OPTIONS.RESEARCH
+                            ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
+                            : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
+                        )}
+                      >
+                        <Microscope className="size-3" />
+                        <span>Research</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
 
                 <Tooltip>
                   <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
