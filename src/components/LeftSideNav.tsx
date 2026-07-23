@@ -743,11 +743,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           })}
         </div>
 
-        {/* Divider above Add Space */}
-        <div className="w-8 h-px bg-zinc-800/60 my-2 flex-none" />
-
-        {/* Add Space Button */}
-        <div className="pt-1 flex-none">
+        {/* Footer Area for Spaces column */}
+        <div className="sticky bottom-0 z-30 flex items-center justify-center w-full bg-[#0c1120] border-t border-zinc-800/60 py-1.5 flex-none h-[92px]">
           <Tooltip>
             <TooltipTrigger asChild>
               <button
@@ -755,9 +752,9 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   setActiveBotId(null);
                   router.push('/spaces');
                 }}
-                className="relative size-11 flex items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700/80 text-zinc-900 dark:text-zinc-100 shadow-sm cursor-pointer hover:rounded-2xl transition-all duration-200"
+                className="relative size-9 flex items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700/80 text-zinc-900 dark:text-zinc-100 shadow-sm cursor-pointer transition-all duration-200"
               >
-                <Plus className="size-5" />
+                <Plus className="size-4" />
               </button>
             </TooltipTrigger>
             <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
