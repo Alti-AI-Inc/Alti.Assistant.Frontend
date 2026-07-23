@@ -68,6 +68,9 @@ import {
   Blocks,
   Pencil,
   Trash2,
+  Music,
+  PenTool,
+  ClipboardCheck,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -649,6 +652,37 @@ const LeftSideNavMobile = () => {
     }
   };
 
+  const getThreadIcon = (title: string, isSelected: boolean) => {
+    const iconColorClass = isSelected
+      ? "h-3.5 w-3.5 text-white flex-shrink-0"
+      : "h-3.5 w-3.5 text-[#8080ff] flex-shrink-0 group-hover:text-white transition-colors";
+
+    const lower = (title || '').toLowerCase();
+    
+    if (lower.includes('image') || lower.includes('art') || lower.includes('draw') || lower.includes('logo') || lower.includes('paint') || lower.includes('picture') || lower.includes('photo') || lower.includes('canvas')) {
+      return <ImageIcon className={iconColorClass} />;
+    }
+    if (lower.includes('video') || lower.includes('movie') || lower.includes('clip') || lower.includes('animate') || lower.includes('mp4')) {
+      return <Video className={iconColorClass} />;
+    }
+    if (lower.includes('audio') || lower.includes('voice') || lower.includes('music') || lower.includes('sound') || lower.includes('transcribe') || lower.includes('speech') || lower.includes('mp3')) {
+      return <Music className={iconColorClass} />;
+    }
+    if (lower.includes('code') || lower.includes('debug') || lower.includes('python') || lower.includes('rust') || lower.includes('js') || lower.includes('ts') || lower.includes('html') || lower.includes('css')) {
+      return <Code2 className={iconColorClass} />;
+    }
+    if (lower.includes('search') || lower.includes('google') || lower.includes('web') || lower.includes('research') || lower.includes('find') || lower.includes('query')) {
+      return <Search className={iconColorClass} />;
+    }
+    if (lower.includes('write') || lower.includes('draft') || lower.includes('email') || lower.includes('article') || lower.includes('copy') || lower.includes('text') || lower.includes('essay')) {
+      return <PenTool className={iconColorClass} />;
+    }
+    if (lower.includes('review') || lower.includes('contract') || lower.includes('check') || lower.includes('audit') || lower.includes('guardrail')) {
+      return <ClipboardCheck className={iconColorClass} />;
+    }
+    return <MessageSquare className={iconColorClass} />;
+  };
+
   const plusProps = getPlusButtonProps();
 
   return (
@@ -675,11 +709,11 @@ const LeftSideNavMobile = () => {
                   activeBotId === null && "bg-white/[0.15] border-white/20"
                 )}
               >
-                <Sparkles className="size-5 text-[#8080ff] animate-pulse" />
+                <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain" />
               </button>
             </TooltipTrigger>
             <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
-              Alti Assistant
+              Inso AI
             </TooltipContent>
           </Tooltip>
         </div>
@@ -767,8 +801,11 @@ const LeftSideNavMobile = () => {
           })}
         </div>
 
+        {/* Divider above Add Space */}
+        <div className="w-8 h-px bg-zinc-800/60 my-2 flex-none" />
+
         {/* Add Space Button */}
-        <div className="pt-2 flex-none">
+        <div className="pt-1 flex-none">
           <Tooltip>
             <TooltipTrigger asChild>
               <button
@@ -794,7 +831,7 @@ const LeftSideNavMobile = () => {
         {/* Header Row */}
         <div className="sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] px-4 flex-none">
           <span className="text-sm font-semibold text-white truncate">
-            {activeBotId ? (bots.find(b => b.id === activeBotId)?.name || 'Space') : 'Alti Assistant'}
+            {activeBotId ? (bots.find(b => b.id === activeBotId)?.name || 'Space') : 'Inso AI'}
           </span>
         </div>
 
@@ -969,8 +1006,8 @@ const LeftSideNavMobile = () => {
                       router.push(`/spaces?bot=${activeBotId}`);
                       close();
                     }}
-                    variant="default"
-                    className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold h-9 rounded-lg gap-2"
+                    variant="outline"
+                    className="flex-1 transition-all duration-300 outline-none select-none cursor-pointer border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700/80 text-zinc-900 dark:text-zinc-100 shadow-sm text-xs font-semibold h-9 rounded-lg gap-2"
                   >
                     <Plus className="size-3.5" /> New Space Chat
                   </Button>
@@ -1042,7 +1079,7 @@ const LeftSideNavMobile = () => {
                             close();
                           }}
                         >
-                          <MessageSquare className="h-3.5 w-3.5 flex-shrink-0 text-zinc-400" />
+                          {getThreadIcon(thread.title, isSelected)}
                           <span className="truncate">{thread.title || 'Untitled Space Chat'}</span>
                         </span>
                         <button
