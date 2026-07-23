@@ -666,7 +666,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
               </button>
             </TooltipTrigger>
-            <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
+            <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
               Inso AI
             </TooltipContent>
           </Tooltip>
@@ -740,9 +740,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       {getSpaceInitials(bot.name)}
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 max-w-[200px] select-none">
+                  <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white max-w-[200px] select-none">
                     <div className="font-bold">{bot.name}</div>
-                    {bot.description && <div className="text-[10px] text-zinc-400 font-normal mt-0.5 line-clamp-2">{bot.description}</div>}
                   </TooltipContent>
                 </Tooltip>
 
