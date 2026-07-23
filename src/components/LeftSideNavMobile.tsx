@@ -683,6 +683,15 @@ const LeftSideNavMobile = () => {
     return <MessageSquare className={iconColorClass} />;
   };
 
+  const getSpaceInitials = (name: string) => {
+    if (!name) return "";
+    const words = name.trim().split(/\s+/);
+    if (words.length >= 2) {
+      return (words[0].substring(0, 1) + words[1].substring(0, 1)).toUpperCase();
+    }
+    return name.substring(0, 2).toUpperCase();
+  };
+
   const plusProps = getPlusButtonProps();
 
   return (
@@ -779,14 +788,14 @@ const LeftSideNavMobile = () => {
                         close();
                       }}
                       className={cn(
-                        "relative size-10 flex items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer text-lg font-semibold text-white",
+                        "relative size-10 flex items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer text-sm font-semibold text-white",
                         isSelected
                           ? "bg-[#0000ff]/15 border-[#0000ff] shadow-[0_0_20px_rgba(0,0,255,0.55)]"
                           : "bg-[#0000ff]/10 border-[#0000ff]/35 hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]",
                         isBeingDragged && "opacity-40"
                       )}
                     >
-                      {bot.avatar || bot.name.substring(0, 1)}
+                      {getSpaceInitials(bot.name)}
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 max-w-[200px] select-none">
