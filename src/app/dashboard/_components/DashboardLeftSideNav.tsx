@@ -115,21 +115,7 @@ const DashboardLeftSideNav = () => {
                       <Brain className="text-black dark:text-white" /> Platform Memory
                     </DropdownMenuItem>
                   )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/platform-knowledge')}>
-                      <Database className="text-black dark:text-white" /> Platform Knowledge
-                    </DropdownMenuItem>
-                  )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/instructions')}>
-                      <SlidersHorizontal className="text-black dark:text-white" /> Platform Instructions
-                    </DropdownMenuItem>
-                  )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/guardrails')}>
-                      <ShieldAlert className="text-black dark:text-white" /> Platform Guardrails
-                    </DropdownMenuItem>
-                  )}
+
                   {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/invite-friends')}>
                       <UserPlus className="text-black dark:text-white" /> Invite Friends
