@@ -701,7 +701,7 @@ const LeftSideNavMobile = () => {
         {/* Alti Assistant Home Button */}
         <div className="relative w-full flex flex-col items-center">
           <div
-            className="absolute left-0 w-1 h-8 bg-[#0000ff] rounded-r-md transition-all duration-200 top-1.5"
+            className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1.5"
             style={{ opacity: activeBotId === null ? 1 : 0 }}
           />
           <Tooltip>
@@ -774,7 +774,7 @@ const LeftSideNavMobile = () => {
 
                 {/* Active Indicator Line */}
                 <div
-                  className="absolute left-0 w-1 h-8 bg-[#0000ff] rounded-r-md transition-all duration-200 top-1.5"
+                  className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1.5"
                   style={{ opacity: isSelected ? 1 : 0 }}
                 />
 
