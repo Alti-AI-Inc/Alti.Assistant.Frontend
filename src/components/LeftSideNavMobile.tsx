@@ -718,8 +718,6 @@ const LeftSideNavMobile = () => {
           </Tooltip>
         </div>
 
-        <div className="w-8 h-px bg-zinc-800/60 my-1 flex-none" />
-
         {/* Spaces Scrollable Area */}
         <div className="flex-1 w-full overflow-y-auto overflow-x-hidden flex flex-col items-center gap-3 no-scrollbar py-1">
           {bots.map((bot, idx) => {
