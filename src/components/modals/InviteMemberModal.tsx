@@ -223,16 +223,7 @@ export function InviteMemberModal() {
                         </div>
                       </div>
                     </SelectItem>
-                    <SelectItem value={TenantRole.MANAGER}>
-                      <div>
-                        <div className="font-medium">
-                          Manager
-                        </div>
-                        <div className="text-muted-foreground text-xs">
-                          Can manage members and billing settings
-                        </div>
-                      </div>
-                    </SelectItem>
+
                     <SelectItem value={TenantRole.ADMIN}>
                       <div>
                         <div className="font-medium">

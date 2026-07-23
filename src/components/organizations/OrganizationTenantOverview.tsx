@@ -427,7 +427,7 @@ export function OrganizationTenantOverview({
                 </SelectTrigger>
                 <SelectContent className="border-black/10">
                   <SelectItem value="member" className="text-xs">User</SelectItem>
-                  <SelectItem value="admin" className="text-xs">Manager</SelectItem>
+
                   <SelectItem value="owner" className="text-xs">Admin</SelectItem>
                 </SelectContent>
               </Select>
