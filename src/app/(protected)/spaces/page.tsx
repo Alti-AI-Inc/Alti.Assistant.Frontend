@@ -1151,9 +1151,6 @@ function MyChatbotsContent() {
           )}
         </div>
       </div>
-
-      {/* Right Column (Bot Specific Details & Timeline) */}
-      <BotRightSidebar botId={activeBot.id} activeThreadId={activeBotThreadId} />
     </div>
   );
 }

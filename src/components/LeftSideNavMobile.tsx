@@ -1002,63 +1002,67 @@ const LeftSideNavMobile = () => {
           ) : (
             /* Space Mode */
             <div className="flex flex-col h-full min-h-0 animate-in fade-in duration-200">
-              {/* Action bar and Search bar */}
-              <div className="pt-3 pb-1.5 flex flex-col gap-2 px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full">
-                <div className="flex items-center gap-2">
-                  <Button
-                    onClick={() => {
-                      setSelectedOption(null);
-                      setActiveBotThreadId(null);
-                      setActiveConversation(null);
-                      router.push(`/spaces?bot=${activeBotId}`);
-                      close();
-                    }}
-                    variant="outline"
-                    className="flex-1 transition-all duration-300 outline-none select-none cursor-pointer border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700/80 text-zinc-900 dark:text-zinc-100 shadow-sm text-xs font-semibold h-9 rounded-lg gap-2"
-                  >
-                    <Plus className="size-3.5" /> New Space Chat
-                  </Button>
-
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="size-9 shrink-0 bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:text-white"
-                      >
-                        <EllipsisVertical className="size-4 rotate-90" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="rounded-2xl" align="end">
-                      <DropdownMenuItem
-                        className="text-zinc-700 dark:text-zinc-200 focus:bg-zinc-100 dark:focus:bg-zinc-800"
-                        onClick={() => setBotToRename(activeBotId)}
-                      >
-                        <Pencil className="h-4 w-4 mr-2" /> Rename Space
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator className="border-black/5 dark:border-white/5" />
-                      <DropdownMenuItem
-                        className="text-red-500 focus:text-red-655 focus:bg-red-50"
-                        onClick={() => setBotToDelete(activeBotId)}
-                      >
-                        <Trash2 className="text-red-500 h-4 w-4 mr-2" /> Delete Space
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-
-                <div className="flex h-9 w-full items-center rounded-lg border border-zinc-850 bg-white/[0.04] focus-within:border-zinc-750 transition-all duration-300">
-                  <div className="flex flex-1 items-center gap-2 px-3 h-full">
-                    <Search className="size-3.5 flex-none text-zinc-500" />
+              {/* Search Bar Row (Same exact styling as general chat mode) */}
+              <div className="pt-3 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full gap-2">
+                <div className="flex-1 flex h-9 items-center rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] overflow-hidden focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40 transition-all duration-300">
+                  <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
+                    <Search className="size-3.5 flex-none text-[#5e5eff]" />
                     <input
                       type="text"
                       placeholder="Search threads..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full bg-transparent text-xs font-normal text-white outline-none placeholder:text-zinc-500"
+                      className="w-full bg-transparent text-xs font-normal text-white outline-none placeholder:text-zinc-400"
                     />
                   </div>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedOption(null);
+                          setActiveBotThreadId(null);
+                          setActiveConversation(null);
+                          router.push(`/spaces?bot=${activeBotId}`);
+                          close();
+                        }}
+                        className="flex h-full w-9 items-center justify-center transition-all hover:bg-[#0000ff]/20 text-blue-100 focus:outline-none border-l border-[#0000ff]/30"
+                      >
+                        <Plus className="size-3.5 text-white" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
+                      New Space Chat
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="size-9 shrink-0 bg-[#0000ff]/10 border-[#0000ff]/35 text-[#8080ff] hover:bg-[#0000ff]/20 hover:text-white transition-all shadow-[0_0_12px_rgba(0,0,255,0.25)] focus:outline-none"
+                    >
+                      <EllipsisVertical className="size-4 rotate-90" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="rounded-2xl" align="end">
+                    <DropdownMenuItem
+                      className="text-zinc-700 dark:text-zinc-200 focus:bg-zinc-100 dark:focus:bg-zinc-800"
+                      onClick={() => setBotToRename(activeBotId)}
+                    >
+                      <Pencil className="h-4 w-4 mr-2" /> Rename Space
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="border-black/5 dark:border-white/5" />
+                    <DropdownMenuItem
+                      className="text-red-500 focus:text-red-655 focus:bg-red-50"
+                      onClick={() => setBotToDelete(activeBotId)}
+                    >
+                      <Trash2 className="text-red-500 h-4 w-4 mr-2" /> Delete Space
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
 
               {/* Space-Specific Threads List */}
@@ -1071,14 +1075,14 @@ const LeftSideNavMobile = () => {
                       <div
                         key={thread.id}
                         className={cn(
-                          "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border mb-1.5 cursor-pointer select-none",
+                          "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-pointer select-none",
                           isSelected
-                            ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs"
-                            : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                            ? "bg-[#0000ff]/15 border-[#0000ff] text-white font-semibold shadow-[0_0_20px_rgba(0,0,255,0.55)]"
+                            : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                         )}
                       >
                         <span
-                          className="flex-1 truncate px-3 py-2 flex items-center gap-2"
+                          className="flex-1 truncate px-3 py-2 flex items-center gap-2.5"
                           onClick={() => {
                             setSelectedOption(null);
                             setActiveBotThreadId(thread.id);
@@ -1098,7 +1102,10 @@ const LeftSideNavMobile = () => {
                               router.push(`/spaces?bot=${activeBotId}`);
                             }
                           }}
-                          className="mr-2 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity p-1 rounded hover:bg-white/5"
+                          className={cn(
+                            "mr-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-colors p-1 rounded hover:bg-[#0000ff]/20",
+                            isSelected ? "text-white" : "text-zinc-450 hover:text-red-500"
+                          )}
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
