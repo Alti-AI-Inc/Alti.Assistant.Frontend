@@ -1236,7 +1236,7 @@ return (
       >
          <div className="mx-auto w-full max-w-[796px]">
           {showAsNewChat && (
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-zinc-900 dark:text-white mb-6 text-center select-none tracking-tight animate-in fade-in duration-300">
+            <h1 className="text-3xl sm:text-4xl font-semibold text-zinc-900 dark:text-white mb-6 text-center select-none tracking-tight animate-in fade-in duration-300">
               How can I help you?
             </h1>
           )}
