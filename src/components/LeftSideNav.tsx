@@ -204,7 +204,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     setUserMessage,
   } = useConversationsStore();
   const { isLeftSidebarOpen, toggleLeftSidebar, isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen } = useSidebarStore();
-  const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, deleteBot, reorderBots, editBot } = useBotsStore();
+  const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, deleteBot, reorderBots, editBot, threads, activeBotThreadId, setActiveBotThreadId, deleteThread } = useBotsStore();
 
   const { data: inboxItems = [] } = useInboxQuery(
     data?.user?.id,
@@ -596,368 +596,157 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   };
 
   return (
-    <>
-      <div
-        className={cn(
-          'sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] transition-colors duration-300 flex-none',
-          hideSidebar ? 'justify-center px-0' : 'px-4',
-          side === 'right' && 'flex-row-reverse',
-        )}
-      >
-        <div
-          className={cn(
-            'flex flex-none items-center justify-center transition-all duration-300',
-          )}
-        >
-          {hideSidebar && !isSuperAdmin ? (
-            <PanelLeftClose
-              className={cn(
-                'size-5 cursor-pointer text-zinc-400 hover:text-white transition-transform duration-300',
-                side === 'right' ? '' : 'scale-x-[-1]'
-              )}
-              onClick={side === 'right' ? toggleRightSidebar : toggleLeftSidebar}
-            />
-          ) : (
-            <Link href="/" className="flex items-center pt-[2px]">
-              <Image
-                src="/assets/logo-icon.png"
-                alt="logo"
-                height={20}
-                width={20}
-                className="brightness-0 invert"
-              />
-            </Link>
-          )}
-        </div>
-
-        {side === 'right' ? (
-          !isSuperAdmin && (
-            <PanelRightClose
-              className={cn(
-                'size-5 cursor-pointer text-zinc-400 hover:text-white transition-transform duration-300',
-                hideSidebar && 'hidden',
-              )}
-              onClick={toggleRightSidebar}
-            />
-          )
-        ) : (
-          !isSuperAdmin && (
-            <PanelLeftClose
-              className={cn(
-                'size-5 cursor-pointer text-zinc-400 hover:text-white transition-transform duration-300',
-                hideSidebar && 'hidden',
-              )}
-              onClick={toggleLeftSidebar}
-            />
-          )
-        )}
-      </div>
-      {/* Enclosed Search & Actions Row */}
-      {!hideSidebar && activeTab !== 'account' && (
-        <div className="pt-3 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-all duration-300 flex-none w-full">
-          <div className="flex h-9 w-full items-center rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] overflow-hidden focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40 transition-all duration-300">
-            {/* Search segment */}
-            <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
-              <Search className="size-3.5 flex-none text-[#5e5eff]" />
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent text-xs font-normal text-white outline-none placeholder:text-zinc-300"
-                style={{ fontFamily: 'inherit' }}
-              />
-            </div>
-
-
-
-            {/* Vertical Separator (only if plus is visible) */}
-            {plusProps.visible && (
-              <div className="w-px h-4 bg-[#0000ff]/30 flex-none" />
-            )}
-
-            {/* Plus segment */}
-            {plusProps.visible && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    className="flex h-full w-9 items-center justify-center transition-all hover:bg-[#0000ff]/20 text-blue-100 focus:outline-none"
-                    onClick={plusProps.onClick}
-                  >
-                    <Plus className="size-3.5 text-white" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" className="rounded-lg bg-zinc-950/95 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
-                  {plusProps.tooltip}
-                </TooltipContent>
-              </Tooltip>
-            )}
-          </div>
-        </div>
-      )}
-
-
-      {/* Fixed Apps Filter Toggle Button Bar */}
-        <div
-          className={cn(
-            'flex flex-1 flex-col overflow-y-scroll px-4 bg-[#0c1120] dark:bg-[#0c1120] transition-colors duration-300',
-            hideSidebar && 'hidden',
-            side === 'right' && 'pb-8',
-          )}
-        >
-          {activeTab === 'bots' ? (
-            <div className="space-y-1.5 pb-4">
-              {bots
-                .map((bot, idx) => ({ bot, idx }))
-                .filter(({ bot }) =>
-                  (bot.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-                  (bot.description || '').toLowerCase().includes(searchQuery.toLowerCase())
-                )
-                .map(({ bot, idx }) => {
-                  const isSelected = activeBotId === bot.id && pathname === '/spaces';
-                  const isBeingDragged = draggedIndex === idx;
-                  const showTopLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex > idx;
-                  const showBottomLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex < idx;
-
-                  return (
-                    <div key={bot.id}>
-                      {showTopLine && (
-                        <div className="h-[2px] w-full bg-indigo-500 rounded-full mb-1 animate-pulse" />
-                      )}
-                      <div
-                        draggable
-                        onDragStart={(e) => {
-                          setDraggedIndex(idx);
-                          e.dataTransfer.effectAllowed = 'move';
-                        }}
-                        onDragOver={(e) => {
-                          e.preventDefault();
-                          if (draggedIndex !== idx) {
-                            setDragOverIndex(idx);
-                          }
-                        }}
-                        onDragLeave={() => {
-                          setDragOverIndex(null);
-                        }}
-                        onDrop={(e) => {
-                          e.preventDefault();
-                          if (draggedIndex !== null && draggedIndex !== idx) {
-                            reorderBots(draggedIndex, idx);
-                          }
-                          setDraggedIndex(null);
-                          setDragOverIndex(null);
-                        }}
-                        onDragEnd={() => {
-                          setDraggedIndex(null);
-                          setDragOverIndex(null);
-                        }}
-                        className={cn(
-                          "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border mb-1.5 cursor-grab active:cursor-grabbing select-none",
-                          isSelected 
-                            ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs" 
-                            : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white",
-                          isBeingDragged && "opacity-40 scale-95 border-dashed border-zinc-500 bg-white/[0.02]"
-                        )}
-                      >
-                        <span
-                          className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
-                          onClick={() => {
-                            setSelectedOption(null);
-                            setActiveBotId(bot.id);
-                            router.push(`/spaces?bot=${bot.id}`);
-                          }}
-                        >
-                          <LayoutGrid className={cn(
-                            "h-3.5 w-3.5 flex-shrink-0 transition-colors",
-                            isSelected ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
-                          )} />
-                          <span className="truncate">{bot.name}</span>
-                        </span>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger className="focus-visible:outline-none">
-                            <EllipsisVertical className={cn(
-                              "mr-2 rotate-90 h-3.5 w-3.5 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-colors",
-                              isSelected ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
-                            )} />
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent className="rounded-2xl" align="end">
-                            <DropdownMenuItem
-                              className="text-zinc-700 dark:text-zinc-200 focus:bg-zinc-100 dark:focus:bg-zinc-800"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setBotToRename(bot.id);
-                              }}
-                            >
-                              <Pencil className="h-4 w-4 mr-2" /> Rename
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator className="border-black/5 dark:border-white/5" />
-                            <DropdownMenuItem
-                              className="text-red-500 focus:text-red-600 focus:bg-red-50"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setBotToDelete(bot.id);
-                              }}
-                            >
-                              <Trash2 className="text-red-500 h-4 w-4 mr-2" /> Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                      {showBottomLine && (
-                        <div className="h-[2px] w-full bg-indigo-500 rounded-full mt-1 mb-1.5 animate-pulse" />
-                      )}
-                    </div>
-                  );
-                })}
-              {bots.filter(bot =>
-                (bot.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (bot.description || '').toLowerCase().includes(searchQuery.toLowerCase())
-              ).length === 0 && (
-                <div className="py-4 text-center text-xs text-gray-500">
-                  No workspaces found.
-                </div>
-              )}
-            </div>
-          ) : activeTab === 'apps' ? (
-            <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
-              
-              {/* Connect Apps row */}
-              <div
-                onClick={() => router.push('/appsx')}
-                className="group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border border-white/[0.04] bg-white/[0.06] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white cursor-pointer select-none mb-2 px-3 py-2 gap-2.5"
+    <div className="flex h-full w-full overflow-hidden">
+      {/* Column 1: Spaces Switcher (Slack style) */}
+      <div className="w-[68px] h-full bg-[#080c14] border-r border-zinc-800/60 flex flex-col items-center py-4 gap-3 select-none flex-none">
+        {/* Alti Assistant Home Button */}
+        <div className="relative w-full flex flex-col items-center">
+          <div
+            className="absolute left-0 w-1 h-8 bg-indigo-500 rounded-r-md transition-all duration-200 top-1.5"
+            style={{ opacity: activeBotId === null ? 1 : 0 }}
+          />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => {
+                  setActiveBotId(null);
+                  setSelectedOption(null);
+                  router.push(isLoggedIn ? '/c/new-chat' : '/');
+                }}
+                className={cn(
+                  "relative size-11 flex items-center justify-center rounded-xl bg-white/[0.06] hover:rounded-2xl transition-all duration-200 border border-white/[0.04] hover:bg-white/[0.12] hover:border-white/10 cursor-pointer text-white",
+                  activeBotId === null && "bg-white/[0.15] border-white/20"
+                )}
               >
-                <span className="flex items-center gap-2.5 truncate">
-                  <Blocks className="h-4 w-4 text-zinc-400 group-hover:text-zinc-200 transition-colors flex-shrink-0" />
-                  <span className="truncate">Connect Apps</span>
-                </span>
-                <ChevronRight className="h-3.5 w-3.5 opacity-60 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
+                <Sparkles className="size-5 text-[#8080ff] animate-pulse" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
+              Alti Assistant
+            </TooltipContent>
+          </Tooltip>
+        </div>
+
+        <div className="w-8 h-px bg-zinc-800/60 my-1 flex-none" />
+
+        {/* Spaces Scrollable Area */}
+        <div className="flex-1 w-full overflow-y-auto overflow-x-hidden flex flex-col items-center gap-3 no-scrollbar py-1">
+          {bots.map((bot, idx) => {
+            const isSelected = activeBotId === bot.id && (pathname === '/spaces' || pathname.startsWith('/spaces'));
+            const isBeingDragged = draggedIndex === idx;
+            const showTopLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex > idx;
+            const showBottomLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex < idx;
+
+            return (
+              <div
+                key={bot.id}
+                className="relative w-full flex flex-col items-center"
+                draggable
+                onDragStart={(e) => {
+                  setDraggedIndex(idx);
+                  e.dataTransfer.effectAllowed = 'move';
+                }}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  if (draggedIndex !== idx) {
+                    setDragOverIndex(idx);
+                  }
+                }}
+                onDragLeave={() => {
+                  setDragOverIndex(null);
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  if (draggedIndex !== null && draggedIndex !== idx) {
+                    reorderBots(draggedIndex, idx);
+                  }
+                  setDraggedIndex(null);
+                  setDragOverIndex(null);
+                }}
+                onDragEnd={() => {
+                  setDraggedIndex(null);
+                  setDragOverIndex(null);
+                }}
+              >
+                {showTopLine && (
+                  <div className="h-[2px] w-8 bg-indigo-500 rounded-full mb-1 animate-pulse" />
+                )}
+
+                {/* Active Indicator Line */}
+                <div
+                  className="absolute left-0 w-1 h-8 bg-indigo-500 rounded-r-md transition-all duration-200 top-1.5"
+                  style={{ opacity: isSelected ? 1 : 0 }}
+                />
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => {
+                        setSelectedOption(null);
+                        setActiveBotId(bot.id);
+                        router.push(`/spaces?bot=${bot.id}`);
+                      }}
+                      className={cn(
+                        "relative size-11 flex items-center justify-center rounded-xl bg-white/[0.06] hover:rounded-2xl transition-all duration-200 border border-white/[0.04] hover:bg-white/[0.12] hover:border-white/10 cursor-pointer text-lg font-semibold text-white",
+                        isSelected && "bg-white/[0.15] border-white/20",
+                        isBeingDragged && "opacity-40"
+                      )}
+                    >
+                      {bot.avatar || bot.name.substring(0, 1)}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 max-w-[200px] select-none">
+                    <div className="font-bold">{bot.name}</div>
+                    {bot.description && <div className="text-[10px] text-zinc-400 font-normal mt-0.5 line-clamp-2">{bot.description}</div>}
+                  </TooltipContent>
+                </Tooltip>
+
+                {showBottomLine && (
+                  <div className="h-[2px] w-8 bg-indigo-500 rounded-full mt-1 animate-pulse" />
+                )}
               </div>
+            );
+          })}
+        </div>
 
-              {localAppsOrder
-                .map((app, idx) => ({ app, idx }))
-                .filter(({ app }) =>
-                  (app.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-                  (app.app_name || '').toLowerCase().includes(searchQuery.toLowerCase())
-                )
-                .map(({ app, idx }) => {
-                  const isSelected = pathname === '/apps' && searchParams?.get('app')?.toLowerCase() === app.app_name.toLowerCase();
-                  const isBeingDragged = draggedAppIndex === idx;
-                  const showTopLine = draggedAppIndex !== null && dragOverAppIndex === idx && draggedAppIndex > idx;
-                  const showBottomLine = draggedAppIndex !== null && dragOverAppIndex === idx && draggedAppIndex < idx;
+        {/* Add Space Button */}
+        <div className="pt-2 flex-none">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => {
+                  setActiveBotId(null);
+                  router.push('/spaces');
+                }}
+                className="relative size-11 flex items-center justify-center rounded-xl bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-400 hover:text-white border border-indigo-500/30 hover:border-indigo-500/50 cursor-pointer hover:rounded-2xl transition-all duration-200"
+              >
+                <Plus className="size-5" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
+              Create Space
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      </div>
 
-                  return (
-                    <div key={app.app_name}>
-                      {showTopLine && (
-                        <div className="h-[2px] w-full bg-indigo-500 rounded-full mb-1 animate-pulse" />
-                      )}
-                      <div
-                        draggable
-                        onDragStart={(e) => {
-                          setDraggedAppIndex(idx);
-                          e.dataTransfer.effectAllowed = 'move';
-                        }}
-                        onDragOver={(e) => {
-                          e.preventDefault();
-                          if (draggedAppIndex !== idx) {
-                            setDragOverAppIndex(idx);
-                          }
-                        }}
-                        onDragLeave={() => {
-                          setDragOverAppIndex(null);
-                        }}
-                        onDrop={(e) => {
-                          e.preventDefault();
-                          if (draggedAppIndex !== null && draggedAppIndex !== idx) {
-                            reorderApps(draggedAppIndex, idx);
-                          }
-                          setDraggedAppIndex(null);
-                          setDragOverAppIndex(null);
-                        }}
-                        onDragEnd={() => {
-                          setDraggedAppIndex(null);
-                          setDragOverAppIndex(null);
-                        }}
-                        className={cn(
-                          "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border mb-1.5 cursor-grab active:cursor-grabbing select-none",
-                          isSelected 
-                            ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs" 
-                            : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white",
-                          isBeingDragged && "opacity-40 scale-95 border-dashed border-zinc-500 bg-white/[0.02]"
-                        )}
-                      >
-                        <span
-                          className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
-                          onClick={() => {
-                            router.push(`/apps?app=${app.app_name}`);
-                          }}
-                        >
-                          <div className="h-4 w-4 rounded overflow-hidden bg-white p-0.5 flex items-center justify-center flex-shrink-0">
-                            <AppImage src={app.image} alt={app.title} className="h-full w-full object-contain" fallbackSizeClass="text-[8px]" />
-                          </div>
-                          <span className="truncate">{app.title}</span>
-                        </span>
-                        
-                        {/* Glow connected active badging */}
-                        <div className="mr-3 flex items-center gap-1.5">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
-                        </div>
-                      </div>
-                      {showBottomLine && (
-                        <div className="h-[2px] w-full bg-indigo-500 rounded-full mt-1 mb-1.5 animate-pulse" />
-                      )}
-                    </div>
-                  );
-                })}
-              {localAppsOrder.filter(app =>
-                (app.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (app.app_name || '').toLowerCase().includes(searchQuery.toLowerCase())
-              ).length === 0 && (
-                <div className="py-8 text-center text-xs text-gray-400 dark:text-zinc-500 italic">
-                  No connected apps found.
-                </div>
-              )}
-            </div>
-          ) : activeTab === 'tasks' ? (
-            <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
-              {tasks.filter(task => 
-                (task.prompt || '').toLowerCase().includes(searchQuery.toLowerCase())
-              ).map((task) => (
-                <button
-                  key={task.id}
-                  onClick={() => {
-                    router.push(`/tasks?taskId=${task.id}`);
-                  }}
-                  className="w-full flex flex-col gap-1 px-3 py-2 text-xs font-medium rounded-lg text-zinc-300 hover:bg-white/5 hover:text-white transition-colors text-left border border-white/[0.04] bg-white/[0.06] shadow-xs mb-1.5"
-                >
-                  <p className="font-semibold text-white line-clamp-1 leading-snug">
-                    {task.prompt}
-                  </p>
-                  <div className="flex items-center justify-between w-full text-[10px] text-zinc-400 font-medium">
-                    <span className="capitalize">{task.taskType}</span>
-                    <span>
-                      {task.triggerType === 'scheduled' 
-                        ? task.schedule 
-                        : 'Action Based'}
-                    </span>
-                  </div>
-                </button>
-              ))}
-              {tasks.filter(task => 
-                (task.prompt || '').toLowerCase().includes(searchQuery.toLowerCase())
-              ).length === 0 && (
-                <div className="py-8 text-center text-xs text-gray-400 dark:text-zinc-500 italic">
-                  No automated tasks found.
-                </div>
-              )}
-            </div>
-          ) : activeTab === 'search' ? (
-            <div className="space-y-1.5 pb-4 animate-in fade-in duration-200">
-              <ConversationsList searchQuery={searchQuery} activeTab="search" />
-            </div>
-          ) : isLoggedIn && activeTab === 'account' ? (
-            <div className="mt-4 space-y-1.5 py-1 pb-4">
-              
+      {/* Column 2: Secondary Content navigation panel */}
+      <div className="flex-1 flex flex-col min-w-0 h-full bg-[#0c1120]">
+        {/* Header Row */}
+        <div className="sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] px-4 flex-none">
+          <span className="text-sm font-semibold text-white truncate">
+            {activeBotId ? (bots.find(b => b.id === activeBotId)?.name || 'Space') : 'Alti Assistant'}
+          </span>
+          <PanelLeftClose
+            className="size-5 cursor-pointer text-zinc-400 hover:text-white transition-colors"
+            onClick={toggleLeftSidebar}
+          />
+        </div>
+
+        {/* Navigation Body */}
+        <div className="flex-1 overflow-y-auto min-h-0">
+          {activeTab === 'account' ? (
+            <div className="mt-4 space-y-1.5 py-1 px-4 pb-4">
               {isSuperAdmin && (
                 <button
                   onClick={() => router.push('/admin')}
@@ -1066,34 +855,182 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </button>
               )}
             </div>
-          ) : null}
+          ) : activeBotId === null ? (
+            /* General Mode */
+            <div className="flex flex-col h-full min-h-0">
+              {/* Search Bar Row */}
+              <div className="pt-3 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full">
+                <div className="flex h-9 w-full items-center rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] overflow-hidden focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40 transition-all duration-300">
+                  <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
+                    <Search className="size-3.5 flex-none text-[#5e5eff]" />
+                    <input
+                      type="text"
+                      placeholder="Search chats..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full bg-transparent text-xs font-normal text-white outline-none placeholder:text-zinc-400"
+                    />
+                  </div>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveConversation(null);
+                          setShowStartLastMessage(false);
+                          setUserMessage('');
+                          setSelectedOption(null);
+                          close();
+                          router.push(isLoggedIn ? '/c/new-chat' : '/');
+                        }}
+                        className="flex h-full w-9 items-center justify-center transition-all hover:bg-[#0000ff]/20 text-blue-100 focus:outline-none border-l border-[#0000ff]/30"
+                      >
+                        <Plus className="size-3.5 text-white" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
+                      New Chat
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              </div>
+
+              {/* Chat History List */}
+              <div className="flex-1 overflow-y-auto px-4 bg-[#0c1120] dark:bg-[#0c1120] py-2">
+                <ConversationsList searchQuery={searchQuery} activeTab="search" />
+              </div>
+            </div>
+          ) : (
+            /* Space Mode */
+            <div className="flex flex-col h-full min-h-0">
+              {/* Action bar and Search bar */}
+              <div className="pt-3 pb-1.5 flex flex-col gap-2 px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full">
+                <div className="flex items-center gap-2">
+                  <Button
+                    onClick={() => {
+                      setSelectedOption(null);
+                      setActiveBotThreadId(null);
+                      setActiveConversation(null);
+                      router.push(`/spaces?bot=${activeBotId}`);
+                    }}
+                    variant="default"
+                    className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold h-9 rounded-lg gap-2"
+                  >
+                    <Plus className="size-3.5" /> New Space Chat
+                  </Button>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="size-9 shrink-0 bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:text-white"
+                      >
+                        <EllipsisVertical className="size-4 rotate-90" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="rounded-2xl" align="end">
+                      <DropdownMenuItem
+                        className="text-zinc-700 dark:text-zinc-200 focus:bg-zinc-100 dark:focus:bg-zinc-800"
+                        onClick={() => setBotToRename(activeBotId)}
+                      >
+                        <Pencil className="h-4 w-4 mr-2" /> Rename Space
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator className="border-black/5 dark:border-white/5" />
+                      <DropdownMenuItem
+                        className="text-red-500 focus:text-red-650 focus:bg-red-50"
+                        onClick={() => setBotToDelete(activeBotId)}
+                      >
+                        <Trash2 className="text-red-500 h-4 w-4 mr-2" /> Delete Space
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+
+                <div className="flex h-9 w-full items-center rounded-lg border border-zinc-850 bg-white/[0.04] focus-within:border-zinc-750 transition-all duration-300">
+                  <div className="flex flex-1 items-center gap-2 px-3 h-full">
+                    <Search className="size-3.5 flex-none text-zinc-500" />
+                    <input
+                      type="text"
+                      placeholder="Search threads..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full bg-transparent text-xs font-normal text-white outline-none placeholder:text-zinc-500"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Space-Specific Threads List */}
+              <div className="flex-1 overflow-y-auto px-4 bg-[#0c1120] dark:bg-[#0c1120] space-y-1.5 py-2">
+                {threads
+                  .filter(t => t.botId === activeBotId && (t.title || 'Untitled Space Chat').toLowerCase().includes(searchQuery.toLowerCase()))
+                  .map(thread => {
+                    const isSelected = activeBotThreadId === thread.id && pathname === '/spaces';
+                    return (
+                      <div
+                        key={thread.id}
+                        className={cn(
+                          "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-150 border mb-1.5 cursor-pointer select-none",
+                          isSelected
+                            ? "bg-white/12 border-white/10 text-white font-semibold shadow-xs"
+                            : "bg-white/[0.06] border-white/[0.04] text-zinc-300 hover:bg-white/[0.10] hover:border-white/5 hover:text-white"
+                        )}
+                      >
+                        <span
+                          className="flex-1 truncate px-3 py-2 flex items-center gap-2"
+                          onClick={() => {
+                            setSelectedOption(null);
+                            setActiveBotThreadId(thread.id);
+                            router.push(`/spaces?bot=${activeBotId}&thread=${thread.id}`);
+                          }}
+                        >
+                          <MessageSquare className="h-3.5 w-3.5 flex-shrink-0 text-zinc-400" />
+                          <span className="truncate">{thread.title || 'Untitled Space Chat'}</span>
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deleteThread(thread.id);
+                            if (activeBotThreadId === thread.id) {
+                              setActiveBotThreadId(null);
+                              router.push(`/spaces?bot=${activeBotId}`);
+                            }
+                          }}
+                          className="mr-2 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity p-1 rounded hover:bg-white/5"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    );
+                  })}
+                {threads.filter(t => t.botId === activeBotId && (t.title || 'Untitled Space Chat').toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
+                  <div className="py-8 text-center text-xs text-zinc-500 italic">
+                    No threads found.
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
-      {side !== 'right' && (
-        <div
-          className={cn(
-            'sticky bottom-0 z-30 flex flex-col w-full',
-            hideSidebar && 'hidden',
-          )}
-          style={{ backgroundColor: '#0c1120' }}
-        >
+        {/* Footer Area */}
+        <div className="sticky bottom-0 z-30 flex flex-col w-full bg-[#0c1120] border-t border-zinc-800/60 p-4 py-1.5 flex-none">
           {isLoggedIn && activeTab === 'account' ? (
             <div className="flex flex-col w-full">
-              {!isSuperAdmin && (
-                <div className="flex h-20 w-full items-center justify-center border-t border-zinc-800/60 p-4 py-1.5">
-                  <Button
-                    variant="default"
-                    className="w-full justify-center gap-2 bg-white text-black hover:bg-white/90 border border-transparent"
-                    onClick={() => {
-                      setActiveTab('search');
-                      router.push(isLoggedIn ? '/c/new-chat' : '/');
-                    }}
-                  >
-                    Return to App
-                  </Button>
-                </div>
-              )}
-              <div className="flex h-20 w-full items-center justify-center border-t border-zinc-800/60 p-4 py-1.5">
+              <div className="flex h-20 w-full items-center justify-center p-4 py-1.5">
+                <Button
+                  variant="default"
+                  className="w-full justify-center gap-2 bg-white text-black hover:bg-white/90 border border-transparent"
+                  onClick={() => {
+                    setActiveTab('search');
+                    router.push(isLoggedIn ? '/c/new-chat' : '/');
+                  }}
+                >
+                  Return to App
+                </Button>
+              </div>
+              <div className="flex h-20 w-full items-center justify-center p-4 py-1.5">
                 <Button
                   variant="outline"
                   onClick={() => onOpen({ type: 'logout' })}
@@ -1104,37 +1041,37 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </div>
             </div>
           ) : (
-            <div className="flex h-20 w-full items-center justify-center border-t border-zinc-800/60 p-4 py-1.5">
-            {!isLoggedIn ? (
-              <div className="flex w-full items-center gap-2">
+            <div className="flex h-20 w-full items-center justify-center p-4 py-1.5">
+              {!isLoggedIn ? (
+                <div className="flex w-full items-center gap-2">
+                  <Button
+                    variant="default"
+                    className="flex-1 bg-white px-0 text-black hover:bg-white/90"
+                    asChild
+                  >
+                    <Link href="/login">Login</Link>
+                  </Button>
+                  <Button
+                    variant="default"
+                    className="flex-1 bg-white px-0 text-black hover:bg-white/90"
+                    asChild
+                  >
+                    <Link href="/register">Register</Link>
+                  </Button>
+                </div>
+              ) : (
                 <Button
-                  variant="default"
-                  className="flex-1 bg-white px-0 text-black hover:bg-white/90"
-                  asChild
+                  variant="outline"
+                  onClick={() => setActiveTab('account')}
+                  className="w-full transition-all duration-300 outline-none select-none cursor-pointer border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700/80 text-zinc-900 dark:text-zinc-100 shadow-sm"
                 >
-                  <Link href="/login">Login</Link>
+                  My Account
                 </Button>
-                <Button
-                  variant="default"
-                  className="flex-1 bg-white px-0 text-black hover:bg-white/90"
-                  asChild
-                >
-                  <Link href="/register">Register</Link>
-                </Button>
-              </div>
-            ) : (
-              <Button
-                variant="outline"
-                onClick={() => setActiveTab('account')}
-                className="w-full transition-all duration-300 outline-none select-none cursor-pointer border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700/80 text-zinc-900 dark:text-zinc-100 shadow-sm"
-              >
-                My Account
-              </Button>
-            )}
+              )}
             </div>
           )}
         </div>
-      )}
+      </div>
 
       {/* Delete Space Dialog */}
       <Dialog open={botToDelete !== null} onOpenChange={(open) => !open && setBotToDelete(null)}>
@@ -1243,7 +1180,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           </div>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 };
 

@@ -109,7 +109,7 @@ export default function ProtectedLayoutClient({
           <div
             className={cn(
               'sticky top-0 left-0 hidden h-full flex-col transition-all duration-300 ease-in-out sm:hidden md:flex border-r border-zinc-800/50 shrink-0 z-20',
-              isLeftSidebarOpen ? 'w-76' : 'w-10',
+              isLeftSidebarOpen ? 'w-80' : 'w-10',
             )}
             style={{ backgroundColor: '#0c1120' }}
           >
