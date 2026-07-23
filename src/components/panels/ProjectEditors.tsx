@@ -38,7 +38,7 @@ export function InstructionsEditor({ bot }: EditorProps) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-[75vh] p-8 max-w-[796px] mx-auto animate-in fade-in zoom-in-95 duration-200">
+    <div className="flex flex-col w-full p-8 max-w-[796px] mx-auto pt-[32vh] animate-in fade-in zoom-in-95 duration-200">
       <div className="text-center mb-6">
         <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
           Space Instructions
@@ -96,7 +96,7 @@ export function GuardrailsEditor({ bot }: EditorProps) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-[75vh] p-8 max-w-[796px] mx-auto animate-in fade-in zoom-in-95 duration-200">
+    <div className="flex flex-col w-full p-8 max-w-[796px] mx-auto pt-[32vh] animate-in fade-in zoom-in-95 duration-200">
       <div className="text-center mb-6">
         <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
           Space Guardrails
@@ -159,7 +159,7 @@ export function DataEditor({ bot }: EditorProps) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-[75vh] p-8 max-w-[796px] mx-auto animate-in fade-in zoom-in-95 duration-200">
+    <div className="flex flex-col w-full p-8 max-w-[796px] mx-auto pt-[32vh] animate-in fade-in zoom-in-95 duration-200">
       <div className="text-center mb-6">
         <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
           Space Knowledgebase
