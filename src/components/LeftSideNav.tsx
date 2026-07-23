@@ -831,7 +831,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         </div>
 
         {/* Footer Area for Spaces column */}
-        <div className="sticky bottom-0 z-30 flex items-center justify-center w-full bg-[#0c1120] border-t border-zinc-800/60 py-1.5 flex-none h-[92px]">
+        <div className="sticky bottom-0 z-30 flex items-center justify-center w-full bg-[#0c1120] border-t border-zinc-800/60 py-1.5 flex-none h-[56px]">
           <Tooltip>
             <TooltipTrigger asChild>
               <button
@@ -1319,12 +1319,12 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
         {/* Footer Area */}
         <div className={cn(
-          "sticky bottom-0 z-30 flex flex-col w-full bg-[#0c1120] border-t border-zinc-800/60 p-4 py-1.5 flex-none",
-          activeTab !== 'account' && "h-[92px] justify-center"
+          "sticky bottom-0 z-30 flex flex-col w-full bg-[#0c1120] border-t border-zinc-800/60 p-3 py-1.5 flex-none",
+          activeTab !== 'account' && "h-[56px] justify-center"
         )}>
           {isLoggedIn && activeTab === 'account' ? (
-            <div className="flex flex-col w-full">
-              <div className="flex h-20 w-full items-center justify-center p-4 py-1.5">
+            <div className="flex flex-col w-full gap-2">
+              <div className="flex h-11 w-full items-center justify-center">
                 <Button
                   variant="default"
                   className="w-full justify-center gap-2 bg-white text-black hover:bg-white/90 border border-transparent"
@@ -1336,7 +1336,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   Return to App
                 </Button>
               </div>
-              <div className="flex h-20 w-full items-center justify-center p-4 py-1.5">
+              <div className="flex h-11 w-full items-center justify-center">
                 <Button
                   variant="outline"
                   onClick={() => onOpen({ type: 'logout' })}
@@ -1347,7 +1347,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </div>
             </div>
           ) : (
-            <div className="flex h-20 w-full items-center justify-center p-4 py-1.5">
+            <div className="flex h-11 w-full items-center justify-center">
               {!isLoggedIn ? (
                 <div className="flex w-full items-center gap-2">
                   <Button

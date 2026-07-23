@@ -71,7 +71,7 @@ const DashboardLeftSideNav = () => {
 
         <div
           className={cn(
-            'bg-white dark:bg-zinc-900 sticky bottom-0 z-30 flex h-20 items-center justify-center p-4 py-1.5 border-t border-black/10 dark:border-zinc-800/80 w-full',
+            'bg-white dark:bg-zinc-900 sticky bottom-0 z-30 flex h-[56px] items-center justify-center p-3 py-1 border-t border-black/10 dark:border-zinc-800/80 w-full',
           )}
         >
           {!isLoggedIn ? (
