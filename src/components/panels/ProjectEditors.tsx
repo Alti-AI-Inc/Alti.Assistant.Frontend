@@ -94,7 +94,7 @@ export function InstructionsEditor({ bot }: EditorProps) {
           </div>
 
           <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
-            <div className="relative flex items-center gap-2 py-2">
+            <div className="relative flex items-start gap-2 py-2">
               <Textarea
                 ref={textareaRef}
                 value={inputValue}
@@ -115,7 +115,7 @@ export function InstructionsEditor({ bot }: EditorProps) {
                   onClick={() => {
                     router.push(`/spaces?bot=${bot.id}&view=instructions`);
                   }}
-                  className="text-xs text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 px-2 py-1 select-none font-medium cursor-pointer"
+                  className="text-xs text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 px-2 py-1 select-none font-medium cursor-pointer self-start mt-[5px]"
                 >
                   Cancel
                 </button>
@@ -123,7 +123,7 @@ export function InstructionsEditor({ bot }: EditorProps) {
               <button
                 onClick={handleSave}
                 disabled={!inputValue.trim()}
-                className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default"
+                className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default self-start mt-[5px]"
               >
                 <ArrowUp className={cn(
                   "size-7 flex-shrink-0 rounded-lg border-2 p-1.5 transition-colors",
@@ -208,7 +208,7 @@ export function GuardrailsEditor({ bot }: EditorProps) {
           </div>
 
           <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
-            <div className="relative flex items-center gap-2 py-2">
+            <div className="relative flex items-start gap-2 py-2">
               <Textarea
                 ref={textareaRef}
                 value={inputValue}
@@ -229,7 +229,7 @@ export function GuardrailsEditor({ bot }: EditorProps) {
                   onClick={() => {
                     router.push(`/spaces?bot=${bot.id}&view=guardrails`);
                   }}
-                  className="text-xs text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 px-2 py-1 select-none font-medium cursor-pointer"
+                  className="text-xs text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 px-2 py-1 select-none font-medium cursor-pointer self-start mt-[5px]"
                 >
                   Cancel
                 </button>
@@ -237,7 +237,7 @@ export function GuardrailsEditor({ bot }: EditorProps) {
               <button
                 onClick={handleSave}
                 disabled={!inputValue.trim()}
-                className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default"
+                className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default self-start mt-[5px]"
               >
                 <ArrowUp className={cn(
                   "size-7 flex-shrink-0 rounded-lg border-2 p-1.5 transition-colors",

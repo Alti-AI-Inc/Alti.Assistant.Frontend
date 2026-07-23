@@ -40,7 +40,7 @@ export function AdminInstructionsEditor() {
   return (
     <div className="flex flex-col w-full h-full p-8 max-w-[796px] mx-auto pt-16 animate-in fade-in zoom-in-95 duration-200">
       <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-4">
-        <div className="relative flex items-center gap-2 py-2">
+        <div className="relative flex items-start gap-2 py-2">
           <Textarea
             ref={textareaRef}
             value={inputValue}
@@ -54,12 +54,11 @@ export function AdminInstructionsEditor() {
             placeholder="Enter a new instruction here..."
             className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
             autoFocus
-            rows={1}
           />
           <button
             onClick={handleAdd}
             disabled={!inputValue.trim()}
-            className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default"
+            className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default self-start mt-[5px]"
           >
             <ArrowUp className={cn(
               "size-7 flex-shrink-0 rounded-lg border-2 p-1.5 transition-colors",
@@ -181,7 +180,7 @@ export function AdminGuardrailsEditor() {
   return (
     <div className="flex flex-col w-full h-full p-8 max-w-[796px] mx-auto pt-16 animate-in fade-in zoom-in-95 duration-200">
       <div className="flex flex-col rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4 mb-4">
-        <div className="relative flex items-center gap-2 py-2">
+        <div className="relative flex items-start gap-2 py-2">
           <Textarea
             ref={textareaRef}
             value={inputValue}
@@ -195,12 +194,11 @@ export function AdminGuardrailsEditor() {
             placeholder="Enter a new guardrail here..."
             className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
             autoFocus
-            rows={1}
           />
           <button
             onClick={handleAdd}
             disabled={!inputValue.trim()}
-            className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default"
+            className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default self-start mt-[5px]"
           >
             <ArrowUp className={cn(
               "size-7 flex-shrink-0 rounded-lg border-2 p-1.5 transition-colors",
