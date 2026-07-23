@@ -11,8 +11,8 @@ const geistExo2 = Exo_2({
 });
 
 export const metadata: Metadata = {
-  title: 'Inso AI',
-  description: 'Inso AI',
+  title: 'Alti AI',
+  description: 'Alti AI',
 };
 
 export default function RootLayout({

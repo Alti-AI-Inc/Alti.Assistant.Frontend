@@ -127,7 +127,7 @@ function MyChatbotsContent() {
       router.replace(`/spaces?bot=${firstBot.id}`);
     } else {
       setActiveBotId(null);
-      // Redirect to Inso AI new chat if there are no bots
+      // Redirect to Alti AI new chat if there are no bots
       router.replace(session?.accessToken ? '/c/new-chat' : '/');
     }
 

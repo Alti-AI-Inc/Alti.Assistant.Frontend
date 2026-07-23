@@ -786,7 +786,7 @@ const LeftSideNavMobile = () => {
               </button>
             </TooltipTrigger>
             <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
-              Inso AI
+              Alti AI
             </TooltipContent>
           </Tooltip>
         </div>
@@ -900,7 +900,7 @@ const LeftSideNavMobile = () => {
         {/* Header Row */}
         <div className="sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] px-4 flex-none">
           <span className="text-sm font-semibold text-white truncate">
-            {activeBotId ? (bots.find(b => b.id === activeBotId)?.name || 'Space') : 'Inso AI'}
+            {activeBotId ? (bots.find(b => b.id === activeBotId)?.name || 'Space') : 'Alti AI'}
           </span>
         </div>
 
