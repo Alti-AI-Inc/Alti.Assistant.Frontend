@@ -1013,7 +1013,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             <div className="flex flex-col h-full min-h-0">
               {/* Configuration Tabs Toggle Group */}
               <div className="px-4 pt-3 pb-1 flex-none w-full bg-[#0c1120]">
-                <div className="flex p-0.5 rounded-lg bg-zinc-900/60 border border-zinc-800/40 w-full select-none">
+                <div className="flex p-0.5 rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] w-full select-none">
                   <button
                     type="button"
                     onClick={() => {
@@ -1028,8 +1028,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     className={cn(
                       "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
                       (viewParam === 'data' || selectedOption === OPTIONS.KNOWLEDGE)
-                        ? "bg-[#0000ff]/15 border-[#0000ff] text-white shadow-[0_0_12px_rgba(0,0,255,0.35)]"
-                        : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30"
+                        ? "bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]"
+                        : "text-blue-200/70 hover:text-white hover:bg-white/5"
                     )}
                   >
                     Knowledge
@@ -1048,8 +1048,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     className={cn(
                       "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
                       (viewParam === 'instructions' || selectedOption === OPTIONS.INSTRUCTIONS)
-                        ? "bg-[#0000ff]/15 border-[#0000ff] text-white shadow-[0_0_12px_rgba(0,0,255,0.35)]"
-                        : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30"
+                        ? "bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]"
+                        : "text-blue-200/70 hover:text-white hover:bg-white/5"
                     )}
                   >
                     Instructions
@@ -1068,8 +1068,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     className={cn(
                       "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
                       (viewParam === 'guardrails' || selectedOption === OPTIONS.GUARDRAILS)
-                        ? "bg-[#0000ff]/15 border-[#0000ff] text-white shadow-[0_0_12px_rgba(0,0,255,0.35)]"
-                        : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30"
+                        ? "bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]"
+                        : "text-blue-200/70 hover:text-white hover:bg-white/5"
                     )}
                   >
                     Guardrails
