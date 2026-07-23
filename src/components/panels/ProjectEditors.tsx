@@ -58,22 +58,21 @@ export function InstructionsEditor({ bot }: EditorProps) {
             </p>
           </div>
 
-          <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
-            <div className="relative flex items-center gap-2 py-2">
-              <Textarea
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey && inputValue.trim()) {
-                    e.preventDefault();
-                    handleAdd();
-                  }
-                }}
-                placeholder="Enter a new instruction here..."
-                className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
-                autoFocus
-                rows={1}
-              />
+          <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <Textarea
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey && inputValue.trim()) {
+                  e.preventDefault();
+                  handleAdd();
+                }
+              }}
+              placeholder="Enter a new instruction here..."
+              className="min-h-[72px] w-full flex-1 resize-none border-none bg-transparent px-4 py-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900"
+              autoFocus
+            />
+            <div className="flex items-center justify-end px-4 pb-3 pt-1 border-t border-black/5">
               <button
                 onClick={handleAdd}
                 disabled={!inputValue.trim()}
@@ -130,22 +129,21 @@ export function GuardrailsEditor({ bot }: EditorProps) {
             </p>
           </div>
 
-          <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
-            <div className="relative flex items-center gap-2 py-2">
-              <Textarea
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey && inputValue.trim()) {
-                    e.preventDefault();
-                    handleAdd();
-                  }
-                }}
-                placeholder="Enter a new guardrail here..."
-                className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
-                autoFocus
-                rows={1}
-              />
+          <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <Textarea
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey && inputValue.trim()) {
+                  e.preventDefault();
+                  handleAdd();
+                }
+              }}
+              placeholder="Enter a new guardrail here..."
+              className="min-h-[72px] w-full flex-1 resize-none border-none bg-transparent px-4 py-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900"
+              autoFocus
+            />
+            <div className="flex items-center justify-end px-4 pb-3 pt-1 border-t border-black/5">
               <button
                 onClick={handleAdd}
                 disabled={!inputValue.trim()}
@@ -205,8 +203,31 @@ export function DataEditor({ bot }: EditorProps) {
             </p>
           </div>
 
-          <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
-            <div className="relative flex items-center gap-2 py-2">
+          <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <div 
+              className={cn(
+                "min-h-[72px] w-full flex-1 border-none bg-transparent px-4 py-3 shadow-none outline-none text-sm cursor-pointer transition-colors flex items-center text-gray-400 hover:text-gray-600",
+                isDragActive && "text-blue-500 bg-blue-50/50 rounded-t-2xl"
+              )}
+              onClick={() => fileInputRef.current?.click()}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsDragActive(true);
+              }}
+              onDragLeave={() => setIsDragActive(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setIsDragActive(false);
+                if (e.dataTransfer.files) {
+                  const filesArray = Array.from(e.dataTransfer.files);
+                  addFiles(filesArray);
+                }
+              }}
+            >
+              {isDragActive ? "Drop files here..." : "Click or drag & drop files here to upload to knowledge base..."}
+            </div>
+
+            <div className="flex items-center justify-start px-4 pb-3 pt-1 border-t border-black/5">
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
@@ -215,43 +236,20 @@ export function DataEditor({ bot }: EditorProps) {
               >
                 <Paperclip className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
               </button>
- 
-              <div 
-                className={cn(
-                  "min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none text-sm cursor-pointer transition-colors flex items-center",
-                  isDragActive ? "text-blue-500 bg-blue-50/50 rounded-lg" : "text-gray-400 hover:text-gray-600"
-                )}
-                onClick={() => fileInputRef.current?.click()}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  setIsDragActive(true);
-                }}
-                onDragLeave={() => setIsDragActive(false)}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  setIsDragActive(false);
-                  if (e.dataTransfer.files) {
-                    const filesArray = Array.from(e.dataTransfer.files);
-                    addFiles(filesArray);
-                  }
-                }}
-              >
-                {isDragActive ? "Drop files here..." : "Click or drag & drop files here..."}
-              </div>
-              
-              <input
-                type="file"
-                ref={fileInputRef}
-                multiple
-                onChange={(e) => {
-                  if (e.target.files) {
-                    const filesArray = Array.from(e.target.files);
-                    addFiles(filesArray);
-                  }
-                }}
-                className="hidden"
-              />
             </div>
+
+            <input
+              type="file"
+              ref={fileInputRef}
+              multiple
+              onChange={(e) => {
+                if (e.target.files) {
+                  const filesArray = Array.from(e.target.files);
+                  addFiles(filesArray);
+                }
+              }}
+              className="hidden"
+            />
           </div>
         </div>
       </div>

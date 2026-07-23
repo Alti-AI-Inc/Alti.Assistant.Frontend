@@ -1651,24 +1651,8 @@ export default function ChatInput({
               </div>
             )}
 
-            {/* Input container with active icon inside */}
-            <div className="relative flex items-center gap-2 py-2">
-              <Tooltip>
-                <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-[#0000ff] bg-[#0000ff] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
-                    aria-label="Attach Files"
-                  >
-                    <Paperclip className="size-3.5" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="top">
-                  <p>Attach Files</p>
-                </TooltipContent>
-              </Tooltip>
-
+            {/* Input container: double height textarea top, actions bottom */}
+            <div className="flex flex-col w-full">
               <Textarea
                 name="message"
                 value={message}
@@ -1690,25 +1674,44 @@ export default function ChatInput({
                         : 'Enter prompt here...')
                 }
                 style={{ backgroundColor: 'transparent' }}
-                className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+                className="min-h-[72px] w-full flex-1 resize-none border-none bg-transparent px-3 py-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white"
                 autoFocus
               />
-              <Tooltip>
-                <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
-                  <ArrowUp
-                    onClick={handleSubmit}
-                    className={cn(
-                      'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity focus:outline-none',
-                      (isLoadingResponse || !message?.trim())
-                        ? 'cursor-not-allowed'
-                        : 'cursor-pointer hover:opacity-80',
-                    )}
-                  />
-                </TooltipTrigger>
-                <TooltipContent side="top">
-                  <p>Send Prompt</p>
-                </TooltipContent>
-              </Tooltip>
+
+              <div className="flex items-center justify-between px-3 pb-3 pt-1 border-t border-black/5 dark:border-white/5">
+                <Tooltip>
+                  <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-[#0000ff] bg-[#0000ff] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
+                      aria-label="Attach Files"
+                    >
+                      <Paperclip className="size-3.5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    <p>Attach Files</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
+                    <ArrowUp
+                      onClick={handleSubmit}
+                      className={cn(
+                        'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity focus:outline-none',
+                        (isLoadingResponse || !message?.trim())
+                          ? 'cursor-not-allowed'
+                          : 'cursor-pointer hover:opacity-80',
+                      )}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    <p>Send Prompt</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
             </div>
           </div>
         </>
