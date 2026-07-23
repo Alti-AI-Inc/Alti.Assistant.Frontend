@@ -56,6 +56,8 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   const botThreads = threads.filter((t) => t.botId === botId);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const editIndexParam = searchParams?.get('editIndex');
+  const currentEditIndex = editIndexParam !== null && editIndexParam !== undefined ? parseInt(editIndexParam, 10) : -1;
   
   // Single active tab state
   const [activeTab, setActiveTab] = useState<TabType>('ai');
@@ -558,27 +560,41 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                       {searchQuery ? 'No matching instructions.' : 'No instructions yet.'}
                     </div>
                   ) : (
-                    filteredInstructions.map((inst, index) => (
-                      <div 
-                        key={index}
-                        className="group relative bg-black/[0.02] border border-black/5 text-zinc-800 dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 rounded-lg p-3 pr-8"
-                      >
-                        <p className="text-xs text-zinc-800 dark:text-zinc-300 truncate">
-                          {inst}
-                        </p>
-                        <button
+                    filteredInstructions.map((inst, index) => {
+                      const originalIndex = parsedInstructions.indexOf(inst);
+                      const isSelected = currentEditIndex === originalIndex;
+                      return (
+                        <div 
+                          key={index}
                           onClick={() => {
-                            const newList = parsedInstructions.filter((_, i) => i !== index);
-                            editBot(botId, { instructions: newList.join('\n\n') });
-                            toast.success('Instruction deleted');
+                            setSelectedOption(OPTIONS.INSTRUCTIONS);
+                            router.push(`${basePath}?bot=${botId}&view=instructions&editIndex=${originalIndex}`);
                           }}
-                          className="absolute right-2 top-2 p-1 rounded-md text-zinc-400 hover:text-red-400 hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-150"
-                          title="Delete Instruction"
+                          className={cn(
+                            "group relative bg-black/[0.02] border border-black/5 text-zinc-800 dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 rounded-lg p-3 pr-8 cursor-pointer select-none",
+                            isSelected
+                              ? "bg-[#0000ff]/15 border-[#0000ff] dark:bg-white/12 dark:border-white/10"
+                              : "hover:bg-black/[0.04] dark:hover:bg-white/[0.10]"
+                          )}
                         >
-                          <Trash2 className="size-3" />
-                        </button>
-                      </div>
-                    ))
+                          <p className="text-xs text-zinc-850 dark:text-zinc-300 truncate">
+                            {inst}
+                          </p>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const newList = parsedInstructions.filter((_, i) => i !== originalIndex);
+                              editBot(botId, { instructions: newList.join('\n\n') });
+                              toast.success('Instruction deleted');
+                            }}
+                            className="absolute right-2 top-2 p-1 rounded-md text-zinc-450 hover:text-red-405 hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-150"
+                            title="Delete Instruction"
+                          >
+                            <Trash2 className="size-3" />
+                          </button>
+                        </div>
+                      );
+                    })
                   )}
                 </div>
               ) : activeTab === 'guardrails' ? (
@@ -589,27 +605,41 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                       {searchQuery ? 'No matching guardrails.' : 'No guardrails defined.'}
                     </div>
                   ) : (
-                    filteredGuardrails.map((gr, index) => (
-                      <div 
-                        key={index}
-                        className="group relative bg-black/[0.02] border border-black/5 text-zinc-800 dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 rounded-lg p-3 pr-8"
-                      >
-                        <p className="text-xs text-zinc-800 dark:text-zinc-300 truncate">
-                          {gr}
-                        </p>
-                        <button
+                    filteredGuardrails.map((gr, index) => {
+                      const originalIndex = parsedGuardrails.indexOf(gr);
+                      const isSelected = currentEditIndex === originalIndex;
+                      return (
+                        <div 
+                          key={index}
                           onClick={() => {
-                            const newList = parsedGuardrails.filter((_, i) => i !== index);
-                            editBot(botId, { guardrails: newList.join('\n\n') });
-                            toast.success('Guardrail deleted');
+                            setSelectedOption(OPTIONS.GUARDRAILS);
+                            router.push(`${basePath}?bot=${botId}&view=guardrails&editIndex=${originalIndex}`);
                           }}
-                          className="absolute right-2 top-2 p-1 rounded-md text-zinc-400 hover:text-red-400 hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-150"
-                          title="Delete Guardrail"
+                          className={cn(
+                            "group relative bg-black/[0.02] border border-black/5 text-zinc-800 dark:bg-white/[0.06] dark:border-white/[0.04] dark:text-zinc-300 rounded-lg p-3 pr-8 cursor-pointer select-none",
+                            isSelected
+                              ? "bg-[#0000ff]/15 border-[#0000ff] dark:bg-white/12 dark:border-white/10"
+                              : "hover:bg-black/[0.04] dark:hover:bg-white/[0.10]"
+                          )}
                         >
-                          <Trash2 className="size-3" />
-                        </button>
-                      </div>
-                    ))
+                          <p className="text-xs text-zinc-850 dark:text-zinc-300 truncate">
+                            {gr}
+                          </p>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const newList = parsedGuardrails.filter((_, i) => i !== originalIndex);
+                              editBot(botId, { guardrails: newList.join('\n\n') });
+                              toast.success('Guardrail deleted');
+                            }}
+                            className="absolute right-2 top-2 p-1 rounded-md text-zinc-450 hover:text-red-405 hover:bg-white/5 opacity-0 group-hover:opacity-100 transition-all duration-150"
+                            title="Delete Guardrail"
+                          >
+                            <Trash2 className="size-3" />
+                          </button>
+                        </div>
+                      );
+                    })
                   )}
                 </div>
               ) : activeTab === 'knowledge' ? (

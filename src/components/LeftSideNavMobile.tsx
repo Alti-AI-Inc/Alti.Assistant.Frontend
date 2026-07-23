@@ -336,6 +336,8 @@ const LeftSideNavMobile = () => {
   const activeAppSlug = searchParams?.get('app');
   const activeConnectorId = searchParams?.get('connector') || 'file';
   const viewParam = searchParams?.get('view');
+  const editIndexParam = searchParams?.get('editIndex');
+  const currentEditIndex = editIndexParam !== null && editIndexParam !== undefined ? parseInt(editIndexParam, 10) : -1;
 
   const [connectedAppSlugs, setConnectedAppSlugs] = useState<Set<string>>(new Set());
 
@@ -1205,10 +1207,20 @@ const LeftSideNavMobile = () => {
                 ) : viewParam === 'instructions' && activeBot ? (
                   /* Instructions List */
                   allInstructions.map((instruction, idx) => {
+                    const isSelected = currentEditIndex === idx;
                     return (
                       <div
                         key={idx}
-                        className="group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-default bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:text-white"
+                        onClick={() => {
+                          setSelectedOption(OPTIONS.INSTRUCTIONS);
+                          router.push(`/spaces?bot=${activeBotId}&view=instructions&editIndex=${idx}`);
+                        }}
+                        className={cn(
+                          "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-pointer select-none",
+                          isSelected
+                            ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
+                            : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_12px_rgba(0,0,255,0.25)] hover:text-white"
+                        )}
                       >
                         <div className="flex-1 truncate px-3 py-2 flex items-center gap-2">
                           <Terminal className="h-3.5 w-3.5 text-indigo-405 flex-shrink-0" />
@@ -1218,14 +1230,15 @@ const LeftSideNavMobile = () => {
                         </div>
                         <button
                           type="button"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setSpaceItemToDelete({
                               type: 'instructions',
                               index: idx,
                               name: instruction
                             });
                           }}
-                          className="mr-2 opacity-100 transition-colors p-1 rounded hover:bg-red-500/20 text-zinc-450 hover:text-red-500 focus:outline-none"
+                          className="mr-2 opacity-100 transition-colors p-1 rounded hover:bg-red-500/20 text-zinc-450 text-zinc-400 hover:text-red-500 focus:outline-none"
                           title="Remove Instruction"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
@@ -1236,10 +1249,20 @@ const LeftSideNavMobile = () => {
                 ) : viewParam === 'guardrails' && activeBot ? (
                   /* Guardrails List */
                   allGuardrails.map((guardrail, idx) => {
+                    const isSelected = currentEditIndex === idx;
                     return (
                       <div
                         key={idx}
-                        className="group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-default bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:text-white"
+                        onClick={() => {
+                          setSelectedOption(OPTIONS.GUARDRAILS);
+                          router.push(`/spaces?bot=${activeBotId}&view=guardrails&editIndex=${idx}`);
+                        }}
+                        className={cn(
+                          "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-pointer select-none",
+                          isSelected
+                            ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
+                            : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_12px_rgba(0,0,255,0.25)] hover:text-white"
+                        )}
                       >
                         <div className="flex-1 truncate px-3 py-2 flex items-center gap-2">
                           <Shield className="h-3.5 w-3.5 text-red-400 flex-shrink-0" />
@@ -1249,14 +1272,15 @@ const LeftSideNavMobile = () => {
                         </div>
                         <button
                           type="button"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setSpaceItemToDelete({
                               type: 'guardrails',
                               index: idx,
                               name: guardrail
                             });
                           }}
-                          className="mr-2 opacity-100 transition-colors p-1 rounded hover:bg-red-500/20 text-zinc-450 hover:text-red-500 focus:outline-none"
+                          className="mr-2 opacity-100 transition-colors p-1 rounded hover:bg-red-500/20 text-zinc-450 text-zinc-400 hover:text-red-500 focus:outline-none"
                           title="Remove Guardrail"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
