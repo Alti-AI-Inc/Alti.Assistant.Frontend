@@ -1134,7 +1134,7 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
     pathname === '/c/new-chat';
 
   const hasMessages = !!activeConversation?.messages?.length;
-  const showAsNewChat = isNewChatRoute && !hasMessages && !isLoadingResponse;
+  const showAsNewChat = isNewChatRoute && !isLoadingResponse;
 
   if (
     selectedOption === OPTIONS.INSTRUCTIONS ||

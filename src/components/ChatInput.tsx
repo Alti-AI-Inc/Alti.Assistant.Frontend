@@ -392,7 +392,8 @@ export default function ChatInput({
   const isExistingConversation =
     (activeConversation?.conversationId &&
       activeConversation?.conversationId !== 'new-chat' &&
-      pathname?.startsWith('/c/')) ||
+      pathname?.startsWith('/c/') &&
+      pathname !== '/c/new-chat') ||
     (conversationId && conversationId !== 'new-chat');
 
   useEffect(() => {
@@ -1401,7 +1402,7 @@ export default function ChatInput({
                 </button>
               </div>
             )}
-            {isExistingConversation || hasMessages ? (
+            {isExistingConversation ? (
               /* Compact Single Line Row layout when chat has messages (at bottom) */
               <div className="flex flex-col w-full gap-2 px-4 sm:px-0">
                 {/* File Cards Preview - Shows above input field next to each other */}
