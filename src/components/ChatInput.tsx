@@ -1370,9 +1370,7 @@ export default function ChatInput({
               >
                 {[
                   { id: 'search', name: 'Chat', icon: MessageSquare, value: null },
-                  { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
-                  { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
-                  { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS }
+                  { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH }
                 ].map((tab) => {
                   const isSelected = selectedOption === tab.value;
                   return (
