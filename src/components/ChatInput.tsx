@@ -1501,10 +1501,10 @@ export default function ChatInput({
                       <ArrowUp
                         onClick={handleSubmit}
                         className={cn(
-                          'size-8 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1.5 text-white transition-opacity focus:outline-none',
+                          'size-8 flex-shrink-0 rounded-lg transition-all focus:outline-none',
                           (isLoadingResponse || !message?.trim())
-                            ? 'cursor-not-allowed opacity-40'
-                            : 'cursor-pointer hover:opacity-80',
+                            ? 'bg-zinc-100 dark:bg-zinc-800 border border-black/5 dark:border-zinc-700/50 text-zinc-400 dark:text-zinc-500 cursor-not-allowed p-2'
+                            : 'border-2 border-gray-300 bg-[#0c1120] p-1.5 text-white cursor-pointer hover:opacity-80',
                         )}
                       />
                     </TooltipTrigger>
@@ -1805,10 +1805,10 @@ export default function ChatInput({
                         <ArrowUp
                           onClick={selectedOption === OPTIONS.TASK ? handleCreateTask : handleSubmit}
                           className={cn(
-                            'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity focus:outline-none',
+                            'size-7 flex-shrink-0 rounded-lg transition-all focus:outline-none',
                             (isLoadingResponse || !message?.trim())
-                              ? 'cursor-not-allowed opacity-40'
-                              : 'cursor-pointer hover:opacity-80',
+                              ? 'bg-zinc-100 dark:bg-zinc-800 border border-black/5 dark:border-zinc-700/50 text-zinc-400 dark:text-zinc-500 cursor-not-allowed p-1.5'
+                              : 'border-2 border-gray-300 bg-[#0c1120] p-1 text-white cursor-pointer hover:opacity-80',
                           )}
                         />
                       </TooltipTrigger>
