@@ -1460,7 +1460,7 @@ export default function ChatInput({
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border border-black/5 bg-zinc-100 hover:bg-zinc-200 p-1 text-zinc-650 transition-all dark:border-zinc-700/50 dark:bg-zinc-800 dark:hover:bg-zinc-750 dark:text-zinc-350 focus:outline-none"
+                        className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border border-black/5 bg-[#e1e1e1] hover:bg-zinc-300 p-1 text-zinc-650 transition-all dark:border-zinc-700/50 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-350 focus:outline-none"
                         aria-label="Attach Files"
                       >
                         <Paperclip className="size-4" />
@@ -1503,7 +1503,7 @@ export default function ChatInput({
                         className={cn(
                           'size-8 flex-shrink-0 rounded-lg transition-all focus:outline-none',
                           (isLoadingResponse || !message?.trim())
-                            ? 'bg-zinc-100 dark:bg-zinc-800 border border-black/5 dark:border-zinc-700/50 text-zinc-400 dark:text-zinc-500 cursor-not-allowed p-2'
+                            ? 'bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed p-2'
                             : 'border-2 border-gray-300 bg-[#0c1120] p-1.5 text-white cursor-pointer hover:opacity-80',
                         )}
                       />
@@ -1756,7 +1756,7 @@ export default function ChatInput({
                           <button
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
-                            className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border border-black/5 bg-zinc-100 hover:bg-zinc-200 p-1 text-zinc-650 transition-all dark:border-zinc-700/50 dark:bg-zinc-800 dark:hover:bg-zinc-750 dark:text-zinc-350 focus:outline-none"
+                            className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border border-black/5 bg-[#e1e1e1] hover:bg-zinc-300 p-1 text-zinc-650 transition-all dark:border-zinc-700/50 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-350 focus:outline-none"
                             aria-label="Attach Files"
                           >
                             <Paperclip className="size-3.5" />
@@ -1769,7 +1769,7 @@ export default function ChatInput({
 
                       {/* Chat / Research / Task Switcher inside Prompt Box */}
                       {!hasMessages && !isExistingConversation && (
-                        <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
+                        <div className="flex bg-[#e1e1e1] dark:bg-zinc-900 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
                           <button
                             type="button"
                             onClick={() => setSelectedOption(null)}
@@ -1807,7 +1807,7 @@ export default function ChatInput({
                           className={cn(
                             'size-7 flex-shrink-0 rounded-lg transition-all focus:outline-none',
                             (isLoadingResponse || !message?.trim())
-                              ? 'bg-zinc-100 dark:bg-zinc-800 border border-black/5 dark:border-zinc-700/50 text-zinc-400 dark:text-zinc-500 cursor-not-allowed p-1.5'
+                              ? 'bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed p-1.5'
                               : 'border-2 border-gray-300 bg-[#0c1120] p-1 text-white cursor-pointer hover:opacity-80',
                           )}
                         />
