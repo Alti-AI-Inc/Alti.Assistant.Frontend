@@ -1129,63 +1129,58 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
       {/* Delete Space Dialog */}
       <Dialog open={botToDelete !== null} onOpenChange={(open) => !open && setBotToDelete(null)}>
-        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
-          <div className="flex flex-col">
-            <div className="flex items-center justify-center pt-8 pb-6">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-500/20">
-                <Trash2 className="h-6 w-6 text-red-600 dark:text-red-500" />
-              </div>
-            </div>
-            
-            <div className="px-6 text-center space-y-2">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Delete Space</h2>
-              <p className="text-sm text-gray-500 dark:text-zinc-400">
-                Are you sure you want to remove this space? This action cannot be undone.
-              </p>
-            </div>
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[270px] sm:max-w-[270px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+          {/* Centered Content Section */}
+          <div className="px-5 pt-5 pb-4 text-center">
+            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+              Delete Space
+            </h2>
+            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+              Are you sure you want to remove this space? This action cannot be undone.
+            </p>
+          </div>
 
-            <div className="mt-8 flex border-t border-gray-100 dark:border-zinc-800">
-              <DialogClose asChild>
-                <button
-                  type="button"
-                  className="flex-1 py-4 text-sm font-medium text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors focus:outline-none focus:ring-0"
-                >
-                  Cancel
-                </button>
-              </DialogClose>
-              <div className="w-[1px] bg-gray-100 dark:bg-zinc-800" />
+          {/* Extended Border & iOS Layout Action Buttons */}
+          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+            <DialogClose asChild>
               <button
                 type="button"
-                className="flex-1 py-4 text-sm font-semibold text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors focus:outline-none focus:ring-0"
-                onClick={async () => {
-                  if (botToDelete) {
-                    // Try to delete bot using backend API, otherwise fallback to store
-                    const token = data?.accessToken;
-                    if (token) {
-                      try {
-                        const apiUrl = buildApiUrl(`/chatbots/${botToDelete}`);
-                        await fetch(apiUrl, {
-                          method: 'DELETE',
-                          headers: {
-                            'Authorization': `Bearer ${token}`
-                          }
-                        });
-                      } catch (err) {
-                        console.error("Failed to delete bot on backend", err);
-                      }
-                    }
-                    deleteBot(botToDelete, token);
-                    if (activeBotId === botToDelete) {
-                      setActiveBotId(null);
-                      router.push('/spaces');
-                    }
-                    setBotToDelete(null);
-                  }
-                }}
+                className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none cursor-pointer"
               >
-                Delete
+                Cancel
               </button>
-            </div>
+            </DialogClose>
+            <button
+              type="button"
+              className="flex-1 text-[15px] font-normal text-red-650 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none cursor-pointer"
+              onClick={async () => {
+                if (botToDelete) {
+                  // Try to delete bot using backend API, otherwise fallback to store
+                  const token = data?.accessToken;
+                  if (token) {
+                    try {
+                      const apiUrl = buildApiUrl(`/chatbots/${botToDelete}`);
+                      await fetch(apiUrl, {
+                        method: 'DELETE',
+                        headers: {
+                          'Authorization': `Bearer ${token}`
+                        }
+                      });
+                    } catch (err) {
+                      console.error("Failed to delete bot on backend", err);
+                    }
+                  }
+                  deleteBot(botToDelete, token);
+                  if (activeBotId === botToDelete) {
+                    setActiveBotId(null);
+                    router.push('/spaces');
+                  }
+                  setBotToDelete(null);
+                }
+              }}
+            >
+              Delete
+            </button>
           </div>
         </DialogContent>
       </Dialog>
