@@ -52,7 +52,7 @@ export default function AppIntegrationsGrid() {
           <Input
             value={query}
             onChange={e => setQuery(e.target.value)}
-            placeholder="Search all applications..."
+            placeholder="Search..."
             className="h-12 w-full md:max-w-2xl px-4 rounded-xl bg-slate-50 dark:bg-slate-950 border-none text-slate-900 dark:text-white focus-visible:ring-0 focus-visible:border-transparent shadow-none"
           />
           <div className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-500 dark:text-slate-400 pr-4">

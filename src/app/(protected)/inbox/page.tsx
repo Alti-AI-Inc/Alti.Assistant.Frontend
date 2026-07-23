@@ -42,7 +42,7 @@ export default function InboxPage() {
         <Search className="size-4 text-gray-400 mr-2 flex-none" />
         <input
           type="text"
-          placeholder="Search Inbox..."
+          placeholder="Search..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full bg-transparent text-sm text-black dark:text-white outline-none placeholder:text-gray-400"

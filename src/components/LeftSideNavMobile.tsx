@@ -964,7 +964,7 @@ const LeftSideNavMobile = () => {
                     <Search className="size-3.5 flex-none text-[#5e5eff]" />
                     <input
                       type="text"
-                      placeholder="Search chats..."
+                      placeholder="Search..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full bg-transparent text-xs font-normal text-white outline-none placeholder:text-zinc-405"
@@ -1009,7 +1009,7 @@ const LeftSideNavMobile = () => {
                     <Search className="size-3.5 flex-none text-[#5e5eff]" />
                     <input
                       type="text"
-                      placeholder="Search threads..."
+                      placeholder="Search..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full bg-transparent text-xs font-normal text-white outline-none placeholder:text-zinc-400"
@@ -1187,7 +1187,7 @@ const LeftSideNavMobile = () => {
 
       {/* Delete Space Dialog */}
       <Dialog open={botToDelete !== null} onOpenChange={(open) => !open && setBotToDelete(null)}>
-        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[270px] sm:max-w-[270px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[320px] sm:max-w-[320px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
           {/* Centered Content Section */}
           <div className="px-5 pt-5 pb-4 text-center">
             <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
