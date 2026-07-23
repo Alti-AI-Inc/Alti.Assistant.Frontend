@@ -71,6 +71,7 @@ import { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { ALLOWED_DOC_EXTENSIONS } from './constants';
 import { Textarea } from './ui/textarea';
+import { Switch } from '@/components/ui/switch';
 import { WarningMessageModal } from './WarningMessageModal';
 import PreFlightPanel, { PreFlightSettings } from './research/PreFlightPanel';
 
@@ -1610,58 +1611,39 @@ export default function ChatInput({
                       {/* Frequency and Trigger Type configurations inline to the right of the Task toggle */}
                       {selectedOption === OPTIONS.TASK && (
                         <>
-                          {/* Frequency Section */}
-                          <div className="flex items-center gap-1 border-l border-zinc-200 dark:border-zinc-700/60 pl-2 ml-1.5 flex-shrink-0">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <button
-                                  type="button"
-                                  className="flex h-5.5 items-center gap-1 rounded bg-white hover:bg-zinc-50 dark:bg-zinc-700 dark:hover:bg-zinc-650 px-1.5 text-[9px] font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white transition-all shadow-xs border border-zinc-200 dark:border-zinc-700/50"
-                                  title="Task Frequency"
-                                >
-                                  {taskType === 'one-time' ? (
-                                    <Clock className="size-2.5 text-zinc-500 dark:text-zinc-400" />
-                                  ) : (
-                                    <Repeat className="size-2.5 text-zinc-500 dark:text-zinc-400" />
-                                  )}
-                                  <span className="hidden sm:inline capitalize">
-                                    {taskType}
-                                  </span>
-                                </button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="start" className="w-36 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-md rounded-lg p-1">
-                                <DropdownMenuItem
-                                  onClick={() => setTaskType('one-time')}
-                                  className={cn(
-                                    "flex items-center justify-between px-2 py-1 text-xs rounded-md cursor-pointer transition-colors focus:bg-zinc-100 dark:focus:bg-zinc-800",
-                                    taskType === 'one-time'
-                                      ? "text-blue-600 dark:text-blue-400 font-medium"
-                                      : "text-zinc-700 dark:text-zinc-300"
-                                  )}
-                                >
-                                  <span className="flex items-center gap-1.5">
-                                    <Clock className="size-3" />
-                                    One-time
-                                  </span>
-                                  {taskType === 'one-time' && <span className="text-[10px]">✓</span>}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => setTaskType('recurring')}
-                                  className={cn(
-                                    "flex items-center justify-between px-2 py-1 text-xs rounded-md cursor-pointer transition-colors focus:bg-zinc-100 dark:focus:bg-zinc-800",
-                                    taskType === 'recurring'
-                                      ? "text-blue-600 dark:text-blue-400 font-medium"
-                                      : "text-zinc-700 dark:text-zinc-300"
-                                  )}
-                                >
-                                  <span className="flex items-center gap-1.5">
-                                    <Repeat className="size-3" />
-                                    Recurring
-                                  </span>
-                                  {taskType === 'recurring' && <span className="text-[10px]">✓</span>}
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
+                          {/* Frequency Section (Switch Toggle) */}
+                          <div className="flex items-center gap-1.5 ml-3 flex-shrink-0">
+                            <span 
+                              className={cn(
+                                "text-[10px] font-semibold flex items-center gap-1 transition-colors cursor-pointer select-none",
+                                taskType === 'one-time'
+                                  ? "text-blue-600 dark:text-blue-400 font-medium"
+                                  : "text-zinc-450 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-400"
+                              )}
+                              onClick={() => setTaskType('one-time')}
+                              title="One-time task"
+                            >
+                              <Clock className="size-3" />
+                              <span className="hidden sm:inline">One-time</span>
+                            </span>
+                            <Switch
+                              checked={taskType === 'recurring'}
+                              onCheckedChange={(checked) => setTaskType(checked ? 'recurring' : 'one-time')}
+                              className="scale-[0.8] data-[state=checked]:bg-blue-600 dark:data-[state=checked]:bg-blue-500"
+                            />
+                            <span 
+                              className={cn(
+                                "text-[10px] font-semibold flex items-center gap-1 transition-colors cursor-pointer select-none",
+                                taskType === 'recurring'
+                                  ? "text-blue-600 dark:text-blue-400 font-medium"
+                                  : "text-zinc-450 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-400"
+                              )}
+                              onClick={() => setTaskType('recurring')}
+                              title="Recurring task"
+                            >
+                              <Repeat className="size-3" />
+                              <span className="hidden sm:inline">Recurring</span>
+                            </span>
                           </div>
 
                           {/* Trigger Type & Execution Time Section */}
