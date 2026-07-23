@@ -281,6 +281,11 @@ const LeftSideNavMobile = () => {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [botToDelete, setBotToDelete] = useState<string | null>(null);
+  const [spaceItemToDelete, setSpaceItemToDelete] = useState<{
+    type: 'data' | 'instructions' | 'guardrails';
+    index: number;
+    name: string;
+  } | null>(null);
   const [botToRename, setBotToRename] = useState<string | null>(null);
 
   const [localAppsOrder, setLocalAppsOrder] = useState<APP[]>([]);
@@ -1183,12 +1188,11 @@ const LeftSideNavMobile = () => {
                         <button
                           type="button"
                           onClick={() => {
-                            const updatedFiles = allFiles.filter((_, i) => i !== idx);
-                            if (updatedFiles.length === 0) {
-                              editBot(activeBot.id, { data: undefined });
-                            } else {
-                              editBot(activeBot.id, { data: JSON.stringify(updatedFiles) });
-                            }
+                            setSpaceItemToDelete({
+                              type: 'data',
+                              index: idx,
+                              name: file.name
+                            });
                           }}
                           className="mr-2 opacity-100 transition-colors p-1 rounded hover:bg-red-500/20 text-zinc-450 hover:text-red-500 focus:outline-none"
                           title="Remove File"
@@ -1215,8 +1219,11 @@ const LeftSideNavMobile = () => {
                         <button
                           type="button"
                           onClick={() => {
-                            const updatedInstructions = allInstructions.filter((_, i) => i !== idx);
-                            editBot(activeBot.id, { instructions: updatedInstructions.join('\n\n') });
+                            setSpaceItemToDelete({
+                              type: 'instructions',
+                              index: idx,
+                              name: instruction
+                            });
                           }}
                           className="mr-2 opacity-100 transition-colors p-1 rounded hover:bg-red-500/20 text-zinc-450 hover:text-red-500 focus:outline-none"
                           title="Remove Instruction"
@@ -1243,8 +1250,11 @@ const LeftSideNavMobile = () => {
                         <button
                           type="button"
                           onClick={() => {
-                            const updatedGuardrails = allGuardrails.filter((_, i) => i !== idx);
-                            editBot(activeBot.id, { guardrails: updatedGuardrails.join('\n\n') });
+                            setSpaceItemToDelete({
+                              type: 'guardrails',
+                              index: idx,
+                              name: guardrail
+                            });
                           }}
                           className="mr-2 opacity-100 transition-colors p-1 rounded hover:bg-red-500/20 text-zinc-450 hover:text-red-500 focus:outline-none"
                           title="Remove Guardrail"
@@ -1440,6 +1450,59 @@ const LeftSideNavMobile = () => {
                     deleteBot(botToDelete, token);
                   }, 100);
                   setBotToDelete(null);
+                }
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Space Item Dialog */}
+      <Dialog open={spaceItemToDelete !== null} onOpenChange={(open) => !open && setSpaceItemToDelete(null)}>
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[320px] sm:max-w-[320px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+          {/* Centered Content Section */}
+          <div className="px-5 pt-5 pb-4 text-center">
+            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+              Delete {spaceItemToDelete?.type === 'data' ? 'File' : spaceItemToDelete?.type === 'instructions' ? 'Instruction' : 'Guardrail'}
+            </h2>
+            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1 break-words">
+              Are you sure you want to delete &ldquo;{spaceItemToDelete?.name}&rdquo;? This action cannot be undone.
+            </p>
+          </div>
+
+          {/* Extended Border & iOS Layout Action Buttons */}
+          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+            <DialogClose asChild>
+              <button
+                type="button"
+                className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none cursor-pointer"
+              >
+                Cancel
+              </button>
+            </DialogClose>
+            <button
+              type="button"
+              className="flex-1 text-[15px] font-normal text-red-655 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none cursor-pointer"
+              onClick={() => {
+                if (spaceItemToDelete && activeBot) {
+                  const { type, index } = spaceItemToDelete;
+                  if (type === 'data') {
+                    const updatedFiles = allFiles.filter((_, i) => i !== index);
+                    if (updatedFiles.length === 0) {
+                      editBot(activeBot.id, { data: undefined });
+                    } else {
+                      editBot(activeBot.id, { data: JSON.stringify(updatedFiles) });
+                    }
+                  } else if (type === 'instructions') {
+                    const updatedInstructions = allInstructions.filter((_, i) => i !== index);
+                    editBot(activeBot.id, { instructions: updatedInstructions.join('\n\n') });
+                  } else if (type === 'guardrails') {
+                    const updatedGuardrails = allGuardrails.filter((_, i) => i !== index);
+                    editBot(activeBot.id, { guardrails: updatedGuardrails.join('\n\n') });
+                  }
+                  setSpaceItemToDelete(null);
                 }
               }}
             >
