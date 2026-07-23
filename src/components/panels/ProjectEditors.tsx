@@ -38,21 +38,18 @@ export function InstructionsEditor({ bot }: EditorProps) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-[75vh] p-8 max-w-[640px] mx-auto animate-in fade-in zoom-in-95 duration-200">
-      <div className="flex flex-col items-center text-center mb-8">
-        <div className="h-12 w-12 rounded-2xl bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center mb-4 shadow-xs">
-          <Terminal className="h-6 w-6" />
-        </div>
+    <div className="flex flex-col items-center justify-center w-full min-h-[75vh] p-8 max-w-[796px] mx-auto animate-in fade-in zoom-in-95 duration-200">
+      <div className="text-center mb-6">
         <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
           Space Instructions
         </h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 max-w-sm">
+        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
           Add specific guidelines, behaviors, or rules to customize how this space operates.
         </p>
       </div>
 
       <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
-        <div className="relative flex items-center gap-2 py-2.5">
+        <div className="relative flex items-center gap-2 py-2">
           <Textarea
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -63,7 +60,7 @@ export function InstructionsEditor({ bot }: EditorProps) {
               }
             }}
             placeholder="Enter a new instruction here..."
-            className="min-h-10 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-zinc-800 dark:text-zinc-100"
+            className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
             autoFocus
             rows={1}
           />
@@ -99,21 +96,18 @@ export function GuardrailsEditor({ bot }: EditorProps) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-[75vh] p-8 max-w-[640px] mx-auto animate-in fade-in zoom-in-95 duration-200">
-      <div className="flex flex-col items-center text-center mb-8">
-        <div className="h-12 w-12 rounded-2xl bg-red-50 dark:bg-red-955/40 text-red-650 dark:text-red-400 flex items-center justify-center mb-4 shadow-xs">
-          <Shield className="h-6 w-6" />
-        </div>
+    <div className="flex flex-col items-center justify-center w-full min-h-[75vh] p-8 max-w-[796px] mx-auto animate-in fade-in zoom-in-95 duration-200">
+      <div className="text-center mb-6">
         <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
           Space Guardrails
         </h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 max-w-sm">
+        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
           Define content constraints and safety boundaries for responses in this space.
         </p>
       </div>
 
       <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
-        <div className="relative flex items-center gap-2 py-2.5">
+        <div className="relative flex items-center gap-2 py-2">
           <Textarea
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -124,7 +118,7 @@ export function GuardrailsEditor({ bot }: EditorProps) {
               }
             }}
             placeholder="Enter a new guardrail here..."
-            className="min-h-10 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-zinc-800 dark:text-zinc-100"
+            className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
             autoFocus
             rows={1}
           />
@@ -165,21 +159,18 @@ export function DataEditor({ bot }: EditorProps) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-[75vh] p-8 max-w-[640px] mx-auto animate-in fade-in zoom-in-95 duration-200">
-      <div className="flex flex-col items-center text-center mb-8">
-        <div className="h-12 w-12 rounded-2xl bg-blue-50 dark:bg-blue-955/40 text-blue-650 dark:text-blue-400 flex items-center justify-center mb-4 shadow-xs">
-          <Upload className="h-6 w-6" />
-        </div>
+    <div className="flex flex-col items-center justify-center w-full min-h-[75vh] p-8 max-w-[796px] mx-auto animate-in fade-in zoom-in-95 duration-200">
+      <div className="text-center mb-6">
         <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
           Space Knowledgebase
         </h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 max-w-sm">
+        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
           Upload documents or data files to provide source context for this space.
         </p>
       </div>
 
       <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
-        <div className="relative flex items-center gap-2 py-3">
+        <div className="relative flex items-center gap-2 py-2">
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
@@ -191,7 +182,7 @@ export function DataEditor({ bot }: EditorProps) {
  
           <div 
             className={cn(
-              "min-h-10 w-full flex-1 border-none bg-transparent px-2 py-2.5 shadow-none outline-none text-sm cursor-pointer transition-colors flex items-center justify-center font-medium",
+              "min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none text-sm cursor-pointer transition-colors flex items-center",
               isDragActive ? "text-blue-500 bg-blue-50/50 rounded-lg" : "text-gray-400 hover:text-gray-600"
             )}
             onClick={() => fileInputRef.current?.click()}
@@ -209,7 +200,7 @@ export function DataEditor({ bot }: EditorProps) {
               }
             }}
           >
-            {isDragActive ? "Drop files here..." : "Click or drag & drop files to upload"}
+            {isDragActive ? "Drop files here..." : "Click or drag & drop files here..."}
           </div>
           
           <input

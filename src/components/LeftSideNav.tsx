@@ -1120,7 +1120,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       </button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
-                      New Space Chat
+                      New Chat
                     </TooltipContent>
                   </Tooltip>
                 </div>
