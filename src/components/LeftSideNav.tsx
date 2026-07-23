@@ -1237,7 +1237,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   deleteBot(botToDelete, token);
                   if (activeBotId === botToDelete) {
                     setActiveBotId(null);
-                    router.push('/spaces');
+                    setSelectedOption(null);
+                    router.push(isLoggedIn ? '/c/new-chat' : '/');
                   }
                   setBotToDelete(null);
                 }
