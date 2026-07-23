@@ -1003,8 +1003,10 @@ function MyChatbotsContent() {
       >
         {/* Chatbot Content Body */}
         <div className={cn(
-          "flex-1 flex flex-col items-center justify-center overflow-hidden relative",
-          viewParam !== 'instructions' && viewParam !== 'guardrails' && viewParam !== 'data' && !hasMessages && "pb-20"
+          "flex-1 flex flex-col overflow-hidden relative",
+          (viewParam === 'instructions' || viewParam === 'guardrails' || viewParam === 'data' || hasMessages)
+            ? "w-full h-full items-stretch justify-start"
+            : "items-center justify-center pb-20"
         )}>
           {viewParam === 'instructions' ? (
             <InstructionsEditor bot={activeBot} />

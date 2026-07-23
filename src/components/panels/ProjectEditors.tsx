@@ -38,7 +38,7 @@ export function InstructionsEditor({ bot }: EditorProps) {
   };
 
   return (
-    <div className="relative flex flex-col w-full p-8 max-w-[796px] mx-auto pt-[32vh] animate-in fade-in zoom-in-95 duration-200">
+    <div className="relative flex w-full h-full flex-grow flex-col min-h-0 overflow-hidden pt-[32vh] items-center">
       <div className="absolute top-[16vh] left-0 right-0 text-center px-8">
         <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
           Space Instructions
@@ -48,34 +48,46 @@ export function InstructionsEditor({ bot }: EditorProps) {
         </p>
       </div>
 
-      <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
-        <div className="relative flex items-center gap-2 py-2">
-          <Textarea
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey && inputValue.trim()) {
-                e.preventDefault();
-                handleAdd();
-              }
-            }}
-            placeholder="Enter a new instruction here..."
-            className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
-            autoFocus
-            rows={1}
-          />
-          <button
-            onClick={handleAdd}
-            disabled={!inputValue.trim()}
-            className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default"
-          >
-            <ArrowUp className={cn(
-              "size-7 flex-shrink-0 rounded-lg border-2 p-1.5 transition-colors",
-              inputValue.trim()
-                ? "border-gray-300 bg-black text-white hover:bg-gray-800"
-                : "border-gray-200 bg-gray-100 text-gray-400"
-            )} />
-          </button>
+      <div className="relative overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col flex-none">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="space-y-6 py-6 mx-auto w-full max-w-[796px]">
+            <div className="h-0" />
+          </div>
+        </div>
+      </div>
+
+      <div className="shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300 py-3 bg-transparent border-t-0">
+        <div className="mx-auto w-full max-w-[796px]">
+          <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
+            <div className="relative flex items-center gap-2 py-2">
+              <Textarea
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey && inputValue.trim()) {
+                    e.preventDefault();
+                    handleAdd();
+                  }
+                }}
+                placeholder="Enter a new instruction here..."
+                className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+                autoFocus
+                rows={1}
+              />
+              <button
+                onClick={handleAdd}
+                disabled={!inputValue.trim()}
+                className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default"
+              >
+                <ArrowUp className={cn(
+                  "size-7 flex-shrink-0 rounded-lg border-2 p-1.5 transition-colors",
+                  inputValue.trim()
+                    ? "border-gray-300 bg-black text-white hover:bg-gray-800"
+                    : "border-gray-200 bg-gray-100 text-gray-400"
+                )} />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -91,12 +103,14 @@ export function GuardrailsEditor({ bot }: EditorProps) {
   const handleAdd = () => {
     if (!inputValue.trim()) return;
     const newList = [inputValue, ...allGuardrails];
-    editBot(bot.id, { guardrails: newList.join('\n\n') });
+    editBot(bot.id, {
+      guardrails: newList.join('\n\n'),
+    });
     setInputValue('');
   };
 
   return (
-    <div className="relative flex flex-col w-full p-8 max-w-[796px] mx-auto pt-[32vh] animate-in fade-in zoom-in-95 duration-200">
+    <div className="relative flex w-full h-full flex-grow flex-col min-h-0 overflow-hidden pt-[32vh] items-center">
       <div className="absolute top-[16vh] left-0 right-0 text-center px-8">
         <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
           Space Guardrails
@@ -106,34 +120,46 @@ export function GuardrailsEditor({ bot }: EditorProps) {
         </p>
       </div>
 
-      <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
-        <div className="relative flex items-center gap-2 py-2">
-          <Textarea
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey && inputValue.trim()) {
-                e.preventDefault();
-                handleAdd();
-              }
-            }}
-            placeholder="Enter a new guardrail here..."
-            className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
-            autoFocus
-            rows={1}
-          />
-          <button
-            onClick={handleAdd}
-            disabled={!inputValue.trim()}
-            className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default"
-          >
-            <ArrowUp className={cn(
-              "size-7 flex-shrink-0 rounded-lg border-2 p-1.5 transition-colors",
-              inputValue.trim()
-                ? "border-gray-300 bg-black text-white hover:bg-gray-800"
-                : "border-gray-200 bg-gray-100 text-gray-400"
-            )} />
-          </button>
+      <div className="relative overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col flex-none">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="space-y-6 py-6 mx-auto w-full max-w-[796px]">
+            <div className="h-0" />
+          </div>
+        </div>
+      </div>
+
+      <div className="shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300 py-3 bg-transparent border-t-0">
+        <div className="mx-auto w-full max-w-[796px]">
+          <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
+            <div className="relative flex items-center gap-2 py-2">
+              <Textarea
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey && inputValue.trim()) {
+                    e.preventDefault();
+                    handleAdd();
+                  }
+                }}
+                placeholder="Enter a new guardrail here..."
+                className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
+                autoFocus
+                rows={1}
+              />
+              <button
+                onClick={handleAdd}
+                disabled={!inputValue.trim()}
+                className="flex cursor-pointer items-center focus:outline-none disabled:cursor-default"
+              >
+                <ArrowUp className={cn(
+                  "size-7 flex-shrink-0 rounded-lg border-2 p-1.5 transition-colors",
+                  inputValue.trim()
+                    ? "border-gray-300 bg-black text-white hover:bg-gray-800"
+                    : "border-gray-200 bg-gray-100 text-gray-400"
+                )} />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -159,7 +185,7 @@ export function DataEditor({ bot }: EditorProps) {
   };
 
   return (
-    <div className="relative flex flex-col w-full p-8 max-w-[796px] mx-auto pt-[32vh] animate-in fade-in zoom-in-95 duration-200">
+    <div className="relative flex w-full h-full flex-grow flex-col min-h-0 overflow-hidden pt-[32vh] items-center">
       <div className="absolute top-[16vh] left-0 right-0 text-center px-8">
         <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white leading-tight">
           Space Knowledgebase
@@ -169,52 +195,64 @@ export function DataEditor({ bot }: EditorProps) {
         </p>
       </div>
 
-      <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
-        <div className="relative flex items-center gap-2 py-2">
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="flex cursor-pointer items-center focus:outline-none"
-            aria-label="Upload"
-          >
-            <Paperclip className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
-          </button>
- 
-          <div 
-            className={cn(
-              "min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none text-sm cursor-pointer transition-colors flex items-center",
-              isDragActive ? "text-blue-500 bg-blue-50/50 rounded-lg" : "text-gray-400 hover:text-gray-600"
-            )}
-            onClick={() => fileInputRef.current?.click()}
-            onDragOver={(e) => {
-              e.preventDefault();
-              setIsDragActive(true);
-            }}
-            onDragLeave={() => setIsDragActive(false)}
-            onDrop={(e) => {
-              e.preventDefault();
-              setIsDragActive(false);
-              if (e.dataTransfer.files) {
-                const filesArray = Array.from(e.dataTransfer.files);
-                addFiles(filesArray);
-              }
-            }}
-          >
-            {isDragActive ? "Drop files here..." : "Click or drag & drop files here..."}
+      <div className="relative overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col flex-none">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="space-y-6 py-6 mx-auto w-full max-w-[796px]">
+            <div className="h-0" />
           </div>
-          
-          <input
-            type="file"
-            ref={fileInputRef}
-            multiple
-            onChange={(e) => {
-              if (e.target.files) {
-                const filesArray = Array.from(e.target.files);
-                addFiles(filesArray);
-              }
-            }}
-            className="hidden"
-          />
+        </div>
+      </div>
+
+      <div className="shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300 py-3 bg-transparent border-t-0">
+        <div className="mx-auto w-full max-w-[796px]">
+          <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white px-3 shadow-sm sm:px-4">
+            <div className="relative flex items-center gap-2 py-2">
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="flex cursor-pointer items-center focus:outline-none"
+                aria-label="Upload"
+              >
+                <Paperclip className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+              </button>
+ 
+              <div 
+                className={cn(
+                  "min-h-8 w-full flex-1 border-none bg-transparent px-2 py-2 shadow-none outline-none text-sm cursor-pointer transition-colors flex items-center",
+                  isDragActive ? "text-blue-500 bg-blue-50/50 rounded-lg" : "text-gray-400 hover:text-gray-600"
+                )}
+                onClick={() => fileInputRef.current?.click()}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsDragActive(true);
+                }}
+                onDragLeave={() => setIsDragActive(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setIsDragActive(false);
+                  if (e.dataTransfer.files) {
+                    const filesArray = Array.from(e.dataTransfer.files);
+                    addFiles(filesArray);
+                  }
+                }}
+              >
+                {isDragActive ? "Drop files here..." : "Click or drag & drop files here..."}
+              </div>
+              
+              <input
+                type="file"
+                ref={fileInputRef}
+                multiple
+                onChange={(e) => {
+                  if (e.target.files) {
+                    const filesArray = Array.from(e.target.files);
+                    addFiles(filesArray);
+                  }
+                }}
+                className="hidden"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

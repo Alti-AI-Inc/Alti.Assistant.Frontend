@@ -400,14 +400,14 @@ function MyChatbotsContent() {
         {/* Chatbot Content Body */}
         <div className={cn(
           "flex-1 flex flex-col overflow-hidden relative",
-          isChatView
+          (isChatView || isEditorView)
             ? "w-full h-full items-stretch justify-start"
             : cn(
                 "items-center justify-center",
-                (viewParam !== 'instructions' && selectedOption !== OPTIONS.INSTRUCTIONS) && 
-                (viewParam !== 'guardrails' && selectedOption !== OPTIONS.GUARDRAILS) && 
-                (viewParam !== 'data' && selectedOption !== OPTIONS.KNOWLEDGE) && 
-                selectedOption !== OPTIONS.INBOX &&
+                (viewParam !== 'instructions' && (selectedOption as any) !== OPTIONS.INSTRUCTIONS) && 
+                (viewParam !== 'guardrails' && (selectedOption as any) !== OPTIONS.GUARDRAILS) && 
+                (viewParam !== 'data' && (selectedOption as any) !== OPTIONS.KNOWLEDGE) && 
+                (selectedOption as any) !== OPTIONS.INBOX &&
                 !hasMessages && "pb-40"
               )
         )}>
