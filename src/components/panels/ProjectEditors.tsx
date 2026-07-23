@@ -69,10 +69,10 @@ export function InstructionsEditor({ bot }: EditorProps) {
                 }
               }}
               placeholder="Enter a new instruction here..."
-              className="min-h-[72px] w-full flex-1 resize-none border-none bg-transparent px-4 py-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900"
+              className="min-h-[48px] w-full flex-1 resize-none border-none bg-transparent px-4 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 sm:px-5"
               autoFocus
             />
-            <div className="flex items-center justify-end px-4 pb-3 pt-1 border-t border-black/5">
+            <div className="flex items-center justify-end px-4 pb-2.5 pt-2.5 border-t border-black/5 sm:px-5">
               <button
                 onClick={handleAdd}
                 disabled={!inputValue.trim()}
@@ -140,10 +140,10 @@ export function GuardrailsEditor({ bot }: EditorProps) {
                 }
               }}
               placeholder="Enter a new guardrail here..."
-              className="min-h-[72px] w-full flex-1 resize-none border-none bg-transparent px-4 py-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900"
+              className="min-h-[48px] w-full flex-1 resize-none border-none bg-transparent px-4 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 sm:px-5"
               autoFocus
             />
-            <div className="flex items-center justify-end px-4 pb-3 pt-1 border-t border-black/5">
+            <div className="flex items-center justify-end px-4 pb-2.5 pt-2.5 border-t border-black/5 sm:px-5">
               <button
                 onClick={handleAdd}
                 disabled={!inputValue.trim()}
@@ -206,7 +206,7 @@ export function DataEditor({ bot }: EditorProps) {
           <div className="flex flex-col w-full rounded-2xl border border-gray-200 bg-white shadow-sm">
             <div 
               className={cn(
-                "min-h-[72px] w-full flex-1 border-none bg-transparent px-4 py-3 shadow-none outline-none text-sm cursor-pointer transition-colors flex items-center text-gray-400 hover:text-gray-600",
+                "min-h-[48px] w-full flex-1 border-none bg-transparent px-4 py-2 shadow-none outline-none text-sm cursor-pointer transition-colors flex items-center text-gray-400 hover:text-gray-600 sm:px-5",
                 isDragActive && "text-blue-500 bg-blue-50/50 rounded-t-2xl"
               )}
               onClick={() => fileInputRef.current?.click()}
@@ -227,7 +227,7 @@ export function DataEditor({ bot }: EditorProps) {
               {isDragActive ? "Drop files here..." : "Click or drag & drop files here to upload to knowledge base..."}
             </div>
 
-            <div className="flex items-center justify-start px-4 pb-3 pt-1 border-t border-black/5">
+            <div className="flex items-center justify-start px-4 pb-2.5 pt-2.5 border-t border-black/5 sm:px-5">
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}

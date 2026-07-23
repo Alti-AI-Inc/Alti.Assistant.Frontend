@@ -1540,7 +1540,7 @@ export default function ChatInput({
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             className={cn(
-              'relative flex flex-col rounded-2xl border bg-white px-3 shadow-sm sm:px-4 transition-all duration-300',
+              'relative flex flex-col rounded-2xl border bg-white shadow-sm transition-all duration-300',
               isDragging 
                 ? 'border-indigo-500 border-dashed bg-indigo-50/30 dark:bg-indigo-950/20 scale-[1.01]' 
                 : 'border-gray-300 dark:border-zinc-700 dark:bg-zinc-800',
@@ -1559,7 +1559,7 @@ export default function ChatInput({
             )}
             {/* Mode Badge Preview */}
             {selectedOption && (selectedOption === OPTIONS.CODE || selectedOption === OPTIONS.IMAGE) && (
-              <div className="mt-3 flex items-center justify-between rounded-lg bg-zinc-50 dark:bg-zinc-850/60 px-3 py-1.5 border border-zinc-200 dark:border-zinc-800/80 animate-in fade-in duration-200">
+              <div className="mt-3 flex items-center justify-between rounded-lg bg-zinc-50 dark:bg-zinc-850/60 px-3 py-1.5 border border-zinc-200 dark:border-zinc-800/80 animate-in fade-in duration-200 mx-4 sm:mx-5">
                 <div className="flex items-center gap-2">
                   {selectedOption === OPTIONS.CODE ? (
                     <Code className="size-4 text-black dark:text-white" />
@@ -1582,7 +1582,7 @@ export default function ChatInput({
             )}
             {/* Image Preview */}
             {imageBase64 && (
-              <div className="relative mt-2 w-fit">
+              <div className="relative mt-2 w-fit mx-4 sm:mx-5">
                 <img
                   src={imageBase64}
                   alt="Uploaded preview"
@@ -1617,7 +1617,7 @@ export default function ChatInput({
 
             {/* File Cards Preview - Shows above input field next to each other */}
             {selectedFiles && selectedFiles.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-2">
+              <div className="mt-2 flex flex-wrap gap-2 mx-4 sm:mx-5">
                 {selectedFiles.map((file, index) => (
                   <div 
                     key={index}
@@ -1674,11 +1674,11 @@ export default function ChatInput({
                         : 'Enter prompt here...')
                 }
                 style={{ backgroundColor: 'transparent' }}
-                className="min-h-[72px] w-full flex-1 resize-none border-none bg-transparent px-3 py-3 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white"
+                className="min-h-[48px] w-full flex-1 resize-none border-none bg-transparent px-4 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-5"
                 autoFocus
               />
 
-              <div className="flex items-center justify-between px-3 pb-3 pt-1 border-t border-black/5 dark:border-white/5">
+              <div className="flex items-center justify-between px-4 pb-2.5 pt-2.5 border-t border-black/5 dark:border-white/5 sm:px-5">
                 <Tooltip>
                   <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
                     <button
