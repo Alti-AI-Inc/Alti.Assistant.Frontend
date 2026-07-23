@@ -1230,7 +1230,7 @@ return (
         className={cn(
           'shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300',
           !showAsNewChat
-            ? 'flex items-center justify-center pt-3 pb-0 border-t border-black/5 dark:border-zinc-800 bg-[#e1e1e1] dark:bg-zinc-900 mt-auto'
+            ? 'flex items-center justify-center h-[64px] pt-0 pb-0 border-t border-black/10 dark:border-zinc-800/60 bg-[#e1e1e1] dark:bg-zinc-950 mt-auto'
             : 'pt-3 pb-0 bg-transparent border-t-0'
         )}
       >

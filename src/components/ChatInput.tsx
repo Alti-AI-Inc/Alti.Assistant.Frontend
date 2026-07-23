@@ -1276,6 +1276,15 @@ export default function ChatInput({
   )?.name;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  }, [message]);
 
   // Use extracted file change handler
   const handleFileChange = createFileChangeHandler({
@@ -1392,267 +1401,69 @@ export default function ChatInput({
                 </button>
               </div>
             )}
-            <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={cn(
-              'relative flex flex-col rounded-2xl border bg-white shadow-sm transition-all duration-300',
-              isDragging 
-                ? 'border-indigo-500 border-dashed bg-indigo-50/30 dark:bg-indigo-950/20 scale-[1.01]' 
-                : 'border-gray-300 dark:border-zinc-700 dark:bg-zinc-800',
-              activeConversation?.knowledgebaseId &&
-                message.length < 100 &&
-                'flex',
-            )}
-          >
-            {isDragging && (
-              <div className="absolute inset-0 flex items-center justify-center bg-indigo-500/10 backdrop-blur-xs rounded-2xl pointer-events-none z-50 animate-in fade-in duration-200">
-                <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
-                  <Paperclip className="size-3.5 animate-bounce" />
-                  Drop files to upload
-                </span>
-              </div>
-            )}
-            {/* Mode Badge Preview */}
-            {selectedOption && (selectedOption === OPTIONS.CODE || selectedOption === OPTIONS.IMAGE) && (
-              <div className="mt-3 flex items-center justify-between rounded-lg bg-zinc-50 dark:bg-zinc-850/60 px-3 py-1.5 border border-zinc-200 dark:border-zinc-800/80 animate-in fade-in duration-200 mx-4 sm:mx-5">
-                <div className="flex items-center gap-2">
-                  {selectedOption === OPTIONS.CODE ? (
-                    <Code className="size-4 text-black dark:text-white" />
-                  ) : (
-                    <ImageIcon className="size-4 text-black dark:text-white" />
+            {hasMessages ? (
+              /* Compact Single Line Row layout when chat has messages (at bottom) */
+              <div className="flex flex-col w-full gap-2 px-4 sm:px-0">
+                {/* File Cards Preview - Shows above input field next to each other */}
+                {selectedFiles && selectedFiles.length > 0 && (
+                  <div className="flex flex-wrap gap-2 px-1 max-h-[80px] overflow-y-auto custom-scrollbar">
+                    {selectedFiles.map((file, index) => (
+                      <div 
+                        key={index}
+                        className="inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs bg-white dark:bg-zinc-800 dark:border-zinc-700 animate-in fade-in duration-200"
+                      >
+                        <FileText className="size-4 flex-shrink-0 text-gray-500" />
+                        <div className="flex min-w-0 flex-1 flex-col">
+                          <span className="truncate text-xs font-semibold text-gray-705 dark:text-zinc-300" title={file.name}>
+                            {file.name}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = selectedFiles.filter((_, i) => i !== index);
+                            setSelectedFiles(updated);
+                          }}
+                          className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
+                          title="Remove file"
+                        >
+                          <X className="size-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  className={cn(
+                    'relative flex items-center gap-2 rounded-2xl border bg-white dark:bg-zinc-800 px-3 py-1 shadow-sm transition-all duration-300 w-full min-h-[48px]',
+                    isDragging 
+                      ? 'border-indigo-500 border-dashed bg-indigo-50/30 dark:bg-indigo-950/20 scale-[1.01]' 
+                      : 'border-gray-300 dark:border-zinc-700',
                   )}
-                  <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                    {selectedOption === OPTIONS.CODE ? 'Code Generation Mode' : 'Image Generation Mode'}
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setSelectedOption(null)}
-                  className="rounded-full hover:bg-black/5 dark:hover:bg-white/5 p-0.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
-                  title="Exit mode"
                 >
-                  <X className="size-3.5" />
-                </button>
-              </div>
-            )}
-            {/* Image Preview */}
-            {imageBase64 && (
-              <div className="relative mt-2 w-fit mx-4 sm:mx-5">
-                <img
-                  src={imageBase64}
-                  alt="Uploaded preview"
-                  className="h-12 w-12 rounded-lg object-cover"
-                />
-                <button
-                  onClick={handleRemoveImage}
-                  className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
-                >
-                  <Plus className="bold size-3 rotate-45" />
-                </button>
-              </div>
-            )}
-
-            {/* Hidden file input - must be outside Popover to persist */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              multiple
-              accept={(() => {
-                switch (selectedOption) {
-                  case OPTIONS.IMAGE:
-                  case OPTIONS.EDIT_IMAGE:
-                    return 'image/*';
-                  default:
-                    return ALLOWED_DOC_EXTENSIONS.join(',');
-                }
-              })()}
-              onChange={handleFileChange}
-              className="hidden"
-            />
-
-            {/* File Cards Preview - Shows above input field next to each other */}
-            {selectedFiles && selectedFiles.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-2 mx-4 sm:mx-5">
-                {selectedFiles.map((file, index) => (
-                  <div 
-                    key={index}
-                    className="inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs animate-in fade-in duration-200"
-                    style={{ backgroundColor: '#FFFFFF' }}
-                  >
-                    {/* File Type Icon */}
-                    <FileText className="size-4 flex-shrink-0 text-gray-500" />
-
-                    {/* File Info */}
-                    <div className="flex min-w-0 flex-1 flex-col">
-                      <span className="truncate text-xs font-semibold text-gray-700" title={file.name}>
-                        {file.name}
+                  {isDragging && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-indigo-500/10 backdrop-blur-xs rounded-2xl pointer-events-none z-50 animate-in fade-in duration-200">
+                      <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
+                        <Paperclip className="size-3.5 animate-bounce" />
+                        Drop files to upload
                       </span>
                     </div>
+                  )}
 
-                    {/* Remove Button */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const updated = selectedFiles.filter((_, i) => i !== index);
-                        setSelectedFiles(updated);
-                      }}
-                      className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
-                      title="Remove file"
-                    >
-                      <X className="size-3.5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Input container: double height textarea top, actions bottom */}
-            <div className="flex flex-col w-full">
-              <Textarea
-                name="message"
-                value={message}
-                onChange={e => setMessage(e.target.value)}
-                onKeyDown={e => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    if (selectedOption === OPTIONS.TASK) {
-                      handleCreateTask();
-                    } else {
-                      handleSubmit();
-                    }
-                  }
-                }}
-                placeholder={
-                  selectedOption === OPTIONS.TASK
-                    ? 'Describe the task you want to automate...'
-                    : selectedOption === OPTIONS.RESEARCH
-                      ? 'State research query...'
-                      : activeConversation?.knowledgebaseId && isLoading
-                        ? 'Loading...'
-                        : activeConversation?.knowledgebaseId &&
-                            activeKnowledgeBaseName
-                          ? `Chat with ${activeKnowledgeBaseName}`
-                          : (pathname === '/workflows' || pathname?.startsWith('/workflows')
-                            ? 'Describe your workflow...'
-                            : 'Enter prompt here...')
-                 }
-                style={{ backgroundColor: 'transparent' }}
-                className="min-h-[48px] w-full flex-1 resize-none border-none bg-transparent px-4 pt-3.5 pb-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-5"
-                autoFocus
-              />
-
-              {/* Dedicated Task Configurations Row */}
-              {selectedOption === OPTIONS.TASK && !hasMessages && !isExistingConversation && (
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-2 border-t border-black/5 dark:border-white/5 sm:px-5 bg-zinc-50/60 dark:bg-zinc-900/30 animate-in fade-in duration-200">
-                  {/* Frequency Section */}
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider select-none">
-                      Frequency
-                    </span>
-                    <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
-                      <button
-                        type="button"
-                        onClick={() => setTaskType('one-time')}
-                        className={cn(
-                          'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
-                          taskType === 'one-time'
-                            ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
-                            : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
-                        )}
-                      >
-                        <Clock className="size-3" />
-                        <span>One-time</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setTaskType('recurring')}
-                        className={cn(
-                          'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
-                          taskType === 'recurring'
-                            ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
-                            : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
-                        )}
-                      >
-                        <Repeat className="size-3" />
-                        <span>Recurring</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Vertical Divider */}
-                  <div className="h-5 w-px bg-black/10 dark:bg-white/10 hidden sm:block mx-1" />
-
-                  {/* Trigger Section */}
-                  <div className="flex items-center gap-2 flex-grow min-w-0">
-                    <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider select-none hidden xs:inline">
-                      Trigger
-                    </span>
-                    <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
-                      <button
-                        type="button"
-                        onClick={() => setTriggerType('scheduled')}
-                        className={cn(
-                          'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
-                          triggerType === 'scheduled'
-                            ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
-                            : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
-                        )}
-                      >
-                        <CalendarClock className="size-3" />
-                        <span>Scheduled</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setTriggerType('event')}
-                        className={cn(
-                          'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
-                          triggerType === 'event'
-                            ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
-                            : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
-                        )}
-                      >
-                        <Zap className="size-3" />
-                        <span>Event</span>
-                      </button>
-                    </div>
-
-                    {/* Trigger Details Input */}
-                    <div className="flex-grow min-w-0">
-                      {triggerType === 'scheduled' ? (
-                        <input
-                          type="text"
-                          value={scheduledTime}
-                          onChange={(e) => setScheduledTime(e.target.value)}
-                          placeholder={taskType === 'recurring' ? 'Cron expression (e.g. Every Mon 9AM)' : 'Specific date/time (e.g. Tomorrow at 3PM)'}
-                          className="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1.5 text-xs text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder:text-[10px] dark:placeholder:text-zinc-500 shadow-xs"
-                        />
-                      ) : (
-                        <input
-                          type="text"
-                          value={eventTrigger}
-                          onChange={(e) => setEventTrigger(e.target.value)}
-                          placeholder="Event conditions details..."
-                          className="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1.5 text-xs text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder:text-[10px] dark:placeholder:text-zinc-550 shadow-xs"
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="flex items-center justify-between px-4 pb-2.5 pt-2.5 border-t border-black/5 dark:border-white/5 sm:px-5">
-                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  {/* Attach Files Button */}
                   <Tooltip>
                     <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border border-black/5 bg-zinc-100 hover:bg-zinc-200 p-1 text-zinc-650 transition-all dark:border-zinc-700/50 dark:bg-zinc-800 dark:hover:bg-zinc-750 dark:text-zinc-350 focus:outline-none"
+                        className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border border-black/5 bg-zinc-100 hover:bg-zinc-200 p-1 text-zinc-650 transition-all dark:border-zinc-700/50 dark:bg-zinc-800 dark:hover:bg-zinc-750 dark:text-zinc-350 focus:outline-none"
                         aria-label="Attach Files"
                       >
-                        <Paperclip className="size-3.5" />
+                        <Paperclip className="size-4" />
                       </button>
                     </TooltipTrigger>
                     <TooltipContent side="top">
@@ -1660,73 +1471,355 @@ export default function ChatInput({
                     </TooltipContent>
                   </Tooltip>
 
-                  {/* Chat / Research / Task Switcher inside Prompt Box */}
-                  {!hasMessages && !isExistingConversation && (
-                    <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedOption(null)}
+                  {/* Textarea (single-line style but auto-expanding) */}
+                  <Textarea
+                    ref={textareaRef}
+                    name="message"
+                    value={message}
+                    onChange={e => setMessage(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSubmit();
+                      }
+                    }}
+                    placeholder={
+                      activeConversation?.knowledgebaseId && isLoading
+                        ? 'Loading...'
+                        : activeConversation?.knowledgebaseId && activeKnowledgeBaseName
+                          ? `Chat with ${activeKnowledgeBaseName}`
+                          : 'Enter prompt here...'
+                    }
+                    style={{ backgroundColor: 'transparent' }}
+                    className="min-h-[36px] max-h-[160px] w-full flex-1 resize-none border-none bg-transparent px-2 py-1.5 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-3"
+                    autoFocus
+                  />
+
+                  {/* Send Button */}
+                  <Tooltip>
+                    <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
+                      <ArrowUp
+                        onClick={handleSubmit}
                         className={cn(
-                          'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
-                          selectedOption === null
-                            ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
-                            : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
+                          'size-8 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1.5 text-white transition-opacity focus:outline-none',
+                          (isLoadingResponse || !message?.trim())
+                            ? 'cursor-not-allowed opacity-40'
+                            : 'cursor-pointer hover:opacity-80',
                         )}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Send Prompt</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              </div>
+            ) : (
+              /* Original double-height prompt box for new chat */
+              <div
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                className={cn(
+                  'relative flex flex-col rounded-2xl border bg-white shadow-sm transition-all duration-300 w-full',
+                  isDragging 
+                    ? 'border-indigo-500 border-dashed bg-indigo-50/30 dark:bg-indigo-950/20 scale-[1.01]' 
+                    : 'border-gray-300 dark:border-zinc-700 dark:bg-zinc-800',
+                  activeConversation?.knowledgebaseId &&
+                    message.length < 100 &&
+                    'flex',
+                )}
+              >
+                {isDragging && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-indigo-500/10 backdrop-blur-xs rounded-2xl pointer-events-none z-50 animate-in fade-in duration-200">
+                    <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
+                      <Paperclip className="size-3.5 animate-bounce" />
+                      Drop files to upload
+                    </span>
+                  </div>
+                )}
+                {/* Mode Badge Preview */}
+                {selectedOption && (selectedOption === OPTIONS.CODE || selectedOption === OPTIONS.IMAGE) && (
+                  <div className="mt-3 flex items-center justify-between rounded-lg bg-zinc-50 dark:bg-zinc-850/60 px-3 py-1.5 border border-zinc-200 dark:border-zinc-800/80 animate-in fade-in duration-200 mx-4 sm:mx-5">
+                    <div className="flex items-center gap-2">
+                      {selectedOption === OPTIONS.CODE ? (
+                        <Code className="size-4 text-black dark:text-white" />
+                      ) : (
+                        <ImageIcon className="size-4 text-black dark:text-white" />
+                      )}
+                      <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                        {selectedOption === OPTIONS.CODE ? 'Code Generation Mode' : 'Image Generation Mode'}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedOption(null)}
+                      className="rounded-full hover:bg-black/5 dark:hover:bg-white/5 p-0.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
+                      title="Exit mode"
+                    >
+                      <X className="size-3.5" />
+                    </button>
+                  </div>
+                )}
+                {/* Image Preview */}
+                {imageBase64 && (
+                  <div className="relative mt-2 w-fit mx-4 sm:mx-5">
+                    <img
+                      src={imageBase64}
+                      alt="Uploaded preview"
+                      className="h-12 w-12 rounded-lg object-cover"
+                    />
+                    <button
+                      onClick={handleRemoveImage}
+                      className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
+                    >
+                      <Plus className="bold size-3 rotate-45" />
+                    </button>
+                  </div>
+                )}
+
+                {/* File Cards Preview - Shows above input field next to each other */}
+                {selectedFiles && selectedFiles.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-2 mx-4 sm:mx-5">
+                    {selectedFiles.map((file, index) => (
+                      <div 
+                        key={index}
+                        className="inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs animate-in fade-in duration-200"
+                        style={{ backgroundColor: '#FFFFFF' }}
                       >
-                        <MessageSquare className="size-3" />
-                        <span>Chat</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
-                        className={cn(
-                          'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
-                          selectedOption === OPTIONS.RESEARCH
-                            ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
-                            : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
-                        )}
-                      >
-                        <Microscope className="size-3" />
-                        <span>Research</span>
-                      </button>
-                      {/* Hide Task option for Phase 1 launch
-                      <button
-                        type="button"
-                        onClick={() => setSelectedOption(OPTIONS.TASK)}
-                        className={cn(
-                          'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
-                          selectedOption === OPTIONS.TASK
-                            ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
-                            : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
-                        )}
-                      >
-                        <ListTodo className="size-3" />
-                        <span>Task</span>
-                      </button>
-                      */}
+                        {/* File Type Icon */}
+                        <FileText className="size-4 flex-shrink-0 text-gray-500" />
+
+                        {/* File Info */}
+                        <div className="flex min-w-0 flex-1 flex-col">
+                          <span className="truncate text-xs font-semibold text-gray-700" title={file.name}>
+                            {file.name}
+                          </span>
+                        </div>
+
+                        {/* Remove Button */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = selectedFiles.filter((_, i) => i !== index);
+                            setSelectedFiles(updated);
+                          }}
+                          className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
+                          title="Remove file"
+                        >
+                          <X className="size-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Input container: double height textarea top, actions bottom */}
+                <div className="flex flex-col w-full">
+                  <Textarea
+                    ref={textareaRef}
+                    name="message"
+                    value={message}
+                    onChange={e => setMessage(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        if (selectedOption === OPTIONS.TASK) {
+                          handleCreateTask();
+                        } else {
+                          handleSubmit();
+                        }
+                      }
+                    }}
+                    placeholder={
+                      selectedOption === OPTIONS.TASK
+                        ? 'Describe the task you want to automate...'
+                        : selectedOption === OPTIONS.RESEARCH
+                          ? 'State research query...'
+                          : activeConversation?.knowledgebaseId && isLoading
+                            ? 'Loading...'
+                            : activeConversation?.knowledgebaseId &&
+                                activeKnowledgeBaseName
+                              ? `Chat with ${activeKnowledgeBaseName}`
+                              : (pathname === '/workflows' || pathname?.startsWith('/workflows')
+                                ? 'Describe your workflow...'
+                                : 'Enter prompt here...')
+                     }
+                    style={{ backgroundColor: 'transparent' }}
+                    className="min-h-[48px] w-full flex-1 resize-none border-none bg-transparent px-4 pt-3.5 pb-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-5"
+                    autoFocus
+                  />
+
+                  {/* Dedicated Task Configurations Row */}
+                  {selectedOption === OPTIONS.TASK && !hasMessages && !isExistingConversation && (
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-2 border-t border-black/5 dark:border-white/5 sm:px-5 bg-zinc-50/60 dark:bg-zinc-900/30 animate-in fade-in duration-200">
+                      {/* Frequency Section */}
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider select-none">
+                          Frequency
+                        </span>
+                        <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => setTaskType('one-time')}
+                            className={cn(
+                              'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
+                              taskType === 'one-time'
+                                ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
+                                : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
+                            )}
+                          >
+                            <Clock className="size-3" />
+                            <span>One-time</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setTaskType('recurring')}
+                            className={cn(
+                              'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
+                              taskType === 'recurring'
+                                ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
+                                : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
+                            )}
+                          >
+                            <Repeat className="size-3" />
+                            <span>Recurring</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Vertical Divider */}
+                      <div className="h-5 w-px bg-black/10 dark:bg-white/10 hidden sm:block mx-1" />
+
+                      {/* Trigger Section */}
+                      <div className="flex items-center gap-2 flex-grow min-w-0">
+                        <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider select-none hidden xs:inline">
+                          Trigger
+                        </span>
+                        <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => setTriggerType('scheduled')}
+                            className={cn(
+                              'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
+                              triggerType === 'scheduled'
+                                ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
+                                : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
+                            )}
+                          >
+                            <CalendarClock className="size-3" />
+                            <span>Scheduled</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setTriggerType('event')}
+                            className={cn(
+                              'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
+                              triggerType === 'event'
+                                ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
+                                : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
+                            )}
+                          >
+                            <Zap className="size-3" />
+                            <span>Event</span>
+                          </button>
+                        </div>
+
+                        {/* Trigger Details Input */}
+                        <div className="flex-grow min-w-0">
+                          {triggerType === 'scheduled' ? (
+                            <input
+                              type="text"
+                              value={scheduledTime}
+                              onChange={(e) => setScheduledTime(e.target.value)}
+                              placeholder={taskType === 'recurring' ? 'Cron expression (e.g. Every Mon 9AM)' : 'Specific date/time (e.g. Tomorrow at 3PM)'}
+                              className="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1.5 text-xs text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder:text-[10px] dark:placeholder:text-zinc-500 shadow-xs"
+                            />
+                          ) : (
+                            <input
+                              type="text"
+                              value={eventTrigger}
+                              onChange={(e) => setEventTrigger(e.target.value)}
+                              placeholder="Event conditions details..."
+                              className="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1.5 text-xs text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder:text-[10px] dark:placeholder:text-zinc-550 shadow-xs"
+                            />
+                          )}
+                        </div>
+                      </div>
                     </div>
                   )}
-                </div>
 
-                <Tooltip>
-                  <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
-                    <ArrowUp
-                      onClick={selectedOption === OPTIONS.TASK ? handleCreateTask : handleSubmit}
-                      className={cn(
-                        'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity focus:outline-none',
-                        (isLoadingResponse || !message?.trim())
-                          ? 'cursor-not-allowed'
-                          : 'cursor-pointer hover:opacity-80',
+                  <div className="flex items-center justify-between px-4 pb-2.5 pt-2.5 border-t border-black/5 dark:border-white/5 sm:px-5">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <Tooltip>
+                        <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
+                          <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border border-black/5 bg-zinc-100 hover:bg-zinc-200 p-1 text-zinc-650 transition-all dark:border-zinc-700/50 dark:bg-zinc-800 dark:hover:bg-zinc-750 dark:text-zinc-350 focus:outline-none"
+                            aria-label="Attach Files"
+                          >
+                            <Paperclip className="size-3.5" />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                          <p>Attach Files</p>
+                        </TooltipContent>
+                      </Tooltip>
+
+                      {/* Chat / Research / Task Switcher inside Prompt Box */}
+                      {!hasMessages && !isExistingConversation && (
+                        <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedOption(null)}
+                            className={cn(
+                              'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                              selectedOption === null
+                                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
+                                : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
+                            )}
+                          >
+                            <MessageSquare className="size-3" />
+                            <span>Chat</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
+                            className={cn(
+                              'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                              selectedOption === OPTIONS.RESEARCH
+                                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
+                                : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
+                            )}
+                          >
+                            <Microscope className="size-3" />
+                            <span>Research</span>
+                          </button>
+                        </div>
                       )}
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent side="top">
-                    <p>{selectedOption === OPTIONS.TASK ? 'Schedule Task' : 'Send Prompt'}</p>
-                  </TooltipContent>
-                </Tooltip>
+                    </div>
+
+                    <Tooltip>
+                      <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
+                        <ArrowUp
+                          onClick={selectedOption === OPTIONS.TASK ? handleCreateTask : handleSubmit}
+                          className={cn(
+                            'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity focus:outline-none',
+                            (isLoadingResponse || !message?.trim())
+                              ? 'cursor-not-allowed opacity-40'
+                              : 'cursor-pointer hover:opacity-80',
+                          )}
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent side="top">
+                        <p>{selectedOption === OPTIONS.TASK ? 'Schedule Task' : 'Send Prompt'}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            )}
       </div>
     </>
   );
