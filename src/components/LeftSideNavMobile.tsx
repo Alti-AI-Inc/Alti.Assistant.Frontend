@@ -1363,7 +1363,7 @@ const LeftSideNavMobile = () => {
                 Cancel
               </button>
               <button 
-                className="flex-1 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:bg-black/5 dark:hover:bg-white/5 h-full outline-none disabled:opacity-50 flex items-center justify-center gap-1.5"
+                className="flex-1 text-sm font-medium text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 h-full outline-none disabled:opacity-50 flex items-center justify-center gap-1.5"
                 onClick={handleCreateSpace}
                 disabled={!newSpaceName.trim() || isCreatingSpace}
               >
