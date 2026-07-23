@@ -75,12 +75,14 @@ import {
   Music,
   PenTool,
   ClipboardCheck,
+  Terminal,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect, useMemo, useRef } from 'react';
+import { getFileIconComponent } from '@/components/panels/ProjectEditors';
 import ConversationsList from './ConversationsList';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
@@ -211,6 +213,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   } = useConversationsStore();
   const { isLeftSidebarOpen, toggleLeftSidebar, isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen } = useSidebarStore();
   const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, deleteBot, reorderBots, editBot, threads, activeBotThreadId, setActiveBotThreadId, deleteThread, addBotAsync } = useBotsStore();
+  const activeBot = bots.find(b => b.id === activeBotId);
 
   const { data: inboxItems = [] } = useInboxQuery(
     data?.user?.id,
@@ -681,6 +684,17 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     return name.substring(0, 2).toUpperCase();
   };
 
+  let allFiles: { name: string; size: number }[] = [];
+  if (activeBot) {
+    try {
+      allFiles = activeBot.data ? JSON.parse(activeBot.data) : [];
+    } catch (e) {
+      allFiles = activeBot.data ? [{ name: activeBot.data, size: 0 }] : [];
+    }
+  }
+  const allInstructions = activeBot?.instructions ? activeBot.instructions.split('\n\n').filter(Boolean) : [];
+  const allGuardrails = activeBot?.guardrails ? activeBot.guardrails.split('\n\n').filter(Boolean) : [];
+
   return (
     <div className="flex h-full w-full overflow-hidden">
       {/* Column 1: Spaces Switcher (Slack style) */}
@@ -1141,51 +1155,159 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
               {/* Space-Specific Threads List */}
               <div className="flex-1 overflow-y-auto px-4 bg-[#0c1120] dark:bg-[#0c1120] space-y-1.5 py-2">
-                {threads
-                  .filter(t => t.botId === activeBotId && (t.title || 'Untitled Space Chat').toLowerCase().includes(searchQuery.toLowerCase()))
-                  .map(thread => {
-                    const isSelected = activeBotThreadId === thread.id && pathname === '/spaces';
+                {viewParam === 'data' && activeBot ? (
+                  /* Knowledge Files List */
+                  allFiles.map((file, idx) => {
+                    const IconComponent = getFileIconComponent(file.name);
                     return (
                       <div
-                        key={thread.id}
-                        className={cn(
-                          "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-pointer select-none",
-                          isSelected
-                            ? "bg-[#0000ff]/15 border-[#0000ff] text-white font-semibold shadow-[0_0_20px_rgba(0,0,255,0.55)]"
-                            : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
-                        )}
+                        key={idx}
+                        className="group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-default bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:text-white"
                       >
-                        <span
-                          className="flex-1 truncate px-3 py-2 flex items-center gap-2.5"
-                          onClick={() => {
-                            setSelectedOption(null);
-                            setActiveBotThreadId(thread.id);
-                            router.push(`/spaces?bot=${activeBotId}&thread=${thread.id}`);
-                          }}
-                        >
-                          {getThreadIcon(thread.title, isSelected)}
-                          <span className="truncate">{thread.title || 'Untitled Space Chat'}</span>
-                        </span>
+                        <div className="flex-1 truncate px-3 py-2 flex items-center gap-2">
+                          <IconComponent className="h-3.5 w-3.5 text-blue-400 flex-shrink-0" />
+                          <span className="truncate" title={file.name}>
+                            {file.name}
+                          </span>
+                        </div>
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            deleteThread(thread.id);
-                            if (activeBotThreadId === thread.id) {
-                              setActiveBotThreadId(null);
-                              router.push(`/spaces?bot=${activeBotId}`);
+                          type="button"
+                          onClick={() => {
+                            const updatedFiles = allFiles.filter((_, i) => i !== idx);
+                            if (updatedFiles.length === 0) {
+                              editBot(activeBot.id, { data: undefined });
+                            } else {
+                              editBot(activeBot.id, { data: JSON.stringify(updatedFiles) });
                             }
                           }}
-                          className={cn(
-                            "mr-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-colors p-1 rounded hover:bg-[#0000ff]/20",
-                            isSelected ? "text-white" : "text-zinc-450 hover:text-red-500"
-                          )}
+                          className="mr-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-colors p-1 rounded hover:bg-red-500/20 text-zinc-400 hover:text-red-500 focus:outline-none"
+                          title="Remove File"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
                       </div>
                     );
-                  })}
-                {threads.filter(t => t.botId === activeBotId && (t.title || 'Untitled Space Chat').toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
+                  })
+                ) : viewParam === 'instructions' && activeBot ? (
+                  /* Instructions List */
+                  allInstructions.map((instruction, idx) => {
+                    return (
+                      <div
+                        key={idx}
+                        className="group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-default bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:text-white"
+                      >
+                        <div className="flex-1 truncate px-3 py-2 flex items-center gap-2">
+                          <Terminal className="h-3.5 w-3.5 text-indigo-405 flex-shrink-0" />
+                          <span className="truncate" title={instruction}>
+                            {instruction}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updatedInstructions = allInstructions.filter((_, i) => i !== idx);
+                            editBot(activeBot.id, { instructions: updatedInstructions.join('\n\n') });
+                          }}
+                          className="mr-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-colors p-1 rounded hover:bg-red-500/20 text-zinc-400 hover:text-red-500 focus:outline-none"
+                          title="Remove Instruction"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    );
+                  })
+                ) : viewParam === 'guardrails' && activeBot ? (
+                  /* Guardrails List */
+                  allGuardrails.map((guardrail, idx) => {
+                    return (
+                      <div
+                        key={idx}
+                        className="group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-default bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:text-white"
+                      >
+                        <div className="flex-1 truncate px-3 py-2 flex items-center gap-2">
+                          <Shield className="h-3.5 w-3.5 text-red-400 flex-shrink-0" />
+                          <span className="truncate" title={guardrail}>
+                            {guardrail}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updatedGuardrails = allGuardrails.filter((_, i) => i !== idx);
+                            editBot(activeBot.id, { guardrails: updatedGuardrails.join('\n\n') });
+                          }}
+                          className="mr-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-colors p-1 rounded hover:bg-red-500/20 text-zinc-400 hover:text-red-500 focus:outline-none"
+                          title="Remove Guardrail"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    );
+                  })
+                ) : (
+                  /* Space-Specific Threads List */
+                  threads
+                    .filter(t => t.botId === activeBotId && (t.title || 'Untitled Space Chat').toLowerCase().includes(searchQuery.toLowerCase()))
+                    .map(thread => {
+                      const isSelected = activeBotThreadId === thread.id && pathname === '/spaces';
+                      return (
+                        <div
+                          key={thread.id}
+                          className={cn(
+                            "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-pointer select-none",
+                            isSelected
+                              ? "bg-[#0000ff]/15 border-[#0000ff] text-white font-semibold shadow-[0_0_20px_rgba(0,0,255,0.55)]"
+                              : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                          )}
+                        >
+                          <span
+                            className="flex-1 truncate px-3 py-2 flex items-center gap-2.5"
+                            onClick={() => {
+                              setSelectedOption(null);
+                              setActiveBotThreadId(thread.id);
+                              router.push(`/spaces?bot=${activeBotId}&thread=${thread.id}`);
+                            }}
+                          >
+                            {getThreadIcon(thread.title, isSelected)}
+                            <span className="truncate">{thread.title || 'Untitled Space Chat'}</span>
+                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteThread(thread.id);
+                              if (activeBotThreadId === thread.id) {
+                                setActiveBotThreadId(null);
+                                router.push(`/spaces?bot=${activeBotId}`);
+                              }
+                            }}
+                            className={cn(
+                              "mr-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-colors p-1 rounded hover:bg-[#0000ff]/20",
+                              isSelected ? "text-white" : "text-zinc-450 hover:text-red-500"
+                            )}
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      );
+                    })
+                )}
+                {/* Fallbacks */}
+                {viewParam === 'data' && allFiles.length === 0 && (
+                  <div className="py-8 text-center text-xs text-zinc-500 italic">
+                    No files uploaded yet.
+                  </div>
+                )}
+                {viewParam === 'instructions' && allInstructions.length === 0 && (
+                  <div className="py-8 text-center text-xs text-zinc-500 italic">
+                    No instructions added yet.
+                  </div>
+                )}
+                {viewParam === 'guardrails' && allGuardrails.length === 0 && (
+                  <div className="py-8 text-center text-xs text-zinc-500 italic">
+                    No guardrails defined yet.
+                  </div>
+                )}
+                {!viewParam && threads.filter(t => t.botId === activeBotId && (t.title || 'Untitled Space Chat').toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
                   <div className="py-8 text-center text-xs text-zinc-500 italic">
                     No threads found.
                   </div>
