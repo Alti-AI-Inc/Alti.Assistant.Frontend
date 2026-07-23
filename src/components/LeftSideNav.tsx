@@ -1234,12 +1234,12 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       console.error("Failed to delete bot on backend", err);
                     }
                   }
-                  deleteBot(botToDelete, token);
-                  if (activeBotId === botToDelete) {
-                    setActiveBotId(null);
-                    setSelectedOption(null);
-                    router.push(isLoggedIn ? '/c/new-chat' : '/');
-                  }
+                  setActiveBotId(null);
+                  setSelectedOption(null);
+                  router.push(isLoggedIn ? '/c/new-chat' : '/');
+                  setTimeout(() => {
+                    deleteBot(botToDelete, token);
+                  }, 100);
                   setBotToDelete(null);
                 }
               }}
