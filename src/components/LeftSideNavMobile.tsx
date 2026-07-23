@@ -327,6 +327,7 @@ const LeftSideNavMobile = () => {
   const searchParams = useSearchParams();
   const activeAppSlug = searchParams?.get('app');
   const activeConnectorId = searchParams?.get('connector') || 'file';
+  const viewParam = searchParams?.get('view');
 
   const [connectedAppSlugs, setConnectedAppSlugs] = useState<Set<string>>(new Set());
 
@@ -1044,6 +1045,75 @@ const LeftSideNavMobile = () => {
           ) : (
             /* Space Mode */
             <div className="flex flex-col h-full min-h-0 animate-in fade-in duration-200">
+              {/* Configuration Tabs Toggle Group */}
+              <div className="px-4 pt-3 pb-1 flex-none w-full bg-[#0c1120]">
+                <div className="flex p-0.5 rounded-lg bg-zinc-900/60 border border-zinc-800/40 w-full select-none">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (viewParam === 'data' || selectedOption === OPTIONS.KNOWLEDGE) {
+                        setSelectedOption(null);
+                        router.push(`/spaces?bot=${activeBotId}`);
+                      } else {
+                        setSelectedOption(OPTIONS.KNOWLEDGE);
+                        router.push(`/spaces?bot=${activeBotId}&view=data`);
+                      }
+                      close();
+                    }}
+                    className={cn(
+                      "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
+                      (viewParam === 'data' || selectedOption === OPTIONS.KNOWLEDGE)
+                        ? "bg-[#0000ff]/15 border-[#0000ff] text-white shadow-[0_0_12px_rgba(0,0,255,0.35)]"
+                        : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30"
+                    )}
+                  >
+                    Knowledge
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (viewParam === 'instructions' || selectedOption === OPTIONS.INSTRUCTIONS) {
+                        setSelectedOption(null);
+                        router.push(`/spaces?bot=${activeBotId}`);
+                      } else {
+                        setSelectedOption(OPTIONS.INSTRUCTIONS);
+                        router.push(`/spaces?bot=${activeBotId}&view=instructions`);
+                      }
+                      close();
+                    }}
+                    className={cn(
+                      "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
+                      (viewParam === 'instructions' || selectedOption === OPTIONS.INSTRUCTIONS)
+                        ? "bg-[#0000ff]/15 border-[#0000ff] text-white shadow-[0_0_12px_rgba(0,0,255,0.35)]"
+                        : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30"
+                    )}
+                  >
+                    Instructions
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (viewParam === 'guardrails' || selectedOption === OPTIONS.GUARDRAILS) {
+                        setSelectedOption(null);
+                        router.push(`/spaces?bot=${activeBotId}`);
+                      } else {
+                        setSelectedOption(OPTIONS.GUARDRAILS);
+                        router.push(`/spaces?bot=${activeBotId}&view=guardrails`);
+                      }
+                      close();
+                    }}
+                    className={cn(
+                      "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
+                      (viewParam === 'guardrails' || selectedOption === OPTIONS.GUARDRAILS)
+                        ? "bg-[#0000ff]/15 border-[#0000ff] text-white shadow-[0_0_12px_rgba(0,0,255,0.35)]"
+                        : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/30"
+                    )}
+                  >
+                    Guardrails
+                  </button>
+                </div>
+              </div>
+
               {/* Search Bar Row (Same exact styling as general chat mode) */}
               <div className="pt-3 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full gap-2">
                 <div className="flex-1 flex h-9 items-center rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] overflow-hidden focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40 transition-all duration-300">
