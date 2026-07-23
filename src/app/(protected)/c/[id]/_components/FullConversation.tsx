@@ -1230,8 +1230,8 @@ return (
         className={cn(
           'shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300',
           !showAsNewChat
-            ? 'flex min-h-[80px] items-center justify-center pt-3 pb-1.5 border-t border-black/5 dark:border-zinc-800 bg-[#e1e1e1] dark:bg-zinc-900 mt-auto'
-            : 'pt-3 pb-1.5 bg-transparent border-t-0'
+            ? 'flex items-center justify-center pt-3 pb-1 border-t border-black/5 dark:border-zinc-800 bg-[#e1e1e1] dark:bg-zinc-900 mt-auto'
+            : 'pt-3 pb-1 bg-transparent border-t-0'
         )}
       >
         <div className="mx-auto w-full max-w-[796px]">
