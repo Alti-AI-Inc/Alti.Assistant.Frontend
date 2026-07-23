@@ -1366,121 +1366,7 @@ export default function ChatInput({
 
 
 
-        {selectedOption === OPTIONS.TASK ? (
-          <div className="relative flex flex-col rounded-2xl border bg-white shadow-sm border-gray-300 dark:border-zinc-700 dark:bg-zinc-800 transition-all duration-300">
-            <Textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Describe the task you want to automate..."
-              style={{ backgroundColor: 'transparent' }}
-              className="min-h-[72px] w-full flex-1 resize-none border-none bg-transparent px-4 py-4 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white"
-            />
 
-            <div className="px-4 pb-4 pt-1 border-t border-black/5 dark:border-white/5">
-              <div className="flex flex-col gap-3">
-                
-                {/* Controls Toggle Row */}
-                <div className="flex flex-wrap items-center gap-3">
-                  
-                  {/* Task Type Switcher */}
-                  <div className="flex bg-gray-100 dark:bg-zinc-955 p-0.5 rounded-xl border border-black/5 dark:border-zinc-800/80">
-                    <button
-                      type="button"
-                      onClick={() => setTaskType('one-time')}
-                      className={cn(
-                        'px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1.5',
-                        taskType === 'one-time'
-                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
-                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                      )}
-                    >
-                      <Clock className="size-3" />
-                      One-time
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setTaskType('recurring')}
-                      className={cn(
-                        'px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1.5',
-                        taskType === 'recurring'
-                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
-                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                      )}
-                    >
-                      <Repeat className="size-3" />
-                      Recurring
-                    </button>
-                  </div>
-
-                  {/* Trigger Type Switcher */}
-                  <div className="flex bg-gray-100 dark:bg-zinc-955 p-0.5 rounded-xl border border-black/5 dark:border-zinc-800/80">
-                    <button
-                      type="button"
-                      onClick={() => setTriggerType('scheduled')}
-                      className={cn(
-                        'px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1.5',
-                        triggerType === 'scheduled'
-                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
-                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                      )}
-                    >
-                      <CalendarClock className="size-3" />
-                      Scheduled
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setTriggerType('event')}
-                      className={cn(
-                        'px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1.5',
-                        triggerType === 'event'
-                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
-                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                      )}
-                    >
-                      <Zap className="size-3" />
-                      Event
-                    </button>
-                  </div>
-
-                </div>
-
-                {/* Input Row */}
-                <div className="flex items-center gap-3">
-                  <div className="flex-1">
-                    {triggerType === 'scheduled' ? (
-                      <input
-                        type="text"
-                        value={scheduledTime}
-                        onChange={(e) => setScheduledTime(e.target.value)}
-                        placeholder={taskType === 'recurring' ? 'Cron expression (e.g. Every Monday at 9AM)' : 'Execution time (e.g. Tomorrow 3PM)'}
-                        className="w-full bg-gray-50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                      />
-                    ) : (
-                      <input
-                        type="text"
-                        value={eventTrigger}
-                        onChange={(e) => setEventTrigger(e.target.value)}
-                        placeholder="Trigger event (e.g. When a new email arrives from @client.com)"
-                        className="w-full bg-gray-50 dark:bg-zinc-955/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                      />
-                    )}
-                  </div>
-                  
-                  <button
-                    type="button"
-                    onClick={handleCreateTask}
-                    disabled={!message.trim()}
-                    className="bg-[#0c1120] hover:bg-[#0c1120]/90 disabled:bg-[#0c1120] disabled:opacity-100 text-white rounded-xl h-[36px] w-[36px] p-0 flex items-center justify-center transition-transform active:scale-95 disabled:active:scale-100"
-                  >
-                    <ArrowUp className="size-4 text-white" />
-                  </button>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        ) : (
-          <>
             {appParam && (
               <div className="mb-3 px-4 py-2.5 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/50 dark:border-indigo-900/50 flex items-center justify-between shadow-xs animate-in fade-in duration-300">
                 <div className="flex items-center gap-2.5">
@@ -1630,23 +1516,126 @@ export default function ChatInput({
                 onKeyDown={e => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
-                    handleSubmit();
+                    if (selectedOption === OPTIONS.TASK) {
+                      handleCreateTask();
+                    } else {
+                      handleSubmit();
+                    }
                   }
                 }}
                 placeholder={
-                  activeConversation?.knowledgebaseId && isLoading
-                    ? 'Loading...'
-                    : activeConversation?.knowledgebaseId &&
-                        activeKnowledgeBaseName
-                      ? `Chat with ${activeKnowledgeBaseName}`
-                      : (pathname === '/workflows' || pathname?.startsWith('/workflows')
-                        ? 'Describe your workflow...'
-                        : 'Enter prompt here...')
+                  selectedOption === OPTIONS.TASK
+                    ? 'Describe the task you want to automate...'
+                    : selectedOption === OPTIONS.RESEARCH
+                      ? 'State research query...'
+                      : activeConversation?.knowledgebaseId && isLoading
+                        ? 'Loading...'
+                        : activeConversation?.knowledgebaseId &&
+                            activeKnowledgeBaseName
+                          ? `Chat with ${activeKnowledgeBaseName}`
+                          : (pathname === '/workflows' || pathname?.startsWith('/workflows')
+                            ? 'Describe your workflow...'
+                            : 'Enter prompt here...')
                 }
                 style={{ backgroundColor: 'transparent' }}
                 className="min-h-[48px] w-full flex-1 resize-none border-none bg-transparent px-4 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-5"
                 autoFocus
               />
+
+              {/* Task Configurations (only shown when Tasks tab is active) */}
+              {selectedOption === OPTIONS.TASK && (
+                <div className="px-4 pb-3 pt-1 border-t border-black/5 dark:border-white/5 sm:px-5">
+                  <div className="flex flex-col gap-3">
+                    
+                    {/* Controls Toggle Row */}
+                    <div className="flex flex-wrap items-center gap-3">
+                      
+                      {/* Task Type Switcher */}
+                      <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50">
+                        <button
+                          type="button"
+                          onClick={() => setTaskType('one-time')}
+                          className={cn(
+                            'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                            taskType === 'one-time'
+                              ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
+                              : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
+                          )}
+                        >
+                          <Clock className="size-3" />
+                          <span>One-time</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setTaskType('recurring')}
+                          className={cn(
+                            'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                            taskType === 'recurring'
+                              ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
+                              : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
+                          )}
+                        >
+                          <Repeat className="size-3" />
+                          <span>Recurring</span>
+                        </button>
+                      </div>
+
+                      {/* Trigger Type Switcher */}
+                      <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50">
+                        <button
+                          type="button"
+                          onClick={() => setTriggerType('scheduled')}
+                          className={cn(
+                            'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                            triggerType === 'scheduled'
+                              ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
+                              : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
+                          )}
+                        >
+                          <CalendarClock className="size-3" />
+                          <span>Scheduled</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setTriggerType('event')}
+                          className={cn(
+                            'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                            triggerType === 'event'
+                              ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
+                              : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
+                          )}
+                        >
+                          <Zap className="size-3" />
+                          <span>Event</span>
+                        </button>
+                      </div>
+
+                    </div>
+
+                    {/* Input Row */}
+                    <div className="w-full">
+                      {triggerType === 'scheduled' ? (
+                        <input
+                          type="text"
+                          value={scheduledTime}
+                          onChange={(e) => setScheduledTime(e.target.value)}
+                          placeholder={taskType === 'recurring' ? 'Cron expression (e.g. Every Monday at 9AM)' : 'Execution time (e.g. Tomorrow 3PM)'}
+                          className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl px-4 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={eventTrigger}
+                          onChange={(e) => setEventTrigger(e.target.value)}
+                          placeholder="Trigger event (e.g. When a new email arrives from @client.com)"
+                          className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 rounded-xl px-4 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                        />
+                      )}
+                    </div>
+
+                  </div>
+                </div>
+              )}
 
               <div className="flex items-center justify-between px-4 pb-2.5 pt-2.5 border-t border-black/5 dark:border-white/5 sm:px-5">
                 <div className="flex items-center gap-2">
@@ -1666,7 +1655,7 @@ export default function ChatInput({
                     </TooltipContent>
                   </Tooltip>
 
-                  {/* Chat / Research Switcher inside Prompt Box */}
+                  {/* Chat / Research / Tasks Switcher inside Prompt Box */}
                   {!hasMessages && !isExistingConversation && (
                     <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50">
                       <button
@@ -1695,6 +1684,19 @@ export default function ChatInput({
                         <Microscope className="size-3" />
                         <span>Research</span>
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedOption(OPTIONS.TASK)}
+                        className={cn(
+                          'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                          selectedOption === OPTIONS.TASK
+                            ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
+                            : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
+                        )}
+                      >
+                        <ListTodo className="size-3" />
+                        <span>Tasks</span>
+                      </button>
                     </div>
                   )}
                 </div>
@@ -1702,7 +1704,7 @@ export default function ChatInput({
                 <Tooltip>
                   <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
                     <ArrowUp
-                      onClick={handleSubmit}
+                      onClick={selectedOption === OPTIONS.TASK ? handleCreateTask : handleSubmit}
                       className={cn(
                         'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity focus:outline-none',
                         (isLoadingResponse || !message?.trim())
@@ -1712,14 +1714,12 @@ export default function ChatInput({
                     />
                   </TooltipTrigger>
                   <TooltipContent side="top">
-                    <p>Send Prompt</p>
+                    <p>{selectedOption === OPTIONS.TASK ? 'Schedule Task' : 'Send Prompt'}</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
             </div>
           </div>
-        </>
-      )}
       </div>
     </>
   );
