@@ -91,6 +91,9 @@ import { apiClientJson, buildApiUrl } from '@/lib/api-client';
 import { useBotsStore } from '@/stores/useBotsStore';
 import { useConnectionsQuery } from '@/hooks/useConnectApps';
 import { useInboxQuery } from '@/hooks/useInbox';
+import { createKnowledgeBaseAction } from '@/actions/knowledgeBaseAction';
+import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
 interface DataConnector {
   id: string;
@@ -207,7 +210,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     setUserMessage,
   } = useConversationsStore();
   const { isLeftSidebarOpen, toggleLeftSidebar, isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen } = useSidebarStore();
-  const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, deleteBot, reorderBots, editBot, threads, activeBotThreadId, setActiveBotThreadId, deleteThread } = useBotsStore();
+  const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, deleteBot, reorderBots, editBot, threads, activeBotThreadId, setActiveBotThreadId, deleteThread, addBotAsync } = useBotsStore();
 
   const { data: inboxItems = [] } = useInboxQuery(
     data?.user?.id,
@@ -216,6 +219,46 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     data?.accessToken
   );
   
+  const [isCreateSpaceOpen, setIsCreateSpaceOpen] = useState(false);
+  const [newSpaceName, setNewSpaceName] = useState('');
+  const [isCreatingSpace, setIsCreatingSpace] = useState(false);
+
+  const handleCreateSpace = async () => {
+    if (!newSpaceName.trim()) return;
+    setIsCreatingSpace(true);
+    try {
+      let backendId = '';
+      const token = data?.accessToken;
+      if (token) {
+        const kbResponse = await createKnowledgeBaseAction(newSpaceName.trim(), token);
+        if (kbResponse.success && kbResponse.data?.id) {
+          backendId = kbResponse.data.id;
+        }
+      }
+      const newBot = await addBotAsync({
+        name: newSpaceName.trim(),
+        description: `Custom Project Workspace: ${newSpaceName.trim()}`,
+        instructions: "",
+        model: 'Gemini 1.5 Pro',
+        avatar: '🤖',
+        guardrails: "",
+        data: backendId || undefined,
+        isShared: false,
+      }, token || undefined);
+
+      setIsCreateSpaceOpen(false);
+      setNewSpaceName('');
+      setActiveBotId(newBot.id);
+      router.push(`/spaces?bot=${newBot.id}`);
+      toast.success('Space created successfully!');
+    } catch (err: any) {
+      console.error(err);
+      toast.error('Failed to create space');
+    } finally {
+      setIsCreatingSpace(false);
+    }
+  };
+
   const unreadInboxCount = inboxItems.filter(item => !item.isRead).length;
 
   const hideSidebar = side === 'right' ? !isRightSidebarOpen : !isLeftSidebarOpen;
@@ -779,8 +822,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             <TooltipTrigger asChild>
               <button
                 onClick={() => {
-                  setActiveBotId(null);
-                  router.push('/spaces');
+                  setNewSpaceName('');
+                  setIsCreateSpaceOpen(true);
                 }}
                 className="relative size-9 flex items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700/80 text-zinc-900 dark:text-zinc-100 shadow-sm cursor-pointer transition-all duration-200"
               >
@@ -1246,6 +1289,50 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 disabled={!renameValue.trim()}
               >
                 Save
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Create Space Dialog */}
+      <Dialog open={isCreateSpaceOpen} onOpenChange={(open) => !open && setIsCreateSpaceOpen(false)}>
+        <DialogContent 
+          className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
+          <div className="space-y-4">
+            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight text-center">
+              Create A New Space
+            </h2>
+            <input
+              type="text"
+              value={newSpaceName}
+              onChange={(e) => setNewSpaceName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && newSpaceName.trim() && !isCreatingSpace) {
+                  handleCreateSpace();
+                }
+              }}
+              placeholder="Enter Space Name"
+              disabled={isCreatingSpace}
+              className="w-full bg-white dark:bg-zinc-900 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none rounded-xl px-3 py-2.5 text-xs text-gray-900 dark:text-white"
+            />
+            <div className="flex border-t border-black/10 dark:border-white/10 h-11 -mx-6 -mb-6 mt-4">
+              <button 
+                className="flex-1 text-sm font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 h-full border-r border-black/10 dark:border-white/10 outline-none disabled:opacity-50"
+                onClick={() => setIsCreateSpaceOpen(false)}
+                disabled={isCreatingSpace}
+              >
+                Cancel
+              </button>
+              <button 
+                className="flex-1 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:bg-black/5 dark:hover:bg-white/5 h-full outline-none disabled:opacity-50 flex items-center justify-center gap-1.5"
+                onClick={handleCreateSpace}
+                disabled={!newSpaceName.trim() || isCreatingSpace}
+              >
+                {isCreatingSpace && <Loader2 className="size-3.5 animate-spin" />}
+                Create
               </button>
             </div>
           </div>
