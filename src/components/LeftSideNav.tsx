@@ -1007,14 +1007,14 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           ) : (
             /* Space Mode */
             <div className="flex flex-col h-full min-h-0">
-              {/* Space Configurations Toggle Button */}
+              {/* Space Configuration Toggle Button */}
               <div className="px-4 pt-3 pb-1 flex-none w-full bg-[#0c1120]">
                 <button
                   type="button"
                   onClick={() => setShowSpaceConfig(!showSpaceConfig)}
                   className="flex items-center justify-between px-3 py-2 w-full rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 hover:bg-[#0000ff]/20 text-xs font-normal text-zinc-400 shadow-[0_0_12px_rgba(0,0,255,0.25)] transition-all cursor-pointer outline-none select-none"
                 >
-                  <span>Space Configurations</span>
+                  <span>Space Configuration</span>
                   <ChevronDown className={cn("size-3.5 text-zinc-400 transition-transform duration-200", showSpaceConfig && "rotate-180")} />
                 </button>
               </div>
