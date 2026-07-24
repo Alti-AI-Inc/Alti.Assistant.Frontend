@@ -64,6 +64,7 @@ import {
   CalendarClock,
   Zap,
   SlidersHorizontal,
+  Mic,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -181,6 +182,96 @@ export default function ChatInput({
   // Custom files state for docs (controlled or uncontrolled)
   const [internalSelectedFiles, setInternalSelectedFiles] = useState<File[]>([]);
   const [isAudioRecording, setIsAudioRecording] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
+  const startListening = () => {
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      toast.error('Speech recognition is not supported in this browser. Please try Chrome, Safari, or Edge.');
+      return;
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = () => {
+        setIsListening(true);
+      };
+
+      recognition.onresult = (event: any) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          } else {
+            interimTranscript += event.results[i][0].transcript;
+          }
+        }
+        const text = finalTranscript + interimTranscript;
+        if (text.trim()) {
+          setMessage(text);
+        }
+      };
+
+      recognition.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        if (event.error !== 'no-speech') {
+          stopListening();
+        }
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current = recognition;
+      recognition.start();
+    } catch (err) {
+      console.error('Failed to start SpeechRecognition:', err);
+      setIsListening(false);
+    }
+  };
+
+  const stopListening = () => {
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch (err) {
+        console.error('Error stopping recognition:', err);
+      }
+      recognitionRef.current = null;
+    }
+    setIsListening(false);
+  };
+
+  const toggleListening = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    };
+  }, []);
   const [researchSettings, setResearchSettings] = useState<PreFlightSettings>({
     depth: 'thorough',
     consensusLevel: 'majority',
@@ -232,6 +323,9 @@ export default function ChatInput({
   const [eventTrigger, setEventTrigger] = useState('');
 
   const handleCreateTask = () => {
+    // Stop recording/listening if active
+    stopListening();
+
     if (!message.trim()) return;
     const taskName = message.trim();
     const runId = Math.random().toString(36).substring(7);
@@ -985,6 +1079,9 @@ export default function ChatInput({
   });
 
   const handleSubmit = async () => {
+    // Stop recording/listening if active
+    stopListening();
+
     // Prevent submission if response is loading or message is empty
     if (isLoadingResponse) return;
 
@@ -1496,21 +1593,38 @@ export default function ChatInput({
                     autoFocus
                   />
 
-                  {/* Send Button */}
+                  {/* Send Button / Mic Button */}
                   <Tooltip>
                     <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
-                      <ArrowUp
-                        onClick={handleSubmit}
-                        className={cn(
-                          'size-8 flex-shrink-0 rounded-lg transition-all focus:outline-none',
-                          (isLoadingResponse || !message?.trim())
-                            ? 'bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed p-2'
-                            : 'border-2 border-gray-300 bg-[#0c1120] p-1.5 text-white cursor-pointer hover:opacity-80',
-                        )}
-                      />
+                      {isLoadingResponse ? (
+                        <ArrowUp
+                          className="size-8 flex-shrink-0 rounded-lg transition-all focus:outline-none bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed p-2"
+                        />
+                      ) : !message?.trim() ? (
+                        <Mic
+                          onClick={toggleListening}
+                          className={cn(
+                            'size-8 flex-shrink-0 rounded-lg transition-all focus:outline-none cursor-pointer bg-black text-white hover:bg-zinc-900 p-2',
+                            isListening && 'bg-red-650 text-white animate-pulse bg-red-600 hover:bg-red-700'
+                          )}
+                        />
+                      ) : (
+                        <ArrowUp
+                          onClick={handleSubmit}
+                          className="size-8 flex-shrink-0 rounded-lg transition-all focus:outline-none bg-black text-white hover:bg-zinc-900 cursor-pointer p-1.5"
+                        />
+                      )}
                     </TooltipTrigger>
                     <TooltipContent side="top">
-                      <p>Send Prompt</p>
+                      <p>
+                        {isLoadingResponse
+                          ? 'Assistant is thinking...'
+                          : !message?.trim()
+                            ? isListening
+                              ? 'Stop listening'
+                              : 'Speech to Text'
+                            : 'Send Prompt'}
+                      </p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -1801,20 +1915,40 @@ export default function ChatInput({
                       )}
                     </div>
 
+                    {/* Send Button / Mic Button */}
                     <Tooltip>
                       <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
-                        <ArrowUp
-                          onClick={selectedOption === OPTIONS.TASK ? handleCreateTask : handleSubmit}
-                          className={cn(
-                            'size-7 flex-shrink-0 rounded-lg transition-all focus:outline-none',
-                            (isLoadingResponse || !message?.trim())
-                              ? 'bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed p-1.5'
-                              : 'border-2 border-gray-300 bg-[#0c1120] p-1 text-white cursor-pointer hover:opacity-80',
-                          )}
-                        />
+                        {isLoadingResponse ? (
+                          <ArrowUp
+                            className="size-7 flex-shrink-0 rounded-lg transition-all focus:outline-none bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed p-1.5"
+                          />
+                        ) : !message?.trim() ? (
+                          <Mic
+                            onClick={toggleListening}
+                            className={cn(
+                              'size-7 flex-shrink-0 rounded-lg transition-all focus:outline-none cursor-pointer bg-black text-white hover:bg-zinc-900 p-1.5',
+                              isListening && 'bg-red-650 text-white animate-pulse bg-red-600 hover:bg-red-700'
+                            )}
+                          />
+                        ) : (
+                          <ArrowUp
+                            onClick={selectedOption === OPTIONS.TASK ? handleCreateTask : handleSubmit}
+                            className="size-7 flex-shrink-0 rounded-lg transition-all focus:outline-none bg-black text-white hover:bg-zinc-900 cursor-pointer p-1"
+                          />
+                        )}
                       </TooltipTrigger>
                       <TooltipContent side="top">
-                        <p>{selectedOption === OPTIONS.TASK ? 'Schedule Task' : 'Send Prompt'}</p>
+                        <p>
+                          {isLoadingResponse
+                            ? 'Assistant is thinking...'
+                            : !message?.trim()
+                              ? isListening
+                                ? 'Stop listening'
+                                : 'Speech to Text'
+                              : selectedOption === OPTIONS.TASK
+                                ? 'Schedule Task'
+                                : 'Send Prompt'}
+                        </p>
                       </TooltipContent>
                     </Tooltip>
                   </div>
