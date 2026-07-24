@@ -1597,22 +1597,34 @@ export default function ChatInput({
                   <Tooltip>
                     <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
                       {isLoadingResponse ? (
-                        <ArrowUp
-                          className="size-8 flex-shrink-0 rounded-lg transition-all focus:outline-none bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed p-2"
-                        />
+                        <button
+                          type="button"
+                          disabled
+                          className="flex size-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed focus:outline-none"
+                        >
+                          <ArrowUp className="size-4" />
+                        </button>
                       ) : !message?.trim() ? (
-                        <Mic
+                        <button
+                          type="button"
                           onClick={toggleListening}
                           className={cn(
-                            'size-8 flex-shrink-0 rounded-lg transition-all focus:outline-none cursor-pointer bg-black text-white hover:bg-zinc-900 p-2',
-                            isListening && 'bg-red-650 text-white animate-pulse bg-red-600 hover:bg-red-700'
+                            'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-black text-white hover:bg-zinc-900 focus:outline-none transition-all',
+                            isListening && 'bg-red-600 hover:bg-red-700 animate-pulse text-white'
                           )}
-                        />
+                          aria-label={isListening ? 'Stop listening' : 'Speech to Text'}
+                        >
+                          <Mic className="size-4" />
+                        </button>
                       ) : (
-                        <ArrowUp
+                        <button
+                          type="button"
                           onClick={handleSubmit}
-                          className="size-8 flex-shrink-0 rounded-lg transition-all focus:outline-none bg-black text-white hover:bg-zinc-900 cursor-pointer p-1.5"
-                        />
+                          className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-black text-white hover:bg-zinc-900 focus:outline-none transition-all"
+                          aria-label="Send Prompt"
+                        >
+                          <ArrowUp className="size-4" />
+                        </button>
                       )}
                     </TooltipTrigger>
                     <TooltipContent side="top">
@@ -1919,22 +1931,34 @@ export default function ChatInput({
                     <Tooltip>
                       <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
                         {isLoadingResponse ? (
-                          <ArrowUp
-                            className="size-7 flex-shrink-0 rounded-lg transition-all focus:outline-none bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed p-1.5"
-                          />
+                          <button
+                            type="button"
+                            disabled
+                            className="flex size-7 flex-shrink-0 items-center justify-center rounded-lg bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed focus:outline-none"
+                          >
+                            <ArrowUp className="size-3.5" />
+                          </button>
                         ) : !message?.trim() ? (
-                          <Mic
+                          <button
+                            type="button"
                             onClick={toggleListening}
                             className={cn(
-                              'size-7 flex-shrink-0 rounded-lg transition-all focus:outline-none cursor-pointer bg-black text-white hover:bg-zinc-900 p-1.5',
-                              isListening && 'bg-red-650 text-white animate-pulse bg-red-600 hover:bg-red-700'
+                              'flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-black text-white hover:bg-zinc-900 focus:outline-none transition-all',
+                              isListening && 'bg-red-600 hover:bg-red-700 animate-pulse text-white'
                             )}
-                          />
+                            aria-label={isListening ? 'Stop listening' : 'Speech to Text'}
+                          >
+                            <Mic className="size-3.5" />
+                          </button>
                         ) : (
-                          <ArrowUp
+                          <button
+                            type="button"
                             onClick={selectedOption === OPTIONS.TASK ? handleCreateTask : handleSubmit}
-                            className="size-7 flex-shrink-0 rounded-lg transition-all focus:outline-none bg-black text-white hover:bg-zinc-900 cursor-pointer p-1"
-                          />
+                            className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-black text-white hover:bg-zinc-900 focus:outline-none transition-all"
+                            aria-label="Send Prompt"
+                          >
+                            <ArrowUp className="size-3.5" />
+                          </button>
                         )}
                       </TooltipTrigger>
                       <TooltipContent side="top">
