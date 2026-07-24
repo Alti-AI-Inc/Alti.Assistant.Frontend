@@ -1455,6 +1455,14 @@ export default function ChatInput({
 
   return (
     <>
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        className="hidden"
+        multiple
+        accept={ALLOWED_DOC_EXTENSIONS.join(',')}
+      />
       {/* Image Gen UI is now handled by parent in FullConversation, but kept here for fallback/other pages */}
       {!externalImageGenHook && shouldShowConfirmation && (
         <ImageGenConfirmation onConfirm={handleUserConfirmation} />
