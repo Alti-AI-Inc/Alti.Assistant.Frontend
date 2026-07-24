@@ -279,6 +279,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [botToRename, setBotToRename] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState('');
+  const [showSpaceConfig, setShowSpaceConfig] = useState(false);
   
   const [localAppsOrder, setLocalAppsOrder] = useState<APP[]>([]);
   const [draggedAppIndex, setDraggedAppIndex] = useState<number | null>(null);
@@ -388,6 +389,21 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       setLocalAppsOrder(sorted);
     }
   }, [connections, data?.user?.email]);
+
+  // Auto-expand if space configuration is currently selected
+  useEffect(() => {
+    const isConfigActive =
+      viewParam === 'data' ||
+      viewParam === 'instructions' ||
+      viewParam === 'guardrails' ||
+      selectedOption === OPTIONS.KNOWLEDGE ||
+      selectedOption === OPTIONS.INSTRUCTIONS ||
+      selectedOption === OPTIONS.GUARDRAILS;
+
+    if (isConfigActive) {
+      setShowSpaceConfig(true);
+    }
+  }, [viewParam, selectedOption]);
 
   const filteredApps = useMemo(() => {
     return AVAILABLE_MCP_APPS.filter(app =>
@@ -991,71 +1007,85 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           ) : (
             /* Space Mode */
             <div className="flex flex-col h-full min-h-0">
-              {/* Configuration Tabs Toggle Group */}
+              {/* Space Configurations Toggle Button */}
               <div className="px-4 pt-3 pb-1 flex-none w-full bg-[#0c1120]">
-                <div className="flex p-0.5 rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] w-full select-none">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (viewParam === 'data' || selectedOption === OPTIONS.KNOWLEDGE) {
-                        setSelectedOption(null);
-                        router.push(`/spaces?bot=${activeBotId}`);
-                      } else {
-                        setSelectedOption(OPTIONS.KNOWLEDGE);
-                        router.push(`/spaces?bot=${activeBotId}&view=data`);
-                      }
-                    }}
-                    className={cn(
-                      "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
-                      (viewParam === 'data' || selectedOption === OPTIONS.KNOWLEDGE)
-                        ? "bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]"
-                        : "text-blue-200/70 hover:text-white hover:bg-white/5"
-                    )}
-                  >
-                    Knowledge
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (viewParam === 'instructions' || selectedOption === OPTIONS.INSTRUCTIONS) {
-                        setSelectedOption(null);
-                        router.push(`/spaces?bot=${activeBotId}`);
-                      } else {
-                        setSelectedOption(OPTIONS.INSTRUCTIONS);
-                        router.push(`/spaces?bot=${activeBotId}&view=instructions`);
-                      }
-                    }}
-                    className={cn(
-                      "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
-                      (viewParam === 'instructions' || selectedOption === OPTIONS.INSTRUCTIONS)
-                        ? "bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]"
-                        : "text-blue-200/70 hover:text-white hover:bg-white/5"
-                    )}
-                  >
-                    Instructions
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (viewParam === 'guardrails' || selectedOption === OPTIONS.GUARDRAILS) {
-                        setSelectedOption(null);
-                        router.push(`/spaces?bot=${activeBotId}`);
-                      } else {
-                        setSelectedOption(OPTIONS.GUARDRAILS);
-                        router.push(`/spaces?bot=${activeBotId}&view=guardrails`);
-                      }
-                    }}
-                    className={cn(
-                      "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
-                      (viewParam === 'guardrails' || selectedOption === OPTIONS.GUARDRAILS)
-                        ? "bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]"
-                        : "text-blue-200/70 hover:text-white hover:bg-white/5"
-                    )}
-                  >
-                    Guardrails
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowSpaceConfig(!showSpaceConfig)}
+                  className="flex items-center justify-between px-3 py-2 w-full rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 hover:bg-[#0000ff]/20 text-xs font-semibold text-white shadow-[0_0_12px_rgba(0,0,255,0.25)] transition-all cursor-pointer outline-none select-none"
+                >
+                  <span>Space Configurations</span>
+                  <ChevronDown className={cn("size-3.5 text-blue-200 transition-transform duration-200", showSpaceConfig && "rotate-180")} />
+                </button>
               </div>
+
+              {/* Configuration Tabs Toggle Group (Expands below) */}
+              {showSpaceConfig && (
+                <div className="px-4 py-1.5 flex-none w-full bg-[#0c1120] animate-in slide-in-from-top-2 duration-200">
+                  <div className="flex p-0.5 rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] w-full select-none">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (viewParam === 'data' || selectedOption === OPTIONS.KNOWLEDGE) {
+                          setSelectedOption(null);
+                          router.push(`/spaces?bot=${activeBotId}`);
+                        } else {
+                          setSelectedOption(OPTIONS.KNOWLEDGE);
+                          router.push(`/spaces?bot=${activeBotId}&view=data`);
+                        }
+                      }}
+                      className={cn(
+                        "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
+                        (viewParam === 'data' || selectedOption === OPTIONS.KNOWLEDGE)
+                          ? "bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]"
+                          : "text-blue-200/70 hover:text-white hover:bg-white/5"
+                      )}
+                    >
+                      Knowledge
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (viewParam === 'instructions' || selectedOption === OPTIONS.INSTRUCTIONS) {
+                          setSelectedOption(null);
+                          router.push(`/spaces?bot=${activeBotId}`);
+                        } else {
+                          setSelectedOption(OPTIONS.INSTRUCTIONS);
+                          router.push(`/spaces?bot=${activeBotId}&view=instructions`);
+                        }
+                      }}
+                      className={cn(
+                        "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
+                        (viewParam === 'instructions' || selectedOption === OPTIONS.INSTRUCTIONS)
+                          ? "bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]"
+                          : "text-blue-200/70 hover:text-white hover:bg-white/5"
+                      )}
+                    >
+                      Instructions
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (viewParam === 'guardrails' || selectedOption === OPTIONS.GUARDRAILS) {
+                          setSelectedOption(null);
+                          router.push(`/spaces?bot=${activeBotId}`);
+                        } else {
+                          setSelectedOption(OPTIONS.GUARDRAILS);
+                          router.push(`/spaces?bot=${activeBotId}&view=guardrails`);
+                        }
+                      }}
+                      className={cn(
+                        "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
+                        (viewParam === 'guardrails' || selectedOption === OPTIONS.GUARDRAILS)
+                          ? "bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]"
+                          : "text-blue-200/70 hover:text-white hover:bg-white/5"
+                      )}
+                    >
+                      Guardrails
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Search Bar Row (Same exact styling as general chat mode) */}
               <div className="pt-3 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full gap-2">
