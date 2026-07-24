@@ -1012,9 +1012,12 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 <button
                   type="button"
                   onClick={() => setShowSpaceConfig(!showSpaceConfig)}
-                  className="flex items-center justify-between px-3 py-2 w-full rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 hover:bg-[#0000ff]/20 text-xs font-normal text-zinc-400 shadow-[0_0_12px_rgba(0,0,255,0.25)] transition-all cursor-pointer outline-none select-none"
+                  className="flex items-center justify-between pl-3 pr-2 py-2 w-full rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 hover:bg-[#0000ff]/20 text-xs font-normal text-zinc-400 shadow-[0_0_12px_rgba(0,0,255,0.25)] transition-all cursor-pointer outline-none select-none"
                 >
-                  <span>Space Configuration</span>
+                  <div className="flex items-center gap-2.5">
+                    <SlidersHorizontal className="size-3.5 flex-none text-[#5e5eff]" />
+                    <span>Space Configuration</span>
+                  </div>
                   <ChevronDown className={cn("size-3.5 text-zinc-400 transition-transform duration-200", showSpaceConfig && "rotate-180")} />
                 </button>
               </div>
