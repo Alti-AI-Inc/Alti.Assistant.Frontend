@@ -338,10 +338,10 @@ export default function ChatInput({
       botId: activeBotId || undefined
     };
 
-    const existing = localStorage.getItem('alti_task_runs');
+    const existing = localStorage.getItem('inso_task_runs');
     const runsList = existing ? JSON.parse(existing) : [];
     runsList.unshift(newRun);
-    localStorage.setItem('alti_task_runs', JSON.stringify(runsList));
+    localStorage.setItem('inso_task_runs', JSON.stringify(runsList));
 
     toast.success('Task scheduled successfully', {
       description: 'You can monitor execution logs in the sidebar Inbox tab.'
@@ -353,13 +353,13 @@ export default function ChatInput({
 
     // Simulate completion
     setTimeout(() => {
-      const currentRuns = JSON.parse(localStorage.getItem('alti_task_runs') || '[]');
+      const currentRuns = JSON.parse(localStorage.getItem('inso_task_runs') || '[]');
       const targetRun = currentRuns.find((r: any) => r.id === runId);
       if (targetRun) {
         targetRun.status = 'success';
         targetRun.duration = 2450;
         targetRun.summary = `Successfully executed task automation pipeline. Verified triggers, loaded task inputs, and completed task: "${taskName}".`;
-        localStorage.setItem('alti_task_runs', JSON.stringify(currentRuns));
+        localStorage.setItem('inso_task_runs', JSON.stringify(currentRuns));
       }
     }, 3000);
   };
@@ -727,7 +727,7 @@ export default function ChatInput({
         }
 
         try {
-          const base = process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
+          const base = process.env.NEXT_PUBLIC_API_URL || 'https://insohq.com/api/v1';
           const res = await fetch(
             `${base}/vertex/anonymous-response`,
             {

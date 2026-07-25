@@ -94,7 +94,7 @@ frontend dashboard will call.
 
 ## Phase 2 — Frontend: Upgrade Page (Plan Selection)
 
-**File:** `Alti.Assistant.Frontend/src/app/(protected)/upgrade/page.tsx`
+**File:** `Inso.Assistant.Frontend/src/app/(protected)/upgrade/page.tsx`
 
 Replace the current static mockup with a fully dynamic, API-driven page.
 
@@ -146,7 +146,7 @@ billing page. No new component needed.
 
 ## Phase 3 — Frontend: Personal Billing Dashboard
 
-**New file:** `Alti.Assistant.Frontend/src/app/(protected)/billing/page.tsx`
+**New file:** `Inso.Assistant.Frontend/src/app/(protected)/billing/page.tsx`
 
 This is the "My Billing" page for personal users, equivalent to
 `/organizations/[tenantId]/billing`. Add a link to it from the settings sidebar
@@ -325,7 +325,7 @@ Phase 1 is complete. Phase 5 (webhooks) can be developed in parallel with Phases
 | `src/app/modules/stripe/subscription.service.js` | Add metadata to `stripe.subscriptions.create`                                                   |
 | `src/app/modules/stripe/webhook.service.js`      | **New file** — personal subscription webhook handler                                            |
 
-### Frontend (`Alti.Assistant.Frontend`)
+### Frontend (`Inso.Assistant.Frontend`)
 
 | File                                     | Action                                               |
 | ---------------------------------------- | ---------------------------------------------------- |

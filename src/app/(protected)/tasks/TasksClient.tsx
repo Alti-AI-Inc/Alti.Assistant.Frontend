@@ -66,8 +66,8 @@ export default function TasksClient() {
 
   // Hydrate states from localStorage on mount
   useEffect(() => {
-    const savedTasks = localStorage.getItem('alti_automations');
-    const savedRuns = localStorage.getItem('alti_task_runs');
+    const savedTasks = localStorage.getItem('inso_automations');
+    const savedRuns = localStorage.getItem('inso_task_runs');
 
     if (savedTasks) {
       setTasks(JSON.parse(savedTasks));
@@ -106,7 +106,7 @@ export default function TasksClient() {
         }
       ];
       setTasks(defaultTasks);
-      localStorage.setItem('alti_automations', JSON.stringify(defaultTasks));
+      localStorage.setItem('inso_automations', JSON.stringify(defaultTasks));
     }
 
     if (savedRuns) {
@@ -141,7 +141,7 @@ export default function TasksClient() {
             }
           ];
           setRuns(defaultRuns);
-          localStorage.setItem('alti_task_runs', JSON.stringify(defaultRuns));
+          localStorage.setItem('inso_task_runs', JSON.stringify(defaultRuns));
         } else {
           setRuns(parsed);
         }
@@ -174,7 +174,7 @@ export default function TasksClient() {
           }
         ];
         setRuns(defaultRuns);
-        localStorage.setItem('alti_task_runs', JSON.stringify(defaultRuns));
+        localStorage.setItem('inso_task_runs', JSON.stringify(defaultRuns));
       }
     } else {
       // Default runs matching the default tasks
@@ -205,7 +205,7 @@ export default function TasksClient() {
         }
       ];
       setRuns(defaultRuns);
-      localStorage.setItem('alti_task_runs', JSON.stringify(defaultRuns));
+      localStorage.setItem('inso_task_runs', JSON.stringify(defaultRuns));
     }
   }, []);
 
@@ -220,9 +220,9 @@ export default function TasksClient() {
       window.history.replaceState(null, '', '/tasks');
     };
 
-    window.addEventListener('alti_new_task_click', handleNewTaskClick);
+    window.addEventListener('inso_new_task_click', handleNewTaskClick);
     return () => {
-      window.removeEventListener('alti_new_task_click', handleNewTaskClick);
+      window.removeEventListener('inso_new_task_click', handleNewTaskClick);
     };
   }, []);
 
@@ -253,13 +253,13 @@ export default function TasksClient() {
 
   const saveTasks = (newTasks: AutomationTask[]) => {
     setTasks(newTasks);
-    localStorage.setItem('alti_automations', JSON.stringify(newTasks));
-    window.dispatchEvent(new Event('alti_automations_updated'));
+    localStorage.setItem('inso_automations', JSON.stringify(newTasks));
+    window.dispatchEvent(new Event('inso_automations_updated'));
   };
 
   const saveRuns = (newRuns: TaskRun[]) => {
     setRuns(newRuns);
-    localStorage.setItem('alti_task_runs', JSON.stringify(newRuns));
+    localStorage.setItem('inso_task_runs', JSON.stringify(newRuns));
   };
 
   const handleCreateTask = () => {
@@ -338,7 +338,7 @@ export default function TasksClient() {
           duration: 2000 + Math.floor(Math.random() * 2000),
           summary: finalSummary,
         } : r);
-        localStorage.setItem('alti_task_runs', JSON.stringify(updated));
+        localStorage.setItem('inso_task_runs', JSON.stringify(updated));
         return updated;
       });
 

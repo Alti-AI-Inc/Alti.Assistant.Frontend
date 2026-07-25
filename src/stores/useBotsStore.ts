@@ -53,7 +53,7 @@ interface BotsState {
   reorderBots: (startIndex: number, endIndex: number) => void;
 }
 
-const getApiUrl = () => process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
+const getApiUrl = () => process.env.NEXT_PUBLIC_API_URL || 'https://insohq.com/api/v1';
 
 const PRELOADED_BOTS: Chatbot[] = [
   {
@@ -87,7 +87,7 @@ const PRELOADED_BOTS: Chatbot[] = [
     id: 'general-assistant',
     name: 'General Assistant',
     description: 'Standard conversational assistant for everyday inquiries and brainstorming.',
-    instructions: 'You are Alti Assistant, a highly helpful, intelligent, and friendly general-purpose AI chatbot. You assist with general tasks, brainstorming, writing, analysis, and problem-solving.',
+    instructions: 'You are Inso Assistant, a highly helpful, intelligent, and friendly general-purpose AI chatbot. You assist with general tasks, brainstorming, writing, analysis, and problem-solving.',
     model: 'Gemini 1.5 Flash',
     avatar: '🤖',
     createdAt: new Date().toISOString(),
@@ -305,7 +305,7 @@ export const useBotsStore = create<BotsState>()(
       },
     }),
     {
-      name: 'alti-custom-bots',
+      name: 'inso-custom-bots',
       partialize: (state) => ({
         bots: state.bots,
         threads: state.threads,

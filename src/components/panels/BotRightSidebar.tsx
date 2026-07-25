@@ -101,14 +101,14 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
       }
       setActiveTab('inbox');
     };
-    window.addEventListener('alti_inbox_click', handleInboxClick);
-    return () => window.removeEventListener('alti_inbox_click', handleInboxClick);
+    window.addEventListener('inso_inbox_click', handleInboxClick);
+    return () => window.removeEventListener('inso_inbox_click', handleInboxClick);
   }, [selectedOption, setSelectedOption]);
 
   // Fetch runs for Inbox
   useEffect(() => {
     const fetchRuns = () => {
-      const savedRuns = localStorage.getItem('alti_task_runs');
+      const savedRuns = localStorage.getItem('inso_task_runs');
       if (savedRuns) {
         setRuns(JSON.parse(savedRuns));
       } else {
@@ -222,7 +222,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   };
 
   const handleClearRuns = () => {
-    localStorage.removeItem('alti_task_runs');
+    localStorage.removeItem('inso_task_runs');
     setRuns([]);
     toast.success('Run history cleared');
   };

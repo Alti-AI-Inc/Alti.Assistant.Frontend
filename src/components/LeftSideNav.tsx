@@ -306,7 +306,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
   useEffect(() => {
     const handleStorageChange = () => {
-      const savedTasks = localStorage.getItem('alti_automations');
+      const savedTasks = localStorage.getItem('inso_automations');
       if (savedTasks) {
         setTasks(JSON.parse(savedTasks));
       } else {
@@ -317,11 +317,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     handleStorageChange();
 
     window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('alti_automations_updated', handleStorageChange);
+    window.addEventListener('inso_automations_updated', handleStorageChange);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('alti_automations_updated', handleStorageChange);
+      window.removeEventListener('inso_automations_updated', handleStorageChange);
     };
   }, [pathname]);
 
@@ -333,7 +333,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const isTenantOwner = mode === 'tenant' && (currentTenant?.role === 'admin' || currentTenant?.role === 'owner');
   const isTenantAdmin = mode === 'tenant' && currentTenant?.role === 'manager';
 
-  const isAdmin = userEmail === 'admin@altihq.com' || isGlobalAdmin || isTenantOwner;
+  const isAdmin = userEmail === 'admin@insohq.com' || isGlobalAdmin || isTenantOwner;
   const isManager = isGlobalAdmin || isTenantOwner || isTenantAdmin;
   const isSuperAdmin = data?.user?.role === 'super_admin';
 
@@ -541,7 +541,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           tooltip: 'New Task',
           onClick: () => {
             router.push('/tasks');
-            window.dispatchEvent(new Event('alti_new_task_click'));
+            window.dispatchEvent(new Event('inso_new_task_click'));
           },
         };
       case 'search':
@@ -737,7 +737,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           </div>
         )}
 
-        {/* Alti Assistant Home Button */}
+        {/* Inso Assistant Home Button */}
         <div className="relative w-full flex flex-col items-center">
           <div
             className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1.5"
@@ -758,11 +758,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     : "bg-[#0000ff]/10 border-[#0000ff]/35 hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]"
                 )}
               >
-                <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
+                <img src="/assets/logo-icon.png" alt="Inso Brand Logo" className="size-6 object-contain brightness-0 invert" />
               </button>
             </TooltipTrigger>
             <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
-              Alti AI
+              Inso AI
             </TooltipContent>
           </Tooltip>
         </div>
@@ -875,7 +875,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         {/* Header Row */}
         <div className="sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] px-4 flex-none">
           <span className="text-sm font-semibold text-white truncate">
-            {activeBotId ? (bots.find(b => b.id === activeBotId)?.name || 'Space') : 'Alti AI'}
+            {activeBotId ? (bots.find(b => b.id === activeBotId)?.name || 'Space') : 'Inso AI'}
           </span>
           <PanelLeftClose
             className="size-5 cursor-pointer text-zinc-400 hover:text-white transition-colors"
