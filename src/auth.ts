@@ -37,7 +37,7 @@ const verifyBackendJwt = (token: string): jwt.JwtPayload | null => {
 
   if (!secret) {
     console.error(
-      'Inso Assistant Auth: Neither JWT_ACCESS_TOKEN nor AUTH_SECRET is defined. Cannot verify backend JWT signature.'
+      'Inso AI Auth: Neither JWT_ACCESS_TOKEN nor AUTH_SECRET is defined. Cannot verify backend JWT signature.'
     );
     return null;
   }
@@ -45,7 +45,7 @@ const verifyBackendJwt = (token: string): jwt.JwtPayload | null => {
   try {
     return jwt.verify(token, secret) as jwt.JwtPayload;
   } catch (error) {
-    console.error('Inso Assistant Auth: Failed to verify backend JWT signature:', error);
+    console.error('Inso AI Auth: Failed to verify backend JWT signature:', error);
     return null;
   }
 };

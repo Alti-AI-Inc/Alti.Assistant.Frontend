@@ -109,7 +109,7 @@ function RegisterPageContent() {
           <Link href="/">
             <Image
               src="/assets/logo-icon.png"
-              alt="Inso Assistant Logo"
+              alt="Inso AI Logo"
               width={40}
               height={40}
               className="mb-2"

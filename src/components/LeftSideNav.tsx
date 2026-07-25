@@ -737,7 +737,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           </div>
         )}
 
-        {/* Inso Assistant Home Button */}
+        {/* Inso AI Home Button */}
         <div className="relative w-full flex flex-col items-center">
           <div
             className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1.5"

@@ -757,7 +757,7 @@ const LeftSideNavMobile = () => {
     <div className="flex h-full w-full overflow-hidden">
       {/* Column 1: Spaces Switcher (Slack style) */}
       <div className="w-[60px] h-full bg-[#0c1120] border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
-        {/* Inso Assistant Home Button */}
+        {/* Inso AI Home Button */}
         <div className="relative w-full flex flex-col items-center">
           <div
             className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1.5"
