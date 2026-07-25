@@ -1,6 +1,10 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // Force a unique build ID on every deploy so browsers never serve stale JS chunks
+  generateBuildId: async () => {
+    return `build-${Date.now()}`;
+  },
   turbopack: {
     root: process.cwd(),
   },

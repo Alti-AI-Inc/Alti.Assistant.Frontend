@@ -108,8 +108,8 @@ export default function ProtectedLayoutClient({
         {!isSuperAdmin && (
           <div
             className={cn(
-              'sticky top-0 left-0 hidden h-full flex-col transition-all duration-300 ease-in-out sm:hidden md:flex border-r border-zinc-800/50 shrink-0 z-20',
-              isLeftSidebarOpen ? 'w-96' : 'w-[68px]',
+              'sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out sm:hidden md:flex border-r border-zinc-800/50 shrink-0 z-20',
+              isLeftSidebarOpen ? 'w-76' : 'w-[68px]',
             )}
             style={{ backgroundColor: '#0c1120' }}
           >
