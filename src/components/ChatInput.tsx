@@ -483,12 +483,16 @@ export default function ChatInput({
 
   const { isFreeUser } = useSubscription();
 
+  const hasStartedChat = activeConversation?.messages && activeConversation.messages.length > 0;
+  
   const isExistingConversation =
     (activeConversation?.conversationId &&
       activeConversation?.conversationId !== 'new-chat' &&
       pathname?.startsWith('/c/') &&
       pathname !== '/c/new-chat') ||
-    (conversationId && conversationId !== 'new-chat');
+    (conversationId && conversationId !== 'new-chat') ||
+    hasStartedChat ||
+    isLoadingResponse;
 
   useEffect(() => {
     if (!isExistingConversation) {
