@@ -716,7 +716,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   return (
     <div className="flex h-full w-full overflow-hidden">
       {/* Column 1: Spaces Switcher (Slack style) */}
-      <div className="w-[68px] h-full bg-[#0c1120] border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
+      <div className="w-[68px] h-full bg-black border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
         {/* Toggle Collapse/Expand Button (Visible only when collapsed) */}
         {!isLeftSidebarOpen && (
           <div className="relative w-full flex flex-col items-center mb-1 animate-in fade-in duration-200">
@@ -849,7 +849,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         </div>
 
         {/* Footer Area for Spaces column */}
-        <div className="sticky bottom-0 z-30 flex items-center justify-center w-full bg-[#0c1120] border-t border-zinc-800/60 py-2.5 flex-none h-[64px]">
+        <div className="sticky bottom-0 z-30 flex items-center justify-center w-full bg-black border-t border-zinc-800/60 py-2.5 flex-none h-[64px]">
           <Tooltip>
             <TooltipTrigger asChild>
               <button
