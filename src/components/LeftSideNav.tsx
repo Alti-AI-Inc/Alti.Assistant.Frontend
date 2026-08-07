@@ -737,7 +737,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           </div>
         )}
 
-        {/* Inso AI Home Button */}
+        {/* Inso Chat Home Button */}
         <div className="relative w-full flex flex-col items-center">
           <div
             className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1.5"
@@ -762,7 +762,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </button>
             </TooltipTrigger>
             <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
-              Inso AI
+              Inso Chat
             </TooltipContent>
           </Tooltip>
         </div>
@@ -875,7 +875,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         {/* Header Row */}
         <div className="sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] px-4 flex-none">
           <span className="text-sm font-semibold text-white truncate">
-            {activeBotId ? (bots.find(b => b.id === activeBotId)?.name || 'Space') : 'Inso AI'}
+            {activeBotId ? (bots.find(b => b.id === activeBotId)?.name || 'Space') : 'Inso Chat'}
           </span>
           <PanelLeftClose
             className="size-5 cursor-pointer text-zinc-400 hover:text-white transition-colors"

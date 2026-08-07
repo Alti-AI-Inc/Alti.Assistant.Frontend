@@ -95,7 +95,7 @@ export default function AudioComponent({ audioUrl }: AudioComponentProps) {
   return (
     <div className="flex flex-col gap-6 w-full">
       {/* New Real-time Interactive Agent */}
-      <LiveVoiceAgent roomName="inso-ai-room" />
+      <LiveVoiceAgent roomName="inso-chat-room" />
 
       {/* Legacy Static Audio Synthesizer */}
       <div className="w-full max-w-xl mx-auto my-4 overflow-hidden rounded-2xl border border-black/10 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-lg select-none">

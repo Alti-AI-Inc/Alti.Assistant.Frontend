@@ -9,7 +9,7 @@ export default function page() {
   const privacyPolicy = {
     title: 'Privacy Policy',
     intro:
-      'This Privacy Policy describes how Inso AI ("Inso AI," "we," "us," or "our") collects, uses, stores, shares, and protects information when you access or use our website at insohq.com, our mobile applications, and any related services (collectively, the "Platform"). By using the Platform, you agree to the collection and use of information in accordance with this policy. If you do not agree with this Privacy Policy, please do not use the Platform.',
+      'This Privacy Policy describes how Inso Chat ("Inso Chat," "we," "us," or "our") collects, uses, stores, shares, and protects information when you access or use our website at insohq.com, our mobile applications, and any related services (collectively, the "Platform"). By using the Platform, you agree to the collection and use of information in accordance with this policy. If you do not agree with this Privacy Policy, please do not use the Platform.',
     sections: [
       {
         heading: '1. Information We Collect',
@@ -232,7 +232,7 @@ export default function page() {
       {
         heading: '10. Contact Us',
         content:
-          'If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at: legal@insohq.com, or by mail at: Inso AI, 280 N Old Woodward, Birmingham, MI 48009.',
+          'If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at: legal@insohq.com, or by mail at: Inso Chat, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
     conclusion: '',
@@ -241,7 +241,7 @@ export default function page() {
   const terms = {
     title: 'Terms of Use',
     intro:
-      'These Terms of Use ("Terms") constitute a legally binding agreement between you ("you," "your," or "User") and Inso AI ("Inso AI," "we," "us," or "our") governing your access to and use of the Platform at insohq.com, our mobile applications, and all related services (collectively, the "Platform"). By creating an account or using the Platform, you agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, do not use the Platform.',
+      'These Terms of Use ("Terms") constitute a legally binding agreement between you ("you," "your," or "User") and Inso Chat ("Inso Chat," "we," "us," or "our") governing your access to and use of the Platform at insohq.com, our mobile applications, and all related services (collectively, the "Platform"). By creating an account or using the Platform, you agree to be bound by these Terms and our Privacy Policy. If you do not agree to these Terms, do not use the Platform.',
     sections: [
       {
         heading: '1. Acceptance of Terms',
@@ -261,7 +261,7 @@ export default function page() {
       {
         heading: '4. Description of the Platform',
         content:
-          'Inso AI is an AI-powered productivity and intelligence platform that provides access to advanced artificial intelligence capabilities including, but not limited to, conversational AI chat, deep research, web search, image and video generation, audio transcription, code generation, writing and editing tools, legal contract review, presentation creation, report generation, knowledge base management with retrieval-augmented generation (RAG), and third-party integrations. The Platform routes and processes your requests exclusively using Google native AI models (Gemini and Imagen) hosted on Google Cloud Platform to deliver responses.',
+          'Inso Chat is an AI-powered productivity and intelligence platform that provides access to advanced artificial intelligence capabilities including, but not limited to, conversational AI chat, deep research, web search, image and video generation, audio transcription, code generation, writing and editing tools, legal contract review, presentation creation, report generation, knowledge base management with retrieval-augmented generation (RAG), and third-party integrations. The Platform routes and processes your requests exclusively using Google native AI models (Gemini and Imagen) hosted on Google Cloud Platform to deliver responses.',
       },
       {
         heading: '5. Subscription Plans and Payments',
@@ -386,7 +386,7 @@ export default function page() {
               <strong>7.4 Platform Intellectual Property.</strong> The Platform,
               including its design, software, features, branding, logos,
               documentation, and all underlying technology, is and remains the
-              exclusive property of Inso AI and is protected by United States and
+              exclusive property of Inso Chat and is protected by United States and
               international intellectual property laws, including copyright,
               trademark, patent, and trade secret laws.
             </p>
@@ -411,17 +411,17 @@ export default function page() {
       {
         heading: '11. Disclaimer of Warranties',
         content:
-          'THE PLATFORM IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, INSO AI DISCLAIMS ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, AND ACCURACY. WE DO NOT WARRANT THAT (A) THE PLATFORM WILL BE UNINTERRUPTED, ERROR-FREE, OR FREE OF HARMFUL COMPONENTS; (B) AI-GENERATED OUTPUTS WILL BE ACCURATE, COMPLETE, RELIABLE, OR SUITABLE FOR ANY PARTICULAR PURPOSE; (C) ANY DEFECTS OR ERRORS WILL BE CORRECTED; OR (D) THE PLATFORM WILL MEET YOUR SPECIFIC REQUIREMENTS. YOU ACKNOWLEDGE THAT AI-GENERATED CONTENT MAY CONTAIN ERRORS, HALLUCINATIONS, OR INACCURACIES, AND YOU ASSUME ALL RESPONSIBILITY FOR EVALUATING AND RELYING UPON SUCH CONTENT.',
+          'THE PLATFORM IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, INSO CHAT DISCLAIMS ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, AND ACCURACY. WE DO NOT WARRANT THAT (A) THE PLATFORM WILL BE UNINTERRUPTED, ERROR-FREE, OR FREE OF HARMFUL COMPONENTS; (B) AI-GENERATED OUTPUTS WILL BE ACCURATE, COMPLETE, RELIABLE, OR SUITABLE FOR ANY PARTICULAR PURPOSE; (C) ANY DEFECTS OR ERRORS WILL BE CORRECTED; OR (D) THE PLATFORM WILL MEET YOUR SPECIFIC REQUIREMENTS. YOU ACKNOWLEDGE THAT AI-GENERATED CONTENT MAY CONTAIN ERRORS, HALLUCINATIONS, OR INACCURACIES, AND YOU ASSUME ALL RESPONSIBILITY FOR EVALUATING AND RELYING UPON SUCH CONTENT.',
       },
       {
         heading: '12. Limitation of Liability',
         content:
-          'TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL INSO AI, ITS OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, OR AFFILIATES BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES (INCLUDING, BUT NOT LIMITED TO, DAMAGES FOR LOSS OF PROFITS, REVENUE, DATA, GOODWILL, OR OTHER INTANGIBLE LOSSES) ARISING OUT OF OR RELATING TO YOUR USE OF OR INABILITY TO USE THE PLATFORM, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. OUR TOTAL AGGREGATE LIABILITY TO YOU FOR ALL CLAIMS ARISING FROM OR RELATING TO THESE TERMS OR YOUR USE OF THE PLATFORM SHALL NOT EXCEED THE GREATER OF (A) THE AMOUNT YOU PAID TO US IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM, OR (B) ONE HUNDRED DOLLARS ($100).',
+          'TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL INSO CHAT, ITS OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, OR AFFILIATES BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES (INCLUDING, BUT NOT LIMITED TO, DAMAGES FOR LOSS OF PROFITS, REVENUE, DATA, GOODWILL, OR OTHER INTANGIBLE LOSSES) ARISING OUT OF OR RELATING TO YOUR USE OF OR INABILITY TO USE THE PLATFORM, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. OUR TOTAL AGGREGATE LIABILITY TO YOU FOR ALL CLAIMS ARISING FROM OR RELATING TO THESE TERMS OR YOUR USE OF THE PLATFORM SHALL NOT EXCEED THE GREATER OF (A) THE AMOUNT YOU PAID TO US IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM, OR (B) ONE HUNDRED DOLLARS ($100).',
       },
       {
         heading: '13. Indemnification',
         content:
-          'You agree to indemnify, defend, and hold harmless Inso AI and its officers, directors, employees, agents, and affiliates from and against any and all claims, liabilities, damages, losses, costs, and expenses (including reasonable attorneys\' fees) arising out of or relating to: (a) your use of the Platform; (b) your User Content; (c) your violation of these Terms; (d) your violation of any applicable law or regulation; or (e) your violation of any rights of a third party.',
+          'You agree to indemnify, defend, and hold harmless Inso Chat and its officers, directors, employees, agents, and affiliates from and against any and all claims, liabilities, damages, losses, costs, and expenses (including reasonable attorneys\' fees) arising out of or relating to: (a) your use of the Platform; (b) your User Content; (c) your violation of these Terms; (d) your violation of any applicable law or regulation; or (e) your violation of any rights of a third party.',
       },
       {
         heading: '14. Termination',
@@ -446,12 +446,12 @@ export default function page() {
       {
         heading: '18. Entire Agreement',
         content:
-          'These Terms, together with our Privacy Policy and Cookies Policy, constitute the entire agreement between you and Inso AI regarding your use of the Platform and supersede all prior and contemporaneous agreements, representations, and understandings, whether written or oral.',
+          'These Terms, together with our Privacy Policy and Cookies Policy, constitute the entire agreement between you and Inso Chat regarding your use of the Platform and supersede all prior and contemporaneous agreements, representations, and understandings, whether written or oral.',
       },
       {
         heading: '19. Contact Information',
         content:
-          'If you have any questions about these Terms of Use, please contact us at: legal@insohq.com, or by mail at: Inso AI, 280 N Old Woodward, Birmingham, MI 48009.',
+          'If you have any questions about these Terms of Use, please contact us at: legal@insohq.com, or by mail at: Inso Chat, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
     conclusion: '',
@@ -460,7 +460,7 @@ export default function page() {
   const cookiesPolicy = {
     title: 'Cookies Policy',
     intro:
-      'This Cookies Policy explains how Inso AI ("Inso AI," "we," "us," or "our") uses cookies and similar technologies when you use our Platform at insohq.com and our mobile applications. This policy should be read in conjunction with our Privacy Policy and Terms of Use.',
+      'This Cookies Policy explains how Inso Chat ("Inso Chat," "we," "us," or "our") uses cookies and similar technologies when you use our Platform at insohq.com and our mobile applications. This policy should be read in conjunction with our Privacy Policy and Terms of Use.',
     sections: [
       {
         heading: '1. What Are Cookies?',
@@ -599,7 +599,7 @@ export default function page() {
       {
         heading: '8. Contact Us',
         content:
-          'If you have any questions about our use of cookies or this Cookies Policy, please contact us at: legal@insohq.com, or by mail at: Inso AI, 280 N Old Woodward, Birmingham, MI 48009.',
+          'If you have any questions about our use of cookies or this Cookies Policy, please contact us at: legal@insohq.com, or by mail at: Inso Chat, 280 N Old Woodward, Birmingham, MI 48009.',
       },
     ],
     conclusion: '',

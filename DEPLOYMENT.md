@@ -1,6 +1,6 @@
 # Deployment Guide — GCP Cloud Run
 
-This guide covers everything needed to build, test, and deploy the Inso AI
+This guide covers everything needed to build, test, and deploy the Inso Chat
 Assistant Frontend to Google Cloud Run.
 
 ---

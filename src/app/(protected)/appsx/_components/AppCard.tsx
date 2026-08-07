@@ -1511,7 +1511,7 @@ const AppCard = ({
               </h3>
               
               <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed">
-                {app.description || `Integrate ${app.title} tools seamlessly to expand Inso AI's automation triggers and actions.`}
+                {app.description || `Integrate ${app.title} tools seamlessly to expand Inso Chat's automation triggers and actions.`}
               </p>
             </div>
           </div>
