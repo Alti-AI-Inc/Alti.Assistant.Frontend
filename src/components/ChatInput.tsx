@@ -67,6 +67,7 @@ import {
   Mic,
   Search,
   Globe,
+  Film,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
