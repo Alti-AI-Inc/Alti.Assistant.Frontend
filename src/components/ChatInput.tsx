@@ -66,6 +66,7 @@ import {
   SlidersHorizontal,
   Mic,
   Search,
+  Globe,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -1938,7 +1939,7 @@ export default function ChatInput({
                                 : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
                             )}
                           >
-                            <Search className="size-3" />
+                            <Globe className="size-3" />
                             <span>Search</span>
                           </button>
                           <button

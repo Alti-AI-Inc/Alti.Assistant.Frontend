@@ -32,6 +32,7 @@ import {
   PenTool,
   ClipboardCheck,
   Music,
+  Globe,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -147,7 +148,7 @@ export default function ConversationsList({
       if (selectedOption === OPTIONS.RESEARCH) {
         return <Microscope className={iconColorClass} />;
       } else if (selectedOption === OPTIONS.SEARCH) {
-        return <Search className={iconColorClass} />;
+        return <Globe className={iconColorClass} />;
       } else if (selectedOption === OPTIONS.CODE || selectedOption === OPTIONS.DEBUG_CODE) {
         return <Code2 className={iconColorClass} />;
       } else if (selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) {
