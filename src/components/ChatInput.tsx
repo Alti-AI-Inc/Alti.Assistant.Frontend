@@ -1865,18 +1865,14 @@ export default function ChatInput({
                     placeholder={
                       selectedOption === OPTIONS.TASK
                         ? 'Describe the task you want to automate...'
-                        : selectedOption === OPTIONS.RESEARCH
-                          ? 'State research query...'
-                          : selectedOption === OPTIONS.SEARCH
-                            ? 'What would you like to search?'
-                            : activeConversation?.knowledgebaseId && isLoading
-                              ? 'Loading...'
-                              : activeConversation?.knowledgebaseId &&
-                                  activeKnowledgeBaseName
-                                ? `Chat with ${activeKnowledgeBaseName}`
-                                : (pathname === '/workflows' || pathname?.startsWith('/workflows')
-                                  ? 'Describe your workflow...'
-                                  : 'Enter prompt here...')
+                        : activeConversation?.knowledgebaseId && isLoading
+                          ? 'Loading...'
+                          : activeConversation?.knowledgebaseId &&
+                              activeKnowledgeBaseName
+                            ? `Chat with ${activeKnowledgeBaseName}`
+                            : (pathname === '/workflows' || pathname?.startsWith('/workflows')
+                              ? 'Describe your workflow...'
+                              : 'Enter prompt here...')
                      }
                     style={{ backgroundColor: 'transparent' }}
                     className="min-h-[48px] w-full flex-1 resize-none border-none bg-transparent px-4 pt-3.5 pb-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-5"
