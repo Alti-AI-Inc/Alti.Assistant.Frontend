@@ -1926,7 +1926,7 @@ export default function ChatInput({
                                 : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
                             )}
                           >
-                            <MessageSquare className="size-3" />
+                            <MessageSquare className="size-[11px]" />
                             <span>Chat</span>
                           </button>
                           <button
@@ -1939,7 +1939,7 @@ export default function ChatInput({
                                 : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
                             )}
                           >
-                            <Globe className="size-3" />
+                            <Globe className="size-[13px]" />
                             <span>Search</span>
                           </button>
                           <button
@@ -1952,7 +1952,7 @@ export default function ChatInput({
                                 : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
                             )}
                           >
-                            <Microscope className="size-3" />
+                            <Microscope className="size-[13px]" />
                             <span>Research</span>
                           </button>
                         </div>
