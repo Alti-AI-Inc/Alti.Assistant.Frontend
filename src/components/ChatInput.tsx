@@ -1545,7 +1545,7 @@ export default function ChatInput({
               >
                 {[
                   { id: 'chat', name: 'Chat', icon: MessageSquare, value: null },
-                  { id: 'search', name: 'Search', icon: Globe, value: OPTIONS.SEARCH },
+                  { id: 'search', name: 'Real-Time Search', icon: Globe, value: OPTIONS.SEARCH },
                   { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
                   { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
                   { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS },
