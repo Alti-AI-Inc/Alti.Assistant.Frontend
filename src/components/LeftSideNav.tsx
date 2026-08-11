@@ -713,10 +713,34 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const allInstructions = activeBot?.instructions ? activeBot.instructions.split('\n\n').filter(Boolean) : [];
   const allGuardrails = activeBot?.guardrails ? activeBot.guardrails.split('\n\n').filter(Boolean) : [];
 
+  const SHOW_WORKSPACES = false;
+
   return (
     <div className="flex h-full w-full overflow-hidden">
-      {/* Column 1: Spaces Switcher (Slack style) */}
-      <div className="w-[68px] h-full bg-black border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
+      {/* Column 1: Spaces Switcher (Slack style) - Show only expand button when collapsed, hide workspace switcher in Phase 1 */}
+      {!isLeftSidebarOpen && (
+        <div className="w-[56px] h-full bg-black border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none animate-in fade-in duration-200">
+          <div className="relative w-full flex flex-col items-center mb-1">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={toggleLeftSidebar}
+                  className="relative size-10 flex items-center justify-center rounded-xl border bg-[#0000ff]/10 border-[#0000ff]/35 text-[#8080ff] hover:bg-[#0000ff]/20 hover:text-white transition-all shadow-[0_0_12px_rgba(0,0,255,0.25)] cursor-pointer"
+                >
+                  <PanelLeftClose className="size-5 rotate-180" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
+                Expand Sidebar
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        </div>
+      )}
+
+      {SHOW_WORKSPACES && (
+        <div className="w-[68px] h-full bg-black border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
         {/* Toggle Collapse/Expand Button (Visible only when collapsed) */}
         {!isLeftSidebarOpen && (
           <div className="relative w-full flex flex-col items-center mb-1 animate-in fade-in duration-200">
@@ -868,6 +892,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           </Tooltip>
         </div>
       </div>
+      )}
 
       {/* Column 2: Secondary Content navigation panel */}
       {isLeftSidebarOpen && (

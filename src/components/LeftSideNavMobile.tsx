@@ -753,10 +753,12 @@ const LeftSideNavMobile = () => {
 
   const plusProps = getPlusButtonProps();
 
+  const SHOW_WORKSPACES = false;
+
   return (
     <div className="flex h-full w-full overflow-hidden">
-      {/* Column 1: Spaces Switcher (Slack style) */}
-      <div className="w-[60px] h-full bg-black border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
+      {SHOW_WORKSPACES && (
+        <div className="w-[60px] h-full bg-black border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
         {/* Inso Chat Home Button */}
         <div className="relative w-full flex flex-col items-center">
           <div
@@ -891,6 +893,7 @@ const LeftSideNavMobile = () => {
           </Tooltip>
         </div>
       </div>
+      )}
 
       {/* Column 2: Secondary Content navigation panel */}
       <div className="flex-1 flex flex-col min-w-0 h-full bg-[#0c1120]">
