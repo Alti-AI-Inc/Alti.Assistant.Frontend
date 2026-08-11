@@ -146,6 +146,8 @@ export default function ConversationsList({
     if (isActive) {
       if (selectedOption === OPTIONS.RESEARCH) {
         return <Microscope className={iconColorClass} />;
+      } else if (selectedOption === OPTIONS.SEARCH) {
+        return <Search className={iconColorClass} />;
       } else if (selectedOption === OPTIONS.CODE || selectedOption === OPTIONS.DEBUG_CODE) {
         return <Code2 className={iconColorClass} />;
       } else if (selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) {

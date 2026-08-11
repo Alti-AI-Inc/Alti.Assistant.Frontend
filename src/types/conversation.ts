@@ -15,6 +15,7 @@ export type ResearchTier = 'bachelors' | 'masters' | 'phd';
 
 export enum OPTIONS {
   RESEARCH = 'deep-research',
+  SEARCH = 'search',
   CODE = 'code-generation',
   // TEXT = 'text-generation',
   DRAFT_DOCUMENT = 'draft-document',

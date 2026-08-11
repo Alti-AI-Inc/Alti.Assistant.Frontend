@@ -65,6 +65,7 @@ import {
   Zap,
   SlidersHorizontal,
   Mic,
+  Search,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -671,6 +672,8 @@ export default function ChatInput({
         return '/video/execute';
       case OPTIONS.RESEARCH:
         return '/deep-research/execute';
+      case OPTIONS.SEARCH:
+        return '/search/stream';
       // case OPTIONS.GENERATE_PLAN:
       //   return '/search/plan';
       // case OPTIONS.GENERATE_REPORT:
@@ -865,8 +868,9 @@ export default function ChatInput({
       }
 
       const isOrchestrator = targetApiUrl.endsWith('/orchestrator/route-prompt');
+      const isSearchStream = targetApiUrl.endsWith('/search/stream');
 
-      if (isOrchestrator) {
+      if (isOrchestrator || isSearchStream) {
         let resolvedConversationId = conversationId;
         // Seed initial empty assistant response placeholder in store so we can stream into it
         useConversationsStore.getState().streamActiveConversation('', resolvedConversationId === 'new-chat' ? undefined : resolvedConversationId);
@@ -1775,14 +1779,16 @@ export default function ChatInput({
                         ? 'Describe the task you want to automate...'
                         : selectedOption === OPTIONS.RESEARCH
                           ? 'State research query...'
-                          : activeConversation?.knowledgebaseId && isLoading
-                            ? 'Loading...'
-                            : activeConversation?.knowledgebaseId &&
-                                activeKnowledgeBaseName
-                              ? `Chat with ${activeKnowledgeBaseName}`
-                              : (pathname === '/workflows' || pathname?.startsWith('/workflows')
-                                ? 'Describe your workflow...'
-                                : 'Enter prompt here...')
+                          : selectedOption === OPTIONS.SEARCH
+                            ? 'What would you like to search?'
+                            : activeConversation?.knowledgebaseId && isLoading
+                              ? 'Loading...'
+                              : activeConversation?.knowledgebaseId &&
+                                  activeKnowledgeBaseName
+                                ? `Chat with ${activeKnowledgeBaseName}`
+                                : (pathname === '/workflows' || pathname?.startsWith('/workflows')
+                                  ? 'Describe your workflow...'
+                                  : 'Enter prompt here...')
                      }
                     style={{ backgroundColor: 'transparent' }}
                     className="min-h-[48px] w-full flex-1 resize-none border-none bg-transparent px-4 pt-3.5 pb-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-5"
@@ -1906,7 +1912,7 @@ export default function ChatInput({
                         </TooltipContent>
                       </Tooltip>
 
-                      {/* Chat / Research / Task Switcher inside Prompt Box */}
+                      {/* Chat / Search / Research Switcher inside Prompt Box */}
                       {!hasMessages && !isExistingConversation && (
                         <div className="flex bg-[#e1e1e1] dark:bg-zinc-900 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
                           <button
@@ -1921,6 +1927,19 @@ export default function ChatInput({
                           >
                             <MessageSquare className="size-3" />
                             <span>Chat</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedOption(OPTIONS.SEARCH)}
+                            className={cn(
+                              'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                              selectedOption === OPTIONS.SEARCH
+                                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
+                                : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
+                            )}
+                          >
+                            <Search className="size-3" />
+                            <span>Search</span>
                           </button>
                           <button
                             type="button"
