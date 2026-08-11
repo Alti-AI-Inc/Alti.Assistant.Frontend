@@ -47,7 +47,7 @@ export default function LoginPage() {
           <Link href="/">
             <Image
               src="/assets/logo-icon.png"
-              alt="Alti Assistant Logo"
+              alt="Inso Chat Logo"
               width={40}
               height={40}
               className="mb-2"

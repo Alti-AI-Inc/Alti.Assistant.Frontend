@@ -44,17 +44,12 @@ export const AdminSecondarySidebar = () => {
   const isTenantOwner = mode === 'tenant' && (currentTenant?.role === 'admin' || currentTenant?.role === 'owner');
   const isTenantAdmin = mode === 'tenant' && currentTenant?.role === 'manager';
 
-  const isAdmin = userEmail === 'admin@altihq.com' || isGlobalAdmin || isTenantOwner;
+  const isAdmin = userEmail === 'admin@insohq.com' || isGlobalAdmin || isTenantOwner;
   const isManager = isGlobalAdmin || isTenantOwner || isTenantAdmin;
   const isSuperAdmin = data?.user?.role === 'super_admin';
 
   const isAdminMode = pathname.startsWith('/admin');
-  const isManagerSection = pathname.startsWith('/admin/data') || 
-                           pathname.startsWith('/admin/instructions') || 
-                           pathname.startsWith('/admin/guardrails') || 
-                           pathname.startsWith('/admin/projects') ||
-                           pathname.startsWith('/admin/platform-manager');
-  const isAdminSection = !isManagerSection && isAdminMode;
+  const isAdminSection = isAdminMode;
 
   if (!isAdminMode) return null;
 
@@ -62,19 +57,17 @@ export const AdminSecondarySidebar = () => {
   let headerTitle = 'Admin Console';
   if (isSuperAdmin) {
     headerTitle = 'Owner Platform';
-  } else if (isManagerSection) {
-    headerTitle = 'Platform Manager';
   } else if (isAdminSection) {
     headerTitle = 'Platform Admin';
   }
 
   return (
     <div className={cn(
-      "bg-white dark:bg-zinc-900 border-r border-black/10 dark:border-zinc-800/80 hidden md:flex flex-col h-full shrink-0 z-10 transition-all duration-300",
+      "bg-[#0c1120] dark:bg-[#0c1120] border-r border-white/5 hidden md:flex flex-col h-full shrink-0 z-10 transition-all duration-300",
       (isLeftSidebarOpen || !isSuperAdmin) ? "w-64" : "w-14"
     )}>
       {/* Header */}
-      <div className="h-[52px] border-b border-black/10 dark:border-zinc-800/80 px-4 flex items-center justify-between flex-none relative">
+      <div className="h-[52px] border-b border-white/5 px-4 flex items-center justify-between flex-none relative">
         {isLeftSidebarOpen || !isSuperAdmin ? (
           <>
             {isSuperAdmin && (
@@ -87,14 +80,14 @@ export const AdminSecondarySidebar = () => {
               />
             )}
             {!isSuperAdmin && (
-              <span className="text-sm font-semibold text-black dark:text-white truncate">
+              <span className="text-sm font-semibold text-white truncate">
                 {headerTitle}
               </span>
             )}
             {isSuperAdmin && (
               <button
                 onClick={toggleLeftSidebar}
-                className="text-gray-500 hover:text-black dark:text-zinc-400 dark:hover:text-white focus:outline-none flex-shrink-0"
+                className="text-gray-400 hover:text-white focus:outline-none flex-shrink-0"
               >
                 <PanelLeftClose className="h-5 w-5" />
               </button>
@@ -104,7 +97,7 @@ export const AdminSecondarySidebar = () => {
           <div className="w-full flex items-center justify-center">
             <button
               onClick={toggleLeftSidebar}
-              className="text-gray-500 hover:text-black dark:text-zinc-400 dark:hover:text-white focus:outline-none"
+              className="text-gray-400 hover:text-white focus:outline-none"
             >
               <PanelRightClose className="h-5 w-5" />
             </button>
@@ -175,16 +168,16 @@ export const AdminSecondarySidebar = () => {
                       key={item.name}
                       href={item.href}
                       className={cn(
-                        'w-full flex items-center rounded-md transition-colors',
+                        'group w-full flex items-center rounded-lg transition-all duration-300 border mb-1.5 select-none cursor-pointer outline-none h-9',
                         isActive
-                          ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white font-semibold'
-                          : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white',
+                          ? 'bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]'
+                          : 'bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white',
                         (isLeftSidebarOpen || !isSuperAdmin) 
-                          ? 'gap-3 px-3 py-2 text-sm font-medium' 
-                          : 'justify-center p-2.5'
+                          ? 'gap-2.5 px-3 text-xs' 
+                          : 'justify-center px-2 text-xs'
                       )}
                     >
-                      <Icon className="w-4 h-4 text-black dark:text-white flex-shrink-0" />
+                      <Icon className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", isActive ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
                       {(isLeftSidebarOpen || !isSuperAdmin) && <span className="truncate">{item.name}</span>}
                     </Link>
                   );
@@ -225,13 +218,13 @@ export const AdminSecondarySidebar = () => {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+                    'group w-full flex items-center gap-2.5 px-3 rounded-lg border transition-all duration-300 mb-1.5 select-none cursor-pointer outline-none h-9 text-xs',
                     isActive
-                      ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white font-semibold'
-                      : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
+                      ? 'bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]'
+                      : 'bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white'
                   )}
                 >
-                  <Icon className="w-4 h-4 text-black dark:text-white" />
+                  <Icon className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", isActive ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
                   {item.name}
                 </Link>
               );
@@ -239,40 +232,11 @@ export const AdminSecondarySidebar = () => {
           </div>
         )}
 
-        {/* Second Section */}
-        {isManagerSection && !isSuperAdmin && (
-          <div className="space-y-1">
-            {[
-              { name: 'Knowledge', href: '/admin/data', icon: Database },
-              { name: 'Instructions', href: '/admin/instructions', icon: FileText },
-              { name: 'Guardrails', href: '/admin/guardrails', icon: Shield },
-              { name: 'Projects', href: '/admin/projects', icon: Folder },
-            ].map((item) => {
-              const isActive = pathname === item.href || (item.name === 'Projects' && pathname.startsWith('/admin/projects'));
-              const Icon = item.icon;
-              return (
-                <div key={item.name}>
-                  <Link
-                    href={item.href}
-                    className={cn(
-                      'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors',
-                      isActive
-                        ? 'bg-black/5 text-black dark:bg-white/10 dark:text-white font-semibold'
-                        : 'text-gray-600 hover:bg-black/5 hover:text-black dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white'
-                    )}
-                  >
-                    <Icon className="w-4 h-4 text-black dark:text-white" />
-                    {item.name}
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
-        )}
+
       </div>
       {isSuperAdmin && (
         <div className={cn(
-          "sticky bottom-0 z-30 flex flex-col border-t border-black/10 dark:border-zinc-800/80 bg-white dark:bg-zinc-900 flex-none items-center justify-center",
+          "sticky bottom-0 z-30 flex flex-col border-t border-white/5 bg-[#0c1120] dark:bg-[#0c1120] flex-none items-center justify-center",
           isLeftSidebarOpen ? "w-full p-4 py-3" : "w-full py-3 px-1"
         )}>
           {isLeftSidebarOpen ? (

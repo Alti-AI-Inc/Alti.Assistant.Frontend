@@ -29,7 +29,7 @@ const InstructionsContent = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const storedInst = localStorage.getItem('alti_instructions');
+    const storedInst = localStorage.getItem('inso_instructions');
     if (storedInst) {
       setInstructionsList(JSON.parse(storedInst));
     } else {
@@ -51,7 +51,7 @@ const InstructionsContent = () => {
         }
       ];
       setInstructionsList(defaults);
-      localStorage.setItem('alti_instructions', JSON.stringify(defaults));
+      localStorage.setItem('inso_instructions', JSON.stringify(defaults));
     }
   }, []);
 
@@ -78,7 +78,7 @@ const InstructionsContent = () => {
       
       const updatedList = [newItem, ...instructionsList];
       setInstructionsList(updatedList);
-      localStorage.setItem('alti_instructions', JSON.stringify(updatedList));
+      localStorage.setItem('inso_instructions', JSON.stringify(updatedList));
       setInputVal('');
       setIsSaving(false);
     }, 300);
@@ -87,7 +87,7 @@ const InstructionsContent = () => {
   const handleDeleteInstruction = (id: string) => {
     const updatedList = instructionsList.filter(item => item.id !== id);
     setInstructionsList(updatedList);
-    localStorage.setItem('alti_instructions', JSON.stringify(updatedList));
+    localStorage.setItem('inso_instructions', JSON.stringify(updatedList));
   };
 
   const filteredInstructions = instructionsList.filter(item =>
@@ -141,7 +141,7 @@ const InstructionsContent = () => {
           <div className="relative w-full flex-none">
             <Search className="text-gray-400 dark:text-gray-400 absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
             <input
-              placeholder="Search instructions..."
+              placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-12 pr-4 h-12 w-full text-base rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 focus:border-black/10 dark:focus:border-white/10 focus-visible:border-black/10 dark:focus-visible:border-white/10 text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 transition-all"

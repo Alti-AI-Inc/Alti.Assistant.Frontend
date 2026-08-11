@@ -71,7 +71,7 @@ const DashboardLeftSideNav = () => {
 
         <div
           className={cn(
-            'bg-white dark:bg-zinc-900 sticky bottom-0 z-30 flex h-20 items-center justify-center p-4 py-1.5 border-t border-black/10 dark:border-zinc-800/80 w-full',
+            'bg-white dark:bg-zinc-900 sticky bottom-0 z-30 flex h-[64px] items-center justify-center p-4 py-2.5 border-t border-black/10 dark:border-zinc-800/80 w-full',
           )}
         >
           {!isLoggedIn ? (
@@ -115,21 +115,7 @@ const DashboardLeftSideNav = () => {
                       <Brain className="text-black dark:text-white" /> Platform Memory
                     </DropdownMenuItem>
                   )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/platform-knowledge')}>
-                      <Database className="text-black dark:text-white" /> Platform Knowledge
-                    </DropdownMenuItem>
-                  )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/instructions')}>
-                      <SlidersHorizontal className="text-black dark:text-white" /> Platform Instructions
-                    </DropdownMenuItem>
-                  )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/guardrails')}>
-                      <ShieldAlert className="text-black dark:text-white" /> Platform Guardrails
-                    </DropdownMenuItem>
-                  )}
+
                   {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/invite-friends')}>
                       <UserPlus className="text-black dark:text-white" /> Invite Friends

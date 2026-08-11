@@ -63,15 +63,26 @@ export const createFileChangeHandler = ({
       }
       // Handle image files (Image Generation & Edit)
       else {
-        const file = files[0];
-        if (file.type.startsWith('image/')) {
-          const compressedDataUrl = await compressImage(file);
-          setImageBase64(compressedDataUrl);
+        const validFiles: File[] = [];
+        for (const file of files) {
+          if (file.type.startsWith('image/')) {
+            const compressedDataUrl = await compressImage(file);
+            setImageBase64(compressedDataUrl);
 
-          // Auto-switch to EDIT_IMAGE mode if currently in IMAGE mode
-          if (selectedOption !== OPTIONS.EDIT_IMAGE) {
-            setSelectedOption(OPTIONS.EDIT_IMAGE);
+            // Auto-switch to EDIT_IMAGE mode if currently in IMAGE mode
+            if (selectedOption !== OPTIONS.EDIT_IMAGE) {
+              setSelectedOption(OPTIONS.EDIT_IMAGE);
+            }
+          } else {
+            if (isValidFileExtension(file.name, allowedDocExtensions)) {
+              validFiles.push(file);
+            } else {
+              showInvalidFileAlert(allowedDocExtensions);
+            }
           }
+        }
+        if (validFiles.length > 0) {
+          setSelectedFiles([...selectedFiles, ...validFiles]);
         }
       }
     } catch (error) {

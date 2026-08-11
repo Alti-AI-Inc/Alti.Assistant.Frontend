@@ -318,13 +318,13 @@ export function OrganizationTenantOverview({
         // Save the invited name locally
         if (typeof window !== 'undefined') {
           try {
-            const saved = localStorage.getItem('alti_invited_names') || '{}';
+            const saved = localStorage.getItem('inso_invited_names') || '{}';
             const parsed = JSON.parse(saved);
             parsed[inviteEmail.toLowerCase().trim()] = {
               firstName: inviteFirstName.trim(),
               lastName: inviteLastName.trim(),
             };
-            localStorage.setItem('alti_invited_names', JSON.stringify(parsed));
+            localStorage.setItem('inso_invited_names', JSON.stringify(parsed));
           } catch (e) {
             console.error(e);
           }
@@ -427,7 +427,7 @@ export function OrganizationTenantOverview({
                 </SelectTrigger>
                 <SelectContent className="border-black/10">
                   <SelectItem value="member" className="text-xs">User</SelectItem>
-                  <SelectItem value="admin" className="text-xs">Manager</SelectItem>
+
                   <SelectItem value="owner" className="text-xs">Admin</SelectItem>
                 </SelectContent>
               </Select>

@@ -1,6 +1,10 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // Force a unique build ID on every deploy so browsers never serve stale JS chunks
+  generateBuildId: async () => {
+    return `build-${Date.now()}`;
+  },
   turbopack: {
     root: process.cwd(),
   },
@@ -20,7 +24,7 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'storage.googleapis.com',
         port: '',
-        pathname: '/alti_assistant_generated_photo/**',
+        pathname: '/inso_assistant_generated_photo/**',
       },
       {
         protocol: 'https',

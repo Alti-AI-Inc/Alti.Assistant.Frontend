@@ -13,6 +13,14 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from '@/components/ui/dropdown-menu';
 
 import { useBrainstorm } from '@/hooks/useBrainstorm';
 import { useContractReview } from '@/hooks/useContractReview';
@@ -49,13 +57,16 @@ import {
   Presentation,
   X,
   Check,
-  Film,
   Headphones,
   ListTodo,
   Clock,
   Repeat,
   CalendarClock,
   Zap,
+  SlidersHorizontal,
+  Mic,
+  Search,
+  Globe,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -72,6 +83,7 @@ interface ChatInputProps {
   selectedFiles?: File[];
   onFilesChange?: (files: File[]) => void;
   isStudio?: boolean;
+  isConversationLoading?: boolean;
 }
 
 // Helper function to get file icon based on extension
@@ -139,6 +151,7 @@ export default function ChatInput({
   selectedFiles: externalSelectedFiles,
   onFilesChange,
   isStudio,
+  isConversationLoading,
 }: ChatInputProps) {
   const [isLocalTasks, setIsLocalTasks] = useState(false);
 
@@ -171,6 +184,96 @@ export default function ChatInput({
   // Custom files state for docs (controlled or uncontrolled)
   const [internalSelectedFiles, setInternalSelectedFiles] = useState<File[]>([]);
   const [isAudioRecording, setIsAudioRecording] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
+  const startListening = () => {
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      toast.error('Speech recognition is not supported in this browser. Please try Chrome, Safari, or Edge.');
+      return;
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = () => {
+        setIsListening(true);
+      };
+
+      recognition.onresult = (event: any) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          } else {
+            interimTranscript += event.results[i][0].transcript;
+          }
+        }
+        const text = finalTranscript + interimTranscript;
+        if (text.trim()) {
+          setMessage(text);
+        }
+      };
+
+      recognition.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        if (event.error !== 'no-speech') {
+          stopListening();
+        }
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current = recognition;
+      recognition.start();
+    } catch (err) {
+      console.error('Failed to start SpeechRecognition:', err);
+      setIsListening(false);
+    }
+  };
+
+  const stopListening = () => {
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch (err) {
+        console.error('Error stopping recognition:', err);
+      }
+      recognitionRef.current = null;
+    }
+    setIsListening(false);
+  };
+
+  const toggleListening = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    };
+  }, []);
   const [researchSettings, setResearchSettings] = useState<PreFlightSettings>({
     depth: 'thorough',
     consensusLevel: 'majority',
@@ -222,6 +325,9 @@ export default function ChatInput({
   const [eventTrigger, setEventTrigger] = useState('');
 
   const handleCreateTask = () => {
+    // Stop recording/listening if active
+    stopListening();
+
     if (!message.trim()) return;
     const taskName = message.trim();
     const runId = Math.random().toString(36).substring(7);
@@ -234,10 +340,10 @@ export default function ChatInput({
       botId: activeBotId || undefined
     };
 
-    const existing = localStorage.getItem('alti_task_runs');
+    const existing = localStorage.getItem('inso_task_runs');
     const runsList = existing ? JSON.parse(existing) : [];
     runsList.unshift(newRun);
-    localStorage.setItem('alti_task_runs', JSON.stringify(runsList));
+    localStorage.setItem('inso_task_runs', JSON.stringify(runsList));
 
     toast.success('Task scheduled successfully', {
       description: 'You can monitor execution logs in the sidebar Inbox tab.'
@@ -249,13 +355,13 @@ export default function ChatInput({
 
     // Simulate completion
     setTimeout(() => {
-      const currentRuns = JSON.parse(localStorage.getItem('alti_task_runs') || '[]');
+      const currentRuns = JSON.parse(localStorage.getItem('inso_task_runs') || '[]');
       const targetRun = currentRuns.find((r: any) => r.id === runId);
       if (targetRun) {
         targetRun.status = 'success';
         targetRun.duration = 2450;
         targetRun.summary = `Successfully executed task automation pipeline. Verified triggers, loaded task inputs, and completed task: "${taskName}".`;
-        localStorage.setItem('alti_task_runs', JSON.stringify(currentRuns));
+        localStorage.setItem('inso_task_runs', JSON.stringify(currentRuns));
       }
     }, 3000);
   };
@@ -287,7 +393,15 @@ export default function ChatInput({
           };
           reader.readAsDataURL(imageFiles[0]);
         } else {
-          toast.error('Only image files are allowed in this mode.');
+          const validFiles = filesArray.filter(file => {
+            const ext = '.' + file.name.split('.').pop()?.toLowerCase();
+            return ALLOWED_DOC_EXTENSIONS.includes(ext);
+          });
+          if (validFiles.length > 0) {
+            setSelectedFiles([...(selectedFiles || []), ...validFiles]);
+          } else {
+            toast.error('Only image or supported document files are allowed.');
+          }
         }
       } else {
         const validFiles = filesArray.filter(file => {
@@ -371,10 +485,16 @@ export default function ChatInput({
 
   const { isFreeUser } = useSubscription();
 
+  const hasStartedChat = activeConversation?.messages && activeConversation.messages.length > 0;
+  
   const isExistingConversation =
-    activeConversation?.conversationId &&
-    activeConversation?.conversationId !== 'new-chat' &&
-    pathname?.startsWith('/c/');
+    (activeConversation?.conversationId &&
+      activeConversation?.conversationId !== 'new-chat' &&
+      pathname?.startsWith('/c/') &&
+      pathname !== '/c/new-chat') ||
+    (conversationId && conversationId !== 'new-chat') ||
+    hasStartedChat ||
+    isLoadingResponse;
 
   useEffect(() => {
     setIsLocalTasks(false);
@@ -562,6 +682,8 @@ export default function ChatInput({
         return '/video/execute';
       case OPTIONS.RESEARCH:
         return '/deep-research/execute';
+      case OPTIONS.SEARCH:
+        return '/search/stream';
       // case OPTIONS.GENERATE_PLAN:
       //   return '/search/plan';
       // case OPTIONS.GENERATE_REPORT:
@@ -622,7 +744,7 @@ export default function ChatInput({
         }
 
         try {
-          const base = process.env.NEXT_PUBLIC_API_URL || 'https://altihq.com/api/v1';
+          const base = process.env.NEXT_PUBLIC_API_URL || 'https://insohq.com/api/v1';
           const res = await fetch(
             `${base}/vertex/anonymous-response`,
             {
@@ -756,8 +878,9 @@ export default function ChatInput({
       }
 
       const isOrchestrator = targetApiUrl.endsWith('/orchestrator/route-prompt');
+      const isSearchStream = targetApiUrl.endsWith('/search/stream');
 
-      if (isOrchestrator) {
+      if (isOrchestrator || isSearchStream) {
         let resolvedConversationId = conversationId;
         // Seed initial empty assistant response placeholder in store so we can stream into it
         useConversationsStore.getState().streamActiveConversation('', resolvedConversationId === 'new-chat' ? undefined : resolvedConversationId);
@@ -974,6 +1097,9 @@ export default function ChatInput({
   });
 
   const handleSubmit = async () => {
+    // Stop recording/listening if active
+    stopListening();
+
     // Prevent submission if response is loading or message is empty
     if (isLoadingResponse) return;
 
@@ -1266,6 +1392,15 @@ export default function ChatInput({
   )?.name;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  }, [message]);
 
   // Use extracted file change handler
   const handleFileChange = createFileChangeHandler({
@@ -1338,6 +1473,14 @@ export default function ChatInput({
 
   return (
     <>
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        className="hidden"
+        multiple
+        accept={ALLOWED_DOC_EXTENSIONS.join(',')}
+      />
       {/* Image Gen UI is now handled by parent in FullConversation, but kept here for fallback/other pages */}
       {!externalImageGenHook && shouldShowConfirmation && (
         <ImageGenConfirmation onConfirm={handleUserConfirmation} />
@@ -1391,7 +1534,7 @@ export default function ChatInput({
                 </button>
               </div>
               )}
-
+ 
               {/* Child Toggle */}
               <div 
                 className={cn(
@@ -1400,7 +1543,8 @@ export default function ChatInput({
                 )}
               >
                 {[
-                  { id: 'search', name: 'Chat', icon: MessageSquare, value: null },
+                  { id: 'chat', name: 'Chat', icon: MessageSquare, value: null },
+                  { id: 'search', name: 'Search', icon: Globe, value: OPTIONS.SEARCH },
                   { id: 'research', name: 'Research', icon: Microscope, value: OPTIONS.RESEARCH },
                   { id: 'write', name: 'Write', icon: PenLine, value: OPTIONS.DRAFT_DOCUMENT },
                   { id: 'review', name: 'Review', icon: FileText, value: OPTIONS.REVIEW_DOCUMENTS },
@@ -1432,121 +1576,8 @@ export default function ChatInput({
 
 
 
-        {selectedOption === OPTIONS.TASK ? (
-          <div className="relative flex flex-col rounded-2xl border bg-white shadow-sm border-gray-300 dark:border-zinc-700 dark:bg-zinc-800 transition-all duration-300">
-            <Textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Describe the task you want to automate..."
-              style={{ backgroundColor: 'transparent' }}
-              className="min-h-[72px] w-full flex-1 resize-none border-none bg-transparent px-4 py-4 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white"
-            />
 
-            <div className="px-4 pb-4 pt-1 border-t border-black/5 dark:border-white/5">
-              <div className="flex flex-col gap-3">
-                
-                {/* Controls Toggle Row */}
-                <div className="flex flex-wrap items-center gap-3">
-                  
-                  {/* Task Type Switcher */}
-                  <div className="flex bg-gray-100 dark:bg-zinc-955 p-0.5 rounded-xl border border-black/5 dark:border-zinc-800/80">
-                    <button
-                      type="button"
-                      onClick={() => setTaskType('one-time')}
-                      className={cn(
-                        'px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1.5',
-                        taskType === 'one-time'
-                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
-                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                      )}
-                    >
-                      <Clock className="size-3" />
-                      One-time
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setTaskType('recurring')}
-                      className={cn(
-                        'px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1.5',
-                        taskType === 'recurring'
-                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
-                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                      )}
-                    >
-                      <Repeat className="size-3" />
-                      Recurring
-                    </button>
-                  </div>
 
-                  {/* Trigger Type Switcher */}
-                  <div className="flex bg-gray-100 dark:bg-zinc-955 p-0.5 rounded-xl border border-black/5 dark:border-zinc-800/80">
-                    <button
-                      type="button"
-                      onClick={() => setTriggerType('scheduled')}
-                      className={cn(
-                        'px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1.5',
-                        triggerType === 'scheduled'
-                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
-                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                      )}
-                    >
-                      <CalendarClock className="size-3" />
-                      Scheduled
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setTriggerType('event')}
-                      className={cn(
-                        'px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all flex items-center gap-1.5',
-                        triggerType === 'event'
-                          ? 'bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm'
-                          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                      )}
-                    >
-                      <Zap className="size-3" />
-                      Event
-                    </button>
-                  </div>
-
-                </div>
-
-                {/* Input Row */}
-                <div className="flex items-center gap-3">
-                  <div className="flex-1">
-                    {triggerType === 'scheduled' ? (
-                      <input
-                        type="text"
-                        value={scheduledTime}
-                        onChange={(e) => setScheduledTime(e.target.value)}
-                        placeholder={taskType === 'recurring' ? 'Cron expression (e.g. Every Monday at 9AM)' : 'Execution time (e.g. Tomorrow 3PM)'}
-                        className="w-full bg-gray-50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                      />
-                    ) : (
-                      <input
-                        type="text"
-                        value={eventTrigger}
-                        onChange={(e) => setEventTrigger(e.target.value)}
-                        placeholder="Trigger event (e.g. When a new email arrives from @client.com)"
-                        className="w-full bg-gray-50 dark:bg-zinc-955/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                      />
-                    )}
-                  </div>
-                  
-                  <button
-                    type="button"
-                    onClick={handleCreateTask}
-                    disabled={!message.trim()}
-                    className="bg-[#0c1120] hover:bg-[#0c1120]/90 disabled:bg-[#0c1120] disabled:opacity-100 text-white rounded-xl h-[36px] w-[36px] p-0 flex items-center justify-center transition-transform active:scale-95 disabled:active:scale-100"
-                  >
-                    <ArrowUp className="size-4 text-white" />
-                  </button>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        ) : (
-          <>
             {appParam && (
               <div className="mb-3 px-4 py-2.5 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/50 dark:border-indigo-900/50 flex items-center justify-between shadow-xs animate-in fade-in duration-300">
                 <div className="flex items-center gap-2.5">
@@ -1571,161 +1602,501 @@ export default function ChatInput({
                 </button>
               </div>
             )}
-            <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={cn(
-              'relative flex flex-col rounded-2xl border bg-white px-3 shadow-sm sm:px-4 transition-all duration-300',
-              isDragging 
-                ? 'border-indigo-500 border-dashed bg-indigo-50/30 dark:bg-indigo-950/20 scale-[1.01]' 
-                : 'border-gray-300 dark:border-zinc-700 dark:bg-zinc-800',
-              activeConversation?.knowledgebaseId &&
-                message.length < 100 &&
-                'flex',
-            )}
-          >
-            {isDragging && (
-              <div className="absolute inset-0 flex items-center justify-center bg-indigo-500/10 backdrop-blur-xs rounded-2xl pointer-events-none z-50 animate-in fade-in duration-200">
-                <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
-                  <Paperclip className="size-3.5 animate-bounce" />
-                  Drop files to upload
-                </span>
-              </div>
-            )}
-            {/* Image Preview */}
-            {imageBase64 && (
-              <div className="relative mt-2 w-fit">
-                <img
-                  src={imageBase64}
-                  alt="Uploaded preview"
-                  className="h-12 w-12 rounded-lg object-cover"
-                />
-                <button
-                  onClick={handleRemoveImage}
-                  className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
+            {isExistingConversation ? (
+              /* Compact Single Line Row layout when chat has messages (at bottom) */
+              <div className="flex flex-col w-full gap-2 px-4 sm:px-0">
+                {/* File Cards Preview - Shows above input field next to each other */}
+                {selectedFiles && selectedFiles.length > 0 && (
+                  <div className="flex flex-wrap gap-2 px-1 max-h-[80px] overflow-y-auto custom-scrollbar">
+                    {selectedFiles.map((file, index) => (
+                      <div 
+                        key={index}
+                        className="inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs bg-white dark:bg-zinc-800 dark:border-zinc-700 animate-in fade-in duration-200"
+                      >
+                        <FileText className="size-4 flex-shrink-0 text-gray-500" />
+                        <div className="flex min-w-0 flex-1 flex-col">
+                          <span className="truncate text-xs font-semibold text-gray-705 dark:text-zinc-300" title={file.name}>
+                            {file.name}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = selectedFiles.filter((_, i) => i !== index);
+                            setSelectedFiles(updated);
+                          }}
+                          className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
+                          title="Remove file"
+                        >
+                          <X className="size-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  className={cn(
+                    'relative flex items-center gap-2 rounded-2xl border bg-white dark:bg-zinc-800 px-3 py-1 shadow-sm transition-all duration-300 w-full min-h-[48px]',
+                    isDragging 
+                      ? 'border-indigo-500 border-dashed bg-indigo-50/30 dark:bg-indigo-950/20 scale-[1.01]' 
+                      : 'border-gray-300 dark:border-zinc-700',
+                  )}
                 >
-                  <Plus className="bold size-3 rotate-45" />
-                </button>
-              </div>
-            )}
-
-            {/* Hidden file input - must be outside Popover to persist */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              multiple
-              accept={(() => {
-                switch (selectedOption) {
-                  case OPTIONS.IMAGE:
-                  case OPTIONS.EDIT_IMAGE:
-                    return 'image/*';
-                  default:
-                    return ALLOWED_DOC_EXTENSIONS.join(',');
-                }
-              })()}
-              onChange={handleFileChange}
-              className="hidden"
-            />
-
-            {/* File Cards Preview - Shows above input field next to each other */}
-            {selectedFiles && selectedFiles.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-2">
-                {selectedFiles.map((file, index) => (
-                  <div 
-                    key={index}
-                    className="inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs animate-in fade-in duration-200"
-                    style={{ backgroundColor: '#FFFFFF' }}
-                  >
-                    {/* File Type Icon */}
-                    <FileText className="size-4 flex-shrink-0 text-gray-500" />
-
-                    {/* File Info */}
-                    <div className="flex min-w-0 flex-1 flex-col">
-                      <span className="truncate text-xs font-semibold text-gray-700" title={file.name}>
-                        {file.name}
+                  {isDragging && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-indigo-500/10 backdrop-blur-xs rounded-2xl pointer-events-none z-50 animate-in fade-in duration-200">
+                      <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
+                        <Paperclip className="size-3.5 animate-bounce" />
+                        Drop files to upload
                       </span>
                     </div>
+                  )}
 
-                    {/* Remove Button */}
+                  {/* Attach Files Button */}
+                  <Tooltip>
+                    <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border border-black/5 bg-[#e1e1e1] hover:bg-zinc-300 p-1 text-zinc-650 transition-all dark:border-zinc-700/50 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-350 focus:outline-none"
+                        aria-label="Attach Files"
+                      >
+                        <Paperclip className="size-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Attach Files</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  {/* Textarea (single-line style but auto-expanding) */}
+                  <Textarea
+                    ref={textareaRef}
+                    name="message"
+                    value={message}
+                    onChange={e => setMessage(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSubmit();
+                      }
+                    }}
+                    placeholder={
+                      activeConversation?.knowledgebaseId && isLoading
+                        ? 'Loading...'
+                        : activeConversation?.knowledgebaseId && activeKnowledgeBaseName
+                          ? `Chat with ${activeKnowledgeBaseName}`
+                          : 'Enter prompt here...'
+                    }
+                    style={{ backgroundColor: 'transparent' }}
+                    className="min-h-[36px] max-h-[160px] w-full flex-1 resize-none border-none bg-transparent px-2 py-1.5 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-3"
+                    autoFocus
+                  />
+
+                  {/* Send Button / Mic Button */}
+                  <Tooltip>
+                    <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
+                      {isLoadingResponse ? (
+                        <button
+                          type="button"
+                          disabled
+                          className="flex size-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed focus:outline-none"
+                        >
+                          <ArrowUp className="size-4" />
+                        </button>
+                      ) : !message?.trim() ? (
+                        <button
+                          type="button"
+                          onClick={toggleListening}
+                          className={cn(
+                            'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-black text-white hover:bg-zinc-900 focus:outline-none transition-all',
+                            isListening && 'bg-red-600 hover:bg-red-700 animate-pulse text-white'
+                          )}
+                          aria-label={isListening ? 'Stop listening' : 'Speech to Text'}
+                        >
+                          <Mic className="size-4" />
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={handleSubmit}
+                          className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-black text-white hover:bg-zinc-900 focus:outline-none transition-all"
+                          aria-label="Send Prompt"
+                        >
+                          <ArrowUp className="size-4" />
+                        </button>
+                      )}
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>
+                        {isLoadingResponse
+                          ? 'Assistant is thinking...'
+                          : !message?.trim()
+                            ? isListening
+                              ? 'Stop listening'
+                              : 'Speech to Text'
+                            : 'Send Prompt'}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              </div>
+            ) : (
+              /* Original double-height prompt box for new chat */
+              <div
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                className={cn(
+                  'relative flex flex-col rounded-2xl border bg-white shadow-sm transition-all duration-300 w-full',
+                  isDragging 
+                    ? 'border-indigo-500 border-dashed bg-indigo-50/30 dark:bg-indigo-950/20 scale-[1.01]' 
+                    : 'border-gray-300 dark:border-zinc-700 dark:bg-zinc-800',
+                  activeConversation?.knowledgebaseId &&
+                    message.length < 100 &&
+                    'flex',
+                )}
+              >
+                {isDragging && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-indigo-500/10 backdrop-blur-xs rounded-2xl pointer-events-none z-50 animate-in fade-in duration-200">
+                    <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
+                      <Paperclip className="size-3.5 animate-bounce" />
+                      Drop files to upload
+                    </span>
+                  </div>
+                )}
+                {/* Mode Badge Preview */}
+                {selectedOption && (selectedOption === OPTIONS.CODE || selectedOption === OPTIONS.IMAGE) && (
+                  <div className="mt-3 flex items-center justify-between rounded-lg bg-zinc-50 dark:bg-zinc-850/60 px-3 py-1.5 border border-zinc-200 dark:border-zinc-800/80 animate-in fade-in duration-200 mx-4 sm:mx-5">
+                    <div className="flex items-center gap-2">
+                      {selectedOption === OPTIONS.CODE ? (
+                        <Code className="size-4 text-black dark:text-white" />
+                      ) : (
+                        <ImageIcon className="size-4 text-black dark:text-white" />
+                      )}
+                      <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                        {selectedOption === OPTIONS.CODE ? 'Code Generation Mode' : 'Image Generation Mode'}
+                      </span>
+                    </div>
                     <button
                       type="button"
-                      onClick={() => {
-                        const updated = selectedFiles.filter((_, i) => i !== index);
-                        setSelectedFiles(updated);
-                      }}
-                      className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
-                      title="Remove file"
+                      onClick={() => setSelectedOption(null)}
+                      className="rounded-full hover:bg-black/5 dark:hover:bg-white/5 p-0.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
+                      title="Exit mode"
                     >
                       <X className="size-3.5" />
                     </button>
                   </div>
-                ))}
+                )}
+                {/* Image Preview */}
+                {imageBase64 && (
+                  <div className="relative mt-2 w-fit mx-4 sm:mx-5">
+                    <img
+                      src={imageBase64}
+                      alt="Uploaded preview"
+                      className="h-12 w-12 rounded-lg object-cover"
+                    />
+                    <button
+                      onClick={handleRemoveImage}
+                      className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
+                    >
+                      <Plus className="bold size-3 rotate-45" />
+                    </button>
+                  </div>
+                )}
+
+                {/* File Cards Preview - Shows above input field next to each other */}
+                {selectedFiles && selectedFiles.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-2 mx-4 sm:mx-5">
+                    {selectedFiles.map((file, index) => (
+                      <div 
+                        key={index}
+                        className="inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs animate-in fade-in duration-200"
+                        style={{ backgroundColor: '#FFFFFF' }}
+                      >
+                        {/* File Type Icon */}
+                        <FileText className="size-4 flex-shrink-0 text-gray-500" />
+
+                        {/* File Info */}
+                        <div className="flex min-w-0 flex-1 flex-col">
+                          <span className="truncate text-xs font-semibold text-gray-700" title={file.name}>
+                            {file.name}
+                          </span>
+                        </div>
+
+                        {/* Remove Button */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = selectedFiles.filter((_, i) => i !== index);
+                            setSelectedFiles(updated);
+                          }}
+                          className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
+                          title="Remove file"
+                        >
+                          <X className="size-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Input container: double height textarea top, actions bottom */}
+                <div className="flex flex-col w-full">
+                  <Textarea
+                    ref={textareaRef}
+                    name="message"
+                    value={message}
+                    onChange={e => setMessage(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        if (selectedOption === OPTIONS.TASK) {
+                          handleCreateTask();
+                        } else {
+                          handleSubmit();
+                        }
+                      }
+                    }}
+                    placeholder={
+                      selectedOption === OPTIONS.TASK
+                        ? 'Describe the task you want to automate...'
+                        : selectedOption === OPTIONS.RESEARCH
+                          ? 'State research query...'
+                          : selectedOption === OPTIONS.SEARCH
+                            ? 'What would you like to search?'
+                            : activeConversation?.knowledgebaseId && isLoading
+                              ? 'Loading...'
+                              : activeConversation?.knowledgebaseId &&
+                                  activeKnowledgeBaseName
+                                ? `Chat with ${activeKnowledgeBaseName}`
+                                : (pathname === '/workflows' || pathname?.startsWith('/workflows')
+                                  ? 'Describe your workflow...'
+                                  : 'Enter prompt here...')
+                     }
+                    style={{ backgroundColor: 'transparent' }}
+                    className="min-h-[48px] w-full flex-1 resize-none border-none bg-transparent px-4 pt-3.5 pb-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white sm:px-5"
+                    autoFocus
+                  />
+
+                  {/* Dedicated Task Configurations Row */}
+                  {selectedOption === OPTIONS.TASK && !hasMessages && !isExistingConversation && (
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-2 border-t border-black/5 dark:border-white/5 sm:px-5 bg-zinc-50/60 dark:bg-zinc-900/30 animate-in fade-in duration-200">
+                      {/* Frequency Section */}
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider select-none">
+                          Frequency
+                        </span>
+                        <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => setTaskType('one-time')}
+                            className={cn(
+                              'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
+                              taskType === 'one-time'
+                                ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
+                                : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
+                            )}
+                          >
+                            <Clock className="size-3" />
+                            <span>One-time</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setTaskType('recurring')}
+                            className={cn(
+                              'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
+                              taskType === 'recurring'
+                                ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
+                                : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
+                            )}
+                          >
+                            <Repeat className="size-3" />
+                            <span>Recurring</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Vertical Divider */}
+                      <div className="h-5 w-px bg-black/10 dark:bg-white/10 hidden sm:block mx-1" />
+
+                      {/* Trigger Section */}
+                      <div className="flex items-center gap-2 flex-grow min-w-0">
+                        <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider select-none hidden xs:inline">
+                          Trigger
+                        </span>
+                        <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => setTriggerType('scheduled')}
+                            className={cn(
+                              'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
+                              triggerType === 'scheduled'
+                                ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
+                                : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
+                            )}
+                          >
+                            <CalendarClock className="size-3" />
+                            <span>Scheduled</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setTriggerType('event')}
+                            className={cn(
+                              'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
+                              triggerType === 'event'
+                                ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
+                                : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
+                            )}
+                          >
+                            <Zap className="size-3" />
+                            <span>Event</span>
+                          </button>
+                        </div>
+
+                        {/* Trigger Details Input */}
+                        <div className="flex-grow min-w-0">
+                          {triggerType === 'scheduled' ? (
+                            <input
+                              type="text"
+                              value={scheduledTime}
+                              onChange={(e) => setScheduledTime(e.target.value)}
+                              placeholder={taskType === 'recurring' ? 'Cron expression (e.g. Every Mon 9AM)' : 'Specific date/time (e.g. Tomorrow at 3PM)'}
+                              className="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1.5 text-xs text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder:text-[10px] dark:placeholder:text-zinc-500 shadow-xs"
+                            />
+                          ) : (
+                            <input
+                              type="text"
+                              value={eventTrigger}
+                              onChange={(e) => setEventTrigger(e.target.value)}
+                              placeholder="Event conditions details..."
+                              className="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1.5 text-xs text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder:text-[10px] dark:placeholder:text-zinc-550 shadow-xs"
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between px-4 pb-2.5 pt-2.5 border-t border-black/5 dark:border-white/5 sm:px-5">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <Tooltip>
+                        <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
+                          <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border border-black/5 bg-[#e1e1e1] hover:bg-zinc-300 p-1 text-zinc-650 transition-all dark:border-zinc-700/50 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-350 focus:outline-none"
+                            aria-label="Attach Files"
+                          >
+                            <Paperclip className="size-3.5" />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                          <p>Attach Files</p>
+                        </TooltipContent>
+                      </Tooltip>
+
+                      {/* Chat / Search / Research Switcher inside Prompt Box */}
+                      {!hasMessages && !isExistingConversation && (
+                        <div className="flex bg-[#e1e1e1] dark:bg-zinc-900 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedOption(null)}
+                            className={cn(
+                              'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                              selectedOption === null
+                                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
+                                : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
+                            )}
+                          >
+                            <MessageSquare className="size-[11px]" />
+                            <span>Chat</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedOption(OPTIONS.SEARCH)}
+                            className={cn(
+                              'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                              selectedOption === OPTIONS.SEARCH
+                                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
+                                : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
+                            )}
+                          >
+                            <Globe className="size-[13px]" />
+                            <span>Search</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
+                            className={cn(
+                              'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
+                              selectedOption === OPTIONS.RESEARCH
+                                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
+                                : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
+                            )}
+                          >
+                            <Microscope className="size-[13px]" />
+                            <span>Research</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Send Button / Mic Button */}
+                    <Tooltip>
+                      <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
+                        {isLoadingResponse ? (
+                          <button
+                            type="button"
+                            disabled
+                            className="flex size-7 flex-shrink-0 items-center justify-center rounded-lg bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed focus:outline-none"
+                          >
+                            <ArrowUp className="size-3.5" />
+                          </button>
+                        ) : !message?.trim() ? (
+                          <button
+                            type="button"
+                            onClick={toggleListening}
+                            className={cn(
+                              'flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-black text-white hover:bg-zinc-900 focus:outline-none transition-all',
+                              isListening && 'bg-red-600 hover:bg-red-700 animate-pulse text-white'
+                            )}
+                            aria-label={isListening ? 'Stop listening' : 'Speech to Text'}
+                          >
+                            <Mic className="size-3.5" />
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={selectedOption === OPTIONS.TASK ? handleCreateTask : handleSubmit}
+                            className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-black text-white hover:bg-zinc-900 focus:outline-none transition-all"
+                            aria-label="Send Prompt"
+                          >
+                            <ArrowUp className="size-3.5" />
+                          </button>
+                        )}
+                      </TooltipTrigger>
+                      <TooltipContent side="top">
+                        <p>
+                          {isLoadingResponse
+                            ? 'Assistant is thinking...'
+                            : !message?.trim()
+                              ? isListening
+                                ? 'Stop listening'
+                                : 'Speech to Text'
+                              : selectedOption === OPTIONS.TASK
+                                ? 'Schedule Task'
+                                : 'Send Prompt'}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </div>
               </div>
             )}
-
-            {/* Input container with active icon inside */}
-            <div className="relative flex items-center gap-2 py-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity hover:opacity-80 focus:outline-none"
-                    aria-label="Attach Files"
-                  >
-                    <Paperclip className="size-3.5" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="top">
-                  <p>Attach Files</p>
-                </TooltipContent>
-              </Tooltip>
-
-              <Textarea
-                name="message"
-                value={message}
-                onChange={e => setMessage(e.target.value)}
-                onKeyDown={e => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSubmit();
-                  }
-                }}
-                placeholder={
-                  activeConversation?.knowledgebaseId && isLoading
-                    ? 'Loading...'
-                    : activeConversation?.knowledgebaseId &&
-                        activeKnowledgeBaseName
-                      ? `Chat with ${activeKnowledgeBaseName}`
-                      : (pathname === '/workflows' || pathname?.startsWith('/workflows')
-                        ? 'Describe your workflow...'
-                        : 'Enter prompt here...')
-                }
-                style={{ backgroundColor: 'transparent' }}
-                className="min-h-8 w-full flex-1 resize-none border-none bg-transparent px-2 py-2 shadow-none outline-none placeholder:text-sm focus-visible:ring-0"
-                autoFocus
-              />
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <ArrowUp
-                    onClick={handleSubmit}
-                    className={cn(
-                      'size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-[#0c1120] p-1 text-white transition-opacity focus:outline-none',
-                      (isLoadingResponse || !message?.trim())
-                        ? 'cursor-not-allowed'
-                        : 'cursor-pointer hover:opacity-80',
-                    )}
-                  />
-                </TooltipTrigger>
-                <TooltipContent side="top">
-                  <p>Send Prompt</p>
-                </TooltipContent>
-              </Tooltip>
-            </div>
-          </div>
-        </>
-      )}
       </div>
     </>
   );

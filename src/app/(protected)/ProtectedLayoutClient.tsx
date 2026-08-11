@@ -92,7 +92,7 @@ export default function ProtectedLayoutClient({
               setShowStartLastMessage(false);
               setUserMessage('');
               setSelectedOption(null);
-              router.push('/');
+              router.push('/c/new-chat');
               close();
             }}
             className="flex items-center justify-start bg-transparent text-sm text-black shadow-none hover:bg-black/5"
@@ -108,8 +108,8 @@ export default function ProtectedLayoutClient({
         {!isSuperAdmin && (
           <div
             className={cn(
-              'sticky top-0 left-0 hidden h-full flex-col transition-all duration-300 ease-in-out sm:hidden md:flex border-r border-zinc-800/50 shrink-0 z-20',
-              isLeftSidebarOpen ? 'w-76' : 'w-10',
+              'sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out sm:hidden md:flex border-r border-zinc-800/50 shrink-0 z-20',
+              isLeftSidebarOpen ? 'w-80' : 'w-[56px]',
             )}
             style={{ backgroundColor: '#0c1120' }}
           >

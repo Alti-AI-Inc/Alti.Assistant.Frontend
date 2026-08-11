@@ -203,14 +203,14 @@ response: {
             "answer": "Image generated successfully using imagen4",
             "image": {
                 "filename": "image-direct-1765467274198.png",
-                "url": "https://storage.googleapis.com/alti_assistant_generated_photo/image-direct-1765467274198.png",
+                "url": "https://storage.googleapis.com/inso_assistant_generated_photo/image-direct-1765467274198.png",
                 "service": "imagen4",
                 "reasoning": "The user is requesting the generation of a new, detailed image (futuristic city skyline). There is no indication of needing to edit an existing image, nor is there a request for speed or quick results. Therefore, the high-fidelity generation model is the appropriate choice.",
                 "confidence": 1
             },
             "prompt": "A futuristic city skyline at night with neon lights, cyberpunk style",
             "metadata": {
-                "imageUrl": "https://storage.googleapis.com/alti_assistant_generated_photo/image-direct-1765467274198.png",
+                "imageUrl": "https://storage.googleapis.com/inso_assistant_generated_photo/image-direct-1765467274198.png",
                 "filename": "image-direct-1765467274198.png",
                 "service": "imagen4",
                 "reasoning": "The user is requesting the generation of a new, detailed image (futuristic city skyline). There is no indication of needing to edit an existing image, nor is there a request for speed or quick results. Therefore, the high-fidelity generation model is the appropriate choice.",
@@ -241,14 +241,14 @@ response :{
             "answer": "Image generated successfully using gemini2.5flash",
             "image": {
                 "filename": "image-direct-1765467203643.png",
-                "url": "https://storage.googleapis.com/alti_assistant_generated_photo/image-direct-1765467203643.png",
+                "url": "https://storage.googleapis.com/inso_assistant_generated_photo/image-direct-1765467203643.png",
                 "service": "gemini2.5flash",
                 "reasoning": "The user is requesting modifications to the image ('Add more vibrant colors', 'increase the saturation'). This falls under the category of image editing and modifications to existing images, which is the designated use case for gemini2.5flash.",
                 "confidence": 1
             },
             "prompt": "Add more vibrant colors and increase the saturation",
             "metadata": {
-                "imageUrl": "https://storage.googleapis.com/alti_assistant_generated_photo/image-direct-1765467203643.png",
+                "imageUrl": "https://storage.googleapis.com/inso_assistant_generated_photo/image-direct-1765467203643.png",
                 "filename": "image-direct-1765467203643.png",
                 "service": "gemini2.5flash",
                 "reasoning": "The user is requesting modifications to the image ('Add more vibrant colors', 'increase the saturation'). This falls under the category of image editing and modifications to existing images, which is the designated use case for gemini2.5flash.",
@@ -284,7 +284,7 @@ response: {
             "image": {
                 "filename": "image-edit-1765467701062.png",
                 "url": {
-                    "url": "https://storage.googleapis.com/alti_assistant_generated_photo/image-edit-1765467701062.png",
+                    "url": "https://storage.googleapis.com/inso_assistant_generated_photo/image-edit-1765467701062.png",
                     "filename": "image-edit-1765467701062.png",
                     "service": "imagen3-edit",
                     "reasoning": "Image edited using Gemini 3 Pro Image (Imagen 3)"
@@ -294,7 +294,7 @@ response: {
             "prompt": "Make the image brighter and add more contrast",
             "metadata": {
                 "imageUrl": {
-                    "url": "https://storage.googleapis.com/alti_assistant_generated_photo/image-edit-1765467701062.png",
+                    "url": "https://storage.googleapis.com/inso_assistant_generated_photo/image-edit-1765467701062.png",
                     "filename": "image-edit-1765467701062.png",
                     "service": "imagen3-edit",
                     "reasoning": "Image edited using Gemini 3 Pro Image (Imagen 3)"

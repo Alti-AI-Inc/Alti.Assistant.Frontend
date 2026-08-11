@@ -70,8 +70,8 @@ export function MemberRoleSelector({
   if (normalizedRole === 'owner') normalizedRole = 'admin';
   if (normalizedRole === 'member') normalizedRole = 'user';
 
-  /** Tenant supports admin + manager + user; legacy values map to user for the control. */
-  const supportedTenantRoles = new Set(['admin', 'manager', 'user']);
+  /** Tenant supports admin + user; legacy values map to user for the control. */
+  const supportedTenantRoles = new Set(['admin', 'user']);
   const selectValue = supportedTenantRoles.has(normalizedRole)
     ? normalizedRole
     : 'user';
@@ -112,9 +112,7 @@ export function MemberRoleSelector({
           <SelectItem value={TenantRole.ADMIN}>
             <span className="capitalize">Admin</span>
           </SelectItem>
-          <SelectItem value={TenantRole.MANAGER}>
-            <span className="capitalize">Manager</span>
-          </SelectItem>
+
         </SelectContent>
       </Select>
 

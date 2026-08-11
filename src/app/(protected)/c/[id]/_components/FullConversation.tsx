@@ -362,6 +362,13 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
     activeConversation?.messages?.length
   ]);
 
+  // Reset active conversation state when entering new-chat route to prevent race conditions
+  useEffect(() => {
+    if (conversationId === 'new-chat') {
+      setActiveConversation(null);
+    }
+  }, [conversationId, setActiveConversation]);
+
   // Track which conversation's presentation metadata we've already processed
   const processedPresentationRef = useRef<string | null>(null);
 
@@ -1142,7 +1149,7 @@ return (
       className={cn(
         "flex w-full h-full flex-1 flex-col min-h-0 overflow-hidden bg-[#e1e1e1] dark:bg-zinc-950",
         showAsNewChat 
-          ? (pathname?.startsWith('/spaces') ? "pt-[28vh] items-center" : "pt-[32vh] items-center")
+          ? "pt-[32vh] items-center"
           : ""
       )}
     >
@@ -1223,17 +1230,23 @@ return (
         className={cn(
           'shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300',
           !showAsNewChat
-            ? 'flex min-h-[88px] items-center justify-center py-4 border-t border-black/5 dark:border-zinc-800 bg-[#e1e1e1] dark:bg-zinc-900 mt-auto'
-            : 'py-4 bg-transparent border-t-0'
+            ? 'flex items-center justify-center h-[64px] pt-0 pb-0 border-t border-black/10 dark:border-zinc-800/60 bg-[#e1e1e1] dark:bg-zinc-950 mt-auto'
+            : 'pt-3 pb-0 bg-transparent border-t-0'
         )}
       >
-        <div className="mx-auto w-full max-w-[796px]">
+         <div className="mx-auto w-full max-w-[796px]">
+          {showAsNewChat && (
+            <h1 className="text-3xl sm:text-4xl font-semibold text-zinc-900 dark:text-white mb-6 text-center select-none tracking-tight animate-in fade-in duration-300">
+              How can I help you?
+            </h1>
+          )}
           <ChatInput
             conversationId={conversationId}
             imageGenHook={imageGenHook}
             selectedFiles={selectedFiles}
             onFilesChange={setSelectedFiles}
             isStudio={isStudio}
+            isConversationLoading={isLoading}
           />
         </div>
       </div>
