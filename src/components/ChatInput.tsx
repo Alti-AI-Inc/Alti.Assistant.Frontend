@@ -2023,7 +2023,7 @@ export default function ChatInput({
                             )}
                           >
                             <Globe className="size-[13px]" />
-                            <span>Search</span>
+                            <span>Real-Time Search</span>
                           </button>
                           <button
                             type="button"
