@@ -898,10 +898,36 @@ const LeftSideNavMobile = () => {
       {/* Column 2: Secondary Content navigation panel */}
       <div className="flex-1 flex flex-col min-w-0 h-full bg-[#0c1120]">
         {/* Header Row */}
-        <div className="sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] px-4 flex-none">
-          <span className="text-sm font-semibold text-white truncate">
-            {activeBotId ? (bots.find(b => b.id === activeBotId)?.name || 'Space') : 'Alti'}
-          </span>
+        <div className="sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] px-4 flex-none gap-4">
+          {/* Search / Research Toggle Switcher */}
+          <div className="flex bg-zinc-950 p-0.5 rounded-lg border border-white/5 flex-shrink-0 select-none">
+            <button
+              type="button"
+              onClick={() => setSelectedOption(OPTIONS.SEARCH)}
+              className={cn(
+                'px-2.5 py-1 text-[10px] font-bold rounded-md transition-all flex items-center gap-1 cursor-pointer',
+                selectedOption === OPTIONS.SEARCH || selectedOption === null
+                  ? 'bg-zinc-800 text-white shadow-xs'
+                  : 'text-zinc-500 hover:text-zinc-350'
+              )}
+            >
+              <Globe className="size-[11px]" />
+              <span>Search</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
+              className={cn(
+                'px-2.5 py-1 text-[10px] font-bold rounded-md transition-all flex items-center gap-1 cursor-pointer',
+                selectedOption === OPTIONS.RESEARCH
+                  ? 'bg-zinc-800 text-white shadow-xs'
+                  : 'text-zinc-500 hover:text-zinc-350'
+              )}
+            >
+              <Microscope className="size-[11px]" />
+              <span>Research</span>
+            </button>
+          </div>
         </div>
 
         {/* Navigation Body */}
