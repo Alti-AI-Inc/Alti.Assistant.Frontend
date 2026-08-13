@@ -713,12 +713,12 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const allInstructions = activeBot?.instructions ? activeBot.instructions.split('\n\n').filter(Boolean) : [];
   const allGuardrails = activeBot?.guardrails ? activeBot.guardrails.split('\n\n').filter(Boolean) : [];
 
-  const SHOW_WORKSPACES = false;
+  const SHOW_WORKSPACES = true;
 
   return (
     <div className="flex h-full w-full overflow-hidden">
       {/* Column 1: Spaces Switcher (Slack style) - Show only expand button when collapsed, hide workspace switcher in Phase 1 */}
-      {!isLeftSidebarOpen && (
+      {!isLeftSidebarOpen && !SHOW_WORKSPACES && (
         <div className="w-[56px] h-full bg-black border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none animate-in fade-in duration-200">
           <div className="relative w-full flex flex-col items-center mb-1">
             <Tooltip>

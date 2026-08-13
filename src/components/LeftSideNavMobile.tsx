@@ -753,7 +753,7 @@ const LeftSideNavMobile = () => {
 
   const plusProps = getPlusButtonProps();
 
-  const SHOW_WORKSPACES = false;
+  const SHOW_WORKSPACES = true;
 
   return (
     <div className="flex h-full w-full overflow-hidden">
