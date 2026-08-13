@@ -1615,10 +1615,10 @@ export default function ChatInput({
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg border border-black/5 bg-[#e1e1e1] hover:bg-zinc-355 text-zinc-650 transition-all dark:border-zinc-700/50 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 focus:outline-none"
+                      className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md border border-black/5 bg-[#e1e1e1] hover:bg-zinc-355 text-zinc-650 transition-all dark:border-zinc-700/50 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 focus:outline-none"
                       aria-label="Attach Files"
                     >
-                      <Paperclip className="size-4" />
+                      <Paperclip className="size-3.5" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="top">
@@ -1666,30 +1666,30 @@ export default function ChatInput({
                       <button
                         type="button"
                         disabled
-                        className="flex size-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed focus:outline-none"
+                        className="flex size-8 flex-shrink-0 items-center justify-center rounded-md bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed focus:outline-none"
                       >
-                        <ArrowUp className="size-4" />
+                        <ArrowUp className="size-3.5" />
                       </button>
                     ) : !message?.trim() ? (
                       <button
                         type="button"
                         onClick={toggleListening}
                         className={cn(
-                          'flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-black text-white hover:bg-zinc-900 dark:bg-zinc-900 dark:hover:bg-zinc-800 focus:outline-none transition-all border border-transparent',
+                          'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md bg-black text-white hover:bg-zinc-900 dark:bg-zinc-900 dark:hover:bg-zinc-800 focus:outline-none transition-all border border-transparent',
                           isListening && 'bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 animate-pulse text-white'
                         )}
                         aria-label={isListening ? 'Stop listening' : 'Speech to Text'}
                       >
-                        <Mic className="size-4" />
+                        <Mic className="size-3.5" />
                       </button>
                     ) : (
                       <button
                         type="button"
                         onClick={selectedOption === OPTIONS.TASK && !hasMessages && !isExistingConversation ? handleCreateTask : handleSubmit}
-                        className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-black text-white hover:bg-zinc-900 dark:bg-zinc-900 dark:hover:bg-zinc-800 focus:outline-none transition-all border border-transparent"
+                        className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md bg-black text-white hover:bg-zinc-900 dark:bg-zinc-900 dark:hover:bg-zinc-800 focus:outline-none transition-all border border-transparent"
                         aria-label="Send Prompt"
                       >
-                        <ArrowUp className="size-4" />
+                        <ArrowUp className="size-3.5" />
                       </button>
                     )}
                   </TooltipTrigger>
