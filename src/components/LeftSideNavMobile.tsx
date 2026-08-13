@@ -900,31 +900,29 @@ const LeftSideNavMobile = () => {
         {/* Header Row */}
         <div className="sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] px-4 flex-none gap-4">
           {/* Search / Research Toggle Switcher */}
-          <div className="flex bg-zinc-950 p-0.5 rounded-lg border border-white/5 flex-shrink-0 select-none">
+          <div className="flex bg-[#060913]/90 p-0.5 rounded-lg border border-blue-500/15 flex-shrink-0 select-none shadow-[0_0_15px_rgba(0,0,255,0.08)]">
             <button
               type="button"
               onClick={() => setSelectedOption(OPTIONS.SEARCH)}
               className={cn(
-                'px-2.5 py-1 text-[10px] font-bold rounded-md transition-all flex items-center gap-1 cursor-pointer',
+                'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
                 selectedOption === OPTIONS.SEARCH || selectedOption === null
-                  ? 'bg-zinc-800 text-white shadow-xs'
-                  : 'text-zinc-500 hover:text-zinc-350'
+                  ? 'bg-gradient-to-r from-blue-600/30 to-indigo-600/30 border-blue-500/40 text-blue-200 shadow-[0_0_10px_rgba(0,0,255,0.25)]'
+                  : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
               )}
             >
-              <Globe className="size-[11px]" />
               <span>Search</span>
             </button>
             <button
               type="button"
               onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
               className={cn(
-                'px-2.5 py-1 text-[10px] font-bold rounded-md transition-all flex items-center gap-1 cursor-pointer',
+                'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
                 selectedOption === OPTIONS.RESEARCH
-                  ? 'bg-zinc-800 text-white shadow-xs'
-                  : 'text-zinc-500 hover:text-zinc-350'
+                  ? 'bg-gradient-to-r from-indigo-600/30 to-purple-600/30 border-indigo-500/40 text-indigo-200 shadow-[0_0_10px_rgba(99,102,241,0.25)]'
+                  : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
               )}
             >
-              <Microscope className="size-[11px]" />
               <span>Research</span>
             </button>
           </div>
@@ -1012,8 +1010,7 @@ const LeftSideNavMobile = () => {
               {/* Search Bar Row */}
               <div className="pt-3 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full">
                 <div className="flex h-9 w-full items-center rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] overflow-hidden focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40 transition-all duration-300">
-                  <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
-                    <Search className="size-3.5 flex-none text-[#5e5eff]" />
+                  <div className="flex flex-1 items-center px-3 h-full">
                     <input
                       type="text"
                       placeholder="Search..."
@@ -1126,8 +1123,7 @@ const LeftSideNavMobile = () => {
               {/* Search Bar Row (Same exact styling as general chat mode) */}
               <div className="pt-3 pb-1.5 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full gap-2">
                 <div className="flex-1 flex h-9 items-center rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] overflow-hidden focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40 transition-all duration-300">
-                  <div className="flex flex-1 items-center gap-2.5 px-3 h-full">
-                    <Search className="size-3.5 flex-none text-[#5e5eff]" />
+                  <div className="flex flex-1 items-center px-3 h-full">
                     <input
                       type="text"
                       placeholder="Search..."
