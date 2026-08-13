@@ -1909,28 +1909,15 @@ export default function ChatInput({
                         </TooltipContent>
                       </Tooltip>
 
-                      {/* Chat / Search / Research Switcher inside Prompt Box */}
+                      {/* Search / Research Switcher inside Prompt Box */}
                       {!hasMessages && !isExistingConversation && (
                         <div className="flex bg-[#e1e1e1] dark:bg-zinc-900 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
-                          <button
-                            type="button"
-                            onClick={() => setSelectedOption(null)}
-                            className={cn(
-                              'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
-                              selectedOption === null
-                                ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
-                                : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
-                            )}
-                          >
-                            <MessageSquare className="size-[11px]" />
-                            <span>Chat</span>
-                          </button>
                           <button
                             type="button"
                             onClick={() => setSelectedOption(OPTIONS.SEARCH)}
                             className={cn(
                               'px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all flex items-center gap-1.5',
-                              selectedOption === OPTIONS.SEARCH
+                              selectedOption === OPTIONS.SEARCH || selectedOption === null
                                 ? 'bg-white dark:bg-zinc-700 text-gray-900 dark:text-white shadow-xs'
                                 : 'text-zinc-500 hover:text-zinc-850 dark:text-zinc-400 dark:hover:text-zinc-200'
                             )}
