@@ -53,7 +53,7 @@ interface BotsState {
   reorderBots: (startIndex: number, endIndex: number) => void;
 }
 
-const getApiUrl = () => process.env.NEXT_PUBLIC_API_URL || 'https://alti.app/api/v1';
+const getApiUrl = () => process.env.NEXT_PUBLIC_API_URL || 'https://api.altihq.com/api/v1';
 
 const PRELOADED_BOTS: Chatbot[] = [
   {
