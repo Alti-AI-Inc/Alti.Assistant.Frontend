@@ -1,4 +1,4 @@
-# Inso.Assistant Frontend
+# Alti.Assistant Frontend
 
 A premium, enterprise-grade Next.js client dashboard powering autonomous agent interactions, multi-tenant workspace isolation, dynamic workflows, and custom Swarm agent configurations.
 
@@ -77,13 +77,13 @@ For deploying this frontend directly to a GCP VM instance using PM2 and Nginx:
 
 1. **Production Variables**: Ensure the following env properties are declared in the PM2 startup script:
    - `AUTH_TRUST_HOST=true` (crucial for reverse proxy SSL handshakes)
-   - `AUTH_URL=https://insohq.com` (forces absolute redirect URLs)
-   - `NEXT_PUBLIC_API_URL=https://insohq.com/api/v1`
+   - `AUTH_URL=https://alti.app` (forces absolute redirect URLs)
+   - `NEXT_PUBLIC_API_URL=https://alti.app/api/v1`
 2. **Nginx Reverse Proxy**:
    Configure your Nginx block to forward `/api/v1` to the backend and root requests to Next.js on port `3000`:
    ```nginx
    server {
-       server_name insohq.com www.insohq.com;
+       server_name alti.app www.alti.app;
 
        location / {
            proxy_pass http://localhost:3000;

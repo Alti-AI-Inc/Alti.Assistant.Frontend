@@ -12,7 +12,7 @@ env:
   PROJECT_ID: gen-lang-client-0273900650
   REGION: us-central1
   REGISTRY: us-central1-docker.pkg.dev
-  REPO: inso-assistant
+  REPO: alti-assistant
 
 jobs:
   deploy:
@@ -29,12 +29,12 @@ jobs:
       - name: Set environment variables for branch
         run: |
           if [ "${{ github.ref_name }}" = "dev" ]; then
-            echo "SERVICE_NAME=inso-assistant-frontend-dev" >> $GITHUB_ENV
-            echo "AUTH_URL=https://dev.insoassistant.com" >> $GITHUB_ENV
+            echo "SERVICE_NAME=alti-assistant-frontend-dev" >> $GITHUB_ENV
+            echo "AUTH_URL=https://dev.alti.app" >> $GITHUB_ENV
             echo "IMAGE_TAG=dev" >> $GITHUB_ENV
           else
-            echo "SERVICE_NAME=inso-assistant-frontend" >> $GITHUB_ENV
-            echo "AUTH_URL=https://insoassistant.com" >> $GITHUB_ENV
+            echo "SERVICE_NAME=alti-assistant-frontend" >> $GITHUB_ENV
+            echo "AUTH_URL=https://alti.app" >> $GITHUB_ENV
             echo "IMAGE_TAG=latest" >> $GITHUB_ENV
           fi
 
@@ -49,7 +49,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            --build-arg NEXT_PUBLIC_API_URL=https://insohq.com/api/v1 \
+            --build-arg NEXT_PUBLIC_API_URL=https://alti.app/api/v1 \
             --build-arg NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }} \
             -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
             -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE_NAME }}:${{ env.IMAGE_TAG }} \
@@ -72,7 +72,7 @@ jobs:
             --cpu 1 \
             --min-instances 1 \
             --max-instances 10 \
-            --set-env-vars "NODE_ENV=production,NEXT_PUBLIC_API_URL=https://insohq.com/api/v1,API_URL=https://insohq.com/api/v1,AUTH_TRUST_HOST=true,AUTH_URL=${{ env.AUTH_URL }}" \
+            --set-env-vars "NODE_ENV=production,NEXT_PUBLIC_API_URL=https://alti.app/api/v1,API_URL=https://alti.app/api/v1,AUTH_TRUST_HOST=true,AUTH_URL=${{ env.AUTH_URL }}" \
             --set-secrets "AUTH_SECRET=AUTH_SECRET:latest,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:latest,STRIPE_PUBLISHABLE_KEY=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:latest" \
             --project ${{ env.PROJECT_ID }}
 

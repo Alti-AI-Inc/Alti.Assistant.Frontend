@@ -330,7 +330,7 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
     placeholders: {
       "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
       "AWS_SECRET_ACCESS_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-      "AWS_S3_BUCKET": "my-inso-bucket",
+      "AWS_S3_BUCKET": "my-alti-bucket",
       "AWS_REGION": "us-east-1"
     }
   },
@@ -502,7 +502,7 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
     },
     placeholders: {
       "WORKDAY_TENANT": "mycompany",
-      "WORKDAY_USERNAME": "isvc_inso",
+      "WORKDAY_USERNAME": "isvc_alti",
       "WORKDAY_PASSWORD": "password_xyz",
       "WORKDAY_CLIENT_ID": "client_id_xyz",
       "WORKDAY_CLIENT_SECRET": "client_secret_xyz"
@@ -519,7 +519,7 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
     },
     placeholders: {
       "SNOWFLAKE_ACCOUNT": "xy12345.us-east-1",
-      "SNOWFLAKE_USERNAME": "INSO_USER",
+      "SNOWFLAKE_USERNAME": "ALTI_USER",
       "SNOWFLAKE_PASSWORD": "password_xyz",
       "SNOWFLAKE_DATABASE": "ANALYTICS_DB",
       "SNOWFLAKE_SCHEMA": "PUBLIC"
@@ -738,7 +738,7 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
     },
     placeholders: {
       "CYBERARK_URL": "https://cyberark.company.com/aimtemplates",
-      "CYBERARK_USERNAME": "inso_svc",
+      "CYBERARK_USERNAME": "alti_svc",
       "CYBERARK_PASSWORD": "password_xyz"
     }
   },
@@ -826,7 +826,7 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
     },
     placeholders: {
       "KAFKA_BROKERS": "localhost:9092,localhost:9093",
-      "KAFKA_CLIENT_ID": "inso-mcp-client"
+      "KAFKA_CLIENT_ID": "alti-mcp-client"
     }
   },
   "aws": {
@@ -1511,7 +1511,7 @@ const AppCard = ({
               </h3>
               
               <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed">
-                {app.description || `Integrate ${app.title} tools seamlessly to expand Inso Chat's automation triggers and actions.`}
+                {app.description || `Integrate ${app.title} tools seamlessly to expand Alti's automation triggers and actions.`}
               </p>
             </div>
           </div>

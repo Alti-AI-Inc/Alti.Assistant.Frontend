@@ -4,7 +4,7 @@
 # Usage: .\scripts\set-github-secrets.ps1
 # ============================================================
 
-$REPO = "Inso-AI-Inc/Inso.Assistant.Frontend"
+$REPO = "Alti-AI-Inc/Alti.Assistant.Frontend"
 
 # ---- Check gh CLI is installed ----
 if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
@@ -28,7 +28,7 @@ Write-Host "Fetching GCP_WORKLOAD_IDENTITY_PROVIDER from gcloud..." -ForegroundC
 $GCP_WORKLOAD_IDENTITY_PROVIDER = (gcloud iam workload-identity-pools providers describe github-provider `
     --location=global `
     --workload-identity-pool=github-pool `
-    --project=inso-assistant-prod `
+    --project=alti-assistant-prod `
     --format="value(name)" 2>&1).Trim()
 
 if (-not $GCP_WORKLOAD_IDENTITY_PROVIDER -or $LASTEXITCODE -ne 0) {

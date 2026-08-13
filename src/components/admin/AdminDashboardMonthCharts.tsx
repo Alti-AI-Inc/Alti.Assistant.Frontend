@@ -261,7 +261,7 @@ export function AdminDashboardMonthCharts({ accessToken }: Props) {
 
       try {
         const baseUrl =
-          process.env.NEXT_PUBLIC_API_URL || 'https://insohq.com/api/v1';
+          process.env.NEXT_PUBLIC_API_URL || 'https://alti.app/api/v1';
 
         const headers: Record<string, string> = {
           'Content-Type': 'application/json',

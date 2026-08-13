@@ -24,7 +24,7 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'storage.googleapis.com',
         port: '',
-        pathname: '/inso_assistant_generated_photo/**',
+        pathname: '/alti_assistant_generated_photo/**',
       },
       {
         protocol: 'https',
