@@ -1590,41 +1590,9 @@ export default function ChatInput({
               )}
 
               <div
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                className={cn(
-                  'relative flex items-center gap-3 rounded-xl border bg-white dark:bg-zinc-800 px-3 py-1.5 shadow-xs transition-all duration-300 w-full min-h-[52px]',
-                  isDragging 
-                    ? 'border-indigo-500 border-dashed bg-indigo-50/30 dark:bg-indigo-950/20 scale-[1.01]' 
-                    : 'border-zinc-300 dark:border-zinc-700/80',
-                )}
+                className="relative flex items-center gap-3 rounded-xl border bg-white dark:bg-zinc-800 px-3 py-1.5 shadow-xs transition-all duration-300 w-full min-h-[52px] border-zinc-300 dark:border-zinc-700/80"
               >
-                {isDragging && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-indigo-500/10 backdrop-blur-xs rounded-xl pointer-events-none z-50 animate-in fade-in duration-200">
-                    <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
-                      <Paperclip className="size-3.5 animate-bounce" />
-                      Drop files to upload
-                    </span>
-                  </div>
-                )}
 
-                {/* Attach Files Button - Square style */}
-                <Tooltip>
-                  <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md border border-black/5 bg-[#e1e1e1] hover:bg-zinc-355 text-zinc-650 transition-all dark:border-zinc-700/50 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 focus:outline-none"
-                      aria-label="Attach Files"
-                    >
-                      <Paperclip className="size-3.5" />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent side="top">
-                    <p>Attach Files</p>
-                  </TooltipContent>
-                </Tooltip>
 
                 {/* Textarea - Single height but auto-expanding */}
                 <Textarea
