@@ -322,17 +322,7 @@ export default function ConversationsList({
 
   return (
     <div className="space-y-1.5">
-      {filteredConversations.length === 0 && status === 'success' && (
-        <div className="mt-6 flex flex-col items-center gap-1 px-2 text-center">
-          <p className="text-xs text-gray-400">
-            {activeTab === 'research'
-              ? 'No research sessions yet. Switch to Research mode in the prompt bar to get started.'
-              : activeTab === 'write' || activeTab === 'code'
-                ? 'No documents yet. Start a new writing/code task!'
-                : 'No conversations yet. Start a new chat!'}
-          </p>
-        </div>
-      )}
+
       {filteredConversations.map(chat => {
         const isActive = activeConversation && chat.conversationId === (activeConversation as any).conversationId;
         return (
