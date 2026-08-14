@@ -928,7 +928,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           </div>
 
           <PanelLeftClose
-            className="size-5 cursor-pointer text-zinc-400 hover:text-white transition-colors flex-none"
+            className="size-5 cursor-pointer text-zinc-400 hover:text-white transition-colors flex-none ml-auto"
             onClick={toggleLeftSidebar}
           />
         </div>
