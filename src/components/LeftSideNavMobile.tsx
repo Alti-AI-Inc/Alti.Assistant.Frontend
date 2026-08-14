@@ -1356,11 +1356,7 @@ const LeftSideNavMobile = () => {
                     No guardrails defined yet.
                   </div>
                 )}
-                {!viewParam && threads.filter(t => t.botId === activeBotId && (t.title || 'Untitled Space Chat').toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
-                  <div className="py-8 text-center text-xs text-zinc-500 italic">
-                    No threads found.
-                  </div>
-                )}
+
               </div>
             </div>
           )}
