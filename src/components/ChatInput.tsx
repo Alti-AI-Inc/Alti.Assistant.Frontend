@@ -1966,7 +1966,7 @@ export default function ChatInput({
                           <button
                             type="button"
                             onClick={selectedOption === OPTIONS.TASK ? handleCreateTask : handleSubmit}
-                            className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-black text-white hover:bg-zinc-900 focus:outline-none transition-all"
+                            className="flex size-7 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-[#e1e1e1] dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 hover:bg-[#d0d0d0] dark:hover:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 focus:outline-none transition-all"
                             aria-label="Send Prompt"
                           >
                             <ArrowUp className="size-3.5" />

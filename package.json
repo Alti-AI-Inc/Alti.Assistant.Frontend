@@ -1,6 +1,6 @@
 {
   "name": "inso-chat-frontend",
-  "version": "1.29.111",
+  "version": "1.29.112",
   "private": true,
   "scripts": {
     "dev": "next dev",
