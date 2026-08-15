@@ -1023,21 +1023,21 @@ const LeftSideNavMobile = () => {
 
               {!isSuperAdmin && (
                 <button
-                  onClick={() => { router.push('/contact-support'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
-                >
-                  <Mail className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
-                  <span>Contact Support</span>
-                </button>
-              )}
-
-              {!isSuperAdmin && (
-                <button
                   onClick={() => { router.push('/legal'); close(); }}
                   className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                 >
                   <Scale className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
                   <span>Legal Documents</span>
+                </button>
+              )}
+
+              {!isSuperAdmin && (
+                <button
+                  onClick={() => { router.push('/contact-support'); close(); }}
+                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                >
+                  <Mail className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
+                  <span>Contact Support</span>
                 </button>
               )}
             </div>
