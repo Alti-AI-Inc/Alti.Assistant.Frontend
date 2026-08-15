@@ -51,7 +51,7 @@ export const AdminSecondarySidebar = () => {
   const isAdminMode = pathname.startsWith('/admin');
   const isAdminSection = isAdminMode;
 
-  if (!isAdminMode) return null;
+  if (!isAdminMode || !isSuperAdmin) return null;
 
   // Determine header title
   let headerTitle = 'Admin Console';

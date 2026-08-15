@@ -947,13 +947,56 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </button>
               )}
               {isAdmin && !isSuperAdmin && (
-                <button
-                  onClick={() => router.push('/admin/platform-admin')}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
-                >
-                  <Shield className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
-                  <span>Platform Admin</span>
-                </button>
+                <>
+                  <button
+                    onClick={() => router.push('/admin/members')}
+                    className={cn(
+                      "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg border mb-1.5 cursor-pointer select-none text-left focus:outline-none text-xs transition-all duration-300",
+                      pathname.startsWith('/admin/members')
+                        ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
+                        : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                    )}
+                  >
+                    <UserPlus className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/members') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                    <span>Invite</span>
+                  </button>
+                  <button
+                    onClick={() => router.push('/admin/team-members')}
+                    className={cn(
+                      "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg border mb-1.5 cursor-pointer select-none text-left focus:outline-none text-xs transition-all duration-300",
+                      pathname.startsWith('/admin/team-members')
+                        ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
+                        : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                    )}
+                  >
+                    <Users className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/team-members') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                    <span>Members</span>
+                  </button>
+                  <button
+                    onClick={() => router.push('/admin/billing')}
+                    className={cn(
+                      "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg border mb-1.5 cursor-pointer select-none text-left focus:outline-none text-xs transition-all duration-300",
+                      pathname.startsWith('/admin/billing')
+                        ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
+                        : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                    )}
+                  >
+                    <CreditCard className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/billing') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                    <span>Billing</span>
+                  </button>
+                  <button
+                    onClick={() => router.push('/admin/invoices')}
+                    className={cn(
+                      "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg border mb-1.5 cursor-pointer select-none text-left focus:outline-none text-xs transition-all duration-300",
+                      pathname.startsWith('/admin/invoices')
+                        ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
+                        : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                    )}
+                  >
+                    <FileText className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/invoices') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                    <span>Invoices</span>
+                  </button>
+                </>
               )}
 
 

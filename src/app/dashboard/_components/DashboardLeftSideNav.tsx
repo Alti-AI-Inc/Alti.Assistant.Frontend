@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
-import { CircleUserRound, LogOut, ReceiptText, Settings, Shield, Brain, SlidersHorizontal, ShieldAlert, UserPlus, Mail, Database, KeyRound, Scale } from 'lucide-react';
+import { CircleUserRound, LogOut, ReceiptText, Settings, Shield, Brain, SlidersHorizontal, ShieldAlert, UserPlus, Mail, Database, KeyRound, Scale, Users, CreditCard, FileText } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -106,9 +106,20 @@ const DashboardLeftSideNav = () => {
                     </DropdownMenuItem>
                   )}
                   {isAdmin && !isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/admin')}>
-                      <Shield className="text-black" /> Platform Admin
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem onClick={() => router.push('/admin/members')}>
+                        <UserPlus className="text-black dark:text-white" /> Invite
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => router.push('/admin/team-members')}>
+                        <Users className="text-black dark:text-white" /> Members
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => router.push('/admin/billing')}>
+                        <CreditCard className="text-black dark:text-white" /> Billing
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => router.push('/admin/invoices')}>
+                        <FileText className="text-black dark:text-white" /> Invoices
+                      </DropdownMenuItem>
+                    </>
                   )}
                   {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/platform-memory')}>
