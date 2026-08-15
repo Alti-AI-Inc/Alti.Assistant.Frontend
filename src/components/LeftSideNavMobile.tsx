@@ -775,7 +775,7 @@ const LeftSideNavMobile = () => {
                   close();
                 }}
                 className={cn(
-                  "relative size-10 flex items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer text-white",
+                  "relative size-11 flex items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer text-white",
                   (activeBotId === null && activeTab !== 'account')
                     ? "bg-[#0000ff]/15 border-[#0000ff] shadow-[0_0_20px_rgba(0,0,255,0.55)]"
                     : "bg-[#0000ff]/10 border-[#0000ff]/35 hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]"

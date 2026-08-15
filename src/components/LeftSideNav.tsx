@@ -765,7 +765,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         <div className="relative w-full flex flex-col items-center">
           <div
             className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1.5"
-            style={{ opacity: activeBotId === null ? 1 : 0 }}
+            style={{ opacity: (activeBotId === null && activeTab !== 'account') ? 1 : 0 }}
           />
           <Tooltip>
             <TooltipTrigger asChild>
@@ -777,7 +777,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 }}
                 className={cn(
                   "relative size-11 flex items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer text-white",
-                  activeBotId === null
+                  (activeBotId === null && activeTab !== 'account')
                     ? "bg-[#0000ff]/15 border-[#0000ff] shadow-[0_0_20px_rgba(0,0,255,0.55)]"
                     : "bg-[#0000ff]/10 border-[#0000ff]/35 hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]"
                 )}
@@ -794,7 +794,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         {/* Spaces Scrollable Area */}
         <div className="flex-1 w-full overflow-y-auto overflow-x-hidden flex flex-col items-center gap-3 no-scrollbar py-1">
           {bots.map((bot, idx) => {
-            const isSelected = activeBotId === bot.id && (pathname === '/spaces' || pathname.startsWith('/spaces'));
+            const isSelected = activeBotId === bot.id && (pathname === '/spaces' || pathname.startsWith('/spaces')) && activeTab !== 'account';
             const isBeingDragged = draggedIndex === idx;
             const showTopLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex > idx;
             const showBottomLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex < idx;
@@ -900,32 +900,34 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         {/* Header Row */}
         <div className="sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] px-4 flex-none gap-4">
           {/* Search / Research Toggle Switcher */}
-          <div className="flex bg-[#060913]/90 p-0.5 rounded-lg border border-blue-500/15 flex-shrink-0 select-none shadow-[0_0_15px_rgba(0,0,255,0.08)]">
-            <button
-              type="button"
-              onClick={() => setSelectedOption(OPTIONS.SEARCH)}
-              className={cn(
-                'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
-                selectedOption === OPTIONS.SEARCH || selectedOption === null
-                  ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
-                  : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
-              )}
-            >
-              <span>Search</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
-              className={cn(
-                'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
-                selectedOption === OPTIONS.RESEARCH
-                  ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
-                  : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
-              )}
-            >
-              <span>Research</span>
-            </button>
-          </div>
+          {activeTab !== 'account' && (
+            <div className="flex bg-[#060913]/90 p-0.5 rounded-lg border border-blue-500/15 flex-shrink-0 select-none shadow-[0_0_15px_rgba(0,0,255,0.08)]">
+              <button
+                type="button"
+                onClick={() => setSelectedOption(OPTIONS.SEARCH)}
+                className={cn(
+                  'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
+                  selectedOption === OPTIONS.SEARCH || selectedOption === null
+                    ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+                )}
+              >
+                <span>Search</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
+                className={cn(
+                  'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
+                  selectedOption === OPTIONS.RESEARCH
+                    ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+                )}
+              >
+                <span>Research</span>
+              </button>
+            </div>
+          )}
 
           <PanelLeftClose
             className="size-5 cursor-pointer text-zinc-400 hover:text-white transition-colors flex-none ml-auto"
