@@ -1645,7 +1645,7 @@ export default function ChatInput({
                         type="button"
                         onClick={toggleListening}
                         className={cn(
-                          'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md bg-black text-white hover:bg-zinc-900 dark:bg-zinc-900 dark:hover:bg-zinc-800 focus:outline-none transition-all border border-transparent',
+                          'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md bg-[#e1e1e1] dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 hover:bg-[#d0d0d0] dark:hover:bg-zinc-900 focus:outline-none transition-all border border-black/5 dark:border-zinc-700/50',
                           isListening && 'bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 animate-pulse text-white'
                         )}
                         aria-label={isListening ? 'Stop listening' : 'Speech to Text'}
