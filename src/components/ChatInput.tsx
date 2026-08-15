@@ -1656,7 +1656,7 @@ export default function ChatInput({
                       <button
                         type="button"
                         onClick={selectedOption === OPTIONS.TASK && !hasMessages && !isExistingConversation ? handleCreateTask : handleSubmit}
-                        className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md bg-[#e1e1e1] dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 hover:bg-[#d0d0d0] dark:hover:bg-zinc-900 focus:outline-none transition-all border border-black/5 dark:border-zinc-700/50"
+                        className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md bg-black text-white hover:bg-zinc-900 dark:bg-zinc-900 dark:hover:bg-zinc-800 focus:outline-none transition-all border border-transparent"
                         aria-label="Send Prompt"
                       >
                         <ArrowUp className="size-3.5" />
