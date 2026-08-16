@@ -178,25 +178,35 @@ export default function PlansPage() {
           <div className="mx-auto max-w-7xl space-y-8">
             {/* Top Row: Starter Free Trial */}
             {!hideTrial && (
-              <div className="flex flex-col items-center">
-                <div className="w-full max-w-sm">
-                  <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2 text-center">
-                    Free Trial
-                  </h2>
-                  {renderPlanCard(ALL_PLANS.find((p) => p.id === 'free')!)}
+              <Card className="w-full p-5 bg-white/80 dark:bg-zinc-950/50 shadow-md border-black/5 dark:border-white/5 transition-all duration-300 hover:-translate-y-1">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  {/* Left Side: Name and Pricing */}
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+                    <h2 className="text-base font-bold tracking-tight text-gray-900 dark:text-white">
+                      Starter
+                    </h2>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-xl font-extrabold tracking-tight">
+                        Free
+                      </span>
+                      <span className="text-zinc-500 dark:text-zinc-400 font-medium text-[10px]">
+                        (One-time trial)
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Right Side: Features */}
+                  <div className="text-sm font-semibold text-black dark:text-black flex items-center gap-1.5">
+                    <span>100 Search</span>
+                    <span className="text-zinc-400 font-normal">&bull;</span>
+                    <span>1 Research</span>
+                  </div>
                 </div>
-                {/* Connector/Divider line */}
-                <div className="w-full max-w-md border-t border-black/10 dark:border-white/10 my-6" />
-              </div>
+              </Card>
             )}
 
             {/* Bottom Row: Active Monthly Plans */}
             <div>
-              {!hideTrial && (
-                <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-4 text-center">
-                  Select a Plan
-                </h2>
-              )}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {ALL_PLANS.filter((p) => p.id !== 'free').map((plan) =>
                   renderPlanCard(plan)
