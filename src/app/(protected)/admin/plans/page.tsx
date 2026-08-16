@@ -1,18 +1,15 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Check, Plus } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 interface PricingPlan {
   id: string;
@@ -21,9 +18,6 @@ interface PricingPlan {
   period: string;
   description: string;
   features: string[];
-  highlighted: boolean;
-  popular: boolean;
-  buttonText: string;
 }
 
 const ALL_PLANS: PricingPlan[] = [
@@ -37,9 +31,6 @@ const ALL_PLANS: PricingPlan[] = [
       '50 Searches / day',
       '1 Deep Research report / day',
     ],
-    highlighted: false,
-    popular: false,
-    buttonText: 'Active Plan',
   },
   {
     id: 'basic',
@@ -51,9 +42,6 @@ const ALL_PLANS: PricingPlan[] = [
       '500 Searches / day',
       '5 Deep Research reports / day',
     ],
-    highlighted: false,
-    popular: false,
-    buttonText: 'Upgrade',
   },
   {
     id: 'individual',
@@ -65,9 +53,6 @@ const ALL_PLANS: PricingPlan[] = [
       '1,000 Searches / day',
       '10 Deep Research reports / day',
     ],
-    highlighted: false,
-    popular: false,
-    buttonText: 'Upgrade',
   },
   {
     id: 'professional',
@@ -79,9 +64,6 @@ const ALL_PLANS: PricingPlan[] = [
       '2,500 Searches / day',
       '25 Deep Research reports / day',
     ],
-    highlighted: true,
-    popular: true,
-    buttonText: 'Upgrade',
   },
   {
     id: 'business',
@@ -93,9 +75,6 @@ const ALL_PLANS: PricingPlan[] = [
       '5,000 Searches / day',
       '50 Deep Research reports / day',
     ],
-    highlighted: false,
-    popular: false,
-    buttonText: 'Upgrade',
   },
 ];
 
@@ -137,7 +116,6 @@ const ADDONS: Addon[] = [
 
 export default function PlansPage() {
   const { data: session } = useSession();
-  const activePlanId = 'free';
 
   return (
     <div className="h-full flex flex-col bg-[#e1e1e1] dark:bg-gray-955 overflow-hidden">
@@ -154,35 +132,11 @@ export default function PlansPage() {
           {/* 5 Plans in One Row on Large Screens */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {ALL_PLANS.map((plan) => {
-              const isCurrentPlan = activePlanId === plan.id;
-
               return (
                 <Card
                   key={plan.id}
-                  className={cn(
-                    'relative flex flex-col transition-all duration-300 hover:-translate-y-1 p-4',
-                    plan.highlighted
-                      ? 'bg-white/80 dark:bg-zinc-950/50 shadow-xl border-blue-500 border-2 ring-1 ring-blue-500/30 dark:border-blue-500'
-                      : 'bg-white/80 dark:bg-zinc-950/50 shadow-md border-black/5 dark:border-white/5',
-                    isCurrentPlan && 'border-green-500 dark:border-green-500 ring-1 ring-green-500/30'
-                  )}
+                  className="relative flex flex-col transition-all duration-300 hover:-translate-y-1 p-4 bg-white/80 dark:bg-zinc-950/50 shadow-md border-black/5 dark:border-white/5"
                 >
-                  {plan.popular && (
-                    <div className="absolute -top-3 right-3">
-                      <Badge className="bg-blue-500 hover:bg-blue-600 px-2 py-0.5 text-white shadow-sm border-none font-semibold text-[8px] tracking-wide uppercase">
-                        Popular
-                      </Badge>
-                    </div>
-                  )}
-
-                  {isCurrentPlan && (
-                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                      <Badge className="bg-green-500 hover:bg-green-600 px-2 py-0.5 text-white shadow-md border-none font-semibold text-[9px] tracking-wide">
-                        Current
-                      </Badge>
-                    </div>
-                  )}
-
                   <CardHeader className="p-0 pt-4 pb-3 flex-none">
                     <CardTitle className="text-sm font-bold tracking-tight text-center">
                       {plan.name}
@@ -213,23 +167,6 @@ export default function PlansPage() {
                       ))}
                     </ul>
                   </CardContent>
-
-                  <CardFooter className="p-0 pt-2 pb-2 flex-none">
-                    <Button
-                      disabled={isCurrentPlan}
-                      className={cn(
-                        'w-full py-3.5 text-[10px] font-bold tracking-wide transition-all shadow-md',
-                        plan.highlighted
-                          ? 'bg-blue-600 hover:bg-blue-700 text-white border-none'
-                          : 'bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-white border-none',
-                        isCurrentPlan &&
-                          'bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-600 shadow-none'
-                      )}
-                      variant="default"
-                    >
-                      {isCurrentPlan ? 'Active' : plan.buttonText}
-                    </Button>
-                  </CardFooter>
                 </Card>
               );
             })}
@@ -237,7 +174,6 @@ export default function PlansPage() {
 
           {/* Add-ons Divider */}
           <div className="pt-4 border-t border-black/10 dark:border-white/10 max-w-4xl mx-auto">
-
             {/* Two Add-on Cards below the grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
               {ADDONS.map((addon) => (
@@ -266,7 +202,7 @@ export default function PlansPage() {
                     </div>
                   </CardHeader>
 
-                  <CardContent className="flex-1 p-0 pb-6">
+                  <CardContent className="flex-1 p-0">
                     <div className="border-t border-black/5 dark:border-white/5 my-3" />
                     <ul className="space-y-2 text-xs text-zinc-600 dark:text-zinc-400">
                       {addon.features.map((feature, i) => (
@@ -277,15 +213,6 @@ export default function PlansPage() {
                       ))}
                     </ul>
                   </CardContent>
-
-                  <CardFooter className="p-0 pt-2 flex-none">
-                    <Button
-                      className="w-full py-5 text-xs font-bold tracking-wide transition-all shadow-md bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-white border-none flex items-center justify-center gap-1.5"
-                      variant="default"
-                    >
-                      <Plus className="h-4 w-4" /> Add to Plan
-                    </Button>
-                  </CardFooter>
                 </Card>
               ))}
             </div>
