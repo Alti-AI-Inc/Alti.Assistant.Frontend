@@ -105,9 +105,6 @@ export default function PlansPage() {
                     <CardTitle className="text-sm font-bold tracking-tight text-center">
                       {plan.name}
                     </CardTitle>
-                    <CardDescription className="min-h-[2.5rem] mt-1 text-zinc-500 dark:text-zinc-400 leading-normal text-[10px] text-center">
-                      {plan.description}
-                    </CardDescription>
                     <div className="mt-2 flex items-baseline justify-center gap-0.5">
                       <span className="text-2xl font-extrabold tracking-tight">
                         {plan.price}
