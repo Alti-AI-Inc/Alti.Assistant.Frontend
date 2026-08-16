@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useModalStore } from '@/stores/useModalStore';
-import { CircleUserRound, LogOut, ReceiptText, Settings, Shield, Brain, SlidersHorizontal, ShieldAlert, UserPlus, Mail, Database, KeyRound, Scale, Users, CreditCard, FileText, LayoutGrid, Plus } from 'lucide-react';
+import { CircleUserRound, LogOut, ReceiptText, Settings, Shield, Brain, SlidersHorizontal, ShieldAlert, UserPlus, Mail, Database, KeyRound, Scale, Users, CreditCard, FileText, LayoutGrid, Plus, Sparkles } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -111,7 +111,7 @@ const DashboardLeftSideNav = () => {
                         <LayoutGrid className="text-black dark:text-white" /> Plans
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => router.push('/admin/addons')}>
-                        <Plus className="text-black dark:text-white" /> Add-ons
+                        <Sparkles className="text-black dark:text-white" /> Extras
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => router.push('/admin/members')}>
                         <UserPlus className="text-black dark:text-white" /> Invite

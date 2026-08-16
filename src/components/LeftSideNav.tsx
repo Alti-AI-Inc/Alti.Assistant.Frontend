@@ -969,8 +969,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                     )}
                   >
-                    <Plus className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/addons') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
-                    <span>Add-ons</span>
+                    <Sparkles className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/addons') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                    <span>Extras</span>
                   </button>
                   <button
                     onClick={() => router.push('/admin/members')}
