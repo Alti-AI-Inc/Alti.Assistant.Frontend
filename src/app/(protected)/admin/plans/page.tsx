@@ -2,15 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { Check, Loader2 } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Loader2 } from 'lucide-react';
 
 interface PricingPlan {
   id: string;
@@ -122,43 +115,6 @@ export default function PlansPage() {
     checkSubscriptionAndTrial();
   }, [session]);
 
-  const renderPlanCard = (plan: PricingPlan) => {
-    return (
-      <Card
-        key={plan.id}
-        className="relative flex flex-col transition-all duration-300 hover:-translate-y-1 p-4 bg-white/80 dark:bg-zinc-950/50 shadow-md border-black/5 dark:border-white/5"
-      >
-        <CardHeader className="p-0 pt-3 pb-1 flex-none">
-          <CardTitle className="text-sm font-bold tracking-tight text-center">
-            {plan.name}
-          </CardTitle>
-          <div className="mt-1 flex items-baseline justify-center gap-0.5">
-            <span className="text-2xl font-extrabold tracking-tight">
-              {plan.price}
-            </span>
-            {plan.period && (
-              <span className="text-zinc-500 dark:text-zinc-400 font-medium text-[10px]">
-                {plan.period}
-              </span>
-            )}
-          </div>
-        </CardHeader>
-
-        <CardContent className="flex-1 p-0 pb-4">
-          <div className="border-t border-black/10 dark:border-white/10 -mx-4 mt-1.5 mb-3" />
-          <ul className="space-y-2 text-sm text-black dark:text-black font-semibold">
-            {plan.features.map((feature, i) => (
-              <li key={i} className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-black dark:bg-black flex-shrink-0" />
-                <span className="leading-tight">{feature}</span>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
-    );
-  };
-
   return (
     <div className="h-full flex flex-col bg-[#e1e1e1] dark:bg-gray-955 overflow-hidden">
       {/* Top Header */}
@@ -175,40 +131,44 @@ export default function PlansPage() {
             <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />
           </div>
         ) : (
-          <div className="mx-auto max-w-7xl space-y-8">
-            {/* Top Row: Starter Free Trial */}
-            {!hideTrial && (
-              <Card className="w-full p-5 bg-white/80 dark:bg-zinc-950/50 shadow-md border-black/5 dark:border-white/5 transition-all duration-300 hover:-translate-y-1">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  {/* Left Side: Name and Pricing */}
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-xl font-extrabold tracking-tight uppercase">
-                        FREE
-                      </span>
-                      <span className="text-zinc-500 dark:text-zinc-400 font-medium text-[10px] tracking-wider">
-                        ( One-time trial )
-                      </span>
+          <div className="mx-auto max-w-7xl">
+            <div className="flex flex-col gap-4">
+              {ALL_PLANS.filter((p) => !(p.id === 'free' && hideTrial)).map((plan) => {
+                const isFree = plan.id === 'free';
+                const displayPrice = isFree ? 'FREE' : plan.price;
+                const displayPeriod = isFree ? '/trial' : '/month';
+                
+                return (
+                  <Card
+                    key={plan.id}
+                    className="w-full p-5 bg-white/80 dark:bg-zinc-950/50 shadow-md border-black/5 dark:border-white/5 transition-all duration-300 hover:-translate-y-0.5"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                      {/* Left Side: Pricing */}
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-xl font-extrabold tracking-tight uppercase">
+                            {displayPrice}
+                          </span>
+                          <span className="text-zinc-500 dark:text-zinc-400 font-medium text-[10px] tracking-wider">
+                            {displayPeriod}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Right Side: Features */}
+                      <div className="text-sm font-semibold text-black dark:text-black flex items-center gap-1.5">
+                        {plan.features.map((feature, idx) => (
+                          <div key={idx} className="flex items-center gap-1.5">
+                            {idx > 0 && <span className="text-zinc-400 font-normal">&bull;</span>}
+                            <span>{feature}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-
-                  {/* Right Side: Features */}
-                  <div className="text-sm font-semibold text-black dark:text-black flex items-center gap-1.5">
-                    <span>100 Search</span>
-                    <span className="text-zinc-400 font-normal">&bull;</span>
-                    <span>1 Research</span>
-                  </div>
-                </div>
-              </Card>
-            )}
-
-            {/* Bottom Row: Active Monthly Plans */}
-            <div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {ALL_PLANS.filter((p) => p.id !== 'free').map((plan) =>
-                  renderPlanCard(plan)
-                )}
-              </div>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         )}

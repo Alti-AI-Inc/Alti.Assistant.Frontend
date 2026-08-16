@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
@@ -10,6 +10,14 @@ const SupportContent = () => {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [message]);
 
   const handleSubmit = async () => {
     if (!subject.trim() || !message.trim()) return;
@@ -49,6 +57,13 @@ const SupportContent = () => {
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-transparent">
+      {/* Top Header */}
+      <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center px-8 flex-none bg-white dark:bg-gray-955">
+        <h1 className="text-base font-semibold text-gray-900 dark:text-white">
+          Contact Support
+        </h1>
+      </div>
+
       {/* Main Body */}
       <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
         <div className="w-full space-y-4">
@@ -63,11 +78,12 @@ const SupportContent = () => {
           />
 
           <textarea
+            ref={textareaRef}
             id="support-message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Enter Message"
-            className="w-full min-h-[120px] rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 p-4 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 focus:border-black/10 dark:focus:border-white/10 focus-visible:border-black/10 dark:focus-visible:border-white/10 shadow-sm transition-all resize-none"
+            className="w-full min-h-[180px] rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 p-4 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 focus:border-black/10 dark:focus:border-white/10 focus-visible:border-black/10 dark:focus-visible:border-white/10 shadow-sm transition-all resize-none"
             disabled={isLoading}
             rows={5}
           />

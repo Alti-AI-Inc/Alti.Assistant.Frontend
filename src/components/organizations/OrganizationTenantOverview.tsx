@@ -30,7 +30,7 @@ import type {
   TenantUsage,
   UserTenant,
 } from '@/types/tenant';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ArrowUp } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
@@ -383,72 +383,69 @@ export function OrganizationTenantOverview({
       ) : selectedTenantId ? (
         <>
           {(view === 'both' || view === 'invite') && (
-          <div className="space-y-4 pt-2">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Row 1: First Name & Last Name */}
-              <Input
+            <div className="relative w-full h-12 flex-none flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm pr-2 pl-4 transition-all gap-3">
+              <input
                 id="first-name"
                 type="text"
-                placeholder="Enter First Name"
+                placeholder="First Name"
                 value={inviteFirstName}
                 onChange={(e) => setInviteFirstName(e.target.value)}
-                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-black/20 focus:shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
                 disabled={isInviting}
+                className="flex-1 min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
               />
-              <Input
+              <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
+              <input
                 id="last-name"
                 type="text"
-                placeholder="Enter Last Name"
+                placeholder="Last Name"
                 value={inviteLastName}
                 onChange={(e) => setInviteLastName(e.target.value)}
-                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-black/20 focus:shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
                 disabled={isInviting}
+                className="flex-1 min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
               />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Row 2: Email & Role */}
-              <Input
+              <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
+              <input
                 id="email-address"
                 type="email"
-                placeholder="Enter Email Address"
+                placeholder="Email Address"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
-                className="h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-black/20 focus:shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
                 disabled={isInviting}
+                className="flex-2 min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
               />
-              <Select
-                value={inviteRole}
-                onValueChange={setInviteRole}
-                disabled={isInviting}
-              >
-                <SelectTrigger id="invite-role" className="!h-10 text-xs md:text-sm border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-black/20 rounded-lg w-full">
-                  <SelectValue placeholder="Select Role Type" />
-                </SelectTrigger>
-                <SelectContent className="border-black/10">
-                  <SelectItem value="member" className="text-xs">User</SelectItem>
-
-                  <SelectItem value="owner" className="text-xs">Admin</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
-              <div className="text-[10px] text-gray-500 max-w-none">
-                <span className="font-semibold text-black dark:text-gray-300">Billing notice:</span> Adding a new team member adds an active seat to your plan at $25.00/month.
+              <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
+              <div className="flex-none">
+                <Select
+                  value={inviteRole}
+                  onValueChange={setInviteRole}
+                  disabled={isInviting}
+                >
+                  <SelectTrigger id="invite-role" className="h-9 border-none bg-transparent hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus:ring-0 focus:ring-offset-0 rounded-lg text-xs text-gray-800 dark:text-gray-100 font-medium w-[120px] px-2">
+                    <SelectValue placeholder="Select Plan" />
+                  </SelectTrigger>
+                  <SelectContent className="border-black/10 dark:border-white/10 bg-white dark:bg-zinc-950">
+                    <SelectItem value="plan-10" className="text-xs font-semibold">$10/month</SelectItem>
+                    <SelectItem value="plan-20" className="text-xs font-semibold">$20/month</SelectItem>
+                    <SelectItem value="plan-50" className="text-xs font-semibold">$50/month</SelectItem>
+                    <SelectItem value="plan-100" className="text-xs font-semibold">$100/month</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               {canInvite && (
-                <Button
-                  onClick={handleSendInvite}
-                  disabled={isInviting || !inviteEmail.trim()}
-                  className="bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 text-xs h-10 px-6 rounded-lg shadow-md hover:shadow-lg transition-all shrink-0"
-                >
-                  {isInviting && <Loader2 className="mr-2 size-4 animate-spin shrink-0" />}
-                  {isInviting ? 'Inviting...' : 'Invite Member'}
-                </Button>
+                <div className="flex-none ml-2">
+                  <Button
+                    size="sm"
+                    onClick={handleSendInvite}
+                    disabled={isInviting || !inviteEmail.trim() || !inviteRole}
+                    className="h-8 px-4 rounded-md cursor-pointer bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 disabled:opacity-50 transition-all text-xs font-medium"
+                  >
+                    {isInviting && <Loader2 className="mr-1.5 size-3.5 animate-spin shrink-0" />}
+                    {isInviting ? 'Inviting' : 'Invite'}
+                    {!isInviting && <ArrowUp className="ml-1.5 h-3.5 w-3.5" />}
+                  </Button>
+                </div>
               )}
             </div>
-          </div>
           )}
 
           {/* Unified Team Members List Table */}
