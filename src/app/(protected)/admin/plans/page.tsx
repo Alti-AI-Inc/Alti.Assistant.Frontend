@@ -117,25 +117,6 @@ const GRID_PLANS: PricingPlan[] = [
   },
 ];
 
-const ENTERPRISE_PLAN: PricingPlan = {
-  id: 'enterprise',
-  name: 'Enterprise',
-  price: 'Custom',
-  period: '',
-  description: 'Tailored limits, dedicated models, and custom SLA for organizations.',
-  features: [
-    'Unlimited seats',
-    'Unlimited AI requests',
-    'Dedicated Gemini/Vertex models',
-    'Custom storage capacity',
-    'SAML SSO & advanced security',
-    'Dedicated account manager',
-  ],
-  highlighted: false,
-  popular: false,
-  buttonText: 'Contact Sales',
-};
-
 export default function PlansPage() {
   const { data: session } = useSession();
   // Assume a default user has the free starter plan active for UI visual indication
@@ -309,57 +290,7 @@ export default function PlansPage() {
               );
             })}
 
-            {/* Enterprise Plan - Spans full width on desktop at the bottom */}
-            <div className="md:col-span-2">
-              <Card
-                className={cn(
-                  'relative flex flex-col transition-all duration-300 hover:-translate-y-1',
-                  'bg-white/80 dark:bg-zinc-950/50 shadow-md border-black/5 dark:border-white/5'
-                )}
-              >
-                <CardHeader className="pt-8">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <div className="text-left">
-                      <CardTitle className="text-2xl font-bold tracking-tight">
-                        {ENTERPRISE_PLAN.name}
-                      </CardTitle>
-                      <CardDescription className="mt-1 text-zinc-500 dark:text-zinc-400 leading-relaxed text-xs">
-                        {ENTERPRISE_PLAN.description}
-                      </CardDescription>
-                    </div>
-                    <div className="flex items-baseline md:justify-end gap-1">
-                      <span className="text-4xl font-extrabold tracking-tight">
-                        {ENTERPRISE_PLAN.price}
-                      </span>
-                    </div>
-                  </div>
-                </CardHeader>
 
-                <CardContent className="pb-6">
-                  <div className="border-t border-black/5 dark:border-white/5 my-3" />
-                  <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2.5 text-xs text-zinc-600 dark:text-zinc-400">
-                    {ENTERPRISE_PLAN.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-2">
-                        <Check className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-
-                <CardFooter className="pb-6 pt-2">
-                  <Button
-                    className={cn(
-                      'w-full py-5 text-xs font-bold tracking-wide transition-all shadow-md',
-                      'bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-white border-none'
-                    )}
-                    variant="default"
-                  >
-                    {ENTERPRISE_PLAN.buttonText}
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
           </div>
         </div>
       </div>
