@@ -23,7 +23,7 @@ interface PricingPlan {
 const ALL_PLANS: PricingPlan[] = [
   {
     id: 'free',
-    name: 'Free Starter',
+    name: 'Starter',
     price: 'Free',
     period: '',
     description: 'Test out Alti’s capabilities with basic search and model limits.',
