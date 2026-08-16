@@ -28,8 +28,8 @@ const ALL_PLANS: PricingPlan[] = [
     period: '',
     description: 'Test out Alti’s capabilities with basic search and model limits.',
     features: [
-      '50 Searches',
-      '1 Deep Research report',
+      '50 Search',
+      '1 Research',
     ],
   },
   {
@@ -39,8 +39,8 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo',
     description: 'For casual users looking for more queries and standard model access.',
     features: [
-      '500 Searches',
-      '5 Deep Research reports',
+      '500 Search',
+      '5 Research',
     ],
   },
   {
@@ -50,8 +50,8 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo',
     description: 'For developers requiring advanced reasoning and deep research.',
     features: [
-      '1,000 Searches',
-      '10 Deep Research reports',
+      '1,000 Search',
+      '10 Research',
     ],
   },
   {
@@ -61,8 +61,8 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo',
     description: 'For small teams needing collaborative workspaces and higher limits.',
     features: [
-      '2,500 Searches',
-      '25 Deep Research reports',
+      '2,500 Search',
+      '25 Research',
     ],
   },
   {
@@ -72,8 +72,8 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo',
     description: 'Uncapped search throughput and enterprise-grade models.',
     features: [
-      '5,000 Searches',
-      '50 Deep Research reports',
+      '5,000 Search',
+      '50 Research',
     ],
   },
 ];
