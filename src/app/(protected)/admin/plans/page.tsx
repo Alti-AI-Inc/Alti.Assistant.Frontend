@@ -101,11 +101,11 @@ export default function PlansPage() {
                   key={plan.id}
                   className="relative flex flex-col transition-all duration-300 hover:-translate-y-1 p-4 bg-white/80 dark:bg-zinc-950/50 shadow-md border-black/5 dark:border-white/5"
                 >
-                  <CardHeader className="p-0 pt-4 pb-3 flex-none">
+                  <CardHeader className="p-0 pt-3 pb-1 flex-none">
                     <CardTitle className="text-sm font-bold tracking-tight text-center">
                       {plan.name}
                     </CardTitle>
-                    <div className="mt-2 flex items-baseline justify-center gap-0.5">
+                    <div className="mt-1 flex items-baseline justify-center gap-0.5">
                       <span className="text-2xl font-extrabold tracking-tight">
                         {plan.price}
                       </span>
@@ -118,7 +118,7 @@ export default function PlansPage() {
                   </CardHeader>
 
                   <CardContent className="flex-1 p-0 pb-4">
-                    <div className="border-t border-black/5 dark:border-white/5 my-2.5" />
+                    <div className="border-t border-black/10 dark:border-white/10 -mx-4 mt-1.5 mb-3" />
                     <ul className="space-y-2 text-sm text-black dark:text-black font-semibold">
                       {plan.features.map((feature, i) => (
                         <li key={i} className="flex items-center gap-2">
