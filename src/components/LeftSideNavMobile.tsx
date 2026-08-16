@@ -91,7 +91,7 @@ import { useInboxQuery } from '@/hooks/useInbox';
 import { createKnowledgeBaseAction } from '@/actions/knowledgeBaseAction';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
-import { useSidebarStore } from '@/stores/useSidebarStore';
+import { useSidebarStore, SidebarTab } from '@/stores/useSidebarStore';
 
 interface DataConnector {
   id: string;
@@ -167,8 +167,6 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'tasks' | 'apps' | 'none' | 'account';
-
 const AVAILABLE_MCP_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
   allApps.forEach(app => {
@@ -221,7 +219,7 @@ const LeftSideNavMobile = () => {
   const isLoggedIn = data?.accessToken;
   const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, reorderBots, editBot, deleteBot, threads, activeBotThreadId, setActiveBotThreadId, deleteThread, addBotAsync } = useBotsStore();
   const activeBot = bots.find(b => b.id === activeBotId);
-  const { isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen } = useSidebarStore();
+  const { isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen, activeTab, setActiveTab } = useSidebarStore();
   
   const { data: inboxItems = [] } = useInboxQuery(
     data?.user?.id,
@@ -270,8 +268,6 @@ const LeftSideNavMobile = () => {
   };
 
   const unreadInboxCount = inboxItems.filter(item => !item.isRead).length;
-
-  const [activeTab, setActiveTab] = useState<SidebarTab>('search');
   const [searchQuery, setSearchQuery] = useState('');
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -1674,7 +1670,7 @@ const LeftSideNavMobile = () => {
       {/* Create Space Dialog */}
       <Dialog open={isCreateSpaceOpen} onOpenChange={(open) => !open && setIsCreateSpaceOpen(false)}>
         <DialogContent 
-          className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
+          className="p-6 overflow-hidden rounded-[20px] max-w-[320px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <div className="space-y-4">

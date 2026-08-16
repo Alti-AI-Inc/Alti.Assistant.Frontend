@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
-import { useSidebarStore } from '@/stores/useSidebarStore';
+import { useSidebarStore, SidebarTab } from '@/stores/useSidebarStore';
 import { UserMode } from '@/types/tenant';
 import {
   Building2,
@@ -171,8 +171,6 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'tasks' | 'apps' | 'none' | 'account';
-
 const AVAILABLE_MCP_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
   allApps.forEach(app => {
@@ -211,7 +209,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     setShowStartLastMessage,
     setUserMessage,
   } = useConversationsStore();
-  const { isLeftSidebarOpen, toggleLeftSidebar, isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen } = useSidebarStore();
+  const { isLeftSidebarOpen, toggleLeftSidebar, isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen, activeTab, setActiveTab } = useSidebarStore();
   const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, deleteBot, reorderBots, editBot, threads, activeBotThreadId, setActiveBotThreadId, deleteThread, addBotAsync } = useBotsStore();
   const activeBot = bots.find(b => b.id === activeBotId);
 
@@ -266,7 +264,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const hideSidebar = side === 'right' ? !isRightSidebarOpen : !isLeftSidebarOpen;
   const isLoggedIn = data?.accessToken;
 
-  const [activeTab, setActiveTab] = useState<SidebarTab>('search');
   const [searchQuery, setSearchQuery] = useState('');
   const [logoHovered, setLogoHovered] = useState(false);
   const [botToDelete, setBotToDelete] = useState<string | null>(null);
@@ -900,32 +897,34 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         {/* Header Row */}
         <div className="sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] px-4 flex-none gap-4">
           {/* Search / Research Toggle Switcher */}
-          <div className="flex bg-[#060913]/90 p-0.5 rounded-lg border border-blue-500/15 flex-shrink-0 select-none shadow-[0_0_15px_rgba(0,0,255,0.08)]">
-            <button
-              type="button"
-              onClick={() => setSelectedOption(OPTIONS.SEARCH)}
-              className={cn(
-                'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
-                selectedOption === OPTIONS.SEARCH || selectedOption === null
-                  ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
-                  : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
-              )}
-            >
-              <span>Search</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
-              className={cn(
-                'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
-                selectedOption === OPTIONS.RESEARCH
-                  ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
-                  : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
-              )}
-            >
-              <span>Research</span>
-            </button>
-          </div>
+          {activeTab !== 'account' && (
+            <div className="flex bg-[#060913]/90 p-0.5 rounded-lg border border-blue-500/15 flex-shrink-0 select-none shadow-[0_0_15px_rgba(0,0,255,0.08)]">
+              <button
+                type="button"
+                onClick={() => setSelectedOption(OPTIONS.SEARCH)}
+                className={cn(
+                  'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
+                  selectedOption === OPTIONS.SEARCH || selectedOption === null
+                    ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+                )}
+              >
+                <span>Search</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
+                className={cn(
+                  'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
+                  selectedOption === OPTIONS.RESEARCH
+                    ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+                )}
+              >
+                <span>Research</span>
+              </button>
+            </div>
+          )}
 
           <PanelLeftClose
             className="size-5 cursor-pointer text-zinc-400 hover:text-white transition-colors flex-none ml-auto"
@@ -1608,7 +1607,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {/* Create Space Dialog */}
       <Dialog open={isCreateSpaceOpen} onOpenChange={(open) => !open && setIsCreateSpaceOpen(false)}>
         <DialogContent 
-          className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
+          className="p-6 overflow-hidden rounded-[20px] max-w-[320px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <div className="space-y-4">
