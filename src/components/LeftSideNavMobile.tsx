@@ -1018,12 +1018,12 @@ const LeftSideNavMobile = () => {
                   onClick={() => { router.push('/invite-friends'); close(); }}
                   className={cn(
                     "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none",
-                    pathname === '/invite-friends'
+                    pathname.startsWith('/invite-friends')
                       ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
                       : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                   )}
                 >
-                  <UserPlus className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname === '/invite-friends' ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                  <UserPlus className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/invite-friends') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
                   <span>Refer A Friend</span>
                 </button>
               )}
@@ -1033,12 +1033,12 @@ const LeftSideNavMobile = () => {
                   onClick={() => { router.push('/change-password'); close(); }}
                   className={cn(
                     "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none",
-                    pathname === '/change-password'
+                    pathname.startsWith('/change-password')
                       ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
                       : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                   )}
                 >
-                  <KeyRound className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname === '/change-password' ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                  <KeyRound className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/change-password') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
                   <span>Change Password</span>
                 </button>
               )}
@@ -1048,12 +1048,12 @@ const LeftSideNavMobile = () => {
                   onClick={() => { router.push('/legal'); close(); }}
                   className={cn(
                     "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none",
-                    pathname === '/legal'
+                    pathname.startsWith('/legal')
                       ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
                       : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                   )}
                 >
-                  <Scale className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname === '/legal' ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                  <Scale className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/legal') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
                   <span>Legal Documents</span>
                 </button>
               )}
@@ -1063,12 +1063,12 @@ const LeftSideNavMobile = () => {
                   onClick={() => { router.push('/contact-support'); close(); }}
                   className={cn(
                     "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none",
-                    pathname === '/contact-support'
+                    pathname.startsWith('/contact-support')
                       ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
                       : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                   )}
                 >
-                  <Mail className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname === '/contact-support' ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                  <Mail className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/contact-support') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
                   <span>Contact Support</span>
                 </button>
               )}
