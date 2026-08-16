@@ -119,10 +119,10 @@ export default function PlansPage() {
 
                   <CardContent className="flex-1 p-0 pb-4">
                     <div className="border-t border-black/5 dark:border-white/5 my-2.5" />
-                    <ul className="space-y-1.5 text-[10px] text-zinc-600 dark:text-zinc-400">
+                    <ul className="space-y-2 text-sm text-black dark:text-black font-semibold">
                       {plan.features.map((feature, i) => (
-                        <li key={i} className="flex items-start gap-1.5">
-                          <Check className="h-3 w-3 text-blue-500 flex-shrink-0 mt-0.5" />
+                        <li key={i} className="flex items-center gap-2">
+                          <span className="h-1.5 w-1.5 rounded-full bg-black dark:bg-black flex-shrink-0" />
                           <span className="leading-tight">{feature}</span>
                         </li>
                       ))}
