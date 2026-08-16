@@ -25,10 +25,10 @@ const ALL_PLANS: PricingPlan[] = [
     id: 'free',
     name: 'Starter',
     price: 'Free',
-    period: '',
+    period: ' (One-time trial)',
     description: 'Test out Alti’s capabilities with basic search and model limits.',
     features: [
-      '50 Search',
+      '100 Search',
       '1 Research',
     ],
   },
