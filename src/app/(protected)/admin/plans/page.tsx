@@ -149,18 +149,8 @@ export default function PlansPage() {
       </div>
 
       {/* Main Workspace Body */}
-      <div className="flex-1 overflow-y-auto min-h-0 px-8 py-8">
-        <div className="mx-auto max-w-7xl space-y-12">
-          {/* Header text */}
-          <div className="text-center max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
-              Flexible tiers for teams and individuals
-            </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
-              Choose the best fit for your workload. Upgrade or downgrade at any time.
-            </p>
-          </div>
-
+      <div className="flex-1 overflow-y-auto min-h-0 px-8 py-4">
+        <div className="mx-auto max-w-7xl space-y-6">
           {/* 5 Plans in One Row on Large Screens */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {ALL_PLANS.map((plan) => {
@@ -245,16 +235,8 @@ export default function PlansPage() {
             })}
           </div>
 
-          {/* Add-ons Divider & Title */}
-          <div className="pt-6 border-t border-black/10 dark:border-white/10 space-y-4 max-w-4xl mx-auto">
-            <div className="text-center">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white tracking-tight">
-                Enhance your workflow with Add-ons
-              </h3>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-                Purchase top-ups directly to get more searches and analytical reports.
-              </p>
-            </div>
+          {/* Add-ons Divider */}
+          <div className="pt-4 border-t border-black/10 dark:border-white/10 max-w-4xl mx-auto">
 
             {/* Two Add-on Cards below the grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
