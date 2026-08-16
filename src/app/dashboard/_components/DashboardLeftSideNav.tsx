@@ -129,7 +129,7 @@ const DashboardLeftSideNav = () => {
 
                   {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/invite-friends')}>
-                      <UserPlus className="text-black dark:text-white" /> Invite Friends
+                      <UserPlus className="text-black dark:text-white" /> Refer Friends
                     </DropdownMenuItem>
                   )}
                   {!isSuperAdmin && (
