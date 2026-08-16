@@ -34,8 +34,8 @@ const ALL_PLANS: PricingPlan[] = [
     period: '',
     description: 'Test out Alti’s capabilities with basic search and model limits.',
     features: [
-      '50 Web Searches / day',
-      '0 Deep Research reports / day',
+      '50 Searches / day',
+      '1 Deep Research report / day',
     ],
     highlighted: false,
     popular: false,
@@ -48,7 +48,7 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo',
     description: 'For casual users looking for more queries and standard model access.',
     features: [
-      '500 Web Searches / day',
+      '500 Searches / day',
       '5 Deep Research reports / day',
     ],
     highlighted: false,
@@ -62,8 +62,8 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo',
     description: 'For developers requiring advanced reasoning and deep research.',
     features: [
-      '1,500 Web Searches / day',
-      '15 Deep Research reports / day',
+      '1,000 Searches / day',
+      '10 Deep Research reports / day',
     ],
     highlighted: false,
     popular: false,
@@ -76,8 +76,8 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo',
     description: 'For small teams needing collaborative workspaces and higher limits.',
     features: [
-      '3,500 Web Searches / day',
-      '35 Deep Research reports / day',
+      '2,500 Searches / day',
+      '25 Deep Research reports / day',
     ],
     highlighted: true,
     popular: true,
@@ -90,8 +90,8 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo',
     description: 'Uncapped search throughput and enterprise-grade models.',
     features: [
-      '10,000 Web Searches / day',
-      '100 Deep Research reports / day',
+      '5,000 Searches / day',
+      '50 Deep Research reports / day',
     ],
     highlighted: false,
     popular: false,
@@ -110,8 +110,8 @@ interface Addon {
 
 const ADDONS: Addon[] = [
   {
-    id: 'websearch_addon',
-    name: 'Web Search Add-on',
+    id: 'search_addon',
+    name: 'Search Add-on',
     price: '$2',
     unit: 'per 100 searches',
     description: 'Need extra real-time search queries? Top up your search limit instantly.',
@@ -122,8 +122,8 @@ const ADDONS: Addon[] = [
     ],
   },
   {
-    id: 'deepresearch_addon',
-    name: 'Deep Research Add-on',
+    id: 'research_addon',
+    name: 'Research Add-on',
     price: '$2',
     unit: 'per report',
     description: 'Execute deep research cycles that generate comprehensive reports.',
