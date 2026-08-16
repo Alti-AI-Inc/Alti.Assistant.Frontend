@@ -91,7 +91,7 @@ import { useInboxQuery } from '@/hooks/useInbox';
 import { createKnowledgeBaseAction } from '@/actions/knowledgeBaseAction';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
-import { useSidebarStore } from '@/stores/useSidebarStore';
+import { useSidebarStore, SidebarTab } from '@/stores/useSidebarStore';
 
 interface DataConnector {
   id: string;
@@ -167,8 +167,6 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'tasks' | 'apps' | 'none' | 'account';
-
 const AVAILABLE_MCP_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
   allApps.forEach(app => {
@@ -221,7 +219,7 @@ const LeftSideNavMobile = () => {
   const isLoggedIn = data?.accessToken;
   const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, reorderBots, editBot, deleteBot, threads, activeBotThreadId, setActiveBotThreadId, deleteThread, addBotAsync } = useBotsStore();
   const activeBot = bots.find(b => b.id === activeBotId);
-  const { isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen } = useSidebarStore();
+  const { isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen, activeTab, setActiveTab } = useSidebarStore();
   
   const { data: inboxItems = [] } = useInboxQuery(
     data?.user?.id,
@@ -270,8 +268,6 @@ const LeftSideNavMobile = () => {
   };
 
   const unreadInboxCount = inboxItems.filter(item => !item.isRead).length;
-
-  const [activeTab, setActiveTab] = useState<SidebarTab>('search');
   const [searchQuery, setSearchQuery] = useState('');
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -937,15 +933,7 @@ const LeftSideNavMobile = () => {
               
 
 
-              {!isSuperAdmin && (
-                <button
-                  onClick={() => { router.push('/invite-friends'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
-                >
-                  <UserPlus className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
-                  <span>Invite Friends</span>
-                </button>
-              )}
+
 
               {!isSuperAdmin && (
                 <button
@@ -1572,7 +1560,7 @@ const LeftSideNavMobile = () => {
       {/* Create Space Dialog */}
       <Dialog open={isCreateSpaceOpen} onOpenChange={(open) => !open && setIsCreateSpaceOpen(false)}>
         <DialogContent 
-          className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
+          className="p-6 overflow-hidden rounded-[20px] max-w-[320px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <div className="space-y-4">

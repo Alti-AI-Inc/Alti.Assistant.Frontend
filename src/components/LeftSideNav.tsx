@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
-import { useSidebarStore } from '@/stores/useSidebarStore';
+import { useSidebarStore, SidebarTab } from '@/stores/useSidebarStore';
 import { UserMode } from '@/types/tenant';
 import {
   Building2,
@@ -171,8 +171,6 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'tasks' | 'apps' | 'none' | 'account';
-
 const AVAILABLE_MCP_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
   allApps.forEach(app => {
@@ -211,7 +209,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     setShowStartLastMessage,
     setUserMessage,
   } = useConversationsStore();
-  const { isLeftSidebarOpen, toggleLeftSidebar, isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen } = useSidebarStore();
+  const { isLeftSidebarOpen, toggleLeftSidebar, isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen, activeTab, setActiveTab } = useSidebarStore();
   const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, deleteBot, reorderBots, editBot, threads, activeBotThreadId, setActiveBotThreadId, deleteThread, addBotAsync } = useBotsStore();
   const activeBot = bots.find(b => b.id === activeBotId);
 
@@ -266,7 +264,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const hideSidebar = side === 'right' ? !isRightSidebarOpen : !isLeftSidebarOpen;
   const isLoggedIn = data?.accessToken;
 
-  const [activeTab, setActiveTab] = useState<SidebarTab>('search');
   const [searchQuery, setSearchQuery] = useState('');
   const [logoHovered, setLogoHovered] = useState(false);
   const [botToDelete, setBotToDelete] = useState<string | null>(null);
@@ -919,15 +916,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               
 
 
-              {!isSuperAdmin && (
-                <button
-                  onClick={() => router.push('/invite-friends')}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
-                >
-                  <UserPlus className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
-                  <span>Invite Friends</span>
-                </button>
-              )}
+
 
               {!isSuperAdmin && (
                 <button
@@ -1566,7 +1555,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {/* Create Space Dialog */}
       <Dialog open={isCreateSpaceOpen} onOpenChange={(open) => !open && setIsCreateSpaceOpen(false)}>
         <DialogContent 
-          className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
+          className="p-6 overflow-hidden rounded-[20px] max-w-[320px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <div className="space-y-4">

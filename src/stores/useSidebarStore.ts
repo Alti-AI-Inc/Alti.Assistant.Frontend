@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+export type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'tasks' | 'apps' | 'none' | 'account';
+
 interface SidebarStore {
   isLeftSidebarOpen: boolean;
   isRightSidebarOpen: boolean;
@@ -12,6 +14,10 @@ interface SidebarStore {
   isSettingsSidebarOpen: boolean;
   // Global Inbox panel state
   isGlobalInboxOpen: boolean;
+  
+  // Active sidebar tab state
+  activeTab: SidebarTab;
+  setActiveTab: (tab: SidebarTab) => void;
 
   setRightSidebarOpen: (isOpen: boolean) => void;
   setLeftSidebarOpen: (isOpen: boolean) => void;
@@ -41,6 +47,9 @@ export const useSidebarStore = create<SidebarStore>(set => ({
   isRightSidebar2Open: true,
   isSettingsSidebarOpen: true,
   isGlobalInboxOpen: false,
+  
+  activeTab: 'search',
+  setActiveTab: tab => set({ activeTab: tab }),
 
   setRightSidebarOpen: (isOpen: boolean) =>
     set({
