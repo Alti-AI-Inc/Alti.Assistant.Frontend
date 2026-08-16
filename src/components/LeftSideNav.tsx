@@ -949,6 +949,18 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               {isAdmin && !isSuperAdmin && (
                 <>
                   <button
+                    onClick={() => router.push('/admin/plans')}
+                    className={cn(
+                      "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg border mb-1.5 cursor-pointer select-none text-left focus:outline-none text-xs transition-all duration-300",
+                      pathname.startsWith('/admin/plans')
+                        ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
+                        : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                    )}
+                  >
+                    <LayoutGrid className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/plans') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                    <span>Plans</span>
+                  </button>
+                  <button
                     onClick={() => router.push('/admin/members')}
                     className={cn(
                       "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg border mb-1.5 cursor-pointer select-none text-left focus:outline-none text-xs transition-all duration-300",
