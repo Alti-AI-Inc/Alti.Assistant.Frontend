@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import {
   Card,
@@ -9,7 +10,7 @@ import {
   CardContent,
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Check } from 'lucide-react';
+import { Check, Loader2 } from 'lucide-react';
 
 interface PricingPlan {
   id: string;
@@ -80,6 +81,83 @@ const ALL_PLANS: PricingPlan[] = [
 
 export default function PlansPage() {
   const { data: session } = useSession();
+  const [hideTrial, setHideTrial] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkSubscriptionAndTrial = async () => {
+      if (!session?.accessToken) {
+        setIsLoading(false);
+        return;
+      }
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.altihq.com/api/v1';
+        const res = await fetch(`${apiUrl}/auth/user/single-user`, {
+          headers: {
+            'Authorization': `Bearer ${session.accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (res.ok) {
+          const body = await res.json();
+          if (body?.success && body?.data) {
+            const user = body.data;
+            const isSubscribed = user.isSubscribed;
+            const promptsUsed = user.freePlanUsage?.promptsUsed ?? 0;
+            const imagesUsed = user.freePlanUsage?.imagesUsed ?? 0;
+
+            // Hide trial if subscribed OR trial usage limits have been reached
+            if (isSubscribed || promptsUsed >= 100 || imagesUsed >= 1) {
+              setHideTrial(true);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Failed to check user subscription status:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkSubscriptionAndTrial();
+  }, [session]);
+
+  const renderPlanCard = (plan: PricingPlan) => {
+    return (
+      <Card
+        key={plan.id}
+        className="relative flex flex-col transition-all duration-300 hover:-translate-y-1 p-4 bg-white/80 dark:bg-zinc-950/50 shadow-md border-black/5 dark:border-white/5"
+      >
+        <CardHeader className="p-0 pt-3 pb-1 flex-none">
+          <CardTitle className="text-sm font-bold tracking-tight text-center">
+            {plan.name}
+          </CardTitle>
+          <div className="mt-1 flex items-baseline justify-center gap-0.5">
+            <span className="text-2xl font-extrabold tracking-tight">
+              {plan.price}
+            </span>
+            {plan.period && (
+              <span className="text-zinc-500 dark:text-zinc-400 font-medium text-[10px]">
+                {plan.period}
+              </span>
+            )}
+          </div>
+        </CardHeader>
+
+        <CardContent className="flex-1 p-0 pb-4">
+          <div className="border-t border-black/10 dark:border-white/10 -mx-4 mt-1.5 mb-3" />
+          <ul className="space-y-2 text-sm text-black dark:text-black font-semibold">
+            {plan.features.map((feature, i) => (
+              <li key={i} className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-black dark:bg-black flex-shrink-0" />
+                <span className="leading-tight">{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+    );
+  };
 
   return (
     <div className="h-full flex flex-col bg-[#e1e1e1] dark:bg-gray-955 overflow-hidden">
@@ -91,48 +169,42 @@ export default function PlansPage() {
       </div>
 
       {/* Main Workspace Body */}
-      <div className="flex-1 overflow-y-auto min-h-0 px-8 py-4">
-        <div className="mx-auto max-w-7xl space-y-6">
-          {/* 5 Plans in One Row on Large Screens */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {ALL_PLANS.map((plan) => {
-              return (
-                <Card
-                  key={plan.id}
-                  className="relative flex flex-col transition-all duration-300 hover:-translate-y-1 p-4 bg-white/80 dark:bg-zinc-950/50 shadow-md border-black/5 dark:border-white/5"
-                >
-                  <CardHeader className="p-0 pt-3 pb-1 flex-none">
-                    <CardTitle className="text-sm font-bold tracking-tight text-center">
-                      {plan.name}
-                    </CardTitle>
-                    <div className="mt-1 flex items-baseline justify-center gap-0.5">
-                      <span className="text-2xl font-extrabold tracking-tight">
-                        {plan.price}
-                      </span>
-                      {plan.period && (
-                        <span className="text-zinc-500 dark:text-zinc-400 font-medium text-[10px]">
-                          {plan.period}
-                        </span>
-                      )}
-                    </div>
-                  </CardHeader>
-
-                  <CardContent className="flex-1 p-0 pb-4">
-                    <div className="border-t border-black/10 dark:border-white/10 -mx-4 mt-1.5 mb-3" />
-                    <ul className="space-y-2 text-sm text-black dark:text-black font-semibold">
-                      {plan.features.map((feature, i) => (
-                        <li key={i} className="flex items-center gap-2">
-                          <span className="h-1.5 w-1.5 rounded-full bg-black dark:bg-black flex-shrink-0" />
-                          <span className="leading-tight">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              );
-            })}
+      <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
+        {isLoading ? (
+          <div className="flex items-center justify-center h-64">
+            <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />
           </div>
-        </div>
+        ) : (
+          <div className="mx-auto max-w-7xl space-y-8">
+            {/* Top Row: Starter Free Trial */}
+            {!hideTrial && (
+              <div className="flex flex-col items-center">
+                <div className="w-full max-w-sm">
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2 text-center">
+                    Free Trial
+                  </h2>
+                  {renderPlanCard(ALL_PLANS.find((p) => p.id === 'free')!)}
+                </div>
+                {/* Connector/Divider line */}
+                <div className="w-full max-w-md border-t border-black/10 dark:border-white/10 my-6" />
+              </div>
+            )}
+
+            {/* Bottom Row: Active Monthly Plans */}
+            <div>
+              {!hideTrial && (
+                <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-4 text-center">
+                  Select a Plan
+                </h2>
+              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {ALL_PLANS.filter((p) => p.id !== 'free').map((plan) =>
+                  renderPlanCard(plan)
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
