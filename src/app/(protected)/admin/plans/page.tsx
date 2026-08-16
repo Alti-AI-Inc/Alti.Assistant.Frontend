@@ -182,15 +182,12 @@ export default function PlansPage() {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   {/* Left Side: Name and Pricing */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
-                    <h2 className="text-base font-bold tracking-tight text-gray-900 dark:text-white">
-                      Starter
-                    </h2>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-xl font-extrabold tracking-tight">
-                        Free
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-xl font-extrabold tracking-tight uppercase">
+                        FREE
                       </span>
-                      <span className="text-zinc-500 dark:text-zinc-400 font-medium text-[10px]">
-                        (One-time trial)
+                      <span className="text-zinc-500 dark:text-zinc-400 font-medium text-[10px] tracking-wider">
+                        ( One-time trial )
                       </span>
                     </div>
                   </div>
