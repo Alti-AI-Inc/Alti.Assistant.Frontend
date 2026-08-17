@@ -50,6 +50,10 @@ export default function AddonsPage() {
   const [activePurchaseAddon, setActivePurchaseAddon] = useState<Addon | null>(null);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
+  // Extra balances
+  const extraSearchesRemaining = 400;
+  const extraResearchRemaining = 3;
+
   return (
     <div className="h-full flex flex-col bg-[#e1e1e1] dark:bg-gray-955 overflow-hidden">
       {/* Top Header */}
@@ -127,6 +131,35 @@ export default function AddonsPage() {
                 </Card>
               );
             })}
+          </div>
+
+          {/* Extra Balances Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+            {/* Extra Searches Balance */}
+            <Card className="bg-white/80 dark:bg-zinc-955/50 shadow-md border-black/5 dark:border-white/5 p-5 flex items-center justify-between">
+              <div>
+                <h4 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Extra Search Queries</h4>
+                <p className="text-lg font-bold text-gray-900 dark:text-white mt-1">
+                  {extraSearchesRemaining} remaining
+                </p>
+              </div>
+              <span className="text-xs font-semibold px-2.5 py-1 bg-zinc-200/80 dark:bg-zinc-800 text-black dark:text-white rounded-lg border border-black/5 dark:border-white/5">
+                Search Add-on
+              </span>
+            </Card>
+
+            {/* Extra Research Balance */}
+            <Card className="bg-white/80 dark:bg-zinc-955/50 shadow-md border-black/5 dark:border-white/5 p-5 flex items-center justify-between">
+              <div>
+                <h4 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Extra Research Reports</h4>
+                <p className="text-lg font-bold text-gray-900 dark:text-white mt-1">
+                  {extraResearchRemaining} remaining
+                </p>
+              </div>
+              <span className="text-xs font-semibold px-2.5 py-1 bg-zinc-200/80 dark:bg-zinc-800 text-black dark:text-white rounded-lg border border-black/5 dark:border-white/5">
+                Research Add-on
+              </span>
+            </Card>
           </div>
         </div>
       </div>

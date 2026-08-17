@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Card } from '@/components/ui/card';
-import { Search, Brain, Sparkles, Calendar } from 'lucide-react';
+import { Search, Brain } from 'lucide-react';
 
 export default function UsagePage() {
   const { data: session } = useSession();
@@ -41,13 +41,6 @@ export default function UsagePage() {
           
           {/* Top Bar / Current Month Progress Indicators */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <Calendar className="h-4 w-4 text-zinc-500" />
-              <h2 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                Current Month Usage (August 2026)
-              </h2>
-            </div>
-            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Search Usage Card */}
               <Card className="bg-white/80 dark:bg-zinc-955/50 shadow-md border-black/5 dark:border-white/5 p-6 space-y-4">
@@ -101,44 +94,6 @@ export default function UsagePage() {
                   <span>{researchPercentage.toFixed(0)}% Used</span>
                   <span>Allowance resets on Sep 1, 2026</span>
                 </div>
-              </Card>
-            </div>
-          </div>
-
-          {/* Extras / Add-on Balances */}
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <Sparkles className="h-4 w-4 text-zinc-500" />
-              <h2 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                Purchased Extras (Never Expire)
-              </h2>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Extra Searches Balance */}
-              <Card className="bg-white/80 dark:bg-zinc-955/50 shadow-md border-black/5 dark:border-white/5 p-5 flex items-center justify-between">
-                <div>
-                  <h4 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Extra Search Queries</h4>
-                  <p className="text-lg font-bold text-gray-900 dark:text-white mt-1">
-                    {extraSearchesRemaining} remaining
-                  </p>
-                </div>
-                <span className="text-xs font-semibold px-2.5 py-1 bg-zinc-200/80 dark:bg-zinc-800 text-black dark:text-white rounded-lg border border-black/5 dark:border-white/5">
-                  Search Add-on
-                </span>
-              </Card>
-
-              {/* Extra Research Balance */}
-              <Card className="bg-white/80 dark:bg-zinc-955/50 shadow-md border-black/5 dark:border-white/5 p-5 flex items-center justify-between">
-                <div>
-                  <h4 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Extra Research Reports</h4>
-                  <p className="text-lg font-bold text-gray-900 dark:text-white mt-1">
-                    {extraResearchRemaining} remaining
-                  </p>
-                </div>
-                <span className="text-xs font-semibold px-2.5 py-1 bg-zinc-200/80 dark:bg-zinc-800 text-black dark:text-white rounded-lg border border-black/5 dark:border-white/5">
-                  Research Add-on
-                </span>
               </Card>
             </div>
           </div>
