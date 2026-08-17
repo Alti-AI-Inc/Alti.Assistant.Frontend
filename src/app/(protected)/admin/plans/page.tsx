@@ -75,6 +75,18 @@ const ALL_PLANS: PricingPlan[] = [
       '500 Monitor',
     ],
   },
+  {
+    id: 'enterprise',
+    name: 'Enterprise',
+    price: '$200',
+    period: '/mo',
+    description: 'For large-scale operations requiring maximum throughput and limits.',
+    features: [
+      '10,000 Search',
+      '1,000 Research',
+      '1,000 Monitor',
+    ],
+  },
 ];
 
 export default function PlansPage() {
