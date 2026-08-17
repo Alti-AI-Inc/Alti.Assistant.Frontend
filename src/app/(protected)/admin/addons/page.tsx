@@ -39,6 +39,18 @@ const ADDONS: Addon[] = [
       'Advanced reasoning model access',
     ],
   },
+  {
+    id: 'monitor_addon',
+    name: 'Monitor',
+    price: '$5',
+    unit: 'per 100 monitor scans',
+    description: 'Track and check real-time streams regularly for custom triggers.',
+    features: [
+      'Automated recurring background scans',
+      'Real-time stream evaluation',
+      'Instant notification on event matches',
+    ],
+  },
 ];
 
 export default function AddonsPage() {
@@ -46,13 +58,15 @@ export default function AddonsPage() {
   const [quantities, setQuantities] = useState<Record<string, number>>({
     search_addon: 1,
     research_addon: 1,
+    monitor_addon: 1,
   });
   const [activePurchaseAddon, setActivePurchaseAddon] = useState<Addon | null>(null);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   // Extra balances
   const extraSearchesRemaining = 400;
-  const extraResearchRemaining = 3;
+  const extraResearchRemaining = 300;
+  const extraMonitorRemaining = 150;
 
   return (
     <div className="h-full flex flex-col bg-[#e1e1e1] dark:bg-gray-955 overflow-hidden">
@@ -66,8 +80,8 @@ export default function AddonsPage() {
       {/* Main Workspace Body */}
       <div className="flex-1 overflow-y-auto min-h-0 px-8 py-8">
         <div className="mx-auto max-w-4xl space-y-6">
-          {/* Two Add-on Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+          {/* Add-on Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-4">
             {ADDONS.map((addon) => {
               const qty = quantities[addon.id] || 0;
               return (
@@ -85,7 +99,7 @@ export default function AddonsPage() {
                         {addon.price}
                       </span>
                       <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
-                        {addon.id === 'search_addon' ? '/ per 100 search results' : '/ per 100 research reports'}
+                        / {addon.unit}
                       </span>
                     </div>
                   </div>
@@ -134,7 +148,7 @@ export default function AddonsPage() {
           </div>
 
           {/* Extra Balances Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
             {/* Extra Searches Balance */}
             <Card className="bg-white/80 dark:bg-zinc-955/50 shadow-md border-black/5 dark:border-white/5 p-5 flex items-center justify-between">
               <div>
@@ -160,6 +174,19 @@ export default function AddonsPage() {
                 Research Add-on
               </span>
             </Card>
+
+            {/* Extra Monitor Balance */}
+            <Card className="bg-white/80 dark:bg-zinc-955/50 shadow-md border-black/5 dark:border-white/5 p-5 flex items-center justify-between">
+              <div>
+                <h4 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Extra Monitor Scans</h4>
+                <p className="text-lg font-bold text-gray-900 dark:text-white mt-1">
+                  {extraMonitorRemaining} remaining
+                </p>
+              </div>
+              <span className="text-xs font-semibold px-2.5 py-1 bg-zinc-200/80 dark:bg-zinc-800 text-black dark:text-white rounded-lg border border-black/5 dark:border-white/5">
+                Monitor Add-on
+              </span>
+            </Card>
           </div>
         </div>
       </div>
@@ -182,9 +209,12 @@ export default function AddonsPage() {
                 </h2>
                 <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
                   Are you sure you want to purchase{' '}
+                  {(quantities[activePurchaseAddon?.id || ''] || 1) * 100}{' '}
                   {activePurchaseAddon?.id === 'search_addon'
-                    ? `${(quantities[activePurchaseAddon?.id || ''] || 1) * 100} searches`
-                    : `${(quantities[activePurchaseAddon?.id || ''] || 1) * 100} research reports`}{' '}
+                    ? 'searches'
+                    : activePurchaseAddon?.id === 'research_addon'
+                    ? 'research reports'
+                    : 'monitor scans'}{' '}
                   for ${(quantities[activePurchaseAddon?.id || ''] || 1) * (activePurchaseAddon?.id === 'search_addon' ? 2 : 5)}?
                 </p>
               </div>
@@ -213,12 +243,16 @@ export default function AddonsPage() {
               {/* Centered Content Section */}
               <div className="px-5 pt-5 pb-4 text-center">
                 <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
-                  {activePurchaseAddon?.id === 'search_addon' ? 'Search Purchased' : 'Research Purchased'}
+                  {activePurchaseAddon?.name} Purchased
                 </h2>
                 <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+                  {(quantities[activePurchaseAddon?.id || ''] || 1) * 100}{' '}
                   {activePurchaseAddon?.id === 'search_addon'
-                    ? `${(quantities[activePurchaseAddon?.id || ''] || 1) * 100} searches have been added to your account.`
-                    : `${(quantities[activePurchaseAddon?.id || ''] || 1) * 100} research reports have been added to your account.`}
+                    ? 'searches'
+                    : activePurchaseAddon?.id === 'research_addon'
+                    ? 'research reports'
+                    : 'monitor scans'}{' '}
+                  have been added to your account.
                 </p>
               </div>
 
