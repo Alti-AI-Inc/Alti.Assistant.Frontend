@@ -115,7 +115,7 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
   const queryClient = useQueryClient();
 
   const { data: queryConversation, isLoading } = useActiveConversation(conversationId, data?.accessToken);
-  const { isLeftSidebarOpen, activeTab } = useSidebarStore();
+  const { isLeftSidebarOpen, isAccountActive } = useSidebarStore();
 
   const {
     setActiveConversation,
@@ -1144,20 +1144,20 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
     return null;
   }
 
-  if (activeTab === 'account') {
+  if (isAccountActive) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-[#e1e1e1] dark:bg-zinc-950">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+      <div className="flex w-full h-full flex-1 flex-col items-center justify-center bg-[#e1e1e1] dark:bg-zinc-955 select-none">
         <img
           src="/assets/logo-icon.png"
-          alt="Alti Logo"
-          className="size-20 opacity-25 dark:opacity-15 animate-pulse"
+          alt="logo"
+          className="h-20 w-20 opacity-20 animate-pulse"
+          style={{ animationDuration: '4s' }}
         />
       </div>
     );
   }
 
-  return (
+return (
     <div
       className={cn(
         "flex w-full h-full flex-1 flex-col min-h-0 overflow-hidden bg-[#e1e1e1] dark:bg-zinc-950",

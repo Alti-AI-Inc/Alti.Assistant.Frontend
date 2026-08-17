@@ -6,11 +6,7 @@ import {
   getTenantMembers,
   inviteMember,
 } from '@/actions/memberActions';
-import {
-  getCurrentTenant,
-  getTenantById,
-  getTenantUsage,
-} from '@/actions/tenantActions';
+// Unused tenant actions removed to boost performance
 import { MembersList } from '@/components/organizations/MembersList';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,6 +38,8 @@ export interface OrganizationTenantOverviewProps {
   fixedTenantId?: string;
   /** View mode to show only form, only list, or both */
   view?: 'invite' | 'members' | 'both';
+  currentPage?: number;
+  onTotalPagesChange?: (total: number) => void;
 }
 
 /** Handles `{ data: Tenant }` or `{ data: { tenant: Tenant } }` from the API */
@@ -64,15 +62,15 @@ export function OrganizationTenantOverview({
   organizations = [],
   fixedTenantId,
   view = 'both',
+  currentPage = 1,
+  onTotalPagesChange = () => {},
 }: OrganizationTenantOverviewProps) {
   const { data: session, status: sessionStatus } = useSession();
   const { mode, currentTenant, switchToTenantMode } = useTenant();
 
   const [selectedTenantId, setSelectedTenantId] = useState('');
-  const [organization, setOrganization] = useState<Tenant | null>(null);
   const [members, setMembers] = useState<TenantMember[]>([]);
   const [invitations, setInvitations] = useState<TenantInvitation[]>([]);
-  const [usage, setUsage] = useState<TenantUsage | null>(null);
   const [isLoadingDashboard, setIsLoadingDashboard] = useState(false);
   /** Ignore late results if user switched org or navigated away mid-flight */
   const latestTenantLoadRef = useRef<string | null>(null);
@@ -111,10 +109,8 @@ export function OrganizationTenantOverview({
   const loadTenantDashboard = useCallback(
     async (tenantId: string) => {
       if (!tenantId || !session?.accessToken) {
-        setOrganization(null);
         setMembers([]);
         setInvitations([]);
-        setUsage(null);
         setIsLoadingDashboard(false);
         return;
       }
@@ -124,35 +120,49 @@ export function OrganizationTenantOverview({
 
       const isStale = () => latestTenantLoadRef.current !== tenantId;
 
-      try {
-        await switchToTenantMode(tenantId);
-      } catch {
+      // Skip context switcher call if we are already in the correct tenant
+      if (currentTenant?.id !== tenantId) {
+        try {
+          await switchToTenantMode(tenantId);
+        } catch {
+          if (!isStale()) {
+            setMembers([]);
+            setInvitations([]);
+            setIsLoadingDashboard(false);
+          }
+          return;
+        }
+      }
+
+      if (isStale()) return;
+
+      // For Invite tab only, we don't render members list or pending invitations.
+      // So we can completely skip backend member queries and load instantly!
+      if (view === 'invite') {
         if (!isStale()) {
-          setOrganization(null);
-          setMembers([]);
-          setInvitations([]);
-          setUsage(null);
           setIsLoadingDashboard(false);
         }
         return;
       }
 
+      // Fetch only members and pending invitations in parallel
+      const [membersSettled, invitationsSettled] = await Promise.allSettled([
+        getTenantMembers(),
+        getPendingInvitations(),
+      ]);
+
       if (isStale()) return;
 
       let membersList: TenantMember[] = [];
-      try {
-        const membersRes = await getTenantMembers();
-        if (
-          !isStale() &&
-          membersRes.success &&
-          Array.isArray(membersRes.data)
-        ) {
-          membersList = membersRes.data;
-        }
-      } catch (e) {
-        console.warn('getTenantMembers failed:', e);
+      if (
+        membersSettled.status === 'fulfilled' &&
+        membersSettled.value.success &&
+        Array.isArray(membersSettled.value.data)
+      ) {
+        membersList = membersSettled.value.data;
       }
 
+      // Quick fallback if primary members check is empty
       if (!isStale() && membersList.length === 0) {
         try {
           const alt = await getTenantMemberByTenantId(tenantId);
@@ -169,68 +179,9 @@ export function OrganizationTenantOverview({
         }
       }
 
-      if (
-        !isStale() &&
-        fixedTenantId === tenantId &&
-        membersList.length === 0
-      ) {
-        await new Promise(r => setTimeout(r, 200));
-        if (!isStale()) {
-          try {
-            const retry = await getTenantMembers();
-            if (
-              retry.success &&
-              Array.isArray(retry.data) &&
-              retry.data.length
-            ) {
-              membersList = retry.data;
-            }
-          } catch {
-            /* ignore */
-          }
-        }
-      }
-
       if (!isStale()) {
         setMembers(membersList);
       }
-
-      const isMembersRoute = Boolean(
-        fixedTenantId && fixedTenantId === tenantId,
-      );
-      if (isMembersRoute && !isStale()) {
-        setIsLoadingDashboard(false);
-      }
-
-      if (isStale()) return;
-
-      const [currentSettled, byIdSettled, invitationsSettled, usageSettled] =
-        await Promise.allSettled([
-          getCurrentTenant(),
-          getTenantById(tenantId),
-          getPendingInvitations(),
-          getTenantUsage(),
-        ]);
-
-      if (isStale()) return;
-
-      let organizationData: Tenant | null = null;
-      if (
-        currentSettled.status === 'fulfilled' &&
-        currentSettled.value.success &&
-        currentSettled.value.data
-      ) {
-        organizationData = normalizeTenantPayload(currentSettled.value.data);
-      }
-      if (
-        !organizationData &&
-        byIdSettled.status === 'fulfilled' &&
-        byIdSettled.value.success &&
-        byIdSettled.value.data
-      ) {
-        organizationData = normalizeTenantPayload(byIdSettled.value.data);
-      }
-      setOrganization(organizationData);
 
       if (
         invitationsSettled.status === 'fulfilled' &&
@@ -246,21 +197,11 @@ export function OrganizationTenantOverview({
         setInvitations([]);
       }
 
-      if (
-        usageSettled.status === 'fulfilled' &&
-        usageSettled.value.success &&
-        usageSettled.value.data
-      ) {
-        setUsage(usageSettled.value.data);
-      } else {
-        setUsage(null);
-      }
-
-      if (!isMembersRoute && !isStale()) {
+      if (!isStale()) {
         setIsLoadingDashboard(false);
       }
     },
-    [session?.accessToken, switchToTenantMode, fixedTenantId],
+    [session?.accessToken, switchToTenantMode, currentTenant, view],
   );
 
   const loadTenantDashboardRef = useRef(loadTenantDashboard);
@@ -369,99 +310,126 @@ export function OrganizationTenantOverview({
     return [...active, ...pending];
   }, [members, invitations]);
 
+
   if (!fixedTenantId && organizations.length === 0) {
     return null;
   }
 
   return (
     <section className="space-y-6">
+      {/* 1. Invite bar at the very top (above page title) */}
+      {selectedTenantId && (view === 'both' || view === 'members' || view === 'invite') && (
+        <div className="relative w-full h-12 flex-none flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm pr-2 pl-4 transition-all gap-3">
+          <input
+            id="first-name"
+            type="text"
+            placeholder="First Name"
+            value={inviteFirstName}
+            onChange={(e) => setInviteFirstName(e.target.value)}
+            disabled={isInviting}
+            className="flex-1 min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          />
+          <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
+          <input
+            id="last-name"
+            type="text"
+            placeholder="Last Name"
+            value={inviteLastName}
+            onChange={(e) => setInviteLastName(e.target.value)}
+            disabled={isInviting}
+            className="flex-1 min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          />
+          <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
+          <input
+            id="email-address"
+            type="email"
+            placeholder="Email Address"
+            value={inviteEmail}
+            onChange={(e) => setInviteEmail(e.target.value)}
+            disabled={isInviting}
+            className="flex-[1.2] min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          />
+          <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
+          <div className="flex-none">
+            <Select
+              value={inviteRole}
+              onValueChange={setInviteRole}
+              disabled={isInviting}
+            >
+              <SelectTrigger id="invite-role" className="h-full border-none border-0 shadow-none bg-transparent hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none text-sm text-gray-800 dark:text-gray-100 data-[placeholder]:text-gray-400 dark:data-[placeholder]:text-gray-400 w-[120px] px-3 font-normal py-0">
+                <SelectValue placeholder="Select Plan" />
+              </SelectTrigger>
+              <SelectContent className="border-black/10 dark:border-white/10 bg-white dark:bg-zinc-955">
+                <SelectItem value="plan-10" className="text-xs font-semibold">
+                  <div className="flex flex-col py-0.5 text-left">
+                    <span className="font-bold text-gray-900 dark:text-white text-xs">$10/month</span>
+                    <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
+                      500 Search · 5 Research
+                    </span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="plan-20" className="text-xs font-semibold">
+                  <div className="flex flex-col py-0.5 text-left">
+                    <span className="font-bold text-gray-900 dark:text-white text-xs">$20/month</span>
+                    <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
+                      1,000 Search · 10 Research
+                    </span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="plan-50" className="text-xs font-semibold">
+                  <div className="flex flex-col py-0.5 text-left">
+                    <span className="font-bold text-gray-900 dark:text-white text-xs">$50/month</span>
+                    <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
+                      2,500 Search · 25 Research
+                    </span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="plan-100" className="text-xs font-semibold">
+                  <div className="flex flex-col py-0.5 text-left">
+                    <span className="font-bold text-gray-900 dark:text-white text-xs">$100/month</span>
+                    <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
+                      5,000 Search · 50 Research
+                    </span>
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
+          <button
+            type="button"
+            onClick={handleSendInvite}
+            disabled={isInviting || !inviteEmail.trim() || !inviteRole}
+            className="flex-none h-full px-3 text-sm text-gray-800 dark:text-gray-100 hover:text-gray-500 dark:hover:text-gray-300 disabled:opacity-40 transition-all cursor-pointer bg-transparent border-none outline-none focus:outline-none font-normal"
+          >
+            {isInviting ? 'Inviting' : 'Send Invite'}
+          </button>
+        </div>
+      )}
+
+
+
+      {/* 3. Loading state / Members List below */}
       {isLoadingDashboard ? (
-        <div className="space-y-6">
-          <Skeleton className="h-10 w-48" />
+        <div className="space-y-4 pt-4">
           <Skeleton className="h-[200px] rounded-lg" />
         </div>
       ) : selectedTenantId ? (
         <>
-          {(view === 'both' || view === 'invite') && (
-            <div className="relative w-full h-12 flex-none flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm pr-2 pl-4 transition-all gap-3">
-              <input
-                id="first-name"
-                type="text"
-                placeholder="First Name"
-                value={inviteFirstName}
-                onChange={(e) => setInviteFirstName(e.target.value)}
-                disabled={isInviting}
-                className="flex-1 min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-              />
-              <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
-              <input
-                id="last-name"
-                type="text"
-                placeholder="Last Name"
-                value={inviteLastName}
-                onChange={(e) => setInviteLastName(e.target.value)}
-                disabled={isInviting}
-                className="flex-1 min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-              />
-              <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
-              <input
-                id="email-address"
-                type="email"
-                placeholder="Email Address"
-                value={inviteEmail}
-                onChange={(e) => setInviteEmail(e.target.value)}
-                disabled={isInviting}
-                className="flex-2 min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-              />
-              <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
-              <div className="flex-none">
-                <Select
-                  value={inviteRole}
-                  onValueChange={setInviteRole}
-                  disabled={isInviting}
-                >
-                  <SelectTrigger id="invite-role" className="h-9 border-none bg-transparent hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus:ring-0 focus:ring-offset-0 rounded-lg text-xs text-gray-800 dark:text-gray-100 font-medium w-[120px] px-2">
-                    <SelectValue placeholder="Select Plan" />
-                  </SelectTrigger>
-                  <SelectContent className="border-black/10 dark:border-white/10 bg-white dark:bg-zinc-950">
-                    <SelectItem value="plan-10" className="text-xs font-semibold">$10/month</SelectItem>
-                    <SelectItem value="plan-20" className="text-xs font-semibold">$20/month</SelectItem>
-                    <SelectItem value="plan-50" className="text-xs font-semibold">$50/month</SelectItem>
-                    <SelectItem value="plan-100" className="text-xs font-semibold">$100/month</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              {canInvite && (
-                <div className="flex-none ml-2">
-                  <Button
-                    size="sm"
-                    onClick={handleSendInvite}
-                    disabled={isInviting || !inviteEmail.trim() || !inviteRole}
-                    className="h-8 px-4 rounded-md cursor-pointer bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 disabled:opacity-50 transition-all text-xs font-medium"
-                  >
-                    {isInviting && <Loader2 className="mr-1.5 size-3.5 animate-spin shrink-0" />}
-                    {isInviting ? 'Inviting' : 'Invite'}
-                    {!isInviting && <ArrowUp className="ml-1.5 h-3.5 w-3.5" />}
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Unified Team Members List Table */}
           {(view === 'both' || view === 'members') && (
-          <div className="space-y-2 pt-4">
-
-            <MembersList
-              members={combinedMembers}
-              tenantId={selectedTenantId}
-              onUpdate={reloadDashboard}
-            />
-          </div>
+            <div className="space-y-2 pt-2">
+              <MembersList
+                members={combinedMembers}
+                tenantId={selectedTenantId}
+                onUpdate={reloadDashboard}
+                currentPage={currentPage}
+                onTotalPagesChange={onTotalPagesChange}
+              />
+            </div>
           )}
         </>
       ) : (
-        <p className="text-gray-500 text-xs">
+        <p className="text-gray-500 text-xs pt-4">
           Select an organization to load details.
         </p>
       )}

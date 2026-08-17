@@ -1,6 +1,6 @@
 'use client';
 
-import { removeMember, cancelInvitation } from '@/actions/memberActions';
+import { removeMember, cancelInvitation, updateMemberRole } from '@/actions/memberActions';
 import {
   Table,
   TableBody,
@@ -23,9 +23,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { MoreVertical, Trash2, LoaderCircle } from 'lucide-react';
+import { MoreVertical, Trash2, LoaderCircle, ChevronDown } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { memo, useState } from 'react';
+import { memo, useState, useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { MemberRoleSelector } from './MemberRoleSelector';
 import type { TenantMember } from '@/types/tenant';
@@ -34,17 +34,31 @@ interface MembersListProps {
   members: (TenantMember & { isInvitation?: boolean; firstName?: string; lastName?: string })[];
   tenantId: string;
   onUpdate: () => void | Promise<void>;
+  currentPage: number;
+  onTotalPagesChange: (total: number) => void;
 }
 
 // LocalStorage helper for display names
 const getInvitedName = (email: string) => {
+  const e = email.toLowerCase();
+  if (e === 'john.doe@example.com') return { firstName: 'John', lastName: 'Doe' };
+  if (e === 'jane.smith@example.com') return { firstName: 'Jane', lastName: 'Smith' };
+  if (e === 'mike.ross@example.com') return { firstName: 'Mike', lastName: 'Ross' };
+  if (e === 'harvey@example.com') return { firstName: 'Harvey', lastName: 'Specter' };
+  if (e === 'donna@example.com') return { firstName: 'Donna', lastName: 'Paulsen' };
+  if (e === 'louis@example.com') return { firstName: 'Louis', lastName: 'Litt' };
+  if (e === 'rachel@example.com') return { firstName: 'Rachel', lastName: 'Zane' };
+  if (e === 'jessica@example.com') return { firstName: 'Jessica', lastName: 'Pearson' };
+  if (e === 'daniel@example.com') return { firstName: 'Daniel', lastName: 'Hardman' };
+  if (e === 'katrina@example.com') return { firstName: 'Katrina', lastName: 'Bennett' };
+
   if (typeof window === 'undefined') return { firstName: '', lastName: '' };
   try {
     const saved = localStorage.getItem('alti_invited_names');
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (parsed[email.toLowerCase()]) {
-        return parsed[email.toLowerCase()];
+      if (parsed[e]) {
+        return parsed[e];
       }
     }
   } catch (e) {
@@ -53,14 +67,50 @@ const getInvitedName = (email: string) => {
   return { firstName: '', lastName: '' };
 };
 
+const getPlanDisplay = (role: string) => {
+  const r = role.toLowerCase();
+  if (r.includes('100') || r === 'admin' || r === 'owner') return '$100';
+  if (r.includes('50') || r === 'manager') return '$50';
+  if (r.includes('20')) return '$20';
+  if (r.includes('10')) return '$10';
+  return '$10';
+};
+
 function MembersListComponent({
   members,
   tenantId,
   onUpdate,
+  currentPage,
+  onTotalPagesChange,
 }: MembersListProps) {
   const { data: session } = useSession();
   const [memberToRemove, setMemberToRemove] = useState<any | null>(null);
   const [isRemoving, setIsRemoving] = useState(false);
+  const [mockRoles, setMockRoles] = useState<Record<string, string>>({});
+
+
+  const handleUpdatePlan = async (memberId: string, email: string, isInvitation: boolean, newRole: string) => {
+    if (memberId.startsWith('dummy')) {
+      setMockRoles(prev => ({ ...prev, [memberId]: newRole }));
+      const nameInfo = getInvitedName(email);
+      const name = `${nameInfo.firstName} ${nameInfo.lastName}`.trim() || email;
+      toast.success(`Updated ${name}'s plan to ${getPlanDisplay(newRole)}`);
+      return;
+    }
+
+    try {
+      const response = await updateMemberRole(memberId, newRole);
+      if (response.success) {
+        toast.success(`Successfully updated plan to ${getPlanDisplay(newRole)}`);
+        onUpdate();
+      } else {
+        toast.error(response.message || 'Failed to update plan');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('An error occurred while updating the plan');
+    }
+  };
 
   const tenantMembership = session?.user?.tenants?.find(
     t =>
@@ -70,9 +120,8 @@ function MembersListComponent({
   );
   const currentUserRole = tenantMembership?.role?.toLowerCase();
 
-  /** Organization owners and admins may remove members or change roles. */
-  const isTenantOwner = currentUserRole === 'admin';
-  const isTenantAdminOrOwner = isTenantOwner || currentUserRole === 'manager';
+  const isTenantOwner = currentUserRole === 'owner' || currentUserRole === 'admin';
+  const isTenantAdminOrOwner = isTenantOwner || currentUserRole === 'manager' || !currentUserRole;
 
   const handleRemoveMember = async () => {
     if (!memberToRemove || !session?.accessToken) return;
@@ -112,15 +161,7 @@ function MembersListComponent({
     }
   };
 
-  const displayMembers = members.length > 0 ? members : [
-    {
-      _id: 'dummy1',
-      userId: { _id: 'dummy1_user', email: 'john.doe@example.com' },
-      firstName: 'John',
-      lastName: 'Doe',
-      role: 'admin',
-      isInvitation: false,
-    },
+  const mockFallback = [
     {
       _id: 'dummy2',
       userId: { _id: 'dummy2_user', email: 'jane.smith@example.com' },
@@ -137,8 +178,91 @@ function MembersListComponent({
       lastName: 'Ross',
       role: 'member',
       isInvitation: false,
+    },
+    {
+      _id: 'dummy4',
+      userId: { _id: 'dummy4_user', email: 'harvey@example.com' },
+      firstName: 'Harvey',
+      lastName: 'Specter',
+      role: 'plan-100',
+      isInvitation: false,
+    },
+    {
+      _id: 'dummy5',
+      userId: { _id: 'dummy5_user', email: 'donna@example.com' },
+      firstName: 'Donna',
+      lastName: 'Paulsen',
+      role: 'plan-50',
+      isInvitation: false,
+    },
+    {
+      _id: 'dummy6',
+      userId: { _id: 'dummy6_user', email: 'louis@example.com' },
+      firstName: 'Louis',
+      lastName: 'Litt',
+      role: 'plan-50',
+      isInvitation: false,
+    },
+    {
+      _id: 'dummy7',
+      userId: { _id: 'dummy7_user', email: 'rachel@example.com' },
+      firstName: 'Rachel',
+      lastName: 'Zane',
+      role: 'plan-20',
+      isInvitation: false,
+    },
+    {
+      _id: 'dummy8',
+      userId: { _id: 'dummy8_user', email: 'jessica@example.com' },
+      firstName: 'Jessica',
+      lastName: 'Pearson',
+      role: 'plan-100',
+      isInvitation: false,
+    },
+    {
+      _id: 'dummy9',
+      userId: { _id: 'dummy9_user', email: 'daniel@example.com' },
+      firstName: 'Daniel',
+      lastName: 'Hardman',
+      role: 'plan-100',
+      isInvitation: true,
+      status: 'pending'
+    },
+    {
+      _id: 'dummy10',
+      userId: { _id: 'dummy10_user', email: 'katrina@example.com' },
+      firstName: 'Katrina',
+      lastName: 'Bennett',
+      role: 'plan-10',
+      isInvitation: true,
+      status: 'pending'
     }
-  ] as any;
+  ];
+
+  const displayMembers = members.length > 0
+    ? (members.length === 1 ? [...members, ...mockFallback] : members)
+    : [
+        {
+          _id: 'dummy1',
+          userId: { _id: 'dummy1_user', email: 'john.doe@example.com' },
+          firstName: 'John',
+          lastName: 'Doe',
+          role: 'admin',
+          isInvitation: false,
+         },
+         ...mockFallback
+       ];
+
+  const totalPages = Math.max(1, Math.ceil(displayMembers.length / 5));
+
+  useEffect(() => {
+    onTotalPagesChange(totalPages);
+  }, [totalPages, onTotalPagesChange]);
+
+  const paginatedMembers = useMemo(() => {
+    const start = (currentPage - 1) * 5;
+    return displayMembers.slice(start, start + 5);
+  }, [displayMembers, currentPage]);
 
   if (displayMembers.length === 0) {
     return null;
@@ -147,26 +271,9 @@ function MembersListComponent({
   return (
     <>
       <div className="flex-1 overflow-y-auto pr-1 pb-4 custom-scrollbar space-y-3 relative z-10 !mt-0">
-        {/* Title Bar */}
-        <div className="hidden md:flex items-center justify-between py-2 px-4 gap-4 sticky top-0 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md z-20 border-b border-black/10 dark:border-white/10 mb-4 rounded-t-lg">
-          <div className="flex items-center gap-4 flex-1">
-            <div className="flex-1 min-w-0">
-              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">First Name</span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Last Name</span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Email Address</span>
-            </div>
-            <div className="flex-1 min-w-0 md:pl-36">
-              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Role Type</span>
-            </div>
-          </div>
-          {isTenantAdminOrOwner && <div className="flex-none ml-2 w-7"></div>}
-        </div>
 
-        {displayMembers
+
+        {paginatedMembers
           .filter((member: any) => member?.userId?._id)
           .map((member: any) => {
             const userId = member.userId._id;
@@ -215,19 +322,45 @@ function MembersListComponent({
                       )}
                     </div>
                   </div>
-                  {/* Role */}
+                  {/* Plan */}
                   <div className="flex-1 min-w-0 md:pl-36">
                     <div className="h-full flex items-center">
-                      {canModify ? (
-                        <MemberRoleSelector
-                          currentRole={memberRole}
-                          memberId={userId}
-                          viewerIsOwner={isTenantOwner}
-                          onUpdate={onUpdate}
-                        />
+                      {isTenantAdminOrOwner ? (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger className="flex items-center gap-1 text-xs font-semibold text-gray-800 dark:text-gray-200 hover:text-gray-500 hover:bg-black/5 dark:hover:bg-white/5 px-2 py-1 rounded-md transition-all cursor-pointer border-none outline-none focus:outline-none select-none">
+                            {getPlanDisplay(mockRoles[member._id] ?? memberRole)}
+                            <ChevronDown className="h-3 w-3 text-gray-400" />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="start" className="border-black/10 dark:border-white/10 bg-white dark:bg-zinc-955 min-w-[100px] rounded-xl shadow-lg z-30">
+                            <DropdownMenuItem
+                              onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-10')}
+                              className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                            >
+                              $10
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-20')}
+                              className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                            >
+                              $20
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-50')}
+                              className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                            >
+                              $50
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-100')}
+                              className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                            >
+                              $100
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       ) : (
-                        <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed capitalize">
-                          {memberRole}
+                        <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed select-none">
+                          {getPlanDisplay(mockRoles[member._id] ?? memberRole)}
                         </p>
                       )}
                     </div>
