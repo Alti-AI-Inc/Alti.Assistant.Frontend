@@ -53,9 +53,21 @@ export const useSidebarStore = create<SidebarStore>(set => ({
   isGlobalInboxOpen: false,
   isAccountActive: false,
   activeTab: 'search',
-  setActiveTab: tab => set({ activeTab: tab }),
+  setActiveTab: tab =>
+    set({
+      activeTab: tab,
+      isAccountActive: tab === 'account',
+    }),
 
-  setIsAccountActive: isActive => set({ isAccountActive: isActive }),
+  setIsAccountActive: isActive =>
+    set(state => ({
+      isAccountActive: isActive,
+      activeTab: isActive
+        ? 'account'
+        : state.activeTab === 'account'
+          ? 'search'
+          : state.activeTab,
+    })),
 
   setRightSidebarOpen: (isOpen: boolean) =>
     set({
