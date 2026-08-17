@@ -30,8 +30,8 @@ const ADDONS: Addon[] = [
   {
     id: 'research_addon',
     name: 'Research',
-    price: '$2',
-    unit: 'per 10 research reports',
+    price: '$5',
+    unit: 'per 100 research reports',
     description: 'Execute deep research cycles that generate comprehensive reports.',
     features: [
       'Comprehensive agentic search runs',
@@ -85,7 +85,7 @@ export default function AddonsPage() {
                         {addon.price}
                       </span>
                       <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
-                        / {addon.unit}
+                        {addon.id === 'search_addon' ? '/ per 100 search results' : '/ per 100 research reports'}
                       </span>
                     </div>
                   </div>
@@ -184,8 +184,8 @@ export default function AddonsPage() {
                   Are you sure you want to purchase{' '}
                   {activePurchaseAddon?.id === 'search_addon'
                     ? `${(quantities[activePurchaseAddon?.id || ''] || 1) * 100} searches`
-                    : `${(quantities[activePurchaseAddon?.id || ''] || 1) * 10} research reports`}{' '}
-                  for ${(quantities[activePurchaseAddon?.id || ''] || 1) * 2}?
+                    : `${(quantities[activePurchaseAddon?.id || ''] || 1) * 100} research reports`}{' '}
+                  for ${(quantities[activePurchaseAddon?.id || ''] || 1) * (activePurchaseAddon?.id === 'search_addon' ? 2 : 5)}?
                 </p>
               </div>
 
@@ -218,7 +218,7 @@ export default function AddonsPage() {
                 <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
                   {activePurchaseAddon?.id === 'search_addon'
                     ? `${(quantities[activePurchaseAddon?.id || ''] || 1) * 100} searches have been added to your account.`
-                    : `${(quantities[activePurchaseAddon?.id || ''] || 1) * 10} research reports have been added to your account.`}
+                    : `${(quantities[activePurchaseAddon?.id || ''] || 1) * 100} research reports have been added to your account.`}
                 </p>
               </div>
 
