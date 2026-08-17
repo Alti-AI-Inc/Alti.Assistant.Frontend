@@ -899,19 +899,18 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {/* Column 2: Secondary Content navigation panel */}
       {isLeftSidebarOpen && (
         <div className="flex-1 flex flex-col min-w-0 h-full bg-[#0c1120] animate-in fade-in duration-200">
-        {/* Header Row */}
-        <div className="sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] px-4 flex-none gap-4">
-          {/* Search / Research Toggle Switcher */}
-          {activeTab !== 'account' ? (
-            <div className="flex bg-[#060913]/90 p-0.5 rounded-lg border border-blue-500/15 flex-1 select-none shadow-[0_0_15px_rgba(0,0,255,0.08)]">
+        {/* Search / Research / Monitor Toggle Switcher */}
+        {activeTab !== 'account' && (
+          <div className="pt-4 pb-3 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full border-b border-zinc-800/60">
+            <div className="flex w-full bg-[#0000ff]/10 h-9 p-0.5 rounded-lg border border-[#0000ff]/35 shadow-[0_0_12px_rgba(0,0,255,0.25)] select-none">
               <button
                 type="button"
                 onClick={() => setSelectedOption(OPTIONS.SEARCH)}
                 className={cn(
-                  'flex-1 px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none',
+                  'flex-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none h-full',
                   selectedOption === OPTIONS.SEARCH || selectedOption === null
-                    ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
-                    : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+                    ? 'bg-[#0000ff]/20 border-[#0000ff]/45 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
+                    : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
                 )}
               >
                 <span>Search</span>
@@ -920,10 +919,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 type="button"
                 onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
                 className={cn(
-                  'flex-1 px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none',
+                  'flex-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none h-full',
                   selectedOption === OPTIONS.RESEARCH
-                    ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
-                    : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+                    ? 'bg-[#0000ff]/20 border-[#0000ff]/45 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
+                    : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
                 )}
               >
                 <span>Research</span>
@@ -932,74 +931,23 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 type="button"
                 onClick={() => setSelectedOption(OPTIONS.MONITOR)}
                 className={cn(
-                  'flex-1 px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none',
+                  'flex-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none h-full',
                   selectedOption === OPTIONS.MONITOR
-                    ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
-                    : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+                    ? 'bg-[#0000ff]/20 border-[#0000ff]/45 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
+                    : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
                 )}
               >
                 <span>Monitor</span>
               </button>
             </div>
-          ) : (
-            <span className="text-xs font-semibold text-white tracking-wide select-none">
-              My Account
-            </span>
-          )}
-
-          <div className="flex items-center gap-2.5 ml-auto flex-none">
-            {activeBotId !== null && activeTab !== 'account' ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    type="button"
-                    className="cursor-pointer text-zinc-400 hover:text-white transition-colors outline-none focus:outline-none flex items-center justify-center p-1 rounded-md hover:bg-white/5 flex-none"
-                    title="Space Settings"
-                  >
-                    <EllipsisVertical className="size-5 rotate-90" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="rounded-2xl bg-zinc-950 border border-white/10 text-white" align="end">
-                  <DropdownMenuItem
-                    className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
-                    onClick={() => setBotToRename(activeBotId)}
-                  >
-                    <Pencil className="h-3.5 w-3.5 mr-2" /> Rename Space
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-white/10 h-[1px] my-1" />
-                  <DropdownMenuItem
-                    className="text-red-400 focus:bg-red-950 focus:text-red-200 cursor-pointer text-xs"
-                    onClick={() => setBotToDelete(activeBotId)}
-                  >
-                    <Trash2 className="h-3.5 w-3.5 mr-2" /> Delete Space
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <div className="w-[28px] h-[28px] flex-none" />
-            )}
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={toggleLeftSidebar}
-                  className="cursor-pointer text-zinc-400 hover:text-white transition-colors outline-none focus:outline-none flex items-center justify-center p-1 rounded-md hover:bg-white/5 flex-none"
-                >
-                  <PanelLeftClose className="size-5" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
-                Close Sidebar
-              </TooltipContent>
-            </Tooltip>
           </div>
-        </div>
+        )}
 
         {/* Navigation Body */}
         <div className="flex-1 overflow-y-auto min-h-0">
           {activeTab === 'account' ? (
             <div className="mt-4 space-y-1.5 py-1 px-4 pb-4">
+              <h2 className="text-sm font-bold text-white mb-4 select-none px-1">My Account</h2>
               {isSuperAdmin && (
                 <button
                   onClick={() => router.push('/admin')}
@@ -1207,6 +1155,32 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       className="w-full bg-transparent text-xs font-normal text-white outline-none placeholder:text-zinc-400"
                     />
                   </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        type="button"
+                        className="flex h-full w-9 items-center justify-center transition-all hover:bg-[#0000ff]/20 text-blue-100 focus:outline-none border-l border-[#0000ff]/30 cursor-pointer"
+                        title="Space Settings"
+                      >
+                        <EllipsisVertical className="size-4 text-white" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="rounded-2xl bg-zinc-950 border border-white/10 text-white" align="end">
+                      <DropdownMenuItem
+                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
+                        onClick={() => setBotToRename(activeBotId)}
+                      >
+                        <Pencil className="h-3.5 w-3.5 mr-2" /> Rename Space
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator className="bg-white/10 h-[1px] my-1" />
+                      <DropdownMenuItem
+                        className="text-red-400 focus:bg-red-950 focus:text-red-200 cursor-pointer text-xs"
+                        onClick={() => setBotToDelete(activeBotId)}
+                      >
+                        <Trash2 className="h-3.5 w-3.5 mr-2" /> Delete Space
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
