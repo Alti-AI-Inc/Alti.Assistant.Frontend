@@ -675,6 +675,8 @@ export default function ChatInput({
         return '/deep-research/execute';
       case OPTIONS.SEARCH:
         return '/search/stream';
+      case OPTIONS.MONITOR:
+        return '/search/stream';
       // case OPTIONS.GENERATE_PLAN:
       //   return '/search/plan';
       // case OPTIONS.GENERATE_REPORT:
@@ -1615,14 +1617,16 @@ export default function ChatInput({
                       ? 'Describe the task you want to automate...'
                       : selectedOption === OPTIONS.RESEARCH && !hasMessages && !isExistingConversation
                         ? 'Research anything...'
-                        : activeConversation?.knowledgebaseId && isLoading
-                          ? 'Loading...'
-                          : activeConversation?.knowledgebaseId &&
-                              activeKnowledgeBaseName
-                            ? `Chat with ${activeKnowledgeBaseName}`
-                            : (pathname === '/workflows' || pathname?.startsWith('/workflows')
-                              ? 'Describe your workflow...'
-                              : 'Search anything...')
+                        : selectedOption === OPTIONS.MONITOR && !hasMessages && !isExistingConversation
+                          ? 'Monitor anything...'
+                          : activeConversation?.knowledgebaseId && isLoading
+                            ? 'Loading...'
+                            : activeConversation?.knowledgebaseId &&
+                                activeKnowledgeBaseName
+                              ? `Chat with ${activeKnowledgeBaseName}`
+                              : (pathname === '/workflows' || pathname?.startsWith('/workflows')
+                                ? 'Describe your workflow...'
+                                : 'Search anything...')
                   }
                   style={{ backgroundColor: 'transparent' }}
                   className="min-h-[36px] max-h-[160px] w-full flex-1 resize-none border-none bg-transparent px-1 py-1.5 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white"

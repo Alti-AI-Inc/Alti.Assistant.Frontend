@@ -923,6 +923,18 @@ const LeftSideNavMobile = () => {
               >
                 <span>Research</span>
               </button>
+              <button
+                type="button"
+                onClick={() => setSelectedOption(OPTIONS.MONITOR)}
+                className={cn(
+                  'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
+                  selectedOption === OPTIONS.MONITOR
+                    ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+                )}
+              >
+                <span>Monitor</span>
+              </button>
             </div>
           )}
         </div>

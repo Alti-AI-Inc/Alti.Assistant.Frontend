@@ -1252,7 +1252,9 @@ return (
             <h1 className="text-3xl sm:text-4xl font-semibold text-zinc-900 dark:text-white mb-6 text-center select-none tracking-tight animate-in fade-in duration-300">
               {selectedOption === OPTIONS.RESEARCH
                 ? 'Deep Research'
-                : 'Real-Time Search'}
+                : selectedOption === OPTIONS.MONITOR
+                  ? 'Real-Time Monitor'
+                  : 'Real-Time Search'}
             </h1>
           )}
           <ChatInput
