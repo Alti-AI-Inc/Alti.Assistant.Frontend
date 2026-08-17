@@ -60,6 +60,7 @@ import {
   Headphones,
   ListTodo,
   Clock,
+  ChevronDown,
   Repeat,
   CalendarClock,
   Zap,
@@ -323,6 +324,9 @@ export default function ChatInput({
   const [triggerType, setTriggerType] = useState<'scheduled' | 'event'>('scheduled');
   const [scheduledTime, setScheduledTime] = useState('');
   const [eventTrigger, setEventTrigger] = useState('');
+
+  // Monitor scan frequency state
+  const [monitorFrequency, setMonitorFrequency] = useState<string>('Real-Time');
 
   const handleCreateTask = () => {
     // Stop recording/listening if active
@@ -857,6 +861,9 @@ export default function ChatInput({
       if (selectedOption === OPTIONS.RESEARCH) {
         Object.assign(extraParams, researchSettings);
         extraParams.researchTier = researchTier;
+      }
+      if (selectedOption === OPTIONS.MONITOR) {
+        extraParams.frequency = monitorFrequency;
       }
       const categoryVal = appParam ? 'mcp' : getCategoryFromOption(selectedOption);
       if (categoryVal) {
@@ -1632,6 +1639,54 @@ export default function ChatInput({
                   className="min-h-[36px] max-h-[160px] w-full flex-1 resize-none border-none bg-transparent px-1 py-1.5 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white"
                   autoFocus
                 />
+
+                {/* Monitor Frequency Selector */}
+                {selectedOption === OPTIONS.MONITOR && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        type="button"
+                        className="flex h-8 items-center gap-1.5 px-2.5 rounded-md border border-[#0000ff]/35 bg-[#0000ff]/10 text-white hover:bg-[#0000ff]/20 transition-all text-xs font-semibold focus:outline-none cursor-pointer select-none shadow-[0_0_8px_rgba(0,0,255,0.15)]"
+                      >
+                        <Clock className="size-3.5" />
+                        <span>{monitorFrequency}</span>
+                        <ChevronDown className="size-3.5 text-zinc-400" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="rounded-2xl bg-zinc-950 border border-white/10 text-white" align="end">
+                      <DropdownMenuItem
+                        onClick={() => setMonitorFrequency('Real-Time')}
+                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
+                      >
+                        Real-Time
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => setMonitorFrequency('Every Hour')}
+                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
+                      >
+                        Every Hour
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => setMonitorFrequency('Every Day')}
+                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
+                      >
+                        Every Day
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => setMonitorFrequency('Every Week')}
+                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
+                      >
+                        Every Week
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => setMonitorFrequency('Every Month')}
+                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
+                      >
+                        Every Month
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
 
                 {/* Send Button / Mic Button - Square style */}
                 <Tooltip>
