@@ -947,7 +947,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         <div className="flex-1 overflow-y-auto min-h-0">
           {activeTab === 'account' ? (
             <div className="mt-4 space-y-1.5 py-1 px-4 pb-4">
-              <h2 className="text-sm font-bold text-white mb-4 select-none px-1">My Account</h2>
               {isSuperAdmin && (
                 <button
                   onClick={() => router.push('/admin')}
