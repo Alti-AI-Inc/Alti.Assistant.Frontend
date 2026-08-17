@@ -932,7 +932,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           )}
 
           <div className="flex items-center gap-2.5 ml-auto flex-none">
-            {activeBotId !== null ? (
+            {activeBotId !== null && activeTab !== 'account' ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
@@ -1609,7 +1609,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {/* Create Space Dialog */}
       <Dialog open={isCreateSpaceOpen} onOpenChange={(open) => !open && setIsCreateSpaceOpen(false)}>
         <DialogContent 
-          className="p-6 overflow-hidden rounded-[20px] max-w-[320px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
+          className="p-6 overflow-hidden rounded-[20px] max-w-[320px] sm:max-w-[320px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <div className="space-y-4">
