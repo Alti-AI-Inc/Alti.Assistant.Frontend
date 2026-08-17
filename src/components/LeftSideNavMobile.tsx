@@ -896,23 +896,17 @@ const LeftSideNavMobile = () => {
       <div className="flex-1 flex flex-col min-w-0 h-full bg-[#0c1120]">
         {/* Header Row */}
         <div className="sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] px-4 flex-none gap-4">
-          <span className="text-xs font-semibold text-white tracking-wide select-none">
-            {activeTab === 'account' ? 'My Account' : 'Assistant'}
-          </span>
-        </div>
-
-        {/* Search / Research / Monitor Toggle Switcher */}
-        {activeTab !== 'account' && (
-          <div className="pt-3 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full">
-            <div className="flex w-full bg-[#0000ff]/10 h-9 p-0.5 rounded-lg border border-[#0000ff]/35 shadow-[0_0_12px_rgba(0,0,255,0.25)] select-none">
+          {/* Search / Research Toggle Switcher */}
+          {activeTab !== 'account' ? (
+            <div className="flex bg-[#060913]/90 p-0.5 rounded-lg border border-blue-500/15 flex-1 select-none shadow-[0_0_15px_rgba(0,0,255,0.08)]">
               <button
                 type="button"
                 onClick={() => setSelectedOption(OPTIONS.SEARCH)}
                 className={cn(
-                  'flex-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none h-full',
+                  'flex-1 px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none',
                   selectedOption === OPTIONS.SEARCH || selectedOption === null
-                    ? 'bg-[#0000ff]/20 border-[#0000ff]/45 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
-                    : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
+                    ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
                 )}
               >
                 <span>Search</span>
@@ -921,10 +915,10 @@ const LeftSideNavMobile = () => {
                 type="button"
                 onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
                 className={cn(
-                  'flex-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none h-full',
+                  'flex-1 px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none',
                   selectedOption === OPTIONS.RESEARCH
-                    ? 'bg-[#0000ff]/20 border-[#0000ff]/45 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
-                    : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
+                    ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
                 )}
               >
                 <span>Research</span>
@@ -933,17 +927,21 @@ const LeftSideNavMobile = () => {
                 type="button"
                 onClick={() => setSelectedOption(OPTIONS.MONITOR)}
                 className={cn(
-                  'flex-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none h-full',
+                  'flex-1 px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none',
                   selectedOption === OPTIONS.MONITOR
-                    ? 'bg-[#0000ff]/20 border-[#0000ff]/45 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
-                    : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
+                    ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
                 )}
               >
                 <span>Monitor</span>
               </button>
             </div>
-          </div>
-        )}
+          ) : (
+            <span className="text-xs font-semibold text-white tracking-wide select-none">
+              My Account
+            </span>
+          )}
+        </div>
 
         {/* Navigation Body */}
         <div className="flex-1 overflow-y-auto min-h-0">
