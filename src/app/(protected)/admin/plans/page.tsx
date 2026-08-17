@@ -24,6 +24,7 @@ const ALL_PLANS: PricingPlan[] = [
     features: [
       '100 Search',
       '10 Research',
+      '10 Monitor',
     ],
   },
   {
@@ -35,6 +36,7 @@ const ALL_PLANS: PricingPlan[] = [
     features: [
       '500 Search',
       '50 Research',
+      '50 Monitor',
     ],
   },
   {
@@ -46,6 +48,7 @@ const ALL_PLANS: PricingPlan[] = [
     features: [
       '1,000 Search',
       '100 Research',
+      '100 Monitor',
     ],
   },
   {
@@ -57,6 +60,7 @@ const ALL_PLANS: PricingPlan[] = [
     features: [
       '2,500 Search',
       '250 Research',
+      '250 Monitor',
     ],
   },
   {
@@ -68,6 +72,7 @@ const ALL_PLANS: PricingPlan[] = [
     features: [
       '5,000 Search',
       '500 Research',
+      '500 Monitor',
     ],
   },
 ];
