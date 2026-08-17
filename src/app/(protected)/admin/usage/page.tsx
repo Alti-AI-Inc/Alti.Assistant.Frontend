@@ -3,20 +3,7 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Card } from '@/components/ui/card';
-import { Search, Brain, History, Sparkles, Calendar } from 'lucide-react';
-
-interface MonthlyUsage {
-  month: string;
-  searches: number;
-  research: number;
-}
-
-const HISTORIC_USAGE: MonthlyUsage[] = [
-  { month: 'July 2026', searches: 890, research: 14 },
-  { month: 'June 2026', searches: 950, research: 18 },
-  { month: 'May 2026', searches: 410, research: 5 },
-  { month: 'April 2026', searches: 320, research: 2 },
-];
+import { Search, Brain, Sparkles, Calendar } from 'lucide-react';
 
 export default function UsagePage() {
   const { data: session } = useSession();
@@ -154,45 +141,6 @@ export default function UsagePage() {
                 </span>
               </Card>
             </div>
-          </div>
-
-          {/* Historic Monthly Usage History */}
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <History className="h-4 w-4 text-zinc-500" />
-              <h2 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                Previous Months History
-              </h2>
-            </div>
-
-            <Card className="bg-white/80 dark:bg-zinc-955/50 shadow-md border-black/5 dark:border-white/5 overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-black/5 dark:divide-white/5 text-left text-xs">
-                  <thead className="bg-zinc-50 dark:bg-zinc-900/60 text-zinc-500 dark:text-zinc-400 font-semibold">
-                    <tr>
-                      <th className="px-6 py-4">Billing Cycle</th>
-                      <th className="px-6 py-4">Searches Conducted</th>
-                      <th className="px-6 py-4">Research Cycles</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-black/5 dark:divide-white/5 text-gray-900 dark:text-zinc-300">
-                    {HISTORIC_USAGE.map((item, idx) => (
-                      <tr key={idx} className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                        <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                          {item.month}
-                        </td>
-                        <td className="px-6 py-4">
-                          {item.searches}
-                        </td>
-                        <td className="px-6 py-4">
-                          {item.research}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </Card>
           </div>
 
         </div>

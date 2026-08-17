@@ -763,7 +763,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         <div className="relative w-full flex flex-col items-center">
           <div
             className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1.5"
-            style={{ opacity: activeBotId === null ? 1 : 0 }}
+            style={{ opacity: (activeBotId === null && activeTab !== 'account') ? 1 : 0 }}
           />
           <Tooltip>
             <TooltipTrigger asChild>
@@ -775,7 +775,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 }}
                 className={cn(
                   "relative size-11 flex items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer text-white",
-                  activeBotId === null
+                  (activeBotId === null && activeTab !== 'account')
                     ? "bg-[#0000ff]/15 border-[#0000ff] shadow-[0_0_20px_rgba(0,0,255,0.55)]"
                     : "bg-[#0000ff]/10 border-[#0000ff]/35 hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]"
                 )}
@@ -792,7 +792,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         {/* Spaces Scrollable Area */}
         <div className="flex-1 w-full overflow-y-auto overflow-x-hidden flex flex-col items-center gap-3 no-scrollbar py-1">
           {bots.map((bot, idx) => {
-            const isSelected = activeBotId === bot.id && (pathname === '/spaces' || pathname.startsWith('/spaces'));
+            const isSelected = activeBotId === bot.id && (pathname === '/spaces' || pathname.startsWith('/spaces')) && activeTab !== 'account';
             const isBeingDragged = draggedIndex === idx;
             const showTopLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex > idx;
             const showBottomLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex < idx;
@@ -844,7 +844,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       onClick={() => {
                         setSelectedOption(null);
                         setActiveBotId(bot.id);
-                        router.push(`/spaces?bot=${bot.id}`);
+                        if (window.location.pathname === '/spaces') {
+                          window.history.pushState(null, '', `/spaces?bot=${bot.id}`);
+                        } else {
+                          router.push(`/spaces?bot=${bot.id}`);
+                        }
                       }}
                       className={cn(
                         "relative size-11 flex items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer text-sm font-semibold text-white",
@@ -1199,7 +1203,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                           setSelectedOption(null);
                           setActiveBotThreadId(null);
                           setActiveConversation(null);
-                          router.push(`/spaces?bot=${activeBotId}`);
+                          if (window.location.pathname === '/spaces') {
+                            window.history.pushState(null, '', `/spaces?bot=${activeBotId}`);
+                          } else {
+                            router.push(`/spaces?bot=${activeBotId}`);
+                          }
                         }}
                         className="flex h-full w-9 items-center justify-center transition-all hover:bg-[#0000ff]/20 text-blue-100 focus:outline-none border-l border-[#0000ff]/30"
                       >
@@ -1352,7 +1360,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                             onClick={() => {
                               setSelectedOption(null);
                               setActiveBotThreadId(thread.id);
-                              router.push(`/spaces?bot=${activeBotId}&thread=${thread.id}`);
+                              if (window.location.pathname === '/spaces') {
+                                window.history.pushState(null, '', `/spaces?bot=${activeBotId}&thread=${thread.id}`);
+                              } else {
+                                router.push(`/spaces?bot=${activeBotId}&thread=${thread.id}`);
+                              }
                             }}
                           >
                             {getThreadIcon(thread.title, isSelected)}
@@ -1364,7 +1376,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                               deleteThread(thread.id);
                               if (activeBotThreadId === thread.id) {
                                 setActiveBotThreadId(null);
-                                router.push(`/spaces?bot=${activeBotId}`);
+                                if (window.location.pathname === '/spaces') {
+                                  window.history.pushState(null, '', `/spaces?bot=${activeBotId}`);
+                                } else {
+                                  router.push(`/spaces?bot=${activeBotId}`);
+                                }
                               }
                             }}
                             className={cn(
