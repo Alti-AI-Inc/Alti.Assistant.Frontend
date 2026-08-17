@@ -23,7 +23,7 @@ const ALL_PLANS: PricingPlan[] = [
     description: 'Test out Alti’s capabilities with basic search and model limits.',
     features: [
       '100 Search',
-      '1 Research',
+      '10 Research',
     ],
   },
   {
@@ -34,7 +34,7 @@ const ALL_PLANS: PricingPlan[] = [
     description: 'For casual users looking for more queries and standard model access.',
     features: [
       '500 Search',
-      '5 Research',
+      '50 Research',
     ],
   },
   {
@@ -45,7 +45,7 @@ const ALL_PLANS: PricingPlan[] = [
     description: 'For developers requiring advanced reasoning and deep research.',
     features: [
       '1,000 Search',
-      '10 Research',
+      '100 Research',
     ],
   },
   {
@@ -56,7 +56,7 @@ const ALL_PLANS: PricingPlan[] = [
     description: 'For small teams needing collaborative workspaces and higher limits.',
     features: [
       '2,500 Search',
-      '25 Research',
+      '250 Research',
     ],
   },
   {
@@ -67,7 +67,7 @@ const ALL_PLANS: PricingPlan[] = [
     description: 'Uncapped search throughput and enterprise-grade models.',
     features: [
       '5,000 Search',
-      '50 Research',
+      '500 Research',
     ],
   },
 ];
