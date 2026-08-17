@@ -79,7 +79,7 @@ export default function AddonsPage() {
 
       {/* Main Workspace Body */}
       <div className="flex-1 overflow-y-auto min-h-0 px-8 py-8">
-        <div className="mx-auto max-w-4xl space-y-6">
+        <div className="mx-auto max-w-6xl space-y-6">
           {/* Add-on Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-4">
             {ADDONS.map((addon) => {
@@ -98,7 +98,7 @@ export default function AddonsPage() {
                       <span className="text-base font-extrabold text-black dark:text-white">
                         {addon.price}
                       </span>
-                      <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+                      <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium whitespace-nowrap">
                         / {addon.unit}
                       </span>
                     </div>
