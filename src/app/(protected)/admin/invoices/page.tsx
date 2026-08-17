@@ -2,7 +2,7 @@
 
 import { useTenant } from '@/contexts/TenantContext';
 import { Button } from '@/components/ui/button';
-import { Download, FileText, Plus, ArrowRight, Building2 } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { useState } from 'react';
 import { jsPDF } from 'jspdf';
 import { toast } from 'sonner';
@@ -21,10 +21,14 @@ const INVOICES = [
 ];
 
 export default function AdminInvoicesPage() {
-  const { currentTenant, tenants, switchToTenantMode, isLoading } = useTenant();
+  const { currentTenant, isLoading } = useTenant();
   const { onOpen } = useModalStore();
   const router = useRouter();
   const [isGenerating, setIsGenerating] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.max(1, Math.ceil(INVOICES.length / 5));
+  const paginatedInvoices = INVOICES.slice((currentPage - 1) * 5, currentPage * 5);
 
   const handleDownloadPDF = async (invoice: typeof INVOICES[0]) => {
     setIsGenerating(invoice.id);
@@ -126,8 +130,8 @@ export default function AdminInvoicesPage() {
 
   if (isLoading) {
     return (
-      <div className="h-full flex items-center justify-center bg-[#e1e1e1] dark:bg-gray-950">
-        <span className="text-gray-500 text-sm">Loading invoice history...</span>
+      <div className="h-full flex items-center justify-center bg-[#e1e1e1] dark:bg-gray-955">
+        <span className="text-gray-555 text-sm text-gray-500">Loading invoice history...</span>
       </div>
     );
   }
@@ -135,7 +139,7 @@ export default function AdminInvoicesPage() {
   if (!currentTenant) {
     return (
       <div className="h-full flex items-center justify-center bg-[#e1e1e1] dark:bg-gray-955">
-        <span className="text-gray-500 text-sm">Loading invoice history...</span>
+        <span className="text-gray-555 text-sm">Loading workspace details...</span>
       </div>
     );
   }
@@ -157,13 +161,10 @@ export default function AdminInvoicesPage() {
           <div className="flex flex-col space-y-3 relative z-10 !mt-0">
             
             {/* Desktop Table Headers */}
-            <div className="hidden md:flex items-center justify-between py-2 px-4 gap-4 sticky top-0 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md z-20 border-b border-black/10 dark:border-white/10 mb-4 rounded-t-lg">
+            <div className="hidden md:flex items-center justify-between py-2 px-4 gap-4 sticky top-0 bg-white/80 dark:bg-gray-955/80 backdrop-blur-md z-20 border-b border-black/10 dark:border-white/10 mb-4 rounded-t-lg">
               <div className="flex items-center gap-4 flex-1">
                 <div className="flex-1 min-w-0">
                   <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Invoice ID</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Month</span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Amount</span>
@@ -175,7 +176,7 @@ export default function AdminInvoicesPage() {
             </div>
 
             {/* List Rows */}
-            {INVOICES.map((invoice) => (
+            {paginatedInvoices.map((invoice) => (
               <div
                 key={invoice.id}
                 className="group flex flex-col md:flex-row md:items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs gap-4 hover:border-black/20 dark:hover:border-white/20 transition-all duration-150"
@@ -192,17 +193,7 @@ export default function AdminInvoicesPage() {
                     </div>
                   </div>
 
-                  {/* Month */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="md:hidden text-[10px] text-gray-400 font-semibold uppercase">Month: </span>
-                      <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed">
-                        {invoice.month}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Amount */}
+                  {/* Amount (Moved to where Month was) */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="md:hidden text-[10px] text-gray-400 font-semibold uppercase">Amount: </span>
@@ -234,6 +225,31 @@ export default function AdminInvoicesPage() {
 
         </div>
       </div>
+
+      {/* Fixed Bottom Bar */}
+      {totalPages > 1 && (
+        <div className="h-[52px] border-t border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-white dark:bg-gray-950 z-20">
+          <button
+            type="button"
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+            className="text-xs font-semibold text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 disabled:opacity-40 transition-all cursor-pointer bg-transparent border-none outline-none focus:outline-none"
+          >
+            Back
+          </button>
+          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            type="button"
+            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+            disabled={currentPage === totalPages}
+            className="text-xs font-semibold text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 disabled:opacity-40 transition-all cursor-pointer bg-transparent border-none outline-none focus:outline-none"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

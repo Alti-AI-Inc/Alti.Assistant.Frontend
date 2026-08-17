@@ -1,15 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { useSession } from 'next-auth/react';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { Check } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 interface Addon {
   id: string;
@@ -23,7 +17,7 @@ interface Addon {
 const ADDONS: Addon[] = [
   {
     id: 'search_addon',
-    name: 'Search Add-on',
+    name: 'Search',
     price: '$2',
     unit: 'per 100 searches',
     description: 'Need extra real-time search queries? Top up your search limit instantly.',
@@ -35,7 +29,7 @@ const ADDONS: Addon[] = [
   },
   {
     id: 'research_addon',
-    name: 'Research Add-on',
+    name: 'Research',
     price: '$2',
     unit: 'per report',
     description: 'Execute deep research cycles that generate comprehensive reports.',
@@ -49,6 +43,12 @@ const ADDONS: Addon[] = [
 
 export default function AddonsPage() {
   const { data: session } = useSession();
+  const [quantities, setQuantities] = useState<Record<string, number>>({
+    search_addon: 1,
+    research_addon: 1,
+  });
+  const [activePurchaseAddon, setActivePurchaseAddon] = useState<Addon | null>(null);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   return (
     <div className="h-full flex flex-col bg-[#e1e1e1] dark:bg-gray-955 overflow-hidden">
@@ -64,48 +64,148 @@ export default function AddonsPage() {
         <div className="mx-auto max-w-4xl space-y-6">
           {/* Two Add-on Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
-            {ADDONS.map((addon) => (
-              <Card
-                key={addon.id}
-                className="relative flex flex-col p-6 bg-white/80 dark:bg-zinc-950/50 shadow-md border-black/5 dark:border-white/5 transition-all duration-300 hover:-translate-y-1"
-              >
-                <CardHeader className="p-0 pb-4 flex-none">
-                  <div className="flex justify-between items-start gap-4">
-                    <div>
-                      <CardTitle className="text-base font-bold tracking-tight">
-                        {addon.name}
-                      </CardTitle>
-                      <CardDescription className="mt-1 text-zinc-500 dark:text-zinc-400 leading-normal text-xs">
-                        {addon.description}
-                      </CardDescription>
-                    </div>
-                    <div className="text-right flex-shrink-0">
-                      <div className="text-3xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
+            {ADDONS.map((addon) => {
+              const qty = quantities[addon.id] || 0;
+              return (
+                <Card
+                  key={addon.id}
+                  className="relative flex items-center justify-between p-6 bg-white/80 dark:bg-zinc-955/50 shadow-md border-black/5 dark:border-white/5 transition-all duration-300"
+                >
+                  {/* Left Side: Title and Pricing on One Row */}
+                  <div className="flex items-center gap-4">
+                    <h3 className="text-base font-bold text-gray-900 dark:text-white tracking-tight">
+                      {addon.name}
+                    </h3>
+                    <div className="flex items-baseline gap-1.5 border-l border-black/10 dark:border-white/10 pl-4">
+                      <span className="text-base font-extrabold text-black dark:text-white">
                         {addon.price}
-                      </div>
-                      <div className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium">
-                        {addon.unit}
-                      </div>
+                      </span>
+                      <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+                        {addon.id === 'search_addon' ? '/ per 100 search results' : '/ per research report'}
+                      </span>
                     </div>
                   </div>
-                </CardHeader>
 
-                <CardContent className="flex-1 p-0">
-                  <div className="border-t border-black/5 dark:border-white/5 my-3" />
-                  <ul className="space-y-2 text-xs text-zinc-600 dark:text-zinc-400">
-                    {addon.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-2">
-                        <Check className="h-3.5 w-3.5 text-blue-500 flex-shrink-0" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            ))}
+                  {/* Right Side: Quantity Selector and Purchase Button */}
+                  <div className="flex items-center gap-4">
+                    {/* Quantity Selector */}
+                    <div className="flex items-center gap-3 bg-zinc-200/80 dark:bg-zinc-800 border border-black/5 dark:border-white/5 rounded-xl p-1 select-none">
+                      <button
+                        type="button"
+                        onClick={() => setQuantities(prev => ({
+                          ...prev,
+                          [addon.id]: Math.max(0, (prev[addon.id] || 0) - 1)
+                        }))}
+                        className="size-8 flex items-center justify-center rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-zinc-650 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white active:scale-95 transition-all cursor-pointer font-bold text-base outline-none"
+                      >
+                        -
+                      </button>
+                      <span className="w-6 text-center text-sm font-semibold text-black dark:text-white">
+                        {qty}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setQuantities(prev => ({
+                          ...prev,
+                          [addon.id]: (prev[addon.id] || 0) + 1
+                        }))}
+                        className="size-8 flex items-center justify-center rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-zinc-650 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white active:scale-95 transition-all cursor-pointer font-bold text-base outline-none"
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    {/* Purchase Button */}
+                    <button
+                      type="button"
+                      onClick={() => setActivePurchaseAddon(addon)}
+                      className="px-5 h-[40px] flex items-center justify-center text-xs font-semibold bg-black hover:bg-zinc-900 dark:bg-white dark:hover:bg-zinc-200 text-white dark:text-black rounded-xl transition-all cursor-pointer active:scale-95 duration-200"
+                    >
+                      Purchase
+                    </button>
+                  </div>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </div>
+
+      {/* iOS-Style Success/Confirmation Dialog (Same style/design as logout popup) */}
+      <Dialog
+        open={activePurchaseAddon !== null}
+        onOpenChange={() => {
+          setActivePurchaseAddon(null);
+          setIsSuccess(false);
+        }}
+      >
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[480px] sm:max-w-[480px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden animate-in fade-in duration-200">
+          {!isSuccess ? (
+            <>
+              {/* Centered Content Section */}
+              <div className="px-5 pt-5 pb-4 text-center">
+                <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                  Purchase {activePurchaseAddon?.name}
+                </h2>
+                <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+                  Are you sure you want to purchase{' '}
+                  {activePurchaseAddon?.id === 'search_addon'
+                    ? `${(quantities[activePurchaseAddon?.id || ''] || 1) * 100} searches`
+                    : `${quantities[activePurchaseAddon?.id || ''] || 1} research reports`}{' '}
+                  for ${(quantities[activePurchaseAddon?.id || ''] || 1) * 2}?
+                </p>
+              </div>
+
+              {/* Extended Border & iOS Layout Action Buttons */}
+              <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+                {/* Cancel Option */}
+                <button
+                  onClick={() => setActivePurchaseAddon(null)}
+                  className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none cursor-pointer"
+                >
+                  Cancel
+                </button>
+                
+                {/* Confirm Option */}
+                <button
+                  onClick={() => setIsSuccess(true)}
+                  className="flex-1 text-[15px] font-normal text-blue-655 dark:text-blue-400 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none cursor-pointer"
+                >
+                  Purchase
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Centered Content Section */}
+              <div className="px-5 pt-5 pb-4 text-center">
+                <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                  {activePurchaseAddon?.id === 'search_addon' ? 'Search Purchased' : 'Research Purchased'}
+                </h2>
+                <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+                  {activePurchaseAddon?.id === 'search_addon'
+                    ? `${(quantities[activePurchaseAddon?.id || ''] || 1) * 100} searches have been added to your account.`
+                    : `${quantities[activePurchaseAddon?.id || ''] || 1} research reports have been added to your account.`}
+                </p>
+              </div>
+
+              {/* Extended Border & iOS Layout Action Buttons */}
+              <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+                {/* Close Option */}
+                <button
+                  onClick={() => {
+                    setActivePurchaseAddon(null);
+                    setIsSuccess(false);
+                  }}
+                  className="flex-1 text-[15px] font-normal text-blue-655 dark:text-blue-400 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

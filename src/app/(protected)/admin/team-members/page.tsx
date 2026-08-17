@@ -2,9 +2,12 @@
 
 import { useTenant } from '@/contexts/TenantContext';
 import { OrganizationTenantOverview } from '@/components/organizations/OrganizationTenantOverview';
+import { useState } from 'react';
 
 export default function AdminTeamMembersPage() {
   const { currentTenant, isLoading } = useTenant();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   if (isLoading) {
     return (
@@ -33,8 +36,38 @@ export default function AdminTeamMembersPage() {
 
       {/* Main Workspace Body */}
       <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
-        <OrganizationTenantOverview fixedTenantId={currentTenant.id} view="members" />
+        <OrganizationTenantOverview
+          fixedTenantId={currentTenant.id}
+          view="members"
+          currentPage={currentPage}
+          onTotalPagesChange={setTotalPages}
+        />
       </div>
+
+      {/* Fixed Bottom Bar */}
+      {totalPages > 1 && (
+        <div className="h-[52px] border-t border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-white dark:bg-gray-950 z-20">
+          <button
+            type="button"
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+            className="text-xs font-semibold text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 disabled:opacity-40 transition-all cursor-pointer bg-transparent border-none outline-none focus:outline-none"
+          >
+            Back
+          </button>
+          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            type="button"
+            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+            disabled={currentPage === totalPages}
+            className="text-xs font-semibold text-gray-800 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 disabled:opacity-40 transition-all cursor-pointer bg-transparent border-none outline-none focus:outline-none"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

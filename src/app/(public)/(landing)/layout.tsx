@@ -68,7 +68,7 @@ export default function PublicLayout({
         <div
           className={cn(
             'bg-white dark:bg-zinc-900 sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out md:flex',
-            isLeftSidebarOpen ? 'w-80' : 'w-[56px]',
+            isLeftSidebarOpen ? 'w-80' : 'w-[136px]',
           )}
           style={{ backgroundColor: '#0c1120' }}
         >

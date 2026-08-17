@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
-import { useSidebarStore } from '@/stores/useSidebarStore';
+import { useSidebarStore, SidebarTab } from '@/stores/useSidebarStore';
 import { UserMode } from '@/types/tenant';
 import {
   Building2,
@@ -73,6 +73,7 @@ import {
   ShieldAlert,
   Blocks,
   Music,
+  BarChart3,
   PenTool,
   ClipboardCheck,
   Terminal,
@@ -171,8 +172,6 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
 ];
 
-type SidebarTab = 'search' | 'research' | 'write' | 'code' | 'image' | 'audio' | 'video' | 'bots' | 'tasks' | 'apps' | 'none' | 'account';
-
 const AVAILABLE_MCP_APPS = (() => {
   const uniqueMap = new Map<string, APP>();
   allApps.forEach(app => {
@@ -211,7 +210,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     setShowStartLastMessage,
     setUserMessage,
   } = useConversationsStore();
-  const { isLeftSidebarOpen, toggleLeftSidebar, isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen } = useSidebarStore();
+  const { isLeftSidebarOpen, toggleLeftSidebar, isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen, activeTab, setActiveTab } = useSidebarStore();
   const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, deleteBot, reorderBots, editBot, threads, activeBotThreadId, setActiveBotThreadId, deleteThread, addBotAsync } = useBotsStore();
   const activeBot = bots.find(b => b.id === activeBotId);
 
@@ -266,7 +265,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const hideSidebar = side === 'right' ? !isRightSidebarOpen : !isLeftSidebarOpen;
   const isLoggedIn = data?.accessToken;
 
-  const [activeTab, setActiveTab] = useState<SidebarTab>('search');
   const [searchQuery, setSearchQuery] = useState('');
   const [logoHovered, setLogoHovered] = useState(false);
   const [botToDelete, setBotToDelete] = useState<string | null>(null);
@@ -900,37 +898,86 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         {/* Header Row */}
         <div className="sticky top-0 z-30 h-[52px] flex items-center justify-between border-b border-zinc-800/60 bg-[#0c1120] dark:bg-[#0c1120] px-4 flex-none gap-4">
           {/* Search / Research Toggle Switcher */}
-          <div className="flex bg-[#060913]/90 p-0.5 rounded-lg border border-blue-500/15 flex-shrink-0 select-none shadow-[0_0_15px_rgba(0,0,255,0.08)]">
-            <button
-              type="button"
-              onClick={() => setSelectedOption(OPTIONS.SEARCH)}
-              className={cn(
-                'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
-                selectedOption === OPTIONS.SEARCH || selectedOption === null
-                  ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
-                  : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
-              )}
-            >
-              <span>Search</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
-              className={cn(
-                'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
-                selectedOption === OPTIONS.RESEARCH
-                  ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
-                  : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
-              )}
-            >
-              <span>Research</span>
-            </button>
-          </div>
+          {activeTab !== 'account' ? (
+            <div className="flex bg-[#060913]/90 p-0.5 rounded-lg border border-blue-500/15 flex-shrink-0 select-none shadow-[0_0_15px_rgba(0,0,255,0.08)]">
+              <button
+                type="button"
+                onClick={() => setSelectedOption(OPTIONS.SEARCH)}
+                className={cn(
+                  'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
+                  selectedOption === OPTIONS.SEARCH || selectedOption === null
+                    ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+                )}
+              >
+                <span>Search</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
+                className={cn(
+                  'px-3 py-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center cursor-pointer border outline-none',
+                  selectedOption === OPTIONS.RESEARCH
+                    ? 'bg-[#0000ff]/10 border-[#0000ff]/35 text-white shadow-[0_0_12px_rgba(0,0,255,0.25)]'
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+                )}
+              >
+                <span>Research</span>
+              </button>
+            </div>
+          ) : (
+            <span className="text-xs font-semibold text-white tracking-wide select-none">
+              My Account
+            </span>
+          )}
 
-          <PanelLeftClose
-            className="size-5 cursor-pointer text-zinc-400 hover:text-white transition-colors flex-none ml-auto"
-            onClick={toggleLeftSidebar}
-          />
+          <div className="flex items-center gap-2.5 ml-auto flex-none">
+            {activeBotId !== null ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className="cursor-pointer text-zinc-400 hover:text-white transition-colors outline-none focus:outline-none flex items-center justify-center p-1 rounded-md hover:bg-white/5 flex-none"
+                    title="Space Settings"
+                  >
+                    <EllipsisVertical className="size-5 rotate-90" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="rounded-2xl bg-zinc-950 border border-white/10 text-white" align="end">
+                  <DropdownMenuItem
+                    className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
+                    onClick={() => setBotToRename(activeBotId)}
+                  >
+                    <Pencil className="h-3.5 w-3.5 mr-2" /> Rename Space
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-white/10 h-[1px] my-1" />
+                  <DropdownMenuItem
+                    className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
+                    onClick={() => setBotToDelete(activeBotId)}
+                  >
+                    <Trash2 className="h-3.5 w-3.5 mr-2" /> Delete Space
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="w-[28px] h-[28px] flex-none" />
+            )}
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={toggleLeftSidebar}
+                  className="cursor-pointer text-zinc-400 hover:text-white transition-colors outline-none focus:outline-none flex items-center justify-center p-1 rounded-md hover:bg-white/5 flex-none"
+                >
+                  <PanelLeftClose className="size-5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
+                Close Sidebar
+              </TooltipContent>
+            </Tooltip>
+          </div>
         </div>
 
         {/* Navigation Body */}
@@ -973,16 +1020,16 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     <span>Extras</span>
                   </button>
                   <button
-                    onClick={() => router.push('/admin/members')}
+                    onClick={() => router.push('/admin/usage')}
                     className={cn(
                       "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg border mb-1.5 cursor-pointer select-none text-left focus:outline-none text-xs transition-all duration-300",
-                      pathname.startsWith('/admin/members')
+                      pathname.startsWith('/admin/usage')
                         ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
                         : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                     )}
                   >
-                    <UserPlus className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/members') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
-                    <span>Invite</span>
+                    <BarChart3 className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/usage') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                    <span>Usage</span>
                   </button>
                   <button
                     onClick={() => router.push('/admin/team-members')}
@@ -1028,20 +1075,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               
 
 
-              {!isSuperAdmin && (
-                <button
-                  onClick={() => router.push('/invite-friends')}
-                  className={cn(
-                    "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none",
-                    pathname.startsWith('/invite-friends')
-                      ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
-                      : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
-                  )}
-                >
-                  <UserPlus className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/invite-friends') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
-                  <span>Refer A Friend</span>
-                </button>
-              )}
+
 
               {!isSuperAdmin && (
                 <button
@@ -1087,6 +1121,14 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   <span>Contact Support</span>
                 </button>
               )}
+
+              <button
+                onClick={() => onOpen({ type: 'logout' })}
+                className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-red-500/10 border-red-500/30 text-red-200 hover:bg-red-500/20 hover:border-red-500/50 hover:shadow-[0_0_15px_rgba(239,68,68,0.25)] hover:text-white"
+              >
+                <LogOut className="h-3.5 w-3.5 flex-shrink-0 transition-colors text-red-400 group-hover:text-white" />
+                <span>Logout Account</span>
+              </button>
             </div>
           ) : activeBotId === null ? (
             /* General Mode */
@@ -1138,8 +1180,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
 
               {/* Search Bar Row (Same exact styling as general chat mode) */}
-              <div className="pt-3 pb-3 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full gap-2 border-b border-zinc-800/60">
-                <div className="flex-1 flex h-9 items-center rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] overflow-hidden focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40 transition-all duration-300">
+              <div className="pt-3 pb-3 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full border-b border-zinc-800/60">
+                <div className="flex h-9 w-full items-center rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] overflow-hidden focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40 transition-all duration-300">
                   <div className="flex flex-1 items-center px-3 h-full">
                     <input
                       type="text"
@@ -1169,33 +1211,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     </TooltipContent>
                   </Tooltip>
                 </div>
-
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="size-9 shrink-0 bg-[#0000ff]/10 border-[#0000ff]/35 text-[#8080ff] hover:bg-[#0000ff]/20 hover:text-white transition-all shadow-[0_0_12px_rgba(0,0,255,0.25)] focus:outline-none"
-                    >
-                      <EllipsisVertical className="size-4 rotate-90" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="rounded-2xl" align="end">
-                    <DropdownMenuItem
-                      className="text-zinc-700 dark:text-zinc-200 focus:bg-zinc-100 dark:focus:bg-zinc-800"
-                      onClick={() => setBotToRename(activeBotId)}
-                    >
-                      <Pencil className="h-4 w-4 mr-2" /> Rename Space
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="border-black/5 dark:border-white/5" />
-                    <DropdownMenuItem
-                      className="text-red-500 focus:text-red-650 focus:bg-red-50"
-                      onClick={() => setBotToDelete(activeBotId)}
-                    >
-                      <Trash2 className="text-red-500 h-4 w-4 mr-2" /> Delete Space
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
               </div>
 
               {/* Space-Specific Threads List */}
@@ -1386,33 +1401,19 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         </div>
 
         {/* Footer Area */}
-        <div className={cn(
-          "sticky bottom-0 z-30 flex flex-col w-full bg-[#0c1120] border-t border-zinc-800/60 p-4 py-2.5 flex-none",
-          activeTab !== 'account' && "h-[64px] justify-center"
-        )}>
+        <div className="sticky bottom-0 z-30 flex flex-col w-full bg-[#0c1120] border-t border-zinc-800/60 p-4 py-2.5 flex-none h-[64px] justify-center">
           {isLoggedIn && activeTab === 'account' ? (
-            <div className="flex flex-col w-full gap-2">
-              <div className="flex h-11 w-full items-center justify-center">
-                <Button
-                  variant="default"
-                  className="w-full justify-center gap-2 bg-white text-black hover:bg-white/90 border border-transparent"
-                  onClick={() => {
-                    setActiveTab('search');
-                    router.push(isLoggedIn ? '/c/new-chat' : '/');
-                  }}
-                >
-                  Return to App
-                </Button>
-              </div>
-              <div className="flex h-11 w-full items-center justify-center">
-                <Button
-                  variant="outline"
-                  onClick={() => onOpen({ type: 'logout' })}
-                  className="w-full transition-all duration-200 outline-none select-none cursor-pointer bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 border-transparent"
-                >
-                  Logout
-                </Button>
-              </div>
+            <div className="flex h-11 w-full items-center justify-center">
+              <Button
+                variant="default"
+                className="w-full justify-center gap-2 bg-white text-black hover:bg-white/90 border border-transparent"
+                onClick={() => {
+                  setActiveTab('search');
+                  router.push(isLoggedIn ? '/c/new-chat' : '/');
+                }}
+              >
+                Return to App
+              </Button>
             </div>
           ) : (
             <div className="flex h-11 w-full items-center justify-center">
@@ -1562,7 +1563,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
       <Dialog open={!!botToRename} onOpenChange={() => setBotToRename(null)}>
         <DialogContent 
-          className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
+          className="p-6 overflow-hidden rounded-[20px] max-w-[320px] sm:max-w-[320px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <div className="space-y-4">
@@ -1608,7 +1609,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {/* Create Space Dialog */}
       <Dialog open={isCreateSpaceOpen} onOpenChange={(open) => !open && setIsCreateSpaceOpen(false)}>
         <DialogContent 
-          className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
+          className="p-6 overflow-hidden rounded-[20px] max-w-[320px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <div className="space-y-4">

@@ -44,6 +44,7 @@ import {
   Upload,
   Cpu,
   Sparkles,
+  BarChart3,
   Palette,
   Microscope,
   EllipsisVertical,
@@ -970,17 +971,18 @@ const LeftSideNavMobile = () => {
                     <span>Extras</span>
                   </button>
                   <button
-                    onClick={() => { router.push('/admin/members'); close(); }}
+                    onClick={() => { router.push('/admin/usage'); close(); }}
                     className={cn(
                       "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg border mb-1.5 cursor-pointer select-none text-left focus:outline-none text-xs transition-all duration-300",
-                      pathname.startsWith('/admin/members')
+                      pathname.startsWith('/admin/usage')
                         ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
                         : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
                     )}
                   >
-                    <UserPlus className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/members') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
-                    <span>Invite</span>
+                    <BarChart3 className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/usage') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                    <span>Usage</span>
                   </button>
+
                   <button
                     onClick={() => { router.push('/admin/team-members'); close(); }}
                     className={cn(
@@ -1025,20 +1027,7 @@ const LeftSideNavMobile = () => {
               
 
 
-              {!isSuperAdmin && (
-                <button
-                  onClick={() => { router.push('/invite-friends'); close(); }}
-                  className={cn(
-                    "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none",
-                    pathname.startsWith('/invite-friends')
-                      ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
-                      : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
-                  )}
-                >
-                  <UserPlus className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/invite-friends') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
-                  <span>Refer A Friend</span>
-                </button>
-              )}
+
 
               {!isSuperAdmin && (
                 <button
@@ -1084,6 +1073,14 @@ const LeftSideNavMobile = () => {
                   <span>Contact Support</span>
                 </button>
               )}
+
+              <button
+                onClick={() => { onOpen({ type: 'logout' }); close(); }}
+                className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-red-500/10 border-red-500/30 text-red-200 hover:bg-red-500/20 hover:border-red-500/50 hover:shadow-[0_0_15px_rgba(239,68,68,0.25)] hover:text-white"
+              >
+                <LogOut className="h-3.5 w-3.5 flex-shrink-0 transition-colors text-red-400 group-hover:text-white" />
+                <span>Logout Account</span>
+              </button>
             </div>
           ) : activeBotId === null ? (
             /* General Mode */
@@ -1452,34 +1449,20 @@ const LeftSideNavMobile = () => {
         </div>
 
         {/* Footer Area */}
-        <div className={cn(
-          "sticky bottom-0 z-30 flex flex-col w-full bg-[#0c1120] border-t border-zinc-800/60 p-4 py-2.5 flex-none",
-          activeTab !== 'account' && "h-[64px] justify-center"
-        )}>
+        <div className="sticky bottom-0 z-30 flex flex-col w-full bg-[#0c1120] border-t border-zinc-800/60 p-4 py-2.5 flex-none h-[64px] justify-center">
           {isLoggedIn && activeTab === 'account' ? (
-            <div className="flex flex-col w-full gap-2">
-              <div className="flex h-11 w-full items-center justify-center">
-                <Button
-                  variant="default"
-                  className="w-full justify-center gap-2 bg-white text-black hover:bg-white/90 border border-transparent"
-                  onClick={() => {
-                    setActiveTab('search');
-                    router.push(isLoggedIn ? '/c/new-chat' : '/');
-                    close();
-                  }}
-                >
-                  Return to App
-                </Button>
-              </div>
-              <div className="flex h-11 w-full items-center justify-center">
-                <Button
-                  variant="outline"
-                  onClick={() => { onOpen({ type: 'logout' }); close(); }}
-                  className="w-full transition-all duration-200 outline-none select-none cursor-pointer bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:text-white dark:hover:bg-red-700 border-transparent"
-                >
-                  Logout
-                </Button>
-              </div>
+            <div className="flex h-11 w-full items-center justify-center">
+              <Button
+                variant="default"
+                className="w-full justify-center gap-2 bg-white text-black hover:bg-white/90 border border-transparent"
+                onClick={() => {
+                  setActiveTab('search');
+                  router.push(isLoggedIn ? '/c/new-chat' : '/');
+                  close();
+                }}
+              >
+                Return to App
+              </Button>
             </div>
           ) : (
             <div className="flex h-11 w-full items-center justify-center">
@@ -1628,7 +1611,7 @@ const LeftSideNavMobile = () => {
       {/* Rename Space Dialog */}
       <Dialog open={!!botToRename} onOpenChange={() => setBotToRename(null)}>
         <DialogContent
-          className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
+          className="p-6 overflow-hidden rounded-[20px] max-w-[320px] sm:max-w-[320px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <div className="space-y-4">
@@ -1674,7 +1657,7 @@ const LeftSideNavMobile = () => {
       {/* Create Space Dialog */}
       <Dialog open={isCreateSpaceOpen} onOpenChange={(open) => !open && setIsCreateSpaceOpen(false)}>
         <DialogContent 
-          className="p-6 overflow-hidden rounded-[20px] max-w-[400px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
+          className="p-6 overflow-hidden rounded-[20px] max-w-[320px] sm:max-w-[320px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <div className="space-y-4">

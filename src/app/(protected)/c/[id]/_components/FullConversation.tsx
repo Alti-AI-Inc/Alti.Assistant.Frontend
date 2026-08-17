@@ -115,7 +115,7 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
   const queryClient = useQueryClient();
 
   const { data: queryConversation, isLoading } = useActiveConversation(conversationId, data?.accessToken);
-  const { isLeftSidebarOpen } = useSidebarStore();
+  const { isLeftSidebarOpen, isAccountActive } = useSidebarStore();
 
   const {
     setActiveConversation,
@@ -1142,6 +1142,19 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
     selectedOption === OPTIONS.KNOWLEDGE
   ) {
     return null;
+  }
+
+  if (isAccountActive) {
+    return (
+      <div className="flex w-full h-full flex-1 flex-col items-center justify-center bg-[#e1e1e1] dark:bg-zinc-955 select-none">
+        <img
+          src="/assets/logo-icon.png"
+          alt="logo"
+          className="h-20 w-20 opacity-20 animate-pulse"
+          style={{ animationDuration: '4s' }}
+        />
+      </div>
+    );
   }
 
 return (
