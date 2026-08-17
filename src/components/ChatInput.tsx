@@ -1614,7 +1614,7 @@ export default function ChatInput({
                     selectedOption === OPTIONS.TASK && !hasMessages && !isExistingConversation
                       ? 'Describe the task you want to automate...'
                       : selectedOption === OPTIONS.RESEARCH && !hasMessages && !isExistingConversation
-                        ? 'What do you want to research?'
+                        ? 'Research anything...'
                         : activeConversation?.knowledgebaseId && isLoading
                           ? 'Loading...'
                           : activeConversation?.knowledgebaseId &&
@@ -1622,7 +1622,7 @@ export default function ChatInput({
                             ? `Chat with ${activeKnowledgeBaseName}`
                             : (pathname === '/workflows' || pathname?.startsWith('/workflows')
                               ? 'Describe your workflow...'
-                              : 'Ask anything...')
+                              : 'Search anything...')
                   }
                   style={{ backgroundColor: 'transparent' }}
                   className="min-h-[36px] max-h-[160px] w-full flex-1 resize-none border-none bg-transparent px-1 py-1.5 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white"
