@@ -76,8 +76,6 @@ export function OrganizationTenantOverview({
   const latestTenantLoadRef = useRef<string | null>(null);
 
   // Form states for the permanent invite box
-  const [inviteFirstName, setInviteFirstName] = useState('');
-  const [inviteLastName, setInviteLastName] = useState('');
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState('');
   const [isInviting, setIsInviting] = useState(false);
@@ -286,8 +284,8 @@ export function OrganizationTenantOverview({
             const saved = localStorage.getItem('alti_invited_names') || '{}';
             const parsed = JSON.parse(saved);
             parsed[inviteEmail.toLowerCase().trim()] = {
-              firstName: inviteFirstName.trim(),
-              lastName: inviteLastName.trim(),
+              firstName: '',
+              lastName: '',
             };
             localStorage.setItem('alti_invited_names', JSON.stringify(parsed));
           } catch (e) {
@@ -296,8 +294,6 @@ export function OrganizationTenantOverview({
         }
 
         toast.success('Invitation sent successfully!');
-        setInviteFirstName('');
-        setInviteLastName('');
         setInviteEmail('');
         setInviteRole('');
         void reloadDashboard();
@@ -345,33 +341,13 @@ export function OrganizationTenantOverview({
       {selectedTenantId && (view === 'both' || view === 'members' || view === 'invite') && (
         <div className="relative w-full h-12 flex-none flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm pr-2 pl-4 transition-all gap-3">
           <input
-            id="first-name"
-            type="text"
-            placeholder="First Name"
-            value={inviteFirstName}
-            onChange={(e) => setInviteFirstName(e.target.value)}
-            disabled={isInviting}
-            className="flex-1 min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-          />
-          <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
-          <input
-            id="last-name"
-            type="text"
-            placeholder="Last Name"
-            value={inviteLastName}
-            onChange={(e) => setInviteLastName(e.target.value)}
-            disabled={isInviting}
-            className="flex-1 min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-          />
-          <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
-          <input
             id="email-address"
             type="email"
             placeholder="Email Address"
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}
             disabled={isInviting}
-            className="flex-[1.2] min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="flex-1 min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           />
           <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
           

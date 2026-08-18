@@ -298,18 +298,6 @@ function MembersListComponent({
                 className="group flex flex-col md:flex-row md:items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs gap-4"
               >
                 <div className="flex flex-col md:flex-row md:items-center gap-4 flex-1">
-                  {/* First Name */}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed">
-                      {firstName}
-                    </p>
-                  </div>
-                  {/* Last Name */}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed">
-                      {lastName}
-                    </p>
-                  </div>
                   {/* Email */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
@@ -324,7 +312,7 @@ function MembersListComponent({
                     </div>
                   </div>
                   {/* Plan */}
-                  <div className="flex-1 min-w-0 md:pl-36">
+                  <div className="flex-none">
                     <div className="h-full flex items-center">
                       {isTenantAdminOrOwner ? (
                         <DropdownMenu>
