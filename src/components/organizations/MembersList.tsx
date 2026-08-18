@@ -69,6 +69,7 @@ const getInvitedName = (email: string) => {
 
 const getPlanDisplay = (role: string) => {
   const r = role.toLowerCase();
+  if (r.includes('200')) return '$200';
   if (r.includes('100') || r === 'admin' || r === 'owner') return '$100';
   if (r.includes('50') || r === 'manager') return '$50';
   if (r.includes('20')) return '$20';
@@ -355,6 +356,12 @@ function MembersListComponent({
                               className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
                             >
                               $100
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-200')}
+                              className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                            >
+                              $200
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>

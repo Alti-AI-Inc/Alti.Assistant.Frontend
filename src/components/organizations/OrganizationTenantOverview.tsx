@@ -392,6 +392,14 @@ export function OrganizationTenantOverview({
                     </span>
                   </div>
                 </SelectItem>
+                <SelectItem value="plan-200" className="text-xs font-semibold">
+                  <div className="flex flex-col py-0.5 text-left">
+                    <span className="font-bold text-gray-900 dark:text-white text-xs">$200/month</span>
+                    <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
+                      10,000 Search · 100 Research
+                    </span>
+                  </div>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
