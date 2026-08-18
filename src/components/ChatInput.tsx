@@ -1646,11 +1646,10 @@ export default function ChatInput({
                     <DropdownMenuTrigger asChild>
                       <button
                         type="button"
-                        className="flex h-8 items-center gap-1.5 px-2.5 rounded-md border border-[#0000ff]/35 bg-[#0000ff]/10 text-white hover:bg-[#0000ff]/20 transition-all text-xs font-semibold focus:outline-none cursor-pointer select-none shadow-[0_0_8px_rgba(0,0,255,0.15)]"
+                        className="flex h-8 items-center gap-1.5 px-2.5 rounded-md border border-black/5 dark:border-zinc-700/50 bg-[#e1e1e1] dark:bg-zinc-950 hover:bg-[#d0d0d0] dark:hover:bg-zinc-900 text-black transition-all text-xs font-semibold focus:outline-none cursor-pointer select-none"
                       >
-                        <Clock className="size-3.5" />
                         <span>{monitorFrequency}</span>
-                        <ChevronDown className="size-3.5 text-zinc-400" />
+                        <ChevronDown className="size-3.5 text-black" />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="rounded-2xl bg-zinc-950 border border-white/10 text-white" align="end">
