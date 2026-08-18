@@ -361,7 +361,7 @@ function MembersListComponent({
 
                   {/* Action button slot aligned exactly under Send Invite */}
                   {isTenantAdminOrOwner && (
-                    <div className="flex-none w-[110px] h-full flex items-center justify-center">
+                    <div className="flex-none w-[110px] h-full flex items-center justify-end pr-4">
                       {!isCurrentUser ? (
                         <button
                           type="button"
