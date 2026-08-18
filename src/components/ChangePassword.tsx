@@ -12,7 +12,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
@@ -107,12 +106,12 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
               <FormItem className="space-y-1">
                 <FormControl>
                   <div className="relative w-full h-12 flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm px-4 focus-within:border-black/10 dark:focus-within:border-white/10 focus-within:ring-0 focus-within:outline-none transition-all">
-                    <Input
+                    <input
                       {...field}
                       type={showOldPassword ? "text" : "password"}
                       id="oldPassword"
                       placeholder="Old Password"
-                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
+                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus:ring-0 transition-all"
                     />
                     {oldPassword && oldPassword.length > 0 && (
                       <button
@@ -138,12 +137,12 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
               <FormItem className="space-y-1">
                 <FormControl>
                   <div className="relative w-full h-12 flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm px-4 focus-within:border-black/10 dark:focus-within:border-white/10 focus-within:ring-0 focus-within:outline-none transition-all">
-                    <Input
+                    <input
                       {...field}
                       type={showNewPassword ? "text" : "password"}
                       id="newPassword"
                       placeholder="New Password"
-                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
+                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus:ring-0 transition-all"
                     />
                     {newPassword && newPassword.length > 0 && (
                       <button
@@ -169,12 +168,12 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
               <FormItem className="space-y-1">
                 <FormControl>
                   <div className="relative w-full h-12 flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm px-4 focus-within:border-black/10 dark:focus-within:border-white/10 focus-within:ring-0 focus-within:outline-none transition-all">
-                    <Input
+                    <input
                       {...field}
                       type={showConfirmNewPassword ? "text" : "password"}
                       id="confirmNewPassword"
                       placeholder="Confirm New Password"
-                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
+                      className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus:ring-0 transition-all"
                     />
                     {confirmNewPassword && confirmNewPassword.length > 0 && (
                       <button
