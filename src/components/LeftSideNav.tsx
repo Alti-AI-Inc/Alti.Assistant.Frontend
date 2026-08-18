@@ -473,7 +473,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   }, []);
 
   const handleTabChange = (tab: SidebarTab) => {
-    const targetPath = isLoggedIn ? '/c/new-chat' : '/';
+    const targetPath = isLoggedIn ? '/c/new-search' : '/';
     setActiveTab(tab);
     if (tab === 'bots') {
       setActiveConversation(null);
@@ -552,7 +552,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             setUserMessage('');
             setSelectedOption(null);
             close();
-            router.push(isLoggedIn ? '/c/new-chat' : '/');
+            router.push(isLoggedIn ? '/c/new-search' : '/');
           },
         };
       case 'research':
@@ -565,7 +565,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             setUserMessage('');
             setSelectedOption(OPTIONS.RESEARCH);
             close();
-            router.push(isLoggedIn ? '/c/new-chat' : '/');
+            router.push(isLoggedIn ? '/c/new-research' : '/');
           },
         };
       case 'write':
@@ -578,7 +578,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             setUserMessage('');
             setSelectedOption(OPTIONS.DRAFT_DOCUMENT);
             close();
-            router.push(isLoggedIn ? '/c/new-chat' : '/');
+            router.push(isLoggedIn ? '/c/new-search' : '/');
           },
         };
 
@@ -592,7 +592,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             setUserMessage('');
             setSelectedOption(OPTIONS.CODE);
             close();
-            router.push(isLoggedIn ? '/c/new-chat' : '/');
+            router.push(isLoggedIn ? '/c/new-search' : '/');
           },
         };
       case 'image':
@@ -605,7 +605,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             setUserMessage('');
             setSelectedOption(OPTIONS.IMAGE);
             close();
-            router.push(isLoggedIn ? '/c/new-chat' : '/');
+            router.push(isLoggedIn ? '/c/new-search' : '/');
           },
         };
       case 'audio':
@@ -618,7 +618,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             setUserMessage('');
             setSelectedOption(OPTIONS.AUDIO);
             close();
-            router.push(isLoggedIn ? '/c/new-chat' : '/');
+            router.push(isLoggedIn ? '/c/new-search' : '/');
           },
         };
       case 'video':
@@ -631,7 +631,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             setUserMessage('');
             setSelectedOption(OPTIONS.VIDEO);
             close();
-            router.push(isLoggedIn ? '/c/new-chat' : '/');
+            router.push(isLoggedIn ? '/c/new-search' : '/');
           },
         };
       case 'bots':
@@ -771,7 +771,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 onClick={() => {
                   setActiveBotId(null);
                   setSelectedOption(null);
-                  router.push(isLoggedIn ? '/c/new-chat' : '/');
+                  router.push(isLoggedIn ? '/c/new-search' : '/');
                 }}
                 className={cn(
                   "relative size-11 flex items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer text-white",
@@ -905,7 +905,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
             <div className="flex w-full bg-[#0000ff]/10 h-9 p-0.5 rounded-lg border border-[#0000ff]/35 shadow-[0_0_12px_rgba(0,0,255,0.25)] select-none">
               <button
                 type="button"
-                onClick={() => setSelectedOption(OPTIONS.SEARCH)}
+                onClick={() => {
+                  setSelectedOption(OPTIONS.SEARCH);
+                  router.push('/c/new-search');
+                }}
                 className={cn(
                   'flex-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none h-full',
                   selectedOption === OPTIONS.SEARCH || selectedOption === null
@@ -917,7 +920,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </button>
               <button
                 type="button"
-                onClick={() => setSelectedOption(OPTIONS.RESEARCH)}
+                onClick={() => {
+                  setSelectedOption(OPTIONS.RESEARCH);
+                  router.push('/c/new-research');
+                }}
                 className={cn(
                   'flex-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none h-full',
                   selectedOption === OPTIONS.RESEARCH
@@ -929,7 +935,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </button>
               <button
                 type="button"
-                onClick={() => setSelectedOption(OPTIONS.MONITOR)}
+                onClick={() => {
+                  setSelectedOption(OPTIONS.MONITOR);
+                  router.push('/c/new-monitor');
+                }}
                 className={cn(
                   'flex-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none h-full',
                   selectedOption === OPTIONS.MONITOR
@@ -1118,7 +1127,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                           setUserMessage('');
                           setSelectedOption(null);
                           close();
-                          router.push(isLoggedIn ? '/c/new-chat' : '/');
+                          router.push(isLoggedIn ? '/c/new-search' : '/');
                         }}
                         className="flex h-full w-9 items-center justify-center transition-all hover:bg-[#0000ff]/20 text-blue-100 focus:outline-none border-l border-[#0000ff]/30"
                       >
@@ -1410,7 +1419,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 className="w-full justify-center gap-2 bg-white text-black hover:bg-white/90 border border-transparent"
                 onClick={() => {
                   setActiveTab('search');
-                  router.push(isLoggedIn ? '/c/new-chat' : '/');
+                  router.push(isLoggedIn ? '/c/new-search' : '/');
                 }}
               >
                 Return to App
@@ -1495,7 +1504,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   }
                   setActiveBotId(null);
                   setSelectedOption(null);
-                  router.push(isLoggedIn ? '/c/new-chat' : '/');
+                  router.push(isLoggedIn ? '/c/new-search' : '/');
                   setTimeout(() => {
                     deleteBot(botToDelete, token);
                   }, 100);

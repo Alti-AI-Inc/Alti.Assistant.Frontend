@@ -87,6 +87,11 @@ interface ChatInputProps {
   isConversationLoading?: boolean;
 }
 
+// Helper function to check if dynamic ID is a new chat
+const isNewChatId = (id?: string) => {
+  return !id || id === 'new-chat' || id === 'new-search' || id === 'new-research' || id === 'new-monitor';
+};
+
 // Helper function to get file icon based on extension
 const getFileIcon = (fileName: string) => {
   const extension = fileName.split('.').pop()?.toLowerCase();
@@ -494,18 +499,29 @@ export default function ChatInput({
   
   const isExistingConversation =
     (activeConversation?.conversationId &&
-      activeConversation?.conversationId !== 'new-chat' &&
+      !isNewChatId(activeConversation.conversationId) &&
       pathname?.startsWith('/c/') &&
-      pathname !== '/c/new-chat') ||
-    (conversationId && conversationId !== 'new-chat') ||
+      pathname !== '/c/new-chat' &&
+      pathname !== '/c/new-search' &&
+      pathname !== '/c/new-research' &&
+      pathname !== '/c/new-monitor') ||
+    (conversationId && !isNewChatId(conversationId)) ||
     hasStartedChat ||
     isLoadingResponse;
 
   useEffect(() => {
     if (!isExistingConversation) {
-      setSelectedOption(null);
+      if (conversationId === 'new-search' || pathname === '/c/new-search') {
+        setSelectedOption(OPTIONS.SEARCH);
+      } else if (conversationId === 'new-research' || pathname === '/c/new-research') {
+        setSelectedOption(OPTIONS.RESEARCH);
+      } else if (conversationId === 'new-monitor' || pathname === '/c/new-monitor') {
+        setSelectedOption(OPTIONS.MONITOR);
+      } else {
+        setSelectedOption(null);
+      }
     }
-  }, [isExistingConversation, setSelectedOption]);
+  }, [isExistingConversation, conversationId, pathname, setSelectedOption]);
 
   const { onOpen } = useModalStore();
 
@@ -766,7 +782,7 @@ export default function ChatInput({
             message: 'Success',
             data: {
               conversationId:
-                conversationId === 'new-chat' ? undefined : conversationId,
+                isNewChatId(conversationId) ? undefined : conversationId,
               responseMessage: { answer: answerText },
             },
           };
@@ -837,7 +853,7 @@ export default function ChatInput({
           formData.append('file', file);
         }
         const convId =
-          conversationId === 'new-chat'
+          isNewChatId(conversationId)
             ? activeConversation?.conversationId || undefined
             : conversationId;
         if (convId) formData.append('conversationId', convId);
@@ -884,13 +900,13 @@ export default function ChatInput({
       if (isOrchestrator || isSearchStream) {
         let resolvedConversationId = conversationId;
         // Seed initial empty assistant response placeholder in store so we can stream into it
-        useConversationsStore.getState().streamActiveConversation('', resolvedConversationId === 'new-chat' ? undefined : resolvedConversationId);
+        useConversationsStore.getState().streamActiveConversation('', isNewChatId(resolvedConversationId) ? undefined : resolvedConversationId);
 
         const result = await PostConversationStream(
           targetApiUrl,
           userMessage,
           data.accessToken,
-          conversationId === 'new-chat'
+          isNewChatId(conversationId)
             ? activeConversation?.conversationId || undefined
             : conversationId,
           targetKbId,
@@ -935,7 +951,7 @@ export default function ChatInput({
         targetApiUrl,
         userMessage,
         data.accessToken,
-        conversationId === 'new-chat'
+        isNewChatId(conversationId)
           ? activeConversation?.conversationId || undefined
           : conversationId,
         targetKbId,
@@ -976,11 +992,11 @@ export default function ChatInput({
       }
       setShowStartLastMessage(false);
       const newId =
-        conversationId === 'new-chat'
+        isNewChatId(conversationId)
           ? response.data.conversationId
           : conversationId;
 
-      if (conversationId === 'new-chat' && response.data.conversationId) {
+      if (isNewChatId(conversationId) && response.data.conversationId) {
         if (activeBotId && pathname.startsWith('/spaces')) {
           useBotsStore.getState().addThread(activeBotId, response.data.conversationId, userMessage.slice(0, 50) || 'New Chat');
           router.replace(`/spaces?bot=${activeBotId}&thread=${response.data.conversationId}`);
@@ -1074,7 +1090,7 @@ export default function ChatInput({
             queryKey: ['conversations', data?.accessToken],
           });
           const targetId =
-            conversationId === 'new-chat'
+            isNewChatId(conversationId)
               ? response.data.conversationId
               : conversationId;
           if (targetId) {
@@ -1445,7 +1461,7 @@ export default function ChatInput({
         condition:
           selectedOption === OPTIONS.REWRITE &&
           rewriteMode === 'select_mode' &&
-          (activeConversation?.conversationId === 'new-chat' ||
+          (isNewChatId(activeConversation?.conversationId) ||
             activeConversation?.conversationId === undefined),
         title: 'Select Rewrite Mode',
         description: 'Please select a rewrite mode to continue.',

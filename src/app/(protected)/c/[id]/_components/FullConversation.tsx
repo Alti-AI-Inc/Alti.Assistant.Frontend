@@ -362,12 +362,24 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
     activeConversation?.messages?.length
   ]);
 
-  // Reset active conversation state when entering new-chat route to prevent race conditions
+  // Reset active conversation state when entering new-chat routes to prevent race conditions
   useEffect(() => {
-    if (conversationId === 'new-chat') {
+    if (
+      conversationId === 'new-chat' ||
+      conversationId === 'new-search' ||
+      conversationId === 'new-research' ||
+      conversationId === 'new-monitor'
+    ) {
       setActiveConversation(null);
+      if (conversationId === 'new-search') {
+        setSelectedOption(OPTIONS.SEARCH);
+      } else if (conversationId === 'new-research') {
+        setSelectedOption(OPTIONS.RESEARCH);
+      } else if (conversationId === 'new-monitor') {
+        setSelectedOption(OPTIONS.MONITOR);
+      }
     }
-  }, [conversationId, setActiveConversation]);
+  }, [conversationId, setActiveConversation, setSelectedOption]);
 
   // Track which conversation's presentation metadata we've already processed
   const processedPresentationRef = useRef<string | null>(null);
@@ -1105,7 +1117,7 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
         {isLoadingResponse && (
           selectedOption === OPTIONS.RESEARCH ? (
             <TelemetryConsole
-              conversationId={activeConversation?.conversationId || 'new-chat'}
+              conversationId={activeConversation?.conversationId || conversationId}
               active={isLoadingResponse}
             />
           ) : (
@@ -1130,8 +1142,14 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
 
   const isNewChatRoute =
     conversationId === 'new-chat' ||
+    conversationId === 'new-search' ||
+    conversationId === 'new-research' ||
+    conversationId === 'new-monitor' ||
     pathname === '/' ||
-    pathname === '/c/new-chat';
+    pathname === '/c/new-chat' ||
+    pathname === '/c/new-search' ||
+    pathname === '/c/new-research' ||
+    pathname === '/c/new-monitor';
 
   const hasMessages = !!activeConversation?.messages?.length;
   const showAsNewChat = isNewChatRoute && !hasMessages && !isLoadingResponse;

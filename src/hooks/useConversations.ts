@@ -372,7 +372,7 @@ export function useDeleteConversation() {
         activeConversation?.conversationId === targetConvId ||
         activeConversation?.conversationId === deletedId
       ) {
-        router.push(data?.accessToken ? '/c/new-chat' : '/');
+         router.push(data?.accessToken ? '/c/new-search' : '/');
         setActiveConversation(null);
       }
 

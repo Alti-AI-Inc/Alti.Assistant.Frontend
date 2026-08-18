@@ -128,7 +128,7 @@ function MyChatbotsContent() {
     } else {
       setActiveBotId(null);
       // Redirect to Alti new chat if there are no bots
-      router.replace(session?.accessToken ? '/c/new-chat' : '/');
+      router.replace(session?.accessToken ? '/c/new-search' : '/');
     }
 
     if (threadParam) {
