@@ -1249,13 +1249,13 @@ return (
       >
          <div className="mx-auto w-full max-w-[796px]">
           {showAsNewChat && (
-            <h1 className="text-3xl sm:text-4xl font-semibold text-zinc-900 dark:text-white mb-6 text-center select-none tracking-tight animate-in fade-in duration-300">
-              {selectedOption === OPTIONS.RESEARCH
-                ? 'Deep Research'
-                : selectedOption === OPTIONS.MONITOR
-                  ? 'Real-Time Monitor'
-                  : 'Real-Time Search'}
-            </h1>
+            <div className="flex justify-center mb-6 select-none animate-in fade-in duration-500">
+              <img
+                src="/assets/logo-icon.png"
+                alt="Brand Logo"
+                className="size-10 object-contain brightness-0 dark:invert opacity-15 hover:opacity-40 transition-all duration-500"
+              />
+            </div>
           )}
           <ChatInput
             conversationId={conversationId}
