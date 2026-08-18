@@ -768,7 +768,7 @@ const LeftSideNavMobile = () => {
         </div>
 
         {/* General Workspace Button */}
-        <div className="relative w-full flex flex-col items-center mt-3">
+        <div className="relative w-full flex flex-col items-center">
           <div
             className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1"
             style={{ opacity: (activeBotId === null && activeTab !== 'account') ? 1 : 0 }}
@@ -799,7 +799,7 @@ const LeftSideNavMobile = () => {
         </div>
 
         {/* Spaces Scrollable Area */}
-        <div className="flex-1 w-full overflow-y-auto overflow-x-hidden flex flex-col items-center gap-3 no-scrollbar py-1">
+        <div className="flex-1 w-full overflow-y-auto overflow-x-hidden flex flex-col items-center gap-3 no-scrollbar pt-0 pb-1">
           {bots.map((bot, idx) => {
             const isSelected = activeBotId === bot.id && (pathname === '/spaces' || pathname.startsWith('/spaces')) && activeTab !== 'account';
             const isBeingDragged = draggedIndex === idx;
