@@ -763,7 +763,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
         <div className="relative w-full flex flex-col items-center">
           <div
             className={cn(
-              "relative size-11 flex items-center justify-center rounded-xl border border-[#0000ff] bg-[#0000ff]/10 text-white select-none"
+              "relative size-11 flex items-center justify-center rounded-xl border border-[#0000ff]/20 bg-[#0000ff]/5 text-white select-none"
             )}
           >
             <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
@@ -785,10 +785,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   router.push(isLoggedIn ? '/c/new-search' : '/');
                 }}
                 className={cn(
-                  "relative size-11 flex items-center justify-center rounded-xl border border-[#0000ff] transition-all duration-300 cursor-pointer text-white",
+                  "relative size-11 flex items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer text-white",
                   (activeBotId === null && activeTab !== 'account')
-                    ? "bg-[#0000ff]/15 shadow-[0_0_20px_rgba(0,0,255,0.55)]"
-                    : "bg-[#0000ff]/10 hover:rounded-2xl hover:bg-[#0000ff]/20 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]"
+                    ? "border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)]"
+                    : "border-[#0000ff]/15 bg-[#0000ff]/5 hover:rounded-2xl hover:border-[#0000ff]/35 hover:bg-[#0000ff]/15 hover:shadow-[0_0_12px_rgba(0,0,255,0.2)]"
                 )}
               >
                 <LayoutGrid className="size-5" />
@@ -862,10 +862,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         }
                       }}
                       className={cn(
-                        "relative size-11 flex items-center justify-center rounded-xl border border-[#0000ff] transition-all duration-300 cursor-pointer text-sm font-semibold text-white",
+                        "relative size-11 flex items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer text-sm font-semibold text-white",
                         isSelected
-                          ? "bg-[#0000ff]/15 shadow-[0_0_20px_rgba(0,0,255,0.55)]"
-                          : "bg-[#0000ff]/10 hover:rounded-2xl hover:bg-[#0000ff]/20 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]",
+                          ? "border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)]"
+                          : "border-[#0000ff]/15 bg-[#0000ff]/5 hover:rounded-2xl hover:border-[#0000ff]/35 hover:bg-[#0000ff]/15 hover:shadow-[0_0_12px_rgba(0,0,255,0.2)]",
                         isBeingDragged && "opacity-40"
                       )}
                     >
