@@ -168,7 +168,7 @@ export default function PlansPage() {
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                       {/* Left Column: Pricing */}
-                      <div className="w-[120px] shrink-0">
+                      <div className="w-[200px] shrink-0">
                         <div className="flex items-baseline gap-1">
                           <span className="text-xl font-extrabold tracking-tight uppercase text-gray-900 dark:text-white">
                             {displayPrice}
