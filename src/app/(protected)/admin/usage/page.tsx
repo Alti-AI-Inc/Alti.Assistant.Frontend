@@ -41,7 +41,7 @@ export default function UsagePage() {
 
       {/* Main Scrollable Content */}
       <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
-        <div className="mx-auto max-w-4xl space-y-8">
+        <div className="mx-auto max-w-6xl space-y-8">
           
           {/* Top Bar / Current Month Progress Indicators */}
           <div>
@@ -56,14 +56,14 @@ export default function UsagePage() {
                     </div>
                   </div>
                   <div className="p-2 bg-blue-500/10 dark:bg-blue-400/10 rounded-lg">
-                    <Search className="h-5 w-5 text-blue-650 dark:text-blue-400" />
+                    <Search className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                   </div>
                 </div>
 
                 {/* Custom Progress Bar */}
                 <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-2.5 rounded-full overflow-hidden">
                   <div 
-                    className="bg-blue-650 dark:bg-blue-400 h-full rounded-full transition-all duration-500" 
+                    className="bg-blue-600 dark:bg-blue-400 h-full rounded-full transition-all duration-500" 
                     style={{ width: `${searchPercentage}%` }}
                   />
                 </div>
@@ -83,14 +83,14 @@ export default function UsagePage() {
                     </div>
                   </div>
                   <div className="p-2 bg-indigo-500/10 dark:bg-indigo-400/10 rounded-lg">
-                    <Brain className="h-5 w-5 text-indigo-650 dark:text-indigo-400" />
+                    <Brain className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                   </div>
                 </div>
 
                 {/* Custom Progress Bar */}
                 <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-2.5 rounded-full overflow-hidden">
                   <div 
-                    className="bg-indigo-650 dark:bg-indigo-400 h-full rounded-full transition-all duration-500" 
+                    className="bg-indigo-600 dark:bg-indigo-400 h-full rounded-full transition-all duration-500" 
                     style={{ width: `${researchPercentage}%` }}
                   />
                 </div>
@@ -110,14 +110,14 @@ export default function UsagePage() {
                     </div>
                   </div>
                   <div className="p-2 bg-emerald-500/10 dark:bg-emerald-400/10 rounded-lg">
-                    <Activity className="h-5 w-5 text-emerald-650 dark:text-emerald-400" />
+                    <Activity className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                   </div>
                 </div>
 
                 {/* Custom Progress Bar */}
                 <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-2.5 rounded-full overflow-hidden">
                   <div 
-                    className="bg-emerald-650 dark:bg-emerald-400 h-full rounded-full transition-all duration-500" 
+                    className="bg-emerald-600 dark:bg-emerald-400 h-full rounded-full transition-all duration-500" 
                     style={{ width: `${monitorPercentage}%` }}
                   />
                 </div>
