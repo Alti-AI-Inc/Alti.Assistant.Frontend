@@ -48,15 +48,10 @@ export default function UsagePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Search Usage Card */}
               <Card className="bg-white/80 dark:bg-zinc-955/50 shadow-md border-black/5 dark:border-white/5 p-6 space-y-4">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Search Queries</h3>
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                      {currentSearches} <span className="text-sm font-normal text-zinc-500">/ {searchLimit}</span>
-                    </div>
-                  </div>
-                  <div className="p-2 bg-blue-500/10 dark:bg-blue-400/10 rounded-lg">
-                    <Search className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                <div className="flex justify-between items-baseline">
+                  <h3 className="text-base font-bold text-gray-900 dark:text-white tracking-tight">Search</h3>
+                  <div className="text-base font-bold text-gray-900 dark:text-white">
+                    {currentSearches} / {searchLimit}
                   </div>
                 </div>
 
@@ -75,15 +70,10 @@ export default function UsagePage() {
 
               {/* Research Usage Card */}
               <Card className="bg-white/80 dark:bg-zinc-955/50 shadow-md border-black/5 dark:border-white/5 p-6 space-y-4">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Research Reports</h3>
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                      {currentResearch} <span className="text-sm font-normal text-zinc-500">/ {researchLimit}</span>
-                    </div>
-                  </div>
-                  <div className="p-2 bg-indigo-500/10 dark:bg-indigo-400/10 rounded-lg">
-                    <Brain className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                <div className="flex justify-between items-baseline">
+                  <h3 className="text-base font-bold text-gray-900 dark:text-white tracking-tight">Research</h3>
+                  <div className="text-base font-bold text-gray-900 dark:text-white">
+                    {currentResearch} / {researchLimit}
                   </div>
                 </div>
 
@@ -102,15 +92,10 @@ export default function UsagePage() {
 
               {/* Monitor Usage Card */}
               <Card className="bg-white/80 dark:bg-zinc-955/50 shadow-md border-black/5 dark:border-white/5 p-6 space-y-4">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Monitor Scans</h3>
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                      {currentMonitors} <span className="text-sm font-normal text-zinc-500">/ {monitorLimit}</span>
-                    </div>
-                  </div>
-                  <div className="p-2 bg-emerald-500/10 dark:bg-emerald-400/10 rounded-lg">
-                    <Activity className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                <div className="flex justify-between items-baseline">
+                  <h3 className="text-base font-bold text-gray-900 dark:text-white tracking-tight">Monitor</h3>
+                  <div className="text-base font-bold text-gray-900 dark:text-white">
+                    {currentMonitors} / {monitorLimit}
                   </div>
                 </div>
 
