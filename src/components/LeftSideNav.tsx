@@ -761,6 +761,29 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
         {/* Alti Home Button */}
         <div className="relative w-full flex flex-col items-center">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => {
+                  setActiveBotId(null);
+                  setSelectedOption(null);
+                  router.push(isLoggedIn ? '/c/new-search' : '/');
+                }}
+                className={cn(
+                  "relative size-11 flex items-center justify-center rounded-xl border border-transparent transition-all duration-300 cursor-pointer text-white hover:bg-white/5"
+                )}
+              >
+                <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
+              Alti
+            </TooltipContent>
+          </Tooltip>
+        </div>
+
+        {/* General Workspace Button */}
+        <div className="relative w-full flex flex-col items-center mt-3">
           <div
             className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1.5"
             style={{ opacity: (activeBotId === null && activeTab !== 'account') ? 1 : 0 }}
@@ -774,17 +797,17 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   router.push(isLoggedIn ? '/c/new-search' : '/');
                 }}
                 className={cn(
-                  "relative size-11 flex items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer text-white",
+                  "relative size-11 flex items-center justify-center rounded-xl border border-[#0000ff] transition-all duration-300 cursor-pointer text-white",
                   (activeBotId === null && activeTab !== 'account')
-                    ? "bg-[#0000ff]/15 border-[#0000ff] shadow-[0_0_20px_rgba(0,0,255,0.55)]"
-                    : "bg-[#0000ff]/10 border-[#0000ff]/35 hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]"
+                    ? "bg-[#0000ff]/15 shadow-[0_0_20px_rgba(0,0,255,0.55)]"
+                    : "bg-[#0000ff]/10 hover:rounded-2xl hover:bg-[#0000ff]/20 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]"
                 )}
               >
-                <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
+                <LayoutGrid className="size-5" />
               </button>
             </TooltipTrigger>
             <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
-              Alti
+              General
             </TooltipContent>
           </Tooltip>
         </div>
@@ -851,10 +874,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         }
                       }}
                       className={cn(
-                        "relative size-11 flex items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer text-sm font-semibold text-white",
+                        "relative size-11 flex items-center justify-center rounded-xl border border-[#0000ff] transition-all duration-300 cursor-pointer text-sm font-semibold text-white",
                         isSelected
-                          ? "bg-[#0000ff]/15 border-[#0000ff] shadow-[0_0_20px_rgba(0,0,255,0.55)]"
-                          : "bg-[#0000ff]/10 border-[#0000ff]/35 hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]",
+                          ? "bg-[#0000ff]/15 shadow-[0_0_20px_rgba(0,0,255,0.55)]"
+                          : "bg-[#0000ff]/10 hover:rounded-2xl hover:bg-[#0000ff]/20 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]",
                         isBeingDragged && "opacity-40"
                       )}
                     >
