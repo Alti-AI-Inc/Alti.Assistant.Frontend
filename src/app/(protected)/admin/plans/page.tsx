@@ -164,7 +164,7 @@ export default function PlansPage() {
                 return (
                   <Card
                     key={plan.id}
-                    className="w-full p-5 bg-white/80 dark:bg-zinc-950/50 shadow-md border-black/5 dark:border-white/5 transition-all duration-300 hover:-translate-y-0.5"
+                    className="w-full p-5 bg-white/80 dark:bg-zinc-950/50 shadow-md border-black/5 dark:border-white/5 transition-all duration-300 hover:-translate-y-0.5 rounded-md"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                       {/* Left Column: Pricing */}
@@ -179,11 +179,14 @@ export default function PlansPage() {
                         </div>
                       </div>
 
-                      {/* Middle Column: Features stacked vertically, left-aligned */}
+                      {/* Middle Column: Features on one row, left-aligned */}
                       <div className="flex-1 min-w-0">
-                        <div className="flex flex-col gap-1 text-sm font-semibold text-gray-800 dark:text-gray-200">
+                        <div className="text-sm font-semibold text-gray-800 dark:text-gray-200 flex flex-wrap items-center gap-1.5 justify-start">
                           {plan.features.map((feature, idx) => (
-                            <span key={idx}>{feature}</span>
+                            <div key={idx} className="flex items-center gap-1.5">
+                              {idx > 0 && <span className="text-zinc-400 font-normal">&bull;</span>}
+                              <span>{feature}</span>
+                            </div>
                           ))}
                         </div>
                       </div>
@@ -194,7 +197,7 @@ export default function PlansPage() {
                           {plan.id === currentPlanId ? (
                             <button
                               type="button"
-                              className="w-full h-9 rounded-xl text-xs font-bold bg-black text-white dark:bg-white dark:text-black hover:opacity-90 active:scale-95 transition-all cursor-pointer border border-transparent"
+                              className="w-full h-9 rounded-md text-xs font-bold bg-black text-white dark:bg-white dark:text-black hover:opacity-90 active:scale-95 transition-all cursor-pointer border border-transparent"
                             >
                               Current Plan
                             </button>
@@ -205,7 +208,7 @@ export default function PlansPage() {
                                 setCurrentPlanId(plan.id);
                                 toast.success(`Selected ${plan.name} plan`);
                               }}
-                              className="w-full h-9 rounded-xl text-xs font-bold bg-[#0000ff] text-white hover:opacity-90 active:scale-95 transition-all cursor-pointer"
+                              className="w-full h-9 rounded-md text-xs font-bold bg-[#0000ff] text-white hover:opacity-90 active:scale-95 transition-all cursor-pointer"
                             >
                               Select Plan
                             </button>
