@@ -756,29 +756,15 @@ const LeftSideNavMobile = () => {
     <div className="flex h-full w-full overflow-hidden">
       {SHOW_WORKSPACES && (
         <div className="w-[60px] h-full bg-black border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
-        {/* Alti Home Button */}
-        {/* Alti Home Button */}
+        {/* Alti Home Logo */}
         <div className="relative w-full flex flex-col items-center">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                onClick={() => {
-                  setActiveBotId(null);
-                  setSelectedOption(null);
-                  router.push(isLoggedIn ? '/c/new-search' : '/');
-                  close();
-                }}
-                className={cn(
-                  "relative size-10 flex items-center justify-center rounded-xl border border-transparent transition-all duration-300 cursor-pointer text-white hover:bg-white/5"
-                )}
-              >
-                <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
-              Alti
-            </TooltipContent>
-          </Tooltip>
+          <div
+            className={cn(
+              "relative size-10 flex items-center justify-center rounded-xl border border-[#0000ff] bg-[#0000ff]/10 text-white select-none"
+            )}
+          >
+            <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
+          </div>
         </div>
 
         {/* General Workspace Button */}

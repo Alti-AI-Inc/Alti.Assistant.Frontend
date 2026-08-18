@@ -1160,7 +1160,10 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
     );
   };
 
-  const hasMessages = !!activeConversation?.messages?.length;
+  const hasMessages = 
+    !isNewChatRoute && 
+    activeConversation?.conversationId === conversationId && 
+    !!activeConversation?.messages?.length;
   const showAsNewChat = isNewChatRoute && !hasMessages && !isLoadingResponse;
 
   if (
