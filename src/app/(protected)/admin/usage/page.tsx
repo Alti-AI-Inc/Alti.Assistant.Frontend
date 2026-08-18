@@ -63,7 +63,7 @@ export default function UsagePage() {
                 {/* Custom Progress Bar */}
                 <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-2.5 rounded-full overflow-hidden">
                   <div 
-                    className="bg-blue-600 dark:bg-blue-400 h-full rounded-full transition-all duration-500" 
+                    className="bg-[#0000ff] h-full rounded-full transition-all duration-500" 
                     style={{ width: `${searchPercentage}%` }}
                   />
                 </div>
@@ -90,7 +90,7 @@ export default function UsagePage() {
                 {/* Custom Progress Bar */}
                 <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-2.5 rounded-full overflow-hidden">
                   <div 
-                    className="bg-indigo-600 dark:bg-indigo-400 h-full rounded-full transition-all duration-500" 
+                    className="bg-[#0000ff] h-full rounded-full transition-all duration-500" 
                     style={{ width: `${researchPercentage}%` }}
                   />
                 </div>
@@ -117,7 +117,7 @@ export default function UsagePage() {
                 {/* Custom Progress Bar */}
                 <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-2.5 rounded-full overflow-hidden">
                   <div 
-                    className="bg-emerald-600 dark:bg-emerald-400 h-full rounded-full transition-all duration-500" 
+                    className="bg-[#0000ff] h-full rounded-full transition-all duration-500" 
                     style={{ width: `${monitorPercentage}%` }}
                   />
                 </div>
