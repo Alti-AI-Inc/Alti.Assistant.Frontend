@@ -1182,7 +1182,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       </DropdownMenuItem>
                       <DropdownMenuSeparator className="bg-white/10 h-[1px] my-1" />
                       <DropdownMenuItem
-                        className="text-red-400 focus:bg-red-950 focus:text-red-200 cursor-pointer text-xs"
+                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
                         onClick={() => setBotToDelete(activeBotId)}
                       >
                         <Trash2 className="h-3.5 w-3.5 mr-2" /> Delete Space

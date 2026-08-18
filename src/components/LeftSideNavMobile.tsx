@@ -1267,10 +1267,10 @@ const LeftSideNavMobile = () => {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="border-black/5 dark:border-white/5" />
                     <DropdownMenuItem
-                      className="text-red-500 focus:text-red-655 focus:bg-red-50"
+                      className="text-zinc-700 dark:text-zinc-200 focus:bg-zinc-100 dark:focus:bg-zinc-800"
                       onClick={() => setBotToDelete(activeBotId)}
                     >
-                      <Trash2 className="text-red-500 h-4 w-4 mr-2" /> Delete Space
+                      <Trash2 className="h-4 w-4 mr-2" /> Delete Space
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
