@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Card } from '@/components/ui/card';
-import { Search, Brain } from 'lucide-react';
+import { Search, Brain, Activity } from 'lucide-react';
 
 export default function UsagePage() {
   const { data: session } = useSession();
@@ -16,12 +16,16 @@ export default function UsagePage() {
   const researchLimit = 20;
   const currentResearch = 8;
 
+  const monitorLimit = 100;
+  const currentMonitors = 34;
+
   // Extra balances
   const extraSearchesRemaining = 400;
   const extraResearchRemaining = 3;
 
   const searchPercentage = Math.min(100, (currentSearches / searchLimit) * 100);
   const researchPercentage = Math.min(100, (currentResearch / researchLimit) * 100);
+  const monitorPercentage = Math.min(100, (currentMonitors / monitorLimit) * 100);
 
   return (
     <div className="h-full flex flex-col bg-[#e1e1e1] dark:bg-gray-955 overflow-hidden">
@@ -41,7 +45,7 @@ export default function UsagePage() {
           
           {/* Top Bar / Current Month Progress Indicators */}
           <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Search Usage Card */}
               <Card className="bg-white/80 dark:bg-zinc-955/50 shadow-md border-black/5 dark:border-white/5 p-6 space-y-4">
                 <div className="flex justify-between items-start">
@@ -92,6 +96,33 @@ export default function UsagePage() {
                 </div>
                 <div className="flex justify-between text-[11px] text-zinc-500 dark:text-zinc-400">
                   <span>{researchPercentage.toFixed(0)}% Used</span>
+                  <span>Allowance resets on Sep 1, 2026</span>
+                </div>
+              </Card>
+
+              {/* Monitor Usage Card */}
+              <Card className="bg-white/80 dark:bg-zinc-955/50 shadow-md border-black/5 dark:border-white/5 p-6 space-y-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Monitor Scans</h3>
+                    <div className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                      {currentMonitors} <span className="text-sm font-normal text-zinc-500">/ {monitorLimit}</span>
+                    </div>
+                  </div>
+                  <div className="p-2 bg-emerald-500/10 dark:bg-emerald-400/10 rounded-lg">
+                    <Activity className="h-5 w-5 text-emerald-650 dark:text-emerald-400" />
+                  </div>
+                </div>
+
+                {/* Custom Progress Bar */}
+                <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-2.5 rounded-full overflow-hidden">
+                  <div 
+                    className="bg-emerald-650 dark:bg-emerald-400 h-full rounded-full transition-all duration-500" 
+                    style={{ width: `${monitorPercentage}%` }}
+                  />
+                </div>
+                <div className="flex justify-between text-[11px] text-zinc-500 dark:text-zinc-400">
+                  <span>{monitorPercentage.toFixed(0)}% Used</span>
                   <span>Allowance resets on Sep 1, 2026</span>
                 </div>
               </Card>
