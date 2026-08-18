@@ -339,7 +339,7 @@ export function OrganizationTenantOverview({
     <section className="space-y-6">
       {/* 1. Invite bar at the very top (above page title) */}
       {selectedTenantId && (view === 'both' || view === 'members' || view === 'invite') && (
-        <div className="relative w-full h-12 flex-none flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm pr-2 pl-4 transition-all gap-3">
+        <div className="relative w-full h-12 flex-none flex items-center bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm pr-2 pl-4 transition-all gap-0">
           <input
             id="email-address"
             type="email"
@@ -347,7 +347,7 @@ export function OrganizationTenantOverview({
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}
             disabled={isInviting}
-            className="flex-1 min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="flex-1 min-w-0 h-full bg-transparent border-none py-0 pr-4 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           />
           <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
           
@@ -357,7 +357,7 @@ export function OrganizationTenantOverview({
               type="button"
               onClick={() => setIsPlanDropdownOpen(!isPlanDropdownOpen)}
               disabled={isInviting}
-              className="h-full border-none border-0 shadow-none bg-transparent hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none rounded-none text-sm text-gray-800 dark:text-gray-100 w-[105px] px-2 font-normal py-0 flex items-center justify-center cursor-pointer select-none"
+              className="h-full border-none border-0 shadow-none bg-transparent hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none rounded-none text-sm text-gray-800 dark:text-gray-100 w-[105px] px-0 font-normal py-0 flex items-center justify-center cursor-pointer select-none"
             >
               <span className={!inviteRole ? "text-gray-400 dark:text-gray-400 text-sm truncate" : "text-sm truncate"}>
                 {inviteRole ? getPlanDisplay(inviteRole) : 'Select Plan'}
