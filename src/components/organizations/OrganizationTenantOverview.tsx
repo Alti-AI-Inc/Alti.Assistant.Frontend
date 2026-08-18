@@ -404,11 +404,11 @@ export function OrganizationTenantOverview({
               <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-zinc-955 border border-black/10 dark:border-white/10 rounded-xl shadow-lg z-50 overflow-hidden animate-in slide-in-from-top-2 duration-150 w-full">
                 <div className="flex flex-col p-1.5 gap-0.5 bg-white dark:bg-zinc-955">
                   {[
-                    { val: 'plan-10', price: '$10/month', features: ['500 Search', '5 Research', '5 Monitor'] },
-                    { val: 'plan-20', price: '$20/month', features: ['1,000 Search', '10 Research', '10 Monitor'] },
-                    { val: 'plan-50', price: '$50/month', features: ['2,500 Search', '25 Research', '25 Monitor'] },
-                    { val: 'plan-100', price: '$100/month', features: ['5,000 Search', '50 Research', '50 Monitor'] },
-                    { val: 'plan-200', price: '$200/month', features: ['10,000 Search', '100 Research', '100 Monitor'] },
+                    { val: 'plan-10', price: '$10/month', features: ['500 Search', '50 Research', '50 Monitor'] },
+                    { val: 'plan-20', price: '$20/month', features: ['1,000 Search', '100 Research', '100 Monitor'] },
+                    { val: 'plan-50', price: '$50/month', features: ['2,500 Search', '250 Research', '250 Monitor'] },
+                    { val: 'plan-100', price: '$100/month', features: ['5,000 Search', '500 Research', '500 Monitor'] },
+                    { val: 'plan-200', price: '$200/month', features: ['10,000 Search', '1,000 Research', '1,000 Monitor'] },
                   ].map((p) => (
                     <button
                       key={p.val}
