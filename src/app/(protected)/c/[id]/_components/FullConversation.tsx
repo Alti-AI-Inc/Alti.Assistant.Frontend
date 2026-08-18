@@ -132,6 +132,26 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
   } = useConversationsStore();
 
   const { bots, activeBotId, editBot } = useBotsStore();
+  const isNewChatRoute =
+    conversationId === 'new-chat' ||
+    conversationId === 'new-search' ||
+    conversationId === 'new-research' ||
+    conversationId === 'new-monitor' ||
+    pathname === '/' ||
+    pathname === '/c/new-chat' ||
+    pathname === '/c/new-search' ||
+    pathname === '/c/new-research' ||
+    pathname === '/c/new-monitor';
+
+  const expectedOption = 
+    conversationId === 'new-search' || pathname === '/c/new-search' ? OPTIONS.SEARCH :
+    conversationId === 'new-research' || pathname === '/c/new-research' ? OPTIONS.RESEARCH :
+    conversationId === 'new-monitor' || pathname === '/c/new-monitor' ? OPTIONS.MONITOR :
+    null;
+
+  if (isNewChatRoute && selectedOption !== expectedOption) {
+    setSelectedOption(expectedOption);
+  }
   const activeBot = bots.find((b) => b.id === activeBotId);
 
   const { onOpen } = useModalStore();
@@ -1140,17 +1160,6 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
     );
   };
 
-  const isNewChatRoute =
-    conversationId === 'new-chat' ||
-    conversationId === 'new-search' ||
-    conversationId === 'new-research' ||
-    conversationId === 'new-monitor' ||
-    pathname === '/' ||
-    pathname === '/c/new-chat' ||
-    pathname === '/c/new-search' ||
-    pathname === '/c/new-research' ||
-    pathname === '/c/new-monitor';
-
   const hasMessages = !!activeConversation?.messages?.length;
   const showAsNewChat = isNewChatRoute && !hasMessages && !isLoadingResponse;
 
@@ -1180,11 +1189,11 @@ return (
       className={cn(
         "flex w-full h-full flex-1 flex-col min-h-0 overflow-hidden bg-[#e1e1e1] dark:bg-zinc-950",
         showAsNewChat 
-          ? "pt-[32vh] items-center"
+          ? "pt-[38vh] items-center"
           : ""
       )}
     >
-      {isLoading && !(activeConversation?.conversationId === conversationId && activeConversation?.messages?.length > 0) ? (
+      {isLoading && !isNewChatRoute && !(activeConversation?.conversationId === conversationId && activeConversation?.messages?.length > 0) ? (
         <div
           className="flex flex-grow items-center justify-center py-4 bg-transparent"
         >
