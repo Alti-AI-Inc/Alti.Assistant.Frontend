@@ -655,9 +655,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const plusProps = getPlusButtonProps();
 
   const handleLogoMouseEnter = () => {
-    if (hideSidebar) {
-      setLogoHovered(true);
-    }
+    setLogoHovered(true);
   };
 
   const getThreadIcon = (title: string, isSelected: boolean) => {
@@ -739,166 +737,163 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
       {SHOW_WORKSPACES && (
         <div className="w-[68px] h-full bg-black border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
-        {/* Toggle Collapse/Expand Button (Visible only when collapsed) */}
-        {!isLeftSidebarOpen && (
-          <div className="relative w-full flex flex-col items-center mb-1 animate-in fade-in duration-200">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={toggleLeftSidebar}
-                  className="relative size-11 flex items-center justify-center rounded-xl border bg-[#0000ff]/10 border-[#0000ff]/35 text-[#8080ff] hover:bg-[#0000ff]/20 hover:text-white transition-all shadow-[0_0_12px_rgba(0,0,255,0.25)] cursor-pointer"
-                >
+          {/* Alti Home Logo */}
+          <div className="relative w-full flex flex-col items-center">
+            <button
+              type="button"
+              onMouseEnter={() => setLogoHovered(true)}
+              onMouseLeave={() => setLogoHovered(false)}
+              onClick={toggleLeftSidebar}
+              className={cn(
+                "relative size-11 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] text-white select-none cursor-pointer transition-all duration-200"
+              )}
+            >
+              {logoHovered ? (
+                isLeftSidebarOpen ? (
+                  <PanelLeftClose className="size-5" />
+                ) : (
                   <PanelLeftClose className="size-5 rotate-180" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
-                Expand Sidebar
-              </TooltipContent>
-            </Tooltip>
+                )
+              ) : (
+                <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
+              )}
+            </button>
           </div>
-        )}
 
-        {/* Alti Home Logo */}
-        <div className="relative w-full flex flex-col items-center">
-          <div
-            className={cn(
-              "relative size-11 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] text-white select-none"
-            )}
-          >
-            <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
-          </div>
-        </div>
-
-        {/* General Workspace Button */}
-        <div className="relative w-full flex flex-col items-center">
-          <div
-            className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1.5"
-            style={{ opacity: (activeBotId === null && activeTab !== 'account') ? 1 : 0 }}
-          />
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                onClick={() => {
-                  setActiveBotId(null);
-                  setSelectedOption(null);
-                  router.push(isLoggedIn ? '/c/new-search' : '/');
-                }}
-                className={cn(
-                  "relative size-11 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] transition-all duration-300 cursor-pointer text-white hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/55 hover:shadow-[0_0_18px_rgba(0,0,255,0.3)]"
-                )}
-              >
-                <LayoutGrid className="size-5" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
-              General
-            </TooltipContent>
-          </Tooltip>
-        </div>
-
-        {/* Spaces Scrollable Area */}
-        <div className="flex-1 w-full overflow-y-auto overflow-x-hidden flex flex-col items-center gap-3 no-scrollbar pt-0 pb-1">
-          {bots.map((bot, idx) => {
-            const isSelected = activeBotId === bot.id && (pathname === '/spaces' || pathname.startsWith('/spaces')) && activeTab !== 'account';
-            const isBeingDragged = draggedIndex === idx;
-            const showTopLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex > idx;
-            const showBottomLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex < idx;
-
-            return (
-              <div
-                key={bot.id}
-                className="relative w-full flex flex-col items-center"
-                draggable
-                onDragStart={(e) => {
-                  setDraggedIndex(idx);
-                  e.dataTransfer.effectAllowed = 'move';
-                }}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  if (draggedIndex !== idx) {
-                    setDragOverIndex(idx);
-                  }
-                }}
-                onDragLeave={() => {
-                  setDragOverIndex(null);
-                }}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  if (draggedIndex !== null && draggedIndex !== idx) {
-                    reorderBots(draggedIndex, idx);
-                  }
-                  setDraggedIndex(null);
-                  setDragOverIndex(null);
-                }}
-                onDragEnd={() => {
-                  setDraggedIndex(null);
-                  setDragOverIndex(null);
-                }}
-              >
-                {showTopLine && (
-                  <div className="h-[2px] w-8 bg-indigo-500 rounded-full mb-1 animate-pulse" />
-                )}
-
-                {/* Active Indicator Line */}
+          {/* Render the rest of Column 1 only if the sidebar is open */}
+          {isLeftSidebarOpen && (
+            <>
+              {/* General Workspace Button */}
+              <div className="relative w-full flex flex-col items-center">
                 <div
                   className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1.5"
-                  style={{ opacity: isSelected ? 1 : 0 }}
+                  style={{ opacity: (activeBotId === null && activeTab !== 'account') ? 1 : 0 }}
                 />
-
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
                       onClick={() => {
+                        setActiveBotId(null);
                         setSelectedOption(null);
-                        setActiveBotId(bot.id);
-                        if (window.location.pathname === '/spaces') {
-                          window.history.pushState(null, '', `/spaces?bot=${bot.id}`);
-                        } else {
-                          router.push(`/spaces?bot=${bot.id}`);
-                        }
+                        router.push(isLoggedIn ? '/c/new-search' : '/');
                       }}
                       className={cn(
-                        "relative size-11 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] transition-all duration-300 cursor-pointer text-sm font-semibold text-white hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/55 hover:shadow-[0_0_18px_rgba(0,0,255,0.3)]",
-                        isBeingDragged && "opacity-40"
+                        "relative size-11 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] transition-all duration-300 cursor-pointer text-white hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/55 hover:shadow-[0_0_18px_rgba(0,0,255,0.3)]"
                       )}
                     >
-                      {getSpaceInitials(bot.name)}
+                      <LayoutGrid className="size-5" />
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white max-w-[200px] select-none">
-                    <div className="font-bold">{bot.name}</div>
+                  <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
+                    General
                   </TooltipContent>
                 </Tooltip>
-
-                {showBottomLine && (
-                  <div className="h-[2px] w-8 bg-indigo-500 rounded-full mt-1 animate-pulse" />
-                )}
               </div>
-            );
-          })}
-        </div>
 
-        {/* Footer Area for Spaces column */}
-        <div className="sticky bottom-0 z-30 flex items-center justify-center w-full bg-black border-t border-zinc-800/60 py-2.5 flex-none h-[64px]">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                onClick={() => {
-                  setNewSpaceName('');
-                  setIsCreateSpaceOpen(true);
-                }}
-                className="relative size-9 flex items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700/80 text-zinc-900 dark:text-zinc-100 shadow-sm cursor-pointer transition-all duration-200"
-              >
-                <Plus className="size-4" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
-              Create Space
-            </TooltipContent>
-          </Tooltip>
+              {/* Spaces Scrollable Area */}
+              <div className="flex-1 w-full overflow-y-auto overflow-x-hidden flex flex-col items-center gap-3 no-scrollbar pt-0 pb-1">
+                {bots.map((bot, idx) => {
+                  const isSelected = activeBotId === bot.id && (pathname === '/spaces' || pathname.startsWith('/spaces')) && activeTab !== 'account';
+                  const isBeingDragged = draggedIndex === idx;
+                  const showTopLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex > idx;
+                  const showBottomLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex < idx;
+
+                  return (
+                    <div
+                      key={bot.id}
+                      className="relative w-full flex flex-col items-center"
+                      draggable
+                      onDragStart={(e) => {
+                        setDraggedIndex(idx);
+                        e.dataTransfer.effectAllowed = 'move';
+                      }}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        if (draggedIndex !== idx) {
+                          setDragOverIndex(idx);
+                        }
+                      }}
+                      onDragLeave={() => {
+                        setDragOverIndex(null);
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        if (draggedIndex !== null && draggedIndex !== idx) {
+                          reorderBots(draggedIndex, idx);
+                        }
+                        setDraggedIndex(null);
+                        setDragOverIndex(null);
+                      }}
+                      onDragEnd={() => {
+                        setDraggedIndex(null);
+                        setDragOverIndex(null);
+                      }}
+                    >
+                      {showTopLine && (
+                        <div className="h-[2px] w-8 bg-indigo-500 rounded-full mb-1 animate-pulse" />
+                      )}
+
+                      {/* Active Indicator Line */}
+                      <div
+                        className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1.5"
+                        style={{ opacity: isSelected ? 1 : 0 }}
+                      />
+
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            onClick={() => {
+                              setSelectedOption(null);
+                              setActiveBotId(bot.id);
+                              if (window.location.pathname === '/spaces') {
+                                window.history.pushState(null, '', `/spaces?bot=${bot.id}`);
+                              } else {
+                                router.push(`/spaces?bot=${bot.id}`);
+                              }
+                            }}
+                            className={cn(
+                              "relative size-11 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] transition-all duration-300 cursor-pointer text-sm font-semibold text-white hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/55 hover:shadow-[0_0_18px_rgba(0,0,255,0.3)]",
+                              isBeingDragged && "opacity-40"
+                            )}
+                          >
+                            {getSpaceInitials(bot.name)}
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white max-w-[200px] select-none">
+                          <div className="font-bold">{bot.name}</div>
+                        </TooltipContent>
+                      </Tooltip>
+
+                      {showBottomLine && (
+                        <div className="h-[2px] w-8 bg-indigo-500 rounded-full mt-1 animate-pulse" />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Footer Area for Spaces column */}
+              <div className="sticky bottom-0 z-30 flex items-center justify-center w-full bg-black border-t border-zinc-800/60 py-2.5 flex-none h-[64px]">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => {
+                        setNewSpaceName('');
+                        setIsCreateSpaceOpen(true);
+                      }}
+                      className="relative size-9 flex items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700/80 text-zinc-900 dark:text-zinc-100 shadow-sm cursor-pointer transition-all duration-200"
+                    >
+                      <Plus className="size-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
+                    Create Space
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </>
+          )}
         </div>
-      </div>
       )}
 
       {/* Column 2: Secondary Content navigation panel */}
