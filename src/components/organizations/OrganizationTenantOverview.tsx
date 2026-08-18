@@ -26,7 +26,7 @@ import type {
   TenantUsage,
   UserTenant,
 } from '@/types/tenant';
-import { Loader2, ArrowUp } from 'lucide-react';
+import { Loader2, ArrowUp, ChevronDown } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
@@ -81,6 +81,30 @@ export function OrganizationTenantOverview({
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState('');
   const [isInviting, setIsInviting] = useState(false);
+  const [isPlanDropdownOpen, setIsPlanDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsPlanDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const getPlanDisplay = (role: string) => {
+    const r = role.toLowerCase();
+    if (r.includes('200')) return '$200';
+    if (r.includes('100')) return '$100';
+    if (r.includes('50')) return '$50';
+    if (r.includes('20')) return '$20';
+    if (r.includes('10')) return '$10';
+    return 'Select Plan';
+  };
 
   useEffect(() => {
     if (fixedTenantId) {
@@ -350,68 +374,61 @@ export function OrganizationTenantOverview({
             className="flex-[1.2] min-w-0 h-full bg-transparent border-none py-0 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           />
           <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
-          <div className="flex-none">
-            <Select
-              value={inviteRole}
-              onValueChange={setInviteRole}
+          
+          {/* Relative wrapper container for Select Plan and Send Invite */}
+          <div ref={dropdownRef} className="relative flex items-center h-full flex-none">
+            <button
+              type="button"
+              onClick={() => setIsPlanDropdownOpen(!isPlanDropdownOpen)}
               disabled={isInviting}
+              className="h-full border-none border-0 shadow-none bg-transparent hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none rounded-none text-sm text-gray-800 dark:text-gray-100 w-[120px] px-3 font-normal py-0 flex items-center justify-between cursor-pointer select-none"
             >
-              <SelectTrigger id="invite-role" className="h-full border-none border-0 shadow-none bg-transparent hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none text-sm text-gray-800 dark:text-gray-100 data-[placeholder]:text-gray-400 dark:data-[placeholder]:text-gray-400 w-[120px] px-3 font-normal py-0">
-                <SelectValue placeholder="Select Plan" />
-              </SelectTrigger>
-              <SelectContent className="border-black/10 dark:border-white/10 bg-white dark:bg-zinc-955">
-                <SelectItem value="plan-10" className="text-xs font-semibold">
-                  <div className="flex flex-col py-0.5 text-left">
-                    <span className="font-bold text-gray-900 dark:text-white text-xs">$10/month</span>
-                    <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
-                      500 Search · 5 Research · 5 Monitor
-                    </span>
-                  </div>
-                </SelectItem>
-                <SelectItem value="plan-20" className="text-xs font-semibold">
-                  <div className="flex flex-col py-0.5 text-left">
-                    <span className="font-bold text-gray-900 dark:text-white text-xs">$20/month</span>
-                    <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
-                      1,000 Search · 10 Research · 10 Monitor
-                    </span>
-                  </div>
-                </SelectItem>
-                <SelectItem value="plan-50" className="text-xs font-semibold">
-                  <div className="flex flex-col py-0.5 text-left">
-                    <span className="font-bold text-gray-900 dark:text-white text-xs">$50/month</span>
-                    <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
-                      2,500 Search · 25 Research · 25 Monitor
-                    </span>
-                  </div>
-                </SelectItem>
-                <SelectItem value="plan-100" className="text-xs font-semibold">
-                  <div className="flex flex-col py-0.5 text-left">
-                    <span className="font-bold text-gray-900 dark:text-white text-xs">$100/month</span>
-                    <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
-                      5,000 Search · 50 Research · 50 Monitor
-                    </span>
-                  </div>
-                </SelectItem>
-                <SelectItem value="plan-200" className="text-xs font-semibold">
-                  <div className="flex flex-col py-0.5 text-left">
-                    <span className="font-bold text-gray-900 dark:text-white text-xs">$200/month</span>
-                    <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
-                      10,000 Search · 100 Research · 100 Monitor
-                    </span>
-                  </div>
-                </SelectItem>
-              </SelectContent>
-            </Select>
+              <span className={!inviteRole ? "text-gray-400 dark:text-gray-400" : ""}>
+                {inviteRole ? getPlanDisplay(inviteRole) : 'Select Plan'}
+              </span>
+              <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
+            </button>
+            
+            <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
+            
+            <button
+              type="button"
+              onClick={handleSendInvite}
+              disabled={isInviting || !inviteEmail.trim() || !inviteRole}
+              className="flex-none h-full px-4 text-sm text-gray-800 dark:text-gray-100 hover:text-gray-500 dark:hover:text-gray-300 disabled:opacity-40 transition-all cursor-pointer bg-transparent border-none outline-none focus:outline-none font-normal"
+            >
+              {isInviting ? 'Inviting' : 'Send Invite'}
+            </button>
+
+            {isPlanDropdownOpen && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-zinc-955 border border-black/10 dark:border-white/10 rounded-xl shadow-lg z-50 overflow-hidden animate-in slide-in-from-top-2 duration-150 min-w-[260px]">
+                <div className="flex flex-col p-1.5 gap-0.5 bg-white dark:bg-zinc-955">
+                  {[
+                    { val: 'plan-10', price: '$10/month', desc: '500 Search · 5 Research · 5 Monitor' },
+                    { val: 'plan-20', price: '$20/month', desc: '1,000 Search · 10 Research · 10 Monitor' },
+                    { val: 'plan-50', price: '$50/month', desc: '2,500 Search · 25 Research · 25 Monitor' },
+                    { val: 'plan-100', price: '$100/month', desc: '5,000 Search · 50 Research · 50 Monitor' },
+                    { val: 'plan-200', price: '$200/month', desc: '10,000 Search · 100 Research · 100 Monitor' },
+                  ].map((p) => (
+                    <button
+                      key={p.val}
+                      type="button"
+                      onClick={() => {
+                        setInviteRole(p.val);
+                        setIsPlanDropdownOpen(false);
+                      }}
+                      className={`w-full px-3 py-2 text-left rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex flex-col cursor-pointer ${
+                        inviteRole === p.val ? 'bg-black/5 dark:bg-white/10' : ''
+                      }`}
+                    >
+                      <span className="font-bold text-gray-900 dark:text-white text-xs">{p.price}</span>
+                      <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">{p.desc}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-          <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
-          <button
-            type="button"
-            onClick={handleSendInvite}
-            disabled={isInviting || !inviteEmail.trim() || !inviteRole}
-            className="flex-none h-full px-3 text-sm text-gray-800 dark:text-gray-100 hover:text-gray-500 dark:hover:text-gray-300 disabled:opacity-40 transition-all cursor-pointer bg-transparent border-none outline-none focus:outline-none font-normal"
-          >
-            {isInviting ? 'Inviting' : 'Send Invite'}
-          </button>
         </div>
       )}
 
