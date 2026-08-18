@@ -359,7 +359,7 @@ export function OrganizationTenantOverview({
               disabled={isInviting}
               className="h-full border-none border-0 shadow-none bg-transparent hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none rounded-none text-sm text-gray-800 dark:text-gray-100 w-[105px] pl-1.5 pr-2 font-normal py-0 flex items-center justify-between cursor-pointer select-none"
             >
-              <span className={!inviteRole ? "text-gray-400 dark:text-gray-400 text-xs truncate" : "text-xs truncate"}>
+              <span className={!inviteRole ? "text-gray-400 dark:text-gray-400 text-sm truncate" : "text-sm truncate"}>
                 {inviteRole ? getPlanDisplay(inviteRole) : 'Select Plan'}
               </span>
               <ChevronDown className="h-3 w-3 text-gray-400 shrink-0 ml-1" />

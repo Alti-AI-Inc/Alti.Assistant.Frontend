@@ -304,11 +304,6 @@ function MembersListComponent({
                       <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed">
                         {email}
                       </p>
-                      {isCurrentUser && (
-                        <span className="text-[10px] bg-black/5 text-black px-1.5 py-0.5 rounded-full font-medium shrink-0">
-                          You
-                        </span>
-                      )}
                     </div>
                   </div>
                   {/* Plan */}
