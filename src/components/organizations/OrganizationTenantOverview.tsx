@@ -404,11 +404,11 @@ export function OrganizationTenantOverview({
               <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-zinc-955 border border-black/10 dark:border-white/10 rounded-xl shadow-lg z-50 overflow-hidden animate-in slide-in-from-top-2 duration-150 w-full">
                 <div className="flex flex-col p-1.5 gap-0.5 bg-white dark:bg-zinc-955">
                   {[
-                    { val: 'plan-10', price: '$10/month', desc: '500 Search · 5 Research · 5 Monitor' },
-                    { val: 'plan-20', price: '$20/month', desc: '1,000 Search · 10 Research · 10 Monitor' },
-                    { val: 'plan-50', price: '$50/month', desc: '2,500 Search · 25 Research · 25 Monitor' },
-                    { val: 'plan-100', price: '$100/month', desc: '5,000 Search · 50 Research · 50 Monitor' },
-                    { val: 'plan-200', price: '$200/month', desc: '10,000 Search · 100 Research · 100 Monitor' },
+                    { val: 'plan-10', price: '$10/month', features: ['500 Search', '5 Research', '5 Monitor'] },
+                    { val: 'plan-20', price: '$20/month', features: ['1,000 Search', '10 Research', '10 Monitor'] },
+                    { val: 'plan-50', price: '$50/month', features: ['2,500 Search', '25 Research', '25 Monitor'] },
+                    { val: 'plan-100', price: '$100/month', features: ['5,000 Search', '50 Research', '50 Monitor'] },
+                    { val: 'plan-200', price: '$200/month', features: ['10,000 Search', '100 Research', '100 Monitor'] },
                   ].map((p) => (
                     <button
                       key={p.val}
@@ -417,12 +417,18 @@ export function OrganizationTenantOverview({
                         setInviteRole(p.val);
                         setIsPlanDropdownOpen(false);
                       }}
-                      className={`w-full px-3 py-2 text-left rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex flex-col cursor-pointer ${
+                      className={`w-full px-3 py-1.5 text-left rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex flex-col cursor-pointer ${
                         inviteRole === p.val ? 'bg-black/5 dark:bg-white/10' : ''
                       }`}
                     >
                       <span className="font-bold text-gray-900 dark:text-white text-xs">{p.price}</span>
-                      <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">{p.desc}</span>
+                      <div className="flex flex-col mt-0.5">
+                        {p.features.map((f, i) => (
+                          <span key={i} className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] leading-tight">
+                            {f}
+                          </span>
+                        ))}
+                      </div>
                     </button>
                   ))}
                 </div>
