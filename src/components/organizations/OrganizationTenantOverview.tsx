@@ -381,12 +381,12 @@ export function OrganizationTenantOverview({
               type="button"
               onClick={() => setIsPlanDropdownOpen(!isPlanDropdownOpen)}
               disabled={isInviting}
-              className="h-full border-none border-0 shadow-none bg-transparent hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none rounded-none text-sm text-gray-800 dark:text-gray-100 w-[120px] px-3 font-normal py-0 flex items-center justify-between cursor-pointer select-none"
+              className="h-full border-none border-0 shadow-none bg-transparent hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none rounded-none text-sm text-gray-800 dark:text-gray-100 w-[105px] pl-1.5 pr-2 font-normal py-0 flex items-center justify-between cursor-pointer select-none"
             >
-              <span className={!inviteRole ? "text-gray-400 dark:text-gray-400" : ""}>
+              <span className={!inviteRole ? "text-gray-400 dark:text-gray-400 text-xs truncate" : "text-xs truncate"}>
                 {inviteRole ? getPlanDisplay(inviteRole) : 'Select Plan'}
               </span>
-              <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
+              <ChevronDown className="h-3 w-3 text-gray-400 shrink-0 ml-1" />
             </button>
             
             <div className="h-6 w-[1px] bg-black/10 dark:bg-white/10 flex-none" />
@@ -401,7 +401,7 @@ export function OrganizationTenantOverview({
             </button>
 
             {isPlanDropdownOpen && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-zinc-955 border border-black/10 dark:border-white/10 rounded-xl shadow-lg z-50 overflow-hidden animate-in slide-in-from-top-2 duration-150 min-w-[260px]">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-zinc-955 border border-black/10 dark:border-white/10 rounded-xl shadow-lg z-50 overflow-hidden animate-in slide-in-from-top-2 duration-150 w-full">
                 <div className="flex flex-col p-1.5 gap-0.5 bg-white dark:bg-zinc-955">
                   {[
                     { val: 'plan-10', price: '$10/month', desc: '500 Search · 5 Research · 5 Monitor' },
