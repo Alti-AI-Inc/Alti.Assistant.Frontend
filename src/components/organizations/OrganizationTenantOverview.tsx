@@ -364,7 +364,7 @@ export function OrganizationTenantOverview({
                   <div className="flex flex-col py-0.5 text-left">
                     <span className="font-bold text-gray-900 dark:text-white text-xs">$10/month</span>
                     <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
-                      500 Search · 5 Research
+                      500 Search · 5 Research · 5 Monitor
                     </span>
                   </div>
                 </SelectItem>
@@ -372,7 +372,7 @@ export function OrganizationTenantOverview({
                   <div className="flex flex-col py-0.5 text-left">
                     <span className="font-bold text-gray-900 dark:text-white text-xs">$20/month</span>
                     <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
-                      1,000 Search · 10 Research
+                      1,000 Search · 10 Research · 10 Monitor
                     </span>
                   </div>
                 </SelectItem>
@@ -380,7 +380,7 @@ export function OrganizationTenantOverview({
                   <div className="flex flex-col py-0.5 text-left">
                     <span className="font-bold text-gray-900 dark:text-white text-xs">$50/month</span>
                     <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
-                      2,500 Search · 25 Research
+                      2,500 Search · 25 Research · 25 Monitor
                     </span>
                   </div>
                 </SelectItem>
@@ -388,7 +388,7 @@ export function OrganizationTenantOverview({
                   <div className="flex flex-col py-0.5 text-left">
                     <span className="font-bold text-gray-900 dark:text-white text-xs">$100/month</span>
                     <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
-                      5,000 Search · 50 Research
+                      5,000 Search · 50 Research · 50 Monitor
                     </span>
                   </div>
                 </SelectItem>
@@ -396,7 +396,7 @@ export function OrganizationTenantOverview({
                   <div className="flex flex-col py-0.5 text-left">
                     <span className="font-bold text-gray-900 dark:text-white text-xs">$200/month</span>
                     <span className="font-normal text-zinc-500 dark:text-zinc-400 text-[10px] mt-0.5">
-                      10,000 Search · 100 Research
+                      10,000 Search · 100 Research · 100 Monitor
                     </span>
                   </div>
                 </SelectItem>
