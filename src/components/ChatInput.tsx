@@ -327,6 +327,7 @@ export default function ChatInput({
 
   // Monitor scan frequency state
   const [monitorFrequency, setMonitorFrequency] = useState<string>('Frequency');
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const handleCreateTask = () => {
     // Stop recording/listening if active
@@ -1393,6 +1394,7 @@ export default function ChatInput({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -1401,6 +1403,18 @@ export default function ChatInput({
       textarea.style.height = `${textarea.scrollHeight}px`;
     }
   }, [message]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   // Use extracted file change handler
   const handleFileChange = createFileChangeHandler({
@@ -1599,7 +1613,13 @@ export default function ChatInput({
               )}
 
               <div
-                className="relative flex items-center gap-3 rounded-xl border bg-white dark:bg-zinc-800 px-3 py-1.5 shadow-xs transition-all duration-300 w-full min-h-[52px] border-zinc-300 dark:border-zinc-700/80"
+                ref={containerRef}
+                className={cn(
+                  "relative flex items-center gap-3 border bg-white dark:bg-zinc-800 px-3 py-1.5 shadow-xs transition-all duration-300 w-full min-h-[52px] border-zinc-300 dark:border-zinc-700/80",
+                  isDropdownOpen && selectedOption === OPTIONS.MONITOR
+                    ? "rounded-t-xl rounded-b-none border-b-zinc-200 dark:border-b-zinc-700"
+                    : "rounded-xl"
+                )}
               >
 
 
@@ -1642,67 +1662,38 @@ export default function ChatInput({
 
                 {/* Monitor Frequency Selector */}
                 {selectedOption === OPTIONS.MONITOR && (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <button
-                        type="button"
-                        className="flex h-8 items-center gap-1.5 px-2.5 rounded-md border border-black/5 dark:border-zinc-700/50 bg-[#e1e1e1] dark:bg-zinc-955 hover:bg-[#d0d0d0] dark:hover:bg-zinc-900 text-black transition-all text-xs font-normal focus:outline-none cursor-pointer select-none"
-                      >
-                        <span>{monitorFrequency}</span>
-                        <ChevronDown className="size-3.5 text-black" />
-                      </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="rounded-2xl bg-zinc-950 border border-white/10 text-white" align="end">
-                      <DropdownMenuItem
-                        onClick={() => setMonitorFrequency('1 Hour')}
-                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
-                      >
-                        1 Hour
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => setMonitorFrequency('6 Hours')}
-                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
-                      >
-                        6 Hours
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => setMonitorFrequency('12 Hours')}
-                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
-                      >
-                        12 Hours
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => setMonitorFrequency('24 Hours')}
-                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
-                      >
-                        24 Hours
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => setMonitorFrequency('3 Days')}
-                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
-                      >
-                        3 Days
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => setMonitorFrequency('7 Days')}
-                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
-                      >
-                        7 Days
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => setMonitorFrequency('14 Days')}
-                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
-                      >
-                        14 Days
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => setMonitorFrequency('30 Days')}
-                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
-                      >
-                        30 Days
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                      className="flex h-8 items-center gap-1.5 px-2.5 rounded-md border border-black/5 dark:border-zinc-700/50 bg-[#e1e1e1] dark:bg-zinc-955 hover:bg-[#d0d0d0] dark:hover:bg-zinc-900 text-black transition-all text-xs font-normal focus:outline-none cursor-pointer select-none"
+                    >
+                      <span>{monitorFrequency}</span>
+                      <ChevronDown className="size-3.5 text-black" />
+                    </button>
+                    {isDropdownOpen && (
+                      <div className="absolute top-full left-[-1px] right-[-1px] bg-white dark:bg-zinc-800 border-x border-b border-zinc-300 dark:border-zinc-700/80 rounded-b-xl shadow-lg z-50 overflow-hidden animate-in slide-in-from-top-2 duration-200">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 p-2.5 gap-1.5 bg-white dark:bg-zinc-800">
+                          {['1 Hour', '6 Hours', '12 Hours', '24 Hours', '3 Days', '7 Days', '14 Days', '30 Days'].map((freq) => (
+                            <button
+                              key={freq}
+                              type="button"
+                              onClick={() => {
+                                setMonitorFrequency(freq);
+                                setIsDropdownOpen(false);
+                              }}
+                              className={cn(
+                                "px-3 py-2 text-left text-xs rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-zinc-700 dark:text-zinc-300 transition-colors cursor-pointer",
+                                monitorFrequency === freq && "bg-black/5 dark:bg-white/10 font-medium text-black dark:text-white"
+                              )}
+                            >
+                              {freq}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
 
                 {/* Send Button / Mic Button - Square style */}
