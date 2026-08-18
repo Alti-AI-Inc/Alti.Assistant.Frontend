@@ -1630,12 +1630,7 @@ export default function ChatInput({
 
               <div
                 ref={containerRef}
-                className={cn(
-                  "relative flex items-center gap-3 border bg-white dark:bg-zinc-800 px-3 py-1.5 shadow-xs transition-all duration-300 w-full min-h-[52px] border-zinc-300 dark:border-zinc-700/80",
-                  isDropdownOpen && selectedOption === OPTIONS.MONITOR
-                    ? "rounded-t-xl rounded-b-none border-b-zinc-200 dark:border-b-zinc-700"
-                    : "rounded-xl"
-                )}
+                className="relative flex items-center gap-3 rounded-xl border bg-white dark:bg-zinc-800 px-3 py-1.5 shadow-xs transition-all duration-300 w-full min-h-[52px] border-zinc-300 dark:border-zinc-700/80"
               >
 
 
@@ -1678,7 +1673,7 @@ export default function ChatInput({
 
                 {/* Monitor Frequency Selector */}
                 {selectedOption === OPTIONS.MONITOR && (
-                  <>
+                  <div className="relative">
                     <button
                       type="button"
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -1688,8 +1683,8 @@ export default function ChatInput({
                       <ChevronDown className="size-3.5 text-black" />
                     </button>
                     {isDropdownOpen && (
-                      <div className="absolute top-full left-[-1px] right-[-1px] bg-white dark:bg-zinc-800 border-x border-b border-zinc-300 dark:border-zinc-700/80 rounded-b-xl shadow-lg z-50 overflow-hidden animate-in slide-in-from-top-2 duration-200">
-                        <div className="grid grid-cols-2 sm:grid-cols-4 p-2.5 gap-1.5 bg-white dark:bg-zinc-800">
+                      <div className="absolute top-full right-0 mt-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 rounded-xl shadow-lg z-50 overflow-hidden w-36 animate-in slide-in-from-top-2 duration-150">
+                        <div className="flex flex-col p-1.5 gap-0.5">
                           {['1 Hour', '6 Hours', '12 Hours', '24 Hours', '3 Days', '7 Days', '14 Days', '30 Days'].map((freq) => (
                             <button
                               key={freq}
@@ -1699,7 +1694,7 @@ export default function ChatInput({
                                 setIsDropdownOpen(false);
                               }}
                               className={cn(
-                                "px-3 py-2 text-left text-xs rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-zinc-700 dark:text-zinc-300 transition-colors cursor-pointer",
+                                "px-2.5 py-1.5 text-left text-xs rounded-md hover:bg-black/5 dark:hover:bg-white/5 text-zinc-700 dark:text-zinc-300 transition-colors cursor-pointer",
                                 monitorFrequency === freq && "bg-black/5 dark:bg-white/10 font-medium text-black dark:text-white"
                               )}
                             >
@@ -1709,7 +1704,7 @@ export default function ChatInput({
                         </div>
                       </div>
                     )}
-                  </>
+                  </div>
                 )}
 
                 {/* Send Button / Mic Button - Square style */}
