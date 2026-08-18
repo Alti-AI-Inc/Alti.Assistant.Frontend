@@ -1266,15 +1266,6 @@ return (
         )}
       >
          <div className="mx-auto w-full max-w-[796px]">
-          {showAsNewChat && (
-            <div className="flex justify-center mb-6 select-none animate-in fade-in duration-500">
-              <img
-                src="/assets/logo-icon.png"
-                alt="Brand Logo"
-                className="size-10 object-contain brightness-0 dark:invert opacity-15 hover:opacity-40 transition-all duration-500"
-              />
-            </div>
-          )}
           <ChatInput
             conversationId={conversationId}
             imageGenHook={imageGenHook}
