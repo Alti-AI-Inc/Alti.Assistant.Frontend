@@ -326,7 +326,7 @@ export default function ChatInput({
   const [eventTrigger, setEventTrigger] = useState('');
 
   // Monitor scan frequency state
-  const [monitorFrequency, setMonitorFrequency] = useState<string>('Real-Time');
+  const [monitorFrequency, setMonitorFrequency] = useState<string>('Frequency');
 
   const handleCreateTask = () => {
     // Stop recording/listening if active
@@ -863,7 +863,7 @@ export default function ChatInput({
         extraParams.researchTier = researchTier;
       }
       if (selectedOption === OPTIONS.MONITOR) {
-        extraParams.frequency = monitorFrequency;
+        extraParams.frequency = monitorFrequency === 'Frequency' ? '1 Hour' : monitorFrequency;
       }
       const categoryVal = appParam ? 'mcp' : getCategoryFromOption(selectedOption);
       if (categoryVal) {
@@ -1646,7 +1646,7 @@ export default function ChatInput({
                     <DropdownMenuTrigger asChild>
                       <button
                         type="button"
-                        className="flex h-8 items-center gap-1.5 px-2.5 rounded-md border border-black/5 dark:border-zinc-700/50 bg-[#e1e1e1] dark:bg-zinc-950 hover:bg-[#d0d0d0] dark:hover:bg-zinc-900 text-black transition-all text-xs font-semibold focus:outline-none cursor-pointer select-none"
+                        className="flex h-8 items-center gap-1.5 px-2.5 rounded-md border border-black/5 dark:border-zinc-700/50 bg-[#e1e1e1] dark:bg-zinc-955 hover:bg-[#d0d0d0] dark:hover:bg-zinc-900 text-black transition-all text-xs font-normal focus:outline-none cursor-pointer select-none"
                       >
                         <span>{monitorFrequency}</span>
                         <ChevronDown className="size-3.5 text-black" />
@@ -1654,34 +1654,52 @@ export default function ChatInput({
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="rounded-2xl bg-zinc-950 border border-white/10 text-white" align="end">
                       <DropdownMenuItem
-                        onClick={() => setMonitorFrequency('Real-Time')}
+                        onClick={() => setMonitorFrequency('1 Hour')}
                         className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
                       >
-                        Real-Time
+                        1 Hour
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={() => setMonitorFrequency('Every Hour')}
+                        onClick={() => setMonitorFrequency('6 Hours')}
                         className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
                       >
-                        Every Hour
+                        6 Hours
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={() => setMonitorFrequency('Every Day')}
+                        onClick={() => setMonitorFrequency('12 Hours')}
                         className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
                       >
-                        Every Day
+                        12 Hours
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={() => setMonitorFrequency('Every Week')}
+                        onClick={() => setMonitorFrequency('24 Hours')}
                         className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
                       >
-                        Every Week
+                        24 Hours
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={() => setMonitorFrequency('Every Month')}
+                        onClick={() => setMonitorFrequency('3 Days')}
                         className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
                       >
-                        Every Month
+                        3 Days
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => setMonitorFrequency('7 Days')}
+                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
+                      >
+                        7 Days
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => setMonitorFrequency('14 Days')}
+                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
+                      >
+                        14 Days
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => setMonitorFrequency('30 Days')}
+                        className="text-zinc-300 focus:bg-zinc-800 focus:text-white cursor-pointer text-xs"
+                      >
+                        30 Days
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
