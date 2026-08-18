@@ -307,7 +307,7 @@ function MembersListComponent({
                     </div>
                   </div>
                   {/* Plan */}
-                  <div className="flex-none">
+                  <div className="flex-1 min-w-0">
                     <div className="h-full flex items-center">
                       {isTenantAdminOrOwner ? (
                         <DropdownMenu>
@@ -358,8 +358,8 @@ function MembersListComponent({
                 </div>
 
                 {isTenantAdminOrOwner && (
-                  <div className="flex-none ml-2">
-                    {!isCurrentUser && (
+                  <div className="flex-none w-7 h-7 flex items-center justify-center ml-2">
+                    {!isCurrentUser ? (
                       <button
                         type="button"
                         onClick={() => setMemberToRemove(member)}
@@ -368,6 +368,8 @@ function MembersListComponent({
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
+                    ) : (
+                      <div className="w-7 h-7" />
                     )}
                   </div>
                 )}
