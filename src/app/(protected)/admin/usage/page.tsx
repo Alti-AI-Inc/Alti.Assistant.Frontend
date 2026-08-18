@@ -13,7 +13,7 @@ export default function UsagePage() {
   const searchLimit = 1000;
   const currentSearches = 450;
   
-  const researchLimit = 20;
+  const researchLimit = 100;
   const currentResearch = 8;
 
   const monitorLimit = 100;
@@ -48,7 +48,7 @@ export default function UsagePage() {
                 <div className="flex justify-between items-baseline">
                   <h3 className="text-base font-bold text-gray-900 dark:text-white tracking-tight">Search</h3>
                   <div className="text-base font-bold text-gray-900 dark:text-white">
-                    {currentSearches} / {searchLimit}
+                    {currentSearches.toLocaleString()} / {searchLimit.toLocaleString()}
                   </div>
                 </div>
 
@@ -70,7 +70,7 @@ export default function UsagePage() {
                 <div className="flex justify-between items-baseline">
                   <h3 className="text-base font-bold text-gray-900 dark:text-white tracking-tight">Research</h3>
                   <div className="text-base font-bold text-gray-900 dark:text-white">
-                    {currentResearch} / {researchLimit}
+                    {currentResearch.toLocaleString()} / {researchLimit.toLocaleString()}
                   </div>
                 </div>
 
@@ -92,7 +92,7 @@ export default function UsagePage() {
                 <div className="flex justify-between items-baseline">
                   <h3 className="text-base font-bold text-gray-900 dark:text-white tracking-tight">Monitor</h3>
                   <div className="text-base font-bold text-gray-900 dark:text-white">
-                    {currentMonitors} / {monitorLimit}
+                    {currentMonitors.toLocaleString()} / {monitorLimit.toLocaleString()}
                   </div>
                 </div>
 
