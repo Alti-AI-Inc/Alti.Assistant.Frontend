@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 import { useTenant } from '@/contexts/TenantContext';
 import { toast } from 'sonner';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 interface PricingPlan {
   id: string;
@@ -97,6 +98,11 @@ export default function PlansPage() {
   const [hideTrial, setHideTrial] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPlanId, setCurrentPlanId] = useState('free');
+  
+  // Custom Confirmation Dialog States
+  const [selectedPlan, setSelectedPlan] = useState<PricingPlan | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
   const isCreator = !currentTenant || currentTenant.role === 'owner' || currentTenant.role === 'admin';
 
@@ -205,8 +211,9 @@ export default function PlansPage() {
                             <button
                               type="button"
                               onClick={() => {
-                                setCurrentPlanId(plan.id);
-                                toast.success(`Selected ${plan.name} plan`);
+                                setSelectedPlan(plan);
+                                setIsPopupOpen(true);
+                                setIsConfirmed(false);
                               }}
                               className="w-full h-9 rounded-md text-xs font-bold bg-[#0000ff] text-white hover:opacity-90 active:scale-95 transition-all cursor-pointer"
                             >
@@ -223,6 +230,74 @@ export default function PlansPage() {
           </div>
         )}
       </div>
+
+      {/* iOS / Logout-Style Confirmation Dialog */}
+      {selectedPlan && (
+        <Dialog open={isPopupOpen} onOpenChange={setIsPopupOpen}>
+          <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[270px] sm:max-w-[270px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+            {/* Centered Content Section */}
+            <div className="px-5 pt-5 pb-4 text-center">
+              {!isConfirmed ? (
+                <>
+                  <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                    {selectedPlan.name}
+                  </h2>
+                  <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+                    {selectedPlan.features.join(' • ')}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+                    {selectedPlan.name} Plan Selected
+                  </h2>
+                  <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+                    Your plan has been updated.
+                  </p>
+                </>
+              )}
+            </div>
+
+            {/* Extended Border & iOS Layout Action Buttons */}
+            <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+              {!isConfirmed ? (
+                <>
+                  {/* Cancel Option */}
+                  <button
+                    type="button"
+                    onClick={() => setIsPopupOpen(false)}
+                    className="flex-1 text-[15px] font-normal text-gray-500 dark:text-gray-400 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  
+                  {/* Select Option */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCurrentPlanId(selectedPlan.id);
+                      setIsConfirmed(true);
+                      toast.success(`Selected ${selectedPlan.name} plan`);
+                    }}
+                    className="flex-1 text-[15px] font-semibold text-[#0000ff] hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none cursor-pointer"
+                  >
+                    Select
+                  </button>
+                </>
+              ) : (
+                /* Close Option */
+                <button
+                  type="button"
+                  onClick={() => setIsPopupOpen(false)}
+                  className="flex-1 text-[15px] font-semibold text-[#0000ff] hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none cursor-pointer"
+                >
+                  Close
+                </button>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
