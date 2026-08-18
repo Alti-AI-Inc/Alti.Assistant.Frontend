@@ -295,84 +295,88 @@ function MembersListComponent({
             return (
               <div
                 key={member._id}
-                className="group flex flex-col md:flex-row md:items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs gap-4"
+                className="group relative w-full h-12 flex items-center bg-white dark:bg-gray-900/30 border border-black/10 dark:border-white/10 rounded-2xl shadow-xs pr-2 pl-4 gap-0"
               >
-                <div className="flex flex-col md:flex-row md:items-center gap-4 flex-1">
-                  {/* Email */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed">
-                        {email}
-                      </p>
-                    </div>
-                  </div>
-                  {/* Plan */}
-                  <div className="flex-1 min-w-0">
-                    <div className="h-full flex items-center">
-                      {isTenantAdminOrOwner ? (
-                        <DropdownMenu>
-                          <DropdownMenuTrigger className="flex items-center gap-1 text-xs font-semibold text-gray-800 dark:text-gray-200 hover:text-gray-500 hover:bg-black/5 dark:hover:bg-white/5 px-2 py-1 rounded-md transition-all cursor-pointer border-none outline-none focus:outline-none select-none">
-                            {getPlanDisplay(mockRoles[member._id] ?? memberRole)}
-                            <ChevronDown className="h-3 w-3 text-gray-400" />
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="start" className="border-black/10 dark:border-white/10 bg-white dark:bg-zinc-955 min-w-[100px] rounded-xl shadow-lg z-30">
-                            <DropdownMenuItem
-                              onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-10')}
-                              className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
-                            >
-                              $10
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-20')}
-                              className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
-                            >
-                              $20
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-50')}
-                              className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
-                            >
-                              $50
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-100')}
-                              className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
-                            >
-                              $100
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-200')}
-                              className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
-                            >
-                              $200
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      ) : (
-                        <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed select-none">
-                          {getPlanDisplay(mockRoles[member._id] ?? memberRole)}
-                        </p>
-                      )}
-                    </div>
-                  </div>
+                {/* Email */}
+                <div className="flex-1 min-w-0 pr-4">
+                  <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed">
+                    {email}
+                  </p>
                 </div>
 
-                {isTenantAdminOrOwner && (
-                  <div className="flex-none w-7 h-7 flex items-center justify-center ml-2">
-                    {!isCurrentUser ? (
-                      <button
-                        type="button"
-                        onClick={() => setMemberToRemove(member)}
-                        className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 transition-all duration-150 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100"
-                        title={isInvitation ? "Cancel Invitation" : "Remove Member"}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
+                {/* Invisible spacer matching the invite bar's first divider */}
+                <div className="h-6 w-[1px] bg-transparent flex-none" />
+
+                {/* Plan Dropdown Section */}
+                <div className="relative flex items-center h-full flex-none">
+                  <div className="flex-none w-[105px] h-full flex items-center justify-center">
+                    {isTenantAdminOrOwner ? (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger className="flex items-center gap-1 text-xs font-semibold text-gray-800 dark:text-gray-200 hover:text-gray-500 hover:bg-black/5 dark:hover:bg-white/5 px-2 py-1 rounded-md transition-all cursor-pointer border-none outline-none focus:outline-none select-none">
+                          {getPlanDisplay(mockRoles[member._id] ?? memberRole)}
+                          <ChevronDown className="h-3 w-3 text-gray-400" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="center" className="border-black/10 dark:border-white/10 bg-white dark:bg-zinc-955 min-w-[100px] rounded-xl shadow-lg z-30">
+                          <DropdownMenuItem
+                            onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-10')}
+                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                          >
+                            $10
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-20')}
+                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                          >
+                            $20
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-50')}
+                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                          >
+                            $50
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-100')}
+                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                          >
+                            $100
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-200')}
+                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                          >
+                            $200
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     ) : (
-                      <div className="w-7 h-7" />
+                      <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate leading-relaxed select-none">
+                        {getPlanDisplay(mockRoles[member._id] ?? memberRole)}
+                      </p>
                     )}
                   </div>
-                )}
+
+                  {/* Spacer 2 (matching Divider 2) */}
+                  <div className="h-6 w-[1px] bg-transparent flex-none" />
+
+                  {/* Action button slot aligned exactly under Send Invite */}
+                  {isTenantAdminOrOwner && (
+                    <div className="flex-none w-[110px] h-full flex items-center justify-center">
+                      {!isCurrentUser ? (
+                        <button
+                          type="button"
+                          onClick={() => setMemberToRemove(member)}
+                          className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 transition-all duration-150 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100"
+                          title={isInvitation ? "Cancel Invitation" : "Remove Member"}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      ) : (
+                        <div className="w-7 h-7" />
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             );
           })}

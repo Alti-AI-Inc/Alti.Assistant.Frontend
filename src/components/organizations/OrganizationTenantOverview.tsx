@@ -370,7 +370,7 @@ export function OrganizationTenantOverview({
               type="button"
               onClick={handleSendInvite}
               disabled={isInviting || !inviteEmail.trim() || !inviteRole}
-              className="flex-none h-full px-4 text-sm text-gray-800 dark:text-gray-100 hover:text-gray-500 dark:hover:text-gray-300 disabled:opacity-40 transition-all cursor-pointer bg-transparent border-none outline-none focus:outline-none font-normal"
+              className="flex-none w-[110px] h-full px-0 text-center text-sm text-gray-800 dark:text-gray-100 hover:text-gray-500 dark:hover:text-gray-300 disabled:opacity-40 transition-all cursor-pointer bg-transparent border-none outline-none focus:outline-none font-normal"
             >
               {isInviting ? 'Inviting' : 'Send Invite'}
             </button>
