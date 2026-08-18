@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Card } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
+import { useTenant } from '@/contexts/TenantContext';
+import { toast } from 'sonner';
 
 interface PricingPlan {
   id: string;
@@ -91,8 +93,12 @@ const ALL_PLANS: PricingPlan[] = [
 
 export default function PlansPage() {
   const { data: session } = useSession();
+  const { currentTenant } = useTenant();
   const [hideTrial, setHideTrial] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPlanId, setCurrentPlanId] = useState('free');
+
+  const isCreator = !currentTenant || currentTenant.role === 'owner' || currentTenant.role === 'admin';
 
   useEffect(() => {
     const checkSubscriptionAndTrial = async () => {
@@ -161,10 +167,10 @@ export default function PlansPage() {
                     className="w-full p-5 bg-white/80 dark:bg-zinc-950/50 shadow-md border-black/5 dark:border-white/5 transition-all duration-300 hover:-translate-y-0.5"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                      {/* Left Side: Pricing */}
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-xl font-extrabold tracking-tight uppercase">
+                      {/* Left Column: Pricing */}
+                      <div className="w-[120px] shrink-0">
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-xl font-extrabold tracking-tight uppercase text-gray-900 dark:text-white">
                             {displayPrice}
                           </span>
                           <span className="text-zinc-500 dark:text-zinc-400 font-medium text-[10px] tracking-wider">
@@ -173,15 +179,39 @@ export default function PlansPage() {
                         </div>
                       </div>
 
-                      {/* Right Side: Features */}
-                      <div className="text-sm font-semibold text-black dark:text-black flex items-center gap-1.5">
-                        {plan.features.map((feature, idx) => (
-                          <div key={idx} className="flex items-center gap-1.5">
-                            {idx > 0 && <span className="text-zinc-400 font-normal">&bull;</span>}
-                            <span>{feature}</span>
-                          </div>
-                        ))}
+                      {/* Middle Column: Features stacked vertically, left-aligned */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-col gap-1 text-sm font-semibold text-gray-800 dark:text-gray-200">
+                          {plan.features.map((feature, idx) => (
+                            <span key={idx}>{feature}</span>
+                          ))}
+                        </div>
                       </div>
+
+                      {/* Right Column: Select / Current Plan buttons for creator only */}
+                      {isCreator && (
+                        <div className="shrink-0 flex items-center justify-end w-[130px]">
+                          {plan.id === currentPlanId ? (
+                            <button
+                              type="button"
+                              className="w-full h-9 rounded-xl text-xs font-bold bg-black text-white dark:bg-white dark:text-black hover:opacity-90 active:scale-95 transition-all cursor-pointer border border-transparent"
+                            >
+                              Current Plan
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setCurrentPlanId(plan.id);
+                                toast.success(`Selected ${plan.name} plan`);
+                              }}
+                              className="w-full h-9 rounded-xl text-xs font-bold bg-[#0000ff] text-white hover:opacity-90 active:scale-95 transition-all cursor-pointer"
+                            >
+                              Select Plan
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </Card>
                 );
