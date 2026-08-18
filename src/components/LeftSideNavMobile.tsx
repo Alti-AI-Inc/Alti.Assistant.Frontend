@@ -760,7 +760,7 @@ const LeftSideNavMobile = () => {
         <div className="relative w-full flex flex-col items-center">
           <div
             className={cn(
-              "relative size-10 flex items-center justify-center rounded-xl border border-[#0000ff]/20 bg-[#0000ff]/5 text-white select-none"
+              "relative size-10 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] text-white select-none"
             )}
           >
             <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
@@ -783,10 +783,7 @@ const LeftSideNavMobile = () => {
                   close();
                 }}
                 className={cn(
-                  "relative size-10 flex items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer text-white",
-                  (activeBotId === null && activeTab !== 'account')
-                    ? "border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)]"
-                    : "border-[#0000ff]/15 bg-[#0000ff]/5 hover:rounded-2xl hover:border-[#0000ff]/35 hover:bg-[#0000ff]/15 hover:shadow-[0_0_12px_rgba(0,0,255,0.2)]"
+                  "relative size-10 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] transition-all duration-300 cursor-pointer text-white hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/55 hover:shadow-[0_0_18px_rgba(0,0,255,0.3)]"
                 )}
               >
                 <LayoutGrid className="size-5" />
@@ -857,10 +854,7 @@ const LeftSideNavMobile = () => {
                         close();
                       }}
                       className={cn(
-                        "relative size-10 flex items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer text-sm font-semibold text-white",
-                        isSelected
-                          ? "border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)]"
-                          : "border-[#0000ff]/15 bg-[#0000ff]/5 hover:rounded-2xl hover:border-[#0000ff]/35 hover:bg-[#0000ff]/15 hover:shadow-[0_0_12px_rgba(0,0,255,0.2)]",
+                        "relative size-10 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] transition-all duration-300 cursor-pointer text-sm font-semibold text-white hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/55 hover:shadow-[0_0_18px_rgba(0,0,255,0.3)]",
                         isBeingDragged && "opacity-40"
                       )}
                     >
