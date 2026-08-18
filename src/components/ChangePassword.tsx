@@ -48,6 +48,11 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
       confirmNewPassword: '',
     },
   });
+
+  const oldPassword = form.watch('oldPassword');
+  const newPassword = form.watch('newPassword');
+  const confirmNewPassword = form.watch('confirmNewPassword');
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (values.newPassword !== values.confirmNewPassword) {
@@ -109,13 +114,15 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                       placeholder="Old Password"
                       className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
                     />
-                    <button
-                      type="button"
-                      onClick={() => setShowOldPassword(!showOldPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none cursor-pointer"
-                    >
-                      {showOldPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                    </button>
+                    {oldPassword && oldPassword.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowOldPassword(!showOldPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none cursor-pointer"
+                      >
+                        {showOldPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      </button>
+                    )}
                   </div>
                 </FormControl>
                 <FormMessage />
@@ -138,13 +145,15 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                       placeholder="New Password"
                       className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
                     />
-                    <button
-                      type="button"
-                      onClick={() => setShowNewPassword(!showNewPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none cursor-pointer"
-                    >
-                      {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                    </button>
+                    {newPassword && newPassword.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none cursor-pointer"
+                      >
+                        {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      </button>
+                    )}
                   </div>
                 </FormControl>
                 <FormMessage />
@@ -167,13 +176,15 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
                       placeholder="Confirm New Password"
                       className="w-full bg-transparent border-none p-0 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all"
                     />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none cursor-pointer"
-                    >
-                      {showConfirmNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                    </button>
+                    {confirmNewPassword && confirmNewPassword.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none cursor-pointer"
+                      >
+                        {showConfirmNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      </button>
+                    )}
                   </div>
                 </FormControl>
                 <FormMessage />
