@@ -78,7 +78,7 @@ For deploying this frontend directly to a GCP VM instance using PM2 and Nginx:
 1. **Production Variables**: Ensure the following env properties are declared in the PM2 startup script:
    - `AUTH_TRUST_HOST=true` (crucial for reverse proxy SSL handshakes)
    - `AUTH_URL=https://insosearch.com` (forces absolute redirect URLs)
-   - `NEXT_PUBLIC_API_URL=https://insosearch.com/api/v1`
+   - `NEXT_PUBLIC_API_URL=https://api.altihq.com/api/v1`
 2. **Nginx Reverse Proxy**:
    Configure your Nginx block to forward `/api/v1` to the backend and root requests to Next.js on port `3000`:
    ```nginx

@@ -758,7 +758,7 @@ export default function ChatInput({
         }
 
         try {
-          const base = process.env.NEXT_PUBLIC_API_URL || 'https://api.insosearch.com/api/v1';
+          const base = process.env.NEXT_PUBLIC_API_URL || 'https://api.altihq.com/api/v1';
           const res = await fetch(
             `${base}/vertex/anonymous-response`,
             {

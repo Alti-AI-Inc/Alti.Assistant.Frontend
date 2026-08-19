@@ -113,7 +113,7 @@ export default function PlansPage() {
         return;
       }
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.insosearch.com/api/v1';
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.altihq.com/api/v1';
         const res = await fetch(`${apiUrl}/auth/user/single-user`, {
           headers: {
             'Authorization': `Bearer ${session.accessToken}`,
