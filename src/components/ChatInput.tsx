@@ -1673,7 +1673,7 @@ export default function ChatInput({
 
                 {/* Monitor Frequency Selector */}
                 {selectedOption === OPTIONS.MONITOR && (
-                  <div className="relative w-32 flex-shrink-0">
+                  <div className="relative w-28 flex-shrink-0">
                     <button
                       type="button"
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
