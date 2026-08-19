@@ -1673,14 +1673,14 @@ export default function ChatInput({
 
                 {/* Monitor Frequency Selector */}
                 {selectedOption === OPTIONS.MONITOR && (
-                  <div className="relative">
+                  <div className="relative w-32 flex-shrink-0">
                     <button
                       type="button"
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                      className="flex h-8 items-center gap-1.5 px-2.5 rounded-md border border-black/5 dark:border-zinc-700/50 bg-[#e1e1e1] dark:bg-zinc-955 hover:bg-[#d0d0d0] dark:hover:bg-zinc-900 text-black transition-all text-xs font-normal focus:outline-none cursor-pointer select-none"
+                      className="flex h-8 w-full items-center justify-between gap-1.5 px-2.5 rounded-md border border-black/5 dark:border-zinc-700/50 bg-[#e1e1e1] dark:bg-zinc-955 hover:bg-[#d0d0d0] dark:hover:bg-zinc-900 text-black transition-all text-xs font-normal focus:outline-none cursor-pointer select-none"
                     >
                       <span>{monitorFrequency}</span>
-                      <ChevronDown className="size-3.5 text-black" />
+                      <ChevronDown className="size-3.5 text-black flex-shrink-0" />
                     </button>
                     {isDropdownOpen && (
                       <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 rounded-xl shadow-lg z-50 overflow-hidden animate-in slide-in-from-top-2 duration-150">
