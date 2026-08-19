@@ -1685,7 +1685,7 @@ export default function ChatInput({
                     {isDropdownOpen && (
                       <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 rounded-xl shadow-lg z-50 overflow-hidden animate-in slide-in-from-top-2 duration-150">
                         <div className="flex flex-col p-1.5 gap-0.5">
-                          {['1 Hour', '6 Hours', '12 Hours', '24 Hours', '3 Days', '7 Days', '14 Days', '30 Days'].map((freq) => (
+                          {['1 Hour', '6 Hours', '12 Hours', '1 Day', '3 Days', '7 Days', '14 Days', '30 Days'].map((freq) => (
                             <button
                               key={freq}
                               type="button"
