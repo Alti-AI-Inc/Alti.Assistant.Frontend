@@ -28,12 +28,12 @@ jobs:
 
       - name: Set environment variables for branch
         run: |
-          if [ "${{ github.ref_name }}" = "dev" ]; then
-            echo "SERVICE_NAME=alti-assistant-frontend-dev" >> $GITHUB_ENV
+          if [ "${{ github.ref_name }}" = "dev" ] || [ "${{ github.ref_name }}" = "temp-rebrand" ]; then
+            echo "SERVICE_NAME=inso-assistant-frontend-dev" >> $GITHUB_ENV
             echo "AUTH_URL=https://dev.alti.app" >> $GITHUB_ENV
             echo "IMAGE_TAG=dev" >> $GITHUB_ENV
           else
-            echo "SERVICE_NAME=alti-assistant-frontend" >> $GITHUB_ENV
+            echo "SERVICE_NAME=inso-assistant-frontend" >> $GITHUB_ENV
             echo "AUTH_URL=https://alti.app" >> $GITHUB_ENV
             echo "IMAGE_TAG=latest" >> $GITHUB_ENV
           fi
