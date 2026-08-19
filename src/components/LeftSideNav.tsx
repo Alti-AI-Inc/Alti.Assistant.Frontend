@@ -781,7 +781,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         "relative size-11 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] transition-all duration-300 cursor-pointer text-white hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/55 hover:shadow-[0_0_18px_rgba(0,0,255,0.3)]"
                       )}
                     >
-                      <LayoutGrid className="size-5" />
+                      <LayoutGrid className="size-[18px]" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
