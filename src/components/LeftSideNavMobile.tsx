@@ -202,7 +202,7 @@ const LeftSideNavMobile = () => {
   const isTenantOwner = mode === 'tenant' && (currentTenant?.role === 'admin' || currentTenant?.role === 'owner');
   const isTenantAdmin = mode === 'tenant' && currentTenant?.role === 'manager';
 
-  const isAdmin = userEmail === 'admin@alti.app' || isGlobalAdmin || isTenantOwner;
+  const isAdmin = userEmail === 'admin@insosearch.com' || isGlobalAdmin || isTenantOwner;
   const isManager = isGlobalAdmin || isTenantOwner || isTenantAdmin;
   const isSuperAdmin = data?.user?.role === 'super_admin';
 
@@ -306,7 +306,7 @@ const LeftSideNavMobile = () => {
 
   useEffect(() => {
     const handleStorageChange = () => {
-      const savedTasks = localStorage.getItem('alti_automations');
+      const savedTasks = localStorage.getItem('insosearch_automations');
       if (savedTasks) {
         setTasks(JSON.parse(savedTasks));
       } else {
@@ -317,11 +317,11 @@ const LeftSideNavMobile = () => {
     handleStorageChange();
 
     window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('alti_automations_updated', handleStorageChange);
+    window.addEventListener('insosearch_automations_updated', handleStorageChange);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('alti_automations_updated', handleStorageChange);
+      window.removeEventListener('insosearch_automations_updated', handleStorageChange);
     };
   }, [pathname]);
   const searchParams = useSearchParams();
@@ -582,7 +582,7 @@ const LeftSideNavMobile = () => {
           label: 'New Task',
           onClick: () => {
             router.push('/tasks');
-            window.dispatchEvent(new Event('alti_new_task_click'));
+            window.dispatchEvent(new Event('insosearch_new_task_click'));
             close();
           },
         };
@@ -756,14 +756,14 @@ const LeftSideNavMobile = () => {
     <div className="flex h-full w-full overflow-hidden">
       {SHOW_WORKSPACES && (
         <div className="w-[60px] h-full bg-black border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
-        {/* Alti Home Logo */}
+        {/* Inso Search Home Logo */}
         <div className="relative w-full flex flex-col items-center">
           <div
             className={cn(
               "relative size-10 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] text-white select-none"
             )}
           >
-            <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
+            <img src="/assets/logo-icon.png" alt="Inso Search Brand Logo" className="size-6 object-contain brightness-0 invert" />
           </div>
         </div>
 

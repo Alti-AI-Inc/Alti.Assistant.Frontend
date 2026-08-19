@@ -44,7 +44,7 @@ export const AdminSecondarySidebar = () => {
   const isTenantOwner = mode === 'tenant' && (currentTenant?.role === 'admin' || currentTenant?.role === 'owner');
   const isTenantAdmin = mode === 'tenant' && currentTenant?.role === 'manager';
 
-  const isAdmin = userEmail === 'admin@alti.app' || isGlobalAdmin || isTenantOwner;
+  const isAdmin = userEmail === 'admin@insosearch.com' || isGlobalAdmin || isTenantOwner;
   const isManager = isGlobalAdmin || isTenantOwner || isTenantAdmin;
   const isSuperAdmin = data?.user?.role === 'super_admin';
 

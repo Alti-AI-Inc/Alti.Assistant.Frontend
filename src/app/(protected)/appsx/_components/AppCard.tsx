@@ -330,7 +330,7 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
     placeholders: {
       "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
       "AWS_SECRET_ACCESS_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-      "AWS_S3_BUCKET": "my-alti-bucket",
+      "AWS_S3_BUCKET": "my-insosearch-bucket",
       "AWS_REGION": "us-east-1"
     }
   },
@@ -502,7 +502,7 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
     },
     placeholders: {
       "WORKDAY_TENANT": "mycompany",
-      "WORKDAY_USERNAME": "isvc_alti",
+      "WORKDAY_USERNAME": "isvc_insosearch",
       "WORKDAY_PASSWORD": "password_xyz",
       "WORKDAY_CLIENT_ID": "client_id_xyz",
       "WORKDAY_CLIENT_SECRET": "client_secret_xyz"
@@ -738,7 +738,7 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
     },
     placeholders: {
       "CYBERARK_URL": "https://cyberark.company.com/aimtemplates",
-      "CYBERARK_USERNAME": "alti_svc",
+      "CYBERARK_USERNAME": "insosearch_svc",
       "CYBERARK_PASSWORD": "password_xyz"
     }
   },
@@ -826,7 +826,7 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
     },
     placeholders: {
       "KAFKA_BROKERS": "localhost:9092,localhost:9093",
-      "KAFKA_CLIENT_ID": "alti-mcp-client"
+      "KAFKA_CLIENT_ID": "insosearch-mcp-client"
     }
   },
   "aws": {
@@ -1011,7 +1011,7 @@ const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bg
   concur: { category: 'Expense & AP Core', color: 'border-yellow-500/40 text-yellow-600 dark:text-yellow-400 bg-yellow-50/50 dark:bg-yellow-950/20', bgGlow: 'shadow-[0_0_15px_rgba(234,179,8,0.15)]', badge: 'Concur Spend', hoverBorder: 'border-yellow-500/60' },
   expensify: { category: 'Expense & AP Core', color: 'border-yellow-500/40 text-yellow-600 dark:text-yellow-400 bg-yellow-50/50 dark:bg-yellow-950/20', bgGlow: 'shadow-[0_0_15px_rgba(234,179,8,0.15)]', badge: 'AP Audit', hoverBorder: 'border-yellow-500/60' },
   bill: { category: 'Expense & AP Core', color: 'border-yellow-500/40 text-yellow-600 dark:text-yellow-400 bg-yellow-50/50 dark:bg-yellow-950/20', bgGlow: 'shadow-[0_0_15px_rgba(234,179,8,0.15)]', badge: 'Bill.com Payable', hoverBorder: 'border-yellow-500/60' },
-  tipalti: { category: 'Expense & AP Core', color: 'border-yellow-500/40 text-yellow-600 dark:text-yellow-400 bg-yellow-50/50 dark:bg-yellow-950/20', bgGlow: 'shadow-[0_0_15px_rgba(234,179,8,0.15)]', badge: 'Global AP', hoverBorder: 'border-yellow-500/60' },
+  tipinsosearch: { category: 'Expense & AP Core', color: 'border-yellow-500/40 text-yellow-600 dark:text-yellow-400 bg-yellow-50/50 dark:bg-yellow-950/20', bgGlow: 'shadow-[0_0_15px_rgba(234,179,8,0.15)]', badge: 'Global AP', hoverBorder: 'border-yellow-500/60' },
   ramp: { category: 'Expense & AP Core', color: 'border-yellow-500/40 text-yellow-600 dark:text-yellow-400 bg-yellow-50/50 dark:bg-yellow-950/20', bgGlow: 'shadow-[0_0_15px_rgba(234,179,8,0.15)]', badge: 'Smart Card', hoverBorder: 'border-yellow-500/60' },
 
   // Cohort 3: Phase 15 – HR Tech, Talent Acquisition & Performance (Violet Glow)
@@ -1511,7 +1511,7 @@ const AppCard = ({
               </h3>
               
               <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed">
-                {app.description || `Integrate ${app.title} tools seamlessly to expand Alti's automation triggers and actions.`}
+                {app.description || `Integrate ${app.title} tools seamlessly to expand Inso Search's automation triggers and actions.`}
               </p>
             </div>
           </div>

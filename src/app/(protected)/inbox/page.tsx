@@ -13,7 +13,7 @@ export default function InboxPage() {
   // Fetch runs for Inbox
   useEffect(() => {
     const fetchRuns = () => {
-      const savedRuns = localStorage.getItem('alti_task_runs');
+      const savedRuns = localStorage.getItem('insosearch_task_runs');
       if (savedRuns) {
         try {
           setRuns(JSON.parse(savedRuns));

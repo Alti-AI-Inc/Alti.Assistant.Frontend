@@ -304,7 +304,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
   useEffect(() => {
     const handleStorageChange = () => {
-      const savedTasks = localStorage.getItem('alti_automations');
+      const savedTasks = localStorage.getItem('insosearch_automations');
       if (savedTasks) {
         setTasks(JSON.parse(savedTasks));
       } else {
@@ -315,11 +315,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     handleStorageChange();
 
     window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('alti_automations_updated', handleStorageChange);
+    window.addEventListener('insosearch_automations_updated', handleStorageChange);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('alti_automations_updated', handleStorageChange);
+      window.removeEventListener('insosearch_automations_updated', handleStorageChange);
     };
   }, [pathname]);
 
@@ -331,7 +331,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const isTenantOwner = mode === 'tenant' && (currentTenant?.role === 'admin' || currentTenant?.role === 'owner');
   const isTenantAdmin = mode === 'tenant' && currentTenant?.role === 'manager';
 
-  const isAdmin = userEmail === 'admin@alti.app' || isGlobalAdmin || isTenantOwner;
+  const isAdmin = userEmail === 'admin@insosearch.com' || isGlobalAdmin || isTenantOwner;
   const isManager = isGlobalAdmin || isTenantOwner || isTenantAdmin;
   const isSuperAdmin = data?.user?.role === 'super_admin';
 
@@ -539,7 +539,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           tooltip: 'New Task',
           onClick: () => {
             router.push('/tasks');
-            window.dispatchEvent(new Event('alti_new_task_click'));
+            window.dispatchEvent(new Event('insosearch_new_task_click'));
           },
         };
       case 'search':
@@ -737,7 +737,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
       {SHOW_WORKSPACES && (
         <div className="w-[68px] h-full bg-black border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
-          {/* Alti Home Logo */}
+          {/* Inso Search Home Logo */}
           <div className="relative w-full flex flex-col items-center">
             <button
               type="button"
@@ -755,7 +755,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   <PanelLeftClose className="size-5 rotate-180" />
                 )
               ) : (
-                <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
+                <img src="/assets/logo-icon.png" alt="Inso Search Brand Logo" className="size-6 object-contain brightness-0 invert" />
               )}
             </button>
           </div>

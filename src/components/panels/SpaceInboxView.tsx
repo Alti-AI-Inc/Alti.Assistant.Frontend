@@ -16,7 +16,7 @@ export default function SpaceInboxView({ botId }: SpaceInboxViewProps) {
   // Fetch runs for this space
   useEffect(() => {
     const fetchRuns = () => {
-      const savedRuns = localStorage.getItem('alti_task_runs');
+      const savedRuns = localStorage.getItem('insosearch_task_runs');
       if (savedRuns) {
         try {
           const allRuns = JSON.parse(savedRuns);
@@ -41,13 +41,13 @@ export default function SpaceInboxView({ botId }: SpaceInboxViewProps) {
   );
 
   const handleClearSpaceRuns = () => {
-    const savedRuns = localStorage.getItem('alti_task_runs');
+    const savedRuns = localStorage.getItem('insosearch_task_runs');
     if (savedRuns) {
       try {
         const allRuns = JSON.parse(savedRuns);
         // Keep runs that do not belong to this botId
         const updatedRuns = allRuns.filter((r: any) => r.botId !== botId);
-        localStorage.setItem('alti_task_runs', JSON.stringify(updatedRuns));
+        localStorage.setItem('insosearch_task_runs', JSON.stringify(updatedRuns));
         setRuns([]);
         toast.success('Space inbox history cleared');
       } catch (e) {

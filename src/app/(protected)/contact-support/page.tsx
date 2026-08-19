@@ -28,7 +28,7 @@ const SupportContent = () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
       const now = new Date();
-      const userEmail = session?.user?.email || 'user@alti.app';
+      const userEmail = session?.user?.email || 'user@insosearch.com';
       const newRequest = {
         id: `req-${Math.random().toString(36).substring(2, 9)}`,
         email: userEmail,
@@ -39,10 +39,10 @@ const SupportContent = () => {
         status: 'Pending',
       };
 
-      const existing = localStorage.getItem('alti_support_requests');
+      const existing = localStorage.getItem('insosearch_support_requests');
       const requests = existing ? JSON.parse(existing) : [];
       requests.unshift(newRequest);
-      localStorage.setItem('alti_support_requests', JSON.stringify(requests));
+      localStorage.setItem('insosearch_support_requests', JSON.stringify(requests));
 
       toast.success('Your message has been sent to our support team.');
       setSubject('');
