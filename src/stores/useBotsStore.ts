@@ -87,7 +87,7 @@ const PRELOADED_BOTS: Chatbot[] = [
     id: 'general-assistant',
     name: 'General Assistant',
     description: 'Standard conversational assistant for everyday inquiries and brainstorming.',
-    instructions: 'You are Inso Search, a highly helpful, intelligent, and friendly general-purpose AI chatbot. You assist with general tasks, brainstorming, writing, analysis, and problem-solving.',
+    instructions: 'You are Alti, a highly helpful, intelligent, and friendly general-purpose AI chatbot. You assist with general tasks, brainstorming, writing, analysis, and problem-solving.',
     model: 'Gemini 1.5 Flash',
     avatar: '🤖',
     createdAt: new Date().toISOString(),

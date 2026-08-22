@@ -39,7 +39,7 @@ export default function TaskHistoryLogs({
     if (taskName.includes('Report') || taskName.includes('GCP')) {
       lines.push(
         `[${new Date().toISOString()}] [fetch] GET secure connection to https://monitoring.cloud.insosearch.com/v3...`,
-        `[${new Date().toISOString()}] [status] 200 OK - connection established with Inso Search Cloud Monitoring API`,
+        `[${new Date().toISOString()}] [status] 200 OK - connection established with Alti Cloud Monitoring API`,
         `[${new Date().toISOString()}] [parse] Auditing active cloud compute instance profiles...`,
         `[${new Date().toISOString()}] [parse] Auditing active AI resource endpoints...`,
         `[${new Date().toISOString()}] [compute] Aggregating cost data and compiling lifecycle metrics...`,

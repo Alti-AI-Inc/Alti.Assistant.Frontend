@@ -42,7 +42,7 @@ const InviteContent = () => {
         tenantId: targetTenantId,
         email: email.trim(),
         role: 'member',
-        message: 'Join me on Inso Search!',
+        message: 'Join me on Alti!',
       });
 
       if (response.success) {

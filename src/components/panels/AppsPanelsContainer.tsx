@@ -317,7 +317,7 @@ export const AppsPanelsContainer = () => {
             <div className="flex flex-col items-center justify-center animate-in fade-in zoom-in-95 duration-500">
               <img
                 src="/assets/logo-icon.png"
-                alt="Inso Search Logo"
+                alt="Alti Logo"
                 className="h-16 w-16 select-none pointer-events-none opacity-40 dark:opacity-30"
                 style={{ filter: 'brightness(0) invert(1)' }}
               />

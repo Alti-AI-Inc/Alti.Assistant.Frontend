@@ -756,14 +756,14 @@ const LeftSideNavMobile = () => {
     <div className="flex h-full w-full overflow-hidden">
       {SHOW_WORKSPACES && (
         <div className="w-[60px] h-full bg-black border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
-        {/* Inso Search Home Logo */}
+        {/* Alti Home Logo */}
         <div className="relative w-full flex flex-col items-center">
           <div
             className={cn(
               "relative size-10 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] text-white select-none"
             )}
           >
-            <img src="/assets/logo-icon.png" alt="Inso Search Brand Logo" className="size-6 object-contain brightness-0 invert" />
+            <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
           </div>
         </div>
 

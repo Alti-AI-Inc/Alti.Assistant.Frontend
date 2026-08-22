@@ -737,7 +737,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
       {SHOW_WORKSPACES && (
         <div className="w-[68px] h-full bg-black border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
-          {/* Inso Search Home Logo */}
+          {/* Alti Home Logo */}
           <div className="relative w-full flex flex-col items-center">
             <button
               type="button"
@@ -755,7 +755,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   <PanelLeftClose className="size-5 rotate-180" />
                 )
               ) : (
-                <img src="/assets/logo-icon.png" alt="Inso Search Brand Logo" className="size-6 object-contain brightness-0 invert" />
+                <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
               )}
             </button>
           </div>

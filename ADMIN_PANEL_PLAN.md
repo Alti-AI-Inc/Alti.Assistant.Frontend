@@ -1,4 +1,4 @@
-# Inso Search Admin Panel — Implementation Plan
+# Alti Admin Panel — Implementation Plan
 
 > Standalone Next.js application that connects to the existing
 > ASON-Core-Service-Backend. Lives at its own repo / deployment URL (e.g.

@@ -8,7 +8,7 @@ export default function Page() {
         </h4>
         <div>
           <p>
-            Inso Search is where the power of AI meets unmatched privacy and security.
+            Alti is where the power of AI meets unmatched privacy and security.
             We give users the
           </p>
           <p>

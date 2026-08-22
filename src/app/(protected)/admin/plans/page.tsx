@@ -23,7 +23,7 @@ const ALL_PLANS: PricingPlan[] = [
     name: 'Starter',
     price: 'Free',
     period: ' (One-time trial)',
-    description: 'Test out Inso Search’s capabilities with basic search and model limits.',
+    description: 'Test out Alti’s capabilities with basic search and model limits.',
     features: [
       '100 Search',
       '10 Research',
