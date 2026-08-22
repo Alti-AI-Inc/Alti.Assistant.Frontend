@@ -1412,18 +1412,32 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
         {/* Rate limits section above Footer Area */}
         {activeTab !== 'account' && (
-          <div className="px-4 py-3 flex flex-col gap-2 border-t border-zinc-800/60 bg-[#0c1120]/90 backdrop-blur-md flex-none">
-            <div className="flex items-center justify-between px-3.5 py-2 rounded-xl border border-[#0000ff]/35 bg-[#0000ff]/5 shadow-[0_0_12px_rgba(0,0,255,0.15)] hover:shadow-[0_0_15px_rgba(0,0,255,0.25)] hover:border-[#0000ff]/50 transition-all duration-300 text-xs text-white">
-              <span className="font-medium text-white">Search</span>
-              <span className="font-light text-white drop-shadow-[0_0_4px_rgba(0,0,255,0.45)]">55/500</span>
+          <div className="px-5 py-3.5 flex flex-col gap-2 border-t border-zinc-800/60 bg-[#0c1120]/40 backdrop-blur-sm flex-none select-none text-xs">
+            <div className="flex items-center justify-between py-0.5">
+              <span className="font-medium text-white/80">Search</span>
+              <span className="text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)] flex items-center">
+                <span className="font-light">55</span>
+                <span className="font-light text-white/50 mx-0.5">/</span>
+                <span className="font-bold">500</span>
+              </span>
             </div>
-            <div className="flex items-center justify-between px-3.5 py-2 rounded-xl border border-[#0000ff]/35 bg-[#0000ff]/5 shadow-[0_0_12px_rgba(0,0,255,0.15)] hover:shadow-[0_0_15px_rgba(0,0,255,0.25)] hover:border-[#0000ff]/50 transition-all duration-300 text-xs text-white">
-              <span className="font-medium text-white">Research</span>
-              <span className="font-light text-white drop-shadow-[0_0_4px_rgba(0,0,255,0.45)]">25/50</span>
+            <div className="border-t border-zinc-800/40 w-full" />
+            <div className="flex items-center justify-between py-0.5">
+              <span className="font-medium text-white/80">Research</span>
+              <span className="text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)] flex items-center">
+                <span className="font-light">25</span>
+                <span className="font-light text-white/50 mx-0.5">/</span>
+                <span className="font-bold">50</span>
+              </span>
             </div>
-            <div className="flex items-center justify-between px-3.5 py-2 rounded-xl border border-[#0000ff]/35 bg-[#0000ff]/5 shadow-[0_0_12px_rgba(0,0,255,0.15)] hover:shadow-[0_0_15px_rgba(0,0,255,0.25)] hover:border-[#0000ff]/50 transition-all duration-300 text-xs text-white">
-              <span className="font-medium text-white">Monitor</span>
-              <span className="font-light text-white drop-shadow-[0_0_4px_rgba(0,0,255,0.45)]">12/50</span>
+            <div className="border-t border-zinc-800/40 w-full" />
+            <div className="flex items-center justify-between py-0.5">
+              <span className="font-medium text-white/80">Monitor</span>
+              <span className="text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)] flex items-center">
+                <span className="font-light">12</span>
+                <span className="font-light text-white/50 mx-0.5">/</span>
+                <span className="font-bold">50</span>
+              </span>
             </div>
           </div>
         )}
