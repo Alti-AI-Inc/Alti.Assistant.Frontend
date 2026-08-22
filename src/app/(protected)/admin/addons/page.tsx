@@ -154,7 +154,7 @@ export default function AddonsPage() {
               <div>
                 <h4 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Extra Search Queries</h4>
                 <p className="text-lg font-bold text-gray-900 dark:text-white mt-1">
-                  {extraSearchesRemaining} remaining
+                  {extraSearchesRemaining} purchased
                 </p>
               </div>
             </Card>
@@ -164,7 +164,7 @@ export default function AddonsPage() {
               <div>
                 <h4 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Extra Research Reports</h4>
                 <p className="text-lg font-bold text-gray-900 dark:text-white mt-1">
-                  {extraResearchRemaining} remaining
+                  {extraResearchRemaining} purchased
                 </p>
               </div>
             </Card>
@@ -174,7 +174,7 @@ export default function AddonsPage() {
               <div>
                 <h4 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Extra Monitor Scans</h4>
                 <p className="text-lg font-bold text-gray-900 dark:text-white mt-1">
-                  {extraMonitorRemaining} remaining
+                  {extraMonitorRemaining} purchased
                 </p>
               </div>
             </Card>

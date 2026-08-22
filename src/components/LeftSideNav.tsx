@@ -979,30 +979,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     <LayoutGrid className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/plans') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
                     <span>Plans</span>
                   </button>
-                  <button
-                    onClick={() => router.push('/admin/addons')}
-                    className={cn(
-                      "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg border mb-1.5 cursor-pointer select-none text-left focus:outline-none text-xs transition-all duration-300",
-                      pathname.startsWith('/admin/addons')
-                        ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
-                        : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
-                    )}
-                  >
-                    <Sparkles className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/addons') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
-                    <span>Extras</span>
-                  </button>
-                  <button
-                    onClick={() => router.push('/admin/usage')}
-                    className={cn(
-                      "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg border mb-1.5 cursor-pointer select-none text-left focus:outline-none text-xs transition-all duration-300",
-                      pathname.startsWith('/admin/usage')
-                        ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
-                        : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
-                    )}
-                  >
-                    <BarChart3 className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/usage') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
-                    <span>Usage</span>
-                  </button>
+
+
                   <button
                     onClick={() => router.push('/admin/team-members')}
                     className={cn(
@@ -1415,29 +1393,17 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
           <div className="px-5 py-3.5 flex flex-col gap-2 border-t border-zinc-800/60 bg-[#0c1120]/40 backdrop-blur-sm flex-none select-none text-xs">
             <div className="flex items-center justify-between py-0.5">
               <span className="font-medium text-white/80">Search</span>
-              <span className="text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)] flex items-center">
-                <span className="font-light">55</span>
-                <span className="font-light text-white/50 mx-0.5">/</span>
-                <span className="font-bold">500</span>
-              </span>
+              <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">445 Remaining</span>
             </div>
             <div className="border-t border-zinc-800/40 w-full" />
             <div className="flex items-center justify-between py-0.5">
               <span className="font-medium text-white/80">Research</span>
-              <span className="text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)] flex items-center">
-                <span className="font-light">25</span>
-                <span className="font-light text-white/50 mx-0.5">/</span>
-                <span className="font-bold">50</span>
-              </span>
+              <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">25 Remaining</span>
             </div>
             <div className="border-t border-zinc-800/40 w-full" />
             <div className="flex items-center justify-between py-0.5">
               <span className="font-medium text-white/80">Monitor</span>
-              <span className="text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)] flex items-center">
-                <span className="font-light">12</span>
-                <span className="font-light text-white/50 mx-0.5">/</span>
-                <span className="font-bold">50</span>
-              </span>
+              <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">38 Remaining</span>
             </div>
           </div>
         )}

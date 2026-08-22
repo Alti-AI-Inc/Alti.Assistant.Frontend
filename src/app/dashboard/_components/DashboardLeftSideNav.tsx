@@ -110,9 +110,7 @@ const DashboardLeftSideNav = () => {
                       <DropdownMenuItem onClick={() => router.push('/admin/plans')}>
                         <LayoutGrid className="text-black dark:text-white" /> Plans
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => router.push('/admin/addons')}>
-                        <Sparkles className="text-black dark:text-white" /> Extras
-                      </DropdownMenuItem>
+
                       <DropdownMenuItem onClick={() => router.push('/admin/members')}>
                         <UserPlus className="text-black dark:text-white" /> Invite
                       </DropdownMenuItem>
