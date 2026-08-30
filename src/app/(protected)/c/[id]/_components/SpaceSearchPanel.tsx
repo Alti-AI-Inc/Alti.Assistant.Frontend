@@ -283,7 +283,8 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
           );
         } else {
           // Brand new session: seed the view and let the sidebar know
-          const newSessionId = newTurn.searchSession || newTurn.id || newTurn._id || '';
+          const newSessionId =
+            newTurn.searchSession || newTurn.id || newTurn._id || '';
           const newSession: SpaceSearchSession = {
             id: newSessionId,
             _id: newSessionId,

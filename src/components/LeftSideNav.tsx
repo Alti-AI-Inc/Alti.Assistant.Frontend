@@ -363,7 +363,9 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
   const { data: connections } = useConnectionsQuery(data?.accessToken);
 
-  const [searchSessions, setSearchSessions] = useState<SpaceSearchSession[]>([]);
+  const [searchSessions, setSearchSessions] = useState<SpaceSearchSession[]>(
+    [],
+  );
   const sessionParam = searchParams?.get('session') || null;
 
   useEffect(() => {
@@ -991,18 +993,30 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <button
-                            onClick={() => {
+                            onClick={async () => {
                               setSelectedOption(null);
                               setActiveBotId(bot.id);
-                              if (window.location.pathname === '/spaces') {
-                                window.history.pushState(
-                                  null,
-                                  '',
-                                  `/spaces?bot=${bot.id}`,
-                                );
-                              } else {
-                                router.push(`/spaces?bot=${bot.id}`);
+                              // Jump straight into the space's most recent session, like ChatGPT
+                              const result = await getSpaceSearchesAction(
+                                bot.id,
+                              );
+                              const firstSession =
+                                result.success && Array.isArray(result.data)
+                                  ? result.data[0]
+                                  : null;
+                              if (
+                                result.success &&
+                                Array.isArray(result.data)
+                              ) {
+                                setSearchSessions(result.data);
                               }
+                              const firstSessionId =
+                                firstSession?.id || firstSession?._id;
+                              const url = firstSessionId
+                                ? `/spaces?bot=${bot.id}&session=${firstSessionId}`
+                                : `/spaces?bot=${bot.id}`;
+                              // Use router.push (not raw pushState) so useSearchParams reflects the new session
+                              router.push(url);
                             }}
                             className={cn(
                               'relative flex size-11 cursor-pointer items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 text-sm font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.25)] transition-all duration-300 hover:rounded-2xl hover:border-[#0000ff]/55 hover:bg-[#0000ff]/20 hover:shadow-[0_0_18px_rgba(0,0,255,0.3)]',
@@ -1382,15 +1396,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                             setSelectedOption(null);
                             setActiveBotThreadId(null);
                             setActiveConversation(null);
-                            if (window.location.pathname === '/spaces') {
-                              window.history.pushState(
-                                null,
-                                '',
-                                `/spaces?bot=${activeBotId}`,
-                              );
-                            } else {
-                              router.push(`/spaces?bot=${activeBotId}`);
-                            }
+                            router.push(`/spaces?bot=${activeBotId}`);
                           }}
                           className="flex h-full w-9 items-center justify-center border-l border-[#0000ff]/30 text-blue-100 transition-all hover:bg-[#0000ff]/20 focus:outline-none"
                         >
@@ -1548,19 +1554,9 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                                   key={id}
                                   onClick={() => {
                                     setSelectedOption(null);
-                                    if (
-                                      window.location.pathname === '/spaces'
-                                    ) {
-                                      window.history.pushState(
-                                        null,
-                                        '',
-                                        `/spaces?bot=${activeBotId}&session=${id}`,
-                                      );
-                                    } else {
-                                      router.push(
-                                        `/spaces?bot=${activeBotId}&session=${id}`,
-                                      );
-                                    }
+                                    router.push(
+                                      `/spaces?bot=${activeBotId}&session=${id}`,
+                                    );
                                   }}
                                   className={cn(
                                     'group mb-1.5 flex h-9 w-full cursor-pointer items-center justify-between rounded-lg border text-left text-xs font-normal transition-all duration-300 select-none',
