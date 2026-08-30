@@ -1,3 +1,10 @@
+import {
+  createSpaceAction,
+  deleteSpaceAction,
+  getSpacesAction,
+  updateSpaceAction,
+} from '@/actions/spaceActions';
+import { toast } from 'sonner';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -33,202 +40,187 @@ interface BotsState {
   activeBotId: string | null;
   activeBotThreadId: string | null;
   projectTab: 'my' | 'team';
-  
+
   // Actions
   addBot: (bot: Omit<Chatbot, 'id' | 'createdAt'>, token?: string) => Chatbot;
-  addBotAsync: (bot: Omit<Chatbot, 'id' | 'createdAt'>, token?: string) => Promise<Chatbot>;
-  editBot: (id: string, updated: Partial<Omit<Chatbot, 'id' | 'createdAt'>>, token?: string) => void;
+  addBotAsync: (
+    bot: Omit<Chatbot, 'id' | 'createdAt'>,
+    token?: string,
+  ) => Promise<Chatbot>;
+  editBot: (
+    id: string,
+    updated: Partial<Omit<Chatbot, 'id' | 'createdAt'>>,
+    token?: string,
+  ) => void;
   deleteBot: (id: string, token?: string) => void;
   setActiveBotId: (id: string | null) => void;
-  
+
   addThread: (botId: string, threadId: string, title: string) => void;
   deleteThread: (threadId: string) => void;
   setActiveBotThreadId: (threadId: string | null) => void;
   setProjectTab: (tab: 'my' | 'team') => void;
-  
+
   // Async initialization
   fetchBots: (token?: string) => Promise<void>;
-  
+
   // Rearrange bots
   reorderBots: (startIndex: number, endIndex: number) => void;
 }
 
-const getApiUrl = () => process.env.NEXT_PUBLIC_API_URL || 'https://api.altihq.com/api/v1';
-
-const PRELOADED_BOTS: Chatbot[] = [
-  {
-    id: 'python-expert',
-    name: 'Python Expert',
-    description: 'Specialist in clean code, refactoring, docstrings, and algorithm optimization.',
-    instructions: 'You are an expert Python developer and architect. You write highly pythonic, clean, efficient, and readable code adhering strictly to PEP 8 standards. Always include thorough docstrings, explain design decisions, and suggest performance optimizations where applicable.',
-    model: 'Gemini 1.5 Pro',
-    avatar: '🐍',
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'ui-design-guru',
-    name: 'UI Design Guru',
-    description: 'Expert in modern UI/UX design, tailwind, vanilla CSS styling, and premium color palettes.',
-    instructions: 'You are a master UI/UX designer and frontend architect. You specialize in creating stunning, responsive, and visually wowing web interfaces using Tailwind CSS, vanilla CSS, and modern design principles like glassmorphism, smooth animations, and tailored HSL color palettes. Always prioritize design aesthetics and visual excellence.',
-    model: 'Gemini 1.5 Pro',
-    avatar: '🎨',
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'copywriter',
-    name: 'AI Copywriter',
-    description: 'Creative assistant for drafting emails, blog posts, sales copies, and high-impact headlines.',
-    instructions: 'You are a professional copywriter and conversion rates marketing expert. You write high-converting, engaging, and compelling copy for newsletters, social media posts, headlines, articles, and marketing emails. Adapt your tone perfectly to the target audience.',
-    model: 'Gemini 1.5 Flash',
-    avatar: '✍️',
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'general-assistant',
-    name: 'General Assistant',
-    description: 'Standard conversational assistant for everyday inquiries and brainstorming.',
-    instructions: 'You are Alti, a highly helpful, intelligent, and friendly general-purpose AI chatbot. You assist with general tasks, brainstorming, writing, analysis, and problem-solving.',
-    model: 'Gemini 1.5 Flash',
-    avatar: '🤖',
-    createdAt: new Date().toISOString(),
-  },
-];
-
 export const useBotsStore = create<BotsState>()(
   persist(
     (set, get) => ({
-      bots: PRELOADED_BOTS,
+      bots: [],
       threads: [],
       activeBotId: null,
       activeBotThreadId: null,
       projectTab: 'my',
 
-      addBot: (newBotData, token) => {
+      addBot: (newBotData, _token) => {
         const id = `bot_${Date.now()}`;
         const newBot: Chatbot = {
           ...newBotData,
           id,
           createdAt: new Date().toISOString(),
         };
-        set((state) => ({
+        set(state => ({
           bots: [newBot, ...state.bots],
           activeBotId: id,
         }));
-        
+
         // Sync with backend asynchronously
-        fetch(`${getApiUrl()}/chatbots`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-          },
-          body: JSON.stringify(newBot),
+        createSpaceAction({
+          name: newBot.name,
+          description: newBot.description,
+          isPrivate: !newBot.isShared,
         })
-        .then(async (res) => {
-          if (res.ok) {
-            const data = await res.json();
-            if (data?.data) {
-              const backendBot = data.data;
+          .then(result => {
+            if (result.success && result.data) {
+              const backendBot = result.data;
               const botId = backendBot.id || backendBot._id || id;
-              set((state) => ({
-                bots: state.bots.map((b) => b.id === id ? { ...backendBot, id: botId } : b),
-                activeBotId: state.activeBotId === id ? botId : state.activeBotId,
+              set(state => ({
+                bots: state.bots.map(b =>
+                  b.id === id ? { ...b, ...backendBot, id: botId } : b,
+                ),
+                activeBotId:
+                  state.activeBotId === id ? botId : state.activeBotId,
               }));
+            } else {
+              console.error(
+                `Failed to create space on backend: ${result.message}`,
+              );
+              toast.error(
+                result.message || 'Space was not saved to the server',
+              );
             }
-          }
-        })
-        .catch((err) => console.error('Failed to sync addBot to backend', err));
-        
+          })
+          .catch(err => console.error('Failed to sync addBot to backend', err));
+
         return newBot;
       },
 
-      addBotAsync: async (newBotData, token) => {
+      addBotAsync: async (newBotData, _token) => {
         const tempId = `bot_${Date.now()}`;
         const tempBot: Chatbot = {
           ...newBotData,
           id: tempId,
           createdAt: new Date().toISOString(),
         };
-        set((state) => ({
+        set(state => ({
           bots: [tempBot, ...state.bots],
           activeBotId: tempId,
         }));
-        
+
         try {
-          const res = await fetch(`${getApiUrl()}/chatbots`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-            },
-            body: JSON.stringify(tempBot),
+          const result = await createSpaceAction({
+            name: tempBot.name,
+            description: tempBot.description,
+            isPrivate: !tempBot.isShared,
           });
-          if (res.ok) {
-            const data = await res.json();
-            if (data?.data) {
-              const backendBot = data.data;
-              const botId = backendBot.id || backendBot._id || tempId;
-              const mappedBot: Chatbot = {
-                ...backendBot,
-                id: botId,
-              };
-              set((state) => ({
-                bots: state.bots.map((b) => b.id === tempId ? mappedBot : b),
-                activeBotId: state.activeBotId === tempId ? botId : state.activeBotId,
-              }));
-              return mappedBot;
-            }
+          if (result.success && result.data) {
+            const backendBot = result.data;
+            const botId = backendBot.id || backendBot._id || tempId;
+            const mappedBot: Chatbot = {
+              ...tempBot,
+              ...backendBot,
+              id: botId,
+            };
+            set(state => ({
+              bots: state.bots.map(b => (b.id === tempId ? mappedBot : b)),
+              activeBotId:
+                state.activeBotId === tempId ? botId : state.activeBotId,
+            }));
+            return mappedBot;
+          } else {
+            console.error(
+              `Failed to create space on backend: ${result.message}`,
+            );
+            toast.error(result.message || 'Space was not saved to the server');
           }
         } catch (err) {
           console.error('Failed to sync addBotAsync to backend', err);
+          toast.error('Space was not saved to the server');
         }
-        
+
         return tempBot;
       },
 
-      editBot: (id, updatedData, token) => {
-        set((state) => ({
-          bots: state.bots.map((bot) =>
-            bot.id === id ? { ...bot, ...updatedData } : bot
+      editBot: (id, updatedData, _token) => {
+        set(state => ({
+          bots: state.bots.map(bot =>
+            bot.id === id ? { ...bot, ...updatedData } : bot,
           ),
         }));
         // Sync with backend asynchronously only if it is a database chatbot
         const isMongoId = /^[0-9a-fA-F]{24}$/.test(id);
         if (isMongoId) {
-          fetch(`${getApiUrl()}/chatbots/${id}`, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-            },
-            body: JSON.stringify(updatedData),
-          }).catch((err) => console.error('Failed to sync editBot to backend', err));
+          updateSpaceAction(id, {
+            name: updatedData.name,
+            description: updatedData.description,
+            isPrivate:
+              updatedData.isShared !== undefined
+                ? !updatedData.isShared
+                : undefined,
+          }).then(result => {
+            if (!result.success) {
+              console.error(
+                `Failed to update space on backend: ${result.message}`,
+              );
+              toast.error(
+                result.message || 'Space changes were not saved to the server',
+              );
+            }
+          });
         }
       },
 
-      deleteBot: (id, token) => {
-        set((state) => ({
-          bots: state.bots.filter((bot) => bot.id !== id),
+      deleteBot: (id, _token) => {
+        set(state => ({
+          bots: state.bots.filter(bot => bot.id !== id),
           // Clear active bot if it was deleted
           activeBotId: state.activeBotId === id ? null : state.activeBotId,
           activeBotThreadId:
             state.activeBotId === id ? null : state.activeBotThreadId,
           // Clean up threads associated with the deleted bot
-          threads: state.threads.filter((t) => t.botId !== id),
+          threads: state.threads.filter(t => t.botId !== id),
         }));
         // Sync with backend only if it is a database chatbot
         const isMongoId = /^[0-9a-fA-F]{24}$/.test(id);
         if (isMongoId) {
-          fetch(`${getApiUrl()}/chatbots/${id}`, {
-            method: 'DELETE',
-            headers: {
-              ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-            },
-          }).catch((err) => console.error('Failed to sync deleteBot to backend', err));
+          deleteSpaceAction(id).then(result => {
+            if (!result.success) {
+              console.error(
+                `Failed to delete space on backend: ${result.message}`,
+              );
+              toast.error(
+                result.message || 'Space was not deleted from the server',
+              );
+            }
+          });
         }
       },
 
-      setActiveBotId: (id) => {
+      setActiveBotId: id => {
         set({
           activeBotId: id,
           activeBotThreadId: null, // Reset thread when changing bot
@@ -242,15 +234,15 @@ export const useBotsStore = create<BotsState>()(
           title,
           createdAt: new Date().toISOString(),
         };
-        set((state) => ({
+        set(state => ({
           threads: [...state.threads, newThread],
           activeBotThreadId: threadId,
         }));
       },
 
-      deleteThread: (threadId) => {
-        set((state) => ({
-          threads: state.threads.filter((t) => t.id !== threadId),
+      deleteThread: threadId => {
+        set(state => ({
+          threads: state.threads.filter(t => t.id !== threadId),
           activeBotThreadId:
             state.activeBotThreadId === threadId
               ? null
@@ -258,12 +250,12 @@ export const useBotsStore = create<BotsState>()(
         }));
       },
 
-      setActiveBotThreadId: (threadId) => set({ activeBotThreadId: threadId }),
+      setActiveBotThreadId: threadId => set({ activeBotThreadId: threadId }),
 
-      setProjectTab: (tab) => set({ projectTab: tab }),
+      setProjectTab: tab => set({ projectTab: tab }),
 
       reorderBots: (startIndex, endIndex) => {
-        set((state) => {
+        set(state => {
           const result = Array.from(state.bots);
           const [removed] = result.splice(startIndex, 1);
           result.splice(endIndex, 0, removed);
@@ -271,33 +263,31 @@ export const useBotsStore = create<BotsState>()(
         });
       },
 
-      fetchBots: async (token) => {
+      fetchBots: async _token => {
         try {
-          const res = await fetch(`${getApiUrl()}/chatbots`, {
-            headers: {
-              ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-            },
-          });
-          if (res.ok) {
-            const data = await res.json();
-            if (data?.data && Array.isArray(data.data)) {
-              const mapped = data.data.map((bot: any) => ({
-                ...bot,
-                id: bot.id || bot._id,
-              }));
-              // Sort custom bots so newest is first
-              const customBots = mapped.filter((b: Chatbot) => !PRELOADED_BOTS.some((p) => p.id === b.id));
-              customBots.sort((a: Chatbot, b: Chatbot) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
-              
-              // Place custom bots at the top, followed by preloaded bots
-              const merged = [...customBots];
-              PRELOADED_BOTS.forEach((p) => {
-                if (!merged.some((b) => b.id === p.id)) {
-                  merged.push(p);
-                }
-              });
-              set({ bots: merged });
-            }
+          const result = await getSpacesAction();
+          if (result.success && Array.isArray(result.data)) {
+            const mapped: Chatbot[] = result.data.map(space => ({
+              id: space.id || space._id || '',
+              name: space.name,
+              description: space.description || '',
+              instructions: '',
+              model: '',
+              avatar: '🗂️',
+              createdAt: space.createdAt || new Date().toISOString(),
+              isShared: !space.isPrivate,
+            }));
+            // Newest space first
+            mapped.sort(
+              (a, b) =>
+                new Date(b.createdAt || 0).getTime() -
+                new Date(a.createdAt || 0).getTime(),
+            );
+            set({ bots: mapped });
+          } else {
+            console.error(
+              `Failed to fetch spaces from backend: ${result.message}`,
+            );
           }
         } catch (error) {
           console.error('Failed to fetch bots from backend', error);
@@ -306,12 +296,13 @@ export const useBotsStore = create<BotsState>()(
     }),
     {
       name: 'insosearch-custom-bots',
-      partialize: (state) => ({
-        bots: state.bots,
+      // bots is intentionally excluded: it must always come fresh from GET /spaces,
+      // not from stale localStorage, otherwise hydration can clobber fetched data
+      partialize: state => ({
         threads: state.threads,
         activeBotId: state.activeBotId,
         activeBotThreadId: state.activeBotThreadId,
       }),
-    }
-  )
+    },
+  ),
 );

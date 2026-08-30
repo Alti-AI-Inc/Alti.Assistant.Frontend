@@ -5,58 +5,51 @@ import { ConfigForm } from '@/components/documents/ConfigForm';
 import { ModeSelector } from '@/components/documents/ModeSelector';
 import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import TelemetryConsole from '@/components/research/TelemetryConsole';
 import { useActiveConversation } from '@/hooks/useConversations';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
+import { useTranslation } from '@/hooks/useTranslation';
 import { cn, containsYouTubeUrl } from '@/lib/utils';
 import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDocumentStore } from '@/stores/useDocumentStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
-import { useTranslation } from '@/hooks/useTranslation';
 import { useQueryClient } from '@tanstack/react-query';
-import { EllipsisVertical, Share, Trash2, Brain, Download, Edit3, Code, FileText, ShieldCheck } from 'lucide-react';
+import { Code, Download, Edit3, ShieldCheck } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useRef, useState, Suspense } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Streamdown } from 'streamdown';
 import ReferencesList from './ReferenceList';
-import TelemetryConsole from '@/components/research/TelemetryConsole';
+import SpaceSearchPanel from './SpaceSearchPanel';
 
 import { useBotsStore } from '@/stores/useBotsStore';
 import { toast } from 'sonner';
 import CodeIDEWidget from './CodeIDEWidget';
 import DesignStudioWidget from './DesignStudioWidget';
 import { VideoStudioWidget } from './VideoStudioWidget';
-import TasksClient from '@/app/(protected)/tasks/TasksClient';
 
-import FileDownloadCard from './FileDownloadCard';
-import VideoComponent from './VideoComponent';
 import AudioComponent from './AudioComponent';
-import VideoComponentForContent from './YoutubePlayer';
+import FileDownloadCard from './FileDownloadCard';
 import FinancialWidget from './FinancialWidget';
-import SportsWidget from './SportsWidget';
 import RealEstateWidget from './RealEstateWidget';
 import SecurityVulnerabilityWidget from './SecurityVulnerabilityWidget';
+import SportsWidget from './SportsWidget';
+import VideoComponent from './VideoComponent';
+import VideoComponentForContent from './YoutubePlayer';
 
-import { BrainstormData } from './BrainstormData';
-import { PlanDataComponent } from './PlanData';
-import InteractiveTableWidget from './InteractiveTableWidget';
-import UniversalChartWidget from './UniversalChartWidget';
-import InteractiveFormWidget from './InteractiveFormWidget';
-import ReportData from './ReportData';
+import { getPresentationStatus } from '@/actions/presentationActions';
 import { useBrainstorm } from '@/hooks/useBrainstorm';
 import { useContractReview } from '@/hooks/useContractReview';
 import { usePlanGeneration } from '@/hooks/usePlanGeneration';
 import { useReportGeneration } from '@/hooks/useReportGeneration';
+import { BrainstormData } from './BrainstormData';
+import InteractiveFormWidget from './InteractiveFormWidget';
+import InteractiveTableWidget from './InteractiveTableWidget';
+import { PlanDataComponent } from './PlanData';
 import PresentationLoadingCard from './PresentationLoadingCard';
-import { getPresentationStatus } from '@/actions/presentationActions';
+import ReportData from './ReportData';
+import UniversalChartWidget from './UniversalChartWidget';
 
 interface ParsedCode {
   language: string;
@@ -108,13 +101,22 @@ function parseCodeFromMessage(content: string): ParsedCode | null {
   return null;
 }
 
-const FullConversation = ({ conversationId, isStudio }: { conversationId: string; isStudio?: boolean }) => {
+const FullConversation = ({
+  conversationId,
+  isStudio,
+}: {
+  conversationId: string;
+  isStudio?: boolean;
+}) => {
   const { data } = useSession();
   const pathname = usePathname();
   const router = useRouter(); // Explicit usage for imageGen
   const queryClient = useQueryClient();
 
-  const { data: queryConversation, isLoading } = useActiveConversation(conversationId, data?.accessToken);
+  const { data: queryConversation, isLoading } = useActiveConversation(
+    conversationId,
+    data?.accessToken,
+  );
   const { isLeftSidebarOpen, isAccountActive } = useSidebarStore();
 
   const {
@@ -143,16 +145,19 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
     pathname === '/c/new-research' ||
     pathname === '/c/new-monitor';
 
-  const expectedOption = 
-    conversationId === 'new-search' || pathname === '/c/new-search' ? OPTIONS.SEARCH :
-    conversationId === 'new-research' || pathname === '/c/new-research' ? OPTIONS.RESEARCH :
-    conversationId === 'new-monitor' || pathname === '/c/new-monitor' ? OPTIONS.MONITOR :
-    null;
+  const expectedOption =
+    conversationId === 'new-search' || pathname === '/c/new-search'
+      ? OPTIONS.SEARCH
+      : conversationId === 'new-research' || pathname === '/c/new-research'
+        ? OPTIONS.RESEARCH
+        : conversationId === 'new-monitor' || pathname === '/c/new-monitor'
+          ? OPTIONS.MONITOR
+          : null;
 
   if (isNewChatRoute && selectedOption !== expectedOption) {
     setSelectedOption(expectedOption);
   }
-  const activeBot = bots.find((b) => b.id === activeBotId);
+  const activeBot = bots.find(b => b.id === activeBotId);
 
   const { onOpen } = useModalStore();
 
@@ -214,81 +219,213 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
     }
 
     // 1. Get the last user query
-    const lastUserMessage = activeConversation?.messages
-      ?.filter((m: any) => m.role === 'user')
-      ?.pop()?.content || '';
+    const lastUserMessage =
+      activeConversation?.messages?.filter((m: any) => m.role === 'user')?.pop()
+        ?.content || '';
 
     // 2. Parse keywords to determine target databases
     const query = lastUserMessage.toLowerCase();
     const sources: ScannedSource[] = [];
 
     if (/inflation|cpi|unemployment|bls|wages|labor/i.test(query)) {
-      sources.push({ name: 'Bureau of Labor Statistics', domain: 'bls.gov', status: 'idle' });
+      sources.push({
+        name: 'Bureau of Labor Statistics',
+        domain: 'bls.gov',
+        status: 'idle',
+      });
     }
     if (/gdp|spending|bea|savings/i.test(query)) {
-      sources.push({ name: 'Bureau of Economic Analysis', domain: 'bea.gov', status: 'idle' });
+      sources.push({
+        name: 'Bureau of Economic Analysis',
+        domain: 'bea.gov',
+        status: 'idle',
+      });
     }
     if (/mortgage|rate|rates|fred|interest|conforming/i.test(query)) {
-      sources.push({ name: 'Freddie Mac Mortgage', domain: 'fred.stlouisfed.org', status: 'idle' });
+      sources.push({
+        name: 'Freddie Mac Mortgage',
+        domain: 'fred.stlouisfed.org',
+        status: 'idle',
+      });
     }
     if (/treasury|yield|yields|debt|bond|bonds/i.test(query)) {
-      sources.push({ name: 'U.S. Treasury Curves', domain: 'fiscaldata.treasury.gov', status: 'idle' });
+      sources.push({
+        name: 'U.S. Treasury Curves',
+        domain: 'fiscaldata.treasury.gov',
+        status: 'idle',
+      });
     }
     if (/conforming|fhfa|hpi|home price/i.test(query)) {
-      sources.push({ name: 'FHFA Home Prices', domain: 'fhfa.gov', status: 'idle' });
+      sources.push({
+        name: 'FHFA Home Prices',
+        domain: 'fhfa.gov',
+        status: 'idle',
+      });
     }
     if (/sec|10-k|10-q|filing|edgar/i.test(query)) {
-      sources.push({ name: 'SEC EDGAR Corporate Filings', domain: 'sec.gov', status: 'idle' });
+      sources.push({
+        name: 'SEC EDGAR Corporate Filings',
+        domain: 'sec.gov',
+        status: 'idle',
+      });
     }
     if (/cisa|kev|cve|vulnerability|threat|exploit/i.test(query)) {
-      sources.push({ name: 'CISA Exploited Threats', domain: 'cisa.gov/kev', status: 'idle' });
+      sources.push({
+        name: 'CISA Exploited Threats',
+        domain: 'cisa.gov/kev',
+        status: 'idle',
+      });
     }
     if (/court|docket|law|caselaw|scotus|judicial/i.test(query)) {
-      sources.push({ name: 'RECAP Judicial Index', domain: 'courtlistener.com', status: 'idle' });
+      sources.push({
+        name: 'RECAP Judicial Index',
+        domain: 'courtlistener.com',
+        status: 'idle',
+      });
     }
     if (/fara|lobbying|secrets|pac|campaign/i.test(query)) {
-      sources.push({ name: 'FARA & OpenSecrets', domain: 'opensecrets.org', status: 'idle' });
+      sources.push({
+        name: 'FARA & OpenSecrets',
+        domain: 'opensecrets.org',
+        status: 'idle',
+      });
     }
     if (/patent|uspto/i.test(query)) {
-      sources.push({ name: 'USPTO PatentsView', domain: 'patentsview.org', status: 'idle' });
+      sources.push({
+        name: 'USPTO PatentsView',
+        domain: 'patentsview.org',
+        status: 'idle',
+      });
     }
     if (/clinical|fda|drug|trials/i.test(query)) {
-      sources.push({ name: 'ClinicalTrials & openFDA', domain: 'clinicaltrials.gov', status: 'idle' });
+      sources.push({
+        name: 'ClinicalTrials & openFDA',
+        domain: 'clinicaltrials.gov',
+        status: 'idle',
+      });
     }
-    if (/opencorporates|corporate\s+registry|company\s+lookup|business\s+registry/i.test(query)) {
-      sources.push({ name: 'OpenCorporates Registry', domain: 'opencorporates.com', status: 'idle' });
+    if (
+      /opencorporates|corporate\s+registry|company\s+lookup|business\s+registry/i.test(
+        query,
+      )
+    ) {
+      sources.push({
+        name: 'OpenCorporates Registry',
+        domain: 'opencorporates.com',
+        status: 'idle',
+      });
     }
-    if (/nhtsa|vehicle\s+recall|vin|crash\s+rating|car\s+recall|defect/i.test(query)) {
-      sources.push({ name: 'NHTSA Vehicle Safety', domain: 'vpic.nhtsa.dot.gov', status: 'idle' });
+    if (
+      /nhtsa|vehicle\s+recall|vin|crash\s+rating|car\s+recall|defect/i.test(
+        query,
+      )
+    ) {
+      sources.push({
+        name: 'NHTSA Vehicle Safety',
+        domain: 'vpic.nhtsa.dot.gov',
+        status: 'idle',
+      });
     }
-    if (/fbi\s+crime|crime\s+stats|arrest\s+rates|regional\s+safety|crime\s+explorer/i.test(query)) {
-      sources.push({ name: 'FBI Crime Data Explorer', domain: 'cde.ucr.cgis.fbi.gov', status: 'idle' });
+    if (
+      /fbi\s+crime|crime\s+stats|arrest\s+rates|regional\s+safety|crime\s+explorer/i.test(
+        query,
+      )
+    ) {
+      sources.push({
+        name: 'FBI Crime Data Explorer',
+        domain: 'cde.ucr.cgis.fbi.gov',
+        status: 'idle',
+      });
     }
-    if (/cpsc|product\s+recall|toy\s+recall|appliance\s+warning|hazard\s+recall/i.test(query)) {
-      sources.push({ name: 'CPSC Product Safety', domain: 'cpsc.gov/recalls', status: 'idle' });
+    if (
+      /cpsc|product\s+recall|toy\s+recall|appliance\s+warning|hazard\s+recall/i.test(
+        query,
+      )
+    ) {
+      sources.push({
+        name: 'CPSC Product Safety',
+        domain: 'cpsc.gov/recalls',
+        status: 'idle',
+      });
     }
-    if (/nsf\s+award|nsf\s+grant|science\s+funding|research\s+grant|technology\s+award/i.test(query)) {
-      sources.push({ name: 'NSF Award Index', domain: 'nsf.gov/awards', status: 'idle' });
+    if (
+      /nsf\s+award|nsf\s+grant|science\s+funding|research\s+grant|technology\s+award/i.test(
+        query,
+      )
+    ) {
+      sources.push({
+        name: 'NSF Award Index',
+        domain: 'nsf.gov/awards',
+        status: 'idle',
+      });
     }
-    if (/eu\s+tender|european\s+tender|eu\s+procurement|ted\s+procurement/i.test(query)) {
-      sources.push({ name: 'EU TED Procurement', domain: 'ted.europa.eu', status: 'idle' });
+    if (
+      /eu\s+tender|european\s+tender|eu\s+procurement|ted\s+procurement/i.test(
+        query,
+      )
+    ) {
+      sources.push({
+        name: 'EU TED Procurement',
+        domain: 'ted.europa.eu',
+        status: 'idle',
+      });
     }
-    if (/usda\s+fas|crop\s+production|agricultural\s+export|agricultural\s+trade|usda\s+export|agricultural\s+supply/i.test(query)) {
-      sources.push({ name: 'USDA FAS Global Trade', domain: 'apps.fas.usda.gov', status: 'idle' });
+    if (
+      /usda\s+fas|crop\s+production|agricultural\s+export|agricultural\s+trade|usda\s+export|agricultural\s+supply/i.test(
+        query,
+      )
+    ) {
+      sources.push({
+        name: 'USDA FAS Global Trade',
+        domain: 'apps.fas.usda.gov',
+        status: 'idle',
+      });
     }
-    if (/ntsb|carol|aviation\s+accident|flight\s+crash|aviation\s+safety|ntsb\s+report/i.test(query)) {
-      sources.push({ name: 'NTSB CAROL Registry', domain: 'carol.ntsb.gov', status: 'idle' });
+    if (
+      /ntsb|carol|aviation\s+accident|flight\s+crash|aviation\s+safety|ntsb\s+report/i.test(
+        query,
+      )
+    ) {
+      sources.push({
+        name: 'NTSB CAROL Registry',
+        domain: 'carol.ntsb.gov',
+        status: 'idle',
+      });
     }
-    if (/cfpb\s+enforcement|cfpb\s+suit|cfpb\s+penalty|consent\s+order|predatory\s+lending|financial\s+settlement/i.test(query)) {
-      sources.push({ name: 'CFPB Enforcement Actions', domain: 'consumerfinance.gov/enforcement', status: 'idle' });
+    if (
+      /cfpb\s+enforcement|cfpb\s+suit|cfpb\s+penalty|consent\s+order|predatory\s+lending|financial\s+settlement/i.test(
+        query,
+      )
+    ) {
+      sources.push({
+        name: 'CFPB Enforcement Actions',
+        domain: 'consumerfinance.gov/enforcement',
+        status: 'idle',
+      });
     }
-    if (/epa\s+iris|iris|toxicology|carcinogen|chemical\s+hazard|epa\s+hazard/i.test(query)) {
-      sources.push({ name: 'EPA IRIS Toxicity DB', domain: 'epa.gov/iris', status: 'idle' });
+    if (
+      /epa\s+iris|iris|toxicology|carcinogen|chemical\s+hazard|epa\s+hazard/i.test(
+        query,
+      )
+    ) {
+      sources.push({
+        name: 'EPA IRIS Toxicity DB',
+        domain: 'epa.gov/iris',
+        status: 'idle',
+      });
     }
 
     if (sources.length === 0) {
-      sources.push({ name: 'Global Grounding Registry', domain: 'grounding.live', status: 'idle' });
-      sources.push({ name: 'Public registries', domain: 'comtrade.un.org', status: 'idle' });
+      sources.push({
+        name: 'Global Grounding Registry',
+        domain: 'grounding.live',
+        status: 'idle',
+      });
+      sources.push({
+        name: 'Public registries',
+        domain: 'comtrade.un.org',
+        status: 'idle',
+      });
     }
 
     setScannedSources(sources);
@@ -298,18 +435,30 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
     allLogs.push('[system] Initiating deep semantic grounding audit...');
     allLogs.push('[network] Resolving secure public endpoint routes...');
 
-    sources.forEach((src) => {
+    sources.forEach(src => {
       allLogs.push(`[dns] Resolving host for ${src.domain}...`);
-      allLogs.push(`[fetch] GET secure connection to https://${src.domain}/api/v1/query...`);
+      allLogs.push(
+        `[fetch] GET secure connection to https://${src.domain}/api/v1/query...`,
+      );
       allLogs.push(`[status] 200 OK - connection established with ${src.name}`);
-      allLogs.push(`[parse] Extracting factual key-value vectors from ${src.domain}...`);
+      allLogs.push(
+        `[parse] Extracting factual key-value vectors from ${src.domain}...`,
+      );
     });
-    allLogs.push('[consensus] Performing cross-channel semantic consensus checks...');
-    allLogs.push('[grounding] Anchoring verified data vectors to prevent hallucination...');
-    allLogs.push('[synthesis] Stream compiled. Dispatching live response synthesis...');
+    allLogs.push(
+      '[consensus] Performing cross-channel semantic consensus checks...',
+    );
+    allLogs.push(
+      '[grounding] Anchoring verified data vectors to prevent hallucination...',
+    );
+    allLogs.push(
+      '[synthesis] Stream compiled. Dispatching live response synthesis...',
+    );
 
     setLogs([allLogs[0]]);
-    setScanningStatus(sources[0] ? `searching ${sources[0].name}...` : 'Thinking...');
+    setScanningStatus(
+      sources[0] ? `searching ${sources[0].name}...` : 'Thinking...',
+    );
 
     let currentLogIndex = 1;
     const interval = setInterval(() => {
@@ -317,13 +466,15 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
         clearInterval(interval);
         return;
       }
-      
+
       const newLog = allLogs[currentLogIndex];
       setLogs(prev => [...prev, newLog]);
-      
+
       // Keep legacy scanningStatus updated for compatibility
       if (newLog.includes('established with')) {
-        setScanningStatus(`retrieved data from ${newLog.split('established with ')[1]}...`);
+        setScanningStatus(
+          `retrieved data from ${newLog.split('established with ')[1]}...`,
+        );
       } else if (newLog.includes('Performing')) {
         setScanningStatus('cross-checking sources...');
       } else if (newLog.includes('Anchoring')) {
@@ -331,17 +482,23 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
       } else if (newLog.includes('Dispatching')) {
         setScanningStatus('synthesizing response...');
       } else if (newLog.includes('Resolving host for')) {
-        setScanningStatus(`scanning ${newLog.split('Resolving host for ')[1]}...`);
+        setScanningStatus(
+          `scanning ${newLog.split('Resolving host for ')[1]}...`,
+        );
       }
-      
+
       // Update sources status based on current log
       setScannedSources(prevSources => {
         return prevSources.map((src, idx) => {
-          const isSrcLog = newLog.includes(src.domain) || newLog.includes(src.name);
+          const isSrcLog =
+            newLog.includes(src.domain) || newLog.includes(src.name);
           if (isSrcLog) {
             if (newLog.includes('[dns]') || newLog.includes('[fetch]')) {
               return { ...src, status: 'scanning' };
-            } else if (newLog.includes('[status]') || newLog.includes('[parse]')) {
+            } else if (
+              newLog.includes('[status]') ||
+              newLog.includes('[parse]')
+            ) {
               return { ...src, status: 'completed' };
             }
           }
@@ -368,7 +525,8 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
       const queryLen = queryConversation.messages?.length || 0;
       const activeLen = activeConversation?.messages?.length || 0;
       if (
-        queryConversation.conversationId !== activeConversation?.conversationId ||
+        queryConversation.conversationId !==
+          activeConversation?.conversationId ||
         queryLen >= activeLen
       ) {
         setActiveConversation(queryConversation);
@@ -379,7 +537,7 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
     setActiveConversation,
     showStartLastMessage,
     activeConversation?.conversationId,
-    activeConversation?.messages?.length
+    activeConversation?.messages?.length,
   ]);
 
   // Reset active conversation state when entering new-chat routes to prevent race conditions
@@ -487,7 +645,8 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
         const element = lastMessageRef.current;
         const containerRect = container.getBoundingClientRect();
         const elementRect = element.getBoundingClientRect();
-        const relativeTop = elementRect.top - containerRect.top + container.scrollTop;
+        const relativeTop =
+          elementRect.top - containerRect.top + container.scrollTop;
 
         container.scrollTo({
           top: relativeTop,
@@ -655,7 +814,8 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
 
   const shouldShowConfigForm = () => {
     // Special case: hide if file selected in rewrite mode
-    if (selectedOption === OPTIONS.REWRITE && selectedFiles.length > 0) return false;
+    if (selectedOption === OPTIONS.REWRITE && selectedFiles.length > 0)
+      return false;
 
     if (drafting.isActive) {
       return drafting.mode === 'direct';
@@ -785,11 +945,22 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
       ? parseCodeFromMessage(lastAssistantMessage.content)
       : null;
 
-  const hasImageContent = !!imageGenHook.imageBase64 || !!(lastAssistantMessage?.metadata?.imageUrl || lastAssistantMessage?.metadata?.images) || isImageGenLoading;
-  const hasVideoContent = !!lastAssistantMessage?.metadata?.video || (selectedOption === OPTIONS.VIDEO && isLoadingResponse);
+  const hasImageContent =
+    !!imageGenHook.imageBase64 ||
+    !!(
+      lastAssistantMessage?.metadata?.imageUrl ||
+      lastAssistantMessage?.metadata?.images
+    ) ||
+    isImageGenLoading;
+  const hasVideoContent =
+    !!lastAssistantMessage?.metadata?.video ||
+    (selectedOption === OPTIONS.VIDEO && isLoadingResponse);
 
-  const isSplitScreen = !!codeData || 
-    ((selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) && hasImageContent) || 
+  const isSplitScreen =
+    !!codeData ||
+    ((selectedOption === OPTIONS.IMAGE ||
+      selectedOption === OPTIONS.EDIT_IMAGE) &&
+      hasImageContent) ||
     (selectedOption === OPTIONS.VIDEO && hasVideoContent);
 
   const handleDownloadImage = async (url: string, filename: string) => {
@@ -814,10 +985,10 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
   const handleEditImage = async (url: string) => {
     try {
       toast.loading('Loading image into editing canvas...');
-      
+
       const img = new Image();
       img.crossOrigin = 'anonymous';
-      
+
       const base64 = await new Promise<string>((resolve, reject) => {
         img.onload = () => {
           const canvas = document.createElement('canvas');
@@ -831,7 +1002,8 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
             reject(new Error('Failed to get canvas 2d context'));
           }
         };
-        img.onerror = () => reject(new Error('Failed to load image into image element'));
+        img.onerror = () =>
+          reject(new Error('Failed to load image into image element'));
         img.src = url;
       }).catch(async () => {
         // Fallback to fetch
@@ -844,11 +1016,13 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
           reader.readAsDataURL(blob);
         });
       });
-      
+
       imageGenHook.setImageBase64(base64);
       setSelectedOption(OPTIONS.EDIT_IMAGE);
       toast.dismiss();
-      toast.success('Image loaded! Describe the changes you want to make in the chat.');
+      toast.success(
+        'Image loaded! Describe the changes you want to make in the chat.',
+      );
     } catch (err) {
       console.error('Error loading image for editing:', err);
       toast.dismiss();
@@ -857,7 +1031,9 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
   };
 
   const renderMessagesContent = (isSplit: boolean) => {
-    const mcpServerId = activeConversation?.metadata?.customData?.mcpServerId || queryConversation?.metadata?.customData?.mcpServerId;
+    const mcpServerId =
+      activeConversation?.metadata?.customData?.mcpServerId ||
+      queryConversation?.metadata?.customData?.mcpServerId;
     const showMessages =
       !!activeConversation?.messages.length ||
       drafting.isActive ||
@@ -877,292 +1053,360 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div
           className={cn(
-            'space-y-6 py-6 mx-auto w-full',
+            'mx-auto w-full space-y-6 py-6',
             isSplit ? '' : 'max-w-[796px]',
           )}
         >
-        {mcpServerId && (
-          <div className="mb-6 p-4 rounded-2xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/50 dark:border-indigo-900/50 shadow-xs flex items-start gap-3.5 animate-in fade-in duration-300">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-indigo-100 dark:bg-indigo-900/50 text-indigo-650 dark:text-indigo-400 flex-shrink-0">
-              <ShieldCheck className="size-5" />
-            </div>
-            <div className="space-y-1">
-              <h4 className="text-xs font-bold text-indigo-950 dark:text-indigo-100 uppercase tracking-wide flex items-center gap-1.5">
-                Direct Local Security Badging
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-800/30">
-                  Active
-                </span>
-              </h4>
-              <p className="text-xs text-indigo-950/80 dark:text-indigo-300 leading-relaxed font-medium">
-                This chat space is 100% isolated and direct-connected to your local <span className="font-extrabold uppercase text-indigo-700 dark:text-indigo-400">{mcpServerId}</span> client. All operations and credential handshakes occur locally with no middleware, ensuring absolute data sovereignty.
-              </p>
-            </div>
-          </div>
-        )}
-        {activeConversation?.messages.length &&
-          activeConversation.messages.map((message, idx) => {
-            const isLastAssistant = message === lastAssistantMessage;
-            const displayContent = (isLastAssistant && codeData) ? codeData.leftText : message.content;
-            const isContentEmpty = !displayContent?.trim();
-
-            return (
-              <div key={idx} className="space-y-4">
-                {message.role === 'user' && (
-                  <div
-                    className="flex items-center justify-end"
-                    data-role="user"
-                    ref={
-                      idx === lastUserMessageIndex
-                        ? lastMessageRef
-                        : null
-                    }
-                  >
-                    <div
-                      className={cn(
-                        'w-fit max-w-[85%] rounded-2xl bg-white dark:bg-white px-4 py-2.5 text-zinc-900 dark:text-zinc-900 border border-black/10 shadow-sm transition-colors duration-300 leading-relaxed text-sm font-medium',
-                        showStartLastMessage && 'mt-8',
-                      )}
-                    >
-                      {message.content}
-                    </div>
-                  </div>
-                )}
-
-                {message.role === 'assistant' &&
-                  // Skip rendering if content is empty and there's no image/video/doc/reference/ticker
-                  !(
-                    isContentEmpty &&
-                    !message.metadata?.imageUrl &&
-                    !message.metadata?.images &&
-                    !message.metadata?.video?.name &&
-                    !message.metadata?.document &&
-                    !message.metadata?.reference?.length &&
-                    !message.metadata?.financialTicker &&
-                    !(message.metadata as any)?.domain &&
-                    !(message.metadata as any)?.homeTeam &&
-                    !(message.metadata as any)?.address &&
-                    !message.metadata?.brainstormData &&
-                    !message.metadata?.planData &&
-                    !message.metadata?.tableData &&
-                    !message.metadata?.chartData &&
-                    !message.metadata?.formData &&
-                    !message.metadata?.reportData
-                  ) && (
-                    <div className="text-zinc-850 dark:text-zinc-200 space-y-2">
-                      {containsYouTubeUrl(displayContent) ? (
-                        <VideoComponentForContent content={displayContent} />
-                      ) : (
-                        <div className="relative group">
-                          <Streamdown className="w-full rounded-lg leading-relaxed text-sm">
-                            {displayContent}
-                          </Streamdown>
-
-                          <div className="flex items-center gap-2 mt-2">
-                            <CopyButton content={displayContent} />
-                            
-                            {displayContent?.includes('```') && (
-                              <button
-                                onClick={() => {
-                                  setSelectedOption(OPTIONS.CODE);
-                                  toast.success('Code opened in Sandbox!');
-                                }}
-                                className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-zinc-500 dark:text-zinc-400 text-[11px] font-semibold transition-all duration-200"
-                                title="Open in Sandbox"
-                              >
-                                <Code className="size-3.5" />
-                                <span>Open in Sandbox</span>
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                {(message.metadata?.imageUrl || message.metadata?.images) && (
-                  <div className="relative group overflow-hidden rounded-lg shadow-md border border-black/5 dark:border-white/5 max-w-full">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={(() => {
-                        const img = message.metadata?.imageUrl || message.metadata?.images;
-                        if (typeof img === 'string') return img;
-                        if (Array.isArray(img)) return typeof img[0] === 'string' ? img[0] : (img as any[])[0]?.url;
-                        return (img as any)?.url;
-                      })()}
-                      alt={message.metadata?.type || 'Generated image'}
-                      className="w-full object-contain max-h-[500px]"
-                      onError={e => {
-                        console.error(
-                           '[FullConversation] Image failed to load:',
-                          (message.metadata?.imageUrl || message.metadata?.images),
-                        );
-                        console.error('Error details:', e);
-                      }}
-                    />
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-3">
-                      <button
-                        onClick={() => {
-                          const img = message.metadata?.imageUrl || message.metadata?.images;
-                          const imageUrl = typeof img === 'string' ? img : Array.isArray(img) ? (typeof img[0] === 'string' ? img[0] : (img as any[])[0]?.url) : (img as any)?.url;
-                          handleDownloadImage(imageUrl, message.metadata?.type || 'generated-image');
-                        }}
-                        className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl text-xs font-semibold backdrop-blur-md transition-all duration-200 shadow-lg cursor-pointer transform hover:scale-105 active:scale-95"
-                      >
-                        <Download className="size-4" />
-                        Download
-                      </button>
-                      
-                      <button
-                        onClick={() => {
-                          const img = message.metadata?.imageUrl || message.metadata?.images;
-                          const imageUrl = typeof img === 'string' ? img : Array.isArray(img) ? (typeof img[0] === 'string' ? img[0] : (img as any[])[0]?.url) : (img as any)?.url;
-                          handleEditImage(imageUrl);
-                        }}
-                        className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold shadow-lg cursor-pointer transform hover:scale-105 active:scale-95 transition-all duration-200"
-                      >
-                        <Edit3 className="size-4" />
-                        Edit Image
-                      </button>
-                    </div>
-                  </div>
-                )}
-                {message.metadata?.video?.name && (
-                  <VideoComponent
-                    operationId={message.metadata?.video?.name}
-                  />
-                )}
-
-                {message.metadata?.audioUrl && (
-                  <AudioComponent
-                    audioUrl={message.metadata.audioUrl}
-                  />
-                )}
-
-                {message.metadata?.document && (
-                  <FileDownloadCard document={message.metadata.document} />
-                )}
-                {!!(message.metadata?.reference?.length || message.metadata?.sources?.length || message.metadata?.citations?.length) && (
-                  <ReferencesList 
-                    references={message.metadata.reference || message.metadata.sources || message.metadata.citations || []} 
-                    webSearchQueries={(message.metadata as any).webSearchQueries}
-                    searchEntryPoint={(message.metadata as any).searchEntryPoint}
-                  />
-                )}
-                {message.metadata?.financialTicker && (
-                  <FinancialWidget 
-                    ticker={message.metadata.financialTicker} 
-                    liveData={message.metadata} 
-                  />
-                )}
-
-                {((message.metadata as any)?.domain === 'sports_odds' || (message.metadata as any)?.homeTeam) && (
-                  <SportsWidget sportsData={message.metadata} />
-                )}
-
-                {((message.metadata as any)?.domain === 'real_estate' || (message.metadata as any)?.domain === 'census_bps' || (message.metadata as any)?.address) && (
-                  <RealEstateWidget realEstateData={message.metadata} />
-                )}
-
-                {((message.metadata as any)?.domain === 'cisa_kev' || (message.metadata as any)?.domain === 'nist_nvd_cve' || (message.metadata as any)?.cveId) && (
-                  <SecurityVulnerabilityWidget vulnerabilityData={message.metadata} />
-                )}
-
-                {message.metadata?.brainstormData && (
-                  <BrainstormData
-                    data={message.metadata.brainstormData}
-                    analysis={message.metadata.ideaAnalysis}
-                  />
-                )}
-                {message.metadata?.planData && (
-                  <PlanDataComponent
-                    plan={message.metadata.planData}
-                    analysis={message.metadata.planAnalysis}
-                    brainstorm={message.metadata.planBrainstorm}
-                  />
-                )}
-                {message.metadata?.tableData && (
-                  <InteractiveTableWidget tableData={message.metadata.tableData} />
-                )}
-                {message.metadata?.chartData && (
-                  <UniversalChartWidget chartData={message.metadata.chartData} />
-                )}
-                {message.metadata?.formData && (
-                  <InteractiveFormWidget formData={message.metadata.formData} />
-                )}
-                {message.metadata?.reportData && (
-                  <ReportData report={message.metadata.reportData} />
-                )}
+          {mcpServerId && (
+            <div className="animate-in fade-in mb-6 flex items-start gap-3.5 rounded-2xl border border-indigo-200/50 bg-indigo-50/50 p-4 shadow-xs duration-300 dark:border-indigo-900/50 dark:bg-indigo-950/20">
+              <div className="text-indigo-650 flex size-9 flex-shrink-0 items-center justify-center rounded-xl bg-indigo-100 dark:bg-indigo-900/50 dark:text-indigo-400">
+                <ShieldCheck className="size-5" />
               </div>
-            );
-          })}
-        {/* Presentation Loading Card - shown during polling */}
-        {presentationTask && presentationTask.status === 'pending' && (
-          <PresentationLoadingCard message={presentationTask.message} />
-        )}
-        {/* Image Generation UI */}
-        {shouldShowConfirmation && (
-          <ImageGenConfirmation onConfirm={handleUserConfirmation} />
-        )}
-        {isCollectingDetails && <ImageGenSuggestions />}
-        {/* Document Drafting/Review/Rewrite/Translate/Brainstorm/Plan Generation/Report Generation UI */}
-        {(drafting.isActive ||
-          selectedOption === OPTIONS.REWRITE ||
-          selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
-          selectedOption === OPTIONS.BRAINSTORM ||
-          selectedOption === OPTIONS.GENERATE_PLAN ||
-          selectedOption === OPTIONS.REVIEW_CONTRACT ||
-          selectedOption === OPTIONS.GENERATE_REPORT) &&
-          !isLoadingResponse && (
-            <>
-              {!shouldHideModeSelector() && (
-                <ModeSelector
-                  currentMode={getCurrentMode()}
-                  modeContext={getModeContext()}
-                />
-              )}
-
-              {shouldShowConfigForm() && (
-                <div
-                  className={cn(
-                    isLoadingResponse && 'pointer-events-none opacity-50',
-                  )}
-                >
-                  <ConfigForm />
-                </div>
-              )}
-            </>
+              <div className="space-y-1">
+                <h4 className="flex items-center gap-1.5 text-xs font-bold tracking-wide text-indigo-950 uppercase dark:text-indigo-100">
+                  Direct Local Security Badging
+                  <span className="inline-flex items-center rounded-full border border-emerald-200/50 bg-emerald-100 px-1.5 py-0.5 text-[9px] font-medium text-emerald-800 dark:border-emerald-800/30 dark:bg-emerald-950/30 dark:text-emerald-400">
+                    Active
+                  </span>
+                </h4>
+                <p className="text-xs leading-relaxed font-medium text-indigo-950/80 dark:text-indigo-300">
+                  This chat space is 100% isolated and direct-connected to your
+                  local{' '}
+                  <span className="font-extrabold text-indigo-700 uppercase dark:text-indigo-400">
+                    {mcpServerId}
+                  </span>{' '}
+                  client. All operations and credential handshakes occur locally
+                  with no middleware, ensuring absolute data sovereignty.
+                </p>
+              </div>
+            </div>
           )}
-        {/* Loading message - visible in the messages area */}
-        {isLoadingResponse && (
-          selectedOption === OPTIONS.RESEARCH ? (
-            <TelemetryConsole
-              conversationId={activeConversation?.conversationId || conversationId}
-              active={isLoadingResponse}
-            />
-          ) : (
-            <div className="flex items-center gap-2.5 py-3 px-1">
-              <div className="flex gap-1">
-                <div className="h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '0ms' }} />
-                <div className="h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '150ms' }} />
-                <div className="h-2 w-2 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '300ms' }} />
-              </div>
-              <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
-                {scanningStatus === 'Thinking...' ? 'Thinking...' : scanningStatus}
-              </span>
-            </div>
-          )
-        )}
+          {activeConversation?.messages.length &&
+            activeConversation.messages.map((message, idx) => {
+              const isLastAssistant = message === lastAssistantMessage;
+              const displayContent =
+                isLastAssistant && codeData
+                  ? codeData.leftText
+                  : message.content;
+              const isContentEmpty = !displayContent?.trim();
 
-        <div ref={messagesEndRef} />
+              return (
+                <div key={idx} className="space-y-4">
+                  {message.role === 'user' && (
+                    <div
+                      className="flex items-center justify-end"
+                      data-role="user"
+                      ref={idx === lastUserMessageIndex ? lastMessageRef : null}
+                    >
+                      <div
+                        className={cn(
+                          'w-fit max-w-[85%] rounded-2xl border border-black/10 bg-white px-4 py-2.5 text-sm leading-relaxed font-medium text-zinc-900 shadow-sm transition-colors duration-300 dark:bg-white dark:text-zinc-900',
+                          showStartLastMessage && 'mt-8',
+                        )}
+                      >
+                        {message.content}
+                      </div>
+                    </div>
+                  )}
+
+                  {message.role === 'assistant' &&
+                    // Skip rendering if content is empty and there's no image/video/doc/reference/ticker
+                    !(
+                      isContentEmpty &&
+                      !message.metadata?.imageUrl &&
+                      !message.metadata?.images &&
+                      !message.metadata?.video?.name &&
+                      !message.metadata?.document &&
+                      !message.metadata?.reference?.length &&
+                      !message.metadata?.financialTicker &&
+                      !(message.metadata as any)?.domain &&
+                      !(message.metadata as any)?.homeTeam &&
+                      !(message.metadata as any)?.address &&
+                      !message.metadata?.brainstormData &&
+                      !message.metadata?.planData &&
+                      !message.metadata?.tableData &&
+                      !message.metadata?.chartData &&
+                      !message.metadata?.formData &&
+                      !message.metadata?.reportData
+                    ) && (
+                      <div className="text-zinc-850 space-y-2 dark:text-zinc-200">
+                        {containsYouTubeUrl(displayContent) ? (
+                          <VideoComponentForContent content={displayContent} />
+                        ) : (
+                          <div className="group relative">
+                            <Streamdown className="w-full rounded-lg text-sm leading-relaxed">
+                              {displayContent}
+                            </Streamdown>
+
+                            <div className="mt-2 flex items-center gap-2">
+                              <CopyButton content={displayContent} />
+
+                              {displayContent?.includes('```') && (
+                                <button
+                                  onClick={() => {
+                                    setSelectedOption(OPTIONS.CODE);
+                                    toast.success('Code opened in Sandbox!');
+                                  }}
+                                  className="flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-semibold text-zinc-500 transition-all duration-200 hover:bg-black/5 dark:text-zinc-400 dark:hover:bg-white/5"
+                                  title="Open in Sandbox"
+                                >
+                                  <Code className="size-3.5" />
+                                  <span>Open in Sandbox</span>
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                  {(message.metadata?.imageUrl || message.metadata?.images) && (
+                    <div className="group relative max-w-full overflow-hidden rounded-lg border border-black/5 shadow-md dark:border-white/5">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={(() => {
+                          const img =
+                            message.metadata?.imageUrl ||
+                            message.metadata?.images;
+                          if (typeof img === 'string') return img;
+                          if (Array.isArray(img))
+                            return typeof img[0] === 'string'
+                              ? img[0]
+                              : (img as any[])[0]?.url;
+                          return (img as any)?.url;
+                        })()}
+                        alt={message.metadata?.type || 'Generated image'}
+                        className="max-h-[500px] w-full object-contain"
+                        onError={e => {
+                          console.error(
+                            '[FullConversation] Image failed to load:',
+                            message.metadata?.imageUrl ||
+                              message.metadata?.images,
+                          );
+                          console.error('Error details:', e);
+                        }}
+                      />
+                      {/* Hover Overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center gap-3 bg-black/40 opacity-0 backdrop-blur-xs transition-all duration-300 group-hover:opacity-100">
+                        <button
+                          onClick={() => {
+                            const img =
+                              message.metadata?.imageUrl ||
+                              message.metadata?.images;
+                            const imageUrl =
+                              typeof img === 'string'
+                                ? img
+                                : Array.isArray(img)
+                                  ? typeof img[0] === 'string'
+                                    ? img[0]
+                                    : (img as any[])[0]?.url
+                                  : (img as any)?.url;
+                            handleDownloadImage(
+                              imageUrl,
+                              message.metadata?.type || 'generated-image',
+                            );
+                          }}
+                          className="flex transform cursor-pointer items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-white/20 active:scale-95"
+                        >
+                          <Download className="size-4" />
+                          Download
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            const img =
+                              message.metadata?.imageUrl ||
+                              message.metadata?.images;
+                            const imageUrl =
+                              typeof img === 'string'
+                                ? img
+                                : Array.isArray(img)
+                                  ? typeof img[0] === 'string'
+                                    ? img[0]
+                                    : (img as any[])[0]?.url
+                                  : (img as any)?.url;
+                            handleEditImage(imageUrl);
+                          }}
+                          className="flex transform cursor-pointer items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-indigo-500 active:scale-95"
+                        >
+                          <Edit3 className="size-4" />
+                          Edit Image
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  {message.metadata?.video?.name && (
+                    <VideoComponent
+                      operationId={message.metadata?.video?.name}
+                    />
+                  )}
+
+                  {message.metadata?.audioUrl && (
+                    <AudioComponent audioUrl={message.metadata.audioUrl} />
+                  )}
+
+                  {message.metadata?.document && (
+                    <FileDownloadCard document={message.metadata.document} />
+                  )}
+                  {!!(
+                    message.metadata?.reference?.length ||
+                    message.metadata?.sources?.length ||
+                    message.metadata?.citations?.length
+                  ) && (
+                    <ReferencesList
+                      references={
+                        message.metadata.reference ||
+                        message.metadata.sources ||
+                        message.metadata.citations ||
+                        []
+                      }
+                      webSearchQueries={
+                        (message.metadata as any).webSearchQueries
+                      }
+                      searchEntryPoint={
+                        (message.metadata as any).searchEntryPoint
+                      }
+                    />
+                  )}
+                  {message.metadata?.financialTicker && (
+                    <FinancialWidget
+                      ticker={message.metadata.financialTicker}
+                      liveData={message.metadata}
+                    />
+                  )}
+
+                  {((message.metadata as any)?.domain === 'sports_odds' ||
+                    (message.metadata as any)?.homeTeam) && (
+                    <SportsWidget sportsData={message.metadata} />
+                  )}
+
+                  {((message.metadata as any)?.domain === 'real_estate' ||
+                    (message.metadata as any)?.domain === 'census_bps' ||
+                    (message.metadata as any)?.address) && (
+                    <RealEstateWidget realEstateData={message.metadata} />
+                  )}
+
+                  {((message.metadata as any)?.domain === 'cisa_kev' ||
+                    (message.metadata as any)?.domain === 'nist_nvd_cve' ||
+                    (message.metadata as any)?.cveId) && (
+                    <SecurityVulnerabilityWidget
+                      vulnerabilityData={message.metadata}
+                    />
+                  )}
+
+                  {message.metadata?.brainstormData && (
+                    <BrainstormData
+                      data={message.metadata.brainstormData}
+                      analysis={message.metadata.ideaAnalysis}
+                    />
+                  )}
+                  {message.metadata?.planData && (
+                    <PlanDataComponent
+                      plan={message.metadata.planData}
+                      analysis={message.metadata.planAnalysis}
+                      brainstorm={message.metadata.planBrainstorm}
+                    />
+                  )}
+                  {message.metadata?.tableData && (
+                    <InteractiveTableWidget
+                      tableData={message.metadata.tableData}
+                    />
+                  )}
+                  {message.metadata?.chartData && (
+                    <UniversalChartWidget
+                      chartData={message.metadata.chartData}
+                    />
+                  )}
+                  {message.metadata?.formData && (
+                    <InteractiveFormWidget
+                      formData={message.metadata.formData}
+                    />
+                  )}
+                  {message.metadata?.reportData && (
+                    <ReportData report={message.metadata.reportData} />
+                  )}
+                </div>
+              );
+            })}
+          {/* Presentation Loading Card - shown during polling */}
+          {presentationTask && presentationTask.status === 'pending' && (
+            <PresentationLoadingCard message={presentationTask.message} />
+          )}
+          {/* Image Generation UI */}
+          {shouldShowConfirmation && (
+            <ImageGenConfirmation onConfirm={handleUserConfirmation} />
+          )}
+          {isCollectingDetails && <ImageGenSuggestions />}
+          {/* Document Drafting/Review/Rewrite/Translate/Brainstorm/Plan Generation/Report Generation UI */}
+          {(drafting.isActive ||
+            selectedOption === OPTIONS.REWRITE ||
+            selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
+            selectedOption === OPTIONS.BRAINSTORM ||
+            selectedOption === OPTIONS.GENERATE_PLAN ||
+            selectedOption === OPTIONS.REVIEW_CONTRACT ||
+            selectedOption === OPTIONS.GENERATE_REPORT) &&
+            !isLoadingResponse && (
+              <>
+                {!shouldHideModeSelector() && (
+                  <ModeSelector
+                    currentMode={getCurrentMode()}
+                    modeContext={getModeContext()}
+                  />
+                )}
+
+                {shouldShowConfigForm() && (
+                  <div
+                    className={cn(
+                      isLoadingResponse && 'pointer-events-none opacity-50',
+                    )}
+                  >
+                    <ConfigForm />
+                  </div>
+                )}
+              </>
+            )}
+          {/* Loading message - visible in the messages area */}
+          {isLoadingResponse &&
+            (selectedOption === OPTIONS.RESEARCH ? (
+              <TelemetryConsole
+                conversationId={
+                  activeConversation?.conversationId || conversationId
+                }
+                active={isLoadingResponse}
+              />
+            ) : (
+              <div className="flex items-center gap-2.5 px-1 py-3">
+                <div className="flex gap-1">
+                  <div
+                    className="h-2 w-2 animate-bounce rounded-full bg-zinc-400 dark:bg-zinc-500"
+                    style={{ animationDelay: '0ms' }}
+                  />
+                  <div
+                    className="h-2 w-2 animate-bounce rounded-full bg-zinc-400 dark:bg-zinc-500"
+                    style={{ animationDelay: '150ms' }}
+                  />
+                  <div
+                    className="h-2 w-2 animate-bounce rounded-full bg-zinc-400 dark:bg-zinc-500"
+                    style={{ animationDelay: '300ms' }}
+                  />
+                </div>
+                <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                  {scanningStatus === 'Thinking...'
+                    ? 'Thinking...'
+                    : scanningStatus}
+                </span>
+              </div>
+            ))}
+
+          <div ref={messagesEndRef} />
         </div>
       </div>
     );
   };
 
-  const hasMessages = 
-    !isNewChatRoute && 
-    activeConversation?.conversationId === conversationId && 
+  const hasMessages =
+    !isNewChatRoute &&
+    activeConversation?.conversationId === conversationId &&
     !!activeConversation?.messages?.length;
   const showAsNewChat = isNewChatRoute && !hasMessages && !isLoadingResponse;
 
@@ -1176,64 +1420,84 @@ const FullConversation = ({ conversationId, isStudio }: { conversationId: string
 
   if (isAccountActive) {
     return (
-      <div className="flex w-full h-full flex-1 flex-col items-center justify-center bg-[#e1e1e1] dark:bg-zinc-955 select-none">
+      <div className="dark:bg-zinc-955 flex h-full w-full flex-1 flex-col items-center justify-center bg-[#e1e1e1] select-none">
         <img
           src="/assets/logo-icon.png"
           alt="logo"
-          className="h-20 w-20 opacity-20 animate-pulse"
+          className="h-20 w-20 animate-pulse opacity-20"
           style={{ animationDuration: '4s' }}
         />
       </div>
     );
   }
 
-return (
+  // Space workspace: search-anything-in-space UI replaces the normal conversation view
+  if (activeBot && pathname.startsWith('/spaces')) {
+    return <SpaceSearchPanel spaceId={activeBot.id} />;
+  }
+
+  return (
     <div
       className={cn(
-        "flex w-full h-full flex-1 flex-col min-h-0 overflow-hidden bg-[#e1e1e1] dark:bg-zinc-950",
-        showAsNewChat 
-          ? "pt-[38vh] items-center"
-          : ""
+        'flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden bg-[#e1e1e1] dark:bg-zinc-950',
+        showAsNewChat ? 'items-center pt-[38vh]' : '',
       )}
     >
-      {isLoading && !isNewChatRoute && !(activeConversation?.conversationId === conversationId && activeConversation?.messages?.length > 0) ? (
-        <div
-          className="flex flex-grow items-center justify-center py-4 bg-transparent"
-        >
+      {isLoading &&
+      !isNewChatRoute &&
+      !(
+        activeConversation?.conversationId === conversationId &&
+        activeConversation?.messages?.length > 0
+      ) ? (
+        <div className="flex flex-grow items-center justify-center bg-transparent py-4">
           <div className="flex items-center space-x-2.5 text-zinc-500 dark:text-zinc-400">
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-500/10 border-t-indigo-500"></div>
             <span className="text-xs font-semibold">loading chat...</span>
           </div>
         </div>
       ) : selectedOption === OPTIONS.TASK ? (
-        <div className={cn(
-          "min-h-0 w-full bg-transparent",
-          showAsNewChat ? "flex-none" : "flex-grow"
-        )} />
+        <div
+          className={cn(
+            'min-h-0 w-full bg-transparent',
+            showAsNewChat ? 'flex-none' : 'flex-grow',
+          )}
+        />
       ) : isSplitScreen ? (
-        <div className="relative flex-grow flex flex-row min-h-0 bg-transparent transition-colors duration-300">
+        <div className="relative flex min-h-0 flex-grow flex-row bg-transparent transition-colors duration-300">
           {/* Left Column: Chat history (45%) */}
           <div
-            className="w-[45%] h-full overflow-y-auto min-h-0 border-r border-black/5 dark:border-zinc-800/80 flex flex-col"
+            className="flex h-full min-h-0 w-[45%] flex-col overflow-y-auto border-r border-black/5 dark:border-zinc-800/80"
             ref={messagesContainerRef}
           >
             {renderMessagesContent(true)}
           </div>
           {/* Right Column: IDE panel (55%) */}
-          <div className="w-[55%] h-full overflow-y-auto min-h-0 p-6 flex flex-col justify-start bg-zinc-950/20">
+          <div className="flex h-full min-h-0 w-[55%] flex-col justify-start overflow-y-auto bg-zinc-950/20 p-6">
             {codeData ? (
               <CodeIDEWidget
                 code={codeData.code}
                 language={codeData.language}
                 guideText={codeData.guideText}
               />
-            ) : (selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) ? (
-              <DesignStudioWidget 
-                currentImageUrl={imageGenHook.imageBase64 || (() => {
-                  const img = lastAssistantMessage?.metadata?.imageUrl || lastAssistantMessage?.metadata?.images;
-                  return typeof img === 'string' ? img : Array.isArray(img) ? (typeof img[0] === 'string' ? img[0] : (img as any[])[0]?.url) : (img as any)?.url;
-                })()}
-                onUpload={(file) => {
+            ) : selectedOption === OPTIONS.IMAGE ||
+              selectedOption === OPTIONS.EDIT_IMAGE ? (
+              <DesignStudioWidget
+                currentImageUrl={
+                  imageGenHook.imageBase64 ||
+                  (() => {
+                    const img =
+                      lastAssistantMessage?.metadata?.imageUrl ||
+                      lastAssistantMessage?.metadata?.images;
+                    return typeof img === 'string'
+                      ? img
+                      : Array.isArray(img)
+                        ? typeof img[0] === 'string'
+                          ? img[0]
+                          : (img as any[])[0]?.url
+                        : (img as any)?.url;
+                  })()
+                }
+                onUpload={file => {
                   const reader = new FileReader();
                   reader.onloadend = () => {
                     imageGenHook.setImageBase64(reader.result as string);
@@ -1244,10 +1508,12 @@ return (
                 isGenerating={isImageGenLoading}
               />
             ) : selectedOption === OPTIONS.VIDEO ? (
-              <VideoStudioWidget 
+              <VideoStudioWidget
                 currentVideoUrl={(() => {
                   const video = lastAssistantMessage?.metadata?.video as any;
-                  return typeof video === 'string' ? video : video?.url || video?.name || null;
+                  return typeof video === 'string'
+                    ? video
+                    : video?.url || video?.name || null;
                 })()}
                 status={isLoadingResponse ? 'processing' : 'idle'}
                 progress={isLoadingResponse ? 45 : 0}
@@ -1259,8 +1525,8 @@ return (
         /* Standard Column: full scroll container */
         <div
           className={cn(
-            "relative overflow-y-auto min-h-0 bg-transparent transition-colors duration-300 flex flex-col",
-            showAsNewChat ? "flex-none" : "flex-grow"
+            'relative flex min-h-0 flex-col overflow-y-auto bg-transparent transition-colors duration-300',
+            showAsNewChat ? 'flex-none' : 'flex-grow',
           )}
           ref={messagesContainerRef}
         >
@@ -1271,13 +1537,13 @@ return (
       {/* Chat input - OUTSIDE scroll container, fixed at bottom as flex sibling */}
       <div
         className={cn(
-          'shrink-0 w-full px-4 sm:px-6 lg:px-8 transition-all duration-300',
+          'w-full shrink-0 px-4 transition-all duration-300 sm:px-6 lg:px-8',
           !showAsNewChat
-            ? 'flex items-center justify-center h-[64px] pt-0 pb-0 border-t border-black/10 dark:border-zinc-800/60 bg-[#e1e1e1] dark:bg-zinc-950 mt-auto'
-            : 'pt-3 pb-0 bg-transparent border-t-0'
+            ? 'mt-auto flex h-[64px] items-center justify-center border-t border-black/10 bg-[#e1e1e1] pt-0 pb-0 dark:border-zinc-800/60 dark:bg-zinc-950'
+            : 'border-t-0 bg-transparent pt-3 pb-0',
         )}
       >
-         <div className="mx-auto w-full max-w-[796px]">
+        <div className="mx-auto w-full max-w-[796px]">
           <ChatInput
             conversationId={conversationId}
             imageGenHook={imageGenHook}

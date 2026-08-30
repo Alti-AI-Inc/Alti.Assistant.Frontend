@@ -1,14 +1,15 @@
 'use client';
 
+import SecretThemeTrigger from '@/components/SecretThemeTrigger';
 import { TenantProvider } from '@/contexts/TenantContext';
 import { useContextSwitch } from '@/hooks/useContextSwitch';
+import { useBotsStore } from '@/stores/useBotsStore';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SessionProvider, signOut, useSession } from 'next-auth/react';
-import dynamic from 'next/dynamic';
 import { ThemeProvider } from 'next-themes';
+import dynamic from 'next/dynamic';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import SecretThemeTrigger from '@/components/SecretThemeTrigger';
 
 const ReactQueryDevtools = dynamic(
   () =>
@@ -43,9 +44,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
       const reason = event.reason || '';
       const reasonStr =
-        typeof reason === 'string'
-          ? reason
-          : reason.message || String(reason);
+        typeof reason === 'string' ? reason : reason.message || String(reason);
 
       const isChunkLoadError =
         reasonStr.includes('Failed to fetch dynamically imported module') ||
@@ -65,7 +64,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
     return () => {
       window.removeEventListener('error', handleGlobalError);
-      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+      window.removeEventListener(
+        'unhandledrejection',
+        handleUnhandledRejection,
+      );
     };
   }, []);
 
@@ -95,7 +97,11 @@ function AuthWatcher({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const pathname = usePathname();
-  const publicPaths = useMemo(() => ['/', '/accept-invite', '/login', '/register'], []);
+  const publicPaths = useMemo(
+    () => ['/', '/accept-invite', '/login', '/register'],
+    [],
+  );
+  const fetchBots = useBotsStore(state => state.fetchBots);
 
   // Listen for context switches and clear stores
   useContextSwitch();
@@ -110,6 +116,13 @@ function AuthWatcher({ children }: { children: React.ReactNode }) {
       signOut({ redirect: true, callbackUrl: '/' });
     }
   }, [pathname, session, status, router, publicPaths]);
+
+  // Load the user's real spaces from the backend once authenticated
+  useEffect(() => {
+    if (session?.accessToken && !session?.isTokenExpired) {
+      fetchBots(session.accessToken);
+    }
+  }, [session?.accessToken, session?.isTokenExpired, fetchBots]);
 
   return <>{children}</>;
 }

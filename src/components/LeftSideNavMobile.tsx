@@ -1,98 +1,58 @@
 'use client';
 
+import { createKnowledgeBaseAction } from '@/actions/knowledgeBaseAction';
+import { getFileIconComponent } from '@/components/panels/ProjectEditors';
+import { Dialog, DialogClose, DialogContent } from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Dialog,
-  DialogContent,
-  DialogClose,
-} from '@/components/ui/dialog';
 import { useTenant } from '@/contexts/TenantContext';
+import { useConnectionsQuery } from '@/hooks/useConnectApps';
+import { useInboxQuery } from '@/hooks/useInbox';
+import { allApps, APP } from '@/lib/all-apps';
 import { cn } from '@/lib/utils';
+import { useBotsStore } from '@/stores/useBotsStore';
 import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
+import { SidebarTab, useSidebarStore } from '@/stores/useSidebarStore';
 import {
-  Building2,
-  Brain,
-  LayoutDashboard,
+  ClipboardCheck,
+  Code2,
+  CreditCard,
+  EllipsisVertical,
+  FileText,
+  ImageIcon,
+  KeyRound,
+  LayoutGrid,
+  Loader2,
   LogOut,
-  ReceiptText,
+  Mail,
+  MessageSquare,
+  Music,
+  Pencil,
+  PenTool,
+  Plus,
   Scale,
   Search,
-  Settings,
-  SquarePen,
-  User,
-  UserPlus,
-  UsersRound,
-  Users,
-  ChevronRight,
-  Plus,
-  MessageSquare,
-  Globe,
-  Folder,
-  Database,
-  LayoutGrid,
-  ListTodo,
-  Zap,
-  Upload,
-  Cpu,
-  Sparkles,
-  BarChart3,
-  Palette,
-  Microscope,
-  EllipsisVertical,
   Shield,
-  FileText,
-  CreditCard,
-  ArrowLeft,
-  Inbox,
-  UserCheck,
-  KeyRound,
-  Mail,
-  Key,
-  Cloud,
-  SlidersHorizontal,
-  ChevronUp,
-  ChevronDown,
-  Code2,
-  ImageIcon,
-  Video,
-  Volume2,
-  ShieldAlert,
-  Blocks,
-  Pencil,
-  Trash2,
-  Music,
-  PenTool,
-  ClipboardCheck,
   Terminal,
+  Trash2,
+  Users,
+  Video,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { useState, useEffect, useMemo, useRef } from 'react';
-import { getFileIconComponent } from '@/components/panels/ProjectEditors';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 import ConversationsList from './ConversationsList';
-import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-import { allApps, APP } from '@/lib/all-apps';
-import AppImage from './AppImage';
-import { apiClientJson, buildApiUrl } from '@/lib/api-client';
-import { useBotsStore } from '@/stores/useBotsStore';
-import { useConnectionsQuery } from '@/hooks/useConnectApps';
-import { useInboxQuery } from '@/hooks/useInbox';
-import { createKnowledgeBaseAction } from '@/actions/knowledgeBaseAction';
-import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
-import { useSidebarStore, SidebarTab } from '@/stores/useSidebarStore';
 
 interface DataConnector {
   id: string;
@@ -173,18 +133,30 @@ const AVAILABLE_MCP_APPS = (() => {
   allApps.forEach(app => {
     if (app.isAvailable && app.app_name) {
       const slug = app.app_name.toLowerCase();
-      const isMcp = !!app.isMcp || [
-        'filesystem', 'google-maps', 'slack', 'linear', 'gcal',
-        'brave-search', 'postgres', 'sqlite', 'playwright', 'fetch', 'evernote'
-      ].includes(slug);
-      
+      const isMcp =
+        !!app.isMcp ||
+        [
+          'filesystem',
+          'google-maps',
+          'slack',
+          'linear',
+          'gcal',
+          'brave-search',
+          'postgres',
+          'sqlite',
+          'playwright',
+          'fetch',
+          'evernote',
+        ].includes(slug);
+
       if (isMcp && !uniqueMap.has(slug)) {
         uniqueMap.set(slug, app);
       }
     }
   });
-  return Array.from(uniqueMap.values())
-    .sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+  return Array.from(uniqueMap.values()).sort((a, b) =>
+    a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }),
+  );
 })();
 
 const LeftSideNavMobile = () => {
@@ -198,11 +170,15 @@ const LeftSideNavMobile = () => {
   const isAdminSection = isAdminMode;
 
   const userEmail = data?.user?.email?.toLowerCase();
-  const isGlobalAdmin = data?.user?.role === 'admin' || data?.user?.role === 'super_admin';
-  const isTenantOwner = mode === 'tenant' && (currentTenant?.role === 'admin' || currentTenant?.role === 'owner');
+  const isGlobalAdmin =
+    data?.user?.role === 'admin' || data?.user?.role === 'super_admin';
+  const isTenantOwner =
+    mode === 'tenant' &&
+    (currentTenant?.role === 'admin' || currentTenant?.role === 'owner');
   const isTenantAdmin = mode === 'tenant' && currentTenant?.role === 'manager';
 
-  const isAdmin = userEmail === 'admin@insosearch.com' || isGlobalAdmin || isTenantOwner;
+  const isAdmin =
+    userEmail === 'admin@insosearch.com' || isGlobalAdmin || isTenantOwner;
   const isManager = isGlobalAdmin || isTenantOwner || isTenantAdmin;
   const isSuperAdmin = data?.user?.role === 'super_admin';
 
@@ -216,19 +192,39 @@ const LeftSideNavMobile = () => {
     setUserMessage,
   } = useConversationsStore();
 
-
   const isLoggedIn = data?.accessToken;
-  const { bots, activeBotId, setActiveBotId, projectTab, setProjectTab, reorderBots, editBot, deleteBot, threads, activeBotThreadId, setActiveBotThreadId, deleteThread, addBotAsync } = useBotsStore();
+  const {
+    bots,
+    activeBotId,
+    setActiveBotId,
+    projectTab,
+    setProjectTab,
+    reorderBots,
+    editBot,
+    deleteBot,
+    threads,
+    activeBotThreadId,
+    setActiveBotThreadId,
+    deleteThread,
+    addBotAsync,
+  } = useBotsStore();
   const activeBot = bots.find(b => b.id === activeBotId);
-  const { isRightSidebarOpen, toggleRightSidebar, toggleGlobalInbox, isGlobalInboxOpen, activeTab, setActiveTab } = useSidebarStore();
-  
+  const {
+    isRightSidebarOpen,
+    toggleRightSidebar,
+    toggleGlobalInbox,
+    isGlobalInboxOpen,
+    activeTab,
+    setActiveTab,
+  } = useSidebarStore();
+
   const { data: inboxItems = [] } = useInboxQuery(
     data?.user?.id,
     undefined,
     false,
-    data?.accessToken
+    data?.accessToken,
   );
-  
+
   const [isCreateSpaceOpen, setIsCreateSpaceOpen] = useState(false);
   const [newSpaceName, setNewSpaceName] = useState('');
   const [isCreatingSpace, setIsCreatingSpace] = useState(false);
@@ -240,21 +236,27 @@ const LeftSideNavMobile = () => {
       let backendId = '';
       const token = data?.accessToken;
       if (token) {
-        const kbResponse = await createKnowledgeBaseAction(newSpaceName.trim(), token);
+        const kbResponse = await createKnowledgeBaseAction(
+          newSpaceName.trim(),
+          token,
+        );
         if (kbResponse.success && kbResponse.data?.id) {
           backendId = kbResponse.data.id;
         }
       }
-      const newBot = await addBotAsync({
-        name: newSpaceName.trim(),
-        description: `Custom Project Workspace: ${newSpaceName.trim()}`,
-        instructions: "",
-        model: 'Gemini 1.5 Pro',
-        avatar: '🤖',
-        guardrails: "",
-        data: backendId || undefined,
-        isShared: false,
-      }, token || undefined);
+      const newBot = await addBotAsync(
+        {
+          name: newSpaceName.trim(),
+          description: `Custom Project Workspace: ${newSpaceName.trim()}`,
+          instructions: '',
+          model: 'Gemini 1.5 Pro',
+          avatar: '🤖',
+          guardrails: '',
+          data: backendId || undefined,
+          isShared: false,
+        },
+        token || undefined,
+      );
 
       setIsCreateSpaceOpen(false);
       setNewSpaceName('');
@@ -317,11 +319,17 @@ const LeftSideNavMobile = () => {
     handleStorageChange();
 
     window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('insosearch_automations_updated', handleStorageChange);
+    window.addEventListener(
+      'insosearch_automations_updated',
+      handleStorageChange,
+    );
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('insosearch_automations_updated', handleStorageChange);
+      window.removeEventListener(
+        'insosearch_automations_updated',
+        handleStorageChange,
+      );
     };
   }, [pathname]);
   const searchParams = useSearchParams();
@@ -329,18 +337,23 @@ const LeftSideNavMobile = () => {
   const activeConnectorId = searchParams?.get('connector') || 'file';
   const viewParam = searchParams?.get('view');
   const editIndexParam = searchParams?.get('editIndex');
-  const currentEditIndex = editIndexParam !== null && editIndexParam !== undefined ? parseInt(editIndexParam, 10) : -1;
+  const currentEditIndex =
+    editIndexParam !== null && editIndexParam !== undefined
+      ? parseInt(editIndexParam, 10)
+      : -1;
 
-  const [connectedAppSlugs, setConnectedAppSlugs] = useState<Set<string>>(new Set());
-
-  const { data: connections } = useConnectionsQuery(
-    data?.accessToken,
+  const [connectedAppSlugs, setConnectedAppSlugs] = useState<Set<string>>(
+    new Set(),
   );
+
+  const { data: connections } = useConnectionsQuery(data?.accessToken);
 
   useEffect(() => {
     if (connections) {
       const activeSlugs = new Set(
-        connections.map(account => account.toolkit?.slug?.toLowerCase()).filter(Boolean)
+        connections
+          .map(account => account.toolkit?.slug?.toLowerCase())
+          .filter(Boolean),
       );
 
       // Seed sample apps for testing if this is meram.michael@gmail.com
@@ -352,8 +365,10 @@ const LeftSideNavMobile = () => {
       setConnectedAppSlugs(activeSlugs);
 
       // Resolve connected apps
-      const connected = allApps.filter(app => activeSlugs.has(app.app_name.toLowerCase()));
-      
+      const connected = allApps.filter(app =>
+        activeSlugs.has(app.app_name.toLowerCase()),
+      );
+
       let savedOrder: string[] = [];
       try {
         const stored = localStorage.getItem('mcp_app_order');
@@ -363,23 +378,32 @@ const LeftSideNavMobile = () => {
       let sorted: APP[] = [];
       if (savedOrder && savedOrder.length > 0) {
         savedOrder.forEach(slug => {
-          const match = connected.find(a => a.app_name.toLowerCase() === slug.toLowerCase());
+          const match = connected.find(
+            a => a.app_name.toLowerCase() === slug.toLowerCase(),
+          );
           if (match) sorted.push(match);
         });
-        const remaining = connected.filter(a => !savedOrder.includes(a.app_name.toLowerCase()));
-        remaining.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+        const remaining = connected.filter(
+          a => !savedOrder.includes(a.app_name.toLowerCase()),
+        );
+        remaining.sort((a, b) =>
+          a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }),
+        );
         sorted = [...sorted, ...remaining];
       } else {
-        sorted = connected.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+        sorted = connected.sort((a, b) =>
+          a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }),
+        );
       }
       setLocalAppsOrder(sorted);
     }
   }, [connections, data?.user?.email]);
 
   const filteredApps = useMemo(() => {
-    return AVAILABLE_MCP_APPS.filter(app =>
-      app.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      app.description.toLowerCase().includes(searchQuery.toLowerCase())
+    return AVAILABLE_MCP_APPS.filter(
+      app =>
+        app.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        app.description.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [searchQuery]);
 
@@ -387,8 +411,12 @@ const LeftSideNavMobile = () => {
     if (searchQuery.trim() !== '') {
       return filteredApps;
     }
-    const connected = AVAILABLE_MCP_APPS.filter(app => connectedAppSlugs.has(app.app_name.toLowerCase()));
-    const nonConnected = AVAILABLE_MCP_APPS.filter(app => !connectedAppSlugs.has(app.app_name.toLowerCase()));
+    const connected = AVAILABLE_MCP_APPS.filter(app =>
+      connectedAppSlugs.has(app.app_name.toLowerCase()),
+    );
+    const nonConnected = AVAILABLE_MCP_APPS.filter(
+      app => !connectedAppSlugs.has(app.app_name.toLowerCase()),
+    );
     return [...connected, ...nonConnected];
   }, [searchQuery, filteredApps, connectedAppSlugs]);
 
@@ -434,16 +462,17 @@ const LeftSideNavMobile = () => {
       } else {
         setActiveTab('search');
       }
-
-    } else if (pathname.startsWith('/instructions') || 
-               pathname.startsWith('/guardrails') || 
-               pathname.startsWith('/platform-knowledge') || 
-               pathname.startsWith('/legal') || 
-               pathname.startsWith('/admin') ||
-               pathname.startsWith('/platform-memory') ||
-               pathname.startsWith('/change-password') ||
-               pathname.startsWith('/contact-support') ||
-               pathname.startsWith('/invite-friends')) {
+    } else if (
+      pathname.startsWith('/instructions') ||
+      pathname.startsWith('/guardrails') ||
+      pathname.startsWith('/platform-knowledge') ||
+      pathname.startsWith('/legal') ||
+      pathname.startsWith('/admin') ||
+      pathname.startsWith('/platform-memory') ||
+      pathname.startsWith('/change-password') ||
+      pathname.startsWith('/contact-support') ||
+      pathname.startsWith('/invite-friends')
+    ) {
       setActiveTab('account');
     } else if (pathname.startsWith('/knowledge')) {
       setActiveTab('none');
@@ -461,7 +490,7 @@ const LeftSideNavMobile = () => {
   useEffect(() => {
     if (isSuperAdmin) return;
     if (activeConversation) {
-      const isDeepSearch = !!((activeConversation as any).is_deep_search);
+      const isDeepSearch = !!(activeConversation as any).is_deep_search;
       if (isDeepSearch) {
         setActiveTab('research');
         if (selectedOption !== OPTIONS.RESEARCH) {
@@ -498,8 +527,8 @@ const LeftSideNavMobile = () => {
           pathname !== '/invite-friends' &&
           !pathname.startsWith('/invite-friends')
         ) {
-          // Removed: We no longer guess the activeTab from the conversation title, 
-          // because it causes the tab to unexpectedly switch away from the current tab 
+          // Removed: We no longer guess the activeTab from the conversation title,
+          // because it causes the tab to unexpectedly switch away from the current tab
           // when clicking a history item. (e.g. clicking image history while on image tab)
         }
       }
@@ -534,7 +563,6 @@ const LeftSideNavMobile = () => {
         router.push(targetPath);
       }
       close();
-
     } else if (tab === 'code') {
       setSelectedOption(OPTIONS.CODE);
       if (pathname !== targetPath) {
@@ -699,40 +727,95 @@ const LeftSideNavMobile = () => {
 
   const getThreadIcon = (title: string, isSelected: boolean) => {
     const iconColorClass = isSelected
-      ? "h-3.5 w-3.5 text-white flex-shrink-0"
-      : "h-3.5 w-3.5 text-[#8080ff] flex-shrink-0 group-hover:text-white transition-colors";
+      ? 'h-3.5 w-3.5 text-white flex-shrink-0'
+      : 'h-3.5 w-3.5 text-[#8080ff] flex-shrink-0 group-hover:text-white transition-colors';
 
     const lower = (title || '').toLowerCase();
-    
-    if (lower.includes('image') || lower.includes('art') || lower.includes('draw') || lower.includes('logo') || lower.includes('paint') || lower.includes('picture') || lower.includes('photo') || lower.includes('canvas')) {
+
+    if (
+      lower.includes('image') ||
+      lower.includes('art') ||
+      lower.includes('draw') ||
+      lower.includes('logo') ||
+      lower.includes('paint') ||
+      lower.includes('picture') ||
+      lower.includes('photo') ||
+      lower.includes('canvas')
+    ) {
       return <ImageIcon className={iconColorClass} />;
     }
-    if (lower.includes('video') || lower.includes('movie') || lower.includes('clip') || lower.includes('animate') || lower.includes('mp4')) {
+    if (
+      lower.includes('video') ||
+      lower.includes('movie') ||
+      lower.includes('clip') ||
+      lower.includes('animate') ||
+      lower.includes('mp4')
+    ) {
       return <Video className={iconColorClass} />;
     }
-    if (lower.includes('audio') || lower.includes('voice') || lower.includes('music') || lower.includes('sound') || lower.includes('transcribe') || lower.includes('speech') || lower.includes('mp3')) {
+    if (
+      lower.includes('audio') ||
+      lower.includes('voice') ||
+      lower.includes('music') ||
+      lower.includes('sound') ||
+      lower.includes('transcribe') ||
+      lower.includes('speech') ||
+      lower.includes('mp3')
+    ) {
       return <Music className={iconColorClass} />;
     }
-    if (lower.includes('code') || lower.includes('debug') || lower.includes('python') || lower.includes('rust') || lower.includes('js') || lower.includes('ts') || lower.includes('html') || lower.includes('css')) {
+    if (
+      lower.includes('code') ||
+      lower.includes('debug') ||
+      lower.includes('python') ||
+      lower.includes('rust') ||
+      lower.includes('js') ||
+      lower.includes('ts') ||
+      lower.includes('html') ||
+      lower.includes('css')
+    ) {
       return <Code2 className={iconColorClass} />;
     }
-    if (lower.includes('search') || lower.includes('google') || lower.includes('web') || lower.includes('research') || lower.includes('find') || lower.includes('query')) {
+    if (
+      lower.includes('search') ||
+      lower.includes('google') ||
+      lower.includes('web') ||
+      lower.includes('research') ||
+      lower.includes('find') ||
+      lower.includes('query')
+    ) {
       return <Search className={iconColorClass} />;
     }
-    if (lower.includes('write') || lower.includes('draft') || lower.includes('email') || lower.includes('article') || lower.includes('copy') || lower.includes('text') || lower.includes('essay')) {
+    if (
+      lower.includes('write') ||
+      lower.includes('draft') ||
+      lower.includes('email') ||
+      lower.includes('article') ||
+      lower.includes('copy') ||
+      lower.includes('text') ||
+      lower.includes('essay')
+    ) {
       return <PenTool className={iconColorClass} />;
     }
-    if (lower.includes('review') || lower.includes('contract') || lower.includes('check') || lower.includes('audit') || lower.includes('guardrail')) {
+    if (
+      lower.includes('review') ||
+      lower.includes('contract') ||
+      lower.includes('check') ||
+      lower.includes('audit') ||
+      lower.includes('guardrail')
+    ) {
       return <ClipboardCheck className={iconColorClass} />;
     }
     return <MessageSquare className={iconColorClass} />;
   };
 
   const getSpaceInitials = (name: string) => {
-    if (!name) return "";
+    if (!name) return '';
     const words = name.trim().split(/\s+/);
     if (words.length >= 2) {
-      return (words[0].substring(0, 1) + words[1].substring(0, 1)).toUpperCase();
+      return (
+        words[0].substring(0, 1) + words[1].substring(0, 1)
+      ).toUpperCase();
     }
     return name.substring(0, 2).toUpperCase();
   };
@@ -745,8 +828,12 @@ const LeftSideNavMobile = () => {
       allFiles = activeBot.data ? [{ name: activeBot.data, size: 0 }] : [];
     }
   }
-  const allInstructions = activeBot?.instructions ? activeBot.instructions.split('\n\n').filter(Boolean) : [];
-  const allGuardrails = activeBot?.guardrails ? activeBot.guardrails.split('\n\n').filter(Boolean) : [];
+  const allInstructions = activeBot?.instructions
+    ? activeBot.instructions.split('\n\n').filter(Boolean)
+    : [];
+  const allGuardrails = activeBot?.guardrails
+    ? activeBot.guardrails.split('\n\n').filter(Boolean)
+    : [];
 
   const plusProps = getPlusButtonProps();
 
@@ -755,154 +842,179 @@ const LeftSideNavMobile = () => {
   return (
     <div className="flex h-full w-full overflow-hidden">
       {SHOW_WORKSPACES && (
-        <div className="w-[60px] h-full bg-black border-r border-zinc-800/60 flex flex-col items-center pt-4 gap-3 select-none flex-none">
-        {/* Alti Home Logo */}
-        <div className="relative w-full flex flex-col items-center">
-          <div
-            className={cn(
-              "relative size-10 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] text-white select-none"
-            )}
-          >
-            <img src="/assets/logo-icon.png" alt="Alti Brand Logo" className="size-6 object-contain brightness-0 invert" />
+        <div className="flex h-full w-[60px] flex-none flex-col items-center gap-3 border-r border-zinc-800/60 bg-black pt-4 select-none">
+          {/* Alti Home Logo */}
+          <div className="relative flex w-full flex-col items-center">
+            <div
+              className={cn(
+                'relative flex size-10 items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 text-white shadow-[0_0_15px_rgba(0,0,255,0.25)] select-none',
+              )}
+            >
+              <img
+                src="/assets/logo-icon.png"
+                alt="Alti Brand Logo"
+                className="size-6 object-contain brightness-0 invert"
+              />
+            </div>
+          </div>
+
+          {/* General Workspace Button */}
+          <div className="relative flex w-full flex-col items-center">
+            <div
+              className="absolute top-1 left-0 h-8 w-1 rounded-r-md bg-white transition-all duration-200"
+              style={{
+                opacity:
+                  activeBotId === null && activeTab !== 'account' ? 1 : 0,
+              }}
+            />
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => {
+                    setActiveBotId(null);
+                    setSelectedOption(null);
+                    router.push(isLoggedIn ? '/c/new-search' : '/');
+                    close();
+                  }}
+                  className={cn(
+                    'relative flex size-10 cursor-pointer items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 text-white shadow-[0_0_15px_rgba(0,0,255,0.25)] transition-all duration-300 hover:rounded-2xl hover:border-[#0000ff]/55 hover:bg-[#0000ff]/20 hover:shadow-[0_0_18px_rgba(0,0,255,0.3)]',
+                  )}
+                >
+                  <LayoutGrid className="size-[18px]" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent
+                side="right"
+                className="border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+              >
+                General
+              </TooltipContent>
+            </Tooltip>
+          </div>
+
+          {/* Spaces Scrollable Area */}
+          <div className="no-scrollbar flex w-full flex-1 flex-col items-center gap-3 overflow-x-hidden overflow-y-auto pt-0 pb-1">
+            {bots.map((bot, idx) => {
+              const isSelected =
+                activeBotId === bot.id &&
+                (pathname === '/spaces' || pathname.startsWith('/spaces')) &&
+                activeTab !== 'account';
+              const isBeingDragged = draggedIndex === idx;
+              const showTopLine =
+                draggedIndex !== null &&
+                dragOverIndex === idx &&
+                draggedIndex > idx;
+              const showBottomLine =
+                draggedIndex !== null &&
+                dragOverIndex === idx &&
+                draggedIndex < idx;
+
+              return (
+                <div
+                  key={bot.id}
+                  className="relative flex w-full flex-col items-center"
+                  draggable
+                  onDragStart={e => {
+                    setDraggedIndex(idx);
+                    e.dataTransfer.effectAllowed = 'move';
+                  }}
+                  onDragOver={e => {
+                    e.preventDefault();
+                    if (draggedIndex !== idx) {
+                      setDragOverIndex(idx);
+                    }
+                  }}
+                  onDragLeave={() => {
+                    setDragOverIndex(null);
+                  }}
+                  onDrop={e => {
+                    e.preventDefault();
+                    if (draggedIndex !== null && draggedIndex !== idx) {
+                      reorderBots(draggedIndex, idx);
+                    }
+                    setDraggedIndex(null);
+                    setDragOverIndex(null);
+                  }}
+                  onDragEnd={() => {
+                    setDraggedIndex(null);
+                    setDragOverIndex(null);
+                  }}
+                >
+                  {showTopLine && (
+                    <div className="mb-1 h-[2px] w-8 animate-pulse rounded-full bg-indigo-500" />
+                  )}
+
+                  {/* Active Indicator Line */}
+                  <div
+                    className="absolute top-1.5 left-0 h-8 w-1 rounded-r-md bg-white transition-all duration-200"
+                    style={{ opacity: isSelected ? 1 : 0 }}
+                  />
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={() => {
+                          setSelectedOption(null);
+                          setActiveBotId(bot.id);
+                          router.push(`/spaces?bot=${bot.id}`);
+                          close();
+                        }}
+                        className={cn(
+                          'relative flex size-10 cursor-pointer items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 text-sm font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.25)] transition-all duration-300 hover:rounded-2xl hover:border-[#0000ff]/55 hover:bg-[#0000ff]/20 hover:shadow-[0_0_18px_rgba(0,0,255,0.3)]',
+                          isBeingDragged && 'opacity-40',
+                        )}
+                      >
+                        {getSpaceInitials(bot.name)}
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="right"
+                      className="max-w-[200px] border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                    >
+                      <div className="font-bold">{bot.name}</div>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  {showBottomLine && (
+                    <div className="mt-1 h-[2px] w-8 animate-pulse rounded-full bg-indigo-500" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Footer Area for Spaces column */}
+          <div className="sticky bottom-0 z-30 flex h-[64px] w-full flex-none items-center justify-center border-t border-zinc-800/60 bg-black py-2.5">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => {
+                    setNewSpaceName('');
+                    setIsCreateSpaceOpen(true);
+                    close();
+                  }}
+                  className="relative flex size-9 cursor-pointer items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-900 shadow-sm transition-all duration-200 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700/80"
+                >
+                  <Plus className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent
+                side="right"
+                className="border border-b-2 border-white/10 border-b-indigo-500 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+              >
+                Create Space
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
-
-        {/* General Workspace Button */}
-        <div className="relative w-full flex flex-col items-center">
-          <div
-            className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1"
-            style={{ opacity: (activeBotId === null && activeTab !== 'account') ? 1 : 0 }}
-          />
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                onClick={() => {
-                  setActiveBotId(null);
-                  setSelectedOption(null);
-                  router.push(isLoggedIn ? '/c/new-search' : '/');
-                  close();
-                }}
-                className={cn(
-                  "relative size-10 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] transition-all duration-300 cursor-pointer text-white hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/55 hover:shadow-[0_0_18px_rgba(0,0,255,0.3)]"
-                )}
-              >
-                <LayoutGrid className="size-[18px]" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
-              General
-            </TooltipContent>
-          </Tooltip>
-        </div>
-
-        {/* Spaces Scrollable Area */}
-        <div className="flex-1 w-full overflow-y-auto overflow-x-hidden flex flex-col items-center gap-3 no-scrollbar pt-0 pb-1">
-          {bots.map((bot, idx) => {
-            const isSelected = activeBotId === bot.id && (pathname === '/spaces' || pathname.startsWith('/spaces')) && activeTab !== 'account';
-            const isBeingDragged = draggedIndex === idx;
-            const showTopLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex > idx;
-            const showBottomLine = draggedIndex !== null && dragOverIndex === idx && draggedIndex < idx;
-
-            return (
-              <div
-                key={bot.id}
-                className="relative w-full flex flex-col items-center"
-                draggable
-                onDragStart={(e) => {
-                  setDraggedIndex(idx);
-                  e.dataTransfer.effectAllowed = 'move';
-                }}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  if (draggedIndex !== idx) {
-                    setDragOverIndex(idx);
-                  }
-                }}
-                onDragLeave={() => {
-                  setDragOverIndex(null);
-                }}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  if (draggedIndex !== null && draggedIndex !== idx) {
-                    reorderBots(draggedIndex, idx);
-                  }
-                  setDraggedIndex(null);
-                  setDragOverIndex(null);
-                }}
-                onDragEnd={() => {
-                  setDraggedIndex(null);
-                  setDragOverIndex(null);
-                }}
-              >
-                {showTopLine && (
-                  <div className="h-[2px] w-8 bg-indigo-500 rounded-full mb-1 animate-pulse" />
-                )}
-
-                {/* Active Indicator Line */}
-                <div
-                  className="absolute left-0 w-1 h-8 bg-white rounded-r-md transition-all duration-200 top-1.5"
-                  style={{ opacity: isSelected ? 1 : 0 }}
-                />
-
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      onClick={() => {
-                        setSelectedOption(null);
-                        setActiveBotId(bot.id);
-                        router.push(`/spaces?bot=${bot.id}`);
-                        close();
-                      }}
-                      className={cn(
-                        "relative size-10 flex items-center justify-center rounded-xl border border-[#0000ff]/40 bg-[#0000ff]/15 shadow-[0_0_15px_rgba(0,0,255,0.25)] transition-all duration-300 cursor-pointer text-sm font-semibold text-white hover:rounded-2xl hover:bg-[#0000ff]/20 hover:border-[#0000ff]/55 hover:shadow-[0_0_18px_rgba(0,0,255,0.3)]",
-                        isBeingDragged && "opacity-40"
-                      )}
-                    >
-                      {getSpaceInitials(bot.name)}
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white max-w-[200px] select-none">
-                    <div className="font-bold">{bot.name}</div>
-                  </TooltipContent>
-                </Tooltip>
-
-                {showBottomLine && (
-                  <div className="h-[2px] w-8 bg-indigo-500 rounded-full mt-1 animate-pulse" />
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Footer Area for Spaces column */}
-        <div className="sticky bottom-0 z-30 flex items-center justify-center w-full bg-black border-t border-zinc-800/60 py-2.5 flex-none h-[64px]">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                onClick={() => {
-                  setNewSpaceName('');
-                  setIsCreateSpaceOpen(true);
-                  close();
-                }}
-                className="relative size-9 flex items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700/80 text-zinc-900 dark:text-zinc-100 shadow-sm cursor-pointer transition-all duration-200"
-              >
-                <Plus className="size-4" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="right" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
-              Create Space
-            </TooltipContent>
-          </Tooltip>
-        </div>
-      </div>
       )}
 
       {/* Column 2: Secondary Content navigation panel */}
-      <div className="flex-1 flex flex-col min-w-0 h-full bg-[#0c1120]">
+      <div className="flex h-full min-w-0 flex-1 flex-col bg-[#0c1120]">
         {/* Search / Research / Monitor Toggle Switcher */}
         {activeTab !== 'account' && (
-          <div className="pt-4 pb-3 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full border-b border-zinc-800/60">
-            <div className="flex w-full bg-[#0000ff]/10 h-9 p-0.5 rounded-lg border border-[#0000ff]/35 shadow-[0_0_12px_rgba(0,0,255,0.25)] select-none">
+          <div className="flex w-full flex-none items-center border-b border-zinc-800/60 bg-[#0c1120] px-4 pt-4 pb-3 dark:bg-[#0c1120]">
+            <div className="flex h-9 w-full rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 p-0.5 shadow-[0_0_12px_rgba(0,0,255,0.25)] select-none">
               <button
                 type="button"
                 onClick={() => {
@@ -910,10 +1022,10 @@ const LeftSideNavMobile = () => {
                   router.push('/c/new-search');
                 }}
                 className={cn(
-                  'flex-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none h-full',
+                  'flex h-full flex-1 cursor-pointer items-center justify-center rounded-md border text-[10px] font-bold transition-all duration-300 outline-none',
                   selectedOption === OPTIONS.SEARCH || selectedOption === null
-                    ? 'bg-[#0000ff]/20 border-[#0000ff]/45 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
-                    : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
+                    ? 'border-[#0000ff]/45 bg-[#0000ff]/20 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
+                    : 'border-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200',
                 )}
               >
                 <span>Search</span>
@@ -925,10 +1037,10 @@ const LeftSideNavMobile = () => {
                   router.push('/c/new-research');
                 }}
                 className={cn(
-                  'flex-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none h-full',
+                  'flex h-full flex-1 cursor-pointer items-center justify-center rounded-md border text-[10px] font-bold transition-all duration-300 outline-none',
                   selectedOption === OPTIONS.RESEARCH
-                    ? 'bg-[#0000ff]/20 border-[#0000ff]/45 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
-                    : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
+                    ? 'border-[#0000ff]/45 bg-[#0000ff]/20 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
+                    : 'border-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200',
                 )}
               >
                 <span>Research</span>
@@ -940,10 +1052,10 @@ const LeftSideNavMobile = () => {
                   router.push('/c/new-monitor');
                 }}
                 className={cn(
-                  'flex-1 text-[10px] font-bold rounded-md transition-all duration-300 flex items-center justify-center cursor-pointer border outline-none h-full',
+                  'flex h-full flex-1 cursor-pointer items-center justify-center rounded-md border text-[10px] font-bold transition-all duration-300 outline-none',
                   selectedOption === OPTIONS.MONITOR
-                    ? 'bg-[#0000ff]/20 border-[#0000ff]/45 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
-                    : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
+                    ? 'border-[#0000ff]/45 bg-[#0000ff]/20 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
+                    : 'border-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200',
                 )}
               >
                 <span>Monitor</span>
@@ -953,147 +1065,214 @@ const LeftSideNavMobile = () => {
         )}
 
         {/* Navigation Body */}
-        <div className="flex-1 overflow-y-auto min-h-0">
+        <div className="min-h-0 flex-1 overflow-y-auto">
           {activeTab === 'account' ? (
-            <div className="mt-4 space-y-1.5 py-1 px-4 pb-4 animate-in fade-in duration-200">
+            <div className="animate-in fade-in mt-4 space-y-1.5 px-4 py-1 pb-4 duration-200">
               {isSuperAdmin && (
                 <button
-                  onClick={() => { router.push('/admin'); close(); }}
-                  className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                  onClick={() => {
+                    router.push('/admin');
+                    close();
+                  }}
+                  className="group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 px-3 text-left text-xs text-zinc-300 transition-all duration-300 select-none hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] focus:outline-none"
                 >
-                  <Shield className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] group-hover:text-white transition-colors" />
+                  <Shield className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] transition-colors group-hover:text-white" />
                   <span>Owner Platform</span>
                 </button>
               )}
               {isAdmin && !isSuperAdmin && (
                 <>
                   <button
-                    onClick={() => { router.push('/admin/plans'); close(); }}
+                    onClick={() => {
+                      router.push('/admin/plans');
+                      close();
+                    }}
                     className={cn(
-                      "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg border mb-1.5 cursor-pointer select-none text-left focus:outline-none text-xs transition-all duration-300",
+                      'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 text-left text-xs transition-all duration-300 select-none focus:outline-none',
                       pathname.startsWith('/admin/plans')
-                        ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
-                        : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                        ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
+                        : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
                     )}
                   >
-                    <LayoutGrid className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/plans') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                    <LayoutGrid
+                      className={cn(
+                        'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                        pathname.startsWith('/admin/plans')
+                          ? 'text-white'
+                          : 'text-[#8080ff] group-hover:text-white',
+                      )}
+                    />
                     <span>Plans</span>
                   </button>
 
-
-
                   <button
-                    onClick={() => { router.push('/admin/team-members'); close(); }}
+                    onClick={() => {
+                      router.push('/admin/team-members');
+                      close();
+                    }}
                     className={cn(
-                      "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg border mb-1.5 cursor-pointer select-none text-left focus:outline-none text-xs transition-all duration-300",
+                      'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 text-left text-xs transition-all duration-300 select-none focus:outline-none',
                       pathname.startsWith('/admin/team-members')
-                        ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
-                        : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                        ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
+                        : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
                     )}
                   >
-                    <Users className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/team-members') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                    <Users
+                      className={cn(
+                        'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                        pathname.startsWith('/admin/team-members')
+                          ? 'text-white'
+                          : 'text-[#8080ff] group-hover:text-white',
+                      )}
+                    />
                     <span>Members</span>
                   </button>
                   <button
-                    onClick={() => { router.push('/admin/billing'); close(); }}
+                    onClick={() => {
+                      router.push('/admin/billing');
+                      close();
+                    }}
                     className={cn(
-                      "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg border mb-1.5 cursor-pointer select-none text-left focus:outline-none text-xs transition-all duration-300",
+                      'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 text-left text-xs transition-all duration-300 select-none focus:outline-none',
                       pathname.startsWith('/admin/billing')
-                        ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
-                        : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                        ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
+                        : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
                     )}
                   >
-                    <CreditCard className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/billing') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                    <CreditCard
+                      className={cn(
+                        'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                        pathname.startsWith('/admin/billing')
+                          ? 'text-white'
+                          : 'text-[#8080ff] group-hover:text-white',
+                      )}
+                    />
                     <span>Billing</span>
                   </button>
                   <button
-                    onClick={() => { router.push('/admin/invoices'); close(); }}
+                    onClick={() => {
+                      router.push('/admin/invoices');
+                      close();
+                    }}
                     className={cn(
-                      "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg border mb-1.5 cursor-pointer select-none text-left focus:outline-none text-xs transition-all duration-300",
+                      'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 text-left text-xs transition-all duration-300 select-none focus:outline-none',
                       pathname.startsWith('/admin/invoices')
-                        ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
-                        : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                        ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
+                        : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
                     )}
                   >
-                    <FileText className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin/invoices') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                    <FileText
+                      className={cn(
+                        'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                        pathname.startsWith('/admin/invoices')
+                          ? 'text-white'
+                          : 'text-[#8080ff] group-hover:text-white',
+                      )}
+                    />
                     <span>Invoices</span>
                   </button>
                 </>
               )}
 
-
-
-              
-
-
-
-
               {!isSuperAdmin && (
                 <button
-                  onClick={() => { router.push('/change-password'); close(); }}
+                  onClick={() => {
+                    router.push('/change-password');
+                    close();
+                  }}
                   className={cn(
-                    "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none",
+                    'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 text-left text-xs transition-all duration-300 select-none focus:outline-none',
                     pathname.startsWith('/change-password')
-                      ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
-                      : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                      ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
+                      : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
                   )}
                 >
-                  <KeyRound className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/change-password') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                  <KeyRound
+                    className={cn(
+                      'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                      pathname.startsWith('/change-password')
+                        ? 'text-white'
+                        : 'text-[#8080ff] group-hover:text-white',
+                    )}
+                  />
                   <span>Change Password</span>
                 </button>
               )}
 
               {!isSuperAdmin && (
                 <button
-                  onClick={() => { router.push('/legal'); close(); }}
+                  onClick={() => {
+                    router.push('/legal');
+                    close();
+                  }}
                   className={cn(
-                    "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none",
+                    'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 text-left text-xs transition-all duration-300 select-none focus:outline-none',
                     pathname.startsWith('/legal')
-                      ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
-                      : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                      ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
+                      : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
                   )}
                 >
-                  <Scale className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/legal') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                  <Scale
+                    className={cn(
+                      'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                      pathname.startsWith('/legal')
+                        ? 'text-white'
+                        : 'text-[#8080ff] group-hover:text-white',
+                    )}
+                  />
                   <span>Legal Documents</span>
                 </button>
               )}
 
               {!isSuperAdmin && (
                 <button
-                  onClick={() => { router.push('/contact-support'); close(); }}
+                  onClick={() => {
+                    router.push('/contact-support');
+                    close();
+                  }}
                   className={cn(
-                    "group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none",
+                    'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 text-left text-xs transition-all duration-300 select-none focus:outline-none',
                     pathname.startsWith('/contact-support')
-                      ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
-                      : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                      ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
+                      : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
                   )}
                 >
-                  <Mail className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/contact-support') ? "text-white" : "text-[#8080ff] group-hover:text-white")} />
+                  <Mail
+                    className={cn(
+                      'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                      pathname.startsWith('/contact-support')
+                        ? 'text-white'
+                        : 'text-[#8080ff] group-hover:text-white',
+                    )}
+                  />
                   <span>Contact Support</span>
                 </button>
               )}
 
               <button
-                onClick={() => { onOpen({ type: 'logout' }); close(); }}
-                className="group flex h-9 w-full items-center gap-2.5 px-3 rounded-lg text-xs transition-all duration-300 border mb-1.5 cursor-pointer select-none text-left focus:outline-none bg-red-500/10 border-red-500/30 text-red-200 hover:bg-red-500/20 hover:border-red-500/50 hover:shadow-[0_0_15px_rgba(239,68,68,0.25)] hover:text-white"
+                onClick={() => {
+                  onOpen({ type: 'logout' });
+                  close();
+                }}
+                className="group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border border-red-500/30 bg-red-500/10 px-3 text-left text-xs text-red-200 transition-all duration-300 select-none hover:border-red-500/50 hover:bg-red-500/20 hover:text-white hover:shadow-[0_0_15px_rgba(239,68,68,0.25)] focus:outline-none"
               >
-                <LogOut className="h-3.5 w-3.5 flex-shrink-0 transition-colors text-red-400 group-hover:text-white" />
+                <LogOut className="h-3.5 w-3.5 flex-shrink-0 text-red-400 transition-colors group-hover:text-white" />
                 <span>Logout Account</span>
               </button>
             </div>
           ) : activeBotId === null ? (
             /* General Mode */
-            <div className="flex flex-col h-full min-h-0 animate-in fade-in duration-200">
+            <div className="animate-in fade-in flex h-full min-h-0 flex-col duration-200">
               {/* Search Bar Row */}
-              <div className="pt-3 pb-3 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full border-b border-zinc-800/60">
-                <div className="flex h-9 w-full items-center rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] overflow-hidden focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40 transition-all duration-300">
-                  <div className="flex flex-1 items-center px-3 h-full">
+              <div className="flex w-full flex-none items-center border-b border-zinc-800/60 bg-[#0c1120] px-4 pt-3 pb-3 dark:bg-[#0c1120]">
+                <div className="flex h-9 w-full items-center overflow-hidden rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] transition-all duration-300 focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40">
+                  <div className="flex h-full flex-1 items-center px-3">
                     <input
                       type="text"
                       placeholder="Search..."
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full bg-transparent text-xs font-normal text-white outline-none placeholder:text-zinc-405"
+                      onChange={e => setSearchQuery(e.target.value)}
+                      className="placeholder:text-zinc-405 w-full bg-transparent text-xs font-normal text-white outline-none"
                     />
                   </div>
                   <Tooltip>
@@ -1108,12 +1287,15 @@ const LeftSideNavMobile = () => {
                           close();
                           router.push(isLoggedIn ? '/c/new-search' : '/');
                         }}
-                        className="flex h-full w-9 items-center justify-center transition-all hover:bg-[#0000ff]/20 text-blue-100 focus:outline-none border-l border-[#0000ff]/30"
+                        className="flex h-full w-9 items-center justify-center border-l border-[#0000ff]/30 text-blue-100 transition-all hover:bg-[#0000ff]/20 focus:outline-none"
                       >
                         <Plus className="size-3.5 text-white" />
                       </button>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-indigo-500 select-none">
+                    <TooltipContent
+                      side="bottom"
+                      className="border border-b-2 border-white/10 border-b-indigo-500 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                    >
                       New Chat
                     </TooltipContent>
                   </Tooltip>
@@ -1121,20 +1303,26 @@ const LeftSideNavMobile = () => {
               </div>
 
               {/* Chat History List */}
-              <div className="flex-1 overflow-y-auto px-4 bg-[#0c1120] dark:bg-[#0c1120] py-2">
-                <ConversationsList searchQuery={searchQuery} activeTab="search" />
+              <div className="flex-1 overflow-y-auto bg-[#0c1120] px-4 py-2 dark:bg-[#0c1120]">
+                <ConversationsList
+                  searchQuery={searchQuery}
+                  activeTab="search"
+                />
               </div>
             </div>
           ) : (
             /* Space Mode */
-            <div className="flex flex-col h-full min-h-0 animate-in fade-in duration-200">
+            <div className="animate-in fade-in flex h-full min-h-0 flex-col duration-200">
               {/* Configuration Tabs Toggle Group */}
-              <div className="px-4 pt-3 pb-1 flex-none w-full bg-[#0c1120]">
-                <div className="flex p-0.5 rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] w-full select-none">
+              <div className="w-full flex-none bg-[#0c1120] px-4 pt-3 pb-1">
+                <div className="flex w-full rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 p-0.5 shadow-[0_0_12px_rgba(0,0,255,0.25)] select-none">
                   <button
                     type="button"
                     onClick={() => {
-                      if (viewParam === 'data' || selectedOption === OPTIONS.KNOWLEDGE) {
+                      if (
+                        viewParam === 'data' ||
+                        selectedOption === OPTIONS.KNOWLEDGE
+                      ) {
                         setSelectedOption(null);
                         router.push(`/spaces?bot=${activeBotId}`);
                       } else {
@@ -1144,10 +1332,11 @@ const LeftSideNavMobile = () => {
                       close();
                     }}
                     className={cn(
-                      "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
-                      (viewParam === 'data' || selectedOption === OPTIONS.KNOWLEDGE)
-                        ? "bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]"
-                        : "text-blue-200/70 hover:text-white hover:bg-white/5"
+                      'flex-1 cursor-pointer rounded-md border border-transparent py-1.5 text-center text-[11px] font-medium transition-all outline-none',
+                      viewParam === 'data' ||
+                        selectedOption === OPTIONS.KNOWLEDGE
+                        ? 'bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]'
+                        : 'text-blue-200/70 hover:bg-white/5 hover:text-white',
                     )}
                   >
                     Knowledge
@@ -1155,20 +1344,26 @@ const LeftSideNavMobile = () => {
                   <button
                     type="button"
                     onClick={() => {
-                      if (viewParam === 'instructions' || selectedOption === OPTIONS.INSTRUCTIONS) {
+                      if (
+                        viewParam === 'instructions' ||
+                        selectedOption === OPTIONS.INSTRUCTIONS
+                      ) {
                         setSelectedOption(null);
                         router.push(`/spaces?bot=${activeBotId}`);
                       } else {
                         setSelectedOption(OPTIONS.INSTRUCTIONS);
-                        router.push(`/spaces?bot=${activeBotId}&view=instructions`);
+                        router.push(
+                          `/spaces?bot=${activeBotId}&view=instructions`,
+                        );
                       }
                       close();
                     }}
                     className={cn(
-                      "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
-                      (viewParam === 'instructions' || selectedOption === OPTIONS.INSTRUCTIONS)
-                        ? "bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]"
-                        : "text-blue-200/70 hover:text-white hover:bg-white/5"
+                      'flex-1 cursor-pointer rounded-md border border-transparent py-1.5 text-center text-[11px] font-medium transition-all outline-none',
+                      viewParam === 'instructions' ||
+                        selectedOption === OPTIONS.INSTRUCTIONS
+                        ? 'bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]'
+                        : 'text-blue-200/70 hover:bg-white/5 hover:text-white',
                     )}
                   >
                     Instructions
@@ -1176,20 +1371,26 @@ const LeftSideNavMobile = () => {
                   <button
                     type="button"
                     onClick={() => {
-                      if (viewParam === 'guardrails' || selectedOption === OPTIONS.GUARDRAILS) {
+                      if (
+                        viewParam === 'guardrails' ||
+                        selectedOption === OPTIONS.GUARDRAILS
+                      ) {
                         setSelectedOption(null);
                         router.push(`/spaces?bot=${activeBotId}`);
                       } else {
                         setSelectedOption(OPTIONS.GUARDRAILS);
-                        router.push(`/spaces?bot=${activeBotId}&view=guardrails`);
+                        router.push(
+                          `/spaces?bot=${activeBotId}&view=guardrails`,
+                        );
                       }
                       close();
                     }}
                     className={cn(
-                      "flex-1 text-[11px] font-medium py-1.5 rounded-md text-center transition-all cursor-pointer outline-none border border-transparent",
-                      (viewParam === 'guardrails' || selectedOption === OPTIONS.GUARDRAILS)
-                        ? "bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]"
-                        : "text-blue-200/70 hover:text-white hover:bg-white/5"
+                      'flex-1 cursor-pointer rounded-md border border-transparent py-1.5 text-center text-[11px] font-medium transition-all outline-none',
+                      viewParam === 'guardrails' ||
+                        selectedOption === OPTIONS.GUARDRAILS
+                        ? 'bg-[#0000ff]/30 text-white shadow-[0_0_8px_rgba(0,0,255,0.4)]'
+                        : 'text-blue-200/70 hover:bg-white/5 hover:text-white',
                     )}
                   >
                     Guardrails
@@ -1198,14 +1399,14 @@ const LeftSideNavMobile = () => {
               </div>
 
               {/* Search Bar Row (Same exact styling as general chat mode) */}
-              <div className="pt-3 pb-3 flex items-center px-4 bg-[#0c1120] dark:bg-[#0c1120] flex-none w-full gap-2 border-b border-zinc-800/60">
-                <div className="flex-1 flex h-9 items-center rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] overflow-hidden focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40 transition-all duration-300">
-                  <div className="flex flex-1 items-center px-3 h-full">
+              <div className="flex w-full flex-none items-center gap-2 border-b border-zinc-800/60 bg-[#0c1120] px-4 pt-3 pb-3 dark:bg-[#0c1120]">
+                <div className="flex h-9 flex-1 items-center overflow-hidden rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] transition-all duration-300 focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40">
+                  <div className="flex h-full flex-1 items-center px-3">
                     <input
                       type="text"
                       placeholder="Search..."
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onChange={e => setSearchQuery(e.target.value)}
                       className="w-full bg-transparent text-xs font-normal text-white outline-none placeholder:text-zinc-400"
                     />
                   </div>
@@ -1220,12 +1421,15 @@ const LeftSideNavMobile = () => {
                           router.push(`/spaces?bot=${activeBotId}`);
                           close();
                         }}
-                        className="flex h-full w-9 items-center justify-center transition-all hover:bg-[#0000ff]/20 text-blue-100 focus:outline-none border-l border-[#0000ff]/30"
+                        className="flex h-full w-9 items-center justify-center border-l border-[#0000ff]/30 text-blue-100 transition-all hover:bg-[#0000ff]/20 focus:outline-none"
                       >
                         <Plus className="size-3.5 text-white" />
                       </button>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom" className="bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
+                    <TooltipContent
+                      side="bottom"
+                      className="border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                    >
                       New Chat
                     </TooltipContent>
                   </Tooltip>
@@ -1236,212 +1440,228 @@ const LeftSideNavMobile = () => {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="size-9 shrink-0 bg-[#0000ff]/10 border-[#0000ff]/35 text-[#8080ff] hover:bg-[#0000ff]/20 hover:text-white transition-all shadow-[0_0_12px_rgba(0,0,255,0.25)] focus:outline-none"
+                      className="size-9 shrink-0 border-[#0000ff]/35 bg-[#0000ff]/10 text-[#8080ff] shadow-[0_0_12px_rgba(0,0,255,0.25)] transition-all hover:bg-[#0000ff]/20 hover:text-white focus:outline-none"
                     >
                       <EllipsisVertical className="size-4 rotate-90" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="rounded-2xl" align="end">
                     <DropdownMenuItem
-                      className="text-zinc-700 dark:text-zinc-200 focus:bg-zinc-100 dark:focus:bg-zinc-800"
+                      className="text-zinc-700 focus:bg-zinc-100 dark:text-zinc-200 dark:focus:bg-zinc-800"
                       onClick={() => setBotToRename(activeBotId)}
                     >
-                      <Pencil className="h-4 w-4 mr-2" /> Rename Space
+                      <Pencil className="mr-2 h-4 w-4" /> Rename Space
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="border-black/5 dark:border-white/5" />
                     <DropdownMenuItem
-                      className="text-zinc-700 dark:text-zinc-200 focus:bg-zinc-100 dark:focus:bg-zinc-800"
+                      className="text-zinc-700 focus:bg-zinc-100 dark:text-zinc-200 dark:focus:bg-zinc-800"
                       onClick={() => setBotToDelete(activeBotId)}
                     >
-                      <Trash2 className="h-4 w-4 mr-2" /> Delete Space
+                      <Trash2 className="mr-2 h-4 w-4" /> Delete Space
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
 
               {/* Space-Specific Threads List */}
-              <div className="flex-1 overflow-y-auto px-4 bg-[#0c1120] dark:bg-[#0c1120] space-y-1.5 py-2">
-                {viewParam === 'data' && activeBot ? (
-                  /* Knowledge Files List */
-                  allFiles.map((file, idx) => {
-                    const IconComponent = getFileIconComponent(file.name);
-                    return (
-                      <div
-                        key={idx}
-                        className="group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-default bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:text-white"
-                      >
-                        <div className="flex-1 truncate px-3 py-2 flex items-center gap-2">
-                          <IconComponent className="h-3.5 w-3.5 text-blue-400 flex-shrink-0" />
-                          <span className="truncate" title={file.name}>
-                            {file.name}
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSpaceItemToDelete({
-                              type: 'data',
-                              index: idx,
-                              name: file.name
-                            });
-                          }}
-                          className="mr-2 opacity-100 transition-colors p-1 rounded hover:bg-red-500/20 text-zinc-450 hover:text-red-500 focus:outline-none"
-                          title="Remove File"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    );
-                  })
-                ) : viewParam === 'instructions' && activeBot ? (
-                  /* Instructions List */
-                  allInstructions.map((instruction, idx) => {
-                    const isSelected = currentEditIndex === idx;
-                    return (
-                      <div
-                        key={idx}
-                        onClick={() => {
-                          setSelectedOption(OPTIONS.INSTRUCTIONS);
-                          router.push(`/spaces?bot=${activeBotId}&view=instructions&editIndex=${idx}`);
-                        }}
-                        className={cn(
-                          "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-pointer select-none",
-                          isSelected
-                            ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
-                            : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_12px_rgba(0,0,255,0.25)] hover:text-white"
-                        )}
-                      >
-                        <div className="flex-1 truncate px-3 py-2 flex items-center gap-2">
-                          <Terminal className="h-3.5 w-3.5 text-indigo-405 flex-shrink-0" />
-                          <span className="truncate" title={instruction}>
-                            {instruction}
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSpaceItemToDelete({
-                              type: 'instructions',
-                              index: idx,
-                              name: instruction
-                            });
-                          }}
-                          className="mr-2 opacity-100 transition-colors p-1 rounded hover:bg-red-500/20 text-zinc-450 text-zinc-400 hover:text-red-500 focus:outline-none"
-                          title="Remove Instruction"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    );
-                  })
-                ) : viewParam === 'guardrails' && activeBot ? (
-                  /* Guardrails List */
-                  allGuardrails.map((guardrail, idx) => {
-                    const isSelected = currentEditIndex === idx;
-                    return (
-                      <div
-                        key={idx}
-                        onClick={() => {
-                          setSelectedOption(OPTIONS.GUARDRAILS);
-                          router.push(`/spaces?bot=${activeBotId}&view=guardrails&editIndex=${idx}`);
-                        }}
-                        className={cn(
-                          "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-pointer select-none",
-                          isSelected
-                            ? "bg-[#0000ff]/25 border-[#0000ff] text-white font-semibold shadow-[0_0_15px_rgba(0,0,255,0.45)]"
-                            : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_12px_rgba(0,0,255,0.25)] hover:text-white"
-                        )}
-                      >
-                        <div className="flex-1 truncate px-3 py-2 flex items-center gap-2">
-                          <Shield className="h-3.5 w-3.5 text-red-400 flex-shrink-0" />
-                          <span className="truncate" title={guardrail}>
-                            {guardrail}
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSpaceItemToDelete({
-                              type: 'guardrails',
-                              index: idx,
-                              name: guardrail
-                            });
-                          }}
-                          className="mr-2 opacity-100 transition-colors p-1 rounded hover:bg-red-500/20 text-zinc-450 text-zinc-400 hover:text-red-500 focus:outline-none"
-                          title="Remove Guardrail"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    );
-                  })
-                ) : (
-                  /* Space-Specific Threads List */
-                  threads
-                    .filter(t => t.botId === activeBotId && (t.title || 'Untitled Space Chat').toLowerCase().includes(searchQuery.toLowerCase()))
-                    .map(thread => {
-                      const isSelected = activeBotThreadId === thread.id && pathname === '/spaces';
+              <div className="flex-1 space-y-1.5 overflow-y-auto bg-[#0c1120] px-4 py-2 dark:bg-[#0c1120]">
+                {viewParam === 'data' && activeBot
+                  ? /* Knowledge Files List */
+                    allFiles.map((file, idx) => {
+                      const IconComponent = getFileIconComponent(file.name);
                       return (
                         <div
-                          key={thread.id}
-                          className={cn(
-                            "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-pointer select-none",
-                            isSelected
-                              ? "bg-[#0000ff]/15 border-[#0000ff] text-white font-semibold shadow-[0_0_20px_rgba(0,0,255,0.55)]"
-                              : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
-                          )}
+                          key={idx}
+                          className="group mb-1.5 flex h-9 w-full cursor-default items-center justify-between rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 text-left text-xs font-normal text-zinc-300 transition-all duration-300 hover:text-white"
                         >
-                          <span
-                            className="flex-1 truncate px-3 py-2 flex items-center gap-2.5"
-                            onClick={() => {
-                              setSelectedOption(null);
-                              setActiveBotThreadId(thread.id);
-                              router.push(`/spaces?bot=${activeBotId}&thread=${thread.id}`);
-                              close();
-                            }}
-                          >
-                            {getThreadIcon(thread.title, isSelected)}
-                            <span className="truncate">{thread.title || 'Untitled Space Chat'}</span>
-                          </span>
+                          <div className="flex flex-1 items-center gap-2 truncate px-3 py-2">
+                            <IconComponent className="h-3.5 w-3.5 flex-shrink-0 text-blue-400" />
+                            <span className="truncate" title={file.name}>
+                              {file.name}
+                            </span>
+                          </div>
                           <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              deleteThread(thread.id);
-                              if (activeBotThreadId === thread.id) {
-                                setActiveBotThreadId(null);
-                                router.push(`/spaces?bot=${activeBotId}`);
-                              }
+                            type="button"
+                            onClick={() => {
+                              setSpaceItemToDelete({
+                                type: 'data',
+                                index: idx,
+                                name: file.name,
+                              });
                             }}
-                            className={cn(
-                              "mr-2 opacity-100 transition-colors p-1 rounded hover:bg-[#0000ff]/20",
-                              isSelected ? "text-white" : "text-zinc-450 hover:text-red-500"
-                            )}
+                            className="text-zinc-450 mr-2 rounded p-1 opacity-100 transition-colors hover:bg-red-500/20 hover:text-red-500 focus:outline-none"
+                            title="Remove File"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
                         </div>
                       );
                     })
-                )}
+                  : viewParam === 'instructions' && activeBot
+                    ? /* Instructions List */
+                      allInstructions.map((instruction, idx) => {
+                        const isSelected = currentEditIndex === idx;
+                        return (
+                          <div
+                            key={idx}
+                            onClick={() => {
+                              setSelectedOption(OPTIONS.INSTRUCTIONS);
+                              router.push(
+                                `/spaces?bot=${activeBotId}&view=instructions&editIndex=${idx}`,
+                              );
+                            }}
+                            className={cn(
+                              'group mb-1.5 flex h-9 w-full cursor-pointer items-center justify-between rounded-lg border text-left text-xs font-normal transition-all duration-300 select-none',
+                              isSelected
+                                ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
+                                : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_12px_rgba(0,0,255,0.25)]',
+                            )}
+                          >
+                            <div className="flex flex-1 items-center gap-2 truncate px-3 py-2">
+                              <Terminal className="text-indigo-405 h-3.5 w-3.5 flex-shrink-0" />
+                              <span className="truncate" title={instruction}>
+                                {instruction}
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={e => {
+                                e.stopPropagation();
+                                setSpaceItemToDelete({
+                                  type: 'instructions',
+                                  index: idx,
+                                  name: instruction,
+                                });
+                              }}
+                              className="text-zinc-450 mr-2 rounded p-1 text-zinc-400 opacity-100 transition-colors hover:bg-red-500/20 hover:text-red-500 focus:outline-none"
+                              title="Remove Instruction"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        );
+                      })
+                    : viewParam === 'guardrails' && activeBot
+                      ? /* Guardrails List */
+                        allGuardrails.map((guardrail, idx) => {
+                          const isSelected = currentEditIndex === idx;
+                          return (
+                            <div
+                              key={idx}
+                              onClick={() => {
+                                setSelectedOption(OPTIONS.GUARDRAILS);
+                                router.push(
+                                  `/spaces?bot=${activeBotId}&view=guardrails&editIndex=${idx}`,
+                                );
+                              }}
+                              className={cn(
+                                'group mb-1.5 flex h-9 w-full cursor-pointer items-center justify-between rounded-lg border text-left text-xs font-normal transition-all duration-300 select-none',
+                                isSelected
+                                  ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
+                                  : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_12px_rgba(0,0,255,0.25)]',
+                              )}
+                            >
+                              <div className="flex flex-1 items-center gap-2 truncate px-3 py-2">
+                                <Shield className="h-3.5 w-3.5 flex-shrink-0 text-red-400" />
+                                <span className="truncate" title={guardrail}>
+                                  {guardrail}
+                                </span>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={e => {
+                                  e.stopPropagation();
+                                  setSpaceItemToDelete({
+                                    type: 'guardrails',
+                                    index: idx,
+                                    name: guardrail,
+                                  });
+                                }}
+                                className="text-zinc-450 mr-2 rounded p-1 text-zinc-400 opacity-100 transition-colors hover:bg-red-500/20 hover:text-red-500 focus:outline-none"
+                                title="Remove Guardrail"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
+                          );
+                        })
+                      : /* Space-Specific Threads List */
+                        threads
+                          .filter(
+                            t =>
+                              t.botId === activeBotId &&
+                              (t.title || 'Untitled Space Chat')
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase()),
+                          )
+                          .map(thread => {
+                            const isSelected =
+                              activeBotThreadId === thread.id &&
+                              pathname === '/spaces';
+                            return (
+                              <div
+                                key={thread.id}
+                                className={cn(
+                                  'group mb-1.5 flex h-9 w-full cursor-pointer items-center justify-between rounded-lg border text-left text-xs font-normal transition-all duration-300 select-none',
+                                  isSelected
+                                    ? 'border-[#0000ff] bg-[#0000ff]/15 font-semibold text-white shadow-[0_0_20px_rgba(0,0,255,0.55)]'
+                                    : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
+                                )}
+                              >
+                                <span
+                                  className="flex flex-1 items-center gap-2.5 truncate px-3 py-2"
+                                  onClick={() => {
+                                    setSelectedOption(null);
+                                    setActiveBotThreadId(thread.id);
+                                    router.push(
+                                      `/spaces?bot=${activeBotId}&thread=${thread.id}`,
+                                    );
+                                    close();
+                                  }}
+                                >
+                                  {getThreadIcon(thread.title, isSelected)}
+                                  <span className="truncate">
+                                    {thread.title || 'Untitled Space Chat'}
+                                  </span>
+                                </span>
+                                <button
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    deleteThread(thread.id);
+                                    if (activeBotThreadId === thread.id) {
+                                      setActiveBotThreadId(null);
+                                      router.push(`/spaces?bot=${activeBotId}`);
+                                    }
+                                  }}
+                                  className={cn(
+                                    'mr-2 rounded p-1 opacity-100 transition-colors hover:bg-[#0000ff]/20',
+                                    isSelected
+                                      ? 'text-white'
+                                      : 'text-zinc-450 hover:text-red-500',
+                                  )}
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            );
+                          })}
                 {/* Fallbacks */}
                 {viewParam === 'data' && allFiles.length === 0 && (
                   <div className="py-8 text-center text-xs text-zinc-500 italic">
                     No files uploaded yet.
                   </div>
                 )}
-                {viewParam === 'instructions' && allInstructions.length === 0 && (
-                  <div className="py-8 text-center text-xs text-zinc-500 italic">
-                    No instructions added yet.
-                  </div>
-                )}
+                {viewParam === 'instructions' &&
+                  allInstructions.length === 0 && (
+                    <div className="py-8 text-center text-xs text-zinc-500 italic">
+                      No instructions added yet.
+                    </div>
+                  )}
                 {viewParam === 'guardrails' && allGuardrails.length === 0 && (
                   <div className="py-8 text-center text-xs text-zinc-500 italic">
                     No guardrails defined yet.
                   </div>
                 )}
-
               </div>
             </div>
           )}
@@ -1449,31 +1669,37 @@ const LeftSideNavMobile = () => {
 
         {/* Rate limits section above Footer Area */}
         {activeTab !== 'account' && (
-          <div className="px-5 py-3.5 flex flex-col gap-2 border-t border-zinc-800/60 bg-[#0c1120]/40 backdrop-blur-sm flex-none select-none text-xs">
+          <div className="flex flex-none flex-col gap-2 border-t border-zinc-800/60 bg-[#0c1120]/40 px-5 py-3.5 text-xs backdrop-blur-sm select-none">
             <div className="flex items-center justify-between py-0.5">
               <span className="font-medium text-white/80">Search</span>
-              <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">445 Remaining</span>
+              <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">
+                445 Remaining
+              </span>
             </div>
-            <div className="border-t border-zinc-800/40 w-full" />
+            <div className="w-full border-t border-zinc-800/40" />
             <div className="flex items-center justify-between py-0.5">
               <span className="font-medium text-white/80">Research</span>
-              <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">25 Remaining</span>
+              <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">
+                25 Remaining
+              </span>
             </div>
-            <div className="border-t border-zinc-800/40 w-full" />
+            <div className="w-full border-t border-zinc-800/40" />
             <div className="flex items-center justify-between py-0.5">
               <span className="font-medium text-white/80">Monitor</span>
-              <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">38 Remaining</span>
+              <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">
+                38 Remaining
+              </span>
             </div>
           </div>
         )}
 
         {/* Footer Area */}
-        <div className="sticky bottom-0 z-30 flex flex-col w-full bg-[#0c1120] border-t border-zinc-800/60 p-4 py-2.5 flex-none h-[64px] justify-center">
+        <div className="sticky bottom-0 z-30 flex h-[64px] w-full flex-none flex-col justify-center border-t border-zinc-800/60 bg-[#0c1120] p-4 py-2.5">
           {isLoggedIn && activeTab === 'account' ? (
             <div className="flex h-11 w-full items-center justify-center">
               <Button
                 variant="default"
-                className="w-full justify-center gap-2 bg-white text-black hover:bg-white/90 border border-transparent"
+                className="w-full justify-center gap-2 border border-transparent bg-white text-black hover:bg-white/90"
                 onClick={() => {
                   setActiveTab('search');
                   router.push(isLoggedIn ? '/c/new-search' : '/');
@@ -1492,21 +1718,25 @@ const LeftSideNavMobile = () => {
                     className="flex-1 bg-white px-0 text-black hover:bg-white/90"
                     asChild
                   >
-                    <Link href="/login" onClick={close}>Login</Link>
+                    <Link href="/login" onClick={close}>
+                      Login
+                    </Link>
                   </Button>
                   <Button
                     variant="default"
                     className="flex-1 bg-white px-0 text-black hover:bg-white/90"
                     asChild
                   >
-                    <Link href="/register" onClick={close}>Register</Link>
+                    <Link href="/register" onClick={close}>
+                      Register
+                    </Link>
                   </Button>
                 </div>
               ) : (
                 <Button
                   variant="outline"
                   onClick={() => setActiveTab('account')}
-                  className="w-full transition-all duration-300 outline-none select-none cursor-pointer border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700/80 text-zinc-900 dark:text-zinc-100 shadow-sm"
+                  className="w-full cursor-pointer border border-zinc-200 bg-white text-zinc-900 shadow-sm transition-all duration-300 outline-none select-none hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700/80"
                 >
                   My Account
                 </Button>
@@ -1517,47 +1747,38 @@ const LeftSideNavMobile = () => {
       </div>
 
       {/* Delete Space Dialog */}
-      <Dialog open={botToDelete !== null} onOpenChange={(open) => !open && setBotToDelete(null)}>
-        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[320px] sm:max-w-[320px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+      <Dialog
+        open={botToDelete !== null}
+        onOpenChange={open => !open && setBotToDelete(null)}
+      >
+        <DialogContent className="max-w-[320px] overflow-hidden rounded-[20px] border-none bg-white p-0 shadow-xl sm:max-w-[320px] dark:bg-zinc-900 [&>button]:hidden">
           {/* Centered Content Section */}
           <div className="px-5 pt-5 pb-4 text-center">
-            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+            <h2 className="text-[17px] leading-tight font-semibold text-black dark:text-white">
               Delete Space
             </h2>
-            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
-              Are you sure you want to remove this space? This action cannot be undone.
+            <p className="mt-1.5 px-1 text-[13px] leading-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to remove this space? This action cannot be
+              undone.
             </p>
           </div>
 
           {/* Extended Border & iOS Layout Action Buttons */}
-          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+          <div className="flex h-11 border-t border-black/10 dark:border-white/10">
             <DialogClose asChild>
               <button
                 type="button"
-                className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none cursor-pointer"
+                className="flex h-full flex-1 cursor-pointer items-center justify-center border-r border-black/10 text-[15px] font-normal text-black transition-colors outline-none hover:bg-black/5 active:bg-black/10 dark:border-white/10 dark:text-white dark:hover:bg-white/5 dark:active:bg-white/10"
               >
                 Cancel
               </button>
             </DialogClose>
             <button
               type="button"
-              className="flex-1 text-[15px] font-normal text-red-655 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none cursor-pointer"
+              className="text-red-655 flex h-full flex-1 cursor-pointer items-center justify-center text-[15px] font-normal transition-colors outline-none hover:bg-black/5 active:bg-black/10 dark:hover:bg-white/5 dark:active:bg-white/10"
               onClick={async () => {
                 if (botToDelete) {
                   const token = data?.accessToken;
-                  if (token) {
-                    try {
-                      const apiUrl = buildApiUrl(`/chatbots/${botToDelete}`);
-                      await fetch(apiUrl, {
-                        method: 'DELETE',
-                        headers: {
-                          'Authorization': `Bearer ${token}`
-                        }
-                      });
-                    } catch (err) {
-                      console.error("Failed to delete bot on backend", err);
-                    }
-                  }
                   setActiveBotId(null);
                   setSelectedOption(null);
                   router.push(isLoggedIn ? '/c/new-search' : '/');
@@ -1575,31 +1796,40 @@ const LeftSideNavMobile = () => {
       </Dialog>
 
       {/* Delete Space Item Dialog */}
-      <Dialog open={spaceItemToDelete !== null} onOpenChange={(open) => !open && setSpaceItemToDelete(null)}>
-        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[320px] sm:max-w-[320px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+      <Dialog
+        open={spaceItemToDelete !== null}
+        onOpenChange={open => !open && setSpaceItemToDelete(null)}
+      >
+        <DialogContent className="max-w-[320px] overflow-hidden rounded-[20px] border-none bg-white p-0 shadow-xl sm:max-w-[320px] dark:bg-zinc-900 [&>button]:hidden">
           {/* Centered Content Section */}
           <div className="px-5 pt-5 pb-4 text-center">
-            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
-              Delete {spaceItemToDelete?.type === 'data' ? 'File' : spaceItemToDelete?.type === 'instructions' ? 'Instruction' : 'Guardrail'}
+            <h2 className="text-[17px] leading-tight font-semibold text-black dark:text-white">
+              Delete{' '}
+              {spaceItemToDelete?.type === 'data'
+                ? 'File'
+                : spaceItemToDelete?.type === 'instructions'
+                  ? 'Instruction'
+                  : 'Guardrail'}
             </h2>
-            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1 break-words">
-              Are you sure you want to delete &ldquo;{spaceItemToDelete?.name}&rdquo;? This action cannot be undone.
+            <p className="mt-1.5 px-1 text-[13px] leading-normal break-words text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete &ldquo;{spaceItemToDelete?.name}
+              &rdquo;? This action cannot be undone.
             </p>
           </div>
 
           {/* Extended Border & iOS Layout Action Buttons */}
-          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+          <div className="flex h-11 border-t border-black/10 dark:border-white/10">
             <DialogClose asChild>
               <button
                 type="button"
-                className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none cursor-pointer"
+                className="flex h-full flex-1 cursor-pointer items-center justify-center border-r border-black/10 text-[15px] font-normal text-black transition-colors outline-none hover:bg-black/5 active:bg-black/10 dark:border-white/10 dark:text-white dark:hover:bg-white/5 dark:active:bg-white/10"
               >
                 Cancel
               </button>
             </DialogClose>
             <button
               type="button"
-              className="flex-1 text-[15px] font-normal text-red-655 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none cursor-pointer"
+              className="text-red-655 flex h-full flex-1 cursor-pointer items-center justify-center text-[15px] font-normal transition-colors outline-none hover:bg-black/5 active:bg-black/10 dark:hover:bg-white/5 dark:active:bg-white/10"
               onClick={() => {
                 if (spaceItemToDelete && activeBot) {
                   const { type, index } = spaceItemToDelete;
@@ -1608,14 +1838,24 @@ const LeftSideNavMobile = () => {
                     if (updatedFiles.length === 0) {
                       editBot(activeBot.id, { data: undefined });
                     } else {
-                      editBot(activeBot.id, { data: JSON.stringify(updatedFiles) });
+                      editBot(activeBot.id, {
+                        data: JSON.stringify(updatedFiles),
+                      });
                     }
                   } else if (type === 'instructions') {
-                    const updatedInstructions = allInstructions.filter((_, i) => i !== index);
-                    editBot(activeBot.id, { instructions: updatedInstructions.join('\n\n') });
+                    const updatedInstructions = allInstructions.filter(
+                      (_, i) => i !== index,
+                    );
+                    editBot(activeBot.id, {
+                      instructions: updatedInstructions.join('\n\n'),
+                    });
                   } else if (type === 'guardrails') {
-                    const updatedGuardrails = allGuardrails.filter((_, i) => i !== index);
-                    editBot(activeBot.id, { guardrails: updatedGuardrails.join('\n\n') });
+                    const updatedGuardrails = allGuardrails.filter(
+                      (_, i) => i !== index,
+                    );
+                    editBot(activeBot.id, {
+                      guardrails: updatedGuardrails.join('\n\n'),
+                    });
                   }
                   setSpaceItemToDelete(null);
                 }
@@ -1630,15 +1870,15 @@ const LeftSideNavMobile = () => {
       {/* Rename Space Dialog */}
       <Dialog open={!!botToRename} onOpenChange={() => setBotToRename(null)}>
         <DialogContent
-          className="p-6 overflow-hidden rounded-[20px] max-w-[320px] sm:max-w-[320px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
-          onOpenAutoFocus={(e) => e.preventDefault()}
+          className="dark:bg-zinc-955 max-w-[320px] overflow-hidden rounded-[20px] border-none bg-[#e1e1e1] p-6 shadow-xl sm:max-w-[320px] [&>button]:hidden"
+          onOpenAutoFocus={e => e.preventDefault()}
         >
           <div className="space-y-4">
             <input
               type="text"
               value={renameValue}
-              onChange={(e) => setRenameValue(e.target.value)}
-              onKeyDown={(e) => {
+              onChange={e => setRenameValue(e.target.value)}
+              onKeyDown={e => {
                 if (e.key === 'Enter' && renameValue.trim() && botToRename) {
                   const token = data?.accessToken;
                   editBot(botToRename, { name: renameValue.trim() }, token);
@@ -1646,17 +1886,17 @@ const LeftSideNavMobile = () => {
                 }
               }}
               placeholder="Enter space name..."
-              className="w-full bg-white dark:bg-zinc-900 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none rounded-xl px-3 py-2 text-xs text-gray-900 dark:text-white"
+              className="w-full rounded-xl border-none bg-white px-3 py-2 text-xs text-gray-900 outline-none focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none dark:bg-zinc-900 dark:text-white"
             />
-            <div className="flex border-t border-black/10 dark:border-white/10 h-11 -mx-6 -mb-6 mt-4">
+            <div className="-mx-6 mt-4 -mb-6 flex h-11 border-t border-black/10 dark:border-white/10">
               <button
-                className="flex-1 text-sm font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 h-full border-r border-black/10 dark:border-white/10 outline-none cursor-pointer"
+                className="h-full flex-1 cursor-pointer border-r border-black/10 text-sm font-normal text-black outline-none hover:bg-black/5 dark:border-white/10 dark:text-white dark:hover:bg-white/5"
                 onClick={() => setBotToRename(null)}
               >
                 Cancel
               </button>
               <button
-                className="flex-1 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:bg-black/5 dark:hover:bg-white/5 h-full outline-none disabled:opacity-50 cursor-pointer"
+                className="h-full flex-1 cursor-pointer text-sm font-medium text-indigo-600 outline-none hover:bg-black/5 disabled:opacity-50 dark:text-indigo-400 dark:hover:bg-white/5"
                 onClick={() => {
                   if (renameValue.trim() && botToRename) {
                     const token = data?.accessToken;
@@ -1674,42 +1914,51 @@ const LeftSideNavMobile = () => {
       </Dialog>
 
       {/* Create Space Dialog */}
-      <Dialog open={isCreateSpaceOpen} onOpenChange={(open) => !open && setIsCreateSpaceOpen(false)}>
-        <DialogContent 
-          className="p-6 overflow-hidden rounded-[20px] max-w-[320px] sm:max-w-[320px] border-none shadow-xl bg-[#e1e1e1] dark:bg-zinc-955 [&>button]:hidden"
-          onOpenAutoFocus={(e) => e.preventDefault()}
+      <Dialog
+        open={isCreateSpaceOpen}
+        onOpenChange={open => !open && setIsCreateSpaceOpen(false)}
+      >
+        <DialogContent
+          className="dark:bg-zinc-955 max-w-[320px] overflow-hidden rounded-[20px] border-none bg-[#e1e1e1] p-6 shadow-xl sm:max-w-[320px] [&>button]:hidden"
+          onOpenAutoFocus={e => e.preventDefault()}
         >
           <div className="space-y-4">
-            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight text-center">
+            <h2 className="text-center text-[17px] leading-tight font-semibold text-black dark:text-white">
               Create A New Space
             </h2>
             <input
               type="text"
               value={newSpaceName}
-              onChange={(e) => setNewSpaceName(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && newSpaceName.trim() && !isCreatingSpace) {
+              onChange={e => setNewSpaceName(e.target.value)}
+              onKeyDown={e => {
+                if (
+                  e.key === 'Enter' &&
+                  newSpaceName.trim() &&
+                  !isCreatingSpace
+                ) {
                   handleCreateSpace();
                 }
               }}
               placeholder="Enter Space Name"
               disabled={isCreatingSpace}
-              className="w-full bg-white dark:bg-zinc-900 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none rounded-xl px-3 py-2.5 text-xs text-gray-900 dark:text-white"
+              className="w-full rounded-xl border-none bg-white px-3 py-2.5 text-xs text-gray-900 outline-none focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none dark:bg-zinc-900 dark:text-white"
             />
-            <div className="flex border-t border-black/10 dark:border-white/10 h-11 -mx-6 -mb-6 mt-4">
-              <button 
-                className="flex-1 text-sm font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 h-full border-r border-black/10 dark:border-white/10 outline-none disabled:opacity-50"
+            <div className="-mx-6 mt-4 -mb-6 flex h-11 border-t border-black/10 dark:border-white/10">
+              <button
+                className="h-full flex-1 border-r border-black/10 text-sm font-normal text-black outline-none hover:bg-black/5 disabled:opacity-50 dark:border-white/10 dark:text-white dark:hover:bg-white/5"
                 onClick={() => setIsCreateSpaceOpen(false)}
                 disabled={isCreatingSpace}
               >
                 Cancel
               </button>
-              <button 
-                className="flex-1 text-sm font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 h-full outline-none disabled:opacity-50 flex items-center justify-center gap-1.5"
+              <button
+                className="flex h-full flex-1 items-center justify-center gap-1.5 text-sm font-normal text-black outline-none hover:bg-black/5 disabled:opacity-50 dark:text-white dark:hover:bg-white/5"
                 onClick={handleCreateSpace}
                 disabled={!newSpaceName.trim() || isCreatingSpace}
               >
-                {isCreatingSpace && <Loader2 className="size-3.5 animate-spin" />}
+                {isCreatingSpace && (
+                  <Loader2 className="size-3.5 animate-spin" />
+                )}
                 Create
               </button>
             </div>
