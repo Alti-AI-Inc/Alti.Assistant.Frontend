@@ -1,5 +1,37 @@
 import type { NextConfig } from 'next';
 
+const MONITOR_API_BASE_URL = 'https://api.altihq.com/api/v1';
+
+const getApiRewrite = () => {
+  const apiBaseUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
+
+  if (!apiBaseUrl) {
+    return null;
+  }
+
+  try {
+    const parsedApiUrl = new URL(apiBaseUrl);
+    const apiPathname = parsedApiUrl.pathname.replace(/\/$/, '');
+
+    if (!apiPathname) {
+      return null;
+    }
+
+    return {
+      source: `${apiPathname}/:path*`,
+      destination: `${parsedApiUrl.origin}${apiPathname}/:path*`,
+    };
+  } catch {
+    return null;
+  }
+};
+
+const apiRewrite = getApiRewrite();
+const monitorApiRewrite = {
+  source: '/api/v1/spaces/:spaceId/monitors/:path*',
+  destination: `${MONITOR_API_BASE_URL}/spaces/:spaceId/monitors/:path*`,
+};
+
 const nextConfig: NextConfig = {
   // Force a unique build ID on every deploy so browsers never serve stale JS chunks
   generateBuildId: async () => {
@@ -38,13 +70,21 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'www.google.com',
       },
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
     ],
+  },
+  async rewrites() {
+    return apiRewrite ? [monitorApiRewrite, apiRewrite] : [monitorApiRewrite];
   },
   async headers() {
     return [
       {
         // Apply security and cache control headers to all page routes (excluding api, static, and public files)
-        source: '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+        source:
+          '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
         headers: [
           {
             key: 'Cache-Control',
@@ -98,4 +138,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-

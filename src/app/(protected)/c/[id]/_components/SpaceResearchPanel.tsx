@@ -1,16 +1,16 @@
 'use client';
 
 import {
-  createSpaceSearchAction,
-  getSpaceSearchesAction,
-  SpaceSearchResult,
-  SpaceSearchSession,
-  SpaceSearchTurn,
-} from '@/actions/spaceSearchActions';
+  createSpaceResearchAction,
+  getSpaceResearchSessionsAction,
+  SpaceResearchResult,
+  SpaceResearchSession,
+  SpaceResearchTurn,
+} from '@/actions/spaceResearchActions';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { ArrowUp, Loader2, Mic, Search } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Streamdown } from 'streamdown';
@@ -24,70 +24,27 @@ const getHostname = (url?: string) => {
   }
 };
 
-const getResultTitle = (result: SpaceSearchResult) =>
+const getResultTitle = (result: SpaceResearchResult) =>
   result.title?.trim() || getHostname(result.url) || 'Untitled source';
 
-const SourceFavicon = ({ result }: { result: SpaceSearchResult }) => {
-  const hostname = getHostname(result.url);
-  return result.favicon ? (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={result.favicon}
-      alt=""
-      className="size-4 flex-shrink-0 rounded-sm"
-      onError={e => {
-        (e.target as HTMLImageElement).style.visibility = 'hidden';
-      }}
-    />
-  ) : (
-    <div className="flex size-4 flex-shrink-0 items-center justify-center rounded-sm bg-zinc-300 text-[8px] font-bold text-zinc-600 dark:bg-zinc-700 dark:text-zinc-300">
-      {hostname.charAt(0).toUpperCase() || '?'}
-    </div>
-  );
-};
-
-const SearchExchange = ({ turn }: { turn: SpaceSearchTurn }) => {
+const SearchExchange = ({ turn }: { turn: SpaceResearchTurn }) => {
   const results = Array.isArray(turn.results) ? turn.results : [];
 
   return (
     <div className="space-y-4">
-      {/* User query bubble - mirrors the main chat's user message style */}
       <div className="flex items-center justify-end">
         <div className="w-fit max-w-[85%] rounded-2xl border border-black/10 bg-white px-4 py-2.5 text-sm leading-relaxed font-medium text-zinc-900 shadow-sm dark:bg-white dark:text-zinc-900">
           {turn.query}
         </div>
       </div>
 
-      {/* Answer / results - mirrors the main chat's assistant style */}
       <div className="text-zinc-850 space-y-3 dark:text-zinc-200">
         {results.length === 0 ? (
           <p className="text-sm text-zinc-500 italic dark:text-zinc-400">
-            No results found for this query.
+            No research results found for this query.
           </p>
         ) : (
           <>
-            {/* Sources row */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-              <span className="flex-shrink-0 text-[11px] font-semibold tracking-wide text-zinc-500 uppercase dark:text-zinc-400">
-                Sources
-              </span>
-              {results.map((result, idx) => (
-                <a
-                  key={idx}
-                  href={result.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-shrink-0 items-center gap-1.5 rounded-full border border-black/10 bg-white px-2.5 py-1 text-[11px] font-medium text-zinc-600 transition-colors hover:border-indigo-400/60 hover:text-indigo-600 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-300"
-                >
-                  <SourceFavicon result={result} />
-                  <span className="max-w-[120px] truncate">
-                    {getHostname(result.url)}
-                  </span>
-                </a>
-              ))}
-            </div>
-
-            {/* Result cards */}
             <div className="grid gap-3 sm:grid-cols-2">
               {results.map((result, idx) => (
                 <a
@@ -98,7 +55,6 @@ const SearchExchange = ({ turn }: { turn: SpaceSearchTurn }) => {
                   className="group flex flex-col rounded-xl border border-black/10 bg-white p-3.5 shadow-sm transition-all duration-200 hover:border-indigo-400/60 hover:shadow-md dark:border-white/10 dark:bg-zinc-900"
                 >
                   <div className="mb-1.5 flex items-center gap-1.5">
-                    <SourceFavicon result={result} />
                     <span className="truncate text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
                       {getHostname(result.url)}
                     </span>
@@ -107,7 +63,7 @@ const SearchExchange = ({ turn }: { turn: SpaceSearchTurn }) => {
                     {getResultTitle(result)}
                   </h3>
                   {result.summary && (
-                    <p className="line-clamp-4 text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
+                    <p className="line-clamp-5 text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
                       {result.summary}
                     </p>
                   )}
@@ -115,7 +71,6 @@ const SearchExchange = ({ turn }: { turn: SpaceSearchTurn }) => {
               ))}
             </div>
 
-            {/* Synthesized answer from the top result's summary */}
             {results[0]?.summary && (
               <div className="rounded-xl border border-black/10 bg-white/60 p-4 dark:border-white/10 dark:bg-zinc-900/40">
                 <Streamdown className="w-full text-sm leading-relaxed">
@@ -130,28 +85,35 @@ const SearchExchange = ({ turn }: { turn: SpaceSearchTurn }) => {
   );
 };
 
-const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
+const SpaceResearchPanel = ({ spaceId }: { spaceId: string }) => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const sessionId = searchParams?.get('session') || null;
+  const shouldCreateResearch = searchParams?.get('createResearch') === '1';
 
-  const [sessions, setSessions] = useState<SpaceSearchSession[]>([]);
-  const [activeExchanges, setActiveExchanges] = useState<SpaceSearchTurn[]>([]);
+  const [sessions, setSessions] = useState<SpaceResearchSession[]>([]);
+  const [activeExchanges, setActiveExchanges] = useState<SpaceResearchTurn[]>(
+    [],
+  );
   const [isLoadingList, setIsLoadingList] = useState(true);
   const [query, setQuery] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
   const listEndRef = useRef<HTMLDivElement>(null);
+  const selectedSession = sessions.find(
+    session => (session.id || session._id) === sessionId,
+  );
 
   useEffect(() => {
     let cancelled = false;
     setIsLoadingList(true);
-    getSpaceSearchesAction(spaceId).then(result => {
+    getSpaceResearchSessionsAction(spaceId).then(result => {
       if (cancelled) return;
       if (result.success && Array.isArray(result.data)) {
         setSessions(result.data);
       } else if (!result.success) {
-        toast.error(result.message || 'Failed to load searches');
+        toast.error(result.message || 'Failed to load research sessions');
       }
       setIsLoadingList(false);
     });
@@ -160,15 +122,44 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
     };
   }, [spaceId]);
 
-  // Show only the active session's turns, not the whole space history
+  useEffect(() => {
+    if (
+      isLoadingList ||
+      sessionId ||
+      shouldCreateResearch ||
+      sessions.length === 0
+    ) {
+      return;
+    }
+
+    const firstSessionId = sessions[0]?.id || sessions[0]?._id;
+    if (!firstSessionId) {
+      return;
+    }
+
+    const nextParams = new URLSearchParams(searchParams?.toString() || '');
+    nextParams.set('bot', spaceId);
+    nextParams.set('section', 'research');
+    nextParams.set('session', firstSessionId);
+    router.replace(`/spaces?${nextParams.toString()}`);
+  }, [
+    isLoadingList,
+    router,
+    searchParams,
+    sessions,
+    shouldCreateResearch,
+    sessionId,
+    spaceId,
+  ]);
+
   useEffect(() => {
     if (!sessionId) {
       setActiveExchanges([]);
       return;
     }
-    const match = sessions.find(s => (s.id || s._id) === sessionId);
-    setActiveExchanges(match?.searches || []);
-  }, [sessionId, sessions]);
+
+    setActiveExchanges(selectedSession?.searches || []);
+  }, [selectedSession, sessionId]);
 
   useEffect(() => {
     listEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -264,53 +255,58 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
     setIsSubmitting(true);
     setQuery('');
     try {
-      const result = await createSpaceSearchAction(
+      const result = await createSpaceResearchAction(
         spaceId,
         trimmed,
-        sessionId || undefined,
+        shouldCreateResearch ? undefined : sessionId || undefined,
       );
       if (result.success && result.data) {
         const newTurn = result.data;
-        if (sessionId) {
-          // Continuing an existing session: append this turn to the current view
+        if (!shouldCreateResearch && sessionId) {
           setActiveExchanges(prev => [...prev, newTurn]);
           setSessions(prev =>
-            prev.map(s =>
-              (s.id || s._id) === sessionId
-                ? { ...s, searches: [...(s.searches || []), newTurn] }
-                : s,
+            prev.map(session =>
+              (session.id || session._id) === sessionId
+                ? {
+                    ...session,
+                    searches: [...(session.searches || []), newTurn],
+                  }
+                : session,
             ),
           );
         } else {
-          // Brand new session: seed the view and let the sidebar know
           const newSessionId =
             newTurn.searchSession || newTurn.id || newTurn._id || '';
-          const newSession: SpaceSearchSession = {
+          const newSession: SpaceResearchSession = {
             id: newSessionId,
             _id: newSessionId,
             searches: [newTurn],
             createdAt: newTurn.createdAt,
+            updatedAt: newTurn.updatedAt,
           };
           setActiveExchanges([newTurn]);
           setSessions(prev => [newSession, ...prev]);
-          window.history.pushState(
-            null,
-            '',
-            `/spaces?bot=${spaceId}&session=${newSessionId}`,
+          const nextParams = new URLSearchParams(
+            searchParams?.toString() || '',
           );
+          nextParams.set('bot', spaceId);
+          nextParams.set('section', 'research');
+          nextParams.set('session', newSessionId);
+          nextParams.delete('createResearch');
+          router.replace(`/spaces?${nextParams.toString()}`);
           window.dispatchEvent(
-            new CustomEvent('space-search-created', {
+            new CustomEvent('space-research-created', {
               detail: { spaceId, session: newSession },
             }),
           );
         }
       } else {
-        toast.error(result.message || 'Failed to run search');
+        toast.error(result.message || 'Failed to run research');
         setQuery(trimmed);
       }
     } catch (err) {
-      console.error('Space search failed', err);
-      toast.error('Failed to run search');
+      console.error('Space research failed', err);
+      toast.error('Failed to run research');
       setQuery(trimmed);
     } finally {
       setIsSubmitting(false);
@@ -318,7 +314,10 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
   };
 
   const showAsEmpty =
-    !isLoadingList && !isSubmitting && activeExchanges.length === 0;
+    !isLoadingList &&
+    !isSubmitting &&
+    (shouldCreateResearch ||
+      (sessions.length === 0 && activeExchanges.length === 0));
 
   return (
     <div
@@ -337,18 +336,18 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
           {isLoadingList ? (
             <div className="flex items-center justify-center gap-2.5 py-10 text-zinc-500 dark:text-zinc-400">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-500/10 border-t-indigo-500" />
-              <span className="text-xs font-semibold">Loading searches...</span>
+              <span className="text-xs font-semibold">Loading research...</span>
             </div>
           ) : showAsEmpty ? (
             <div className="flex flex-col items-center justify-center gap-2 text-center text-zinc-500 dark:text-zinc-400">
               <Search className="size-8 opacity-40" />
               <p className="text-sm font-medium">
                 {sessionId
-                  ? 'Session not found.'
-                  : 'Start a new search in this space.'}
+                  ? 'Research session not found.'
+                  : 'Start a new research query in this space.'}
               </p>
               <p className="text-xs">
-                Type a query below to search this space.
+                Type a query below to run deep research in this space.
               </p>
             </div>
           ) : (
@@ -368,7 +367,7 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
               <Loader2 className="size-4 animate-spin text-indigo-500" />
               <div>
                 <p className="text-sm font-semibold text-zinc-900 dark:text-white">
-                  Searching...
+                  Researching...
                 </p>
               </div>
             </div>
@@ -395,7 +394,7 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
                   handleSubmit();
                 }
               }}
-              placeholder="Search anything in this space..."
+              placeholder="Research anything in this space..."
               disabled={isSubmitting}
               style={{ backgroundColor: 'transparent' }}
               className="max-h-[160px] min-h-[36px] w-full flex-1 resize-none border-none bg-transparent px-1 py-1.5 text-gray-900 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 dark:text-white"
@@ -412,7 +411,7 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
               )}
               aria-label={
                 query.trim()
-                  ? 'Send Search'
+                  ? 'Send Research'
                   : isListening
                     ? 'Stop listening'
                     : 'Speech to Text'
@@ -431,4 +430,4 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
   );
 };
 
-export default SpaceSearchPanel;
+export default SpaceResearchPanel;

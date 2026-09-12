@@ -20,6 +20,8 @@ export interface ApiResponse<T = unknown> {
   statusCode?: number;
 }
 
+const LOCAL_API_HOSTNAMES = new Set(['localhost', '127.0.0.1', '0.0.0.0']);
+
 /**
  * Get current tenant context from localStorage
  * This matches the logic in useTenantStore
@@ -107,7 +109,7 @@ export async function apiClientJson<T = unknown>(
       } catch (e) {
         // Not a JSON response
       }
-      
+
       const friendlyMessage = parsedError?.message || 'Request failed';
       return {
         success: false,
@@ -140,8 +142,26 @@ export function buildApiUrl(endpoint: string): string {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
   // Remove leading slash from endpoint if present
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
-  // Remove trailing slash from base URL if present
-  const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+
+  let cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+
+  if (typeof window !== 'undefined' && cleanBaseUrl) {
+    try {
+      const parsedBaseUrl = new URL(cleanBaseUrl);
+
+      // Keep browser requests same-origin when the configured API points at a
+      // local backend so CSP can allow the call and Next.js can proxy it.
+      if (
+        parsedBaseUrl.protocol === 'http:' &&
+        LOCAL_API_HOSTNAMES.has(parsedBaseUrl.hostname)
+      ) {
+        cleanBaseUrl = parsedBaseUrl.pathname.replace(/\/$/, '');
+      }
+    } catch {
+      // Leave relative and otherwise non-URL values unchanged.
+    }
+  }
+
   return `${cleanBaseUrl}/${cleanEndpoint}`;
 }
 

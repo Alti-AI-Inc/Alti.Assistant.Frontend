@@ -333,6 +333,28 @@ const LeftSideNavMobile = () => {
     };
   }, [pathname]);
   const searchParams = useSearchParams();
+  const isSpaceMonitorSection =
+    pathname.startsWith('/spaces') &&
+    searchParams?.get('section') === 'monitor';
+  const getSpaceSectionUrl = (section?: 'monitor') => {
+    const nextParams = new URLSearchParams();
+
+    if (activeBotId) {
+      nextParams.set('bot', activeBotId);
+    }
+
+    if (!section) {
+      const sessionParam = searchParams?.get('session');
+      if (sessionParam) {
+        nextParams.set('session', sessionParam);
+      }
+    } else {
+      nextParams.set('section', section);
+    }
+
+    const queryString = nextParams.toString();
+    return queryString ? `/spaces?${queryString}` : '/spaces';
+  };
   const activeAppSlug = searchParams?.get('app');
   const activeConnectorId = searchParams?.get('connector') || 'file';
   const viewParam = searchParams?.get('view');
@@ -1019,11 +1041,17 @@ const LeftSideNavMobile = () => {
                 type="button"
                 onClick={() => {
                   setSelectedOption(OPTIONS.SEARCH);
+                  if (pathname.startsWith('/spaces') && activeBotId) {
+                    router.push(getSpaceSectionUrl());
+                    return;
+                  }
                   router.push('/c/new-search');
                 }}
                 className={cn(
                   'flex h-full flex-1 cursor-pointer items-center justify-center rounded-md border text-[10px] font-bold transition-all duration-300 outline-none',
-                  selectedOption === OPTIONS.SEARCH || selectedOption === null
+                  (pathname.startsWith('/spaces') && !isSpaceMonitorSection) ||
+                    selectedOption === OPTIONS.SEARCH ||
+                    selectedOption === null
                     ? 'border-[#0000ff]/45 bg-[#0000ff]/20 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
                     : 'border-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200',
                 )}
@@ -1049,11 +1077,19 @@ const LeftSideNavMobile = () => {
                 type="button"
                 onClick={() => {
                   setSelectedOption(OPTIONS.MONITOR);
-                  router.push('/c/new-monitor');
+                  if (pathname.startsWith('/spaces') && activeBotId) {
+                    router.push(getSpaceSectionUrl('monitor'));
+                    return;
+                  }
+                  if (activeBotId) {
+                    router.push(`/spaces?bot=${activeBotId}&section=monitor`);
+                    return;
+                  }
+                  router.push('/spaces?section=monitor');
                 }}
                 className={cn(
                   'flex h-full flex-1 cursor-pointer items-center justify-center rounded-md border text-[10px] font-bold transition-all duration-300 outline-none',
-                  selectedOption === OPTIONS.MONITOR
+                  isSpaceMonitorSection || selectedOption === OPTIONS.MONITOR
                     ? 'border-[#0000ff]/45 bg-[#0000ff]/20 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
                     : 'border-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200',
                 )}

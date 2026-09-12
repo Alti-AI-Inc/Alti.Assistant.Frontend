@@ -1,9 +1,14 @@
 'use client';
 import { createKnowledgeBaseAction } from '@/actions/knowledgeBaseAction';
 import {
+  getSpaceResearchSessionsAction,
+  SpaceResearchSession,
+} from '@/actions/spaceResearchActions';
+import {
   getSpaceSearchesAction,
   SpaceSearchSession,
 } from '@/actions/spaceSearchActions';
+import { getMonitorId } from '@/components/monitors/monitor-utils';
 import { getFileIconComponent } from '@/components/panels/ProjectEditors';
 import { Dialog, DialogClose, DialogContent } from '@/components/ui/dialog';
 import {
@@ -16,6 +21,7 @@ import {
 import { useTenant } from '@/contexts/TenantContext';
 import { useConnectionsQuery } from '@/hooks/useConnectApps';
 import { useInboxQuery } from '@/hooks/useInbox';
+import { useMonitorsQuery } from '@/hooks/useMonitors';
 import { allApps, APP } from '@/lib/all-apps';
 import { cn } from '@/lib/utils';
 import { useBotsStore } from '@/stores/useBotsStore';
@@ -345,6 +351,63 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const isSuperAdmin = data?.user?.role === 'super_admin';
 
   const searchParams = useSearchParams();
+  const isSpaceMonitorSection =
+    pathname.startsWith('/spaces') &&
+    searchParams?.get('section') === 'monitor';
+  const isSpaceResearchSection =
+    pathname.startsWith('/spaces') &&
+    searchParams?.get('section') === 'research';
+  const getSpaceSectionUrl = (
+    section?: 'monitor' | 'research',
+    options?: {
+      monitorId?: string | null;
+      createMonitor?: boolean;
+      createResearch?: boolean;
+      sessionId?: string | null;
+    },
+  ) => {
+    const nextParams = new URLSearchParams();
+
+    if (activeBotId) {
+      nextParams.set('bot', activeBotId);
+    }
+
+    if (!section) {
+      const sessionParam = searchParams?.get('session');
+      if (sessionParam) {
+        nextParams.set('session', sessionParam);
+      }
+    } else {
+      nextParams.set('section', section);
+
+      if (section === 'monitor' && options?.monitorId) {
+        nextParams.set('monitor', options.monitorId);
+      } else {
+        nextParams.delete('monitor');
+      }
+
+      if (section === 'monitor' && options?.createMonitor) {
+        nextParams.set('createMonitor', '1');
+      } else {
+        nextParams.delete('createMonitor');
+      }
+
+      if (section === 'research' && options?.sessionId) {
+        nextParams.set('session', options.sessionId);
+      } else if (section !== 'monitor') {
+        nextParams.delete('session');
+      }
+
+      if (section === 'research' && options?.createResearch) {
+        nextParams.set('createResearch', '1');
+      } else {
+        nextParams.delete('createResearch');
+      }
+    }
+
+    const queryString = nextParams.toString();
+    return queryString ? `/spaces?${queryString}` : '/spaces';
+  };
   const activeAppSlug = searchParams?.get('app');
   const activeConnectorId = searchParams?.get('connector') || 'file';
   const viewParam = searchParams?.get('view');
@@ -366,24 +429,45 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
   const [searchSessions, setSearchSessions] = useState<SpaceSearchSession[]>(
     [],
   );
+  const [researchSessions, setResearchSessions] = useState<
+    SpaceResearchSession[]
+  >([]);
   const sessionParam = searchParams?.get('session') || null;
+  const monitorParam = searchParams?.get('monitor') || null;
+
+  const { data: spaceMonitors = [], isLoading: isLoadingSpaceMonitors } =
+    useMonitorsQuery(activeBotId || undefined, data?.accessToken);
 
   useEffect(() => {
     if (!activeBotId || !pathname.startsWith('/spaces')) {
       setSearchSessions([]);
+      setResearchSessions([]);
       return;
     }
     let cancelled = false;
-    getSpaceSearchesAction(activeBotId).then(result => {
+
+    const loadSessions = async () => {
+      if (isSpaceResearchSection) {
+        const result = await getSpaceResearchSessionsAction(activeBotId);
+        if (cancelled) return;
+        if (result.success && Array.isArray(result.data)) {
+          setResearchSessions(result.data);
+        }
+        return;
+      }
+
+      const result = await getSpaceSearchesAction(activeBotId);
       if (cancelled) return;
       if (result.success && Array.isArray(result.data)) {
         setSearchSessions(result.data);
       }
-    });
+    };
+
+    loadSessions();
     return () => {
       cancelled = true;
     };
-  }, [activeBotId, pathname]);
+  }, [activeBotId, isSpaceResearchSection, pathname]);
 
   useEffect(() => {
     const handleSessionCreated = (e: Event) => {
@@ -396,6 +480,22 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     window.addEventListener('space-search-created', handleSessionCreated);
     return () =>
       window.removeEventListener('space-search-created', handleSessionCreated);
+  }, [activeBotId]);
+
+  useEffect(() => {
+    const handleSessionCreated = (e: Event) => {
+      const detail = (
+        e as CustomEvent<{ spaceId: string; session: SpaceResearchSession }>
+      ).detail;
+      if (!detail || detail.spaceId !== activeBotId) return;
+      setResearchSessions(prev => [detail.session, ...prev]);
+    };
+    window.addEventListener('space-research-created', handleSessionCreated);
+    return () =>
+      window.removeEventListener(
+        'space-research-created',
+        handleSessionCreated,
+      );
   }, [activeBotId]);
 
   useEffect(() => {
@@ -994,8 +1094,40 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         <TooltipTrigger asChild>
                           <button
                             onClick={async () => {
-                              setSelectedOption(null);
+                              setSelectedOption(
+                                isSpaceMonitorSection
+                                  ? OPTIONS.MONITOR
+                                  : isSpaceResearchSection
+                                    ? OPTIONS.RESEARCH
+                                    : null,
+                              );
                               setActiveBotId(bot.id);
+                              if (isSpaceMonitorSection) {
+                                router.push(
+                                  `/spaces?bot=${bot.id}&section=monitor`,
+                                );
+                                return;
+                              }
+                              if (isSpaceResearchSection) {
+                                const result =
+                                  await getSpaceResearchSessionsAction(bot.id);
+                                const firstSession =
+                                  result.success && Array.isArray(result.data)
+                                    ? result.data[0]
+                                    : null;
+                                if (
+                                  result.success &&
+                                  Array.isArray(result.data)
+                                ) {
+                                  setResearchSessions(result.data);
+                                }
+                                const firstSessionId = firstSession?.id;
+                                const url = firstSessionId
+                                  ? `/spaces?bot=${bot.id}&section=research&session=${firstSessionId}`
+                                  : `/spaces?bot=${bot.id}&section=research`;
+                                router.push(url);
+                                return;
+                              }
                               // Jump straight into the space's most recent session, like ChatGPT
                               const result = await getSpaceSearchesAction(
                                 bot.id,
@@ -1080,11 +1212,19 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   type="button"
                   onClick={() => {
                     setSelectedOption(OPTIONS.SEARCH);
+                    if (pathname.startsWith('/spaces') && activeBotId) {
+                      router.push(getSpaceSectionUrl());
+                      return;
+                    }
                     router.push('/c/new-search');
                   }}
                   className={cn(
                     'flex h-full flex-1 cursor-pointer items-center justify-center rounded-md border text-[10px] font-bold transition-all duration-300 outline-none',
-                    selectedOption === OPTIONS.SEARCH || selectedOption === null
+                    (pathname.startsWith('/spaces') &&
+                      !isSpaceMonitorSection &&
+                      !isSpaceResearchSection) ||
+                      selectedOption === OPTIONS.SEARCH ||
+                      selectedOption === null
                       ? 'border-[#0000ff]/45 bg-[#0000ff]/20 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
                       : 'border-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200',
                   )}
@@ -1095,11 +1235,22 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   type="button"
                   onClick={() => {
                     setSelectedOption(OPTIONS.RESEARCH);
+                    if (pathname.startsWith('/spaces') && activeBotId) {
+                      const firstSessionId =
+                        researchSessions[0]?.id || researchSessions[0]?._id;
+                      router.push(
+                        getSpaceSectionUrl('research', {
+                          sessionId: firstSessionId || null,
+                        }),
+                      );
+                      return;
+                    }
                     router.push('/c/new-research');
                   }}
                   className={cn(
                     'flex h-full flex-1 cursor-pointer items-center justify-center rounded-md border text-[10px] font-bold transition-all duration-300 outline-none',
-                    selectedOption === OPTIONS.RESEARCH
+                    isSpaceResearchSection ||
+                      selectedOption === OPTIONS.RESEARCH
                       ? 'border-[#0000ff]/45 bg-[#0000ff]/20 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
                       : 'border-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200',
                   )}
@@ -1110,11 +1261,19 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   type="button"
                   onClick={() => {
                     setSelectedOption(OPTIONS.MONITOR);
-                    router.push('/c/new-monitor');
+                    if (pathname.startsWith('/spaces') && activeBotId) {
+                      router.push(getSpaceSectionUrl('monitor'));
+                      return;
+                    }
+                    if (activeBotId) {
+                      router.push(`/spaces?bot=${activeBotId}&section=monitor`);
+                      return;
+                    }
+                    router.push('/spaces?section=monitor');
                   }}
                   className={cn(
                     'flex h-full flex-1 cursor-pointer items-center justify-center rounded-md border text-[10px] font-bold transition-all duration-300 outline-none',
-                    selectedOption === OPTIONS.MONITOR
+                    isSpaceMonitorSection || selectedOption === OPTIONS.MONITOR
                       ? 'border-[#0000ff]/45 bg-[#0000ff]/20 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
                       : 'border-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200',
                   )}
@@ -1393,6 +1552,29 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         <button
                           type="button"
                           onClick={() => {
+                            if (isSpaceMonitorSection) {
+                              setSelectedOption(OPTIONS.MONITOR);
+                              router.push(
+                                getSpaceSectionUrl('monitor', {
+                                  monitorId: monitorParam,
+                                  createMonitor: true,
+                                }),
+                              );
+                              return;
+                            }
+
+                            if (isSpaceResearchSection) {
+                              setSelectedOption(OPTIONS.RESEARCH);
+                              setActiveBotThreadId(null);
+                              setActiveConversation(null);
+                              router.push(
+                                getSpaceSectionUrl('research', {
+                                  createResearch: true,
+                                }),
+                              );
+                              return;
+                            }
+
                             setSelectedOption(null);
                             setActiveBotThreadId(null);
                             setActiveConversation(null);
@@ -1407,7 +1589,11 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         side="bottom"
                         className="border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
                       >
-                        New Chat
+                        {isSpaceMonitorSection
+                          ? 'Create Monitor'
+                          : isSpaceResearchSection
+                            ? 'New Research'
+                            : 'New Chat'}
                       </TooltipContent>
                     </Tooltip>
                   </div>
@@ -1415,164 +1601,310 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
                 {/* Space-Specific Threads List */}
                 <div className="flex-1 space-y-1.5 overflow-y-auto bg-[#0c1120] px-4 py-2 dark:bg-[#0c1120]">
-                  {viewParam === 'data' && activeBot
-                    ? /* Knowledge Files List */
-                      allFiles.map((file, idx) => {
-                        const IconComponent = getFileIconComponent(file.name);
-                        return (
-                          <div
-                            key={idx}
-                            className="group mb-1.5 flex h-9 w-full cursor-default items-center justify-between rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 text-left text-xs font-normal text-zinc-300 transition-all duration-300 hover:text-white"
-                          >
-                            <div className="flex flex-1 items-center gap-2 truncate px-3 py-2">
-                              <IconComponent className="h-3.5 w-3.5 flex-shrink-0 text-blue-400" />
-                              <span className="truncate" title={file.name}>
-                                {file.name}
-                              </span>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setSpaceItemToDelete({
-                                  type: 'data',
-                                  index: idx,
-                                  name: file.name,
-                                });
-                              }}
-                              className="mr-2 rounded p-1 text-zinc-400 opacity-100 transition-colors hover:bg-red-500/20 hover:text-red-500 focus:outline-none md:opacity-0 md:group-hover:opacity-100"
-                              title="Remove File"
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </button>
-                          </div>
-                        );
-                      })
-                    : viewParam === 'instructions' && activeBot
-                      ? /* Instructions List */
-                        allInstructions.map((instruction, idx) => {
-                          const isSelected = currentEditIndex === idx;
+                  {isSpaceMonitorSection
+                    ? spaceMonitors
+                        .filter(monitor => {
+                          const normalizedQuery = searchQuery.toLowerCase();
+                          const name = (monitor.name || '').toLowerCase();
+                          const query = (
+                            monitor.search?.query || ''
+                          ).toLowerCase();
+
+                          return (
+                            !normalizedQuery ||
+                            name.includes(normalizedQuery) ||
+                            query.includes(normalizedQuery)
+                          );
+                        })
+                        .map(monitor => {
+                          const monitorId = getMonitorId(monitor);
+                          const isSelected = monitorParam === monitorId;
+
                           return (
                             <div
-                              key={idx}
+                              key={monitorId}
                               onClick={() => {
-                                setSelectedOption(OPTIONS.INSTRUCTIONS);
+                                setSelectedOption(OPTIONS.MONITOR);
                                 router.push(
-                                  `/spaces?bot=${activeBotId}&view=instructions&editIndex=${idx}`,
+                                  getSpaceSectionUrl('monitor', {
+                                    monitorId,
+                                  }),
                                 );
                               }}
                               className={cn(
-                                'group mb-1.5 flex h-9 w-full cursor-pointer items-center justify-between rounded-lg border text-left text-xs font-normal transition-all duration-300 select-none',
+                                'group mb-1.5 flex min-h-11 w-full cursor-pointer items-center justify-between rounded-lg border text-left text-xs font-normal transition-all duration-300 select-none',
                                 isSelected
-                                  ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
-                                  : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_12px_rgba(0,0,255,0.25)]',
+                                  ? 'border-[#0000ff] bg-[#0000ff]/15 font-semibold text-white shadow-[0_0_20px_rgba(0,0,255,0.55)]'
+                                  : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
                               )}
                             >
-                              <div className="flex flex-1 items-center gap-2 truncate px-3 py-2">
-                                <Terminal className="text-indigo-405 h-3.5 w-3.5 flex-shrink-0" />
-                                <span className="truncate" title={instruction}>
-                                  {instruction}
+                              <span className="flex flex-1 flex-col gap-1 truncate px-3 py-2">
+                                <span className="truncate font-medium">
+                                  {monitor.name || 'Untitled monitor'}
                                 </span>
-                              </div>
-                              <button
-                                type="button"
-                                onClick={e => {
-                                  e.stopPropagation();
-                                  setSpaceItemToDelete({
-                                    type: 'instructions',
-                                    index: idx,
-                                    name: instruction,
-                                  });
-                                }}
-                                className="mr-2 rounded p-1 text-zinc-400 opacity-100 transition-colors hover:bg-red-500/20 hover:text-red-500 focus:outline-none md:opacity-0 md:group-hover:opacity-100"
-                                title="Remove Instruction"
-                              >
-                                <Trash2 className="h-3.5 w-3.5" />
-                              </button>
+                                <span className="truncate text-[10px] text-zinc-400 group-hover:text-zinc-200">
+                                  {monitor.search?.query ||
+                                    'No search query configured.'}
+                                </span>
+                              </span>
                             </div>
                           );
                         })
-                      : viewParam === 'guardrails' && activeBot
-                        ? /* Guardrails List */
-                          allGuardrails.map((guardrail, idx) => {
-                            const isSelected = currentEditIndex === idx;
+                    : isSpaceResearchSection
+                      ? researchSessions
+                          .filter(session =>
+                            (session.searches?.[0]?.query || '')
+                              .toLowerCase()
+                              .includes(searchQuery.toLowerCase()),
+                          )
+                          .map(session => {
+                            const id = session.id || session._id || '';
+                            const title =
+                              session.searches?.[0]?.query ||
+                              'Untitled research';
+                            const isSelected =
+                              sessionParam === id && pathname === '/spaces';
                             return (
                               <div
-                                key={idx}
+                                key={id}
                                 onClick={() => {
-                                  setSelectedOption(OPTIONS.GUARDRAILS);
+                                  setSelectedOption(OPTIONS.RESEARCH);
                                   router.push(
-                                    `/spaces?bot=${activeBotId}&view=guardrails&editIndex=${idx}`,
+                                    getSpaceSectionUrl('research', {
+                                      sessionId: id,
+                                    }),
                                   );
                                 }}
                                 className={cn(
                                   'group mb-1.5 flex h-9 w-full cursor-pointer items-center justify-between rounded-lg border text-left text-xs font-normal transition-all duration-300 select-none',
                                   isSelected
-                                    ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
-                                    : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_12px_rgba(0,0,255,0.25)]',
+                                    ? 'border-[#0000ff] bg-[#0000ff]/15 font-semibold text-white shadow-[0_0_20px_rgba(0,0,255,0.55)]'
+                                    : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
                                 )}
                               >
+                                <span className="flex flex-1 items-center gap-2.5 truncate px-3 py-2">
+                                  {getThreadIcon(title, isSelected)}
+                                  <span className="truncate">{title}</span>
+                                </span>
+                              </div>
+                            );
+                          })
+                      : viewParam === 'data' && activeBot
+                        ? /* Knowledge Files List */
+                          allFiles.map((file, idx) => {
+                            const IconComponent = getFileIconComponent(
+                              file.name,
+                            );
+                            return (
+                              <div
+                                key={idx}
+                                className="group mb-1.5 flex h-9 w-full cursor-default items-center justify-between rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 text-left text-xs font-normal text-zinc-300 transition-all duration-300 hover:text-white"
+                              >
                                 <div className="flex flex-1 items-center gap-2 truncate px-3 py-2">
-                                  <Shield className="h-3.5 w-3.5 flex-shrink-0 text-red-400" />
-                                  <span className="truncate" title={guardrail}>
-                                    {guardrail}
+                                  <IconComponent className="h-3.5 w-3.5 flex-shrink-0 text-blue-400" />
+                                  <span className="truncate" title={file.name}>
+                                    {file.name}
                                   </span>
                                 </div>
                                 <button
                                   type="button"
-                                  onClick={e => {
-                                    e.stopPropagation();
+                                  onClick={() => {
                                     setSpaceItemToDelete({
-                                      type: 'guardrails',
+                                      type: 'data',
                                       index: idx,
-                                      name: guardrail,
+                                      name: file.name,
                                     });
                                   }}
                                   className="mr-2 rounded p-1 text-zinc-400 opacity-100 transition-colors hover:bg-red-500/20 hover:text-red-500 focus:outline-none md:opacity-0 md:group-hover:opacity-100"
-                                  title="Remove Guardrail"
+                                  title="Remove File"
                                 >
                                   <Trash2 className="h-3.5 w-3.5" />
                                 </button>
                               </div>
                             );
                           })
-                        : /* Space Search Sessions List */
-                          searchSessions
-                            .filter(session =>
-                              (session.searches?.[0]?.query || '')
-                                .toLowerCase()
-                                .includes(searchQuery.toLowerCase()),
-                            )
-                            .map(session => {
-                              const id = session.id || session._id || '';
-                              const title =
-                                session.searches?.[0]?.query ||
-                                'Untitled search';
-                              const isSelected =
-                                sessionParam === id && pathname === '/spaces';
+                        : viewParam === 'instructions' && activeBot
+                          ? /* Instructions List */
+                            allInstructions.map((instruction, idx) => {
+                              const isSelected = currentEditIndex === idx;
                               return (
                                 <div
-                                  key={id}
+                                  key={idx}
                                   onClick={() => {
-                                    setSelectedOption(null);
+                                    setSelectedOption(OPTIONS.INSTRUCTIONS);
                                     router.push(
-                                      `/spaces?bot=${activeBotId}&session=${id}`,
+                                      `/spaces?bot=${activeBotId}&view=instructions&editIndex=${idx}`,
                                     );
                                   }}
                                   className={cn(
                                     'group mb-1.5 flex h-9 w-full cursor-pointer items-center justify-between rounded-lg border text-left text-xs font-normal transition-all duration-300 select-none',
                                     isSelected
-                                      ? 'border-[#0000ff] bg-[#0000ff]/15 font-semibold text-white shadow-[0_0_20px_rgba(0,0,255,0.55)]'
-                                      : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
+                                      ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
+                                      : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_12px_rgba(0,0,255,0.25)]',
                                   )}
                                 >
-                                  <span className="flex flex-1 items-center gap-2.5 truncate px-3 py-2">
-                                    {getThreadIcon(title, isSelected)}
-                                    <span className="truncate">{title}</span>
-                                  </span>
+                                  <div className="flex flex-1 items-center gap-2 truncate px-3 py-2">
+                                    <Terminal className="text-indigo-405 h-3.5 w-3.5 flex-shrink-0" />
+                                    <span
+                                      className="truncate"
+                                      title={instruction}
+                                    >
+                                      {instruction}
+                                    </span>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={e => {
+                                      e.stopPropagation();
+                                      setSpaceItemToDelete({
+                                        type: 'instructions',
+                                        index: idx,
+                                        name: instruction,
+                                      });
+                                    }}
+                                    className="mr-2 rounded p-1 text-zinc-400 opacity-100 transition-colors hover:bg-red-500/20 hover:text-red-500 focus:outline-none md:opacity-0 md:group-hover:opacity-100"
+                                    title="Remove Instruction"
+                                  >
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                  </button>
                                 </div>
                               );
-                            })}
+                            })
+                          : viewParam === 'guardrails' && activeBot
+                            ? /* Guardrails List */
+                              allGuardrails.map((guardrail, idx) => {
+                                const isSelected = currentEditIndex === idx;
+                                return (
+                                  <div
+                                    key={idx}
+                                    onClick={() => {
+                                      setSelectedOption(OPTIONS.GUARDRAILS);
+                                      router.push(
+                                        `/spaces?bot=${activeBotId}&view=guardrails&editIndex=${idx}`,
+                                      );
+                                    }}
+                                    className={cn(
+                                      'group mb-1.5 flex h-9 w-full cursor-pointer items-center justify-between rounded-lg border text-left text-xs font-normal transition-all duration-300 select-none',
+                                      isSelected
+                                        ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
+                                        : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_12px_rgba(0,0,255,0.25)]',
+                                    )}
+                                  >
+                                    <div className="flex flex-1 items-center gap-2 truncate px-3 py-2">
+                                      <Shield className="h-3.5 w-3.5 flex-shrink-0 text-red-400" />
+                                      <span
+                                        className="truncate"
+                                        title={guardrail}
+                                      >
+                                        {guardrail}
+                                      </span>
+                                    </div>
+                                    <button
+                                      type="button"
+                                      onClick={e => {
+                                        e.stopPropagation();
+                                        setSpaceItemToDelete({
+                                          type: 'guardrails',
+                                          index: idx,
+                                          name: guardrail,
+                                        });
+                                      }}
+                                      className="mr-2 rounded p-1 text-zinc-400 opacity-100 transition-colors hover:bg-red-500/20 hover:text-red-500 focus:outline-none md:opacity-0 md:group-hover:opacity-100"
+                                      title="Remove Guardrail"
+                                    >
+                                      <Trash2 className="h-3.5 w-3.5" />
+                                    </button>
+                                  </div>
+                                );
+                              })
+                            : /* Space Search Sessions List */
+                              searchSessions
+                                .filter(session =>
+                                  (session.searches?.[0]?.query || '')
+                                    .toLowerCase()
+                                    .includes(searchQuery.toLowerCase()),
+                                )
+                                .map(session => {
+                                  const id = session.id || session._id || '';
+                                  const title =
+                                    session.searches?.[0]?.query ||
+                                    'Untitled search';
+                                  const isSelected =
+                                    sessionParam === id &&
+                                    pathname === '/spaces';
+                                  return (
+                                    <div
+                                      key={id}
+                                      onClick={() => {
+                                        setSelectedOption(null);
+                                        router.push(
+                                          `/spaces?bot=${activeBotId}&session=${id}`,
+                                        );
+                                      }}
+                                      className={cn(
+                                        'group mb-1.5 flex h-9 w-full cursor-pointer items-center justify-between rounded-lg border text-left text-xs font-normal transition-all duration-300 select-none',
+                                        isSelected
+                                          ? 'border-[#0000ff] bg-[#0000ff]/15 font-semibold text-white shadow-[0_0_20px_rgba(0,0,255,0.55)]'
+                                          : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
+                                      )}
+                                    >
+                                      <span className="flex flex-1 items-center gap-2.5 truncate px-3 py-2">
+                                        {getThreadIcon(title, isSelected)}
+                                        <span className="truncate">
+                                          {title}
+                                        </span>
+                                      </span>
+                                    </div>
+                                  );
+                                })}
                   {/* Fallbacks */}
+                  {isSpaceMonitorSection && isLoadingSpaceMonitors && (
+                    <div className="py-8 text-center text-xs text-zinc-500 italic">
+                      Loading monitors...
+                    </div>
+                  )}
+                  {isSpaceResearchSection && researchSessions.length === 0 && (
+                    <div className="py-8 text-center text-xs text-zinc-500 italic">
+                      No research sessions yet.
+                    </div>
+                  )}
+                  {isSpaceResearchSection &&
+                    researchSessions.length > 0 &&
+                    researchSessions.every(
+                      session =>
+                        !(session.searches?.[0]?.query || '')
+                          .toLowerCase()
+                          .includes(searchQuery.toLowerCase()),
+                    ) && (
+                      <div className="py-8 text-center text-xs text-zinc-500 italic">
+                        No research sessions match your search.
+                      </div>
+                    )}
+                  {isSpaceMonitorSection &&
+                    !isLoadingSpaceMonitors &&
+                    spaceMonitors.length === 0 && (
+                      <div className="py-8 text-center text-xs text-zinc-500 italic">
+                        No monitors created yet.
+                      </div>
+                    )}
+                  {isSpaceMonitorSection &&
+                    !isLoadingSpaceMonitors &&
+                    spaceMonitors.length > 0 &&
+                    spaceMonitors.every(monitor => {
+                      const normalizedQuery = searchQuery.toLowerCase();
+                      const name = (monitor.name || '').toLowerCase();
+                      const query = (monitor.search?.query || '').toLowerCase();
+
+                      return (
+                        normalizedQuery !== '' &&
+                        !name.includes(normalizedQuery) &&
+                        !query.includes(normalizedQuery)
+                      );
+                    }) && (
+                      <div className="py-8 text-center text-xs text-zinc-500 italic">
+                        No monitors match your search.
+                      </div>
+                    )}
                   {viewParam === 'data' && allFiles.length === 0 && (
                     <div className="py-8 text-center text-xs text-zinc-500 italic">
                       No files uploaded yet.

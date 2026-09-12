@@ -74,6 +74,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { ALLOWED_DOC_EXTENSIONS } from './constants';
+import { PENDING_MONITOR_DRAFT_KEY } from './monitors/monitor-utils';
 import { Textarea } from './ui/textarea';
 import { WarningMessageModal } from './WarningMessageModal';
 import PreFlightPanel, { PreFlightSettings } from './research/PreFlightPanel';
@@ -89,7 +90,13 @@ interface ChatInputProps {
 
 // Helper function to check if dynamic ID is a new chat
 const isNewChatId = (id?: string) => {
-  return !id || id === 'new-chat' || id === 'new-search' || id === 'new-research' || id === 'new-monitor';
+  return (
+    !id ||
+    id === 'new-chat' ||
+    id === 'new-search' ||
+    id === 'new-research' ||
+    id === 'new-monitor'
+  );
 };
 
 // Helper function to get file icon based on extension
@@ -159,8 +166,6 @@ export default function ChatInput({
   isStudio,
   isConversationLoading,
 }: ChatInputProps) {
-
-
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -185,20 +190,25 @@ export default function ChatInput({
   } = useConversationsStore();
 
   const { bots, activeBotId } = useBotsStore();
-  const activeBot = bots.find((b) => b.id === activeBotId);
+  const activeBot = bots.find(b => b.id === activeBotId);
 
   // Custom files state for docs (controlled or uncontrolled)
-  const [internalSelectedFiles, setInternalSelectedFiles] = useState<File[]>([]);
+  const [internalSelectedFiles, setInternalSelectedFiles] = useState<File[]>(
+    [],
+  );
   const [isAudioRecording, setIsAudioRecording] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
 
   const startListening = () => {
     const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      toast.error('Speech recognition is not supported in this browser. Please try Chrome, Safari, or Edge.');
+      toast.error(
+        'Speech recognition is not supported in this browser. Please try Chrome, Safari, or Edge.',
+      );
       return;
     }
 
@@ -283,7 +293,11 @@ export default function ChatInput({
   const [researchSettings, setResearchSettings] = useState<PreFlightSettings>({
     depth: 'thorough',
     consensusLevel: 'majority',
-    boardPersonas: ['McKinsey Strategy Partner', 'Gartner Research Director', 'YC Technical Architect']
+    boardPersonas: [
+      'McKinsey Strategy Partner',
+      'Gartner Research Director',
+      'YC Technical Architect',
+    ],
   });
 
   const selectedFiles =
@@ -325,8 +339,12 @@ export default function ChatInput({
   const [isDragging, setIsDragging] = useState(false);
 
   // Tasks form states
-  const [taskType, setTaskType] = useState<'one-time' | 'recurring'>('one-time');
-  const [triggerType, setTriggerType] = useState<'scheduled' | 'event'>('scheduled');
+  const [taskType, setTaskType] = useState<'one-time' | 'recurring'>(
+    'one-time',
+  );
+  const [triggerType, setTriggerType] = useState<'scheduled' | 'event'>(
+    'scheduled',
+  );
   const [scheduledTime, setScheduledTime] = useState('');
   const [eventTrigger, setEventTrigger] = useState('');
 
@@ -347,7 +365,7 @@ export default function ChatInput({
       timestamp: new Date().toISOString(),
       status: 'running' as const,
       summary: `Initiating workflow: "${taskName}" using triggers: [Type: ${taskType}, Trigger: ${triggerType === 'scheduled' ? scheduledTime : eventTrigger}]`,
-      botId: activeBotId || undefined
+      botId: activeBotId || undefined,
     };
 
     const existing = localStorage.getItem('insosearch_task_runs');
@@ -356,7 +374,7 @@ export default function ChatInput({
     localStorage.setItem('insosearch_task_runs', JSON.stringify(runsList));
 
     toast.success('Task scheduled successfully', {
-      description: 'You can monitor execution logs in the sidebar Inbox tab.'
+      description: 'You can monitor execution logs in the sidebar Inbox tab.',
     });
 
     setMessage('');
@@ -365,13 +383,18 @@ export default function ChatInput({
 
     // Simulate completion
     setTimeout(() => {
-      const currentRuns = JSON.parse(localStorage.getItem('insosearch_task_runs') || '[]');
+      const currentRuns = JSON.parse(
+        localStorage.getItem('insosearch_task_runs') || '[]',
+      );
       const targetRun = currentRuns.find((r: any) => r.id === runId);
       if (targetRun) {
         targetRun.status = 'success';
         targetRun.duration = 2450;
         targetRun.summary = `Successfully executed task automation pipeline. Verified triggers, loaded task inputs, and completed task: "${taskName}".`;
-        localStorage.setItem('insosearch_task_runs', JSON.stringify(currentRuns));
+        localStorage.setItem(
+          'insosearch_task_runs',
+          JSON.stringify(currentRuns),
+        );
       }
     }, 3000);
   };
@@ -386,48 +409,65 @@ export default function ChatInput({
     setIsDragging(false);
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const filesArray = Array.from(e.dataTransfer.files);
-      
-      if (selectedOption === OPTIONS.IMAGE || selectedOption === OPTIONS.EDIT_IMAGE) {
-        const imageFiles = filesArray.filter(file => file.type.startsWith('image/'));
-        if (imageFiles.length > 0) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setImageBase64(reader.result as string);
-            setSelectedOption(OPTIONS.EDIT_IMAGE);
-          };
-          reader.readAsDataURL(imageFiles[0]);
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragging(false);
+
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        const filesArray = Array.from(e.dataTransfer.files);
+
+        if (
+          selectedOption === OPTIONS.IMAGE ||
+          selectedOption === OPTIONS.EDIT_IMAGE
+        ) {
+          const imageFiles = filesArray.filter(file =>
+            file.type.startsWith('image/'),
+          );
+          if (imageFiles.length > 0) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              setImageBase64(reader.result as string);
+              setSelectedOption(OPTIONS.EDIT_IMAGE);
+            };
+            reader.readAsDataURL(imageFiles[0]);
+          } else {
+            const validFiles = filesArray.filter(file => {
+              const ext = '.' + file.name.split('.').pop()?.toLowerCase();
+              return ALLOWED_DOC_EXTENSIONS.includes(ext);
+            });
+            if (validFiles.length > 0) {
+              setSelectedFiles([...(selectedFiles || []), ...validFiles]);
+            } else {
+              toast.error(
+                'Only image or supported document files are allowed.',
+              );
+            }
+          }
         } else {
           const validFiles = filesArray.filter(file => {
             const ext = '.' + file.name.split('.').pop()?.toLowerCase();
             return ALLOWED_DOC_EXTENSIONS.includes(ext);
           });
+
           if (validFiles.length > 0) {
             setSelectedFiles([...(selectedFiles || []), ...validFiles]);
           } else {
-            toast.error('Only image or supported document files are allowed.');
+            toast.error(
+              'Supported document types: PDF, DOCX, XLSX, CSV, PPTX.',
+            );
           }
         }
-      } else {
-        const validFiles = filesArray.filter(file => {
-          const ext = '.' + file.name.split('.').pop()?.toLowerCase();
-          return ALLOWED_DOC_EXTENSIONS.includes(ext);
-        });
-        
-        if (validFiles.length > 0) {
-          setSelectedFiles([...(selectedFiles || []), ...validFiles]);
-        } else {
-          toast.error('Supported document types: PDF, DOCX, XLSX, CSV, PPTX.');
-        }
       }
-    }
-  }, [selectedOption, selectedFiles, setSelectedFiles, setImageBase64, setSelectedOption]);
-
+    },
+    [
+      selectedOption,
+      selectedFiles,
+      setSelectedFiles,
+      setImageBase64,
+      setSelectedOption,
+    ],
+  );
 
   // Document hook
   const {
@@ -495,8 +535,9 @@ export default function ChatInput({
 
   const { isFreeUser } = useSubscription();
 
-  const hasStartedChat = activeConversation?.messages && activeConversation.messages.length > 0;
-  
+  const hasStartedChat =
+    activeConversation?.messages && activeConversation.messages.length > 0;
+
   const isExistingConversation =
     (activeConversation?.conversationId &&
       !isNewChatId(activeConversation.conversationId) &&
@@ -513,9 +554,15 @@ export default function ChatInput({
     if (!isExistingConversation) {
       if (conversationId === 'new-search' || pathname === '/c/new-search') {
         setSelectedOption(OPTIONS.SEARCH);
-      } else if (conversationId === 'new-research' || pathname === '/c/new-research') {
+      } else if (
+        conversationId === 'new-research' ||
+        pathname === '/c/new-research'
+      ) {
         setSelectedOption(OPTIONS.RESEARCH);
-      } else if (conversationId === 'new-monitor' || pathname === '/c/new-monitor') {
+      } else if (
+        conversationId === 'new-monitor' ||
+        pathname === '/c/new-monitor'
+      ) {
         setSelectedOption(OPTIONS.MONITOR);
       } else {
         setSelectedOption(null);
@@ -758,17 +805,15 @@ export default function ChatInput({
         }
 
         try {
-          const base = process.env.NEXT_PUBLIC_API_URL || 'https://api.altihq.com/api/v1';
-          const res = await fetch(
-            `${base}/vertex/anonymous-response`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ prompt: userMessage }),
+          const base =
+            process.env.NEXT_PUBLIC_API_URL || 'https://api.altihq.com/api/v1';
+          const res = await fetch(`${base}/vertex/anonymous-response`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
             },
-          );
+            body: JSON.stringify({ prompt: userMessage }),
+          });
           const resData = await res.json();
           const answerText = extractAssistantText(resData);
 
@@ -781,8 +826,9 @@ export default function ChatInput({
             success: true,
             message: 'Success',
             data: {
-              conversationId:
-                isNewChatId(conversationId) ? undefined : conversationId,
+              conversationId: isNewChatId(conversationId)
+                ? undefined
+                : conversationId,
               responseMessage: { answer: answerText },
             },
           };
@@ -795,9 +841,13 @@ export default function ChatInput({
         }
       }
 
-      const getCategoryFromOption = (opt: OPTIONS | null): string | undefined => {
+      const getCategoryFromOption = (
+        opt: OPTIONS | null,
+      ): string | undefined => {
         if (!opt) return 'search';
         switch (opt) {
+          case OPTIONS.MONITOR:
+            return 'monitor';
           case OPTIONS.RESEARCH:
             return 'search';
           case OPTIONS.CODE:
@@ -852,27 +902,35 @@ export default function ChatInput({
         } else if (file) {
           formData.append('file', file);
         }
-        const convId =
-          isNewChatId(conversationId)
-            ? activeConversation?.conversationId || undefined
-            : conversationId;
+        const convId = isNewChatId(conversationId)
+          ? activeConversation?.conversationId || undefined
+          : conversationId;
         if (convId) formData.append('conversationId', convId);
-        
-        const categoryVal = appParam ? 'mcp' : getCategoryFromOption(selectedOption);
+
+        const categoryVal = appParam
+          ? 'mcp'
+          : getCategoryFromOption(selectedOption);
         if (categoryVal) formData.append('category', categoryVal);
         if (appParam) {
-          formData.append('metadata', JSON.stringify({
-            customData: { mcpServerId: appParam.toLowerCase() }
-          }));
+          formData.append(
+            'metadata',
+            JSON.stringify({
+              customData: { mcpServerId: appParam.toLowerCase() },
+            }),
+          );
         }
 
         return await PostConversationWithFile(formData, data.accessToken);
       }
-      const isKbId = activeBot?.data && /^[0-9a-fA-F]{24}$/.test(activeBot.data);
-      const targetApiUrl = isKbId || activeConversation?.knowledgebaseId
-        ? `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/chat` 
-        : apiUrl;
-      const targetKbId = (isKbId ? activeBot.data : activeConversation?.knowledgebaseId) || undefined;
+      const isKbId =
+        activeBot?.data && /^[0-9a-fA-F]{24}$/.test(activeBot.data);
+      const targetApiUrl =
+        isKbId || activeConversation?.knowledgebaseId
+          ? `${process.env.NEXT_PUBLIC_API_URL}/knowledgebase/chat`
+          : apiUrl;
+      const targetKbId =
+        (isKbId ? activeBot.data : activeConversation?.knowledgebaseId) ||
+        undefined;
 
       const extraParams: Record<string, any> = {};
       if (selectedOption === OPTIONS.RESEARCH) {
@@ -880,27 +938,39 @@ export default function ChatInput({
         extraParams.researchTier = researchTier;
       }
       if (selectedOption === OPTIONS.MONITOR) {
-        extraParams.frequency = monitorFrequency === 'Frequency' ? '1 Hour' : monitorFrequency;
+        extraParams.frequency =
+          monitorFrequency === 'Frequency' ? '1 Hour' : monitorFrequency;
       }
-      const categoryVal = appParam ? 'mcp' : getCategoryFromOption(selectedOption);
+      const categoryVal = appParam
+        ? 'mcp'
+        : getCategoryFromOption(selectedOption);
       if (categoryVal) {
         extraParams.category = categoryVal;
       }
       if (appParam) {
         extraParams.metadata = {
           customData: {
-            mcpServerId: appParam.toLowerCase()
-          }
+            mcpServerId: appParam.toLowerCase(),
+          },
         };
       }
 
-      const isOrchestrator = targetApiUrl.endsWith('/orchestrator/route-prompt');
+      const isOrchestrator = targetApiUrl.endsWith(
+        '/orchestrator/route-prompt',
+      );
       const isSearchStream = targetApiUrl.endsWith('/search/stream');
 
       if (isOrchestrator || isSearchStream) {
         let resolvedConversationId = conversationId;
         // Seed initial empty assistant response placeholder in store so we can stream into it
-        useConversationsStore.getState().streamActiveConversation('', isNewChatId(resolvedConversationId) ? undefined : resolvedConversationId);
+        useConversationsStore
+          .getState()
+          .streamActiveConversation(
+            '',
+            isNewChatId(resolvedConversationId)
+              ? undefined
+              : resolvedConversationId,
+          );
 
         const result = await PostConversationStream(
           targetApiUrl,
@@ -911,26 +981,34 @@ export default function ChatInput({
             : conversationId,
           targetKbId,
           extraParams,
-          (chunk) => {
+          chunk => {
             if (chunk.type === 'connected' && chunk.conversationId) {
               resolvedConversationId = chunk.conversationId;
             } else if (chunk.type === 'text' && chunk.content) {
               setLoadingResponse(false);
-              useConversationsStore.getState().streamActiveConversation(chunk.content, resolvedConversationId);
+              useConversationsStore
+                .getState()
+                .streamActiveConversation(
+                  chunk.content,
+                  resolvedConversationId,
+                );
             } else if (chunk.type === 'metadata') {
-              useConversationsStore.getState().streamActiveConversation('', resolvedConversationId, {
-                reference: chunk.reference,
-                citations: chunk.citations
-              });
+              useConversationsStore
+                .getState()
+                .streamActiveConversation('', resolvedConversationId, {
+                  reference: chunk.reference,
+                  citations: chunk.citations,
+                });
             }
-          }
+          },
         );
 
         if (!result.success) {
           return result;
         }
 
-        const messages = useConversationsStore.getState().activeConversation?.messages || [];
+        const messages =
+          useConversationsStore.getState().activeConversation?.messages || [];
         const lastMessage = messages[messages.length - 1];
 
         return {
@@ -942,8 +1020,8 @@ export default function ChatInput({
             responseMessage: {
               answer: lastMessage?.content || '',
               reference: lastMessage?.metadata?.reference || [],
-            }
-          }
+            },
+          },
         };
       }
 
@@ -955,7 +1033,7 @@ export default function ChatInput({
           ? activeConversation?.conversationId || undefined
           : conversationId,
         targetKbId,
-        extraParams
+        extraParams,
       );
     },
     onMutate: ({ message: userMessage }) => {
@@ -991,47 +1069,60 @@ export default function ChatInput({
         return;
       }
       setShowStartLastMessage(false);
-      const newId =
-        isNewChatId(conversationId)
-          ? response.data.conversationId
-          : conversationId;
+      const newId = isNewChatId(conversationId)
+        ? response.data.conversationId
+        : conversationId;
 
       if (isNewChatId(conversationId) && response.data.conversationId) {
         if (activeBotId && pathname.startsWith('/spaces')) {
-          useBotsStore.getState().addThread(activeBotId, response.data.conversationId, userMessage.slice(0, 50) || 'New Chat');
-          router.replace(`/spaces?bot=${activeBotId}&thread=${response.data.conversationId}`);
+          useBotsStore
+            .getState()
+            .addThread(
+              activeBotId,
+              response.data.conversationId,
+              userMessage.slice(0, 50) || 'New Chat',
+            );
+          router.replace(
+            `/spaces?bot=${activeBotId}&thread=${response.data.conversationId}`,
+          );
         } else {
           router.replace(`/c/${response.data.conversationId}`);
         }
       }
 
       // Extract media and attachments based on the new agent JSON schemas or legacy schema
-      let imageUrl = response.data?.responseMessage?.images?.[0] || response.data?.responseMessage?.imageUrl;
+      let imageUrl =
+        response.data?.responseMessage?.images?.[0] ||
+        response.data?.responseMessage?.imageUrl;
       if (response.data?.imageUrl) {
         imageUrl = response.data.imageUrl;
       }
-      
+
       let name = response.data?.responseMessage?.video?.name;
       if (response.data?.videoUrl) {
         name = response.data.videoUrl;
       }
-      
+
       let audioUrl = response.data?.responseMessage?.audioUrl;
       if (response.data?.audioBase64) {
         audioUrl = `data:audio/mp3;base64,${response.data.audioBase64}`;
       }
-      
-      let reference = response.data?.responseMessage?.reference || response.data?.reference || response.data?.citations;
+
+      let reference =
+        response.data?.responseMessage?.reference ||
+        response.data?.reference ||
+        response.data?.citations;
       if (response.data?.sources) {
         reference = response.data.sources;
       }
-      
+
       const document =
         response.data?.document || response.data?.responseMessage?.document;
 
       // Determine the appropriate response text based on the context
       const getResponseText = () => {
-        const isKbId = activeBot?.data && /^[0-9a-fA-F]{24}$/.test(activeBot.data);
+        const isKbId =
+          activeBot?.data && /^[0-9a-fA-F]{24}$/.test(activeBot.data);
         if (activeConversation?.knowledgebaseId || isKbId) {
           return response.data?.message;
         }
@@ -1045,7 +1136,11 @@ export default function ChatInput({
           case OPTIONS.IMAGE:
           case OPTIONS.AUDIO:
           case OPTIONS.VIDEO:
-            return response.data?.content || response.data?.prompt || response.data?.responseMessage?.text;
+            return (
+              response.data?.content ||
+              response.data?.prompt ||
+              response.data?.responseMessage?.text
+            );
           case OPTIONS.CREATIVE_WRITING:
             return response.data?.content || response.data?.response;
           case OPTIONS.CODE:
@@ -1059,29 +1154,30 @@ export default function ChatInput({
             }
             return response.data?.responseMessage?.answer;
           case OPTIONS.RESEARCH:
-            return response.data?.synthesis || response.data?.content || response.data?.responseMessage?.answer;
+            return (
+              response.data?.synthesis ||
+              response.data?.content ||
+              response.data?.responseMessage?.answer
+            );
           case OPTIONS.PRESENTATION:
             return response.data?.message;
           case OPTIONS.WRITE_CONTRACT:
             return response.data?.contract;
           default:
-            return response.data?.content || response.data?.responseMessage?.answer;
+            return (
+              response.data?.content || response.data?.responseMessage?.answer
+            );
         }
       };
 
       if (!response.isStreamed) {
-        updateActiveConversation(
-          getResponseText(),
-          ROLES.ASSISTANT,
-          newId,
-          {
-            ...(imageUrl && { imageUrl }),
-            ...(name && { video: { name } }),
-            ...(reference && { reference }),
-            ...(document && { document }),
-            ...(audioUrl && { audioUrl }),
-          },
-        );
+        updateActiveConversation(getResponseText(), ROLES.ASSISTANT, newId, {
+          ...(imageUrl && { imageUrl }),
+          ...(name && { video: { name } }),
+          ...(reference && { reference }),
+          ...(document && { document }),
+          ...(audioUrl && { audioUrl }),
+        });
       }
 
       if (response?.data) {
@@ -1089,10 +1185,9 @@ export default function ChatInput({
           queryClient.invalidateQueries({
             queryKey: ['conversations', data?.accessToken],
           });
-          const targetId =
-            isNewChatId(conversationId)
-              ? response.data.conversationId
-              : conversationId;
+          const targetId = isNewChatId(conversationId)
+            ? response.data.conversationId
+            : conversationId;
           if (targetId) {
             queryClient.invalidateQueries({
               queryKey: ['activeConversation', targetId, data?.accessToken],
@@ -1121,6 +1216,27 @@ export default function ChatInput({
     if (isLoadingResponse) return;
 
     if (!message?.trim()) return;
+
+    if (selectedOption === OPTIONS.MONITOR && !pathname.startsWith('/spaces')) {
+      if (typeof window !== 'undefined') {
+        window.sessionStorage.setItem(
+          PENDING_MONITOR_DRAFT_KEY,
+          message.trim(),
+        );
+      }
+
+      setMessage('');
+      setShowStartLastMessage(false);
+
+      const destination = activeBotId
+        ? `/spaces?bot=${activeBotId}&section=monitor`
+        : '/spaces?section=monitor';
+
+      router.push(destination);
+      toast.info('Monitor draft moved to your selected space.');
+      return;
+    }
+
     setShowStartLastMessage(true);
 
     const handleImageWorkflow = async () => {
@@ -1422,7 +1538,10 @@ export default function ChatInput({
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     }
@@ -1499,7 +1618,8 @@ export default function ChatInput({
 
   const activeWarning = warningConfig.find(w => w.condition);
 
-  const hasMessages = activeConversation?.messages && activeConversation.messages.length > 0;
+  const hasMessages =
+    activeConversation?.messages && activeConversation.messages.length > 0;
 
   return (
     <>
@@ -1525,337 +1645,380 @@ export default function ChatInput({
         />
       )}
 
-      <div className="mx-auto w-full max-w-[796px] space-y-6 px-0 relative z-20">
-
-
-
-
-
-            {appParam && (
-              <div className="mb-3 px-4 py-2.5 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/50 dark:border-indigo-900/50 flex items-center justify-between shadow-xs animate-in fade-in duration-300">
-                <div className="flex items-center gap-2.5">
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-600 dark:bg-indigo-400"></span>
+      <div className="relative z-20 mx-auto w-full max-w-[796px] space-y-6 px-0">
+        {appParam && (
+          <div className="animate-in fade-in mb-3 flex items-center justify-between rounded-xl border border-indigo-200/50 bg-indigo-50/50 px-4 py-2.5 shadow-xs duration-300 dark:border-indigo-900/50 dark:bg-indigo-950/20">
+            <div className="flex items-center gap-2.5">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-indigo-600 dark:bg-indigo-400"></span>
+              </span>
+              <p className="text-xs font-semibold text-indigo-950 dark:text-indigo-200">
+                Isolated Chat Space:{' '}
+                <span className="font-extrabold text-indigo-600 uppercase dark:text-indigo-400">
+                  {appParam}
+                </span>
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                const params = new URLSearchParams(window.location.search);
+                params.delete('app');
+                router.push(`${pathname}?${params.toString()}`);
+              }}
+              className="text-[10px] font-bold tracking-wider text-indigo-600 uppercase transition-colors hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
+            >
+              Exit Space
+            </button>
+          </div>
+        )}
+        {/* Unified Single-Height Prompt Box Container */}
+        <div className="flex w-full flex-col gap-2 px-4 sm:px-0">
+          {/* Mode Badge Preview */}
+          {selectedOption &&
+            (selectedOption === OPTIONS.CODE ||
+              selectedOption === OPTIONS.IMAGE) && (
+              <div className="dark:bg-zinc-850/60 animate-in fade-in mb-2 flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 duration-200 dark:border-zinc-800/80">
+                <div className="flex items-center gap-2">
+                  {selectedOption === OPTIONS.CODE ? (
+                    <Code className="size-4 text-black dark:text-white" />
+                  ) : (
+                    <ImageIcon className="size-4 text-black dark:text-white" />
+                  )}
+                  <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                    {selectedOption === OPTIONS.CODE
+                      ? 'Code Generation Mode'
+                      : 'Image Generation Mode'}
                   </span>
-                  <p className="text-xs font-semibold text-indigo-950 dark:text-indigo-200">
-                    Isolated Chat Space: <span className="font-extrabold uppercase text-indigo-600 dark:text-indigo-400">{appParam}</span>
-                  </p>
                 </div>
                 <button
                   type="button"
-                  onClick={() => {
-                    const params = new URLSearchParams(window.location.search);
-                    params.delete('app');
-                    router.push(`${pathname}?${params.toString()}`);
-                  }}
-                  className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors uppercase tracking-wider"
+                  onClick={() => setSelectedOption(null)}
+                  className="rounded-full p-0.5 text-zinc-400 transition-colors hover:bg-black/5 hover:text-zinc-600 dark:hover:bg-white/5 dark:hover:text-zinc-200"
+                  title="Exit mode"
                 >
-                  Exit Space
+                  <X className="size-3.5" />
                 </button>
               </div>
             )}
-            {/* Unified Single-Height Prompt Box Container */}
-            <div className="flex flex-col w-full gap-2 px-4 sm:px-0">
-              {/* Mode Badge Preview */}
-              {selectedOption && (selectedOption === OPTIONS.CODE || selectedOption === OPTIONS.IMAGE) && (
-                <div className="mb-2 flex items-center justify-between rounded-lg bg-zinc-50 dark:bg-zinc-850/60 px-3 py-1.5 border border-zinc-200 dark:border-zinc-800/80 animate-in fade-in duration-200">
-                  <div className="flex items-center gap-2">
-                    {selectedOption === OPTIONS.CODE ? (
-                      <Code className="size-4 text-black dark:text-white" />
-                    ) : (
-                      <ImageIcon className="size-4 text-black dark:text-white" />
-                    )}
-                    <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                      {selectedOption === OPTIONS.CODE ? 'Code Generation Mode' : 'Image Generation Mode'}
+
+          {/* Image Preview */}
+          {imageBase64 && (
+            <div className="relative mb-2 w-fit">
+              <img
+                src={imageBase64}
+                alt="Uploaded preview"
+                className="h-12 w-12 rounded-lg object-cover"
+              />
+              <button
+                onClick={handleRemoveImage}
+                className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
+              >
+                <Plus className="bold size-3 rotate-45" />
+              </button>
+            </div>
+          )}
+
+          {/* File Cards Preview */}
+          {selectedFiles && selectedFiles.length > 0 && (
+            <div className="custom-scrollbar mb-2 flex max-h-[80px] flex-wrap gap-2 overflow-y-auto">
+              {selectedFiles.map((file, index) => (
+                <div
+                  key={index}
+                  className="animate-in fade-in inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 bg-white px-2.5 py-1.5 shadow-xs duration-200 dark:border-zinc-700 dark:bg-zinc-800"
+                >
+                  <FileText className="size-4 flex-shrink-0 text-gray-500" />
+                  <div className="flex min-w-0 flex-1 flex-col">
+                    <span
+                      className="text-gray-705 truncate text-xs font-semibold dark:text-zinc-300"
+                      title={file.name}
+                    >
+                      {file.name}
                     </span>
                   </div>
                   <button
                     type="button"
-                    onClick={() => setSelectedOption(null)}
-                    className="rounded-full hover:bg-black/5 dark:hover:bg-white/5 p-0.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
-                    title="Exit mode"
+                    onClick={() => {
+                      const updated = selectedFiles.filter(
+                        (_, i) => i !== index,
+                      );
+                      setSelectedFiles(updated);
+                    }}
+                    className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
+                    title="Remove file"
                   >
                     <X className="size-3.5" />
                   </button>
                 </div>
-              )}
+              ))}
+            </div>
+          )}
 
-              {/* Image Preview */}
-              {imageBase64 && (
-                <div className="relative mb-2 w-fit">
-                  <img
-                    src={imageBase64}
-                    alt="Uploaded preview"
-                    className="h-12 w-12 rounded-lg object-cover"
-                  />
-                  <button
-                    onClick={handleRemoveImage}
-                    className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
-                  >
-                    <Plus className="bold size-3 rotate-45" />
-                  </button>
-                </div>
-              )}
-
-              {/* File Cards Preview */}
-              {selectedFiles && selectedFiles.length > 0 && (
-                <div className="mb-2 flex flex-wrap gap-2 max-h-[80px] overflow-y-auto custom-scrollbar">
-                  {selectedFiles.map((file, index) => (
-                    <div 
-                      key={index}
-                      className="inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 px-2.5 py-1.5 shadow-xs bg-white dark:bg-zinc-800 dark:border-zinc-700 animate-in fade-in duration-200"
-                    >
-                      <FileText className="size-4 flex-shrink-0 text-gray-500" />
-                      <div className="flex min-w-0 flex-1 flex-col">
-                        <span className="truncate text-xs font-semibold text-gray-705 dark:text-zinc-300" title={file.name}>
-                          {file.name}
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const updated = selectedFiles.filter((_, i) => i !== index);
-                          setSelectedFiles(updated);
-                        }}
-                        className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
-                        title="Remove file"
-                      >
-                        <X className="size-3.5" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              <div
-                ref={containerRef}
-                className="relative flex items-center gap-3 rounded-xl border bg-white dark:bg-zinc-800 px-3 py-1.5 shadow-xs transition-all duration-300 w-full min-h-[52px] border-zinc-300 dark:border-zinc-700/80"
-              >
-
-
-                {/* Textarea - Single height but auto-expanding */}
-                <Textarea
-                  ref={textareaRef}
-                  name="message"
-                  value={message}
-                  onChange={e => setMessage(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      if (selectedOption === OPTIONS.TASK && !hasMessages && !isExistingConversation) {
-                        handleCreateTask();
-                      } else {
-                        handleSubmit();
-                      }
-                    }
-                  }}
-                  placeholder={
-                    selectedOption === OPTIONS.TASK && !hasMessages && !isExistingConversation
-                      ? 'Describe the task you want to automate...'
-                      : selectedOption === OPTIONS.RESEARCH && !hasMessages && !isExistingConversation
-                        ? 'What do you want to research?'
-                        : selectedOption === OPTIONS.MONITOR && !hasMessages && !isExistingConversation
-                          ? 'What do you want to monitor?'
-                          : activeConversation?.knowledgebaseId && isLoading
-                            ? 'Loading...'
-                            : activeConversation?.knowledgebaseId &&
-                                activeKnowledgeBaseName
-                              ? `Chat with ${activeKnowledgeBaseName}`
-                              : (pathname === '/workflows' || pathname?.startsWith('/workflows')
-                                ? 'Describe your workflow...'
-                                : 'What do you want to search?')
+          <div
+            ref={containerRef}
+            className="relative flex min-h-[52px] w-full items-center gap-3 rounded-xl border border-zinc-300 bg-white px-3 py-1.5 shadow-xs transition-all duration-300 dark:border-zinc-700/80 dark:bg-zinc-800"
+          >
+            {/* Textarea - Single height but auto-expanding */}
+            <Textarea
+              ref={textareaRef}
+              name="message"
+              value={message}
+              onChange={e => setMessage(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  if (
+                    selectedOption === OPTIONS.TASK &&
+                    !hasMessages &&
+                    !isExistingConversation
+                  ) {
+                    handleCreateTask();
+                  } else {
+                    handleSubmit();
                   }
-                  style={{ backgroundColor: 'transparent' }}
-                  className="min-h-[36px] max-h-[160px] w-full flex-1 resize-none border-none bg-transparent px-1 py-1.5 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 text-gray-900 dark:text-white"
-                  autoFocus
-                />
+                }
+              }}
+              placeholder={
+                selectedOption === OPTIONS.TASK &&
+                !hasMessages &&
+                !isExistingConversation
+                  ? 'Describe the task you want to automate...'
+                  : selectedOption === OPTIONS.RESEARCH &&
+                      !hasMessages &&
+                      !isExistingConversation
+                    ? 'What do you want to research?'
+                    : selectedOption === OPTIONS.MONITOR &&
+                        !hasMessages &&
+                        !isExistingConversation
+                      ? 'What do you want to monitor?'
+                      : activeConversation?.knowledgebaseId && isLoading
+                        ? 'Loading...'
+                        : activeConversation?.knowledgebaseId &&
+                            activeKnowledgeBaseName
+                          ? `Chat with ${activeKnowledgeBaseName}`
+                          : pathname === '/workflows' ||
+                              pathname?.startsWith('/workflows')
+                            ? 'Describe your workflow...'
+                            : 'What do you want to search?'
+              }
+              style={{ backgroundColor: 'transparent' }}
+              className="max-h-[160px] min-h-[36px] w-full flex-1 resize-none border-none bg-transparent px-1 py-1.5 text-gray-900 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 dark:text-white"
+              autoFocus
+            />
 
-                {/* Monitor Frequency Selector */}
-                {selectedOption === OPTIONS.MONITOR && (
-                  <div className="relative w-28 flex-shrink-0">
-                    <button
-                      type="button"
-                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                      className="flex h-8 w-full items-center justify-between gap-1.5 px-2.5 rounded-md border border-black/5 dark:border-zinc-700/50 bg-[#e1e1e1] dark:bg-zinc-955 hover:bg-[#d0d0d0] dark:hover:bg-zinc-900 text-black transition-all text-xs font-normal focus:outline-none cursor-pointer select-none"
-                    >
-                      <span>{monitorFrequency}</span>
-                      <ChevronDown className="size-3.5 text-black flex-shrink-0" />
-                    </button>
-                    {isDropdownOpen && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 rounded-xl shadow-lg z-50 overflow-hidden animate-in slide-in-from-top-2 duration-150">
-                        <div className="flex flex-col p-1.5 gap-0.5">
-                          {['1 Hour', '6 Hours', '12 Hours', '1 Day', '3 Days', '7 Days', '14 Days', '30 Days'].map((freq) => (
-                            <button
-                              key={freq}
-                              type="button"
-                              onClick={() => {
-                                setMonitorFrequency(freq);
-                                setIsDropdownOpen(false);
-                              }}
-                              className={cn(
-                                "px-2.5 py-1.5 text-left text-xs rounded-md hover:bg-black/5 dark:hover:bg-white/5 text-zinc-700 dark:text-zinc-300 transition-colors cursor-pointer",
-                                monitorFrequency === freq && "bg-black/5 dark:bg-white/10 font-medium text-black dark:text-white"
-                              )}
-                            >
-                              {freq}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+            {/* Monitor Frequency Selector */}
+            {selectedOption === OPTIONS.MONITOR && (
+              <div className="relative w-28 flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="dark:bg-zinc-955 flex h-8 w-full cursor-pointer items-center justify-between gap-1.5 rounded-md border border-black/5 bg-[#e1e1e1] px-2.5 text-xs font-normal text-black transition-all select-none hover:bg-[#d0d0d0] focus:outline-none dark:border-zinc-700/50 dark:hover:bg-zinc-900"
+                >
+                  <span>{monitorFrequency}</span>
+                  <ChevronDown className="size-3.5 flex-shrink-0 text-black" />
+                </button>
+                {isDropdownOpen && (
+                  <div className="dark:border-zinc-850 animate-in slide-in-from-top-2 absolute top-full right-0 left-0 z-50 mt-1 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-lg duration-150 dark:bg-zinc-900">
+                    <div className="flex flex-col gap-0.5 p-1.5">
+                      {[
+                        '1 Hour',
+                        '6 Hours',
+                        '12 Hours',
+                        '1 Day',
+                        '3 Days',
+                        '7 Days',
+                        '14 Days',
+                        '30 Days',
+                      ].map(freq => (
+                        <button
+                          key={freq}
+                          type="button"
+                          onClick={() => {
+                            setMonitorFrequency(freq);
+                            setIsDropdownOpen(false);
+                          }}
+                          className={cn(
+                            'cursor-pointer rounded-md px-2.5 py-1.5 text-left text-xs text-zinc-700 transition-colors hover:bg-black/5 dark:text-zinc-300 dark:hover:bg-white/5',
+                            monitorFrequency === freq &&
+                              'bg-black/5 font-medium text-black dark:bg-white/10 dark:text-white',
+                          )}
+                        >
+                          {freq}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
-
-                {/* Send Button / Mic Button - Square style */}
-                <Tooltip>
-                  <TooltipTrigger asChild onFocus={(e) => e.preventDefault()}>
-                    {isLoadingResponse ? (
-                      <button
-                        type="button"
-                        disabled
-                        className="flex size-8 flex-shrink-0 items-center justify-center rounded-md bg-[#e1e1e1] dark:bg-zinc-900 border border-black/5 dark:border-zinc-700/50 text-zinc-650 dark:text-zinc-350 cursor-not-allowed focus:outline-none"
-                      >
-                        <ArrowUp className="size-3.5" />
-                      </button>
-                    ) : !message?.trim() ? (
-                      <button
-                        type="button"
-                        onClick={toggleListening}
-                        className={cn(
-                          'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md bg-[#e1e1e1] dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 hover:bg-[#d0d0d0] dark:hover:bg-zinc-900 focus:outline-none transition-all border border-black/5 dark:border-zinc-700/50',
-                          isListening && 'bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 animate-pulse text-white'
-                        )}
-                        aria-label={isListening ? 'Stop listening' : 'Speech to Text'}
-                      >
-                        <Mic className="size-3.5" />
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={selectedOption === OPTIONS.TASK && !hasMessages && !isExistingConversation ? handleCreateTask : handleSubmit}
-                        className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md bg-[#e1e1e1] dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 hover:bg-[#d0d0d0] dark:hover:bg-zinc-900 focus:outline-none transition-all border border-black/5 dark:border-zinc-700/50"
-                        aria-label="Send Prompt"
-                      >
-                        <ArrowUp className="size-3.5" />
-                      </button>
-                    )}
-                  </TooltipTrigger>
-                  <TooltipContent side="top">
-                    <p>
-                      {isLoadingResponse
-                        ? 'Assistant is thinking...'
-                        : !message?.trim()
-                          ? isListening
-                            ? 'Stop listening'
-                            : 'Speech to Text'
-                          : selectedOption === OPTIONS.TASK && !hasMessages && !isExistingConversation
-                            ? 'Schedule Task'
-                            : 'Send Prompt'}
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
               </div>
+            )}
 
-              {/* Dedicated Task Configurations Row */}
-              {selectedOption === OPTIONS.TASK && !hasMessages && !isExistingConversation && (
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-xl bg-zinc-50/60 dark:bg-zinc-900/30 animate-in fade-in duration-200 mt-1">
-                  {/* Frequency Section */}
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider select-none">
-                      Frequency
-                    </span>
-                    <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
-                      <button
-                        type="button"
-                        onClick={() => setTaskType('one-time')}
-                        className={cn(
-                          'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
-                          taskType === 'one-time'
-                            ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
-                            : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
-                        )}
-                      >
-                        <Clock className="size-3" />
-                        <span>One-time</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setTaskType('recurring')}
-                        className={cn(
-                          'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
-                          taskType === 'recurring'
-                            ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
-                            : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
-                        )}
-                      >
-                        <Repeat className="size-3" />
-                        <span>Recurring</span>
-                      </button>
-                    </div>
-                  </div>
+            {/* Send Button / Mic Button - Square style */}
+            <Tooltip>
+              <TooltipTrigger asChild onFocus={e => e.preventDefault()}>
+                {isLoadingResponse ? (
+                  <button
+                    type="button"
+                    disabled
+                    className="text-zinc-650 dark:text-zinc-350 flex size-8 flex-shrink-0 cursor-not-allowed items-center justify-center rounded-md border border-black/5 bg-[#e1e1e1] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-900"
+                  >
+                    <ArrowUp className="size-3.5" />
+                  </button>
+                ) : !message?.trim() ? (
+                  <button
+                    type="button"
+                    onClick={toggleListening}
+                    className={cn(
+                      'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md border border-black/5 bg-[#e1e1e1] text-zinc-800 transition-all hover:bg-[#d0d0d0] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900',
+                      isListening &&
+                        'animate-pulse bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700',
+                    )}
+                    aria-label={
+                      isListening ? 'Stop listening' : 'Speech to Text'
+                    }
+                  >
+                    <Mic className="size-3.5" />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={
+                      selectedOption === OPTIONS.TASK &&
+                      !hasMessages &&
+                      !isExistingConversation
+                        ? handleCreateTask
+                        : handleSubmit
+                    }
+                    className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md border border-black/5 bg-[#e1e1e1] text-zinc-800 transition-all hover:bg-[#d0d0d0] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900"
+                    aria-label="Send Prompt"
+                  >
+                    <ArrowUp className="size-3.5" />
+                  </button>
+                )}
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p>
+                  {isLoadingResponse
+                    ? 'Assistant is thinking...'
+                    : !message?.trim()
+                      ? isListening
+                        ? 'Stop listening'
+                        : 'Speech to Text'
+                      : selectedOption === OPTIONS.TASK &&
+                          !hasMessages &&
+                          !isExistingConversation
+                        ? 'Schedule Task'
+                        : 'Send Prompt'}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
 
-                  {/* Vertical Divider */}
-                  <div className="h-5 w-px bg-black/10 dark:bg-white/10 hidden sm:block mx-1" />
-
-                  {/* Trigger Section */}
-                  <div className="flex items-center gap-2 flex-grow min-w-0">
-                    <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider select-none hidden xs:inline">
-                      Trigger
-                    </span>
-                    <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-black/5 dark:border-zinc-700/50 flex-shrink-0">
-                      <button
-                        type="button"
-                        onClick={() => setTriggerType('scheduled')}
-                        className={cn(
-                          'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
-                          triggerType === 'scheduled'
-                            ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
-                            : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
-                        )}
-                      >
-                        <CalendarClock className="size-3" />
-                        <span>Scheduled</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setTriggerType('event')}
-                        className={cn(
-                          'px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1',
-                          triggerType === 'event'
-                            ? 'bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs'
-                            : 'text-zinc-500 hover:text-zinc-750 dark:text-zinc-400 dark:hover:text-zinc-200'
-                        )}
-                      >
-                        <Zap className="size-3" />
-                        <span>Event</span>
-                      </button>
-                    </div>
-
-                    {/* Trigger Details Input */}
-                    <div className="flex-grow min-w-0">
-                      {triggerType === 'scheduled' ? (
-                        <input
-                          type="text"
-                          value={scheduledTime}
-                          onChange={(e) => setScheduledTime(e.target.value)}
-                          placeholder={taskType === 'recurring' ? 'Cron expression (e.g. Every Mon 9AM)' : 'Specific date/time (e.g. Tomorrow at 3PM)'}
-                          className="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1.5 text-xs text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder:text-[10px] dark:placeholder:text-zinc-500 shadow-xs"
-                        />
-                      ) : (
-                        <input
-                          type="text"
-                          value={eventTrigger}
-                          onChange={(e) => setEventTrigger(e.target.value)}
-                          placeholder="Event conditions details..."
-                          className="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1.5 text-xs text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder:text-[10px] dark:placeholder:text-zinc-550 shadow-xs"
-                        />
+          {/* Dedicated Task Configurations Row */}
+          {selectedOption === OPTIONS.TASK &&
+            !hasMessages &&
+            !isExistingConversation && (
+              <div className="animate-in fade-in mt-1 flex flex-col gap-3 rounded-xl border border-zinc-200 bg-zinc-50/60 px-4 py-2 duration-200 sm:flex-row sm:items-center dark:border-zinc-700 dark:bg-zinc-900/30">
+                {/* Frequency Section */}
+                <div className="flex flex-shrink-0 items-center gap-2">
+                  <span className="text-[10px] font-semibold tracking-wider text-zinc-400 uppercase select-none dark:text-zinc-500">
+                    Frequency
+                  </span>
+                  <div className="flex flex-shrink-0 rounded-lg border border-black/5 bg-zinc-100 p-0.5 dark:border-zinc-700/50 dark:bg-zinc-800">
+                    <button
+                      type="button"
+                      onClick={() => setTaskType('one-time')}
+                      className={cn(
+                        'flex items-center gap-1 rounded-md px-2.5 py-1 text-[10px] font-semibold transition-all',
+                        taskType === 'one-time'
+                          ? 'bg-white text-blue-600 shadow-xs dark:bg-zinc-700 dark:text-blue-400'
+                          : 'hover:text-zinc-750 text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-200',
                       )}
-                    </div>
+                    >
+                      <Clock className="size-3" />
+                      <span>One-time</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setTaskType('recurring')}
+                      className={cn(
+                        'flex items-center gap-1 rounded-md px-2.5 py-1 text-[10px] font-semibold transition-all',
+                        taskType === 'recurring'
+                          ? 'bg-white text-blue-600 shadow-xs dark:bg-zinc-700 dark:text-blue-400'
+                          : 'hover:text-zinc-750 text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-200',
+                      )}
+                    >
+                      <Repeat className="size-3" />
+                      <span>Recurring</span>
+                    </button>
                   </div>
                 </div>
-              )}
-            </div>
+
+                {/* Vertical Divider */}
+                <div className="mx-1 hidden h-5 w-px bg-black/10 sm:block dark:bg-white/10" />
+
+                {/* Trigger Section */}
+                <div className="flex min-w-0 flex-grow items-center gap-2">
+                  <span className="xs:inline hidden text-[10px] font-semibold tracking-wider text-zinc-400 uppercase select-none dark:text-zinc-500">
+                    Trigger
+                  </span>
+                  <div className="flex flex-shrink-0 rounded-lg border border-black/5 bg-zinc-100 p-0.5 dark:border-zinc-700/50 dark:bg-zinc-800">
+                    <button
+                      type="button"
+                      onClick={() => setTriggerType('scheduled')}
+                      className={cn(
+                        'flex items-center gap-1 rounded-md px-2.5 py-1 text-[10px] font-semibold transition-all',
+                        triggerType === 'scheduled'
+                          ? 'bg-white text-blue-600 shadow-xs dark:bg-zinc-700 dark:text-blue-400'
+                          : 'hover:text-zinc-750 text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-200',
+                      )}
+                    >
+                      <CalendarClock className="size-3" />
+                      <span>Scheduled</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setTriggerType('event')}
+                      className={cn(
+                        'flex items-center gap-1 rounded-md px-2.5 py-1 text-[10px] font-semibold transition-all',
+                        triggerType === 'event'
+                          ? 'bg-white text-blue-600 shadow-xs dark:bg-zinc-700 dark:text-blue-400'
+                          : 'hover:text-zinc-750 text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-200',
+                      )}
+                    >
+                      <Zap className="size-3" />
+                      <span>Event</span>
+                    </button>
+                  </div>
+
+                  {/* Trigger Details Input */}
+                  <div className="min-w-0 flex-grow">
+                    {triggerType === 'scheduled' ? (
+                      <input
+                        type="text"
+                        value={scheduledTime}
+                        onChange={e => setScheduledTime(e.target.value)}
+                        placeholder={
+                          taskType === 'recurring'
+                            ? 'Cron expression (e.g. Every Mon 9AM)'
+                            : 'Specific date/time (e.g. Tomorrow at 3PM)'
+                        }
+                        className="w-full rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 text-xs text-gray-900 shadow-xs placeholder:text-[10px] focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-500"
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        value={eventTrigger}
+                        onChange={e => setEventTrigger(e.target.value)}
+                        placeholder="Event conditions details..."
+                        className="dark:placeholder:text-zinc-550 w-full rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 text-xs text-gray-900 shadow-xs placeholder:text-[10px] focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+        </div>
       </div>
     </>
   );
