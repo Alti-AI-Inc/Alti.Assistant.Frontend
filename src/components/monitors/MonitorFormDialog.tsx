@@ -49,7 +49,7 @@ const monitorFormSchema = z.object({
   name: z.string().trim().min(1, 'Name is required'),
   query: z.string().trim().min(1, 'Search query is required'),
   numResults: z.coerce
-    .number({ invalid_type_error: 'Number of results is required' })
+    .number({ error: 'Number of results is required' })
     .int('Number of results must be a whole number')
     .min(1, 'Number of results must be at least 1')
     .max(100, 'Number of results must be 100 or less'),
@@ -123,7 +123,7 @@ export default function MonitorFormDialog({
 }: MonitorFormDialogProps) {
   const isCreateMode = mode === 'create';
 
-  const form = useForm<MonitorFormValues>({
+  const form = useForm({
     resolver: zodResolver(monitorFormSchema),
     defaultValues: toFormValues(initialValue),
   });
@@ -257,8 +257,12 @@ export default function MonitorFormDialog({
                         type="number"
                         min={1}
                         max={100}
-                        value={field.value}
-                        onChange={event => field.onChange(event.target.value)}
+                        value={field.value as number | string | undefined}
+                        onChange={event => {
+                          const raw = event.target.value;
+                          const parsed = raw === '' ? undefined : Number(raw);
+                          field.onChange(parsed);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
