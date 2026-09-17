@@ -66,6 +66,14 @@ const SearchExchange = ({ turn }: { turn: SpaceSearchTurn }) => {
           </p>
         ) : (
           <>
+            {/* Synthesized answer from the top result's summary */}
+            {results[0]?.summary && (
+              <div className="rounded-xl border border-black/10 bg-white/60 p-4 dark:border-white/10 dark:bg-zinc-900/40">
+                <Streamdown className="w-full text-sm leading-relaxed">
+                  {results[0].summary}
+                </Streamdown>
+              </div>
+            )}
             {/* Sources row */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
               <span className="flex-shrink-0 text-[11px] font-semibold tracking-wide text-zinc-500 uppercase dark:text-zinc-400">
@@ -88,7 +96,7 @@ const SearchExchange = ({ turn }: { turn: SpaceSearchTurn }) => {
             </div>
 
             {/* Result cards */}
-            <div className="grid gap-3 sm:grid-cols-2">
+            {/* <div className="grid gap-3 sm:grid-cols-2">
               {results.map((result, idx) => (
                 <a
                   key={idx}
@@ -113,16 +121,7 @@ const SearchExchange = ({ turn }: { turn: SpaceSearchTurn }) => {
                   )}
                 </a>
               ))}
-            </div>
-
-            {/* Synthesized answer from the top result's summary */}
-            {results[0]?.summary && (
-              <div className="rounded-xl border border-black/10 bg-white/60 p-4 dark:border-white/10 dark:bg-zinc-900/40">
-                <Streamdown className="w-full text-sm leading-relaxed">
-                  {results[0].summary}
-                </Streamdown>
-              </div>
-            )}
+            </div> */}
           </>
         )}
       </div>
