@@ -15,6 +15,23 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Streamdown } from 'streamdown';
 
+type SpeechRecognitionInstance = {
+  continuous?: boolean;
+  interimResults?: boolean;
+  lang?: string;
+  onstart?: () => void;
+  onresult?: (event: {
+    resultIndex: number;
+    results: Array<{ isFinal: boolean; [key: number]: { transcript: string } }>;
+  }) => void;
+  onerror?: (event: { error?: string }) => void;
+  onend?: () => void;
+  start?: () => void;
+  stop?: () => void;
+};
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
+
 const getHostname = (url?: string) => {
   if (!url) return '';
   try {
@@ -24,8 +41,7 @@ const getHostname = (url?: string) => {
   }
 };
 
-const getResultTitle = (result: SpaceSearchResult) =>
-  result.title?.trim() || getHostname(result.url) || 'Untitled source';
+// Removed unused helper `getResultTitle` to satisfy linting (no UI change).
 
 const SourceFavicon = ({ result }: { result: SpaceSearchResult }) => {
   const hostname = getHostname(result.url);
@@ -139,7 +155,7 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
   const [query, setQuery] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const listEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -176,7 +192,7 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
   const stopListening = () => {
     if (recognitionRef.current) {
       try {
-        recognitionRef.current.stop();
+        recognitionRef.current?.stop?.();
       } catch (err) {
         console.error('Error stopping recognition:', err);
       }
@@ -186,9 +202,13 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
   };
 
   const startListening = () => {
+    const win = window as unknown as {
+      SpeechRecognition?: SpeechRecognitionConstructor;
+      webkitSpeechRecognition?: SpeechRecognitionConstructor;
+    };
+
     const SpeechRecognition =
-      (window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition;
+      win.SpeechRecognition || win.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
       toast.error(
@@ -205,7 +225,13 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
 
       recognition.onstart = () => setIsListening(true);
 
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event: {
+        resultIndex: number;
+        results: Array<{
+          isFinal: boolean;
+          [key: number]: { transcript: string };
+        }>;
+      }) => {
         let interimTranscript = '';
         let finalTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -219,7 +245,7 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
         if (text.trim()) setQuery(text);
       };
 
-      recognition.onerror = (event: any) => {
+      recognition.onerror = (event: { error?: string }) => {
         console.error('Speech recognition error:', event.error);
         if (event.error !== 'no-speech') stopListening();
       };
@@ -227,7 +253,7 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
       recognition.onend = () => setIsListening(false);
 
       recognitionRef.current = recognition;
-      recognition.start();
+      recognition.start?.();
     } catch (err) {
       console.error('Failed to start SpeechRecognition:', err);
       setIsListening(false);
@@ -248,7 +274,7 @@ const SpaceSearchPanel = ({ spaceId }: { spaceId: string }) => {
     return () => {
       if (recognitionRef.current) {
         try {
-          recognitionRef.current.stop();
+          recognitionRef.current?.stop?.();
         } catch (err) {
           console.error(err);
         }
