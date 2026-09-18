@@ -8,12 +8,11 @@ import {
   OrganizationPricingCards,
   type OrganizationPlan,
 } from '@/components/organizations/OrganizationPricingCards';
+import SpacesLayout from '@/components/sidebars/SpacesLayout';
 import { PaymentConfirmationModal } from '@/components/stripe/PaymentConfirmationModal';
 import StripeProviderWithErrorBoundary from '@/components/stripe/StripeProvider';
-import { Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import SpacesLayout from '@/components/sidebars/SpacesLayout';
 
 function UpgradePage() {
   const { data: session } = useSession();
@@ -50,12 +49,15 @@ function UpgradePage() {
             const rawProducts = productsRes.data;
             const products = (Array.isArray(rawProducts)
               ? rawProducts
-              : (rawProducts && typeof rawProducts === 'object' && 'products' in rawProducts && Array.isArray((rawProducts as any).products)
+              : rawProducts &&
+                  typeof rawProducts === 'object' &&
+                  'products' in rawProducts &&
+                  Array.isArray((rawProducts as any).products)
                 ? (rawProducts as any).products
-                : [])) as unknown as {
-                stripePriceId: string;
-                plan: string;
-              }[];
+                : []) as unknown as {
+              stripePriceId: string;
+              plan: string;
+            }[];
             const currentProduct = products.find(
               p => p.stripePriceId === currentPriceId,
             );
@@ -83,17 +85,17 @@ function UpgradePage() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-white dark:bg-gray-950 overflow-hidden">
+    <div className="flex h-full flex-col overflow-hidden bg-white dark:bg-gray-950">
       {/* Dynamic Header */}
-      <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center px-8 flex-none bg-white dark:bg-gray-950">
+      <div className="flex h-[52px] flex-none items-center border-b border-black/10 bg-white px-8 dark:border-white/10 dark:bg-gray-950">
         <h1 className="text-base font-semibold text-gray-900 dark:text-white">
           Pricing Plans
         </h1>
       </div>
 
       {/* Main Workspace Body */}
-      <div className="flex-1 overflow-y-auto min-h-0 px-8 py-12 flex flex-col justify-center">
-        <div className="container mx-auto max-w-7xl my-auto">
+      <div className="flex min-h-0 flex-1 flex-col justify-center overflow-y-auto px-8 py-12">
+        <div className="container mx-auto my-auto max-w-7xl">
           <OrganizationPricingCards
             onSelectPlan={handleSelectPlan}
             currentPlanId={currentPlanId}
@@ -110,7 +112,7 @@ function UpgradePage() {
           plan={{
             id: selectedPlan.id,
             name: selectedPlan.name,
-            price: selectedPlan.price,
+            price: String(selectedPlan.price),
             priceId: selectedPlan.priceId || '',
             interval: selectedPlan.period === '/year' ? 'year' : 'month',
           }}

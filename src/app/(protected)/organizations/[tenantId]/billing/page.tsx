@@ -1,21 +1,21 @@
 'use client';
 
 import {
-  getPaymentMethods,
-  type StripePaymentMethod,
-  cancelAppSubscription,
   addSeatToSubscription,
-  removeSeatFromSubscription,
+  cancelAppSubscription,
   createBillingPortalSessionAction,
   deletePaymentMethodAction,
+  getPaymentMethods,
+  removeSeatFromSubscription,
+  type StripePaymentMethod,
 } from '@/actions/stripeActions';
 import { getCurrentTenant, getTenantUsage } from '@/actions/tenantActions';
 import {
   OrganizationPricingCards,
   type OrganizationPlan,
 } from '@/components/organizations/OrganizationPricingCards';
-import { PaymentConfirmationModal } from '@/components/stripe/PaymentConfirmationModal';
 import { AddPaymentMethodModal } from '@/components/stripe/AddPaymentMethodModal';
+import { PaymentConfirmationModal } from '@/components/stripe/PaymentConfirmationModal';
 import { StripeProviderWithErrorBoundary } from '@/components/stripe/StripeProvider';
 import { Button } from '@/components/ui/button';
 import {
@@ -31,9 +31,9 @@ import type { TenantUsage } from '@/types/tenant';
 import {
   ArrowLeft,
   CreditCard,
-  Plus,
-  Minus,
   Loader2,
+  Minus,
+  Plus,
   Trash2,
   TrendingUp,
   Users,
@@ -86,7 +86,10 @@ export default function OrganizationBillingPage({
 
     setIsLaunchingPortal(true);
     try {
-      const result = await createBillingPortalSessionAction(tenantId, session.accessToken);
+      const result = await createBillingPortalSessionAction(
+        tenantId,
+        session.accessToken,
+      );
       if (result.success && result.data?.url) {
         window.location.href = result.data.url;
       } else {
@@ -220,13 +223,23 @@ export default function OrganizationBillingPage({
     try {
       let response;
       if (action === 'add') {
-        response = await addSeatToSubscription(subscription.id, userId, session.accessToken);
+        response = await addSeatToSubscription(
+          subscription.id,
+          userId,
+          session.accessToken,
+        );
       } else {
-        response = await removeSeatFromSubscription(subscription.id, userId, session.accessToken);
+        response = await removeSeatFromSubscription(
+          subscription.id,
+          userId,
+          session.accessToken,
+        );
       }
 
       if (response.success) {
-        toast.success(`Seat ${action === 'add' ? 'added' : 'removed'} successfully!`);
+        toast.success(
+          `Seat ${action === 'add' ? 'added' : 'removed'} successfully!`,
+        );
         await fetchBillingData(false);
       } else {
         toast.error(response.message || `Failed to ${action} seat`);
@@ -244,7 +257,10 @@ export default function OrganizationBillingPage({
 
     setIsCancelling(true);
     try {
-      const response = await cancelAppSubscription(cancelImmediate, session.accessToken);
+      const response = await cancelAppSubscription(
+        cancelImmediate,
+        session.accessToken,
+      );
       if (response.success) {
         toast.success(
           cancelImmediate
@@ -341,13 +357,13 @@ export default function OrganizationBillingPage({
                     {subscription?.status !== 'cancelled' ? (
                       <Button
                         variant="ghost"
-                        className="w-full text-zinc-500 hover:text-red-500 hover:bg-red-500/10 transition-colors duration-200"
+                        className="w-full text-zinc-500 transition-colors duration-200 hover:bg-red-500/10 hover:text-red-500"
                         onClick={() => setShowCancelModal(true)}
                       >
                         Cancel Subscription
                       </Button>
                     ) : (
-                      <p className="text-red-500 text-center text-xs font-semibold">
+                      <p className="text-center text-xs font-semibold text-red-500">
                         Subscription scheduled for cancellation
                       </p>
                     )}
@@ -433,48 +449,61 @@ export default function OrganizationBillingPage({
                     </Button>
                   )
                 )}
-                {subscription && subscription.plan !== 'free' && !subscription.unlimitedSeats && (
-                  <div className="flex flex-col gap-2 rounded-lg border p-4 bg-zinc-500/5 backdrop-blur-md border-zinc-500/20 mt-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">Subscription Seats</span>
-                      <span className="text-xs text-muted-foreground">${subscription.amount || 25}/seat/mo</span>
-                    </div>
-                    <div className="flex items-center justify-between gap-4 mt-2">
-                      <div className="flex items-center gap-3">
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          disabled={isUpdatingSeats || subscription.seats <= 1 || subscription.seats <= memberCount}
-                          onClick={() => handleUpdateSeats('remove')}
-                          className="size-8"
-                        >
-                          <Minus className="size-4" />
-                        </Button>
-                        <span className="text-lg font-semibold w-8 text-center">{subscription.seats}</span>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          disabled={isUpdatingSeats}
-                          onClick={() => handleUpdateSeats('add')}
-                          className="size-8"
-                        >
-                          <Plus className="size-4" />
-                        </Button>
+                {subscription &&
+                  subscription.plan !== 'free' &&
+                  !subscription.unlimitedSeats && (
+                    <div className="mt-4 flex flex-col gap-2 rounded-lg border border-zinc-500/20 bg-zinc-500/5 p-4 backdrop-blur-md">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">
+                          Subscription Seats
+                        </span>
+                        <span className="text-muted-foreground text-xs">
+                          ${subscription.amount || 25}/seat/mo
+                        </span>
                       </div>
-                      {isUpdatingSeats && (
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground animate-pulse">
-                          <Loader2 className="size-3.5 animate-spin" />
-                          Updating...
+                      <div className="mt-2 flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            disabled={
+                              isUpdatingSeats ||
+                              subscription.seats <= 1 ||
+                              subscription.seats <= memberCount
+                            }
+                            onClick={() => handleUpdateSeats('remove')}
+                            className="size-8"
+                          >
+                            <Minus className="size-4" />
+                          </Button>
+                          <span className="w-8 text-center text-lg font-semibold">
+                            {subscription.seats}
+                          </span>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            disabled={isUpdatingSeats}
+                            onClick={() => handleUpdateSeats('add')}
+                            className="size-8"
+                          >
+                            <Plus className="size-4" />
+                          </Button>
                         </div>
+                        {isUpdatingSeats && (
+                          <div className="text-muted-foreground flex animate-pulse items-center gap-1.5 text-xs">
+                            <Loader2 className="size-3.5 animate-spin" />
+                            Updating...
+                          </div>
+                        )}
+                      </div>
+                      {subscription.seats <= memberCount && (
+                        <p className="mt-1 text-[10px] text-zinc-500">
+                          Cannot decrease seats below active member count (
+                          {memberCount}).
+                        </p>
                       )}
                     </div>
-                    {subscription.seats <= memberCount && (
-                      <p className="text-[10px] text-zinc-500 mt-1">
-                        Cannot decrease seats below active member count ({memberCount}).
-                      </p>
-                    )}
-                  </div>
-                )}
+                  )}
               </div>
             </CardContent>
           </Card>
@@ -535,27 +564,30 @@ export default function OrganizationBillingPage({
                       onClick={async () => {
                         if (!session?.accessToken) return;
                         const confirmed = window.confirm(
-                          'Are you sure you want to delete this payment method?'
+                          'Are you sure you want to delete this payment method?',
                         );
                         if (!confirmed) return;
 
                         try {
                           const response = await deletePaymentMethodAction(
                             method.id,
-                            session.accessToken
+                            session.accessToken,
                           );
                           if (response.success) {
-                            toast.success('Payment method deleted successfully!');
+                            toast.success(
+                              'Payment method deleted successfully!',
+                            );
                             fetchBillingData(false);
                           } else {
                             toast.error(
-                              response.message || 'Failed to delete payment method'
+                              response.message ||
+                                'Failed to delete payment method',
                             );
                           }
                         } catch (err) {
                           console.error(err);
                           toast.error(
-                            'An unexpected error occurred while deleting payment method'
+                            'An unexpected error occurred while deleting payment method',
                           );
                         }
                       }}
@@ -676,7 +708,7 @@ export default function OrganizationBillingPage({
             plan={{
               id: selectedPlan.id,
               name: selectedPlan.name,
-              price: selectedPlan.price,
+              price: String(selectedPlan.price),
               priceId: selectedPlan.priceId!,
               interval: 'month',
             }}
@@ -692,37 +724,38 @@ export default function OrganizationBillingPage({
 
         {/* Cancellation Confirmation Modal */}
         {showCancelModal && (
-          <div className="bg-black/60 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md transition-all duration-300">
-            <div className="bg-zinc-950/80 border border-zinc-800 relative w-full max-w-md overflow-hidden rounded-xl shadow-2xl p-6 text-zinc-100">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md transition-all duration-300">
+            <div className="relative w-full max-w-md overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950/80 p-6 text-zinc-100 shadow-2xl">
               <div className="absolute top-4 right-4">
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowCancelModal(false)}
-                  className="text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 size-8 rounded-full"
+                  className="size-8 rounded-full text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100"
                 >
                   <X className="size-4" />
                 </Button>
               </div>
-              
+
               <div className="mb-6 flex flex-col items-center text-center">
-                <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-red-500/10 border border-red-500/20 text-red-500">
+                <div className="mb-4 flex size-12 items-center justify-center rounded-full border border-red-500/20 bg-red-500/10 text-red-500">
                   <X className="size-6" />
                 </div>
                 <h3 className="text-xl font-bold">Cancel Subscription</h3>
-                <p className="text-zinc-400 mt-2 text-sm">
-                  We are sorry to see you go. Please choose how you would like to cancel your subscription.
+                <p className="mt-2 text-sm text-zinc-400">
+                  We are sorry to see you go. Please choose how you would like
+                  to cancel your subscription.
                 </p>
               </div>
 
-              <div className="space-y-3 mb-6">
+              <div className="mb-6 space-y-3">
                 {/* Cancel at End of Period option */}
                 <div
                   onClick={() => setCancelImmediate(false)}
-                  className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-all duration-200 ${
+                  className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-all duration-200 ${
                     !cancelImmediate
-                      ? 'bg-zinc-800/40 border-zinc-700 text-zinc-100 shadow-md shadow-zinc-950/50'
-                      : 'bg-zinc-900/20 border-zinc-800/80 text-zinc-400 hover:border-zinc-800 hover:bg-zinc-900/40'
+                      ? 'border-zinc-700 bg-zinc-800/40 text-zinc-100 shadow-md shadow-zinc-950/50'
+                      : 'border-zinc-800/80 bg-zinc-900/20 text-zinc-400 hover:border-zinc-800 hover:bg-zinc-900/40'
                   }`}
                 >
                   <div className="flex h-5 items-center">
@@ -734,9 +767,12 @@ export default function OrganizationBillingPage({
                     />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold">Cancel at billing cycle end</p>
-                    <p className="text-xs text-zinc-500 mt-0.5">
-                      Keep your active subscription benefits until the end of your current billing period.
+                    <p className="text-sm font-semibold">
+                      Cancel at billing cycle end
+                    </p>
+                    <p className="mt-0.5 text-xs text-zinc-500">
+                      Keep your active subscription benefits until the end of
+                      your current billing period.
                     </p>
                   </div>
                 </div>
@@ -744,10 +780,10 @@ export default function OrganizationBillingPage({
                 {/* Cancel Immediately option */}
                 <div
                   onClick={() => setCancelImmediate(true)}
-                  className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-all duration-200 ${
+                  className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-all duration-200 ${
                     cancelImmediate
-                      ? 'bg-red-950/15 border-red-900/50 text-zinc-100 shadow-md shadow-red-950/10'
-                      : 'bg-zinc-900/20 border-zinc-800/80 text-zinc-400 hover:border-zinc-800 hover:bg-zinc-900/40'
+                      ? 'border-red-900/50 bg-red-950/15 text-zinc-100 shadow-md shadow-red-950/10'
+                      : 'border-zinc-800/80 bg-zinc-900/20 text-zinc-400 hover:border-zinc-800 hover:bg-zinc-900/40'
                   }`}
                 >
                   <div className="flex h-5 items-center">
@@ -760,8 +796,10 @@ export default function OrganizationBillingPage({
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Cancel immediately</p>
-                    <p className="text-xs text-zinc-500 mt-0.5">
-                      Your subscription ends immediately. Access to paid features will be revoked instantly. No refunds for unused time.
+                    <p className="mt-0.5 text-xs text-zinc-500">
+                      Your subscription ends immediately. Access to paid
+                      features will be revoked instantly. No refunds for unused
+                      time.
                     </p>
                   </div>
                 </div>
@@ -770,7 +808,7 @@ export default function OrganizationBillingPage({
               <div className="flex gap-3">
                 <Button
                   variant="outline"
-                  className="w-full bg-zinc-900/50 border-zinc-800 hover:bg-zinc-800 hover:text-zinc-100"
+                  className="w-full border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 hover:text-zinc-100"
                   onClick={() => setShowCancelModal(false)}
                   disabled={isCancelling}
                 >
@@ -779,8 +817,8 @@ export default function OrganizationBillingPage({
                 <Button
                   className={`w-full ${
                     cancelImmediate
-                      ? 'bg-red-600 hover:bg-red-500 text-white'
-                      : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-950'
+                      ? 'bg-red-600 text-white hover:bg-red-500'
+                      : 'bg-zinc-100 text-zinc-950 hover:bg-zinc-200'
                   }`}
                   onClick={handleCancelSubscription}
                   disabled={isCancelling}

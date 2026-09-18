@@ -33,7 +33,7 @@ import { useStripeAvailability } from './StripeProvider';
 interface Plan {
   id: string;
   name: string;
-  price: number;
+  price: string;
   priceId: string;
   interval?: 'month' | 'year';
 }
@@ -114,7 +114,36 @@ export function PaymentConfirmationModal({
     return expDate > now;
   };
 
-  const validateCvc = (cvc: string) => /^[0-9]{3,4}$/.test(cvc.trim());
+  const validateCvc = (cvc: string) => /^[0-9]{3}$/.test(cvc.trim());
+
+  // Formatting helpers to mimic Stripe behavior
+  const formatCardNumber = (value: string) => {
+    let digits = value.replace(/\D/g, '');
+    // Enforce maximum 16 digits
+    digits = digits.substring(0, 16);
+    // Detect AMEX (starts with 34 or 37)
+    const isAmex = /^3[47]/.test(digits);
+    if (isAmex) {
+      const part1 = digits.substring(0, 4);
+      const part2 = digits.substring(4, 10);
+      const part3 = digits.substring(10, 15);
+      return [part1, part2, part3].filter(Boolean).join(' ');
+    }
+    // Default grouping by 4
+    return (
+      digits
+        .match(/.{1,4}/g)
+        ?.join(' ')
+        ?.trim() || digits
+    );
+  };
+
+  const formatExpiry = (value: string) => {
+    const digits = value.replace(/\D/g, '');
+    if (digits.length === 0) return '';
+    if (digits.length <= 2) return digits;
+    return digits.substring(0, 2) + '/' + digits.substring(2, 4);
+  };
 
   // Fetch payment methods on mount
   const fetchPaymentMethods = useCallback(async () => {
@@ -241,7 +270,7 @@ export function PaymentConfirmationModal({
 
       // Validate fallback inputs
       const sanitizedNumber = fallbackCardNumber.replace(/\s+/g, '');
-      if (!/^\d{12,19}$/.test(sanitizedNumber) || !luhnCheck(sanitizedNumber)) {
+      if (!/^\d{12,16}$/.test(sanitizedNumber) || !luhnCheck(sanitizedNumber)) {
         setError('Invalid card number');
         return;
       }
@@ -476,7 +505,7 @@ export function PaymentConfirmationModal({
             </div>
             <div className="flex items-center text-right">
               <div className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
-                ${plan.price}
+                {plan.price}
               </div>
             </div>
           </div>
@@ -552,11 +581,16 @@ export function PaymentConfirmationModal({
                     disabled={step === 'processing'}
                   />
                 ) : (
-                  <div className="mt-4 space-y-3 text-left">
+                  <form
+                    autoComplete="off"
+                    onSubmit={e => e.preventDefault()}
+                    className="mt-4 space-y-3 text-left"
+                  >
                     <label className="block text-xs text-gray-600 dark:text-gray-400">
                       Cardholder name
                     </label>
                     <input
+                      name="fallback-cardholder-name"
                       value={cardholderName}
                       onChange={e => {
                         setCardholderName(e.target.value);
@@ -570,18 +604,32 @@ export function PaymentConfirmationModal({
                       placeholder="Jane Doe"
                       className="mt-1 w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm text-gray-900 dark:border-white/10 dark:bg-zinc-950 dark:text-white"
                       disabled={step === 'processing'}
+                      autoComplete="off"
+                      spellCheck={false}
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      readOnly
+                      onFocus={e => {
+                        // Remove readOnly to allow typing and to help prevent browser autofill prompts
+                        // This is a common workaround to reduce Chrome's payment autofill detection on insecure pages
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        e.currentTarget.readOnly = false;
+                      }}
                     />
 
                     <label className="block text-xs text-gray-600 dark:text-gray-400">
                       Card number
                     </label>
                     <input
+                      name="fallback-card-number"
                       value={fallbackCardNumber}
                       onChange={e => {
-                        setFallbackCardNumber(e.target.value);
+                        const formatted = formatCardNumber(e.target.value);
+                        setFallbackCardNumber(formatted);
                         const complete =
                           cardholderName.trim().length > 0 &&
-                          e.target.value.trim().length > 0 &&
+                          formatted.replace(/\s+/g, '').length > 0 &&
                           fallbackExpiry.trim().length > 0 &&
                           fallbackCvc.trim().length > 0;
                         setIsCardComplete(complete);
@@ -589,6 +637,18 @@ export function PaymentConfirmationModal({
                       placeholder="4242 4242 4242 4242"
                       className="mt-1 w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm text-gray-900 dark:border-white/10 dark:bg-zinc-950 dark:text-white"
                       disabled={step === 'processing'}
+                      inputMode="numeric"
+                      autoComplete="off"
+                      spellCheck={false}
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      readOnly
+                      onFocus={e => {
+                        // Allow typing after focus and help avoid browser payment autofill detection
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        e.currentTarget.readOnly = false;
+                      }}
                     />
 
                     <div className="flex gap-2">
@@ -597,19 +657,35 @@ export function PaymentConfirmationModal({
                           Expiry
                         </label>
                         <input
+                          name="fallback-expiry"
                           value={fallbackExpiry}
                           onChange={e => {
-                            setFallbackExpiry(e.target.value);
+                            const formatted = formatExpiry(e.target.value);
+                            setFallbackExpiry(formatted);
                             const complete =
                               cardholderName.trim().length > 0 &&
-                              fallbackCardNumber.trim().length > 0 &&
-                              e.target.value.trim().length > 0 &&
+                              fallbackCardNumber.replace(/\s+/g, '').length >
+                                0 &&
+                              formatted.trim().length > 0 &&
                               fallbackCvc.trim().length > 0;
                             setIsCardComplete(complete);
                           }}
                           placeholder="MM/YY"
                           className="mt-1 w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm text-gray-900 dark:border-white/10 dark:bg-zinc-950 dark:text-white"
                           disabled={step === 'processing'}
+                          inputMode="numeric"
+                          maxLength={5}
+                          autoComplete="off"
+                          spellCheck={false}
+                          autoCapitalize="none"
+                          autoCorrect="off"
+                          readOnly
+                          onFocus={e => {
+                            // Enable typing on focus to reduce autofill detection
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            e.currentTarget.readOnly = false;
+                          }}
                         />
                       </div>
                       <div className="w-[110px]">
@@ -617,23 +693,40 @@ export function PaymentConfirmationModal({
                           CVC
                         </label>
                         <input
+                          name="fallback-cvc"
                           value={fallbackCvc}
                           onChange={e => {
-                            setFallbackCvc(e.target.value);
+                            let digits = e.target.value.replace(/\D/g, '');
+                            digits = digits.substring(0, 3); // enforce max 3
+                            setFallbackCvc(digits);
                             const complete =
                               cardholderName.trim().length > 0 &&
-                              fallbackCardNumber.trim().length > 0 &&
+                              fallbackCardNumber.replace(/\s+/g, '').length >
+                                0 &&
                               fallbackExpiry.trim().length > 0 &&
-                              e.target.value.trim().length > 0;
+                              digits.trim().length > 0;
                             setIsCardComplete(complete);
                           }}
                           placeholder="123"
                           className="mt-1 w-full rounded-md border border-black/10 bg-white px-3 py-2 text-sm text-gray-900 dark:border-white/10 dark:bg-zinc-950 dark:text-white"
                           disabled={step === 'processing'}
+                          inputMode="numeric"
+                          maxLength={3}
+                          autoComplete="off"
+                          spellCheck={false}
+                          autoCapitalize="none"
+                          autoCorrect="off"
+                          readOnly
+                          onFocus={e => {
+                            // Enable typing on focus to reduce autofill detection
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            e.currentTarget.readOnly = false;
+                          }}
                         />
                       </div>
                     </div>
-                  </div>
+                  </form>
                 )}
               </motion.div>
             )}

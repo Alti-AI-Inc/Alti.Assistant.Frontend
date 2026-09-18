@@ -8,6 +8,9 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "next lint",
+    "ngrok": "ngrok http 3000",
+    "dev:secure": "concurrently \"pnpm dev\" \"pnpm run ngrok\"",
+    "dev:mkcert": "concurrently \"pnpm dev\" \"node ./scripts/dev-https-proxy.js --cert ./certs/localhost.pem --key ./certs/localhost-key.pem --listen 3443\"",
     "format": "prettier --write ."
   },
   "dependencies": {
@@ -79,7 +82,11 @@
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "ngrok": "^4.3.0",
+    "concurrently": "^8.2.0",
+    "http-proxy": "^1.18.1",
+    "minimist": "^1.2.8"
   },
   "pnpm": {
     "approvedBuilds": [

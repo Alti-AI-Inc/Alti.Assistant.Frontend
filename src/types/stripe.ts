@@ -243,7 +243,7 @@ export interface PaymentConfirmationModalProps {
   plan: {
     id: string;
     name: string;
-    price: number;
+    price: string;
     priceId: string;
     interval?: 'month' | 'year';
   };

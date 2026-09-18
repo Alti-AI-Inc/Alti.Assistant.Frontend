@@ -32,6 +32,32 @@ const monitorApiRewrite = {
   destination: `${MONITOR_API_BASE_URL}/spaces/:spaceId/monitors/:path*`,
 };
 
+// Build dynamic Content Security Policy parts based on environment
+const getConnectSrc = () => {
+  const parts = ["'self'", 'https:', 'wss:', 'https://api.stripe.com'];
+
+  // If an API_URL is configured, allow its origin for connect-src
+  const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
+  if (apiUrl) {
+    try {
+      const u = new URL(apiUrl);
+      parts.push(u.origin);
+    } catch {
+      // ignore invalid URL
+    }
+  }
+
+  // During development, allow local backend running on http://localhost:5100
+  if (process.env.NODE_ENV !== 'production') {
+    parts.push('http://localhost:5100');
+    parts.push('http://127.0.0.1:5100');
+    // allow ws over localhost if used by dev servers
+    parts.push('ws://localhost:5100');
+  }
+
+  return parts.join(' ');
+};
+
 const nextConfig: NextConfig = {
   // Force a unique build ID on every deploy so browsers never serve stale JS chunks
   generateBuildId: async () => {
@@ -106,7 +132,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https: blob:",
-              "connect-src 'self' https: wss: https://api.stripe.com",
+              `connect-src ${getConnectSrc()}`,
               "frame-src 'self' https://js.stripe.com https://hooks.stripe.com",
               "frame-ancestors 'none'",
             ].join('; '),

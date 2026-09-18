@@ -215,10 +215,11 @@ export default function PlansPage() {
                               </button>
                             ) : (
                               (() => {
-                                const isDisabled =
+                                const isDisabled = Boolean(
                                   currentPlanId &&
-                                  currentPlanId !== 'free' &&
-                                  currentPlanId !== plan.id;
+                                    currentPlanId !== 'free' &&
+                                    currentPlanId !== plan.id,
+                                );
                                 return (
                                   <button
                                     type="button"
