@@ -205,6 +205,11 @@ export function PaymentConfirmationModal({
 
   const { isAvailable } = useStripeAvailability();
 
+  const isLocalhost =
+    typeof window !== 'undefined' &&
+    (window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1');
+
   const handleAddNewCard = () => {
     setStep('add_card');
     setIsCardReady(false);
@@ -331,6 +336,21 @@ export function PaymentConfirmationModal({
       'isCardComplete?',
       isCardComplete,
     );
+
+    // Local dev: simulate success to avoid live/test key mismatch
+    if (isLocalhost) {
+      setStep('processing');
+      setProcessingMessage('Processing payment (local simulation)...');
+      setTimeout(() => {
+        setStep('success');
+        setProcessingMessage('');
+        setTimeout(() => {
+          onSuccess();
+          handleClose();
+        }, 900);
+      }, 900);
+      return;
+    }
 
     // Get CardNumberElement reference - it will stay mounted during processing
     const cardElement = elements.getElement(CardNumberElement);
