@@ -16,7 +16,11 @@ import {
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import type { PaymentMethod } from '@/types/stripe';
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import {
+  CardNumberElement,
+  useElements,
+  useStripe,
+} from '@stripe/react-stripe-js';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AlertCircle, ArrowLeft, CheckCircle2, Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -316,8 +320,8 @@ export function PaymentConfirmationModal({
       return;
     }
 
-    // Get CardElement reference - it will stay mounted during processing
-    const cardElement = elements.getElement(CardElement);
+    // Get CardNumberElement reference - it will stay mounted during processing
+    const cardElement = elements.getElement(CardNumberElement);
 
     if (!cardElement) {
       setError('Card input not found. Please refresh and try again.');
