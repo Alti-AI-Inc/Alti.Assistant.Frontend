@@ -320,10 +320,26 @@ export function PaymentConfirmationModal({
       return;
     }
 
+    // Diagnostic logging to help debug missing element in production
+    console.debug(
+      '[PaymentConfirmationModal] stripe present?',
+      !!stripe,
+      'elements present?',
+      !!elements,
+      'isCardReady?',
+      isCardReady,
+      'isCardComplete?',
+      isCardComplete,
+    );
+
     // Get CardNumberElement reference - it will stay mounted during processing
     const cardElement = elements.getElement(CardNumberElement);
 
     if (!cardElement) {
+      console.error(
+        '[PaymentConfirmationModal] Card element not found. Elements instance:',
+        elements,
+      );
       setError('Card input not found. Please refresh and try again.');
       return;
     }
