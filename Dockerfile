@@ -8,7 +8,7 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 
 COPY package.json pnpm-lock.yaml .npmrc* ./
 # RUN pnpm install --frozen-lockfile --ignore-scripts
-RUN pnpm install --ignore-scripts
+RUN npm install --ignore-scripts
 
 # Stage 2: Build the application
 FROM node:22-alpine AS builder
