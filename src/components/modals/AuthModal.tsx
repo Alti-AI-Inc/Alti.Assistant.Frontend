@@ -199,7 +199,7 @@ export function AuthModal() {
                           {...field}
                           type="email"
                           placeholder="Email Address"
-                          className="w-full rounded-[5px] border-none bg-[#e1e1e1] bg-auth-input p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
+                          className="h-11 w-full rounded-[5px] border-none bg-[#e1e1e1] bg-auth-input px-3.5 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
                         />
                       </FormControl>
                       <FormMessage />
@@ -210,7 +210,7 @@ export function AuthModal() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="flex w-full items-center justify-center rounded-[5px] bg-black py-3 text-sm font-medium text-white transition hover:bg-black/90 active:scale-[0.99] disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-white/90"
+                  className="flex h-11 w-full items-center justify-center rounded-[5px] bg-black text-sm font-medium text-white transition hover:bg-black/90 active:scale-[0.99] disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-white/90"
                 >
                   {isLoading && (
                     <span className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-current border-r-transparent"></span>
@@ -240,7 +240,7 @@ export function AuthModal() {
                           {...field}
                           type="email"
                           placeholder="Email Address"
-                          className="w-full rounded-[5px] border-none bg-[#e1e1e1] bg-auth-input p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
+                          className="h-11 w-full rounded-[5px] border-none bg-[#e1e1e1] bg-auth-input px-3.5 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
                         />
                       </FormControl>
                       <FormMessage />
@@ -251,7 +251,7 @@ export function AuthModal() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="flex w-full items-center justify-center rounded-[5px] bg-black py-3 text-sm font-medium text-white transition hover:bg-black/90 active:scale-[0.99] disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-white/90"
+                  className="flex h-11 w-full items-center justify-center rounded-[5px] bg-black text-sm font-medium text-white transition hover:bg-black/90 active:scale-[0.99] disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-white/90"
                 >
                   {isLoading && (
                     <span className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-current border-r-transparent"></span>
@@ -277,7 +277,7 @@ export function AuthModal() {
                   setVerifyCode(e.target.value.replace(/\D/g, '').slice(0, 6));
                   setVerifyError(null);
                 }}
-                className="w-full rounded-[5px] border-none bg-[#e1e1e1] bg-auth-input p-3 text-center text-xl tracking-[0.5em] text-black outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white"
+                className="h-11 w-full rounded-[5px] border-none bg-[#e1e1e1] bg-auth-input text-center text-xl tracking-[0.5em] text-black outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white"
               />
 
               {verifyError && (
@@ -290,7 +290,7 @@ export function AuthModal() {
                 type="button"
                 onClick={handleVerify}
                 disabled={isVerifying || verifyCode.length !== 6}
-                className="flex w-full items-center justify-center rounded-[5px] bg-black py-3 text-sm font-medium text-white transition hover:bg-black/90 active:scale-[0.99] disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-white/90"
+                className="flex h-11 w-full items-center justify-center rounded-[5px] bg-black text-sm font-medium text-white transition hover:bg-black/90 active:scale-[0.99] disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-white/90"
               >
                 {isVerifying && (
                   <span className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-current border-r-transparent"></span>
