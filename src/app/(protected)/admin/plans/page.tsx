@@ -25,7 +25,7 @@ const ALL_PLANS: PricingPlan[] = [
     price: 'Free',
     period: ' (One-time trial)',
     description:
-      'Test out Alti’s capabilities with basic search and model limits.',
+      'Test out Aphura’s capabilities with basic search and model limits.',
     features: ['100 Search', '10 Research', '10 Monitor'],
   },
   {

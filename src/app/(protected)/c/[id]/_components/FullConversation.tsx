@@ -1100,7 +1100,7 @@ const FullConversation = ({
                     >
                       <div
                         className={cn(
-                          'w-fit max-w-[85%] rounded-2xl border border-black/10 bg-white px-4 py-2.5 text-sm leading-relaxed font-medium text-zinc-900 shadow-sm transition-colors duration-300 dark:bg-white dark:text-zinc-900',
+                          'w-fit max-w-[85%] rounded-lg border border-black/10 bg-white px-4 py-2.5 text-sm leading-relaxed font-medium text-zinc-900 shadow-sm transition-colors duration-300 dark:bg-white dark:text-zinc-900',
                           showStartLastMessage && 'mt-8',
                         )}
                       >
@@ -1440,7 +1440,7 @@ const FullConversation = ({
     <div
       className={cn(
         'flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden bg-[#e1e1e1] dark:bg-zinc-950',
-        showAsNewChat ? 'items-center pt-[38vh]' : '',
+        showAsNewChat ? 'items-center pt-[30vh]' : '',
       )}
     >
       {isLoading &&
@@ -1539,11 +1539,20 @@ const FullConversation = ({
         className={cn(
           'w-full shrink-0 px-4 transition-all duration-300 sm:px-6 lg:px-8',
           !showAsNewChat
-            ? 'mt-auto flex h-[64px] items-center justify-center border-t border-black/10 bg-[#e1e1e1] pt-0 pb-0 dark:border-zinc-800/60 dark:bg-zinc-950'
+            ? 'mt-auto flex min-h-[64px] items-center justify-center border-t border-black/10 bg-[#e1e1e1] py-2 dark:border-zinc-800/60 dark:bg-zinc-950'
             : 'border-t-0 bg-transparent pt-3 pb-0',
         )}
       >
         <div className="mx-auto w-full max-w-[796px]">
+          {showAsNewChat && (
+            <div className="mb-6 flex justify-center">
+              <img
+                src="/assets/aphura-logo.png"
+                alt="aphura"
+                className="h-12 w-auto object-contain select-none md:h-14 dark:invert"
+              />
+            </div>
+          )}
           <ChatInput
             conversationId={conversationId}
             imageGenHook={imageGenHook}
@@ -1551,6 +1560,7 @@ const FullConversation = ({
             onFilesChange={setSelectedFiles}
             isStudio={isStudio}
             isConversationLoading={isLoading}
+            showAsNewChat={showAsNewChat}
           />
         </div>
       </div>

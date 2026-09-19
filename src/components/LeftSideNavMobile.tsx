@@ -859,13 +859,13 @@ const LeftSideNavMobile = () => {
 
   const plusProps = getPlusButtonProps();
 
-  const SHOW_WORKSPACES = true;
+  const SHOW_WORKSPACES = false;
 
   return (
     <div className="flex h-full w-full overflow-hidden">
       {SHOW_WORKSPACES && (
         <div className="flex h-full w-[60px] flex-none flex-col items-center gap-3 border-r border-zinc-800/60 bg-black pt-4 select-none">
-          {/* Alti Home Logo */}
+          {/* Aphura Home Logo */}
           <div className="relative flex w-full flex-col items-center">
             <div
               className={cn(
@@ -874,7 +874,7 @@ const LeftSideNavMobile = () => {
             >
               <img
                 src="/assets/logo-icon.png"
-                alt="Alti Brand Logo"
+                alt="Aphura Brand Logo"
                 className="size-6 object-contain brightness-0 invert"
               />
             </div>
@@ -1033,72 +1033,6 @@ const LeftSideNavMobile = () => {
 
       {/* Column 2: Secondary Content navigation panel */}
       <div className="flex h-full min-w-0 flex-1 flex-col bg-[#0c1120]">
-        {/* Search / Research / Monitor Toggle Switcher */}
-        {activeTab !== 'account' && (
-          <div className="flex w-full flex-none items-center border-b border-zinc-800/60 bg-[#0c1120] px-4 pt-4 pb-3 dark:bg-[#0c1120]">
-            <div className="flex h-9 w-full rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 p-0.5 shadow-[0_0_12px_rgba(0,0,255,0.25)] select-none">
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedOption(OPTIONS.SEARCH);
-                  if (pathname.startsWith('/spaces') && activeBotId) {
-                    router.push(getSpaceSectionUrl());
-                    return;
-                  }
-                  router.push('/c/new-search');
-                }}
-                className={cn(
-                  'flex h-full flex-1 cursor-pointer items-center justify-center rounded-md border text-[10px] font-bold transition-all duration-300 outline-none',
-                  (pathname.startsWith('/spaces') && !isSpaceMonitorSection) ||
-                    selectedOption === OPTIONS.SEARCH ||
-                    selectedOption === null
-                    ? 'border-[#0000ff]/45 bg-[#0000ff]/20 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
-                    : 'border-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200',
-                )}
-              >
-                <span>Search</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedOption(OPTIONS.RESEARCH);
-                  router.push('/c/new-research');
-                }}
-                className={cn(
-                  'flex h-full flex-1 cursor-pointer items-center justify-center rounded-md border text-[10px] font-bold transition-all duration-300 outline-none',
-                  selectedOption === OPTIONS.RESEARCH
-                    ? 'border-[#0000ff]/45 bg-[#0000ff]/20 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
-                    : 'border-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200',
-                )}
-              >
-                <span>Research</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedOption(OPTIONS.MONITOR);
-                  if (pathname.startsWith('/spaces') && activeBotId) {
-                    router.push(getSpaceSectionUrl('monitor'));
-                    return;
-                  }
-                  if (activeBotId) {
-                    router.push(`/spaces?bot=${activeBotId}&section=monitor`);
-                    return;
-                  }
-                  router.push('/spaces?section=monitor');
-                }}
-                className={cn(
-                  'flex h-full flex-1 cursor-pointer items-center justify-center rounded-md border text-[10px] font-bold transition-all duration-300 outline-none',
-                  isSpaceMonitorSection || selectedOption === OPTIONS.MONITOR
-                    ? 'border-[#0000ff]/45 bg-[#0000ff]/20 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
-                    : 'border-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200',
-                )}
-              >
-                <span>Monitor</span>
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* Navigation Body */}
         <div className="min-h-0 flex-1 overflow-y-auto">
@@ -1301,14 +1235,14 @@ const LeftSideNavMobile = () => {
             <div className="animate-in fade-in flex h-full min-h-0 flex-col duration-200">
               {/* Search Bar Row */}
               <div className="flex w-full flex-none items-center border-b border-zinc-800/60 bg-[#0c1120] px-4 pt-3 pb-3 dark:bg-[#0c1120]">
-                <div className="flex h-9 w-full items-center overflow-hidden rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] transition-all duration-300 focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40">
-                  <div className="flex h-full flex-1 items-center px-3">
+                <div className="flex h-9 w-full items-center overflow-hidden rounded-[3px] bg-[#e1e1e1] shadow-sm transition-all duration-200">
+                  <div className="flex h-full flex-1 items-center px-2.5">
                     <input
                       type="text"
                       placeholder="Search..."
                       value={searchQuery}
                       onChange={e => setSearchQuery(e.target.value)}
-                      className="placeholder:text-zinc-405 w-full bg-transparent text-xs font-normal text-white outline-none"
+                      className="w-full bg-transparent text-xs font-normal text-black outline-none placeholder:text-black"
                     />
                   </div>
                   <Tooltip>
@@ -1323,9 +1257,9 @@ const LeftSideNavMobile = () => {
                           close();
                           router.push(isLoggedIn ? '/c/new-search' : '/');
                         }}
-                        className="flex h-full w-9 items-center justify-center border-l border-[#0000ff]/30 text-blue-100 transition-all hover:bg-[#0000ff]/20 focus:outline-none"
+                        className="flex h-full w-9 items-center justify-center border-l border-black/10 text-zinc-700 transition-colors hover:bg-[#d0d0d0] hover:text-black focus:outline-none"
                       >
-                        <Plus className="size-3.5 text-white" />
+                        <Plus strokeWidth={1.5} className="size-4 text-zinc-800" />
                       </button>
                     </TooltipTrigger>
                     <TooltipContent
@@ -1436,7 +1370,7 @@ const LeftSideNavMobile = () => {
 
               {/* Search Bar Row (Same exact styling as general chat mode) */}
               <div className="flex w-full flex-none items-center gap-2 border-b border-zinc-800/60 bg-[#0c1120] px-4 pt-3 pb-3 dark:bg-[#0c1120]">
-                <div className="flex h-9 flex-1 items-center overflow-hidden rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] transition-all duration-300 focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40">
+                <div className="flex h-9 flex-1 items-center overflow-hidden rounded-[3px] border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] transition-all duration-300 focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40">
                   <div className="flex h-full flex-1 items-center px-3">
                     <input
                       type="text"
@@ -1703,31 +1637,6 @@ const LeftSideNavMobile = () => {
           )}
         </div>
 
-        {/* Rate limits section above Footer Area */}
-        {activeTab !== 'account' && (
-          <div className="flex flex-none flex-col gap-2 border-t border-zinc-800/60 bg-[#0c1120]/40 px-5 py-3.5 text-xs backdrop-blur-sm select-none">
-            <div className="flex items-center justify-between py-0.5">
-              <span className="font-medium text-white/80">Search</span>
-              <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">
-                445 Remaining
-              </span>
-            </div>
-            <div className="w-full border-t border-zinc-800/40" />
-            <div className="flex items-center justify-between py-0.5">
-              <span className="font-medium text-white/80">Research</span>
-              <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">
-                25 Remaining
-              </span>
-            </div>
-            <div className="w-full border-t border-zinc-800/40" />
-            <div className="flex items-center justify-between py-0.5">
-              <span className="font-medium text-white/80">Monitor</span>
-              <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">
-                38 Remaining
-              </span>
-            </div>
-          </div>
-        )}
 
         {/* Footer Area */}
         <div className="sticky bottom-0 z-30 flex h-[64px] w-full flex-none flex-col justify-center border-t border-zinc-800/60 bg-[#0c1120] p-4 py-2.5">
@@ -1735,7 +1644,7 @@ const LeftSideNavMobile = () => {
             <div className="flex h-11 w-full items-center justify-center">
               <Button
                 variant="default"
-                className="w-full justify-center gap-2 border border-transparent bg-white text-black hover:bg-white/90"
+                className="w-full justify-center gap-2 rounded-[3px] border border-transparent bg-[#e1e1e1] font-normal text-black hover:bg-[#d0d0d0]"
                 onClick={() => {
                   setActiveTab('search');
                   router.push(isLoggedIn ? '/c/new-search' : '/');
@@ -1750,29 +1659,33 @@ const LeftSideNavMobile = () => {
               {!isLoggedIn ? (
                 <div className="flex w-full items-center gap-2">
                   <Button
+                    type="button"
                     variant="default"
-                    className="flex-1 bg-white px-0 text-black hover:bg-white/90"
-                    asChild
+                    className="flex-1 cursor-pointer rounded-[3px] bg-[#e1e1e1] px-0 font-normal text-black hover:bg-[#d0d0d0]"
+                    onClick={() => {
+                      close();
+                      onOpen({ type: 'auth-modal', actionId: 'login' });
+                    }}
                   >
-                    <Link href="/login" onClick={close}>
-                      Login
-                    </Link>
+                    Login
                   </Button>
                   <Button
+                    type="button"
                     variant="default"
-                    className="flex-1 bg-white px-0 text-black hover:bg-white/90"
-                    asChild
+                    className="flex-1 cursor-pointer rounded-[3px] bg-[#e1e1e1] px-0 font-normal text-black hover:bg-[#d0d0d0]"
+                    onClick={() => {
+                      close();
+                      onOpen({ type: 'auth-modal', actionId: 'register' });
+                    }}
                   >
-                    <Link href="/register" onClick={close}>
-                      Register
-                    </Link>
+                    Register
                   </Button>
                 </div>
               ) : (
                 <Button
                   variant="outline"
                   onClick={() => setActiveTab('account')}
-                  className="w-full cursor-pointer border border-zinc-200 bg-white text-zinc-900 shadow-sm transition-all duration-300 outline-none select-none hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700/80"
+                  className="w-full cursor-pointer rounded-[3px] border border-transparent bg-[#e1e1e1] font-normal text-zinc-900 shadow-sm transition-all duration-300 outline-none select-none hover:bg-[#d0d0d0] dark:border-transparent dark:bg-[#e1e1e1] dark:text-zinc-900 dark:hover:bg-[#d0d0d0]"
                 >
                   My Account
                 </Button>

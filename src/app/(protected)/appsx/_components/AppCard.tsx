@@ -519,7 +519,7 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
     },
     placeholders: {
       "SNOWFLAKE_ACCOUNT": "xy12345.us-east-1",
-      "SNOWFLAKE_USERNAME": "ALTI_USER",
+      "SNOWFLAKE_USERNAME": "APHURA_USER",
       "SNOWFLAKE_PASSWORD": "password_xyz",
       "SNOWFLAKE_DATABASE": "ANALYTICS_DB",
       "SNOWFLAKE_SCHEMA": "PUBLIC"
@@ -1511,7 +1511,7 @@ const AppCard = ({
               </h3>
               
               <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed">
-                {app.description || `Integrate ${app.title} tools seamlessly to expand Alti's automation triggers and actions.`}
+                {app.description || `Integrate ${app.title} tools seamlessly to expand Aphura's automation triggers and actions.`}
               </p>
             </div>
           </div>

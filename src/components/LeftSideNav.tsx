@@ -937,38 +937,15 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     ? activeBot.guardrails.split('\n\n').filter(Boolean)
     : [];
 
-  const SHOW_WORKSPACES = true;
+  const SHOW_WORKSPACES = false;
 
   return (
     <div className="flex h-full w-full overflow-hidden">
-      {/* Column 1: Spaces Switcher (Slack style) - Show only expand button when collapsed, hide workspace switcher in Phase 1 */}
-      {!isLeftSidebarOpen && !SHOW_WORKSPACES && (
-        <div className="animate-in fade-in flex h-full w-[56px] flex-none flex-col items-center gap-3 border-r border-zinc-800/60 bg-black pt-4 duration-200 select-none">
-          <div className="relative mb-1 flex w-full flex-col items-center">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={toggleLeftSidebar}
-                  className="relative flex size-10 cursor-pointer items-center justify-center rounded-xl border border-[#0000ff]/35 bg-[#0000ff]/10 text-[#8080ff] shadow-[0_0_12px_rgba(0,0,255,0.25)] transition-all hover:bg-[#0000ff]/20 hover:text-white"
-                >
-                  <PanelLeftClose className="size-5 rotate-180" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent
-                side="right"
-                className="border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
-              >
-                Expand Sidebar
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        </div>
-      )}
+      {/* Column 1: Spaces Switcher (Slack style) */}
 
       {SHOW_WORKSPACES && (
         <div className="flex h-full w-[68px] flex-none flex-col items-center gap-3 border-r border-zinc-800/60 bg-black pt-4 select-none">
-          {/* Alti Home Logo */}
+          {/* Aphura Home Logo */}
           <div className="relative flex w-full flex-col items-center">
             <button
               type="button"
@@ -988,7 +965,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               ) : (
                 <img
                   src="/assets/logo-icon.png"
-                  alt="Alti Brand Logo"
+                  alt="Aphura Brand Logo"
                   className="size-6 object-contain brightness-0 invert"
                 />
               )}
@@ -1202,92 +1179,173 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       )}
 
       {/* Column 2: Secondary Content navigation panel */}
-      {isLeftSidebarOpen && (
-        <div className="animate-in fade-in flex h-full min-w-0 flex-1 flex-col bg-[#0c1120] duration-200">
-          {/* Search / Research / Monitor Toggle Switcher */}
-          {activeTab !== 'account' && (
-            <div className="flex w-full flex-none items-center border-b border-zinc-800/60 bg-[#0c1120] px-4 pt-4 pb-3 dark:bg-[#0c1120]">
-              <div className="flex h-9 w-full rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 p-0.5 shadow-[0_0_12px_rgba(0,0,255,0.25)] select-none">
+      {(isLeftSidebarOpen || !SHOW_WORKSPACES) && (
+        <div className="flex h-full min-w-0 flex-1 flex-col bg-[#0c1120] overflow-hidden select-none">
+          {/* Top Bar Row with Unified Collapse Button */}
+          <div className="flex w-full flex-none items-center gap-2 border-b border-zinc-800/60 bg-[#0c1120] px-4 pt-3 pb-3 dark:bg-[#0c1120]">
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <button
                   type="button"
-                  onClick={() => {
-                    setSelectedOption(OPTIONS.SEARCH);
-                    if (pathname.startsWith('/spaces') && activeBotId) {
-                      router.push(getSpaceSectionUrl());
-                      return;
-                    }
-                    router.push('/c/new-search');
-                  }}
-                  className={cn(
-                    'flex h-full flex-1 cursor-pointer items-center justify-center rounded-md border text-[10px] font-bold transition-all duration-300 outline-none',
-                    (pathname.startsWith('/spaces') &&
-                      !isSpaceMonitorSection &&
-                      !isSpaceResearchSection) ||
-                      selectedOption === OPTIONS.SEARCH ||
-                      selectedOption === null
-                      ? 'border-[#0000ff]/45 bg-[#0000ff]/20 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
-                      : 'border-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200',
-                  )}
+                  onClick={toggleLeftSidebar}
+                  className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-[#e1e1e1] text-zinc-800 shadow-sm transition-all duration-200 hover:bg-[#d0d0d0] hover:text-black focus:outline-none"
                 >
-                  <span>Search</span>
+                  <PanelLeftClose strokeWidth={1.5} className="size-4 text-zinc-800" />
                 </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelectedOption(OPTIONS.RESEARCH);
-                    if (pathname.startsWith('/spaces') && activeBotId) {
-                      const firstSessionId =
-                        researchSessions[0]?.id || researchSessions[0]?._id;
-                      router.push(
-                        getSpaceSectionUrl('research', {
-                          sessionId: firstSessionId || null,
-                        }),
-                      );
-                      return;
-                    }
-                    router.push('/c/new-research');
-                  }}
-                  className={cn(
-                    'flex h-full flex-1 cursor-pointer items-center justify-center rounded-md border text-[10px] font-bold transition-all duration-300 outline-none',
-                    isSpaceResearchSection ||
-                      selectedOption === OPTIONS.RESEARCH
-                      ? 'border-[#0000ff]/45 bg-[#0000ff]/20 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
-                      : 'border-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200',
-                  )}
-                >
-                  <span>Research</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelectedOption(OPTIONS.MONITOR);
-                    if (pathname.startsWith('/spaces') && activeBotId) {
-                      router.push(getSpaceSectionUrl('monitor'));
-                      return;
-                    }
-                    if (activeBotId) {
-                      router.push(`/spaces?bot=${activeBotId}&section=monitor`);
-                      return;
-                    }
-                    router.push('/spaces?section=monitor');
-                  }}
-                  className={cn(
-                    'flex h-full flex-1 cursor-pointer items-center justify-center rounded-md border text-[10px] font-bold transition-all duration-300 outline-none',
-                    isSpaceMonitorSection || selectedOption === OPTIONS.MONITOR
-                      ? 'border-[#0000ff]/45 bg-[#0000ff]/20 text-white shadow-[0_0_8px_rgba(0,0,255,0.2)]'
-                      : 'border-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200',
-                  )}
-                >
-                  <span>Monitor</span>
-                </button>
-              </div>
-            </div>
-          )}
+              </TooltipTrigger>
+              <TooltipContent
+                side={isLeftSidebarOpen ? 'bottom' : 'right'}
+                className="border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+              >
+                {isLeftSidebarOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
+              </TooltipContent>
+            </Tooltip>
 
-          {/* Navigation Body */}
-          <div className="min-h-0 flex-1 overflow-y-auto">
-            {activeTab === 'account' ? (
-              <div className="mt-4 space-y-1.5 px-4 py-1 pb-4">
+            {isLeftSidebarOpen && (
+              activeTab === 'account' ? (
+                <div className="flex h-9 flex-1 items-center px-1">
+                  <span className="text-xs font-semibold text-white">Account Settings</span>
+                </div>
+              ) : activeBotId === null ? (
+                /* General Mode */
+                <>
+                  <div className="flex h-9 flex-1 items-center overflow-hidden rounded-[3px] bg-[#e1e1e1] px-2.5 shadow-sm transition-all duration-200">
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      value={searchQuery}
+                      onChange={e => setSearchQuery(e.target.value)}
+                      className="w-full bg-transparent text-xs font-normal text-black outline-none placeholder:text-black"
+                    />
+                  </div>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveConversation(null);
+                          setShowStartLastMessage(false);
+                          setUserMessage('');
+                          setSelectedOption(null);
+                          close();
+                          router.push(isLoggedIn ? '/c/new-search' : '/');
+                        }}
+                        className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-[#e1e1e1] text-zinc-800 shadow-sm transition-all duration-200 hover:bg-[#d0d0d0] hover:text-black focus:outline-none"
+                      >
+                        <Plus strokeWidth={1.5} className="size-4 text-zinc-800" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="bottom"
+                      className="border border-b-2 border-white/10 border-b-indigo-500 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                    >
+                      New Chat
+                    </TooltipContent>
+                  </Tooltip>
+                </>
+              ) : (
+                /* Space Mode */
+                <>
+                  <div className="flex h-9 flex-1 items-center overflow-hidden rounded-[3px] bg-[#e1e1e1] shadow-sm transition-all duration-200">
+                    <div className="flex h-full flex-1 items-center px-2.5">
+                      <input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                        className="w-full bg-transparent text-xs font-normal text-black outline-none placeholder:text-black"
+                      />
+                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button
+                          type="button"
+                          className="flex h-full w-9 cursor-pointer items-center justify-center border-l border-black/10 text-zinc-700 transition-colors hover:bg-[#d0d0d0] hover:text-black focus:outline-none"
+                          title="Space Settings"
+                        >
+                          <EllipsisVertical className="size-4 text-zinc-800" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent
+                        className="rounded-2xl border border-white/10 bg-zinc-950 text-white"
+                        align="end"
+                      >
+                        <DropdownMenuItem
+                          className="cursor-pointer text-xs text-zinc-300 focus:bg-zinc-800 focus:text-white"
+                          onClick={() => setBotToRename(activeBotId)}
+                        >
+                          <Pencil className="mr-2 h-3.5 w-3.5" /> Rename Space
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator className="my-1 h-[1px] bg-white/10" />
+                        <DropdownMenuItem
+                          className="cursor-pointer text-xs text-zinc-300 focus:bg-zinc-800 focus:text-white"
+                          onClick={() => setBotToDelete(activeBotId)}
+                        >
+                          <Trash2 className="mr-2 h-3.5 w-3.5" /> Delete Space
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (isSpaceMonitorSection) {
+                            setSelectedOption(OPTIONS.MONITOR);
+                            router.push(
+                              getSpaceSectionUrl('monitor', {
+                                monitorId: monitorParam,
+                                createMonitor: true,
+                              }),
+                            );
+                            return;
+                          }
+
+                          if (isSpaceResearchSection) {
+                            setSelectedOption(OPTIONS.RESEARCH);
+                            setActiveBotThreadId(null);
+                            setActiveConversation(null);
+                            router.push(
+                              getSpaceSectionUrl('research', {
+                                createResearch: true,
+                              }),
+                            );
+                            return;
+                          }
+
+                          setSelectedOption(null);
+                          setActiveBotThreadId(null);
+                          setActiveConversation(null);
+                          router.push(`/spaces?bot=${activeBotId}`);
+                        }}
+                        className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-[#e1e1e1] text-zinc-800 shadow-sm transition-all duration-200 hover:bg-[#d0d0d0] hover:text-black focus:outline-none"
+                      >
+                        <Plus strokeWidth={1.5} className="size-4 text-zinc-800" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="bottom"
+                      className="border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                    >
+                      {isSpaceMonitorSection
+                        ? 'Create Monitor'
+                        : isSpaceResearchSection
+                          ? 'New Research'
+                          : 'New Chat'}
+                    </TooltipContent>
+                  </Tooltip>
+                </>
+              )
+            )}
+          </div>
+
+          {isLeftSidebarOpen && (
+            <>
+              {/* Navigation Body */}
+              <div className="min-h-0 flex-1 overflow-y-auto">
+                {activeTab === 'account' ? (
+                  <div className="mt-4 space-y-1.5 px-4 py-1 pb-4">
                 {isSuperAdmin && (
                   <button
                     onClick={() => router.push('/admin')}
@@ -1454,153 +1512,16 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </button>
               </div>
             ) : activeBotId === null ? (
-              /* General Mode */
-              <div className="flex h-full min-h-0 flex-col">
-                {/* Search Bar Row */}
-                <div className="flex w-full flex-none items-center border-b border-zinc-800/60 bg-[#0c1120] px-4 pt-3 pb-3 dark:bg-[#0c1120]">
-                  <div className="flex h-9 w-full items-center overflow-hidden rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] transition-all duration-300 focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40">
-                    <div className="flex h-full flex-1 items-center px-3">
-                      <input
-                        type="text"
-                        placeholder="Search..."
-                        value={searchQuery}
-                        onChange={e => setSearchQuery(e.target.value)}
-                        className="w-full bg-transparent text-xs font-normal text-white outline-none placeholder:text-zinc-400"
-                      />
-                    </div>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setActiveConversation(null);
-                            setShowStartLastMessage(false);
-                            setUserMessage('');
-                            setSelectedOption(null);
-                            close();
-                            router.push(isLoggedIn ? '/c/new-search' : '/');
-                          }}
-                          className="flex h-full w-9 items-center justify-center border-l border-[#0000ff]/30 text-blue-100 transition-all hover:bg-[#0000ff]/20 focus:outline-none"
-                        >
-                          <Plus className="size-3.5 text-white" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent
-                        side="bottom"
-                        className="border border-b-2 border-white/10 border-b-indigo-500 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
-                      >
-                        New Chat
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                </div>
-
-                {/* Chat History List */}
-                <div className="flex-1 overflow-y-auto bg-[#0c1120] px-4 py-2 dark:bg-[#0c1120]">
-                  <ConversationsList
-                    searchQuery={searchQuery}
-                    activeTab="search"
-                  />
-                </div>
+              /* General Mode Chat History List */
+              <div className="flex-1 overflow-y-auto bg-[#0c1120] px-4 py-2 dark:bg-[#0c1120]">
+                <ConversationsList
+                  searchQuery={searchQuery}
+                  activeTab="search"
+                />
               </div>
             ) : (
-              /* Space Mode */
-              <div className="flex h-full min-h-0 flex-col">
-                {/* Search Bar Row (Same exact styling as general chat mode) */}
-                <div className="flex w-full flex-none items-center border-b border-zinc-800/60 bg-[#0c1120] px-4 pt-3 pb-3 dark:bg-[#0c1120]">
-                  <div className="flex h-9 w-full items-center overflow-hidden rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] transition-all duration-300 focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40">
-                    <div className="flex h-full flex-1 items-center px-3">
-                      <input
-                        type="text"
-                        placeholder="Search..."
-                        value={searchQuery}
-                        onChange={e => setSearchQuery(e.target.value)}
-                        className="w-full bg-transparent text-xs font-normal text-white outline-none placeholder:text-zinc-400"
-                      />
-                    </div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <button
-                          type="button"
-                          className="flex h-full w-9 cursor-pointer items-center justify-center border-l border-[#0000ff]/30 text-blue-100 transition-all hover:bg-[#0000ff]/20 focus:outline-none"
-                          title="Space Settings"
-                        >
-                          <EllipsisVertical className="size-4 text-white" />
-                        </button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent
-                        className="rounded-2xl border border-white/10 bg-zinc-950 text-white"
-                        align="end"
-                      >
-                        <DropdownMenuItem
-                          className="cursor-pointer text-xs text-zinc-300 focus:bg-zinc-800 focus:text-white"
-                          onClick={() => setBotToRename(activeBotId)}
-                        >
-                          <Pencil className="mr-2 h-3.5 w-3.5" /> Rename Space
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator className="my-1 h-[1px] bg-white/10" />
-                        <DropdownMenuItem
-                          className="cursor-pointer text-xs text-zinc-300 focus:bg-zinc-800 focus:text-white"
-                          onClick={() => setBotToDelete(activeBotId)}
-                        >
-                          <Trash2 className="mr-2 h-3.5 w-3.5" /> Delete Space
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (isSpaceMonitorSection) {
-                              setSelectedOption(OPTIONS.MONITOR);
-                              router.push(
-                                getSpaceSectionUrl('monitor', {
-                                  monitorId: monitorParam,
-                                  createMonitor: true,
-                                }),
-                              );
-                              return;
-                            }
-
-                            if (isSpaceResearchSection) {
-                              setSelectedOption(OPTIONS.RESEARCH);
-                              setActiveBotThreadId(null);
-                              setActiveConversation(null);
-                              router.push(
-                                getSpaceSectionUrl('research', {
-                                  createResearch: true,
-                                }),
-                              );
-                              return;
-                            }
-
-                            setSelectedOption(null);
-                            setActiveBotThreadId(null);
-                            setActiveConversation(null);
-                            router.push(`/spaces?bot=${activeBotId}`);
-                          }}
-                          className="flex h-full w-9 items-center justify-center border-l border-[#0000ff]/30 text-blue-100 transition-all hover:bg-[#0000ff]/20 focus:outline-none"
-                        >
-                          <Plus className="size-3.5 text-white" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent
-                        side="bottom"
-                        className="border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
-                      >
-                        {isSpaceMonitorSection
-                          ? 'Create Monitor'
-                          : isSpaceResearchSection
-                            ? 'New Research'
-                            : 'New Chat'}
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                </div>
-
-                {/* Space-Specific Threads List */}
-                <div className="flex-1 space-y-1.5 overflow-y-auto bg-[#0c1120] px-4 py-2 dark:bg-[#0c1120]">
+              /* Space-Specific Threads List */
+              <div className="flex-1 space-y-1.5 overflow-y-auto bg-[#0c1120] px-4 py-2 dark:bg-[#0c1120]">
                   {isSpaceMonitorSection
                     ? spaceMonitors
                         .filter(monitor => {
@@ -1922,35 +1843,9 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     </div>
                   )}
                 </div>
-              </div>
             )}
           </div>
 
-          {/* Rate limits section above Footer Area */}
-          {activeTab !== 'account' && (
-            <div className="flex flex-none flex-col gap-2 border-t border-zinc-800/60 bg-[#0c1120]/40 px-5 py-3.5 text-xs backdrop-blur-sm select-none">
-              <div className="flex items-center justify-between py-0.5">
-                <span className="font-medium text-white/80">Search</span>
-                <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">
-                  445 Remaining
-                </span>
-              </div>
-              <div className="w-full border-t border-zinc-800/40" />
-              <div className="flex items-center justify-between py-0.5">
-                <span className="font-medium text-white/80">Research</span>
-                <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">
-                  25 Remaining
-                </span>
-              </div>
-              <div className="w-full border-t border-zinc-800/40" />
-              <div className="flex items-center justify-between py-0.5">
-                <span className="font-medium text-white/80">Monitor</span>
-                <span className="font-light text-white drop-shadow-[0_0_6px_rgba(0,0,255,0.7)]">
-                  38 Remaining
-                </span>
-              </div>
-            </div>
-          )}
 
           {/* Footer Area */}
           <div className="sticky bottom-0 z-30 flex h-[64px] w-full flex-none flex-col justify-center border-t border-zinc-800/60 bg-[#0c1120] p-4 py-2.5">
@@ -1958,7 +1853,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               <div className="flex h-11 w-full items-center justify-center">
                 <Button
                   variant="default"
-                  className="w-full justify-center gap-2 border border-transparent bg-white text-black hover:bg-white/90"
+                  className="w-full justify-center gap-2 rounded-[3px] border border-transparent bg-[#e1e1e1] font-normal text-black hover:bg-[#d0d0d0]"
                   onClick={() => {
                     setActiveTab('search');
                     router.push(isLoggedIn ? '/c/new-search' : '/');
@@ -1972,25 +1867,31 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 {!isLoggedIn ? (
                   <div className="flex w-full items-center gap-2">
                     <Button
+                      type="button"
                       variant="default"
-                      className="flex-1 bg-white px-0 text-black hover:bg-white/90"
-                      asChild
+                      className="flex-1 cursor-pointer rounded-[3px] bg-[#e1e1e1] px-0 font-normal text-black hover:bg-[#d0d0d0]"
+                      onClick={() =>
+                        onOpen({ type: 'auth-modal', actionId: 'login' })
+                      }
                     >
-                      <Link href="/login">Login</Link>
+                      Login
                     </Button>
                     <Button
+                      type="button"
                       variant="default"
-                      className="flex-1 bg-white px-0 text-black hover:bg-white/90"
-                      asChild
+                      className="flex-1 cursor-pointer rounded-[3px] bg-[#e1e1e1] px-0 font-normal text-black hover:bg-[#d0d0d0]"
+                      onClick={() =>
+                        onOpen({ type: 'auth-modal', actionId: 'register' })
+                      }
                     >
-                      <Link href="/register">Register</Link>
+                      Register
                     </Button>
                   </div>
                 ) : (
                   <Button
                     variant="outline"
                     onClick={() => setActiveTab('account')}
-                    className="w-full cursor-pointer border border-zinc-200 bg-white text-zinc-900 shadow-sm transition-all duration-300 outline-none select-none hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700/80"
+                    className="w-full cursor-pointer rounded-[3px] border border-transparent bg-[#e1e1e1] font-normal text-zinc-900 shadow-sm transition-all duration-300 outline-none select-none hover:bg-[#d0d0d0] dark:border-transparent dark:bg-[#e1e1e1] dark:text-zinc-900 dark:hover:bg-[#d0d0d0]"
                   >
                     My Account
                   </Button>
@@ -1998,8 +1899,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </div>
             )}
           </div>
-        </div>
+        </>
       )}
+    </div>
+  )}
 
       {/* Delete Space Dialog */}
       <Dialog

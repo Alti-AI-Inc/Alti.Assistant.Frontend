@@ -77,18 +77,24 @@ const DashboardLeftSideNav = () => {
           {!isLoggedIn ? (
             <div className="flex w-full items-center gap-2">
               <Button
+                type="button"
                 variant="default"
-                className="flex-1 bg-black px-0 text-white hover:bg-black/90"
-                asChild
+                className="flex-1 cursor-pointer bg-black px-0 text-white hover:bg-black/90"
+                onClick={() =>
+                  onOpen({ type: 'auth-modal', actionId: 'login' })
+                }
               >
-                <Link href="/login">Login</Link>
+                Login
               </Button>
               <Button
+                type="button"
                 variant="default"
-                className="flex-1 bg-black px-0 text-white hover:bg-black/90"
-                asChild
+                className="flex-1 cursor-pointer bg-black px-0 text-white hover:bg-black/90"
+                onClick={() =>
+                  onOpen({ type: 'auth-modal', actionId: 'register' })
+                }
               >
-                <Link href="/register">Register</Link>
+                Register
               </Button>
             </div>
           ) : (

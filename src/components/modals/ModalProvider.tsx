@@ -1,7 +1,7 @@
 'use client';
 import { useModalStore } from '@/stores/useModalStore';
-import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, Suspense } from 'react';
 import { AddChatbotModal } from './AddChatbotModal';
 import { AddModelModal } from './AddModelModal';
 import { AuthModal } from './AuthModal';
@@ -23,6 +23,23 @@ import SearchChats from './SearchChats';
 import SearchWorkflows from './SearchWorkflows';
 import { ShareConversationModal } from './ShareConversationModal';
 
+function AuthQueryWatcher() {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { onOpen } = useModalStore();
+
+  useEffect(() => {
+    const auth = searchParams?.get('auth');
+    if (auth === 'login' || auth === 'register') {
+      onOpen({ type: 'auth-modal', actionId: auth });
+      if (typeof window !== 'undefined') {
+        window.history.replaceState(null, '', pathname);
+      }
+    }
+  }, [searchParams, pathname, onOpen]);
+
+  return null;
+}
 
 export const ModalProvider = () => {
   const pathname = usePathname();
@@ -41,10 +58,11 @@ export const ModalProvider = () => {
     }
   }, [isOpen]);
 
-  if (!type || !isOpen) return null;
-
   return (
     <>
+      <Suspense fallback={null}>
+        <AuthQueryWatcher />
+      </Suspense>
       {type === 'logout' && <Logout />}
       {type === 'search-chats' && <SearchChats />}
       {type === 'rename-chat' && <RenameChat />}

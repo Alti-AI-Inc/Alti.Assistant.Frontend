@@ -136,7 +136,7 @@ function MyChatbotsContent() {
       router.replace(`/spaces?${nextParams.toString()}`);
     } else {
       setActiveBotId(null);
-      // Redirect to Alti new chat if there are no bots
+      // Redirect to Aphura new chat if there are no bots
       router.replace(session?.accessToken ? '/c/new-search' : '/');
     }
 

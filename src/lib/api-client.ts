@@ -73,16 +73,33 @@ export async function apiClient(
     }
   }
 
+  // If in browser and URL is absolute pointing to the API host, convert to same-origin path to use Next.js proxy rewrite and prevent CORS failure
+  let requestUrl = url;
+  if (typeof window !== 'undefined' && url.startsWith('http')) {
+    try {
+      const parsed = new URL(url);
+      const apiEnvUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (apiEnvUrl) {
+        const parsedApiEnv = new URL(apiEnvUrl);
+        if (parsed.host === parsedApiEnv.host) {
+          requestUrl = `${parsed.pathname}${parsed.search}`;
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+
   // Make the request
   try {
-    const response = await fetch(url, {
+    const response = await fetch(requestUrl, {
       ...restOptions,
       headers: requestHeaders,
     });
 
     return response;
   } catch (error) {
-    console.error('API Client Error:', error);
+    console.warn('API Client Warning:', error instanceof Error ? error.message : String(error));
     throw error;
   }
 }

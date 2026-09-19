@@ -1,25 +1,27 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { useModalStore } from '@/stores/useModalStore';
 
 const LoginRegisterButtons = () => {
+  const { onOpen } = useModalStore();
+
   return (
     <div className="flex items-center gap-3">
       <Button
         variant="outline"
-        asChild
-        className="relative rounded-full text-black max-md:bg-black max-md:text-white max-md:hover:bg-black max-md:hover:text-white"
+        type="button"
+        onClick={() => onOpen({ type: 'auth-modal', actionId: 'login' })}
+        className="relative cursor-pointer rounded-full text-black max-md:bg-black max-md:text-white max-md:hover:bg-black max-md:hover:text-white"
       >
-        <Link href="/login" className="absolute inset-0">
-          Sign In
-        </Link>
+        Sign In
       </Button>
       <Button
-        asChild
-        className="relative rounded-full bg-blue-700 hover:bg-blue-800"
+        type="button"
+        onClick={() => onOpen({ type: 'auth-modal', actionId: 'register' })}
+        className="relative cursor-pointer rounded-full bg-blue-700 hover:bg-blue-800"
       >
-        <Link href="/register" className="absolute inset-0">
-          Sign Up
-        </Link>
+        Sign Up
       </Button>
     </div>
   );

@@ -78,12 +78,13 @@ export async function fetchKnowledgeBaseList(
       data: data?.data?.knowledgeBases ?? [],
     };
   } catch (error: any) {
-    console.error('fetchKnowledgeBaseList Error:', error);
+    console.warn('fetchKnowledgeBaseList Warning:', error?.message || String(error));
     return {
       success: false,
       message: 'Failed to fetch knowledge base list.',
-      debugMessage: error.message || String(error),
+      debugMessage: error?.message || String(error),
       statusCode: 500,
+      data: [],
     };
   }
 }

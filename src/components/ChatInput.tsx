@@ -86,6 +86,7 @@ interface ChatInputProps {
   onFilesChange?: (files: File[]) => void;
   isStudio?: boolean;
   isConversationLoading?: boolean;
+  showAsNewChat?: boolean;
 }
 
 // Helper function to check if dynamic ID is a new chat
@@ -165,6 +166,7 @@ export default function ChatInput({
   onFilesChange,
   isStudio,
   isConversationLoading,
+  showAsNewChat: propShowAsNewChat,
 }: ChatInputProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -549,6 +551,11 @@ export default function ChatInput({
     (conversationId && !isNewChatId(conversationId)) ||
     hasStartedChat ||
     isLoadingResponse;
+
+  const isNewChat =
+    propShowAsNewChat !== undefined
+      ? propShowAsNewChat
+      : !isExistingConversation;
 
   useEffect(() => {
     if (!isExistingConversation) {
@@ -1621,6 +1628,62 @@ export default function ChatInput({
   const hasMessages =
     activeConversation?.messages && activeConversation.messages.length > 0;
 
+  const attachmentsPreview = (
+    <>
+      {/* Image Preview */}
+      {imageBase64 && (
+        <div className="relative w-fit">
+          <img
+            src={imageBase64}
+            alt="Uploaded preview"
+            className="h-12 w-12 rounded-lg object-cover"
+          />
+          <button
+            onClick={handleRemoveImage}
+            className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
+          >
+            <Plus className="bold size-3 rotate-45" />
+          </button>
+        </div>
+      )}
+
+      {/* File Cards Preview */}
+      {selectedFiles && selectedFiles.length > 0 && (
+        <div className="custom-scrollbar flex max-h-[80px] flex-wrap gap-2 overflow-y-auto">
+          {selectedFiles.map((file, index) => (
+            <div
+              key={index}
+              className="animate-in fade-in inline-flex max-w-[140px] items-center gap-2 rounded-[3px] border border-black/10 bg-white px-2.5 py-1.5 shadow-xs duration-200 dark:border-zinc-700 dark:bg-zinc-800"
+            >
+              <FileText className="size-4 flex-shrink-0 text-gray-500" />
+              <div className="flex min-w-0 flex-1 flex-col">
+                <span
+                  className="text-gray-705 truncate text-xs font-semibold dark:text-zinc-300"
+                  title={file.name}
+                >
+                  {file.name}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const updated = selectedFiles.filter(
+                    (_, i) => i !== index,
+                  );
+                  setSelectedFiles(updated);
+                }}
+                className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
+                title="Remove file"
+              >
+                <X className="size-3.5" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </>
+  );
+
   return (
     <>
       <input
@@ -1703,62 +1766,34 @@ export default function ChatInput({
               </div>
             )}
 
-          {/* Image Preview */}
-          {imageBase64 && (
-            <div className="relative mb-2 w-fit">
-              <img
-                src={imageBase64}
-                alt="Uploaded preview"
-                className="h-12 w-12 rounded-lg object-cover"
-              />
-              <button
-                onClick={handleRemoveImage}
-                className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
-              >
-                <Plus className="bold size-3 rotate-45" />
-              </button>
-            </div>
-          )}
-
-          {/* File Cards Preview */}
-          {selectedFiles && selectedFiles.length > 0 && (
-            <div className="custom-scrollbar mb-2 flex max-h-[80px] flex-wrap gap-2 overflow-y-auto">
-              {selectedFiles.map((file, index) => (
-                <div
-                  key={index}
-                  className="animate-in fade-in inline-flex max-w-[140px] items-center gap-2 rounded-lg border border-black/10 bg-white px-2.5 py-1.5 shadow-xs duration-200 dark:border-zinc-700 dark:bg-zinc-800"
-                >
-                  <FileText className="size-4 flex-shrink-0 text-gray-500" />
-                  <div className="flex min-w-0 flex-1 flex-col">
-                    <span
-                      className="text-gray-705 truncate text-xs font-semibold dark:text-zinc-300"
-                      title={file.name}
-                    >
-                      {file.name}
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const updated = selectedFiles.filter(
-                        (_, i) => i !== index,
-                      );
-                      setSelectedFiles(updated);
-                    }}
-                    className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
-                    title="Remove file"
-                  >
-                    <X className="size-3.5" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+          {/* Attached files preview: shown ABOVE prompt box when in conversation */}
+          {!isNewChat && attachmentsPreview}
 
           <div
             ref={containerRef}
-            className="relative flex min-h-[52px] w-full items-center gap-3 rounded-xl border border-zinc-300 bg-white px-3 py-1.5 shadow-xs transition-all duration-300 dark:border-zinc-700/80 dark:bg-zinc-800"
+            className="relative flex min-h-[52px] w-full items-center gap-3 rounded-[5px] border border-zinc-300 bg-white px-3 py-1.5 shadow-xs transition-all duration-300 dark:border-zinc-700/80 dark:bg-zinc-800"
           >
+            {/* Attach Files Button */}
+            <Tooltip>
+              <TooltipTrigger asChild onFocus={e => e.preventDefault()}>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isLoadingResponse}
+                  className={cn(
+                    'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-black/5 bg-[#e1e1e1] text-zinc-800 transition-all hover:bg-[#d0d0d0] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900',
+                    isLoadingResponse && 'cursor-not-allowed opacity-50',
+                  )}
+                  aria-label="Attach files"
+                >
+                  <Paperclip strokeWidth={1.5} className="size-3.5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p>Attach files</p>
+              </TooltipContent>
+            </Tooltip>
+
             {/* Textarea - Single height but auto-expanding */}
             <Textarea
               ref={textareaRef}
@@ -1800,7 +1835,7 @@ export default function ChatInput({
                           : pathname === '/workflows' ||
                               pathname?.startsWith('/workflows')
                             ? 'Describe your workflow...'
-                            : 'What do you want to search?'
+                            : 'Enter prompt here...'
               }
               style={{ backgroundColor: 'transparent' }}
               className="max-h-[160px] min-h-[36px] w-full flex-1 resize-none border-none bg-transparent px-1 py-1.5 text-gray-900 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 dark:text-white"
@@ -1813,7 +1848,7 @@ export default function ChatInput({
                 <button
                   type="button"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="dark:bg-zinc-955 flex h-8 w-full cursor-pointer items-center justify-between gap-1.5 rounded-md border border-black/5 bg-[#e1e1e1] px-2.5 text-xs font-normal text-black transition-all select-none hover:bg-[#d0d0d0] focus:outline-none dark:border-zinc-700/50 dark:hover:bg-zinc-900"
+                  className="dark:bg-zinc-955 flex h-8 w-full cursor-pointer items-center justify-between gap-1.5 rounded-[3px] border border-black/5 bg-[#e1e1e1] px-2.5 text-xs font-normal text-black transition-all select-none hover:bg-[#d0d0d0] focus:outline-none dark:border-zinc-700/50 dark:hover:bg-zinc-900"
                 >
                   <span>{monitorFrequency}</span>
                   <ChevronDown className="size-3.5 flex-shrink-0 text-black" />
@@ -1860,16 +1895,16 @@ export default function ChatInput({
                   <button
                     type="button"
                     disabled
-                    className="text-zinc-650 dark:text-zinc-350 flex size-8 flex-shrink-0 cursor-not-allowed items-center justify-center rounded-md border border-black/5 bg-[#e1e1e1] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-900"
+                    className="text-zinc-650 dark:text-zinc-350 flex size-8 flex-shrink-0 cursor-not-allowed items-center justify-center rounded-[3px] border border-black/5 bg-[#e1e1e1] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-900"
                   >
-                    <ArrowUp className="size-3.5" />
+                    <ArrowUp strokeWidth={1.5} className="size-3.5" />
                   </button>
                 ) : !message?.trim() ? (
                   <button
                     type="button"
                     onClick={toggleListening}
                     className={cn(
-                      'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md border border-black/5 bg-[#e1e1e1] text-zinc-800 transition-all hover:bg-[#d0d0d0] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900',
+                      'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-black/5 bg-[#e1e1e1] text-zinc-800 transition-all hover:bg-[#d0d0d0] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900',
                       isListening &&
                         'animate-pulse bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700',
                     )}
@@ -1877,7 +1912,7 @@ export default function ChatInput({
                       isListening ? 'Stop listening' : 'Speech to Text'
                     }
                   >
-                    <Mic className="size-3.5" />
+                    <Mic strokeWidth={1.5} className="size-3.5" />
                   </button>
                 ) : (
                   <button
@@ -1889,10 +1924,10 @@ export default function ChatInput({
                         ? handleCreateTask
                         : handleSubmit
                     }
-                    className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md border border-black/5 bg-[#e1e1e1] text-zinc-800 transition-all hover:bg-[#d0d0d0] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900"
+                    className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-black/5 bg-[#e1e1e1] text-zinc-800 transition-all hover:bg-[#d0d0d0] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900"
                     aria-label="Send Prompt"
                   >
-                    <ArrowUp className="size-3.5" />
+                    <ArrowUp strokeWidth={1.5} className="size-3.5" />
                   </button>
                 )}
               </TooltipTrigger>
@@ -1913,6 +1948,9 @@ export default function ChatInput({
               </TooltipContent>
             </Tooltip>
           </div>
+
+          {/* Attached files preview: shown BELOW prompt box on new chat */}
+          {isNewChat && attachmentsPreview}
 
           {/* Dedicated Task Configurations Row */}
           {selectedOption === OPTIONS.TASK &&

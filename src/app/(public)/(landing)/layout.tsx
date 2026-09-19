@@ -67,7 +67,7 @@ export default function PublicLayout({
         {/* Sidebar - Desktop only */}
         <div
           className={cn(
-            'bg-white dark:bg-zinc-900 sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out md:flex',
+            'bg-white dark:bg-zinc-900 sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out md:flex overflow-hidden',
             isLeftSidebarOpen ? 'w-80' : 'w-[68px]',
           )}
           style={{ backgroundColor: '#0c1120' }}

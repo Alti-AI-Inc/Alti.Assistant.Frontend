@@ -35,7 +35,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
       if (isChunkLoadError) {
         console.warn(
-          'Alti Shield: Detected chunk loading or Server Action mismatch. Performing automatic recovery refresh...',
+          'Aphura Shield: Detected chunk loading or Server Action mismatch. Performing automatic recovery refresh...',
         );
         window.location.reload();
       }
@@ -53,7 +53,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
       if (isChunkLoadError) {
         console.warn(
-          'Alti Shield: Detected unhandled chunk/Server Action rejection. Performing automatic recovery refresh...',
+          'Aphura Shield: Detected unhandled chunk/Server Action rejection. Performing automatic recovery refresh...',
         );
         window.location.reload();
       }
