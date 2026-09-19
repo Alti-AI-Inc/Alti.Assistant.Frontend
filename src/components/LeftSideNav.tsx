@@ -1180,9 +1180,9 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
       {/* Column 2: Secondary Content navigation panel */}
       {(isLeftSidebarOpen || !SHOW_WORKSPACES) && (
-        <div className="flex h-full min-w-0 flex-1 flex-col bg-[#0c1120] overflow-hidden select-none">
+        <div className="flex h-full min-w-0 flex-1 flex-col bg-black overflow-hidden select-none">
           {/* Top Bar Row with Unified Collapse Button */}
-          <div className="flex w-full flex-none items-center gap-2 border-b border-zinc-800/60 bg-[#0c1120] px-4 pt-3 pb-3 dark:bg-[#0c1120]">
+          <div className="flex w-full flex-none items-center gap-2 border-b border-zinc-800/60 bg-black px-4 pt-3 pb-3 dark:bg-black">
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
@@ -1513,7 +1513,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </div>
             ) : activeBotId === null ? (
               /* General Mode Chat History List */
-              <div className="flex-1 overflow-y-auto bg-[#0c1120] px-4 py-2 dark:bg-[#0c1120]">
+              <div className="flex-1 overflow-y-auto bg-black px-4 py-2 dark:bg-black">
                 <ConversationsList
                   searchQuery={searchQuery}
                   activeTab="search"
@@ -1521,7 +1521,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               </div>
             ) : (
               /* Space-Specific Threads List */
-              <div className="flex-1 space-y-1.5 overflow-y-auto bg-[#0c1120] px-4 py-2 dark:bg-[#0c1120]">
+              <div className="flex-1 space-y-1.5 overflow-y-auto bg-black px-4 py-2 dark:bg-black">
                   {isSpaceMonitorSection
                     ? spaceMonitors
                         .filter(monitor => {
@@ -1848,7 +1848,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
 
           {/* Footer Area */}
-          <div className="sticky bottom-0 z-30 flex h-[64px] w-full flex-none flex-col justify-center border-t border-zinc-800/60 bg-[#0c1120] p-4 py-2.5">
+          <div className="sticky bottom-0 z-30 flex h-[64px] w-full flex-none flex-col justify-center border-t border-zinc-800/60 bg-black p-4 py-2.5">
             {isLoggedIn && activeTab === 'account' ? (
               <div className="flex h-11 w-full items-center justify-center">
                 <Button

@@ -11,6 +11,6 @@ export default function LoginPage() {
   }, [router]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0c1120]" />
+    <div className="flex min-h-screen items-center justify-center bg-black" />
   );
 }

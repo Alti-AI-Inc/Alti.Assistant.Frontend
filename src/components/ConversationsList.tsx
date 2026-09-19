@@ -330,8 +330,8 @@ export default function ConversationsList({
             className={cn(
               "group flex h-9 w-full items-center justify-between rounded-[3px] text-xs transition-all duration-150 mb-1.5 cursor-pointer select-none border",
               isActive
-                ? "bg-[#273554] border-white/20 text-white font-medium shadow-sm"
-                : "bg-[#172033] border-white/[0.06] text-zinc-300 hover:bg-[#1e2942] hover:text-white hover:border-white/10"
+                ? "bg-[#27272a] border-white/20 text-white font-medium shadow-sm"
+                : "bg-[#121214] border-white/10 text-zinc-300 hover:bg-[#1c1c20] hover:text-white hover:border-white/20"
             )}
             key={chat._id}
           >

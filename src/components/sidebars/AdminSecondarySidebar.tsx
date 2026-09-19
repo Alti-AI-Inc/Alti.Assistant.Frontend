@@ -63,7 +63,7 @@ export const AdminSecondarySidebar = () => {
 
   return (
     <div className={cn(
-      "bg-[#0c1120] dark:bg-[#0c1120] border-r border-white/5 hidden md:flex flex-col h-full shrink-0 z-10 transition-all duration-300",
+      "bg-black dark:bg-black border-r border-white/5 hidden md:flex flex-col h-full shrink-0 z-10 transition-all duration-300",
       (isLeftSidebarOpen || !isSuperAdmin) ? "w-64" : "w-14"
     )}>
       {/* Header */}
@@ -236,7 +236,7 @@ export const AdminSecondarySidebar = () => {
       </div>
       {isSuperAdmin && (
         <div className={cn(
-          "sticky bottom-0 z-30 flex flex-col border-t border-white/5 bg-[#0c1120] dark:bg-[#0c1120] flex-none items-center justify-center",
+          "sticky bottom-0 z-30 flex flex-col border-t border-white/5 bg-black dark:bg-black flex-none items-center justify-center",
           isLeftSidebarOpen ? "w-full p-4 py-3" : "w-full py-3 px-1"
         )}>
           {isLeftSidebarOpen ? (

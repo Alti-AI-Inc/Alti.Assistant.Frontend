@@ -1032,7 +1032,7 @@ const LeftSideNavMobile = () => {
       )}
 
       {/* Column 2: Secondary Content navigation panel */}
-      <div className="flex h-full min-w-0 flex-1 flex-col bg-[#0c1120]">
+      <div className="flex h-full min-w-0 flex-1 flex-col bg-black">
 
         {/* Navigation Body */}
         <div className="min-h-0 flex-1 overflow-y-auto">
@@ -1234,7 +1234,7 @@ const LeftSideNavMobile = () => {
             /* General Mode */
             <div className="animate-in fade-in flex h-full min-h-0 flex-col duration-200">
               {/* Search Bar Row */}
-              <div className="flex w-full flex-none items-center border-b border-zinc-800/60 bg-[#0c1120] px-4 pt-3 pb-3 dark:bg-[#0c1120]">
+              <div className="flex w-full flex-none items-center border-b border-zinc-800/60 bg-black px-4 pt-3 pb-3 dark:bg-black">
                 <div className="flex h-9 w-full items-center overflow-hidden rounded-[3px] bg-[#e1e1e1] shadow-sm transition-all duration-200">
                   <div className="flex h-full flex-1 items-center px-2.5">
                     <input
@@ -1273,7 +1273,7 @@ const LeftSideNavMobile = () => {
               </div>
 
               {/* Chat History List */}
-              <div className="flex-1 overflow-y-auto bg-[#0c1120] px-4 py-2 dark:bg-[#0c1120]">
+              <div className="flex-1 overflow-y-auto bg-black px-4 py-2 dark:bg-black">
                 <ConversationsList
                   searchQuery={searchQuery}
                   activeTab="search"
@@ -1284,7 +1284,7 @@ const LeftSideNavMobile = () => {
             /* Space Mode */
             <div className="animate-in fade-in flex h-full min-h-0 flex-col duration-200">
               {/* Configuration Tabs Toggle Group */}
-              <div className="w-full flex-none bg-[#0c1120] px-4 pt-3 pb-1">
+              <div className="w-full flex-none bg-black px-4 pt-3 pb-1">
                 <div className="flex w-full rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 p-0.5 shadow-[0_0_12px_rgba(0,0,255,0.25)] select-none">
                   <button
                     type="button"
@@ -1369,7 +1369,7 @@ const LeftSideNavMobile = () => {
               </div>
 
               {/* Search Bar Row (Same exact styling as general chat mode) */}
-              <div className="flex w-full flex-none items-center gap-2 border-b border-zinc-800/60 bg-[#0c1120] px-4 pt-3 pb-3 dark:bg-[#0c1120]">
+              <div className="flex w-full flex-none items-center gap-2 border-b border-zinc-800/60 bg-black px-4 pt-3 pb-3 dark:bg-black">
                 <div className="flex h-9 flex-1 items-center overflow-hidden rounded-[3px] border border-[#0000ff]/35 bg-[#0000ff]/10 shadow-[0_0_12px_rgba(0,0,255,0.25)] transition-all duration-300 focus-within:border-[#0000ff] focus-within:shadow-[0_0_20px_rgba(0,0,255,0.55)] focus-within:ring-1 focus-within:ring-[#0000ff]/40">
                   <div className="flex h-full flex-1 items-center px-3">
                     <input
@@ -1434,7 +1434,7 @@ const LeftSideNavMobile = () => {
               </div>
 
               {/* Space-Specific Threads List */}
-              <div className="flex-1 space-y-1.5 overflow-y-auto bg-[#0c1120] px-4 py-2 dark:bg-[#0c1120]">
+              <div className="flex-1 space-y-1.5 overflow-y-auto bg-black px-4 py-2 dark:bg-black">
                 {viewParam === 'data' && activeBot
                   ? /* Knowledge Files List */
                     allFiles.map((file, idx) => {
@@ -1639,7 +1639,7 @@ const LeftSideNavMobile = () => {
 
 
         {/* Footer Area */}
-        <div className="sticky bottom-0 z-30 flex h-[64px] w-full flex-none flex-col justify-center border-t border-zinc-800/60 bg-[#0c1120] p-4 py-2.5">
+        <div className="sticky bottom-0 z-30 flex h-[64px] w-full flex-none flex-col justify-center border-t border-zinc-800/60 bg-black p-4 py-2.5">
           {isLoggedIn && activeTab === 'account' ? (
             <div className="flex h-11 w-full items-center justify-center">
               <Button

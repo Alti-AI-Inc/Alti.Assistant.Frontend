@@ -17,13 +17,13 @@ function RegisterRedirect() {
   }, [router, code]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0c1120]" />
+    <div className="flex min-h-screen items-center justify-center bg-black" />
   );
 }
 
 export default function RegisterPage() {
   return (
-    <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-[#0c1120]" />}>
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-black" />}>
       <RegisterRedirect />
     </Suspense>
   );

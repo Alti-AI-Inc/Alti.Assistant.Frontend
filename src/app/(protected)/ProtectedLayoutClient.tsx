@@ -111,7 +111,7 @@ export default function ProtectedLayoutClient({
               'sticky top-0 left-0 hidden h-screen flex-col transition-all duration-300 ease-in-out sm:hidden md:flex border-r border-zinc-800/50 shrink-0 z-20 overflow-hidden',
               isLeftSidebarOpen ? 'w-80' : 'w-[68px]',
             )}
-            style={{ backgroundColor: '#0c1120' }}
+            style={{ backgroundColor: '#000000' }}
           >
             <Suspense fallback={null}>
               <LeftSideNav />
