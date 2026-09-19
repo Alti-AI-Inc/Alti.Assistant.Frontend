@@ -154,9 +154,11 @@ const FullConversation = ({
           ? OPTIONS.MONITOR
           : null;
 
-  if (isNewChatRoute && selectedOption !== expectedOption) {
-    setSelectedOption(expectedOption);
-  }
+  useEffect(() => {
+    if (isNewChatRoute && selectedOption !== expectedOption) {
+      setSelectedOption(expectedOption);
+    }
+  }, [isNewChatRoute, selectedOption, expectedOption, setSelectedOption]);
   const activeBot = bots.find(b => b.id === activeBotId);
 
   const { onOpen } = useModalStore();
