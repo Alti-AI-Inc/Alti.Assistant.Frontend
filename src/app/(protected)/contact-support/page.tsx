@@ -114,11 +114,11 @@ const SupportContent = () => {
       <Dialog open={isSuccessOpen} onOpenChange={setIsSuccessOpen}>
         <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[300px] sm:max-w-[300px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
           {/* Centered Content Section */}
-          <div className="px-5 pt-5 pb-2 text-center">
+          <div className="px-5 pt-5 pb-2.5 text-center">
             <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
               Message Sent
             </h2>
-            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal">
+            <p className="mt-2.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal">
               Your message has been sent.
               <br />
               Our team will reply to you soon.
