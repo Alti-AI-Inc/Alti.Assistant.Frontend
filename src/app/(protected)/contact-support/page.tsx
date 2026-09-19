@@ -73,7 +73,7 @@ const SupportContent = () => {
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             placeholder="Enter Subject"
-            className="w-full h-12 rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 px-4 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 focus:border-black/10 dark:focus:border-white/10 focus-visible:border-black/10 dark:focus-visible:border-white/10 shadow-sm transition-all"
+            className="w-full h-12 rounded-[5px] border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 px-4 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 focus:border-black/20 dark:focus:border-white/20 shadow-sm transition-all"
             disabled={isLoading}
           />
 
@@ -83,7 +83,7 @@ const SupportContent = () => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Enter Message"
-            className="w-full min-h-[180px] rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 p-4 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 focus:border-black/10 dark:focus:border-white/10 focus-visible:border-black/10 dark:focus-visible:border-white/10 shadow-sm transition-all resize-none"
+            className="w-full min-h-[180px] rounded-[5px] border border-black/10 dark:border-white/10 bg-white dark:bg-zinc-900 p-4 text-sm text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 focus:border-black/20 dark:focus:border-white/20 shadow-sm transition-all resize-none"
             disabled={isLoading}
             rows={5}
           />
@@ -91,7 +91,7 @@ const SupportContent = () => {
           <Button
             onClick={handleSubmit}
             disabled={isLoading || !subject.trim() || !message.trim()}
-            className="w-full h-12 rounded-xl bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/90 font-medium shadow-sm transition-all cursor-pointer flex items-center justify-center disabled:opacity-100 disabled:bg-black disabled:text-white dark:disabled:bg-white dark:disabled:text-black"
+            className="w-full h-12 rounded-[5px] bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/90 text-sm font-semibold shadow-sm transition-all cursor-pointer flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>
