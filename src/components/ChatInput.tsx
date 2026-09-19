@@ -1789,7 +1789,7 @@ export default function ChatInput({
                   <Paperclip strokeWidth={1.5} className="size-3.5" />
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="top">
+              <TooltipContent side="bottom">
                 <p>Attach files</p>
               </TooltipContent>
             </Tooltip>
@@ -1931,7 +1931,7 @@ export default function ChatInput({
                   </button>
                 )}
               </TooltipTrigger>
-              <TooltipContent side="top">
+              <TooltipContent side="bottom">
                 <p>
                   {isLoadingResponse
                     ? 'Assistant is thinking...'
