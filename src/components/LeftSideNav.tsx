@@ -1000,7 +1000,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   </TooltipTrigger>
                   <TooltipContent
                     side="right"
-                    className="border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                    className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
                   >
                     General
                   </TooltipContent>
@@ -1136,7 +1136,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         </TooltipTrigger>
                         <TooltipContent
                           side="right"
-                          className="max-w-[200px] border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                          className="max-w-[200px] border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
                         >
                           <div className="font-bold">{bot.name}</div>
                         </TooltipContent>
@@ -1166,7 +1166,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   </TooltipTrigger>
                   <TooltipContent
                     side="right"
-                    className="border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                    className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
                   >
                     Create Space
                   </TooltipContent>
@@ -1195,7 +1195,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </TooltipTrigger>
                 <TooltipContent
                   side={isLeftSidebarOpen ? 'bottom' : 'right'}
-                  className="border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                  className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
                 >
                   {isLeftSidebarOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
                 </TooltipContent>
@@ -1233,7 +1233,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     </TooltipTrigger>
                     <TooltipContent
                       side="bottom"
-                      className="border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                      className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
                     >
                       New Chat
                     </TooltipContent>
@@ -1322,7 +1322,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     </TooltipTrigger>
                     <TooltipContent
                       side="bottom"
-                      className="border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                      className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
                     >
                       {isSpaceMonitorSection
                         ? 'Create Monitor'

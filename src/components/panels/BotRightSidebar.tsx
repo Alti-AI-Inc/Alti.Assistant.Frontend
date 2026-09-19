@@ -464,7 +464,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                       <Inbox className="size-3.5 text-zinc-700 dark:text-white" />
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent side="bottom" className="rounded-[3px] bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
+                  <TooltipContent side="bottom" className="rounded-[3px] bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none">
                     Inbox
                   </TooltipContent>
                 </Tooltip>
@@ -496,7 +496,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
                         <Plus className="size-3.5 text-zinc-700 dark:text-white" />
                       </button>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom" className="rounded-[3px] bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] border-b-2 border-b-white select-none">
+                    <TooltipContent side="bottom" className="rounded-[3px] bg-zinc-950 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none">
                       {activeTab === 'instructions' 
                         ? 'Add Instruction' 
                         : activeTab === 'guardrails' 
