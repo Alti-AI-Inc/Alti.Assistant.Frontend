@@ -2,6 +2,10 @@
 
 import { useState, Suspense, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+} from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
 
@@ -10,6 +14,7 @@ const SupportContent = () => {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -44,9 +49,9 @@ const SupportContent = () => {
       requests.unshift(newRequest);
       localStorage.setItem('insosearch_support_requests', JSON.stringify(requests));
 
-      toast.success('Your message has been sent to our support team.');
       setSubject('');
       setMessage('');
+      setIsSuccessOpen(true);
     } catch (error) {
       toast.error('Failed to send support message. Please try again.');
     } finally {
@@ -104,6 +109,32 @@ const SupportContent = () => {
           </Button>
         </div>
       </div>
+
+      {/* Sent Confirmation Modal */}
+      <Dialog open={isSuccessOpen} onOpenChange={setIsSuccessOpen}>
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[270px] sm:max-w-[270px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+          {/* Centered Content Section */}
+          <div className="px-5 pt-5 pb-4 text-center">
+            <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
+              Message Sent
+            </h2>
+            <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+              Your message has been sent to our support team.
+            </p>
+          </div>
+
+          {/* Extended Border & Action Button */}
+          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
+            <button
+              type="button"
+              onClick={() => setIsSuccessOpen(false)}
+              className="flex-1 text-[15px] font-semibold text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none cursor-pointer"
+            >
+              Done
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
