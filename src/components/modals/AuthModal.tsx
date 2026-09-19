@@ -233,20 +233,6 @@ export function AuthModal() {
                 </button>
               </form>
             </Form>
-
-            <div className="text-center text-sm text-gray-500 dark:text-zinc-400">
-              Don&apos;t have an account?{' '}
-              <button
-                type="button"
-                onClick={() => {
-                  setView('register');
-                  setErrorMessage(null);
-                }}
-                className="font-semibold text-black hover:underline dark:text-white"
-              >
-                Register
-              </button>
-            </div>
           </div>
         )}
 
