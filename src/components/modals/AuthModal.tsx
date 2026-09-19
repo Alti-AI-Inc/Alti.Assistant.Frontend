@@ -25,9 +25,7 @@ import { z } from 'zod';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
-  password: z
-    .string()
-    .min(6, { message: 'Password must be at least 6 characters long' }),
+  password: z.string().optional(),
 });
 
 const registerSchema = z
@@ -103,7 +101,7 @@ export function AuthModal() {
     try {
       const response = await signIn('credentials', {
         email: values.email,
-        password: values.password,
+        password: values.password || '',
         redirect: false,
       });
 
@@ -177,20 +175,18 @@ export function AuthModal() {
         </DialogDescription>
 
         {/* Header */}
-        <div className="flex flex-col items-center space-y-2 text-center pt-2">
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">
-            {showVerification
-              ? 'Verify Email'
-              : view === 'login'
-                ? 'Login Account'
-                : 'Register Account'}
-          </h2>
-          {showVerification && (
-            <p className="text-sm text-gray-500 dark:text-zinc-400">
-              Enter the 6-digit confirmation code sent to your email
-            </p>
-          )}
-        </div>
+        {(showVerification || view !== 'login') && (
+          <div className="flex flex-col items-center space-y-2 text-center pt-2">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">
+              {showVerification ? 'Verify Email' : 'Register Account'}
+            </h2>
+            {showVerification && (
+              <p className="text-sm text-gray-500 dark:text-zinc-400">
+                Enter the 6-digit confirmation code sent to your email
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Error message notification */}
         {errorMessage && (
@@ -220,39 +216,6 @@ export function AuthModal() {
                           className="w-full rounded-xl border-none bg-[#e1e1e1] bg-auth-input p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
                         />
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={loginForm.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="relative">
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type={isPasswordVisible ? 'text' : 'password'}
-                            placeholder="Password"
-                            className="w-full rounded-xl border-none bg-[#e1e1e1] bg-auth-input p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
-                          />
-                        </FormControl>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setIsPasswordVisible(!isPasswordVisible)
-                          }
-                          className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600 dark:text-zinc-400 dark:hover:text-white"
-                        >
-                          {isPasswordVisible ? (
-                            <EyeOff className="size-5" />
-                          ) : (
-                            <Eye className="size-5" />
-                          )}
-                        </button>
-                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
