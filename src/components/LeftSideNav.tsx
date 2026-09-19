@@ -1342,7 +1342,8 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               {/* Navigation Body */}
               <div className="min-h-0 flex-1 overflow-y-auto">
                 {activeTab === 'account' ? (
-                  <div className="mt-4 space-y-1.5 px-4 py-1 pb-4">
+                  <div className="flex min-h-full flex-col justify-between px-4 pt-4 pb-4">
+                    <div className="space-y-1.5">
                 {isSuperAdmin && (
                   <button
                     onClick={() => router.push('/admin')}
@@ -1484,14 +1485,18 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   </button>
                 )}
 
-                <button
-                  onClick={() => onOpen({ type: 'logout' })}
-                  className="group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] bg-[#1e1e24] text-red-400 px-3 text-left text-xs transition-all duration-150 select-none hover:bg-[#282830] hover:text-red-300 shadow-[0_2px_8px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)] focus:outline-none"
-                >
-                  <LogOut className="h-3.5 w-3.5 flex-shrink-0 text-red-400 transition-colors group-hover:text-red-300" />
-                  <span>Logout Account</span>
-                </button>
-              </div>
+                    </div>
+
+                    <div className="mt-auto pt-4">
+                      <button
+                        onClick={() => onOpen({ type: 'logout' })}
+                        className="group flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] bg-[#1e1e24] text-red-400 px-3 text-left text-xs transition-all duration-150 select-none hover:bg-[#282830] hover:text-red-300 shadow-[0_2px_8px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)] focus:outline-none"
+                      >
+                        <LogOut className="h-3.5 w-3.5 flex-shrink-0 text-red-400 transition-colors group-hover:text-red-300" />
+                        <span>Logout Account</span>
+                      </button>
+                    </div>
+                  </div>
             ) : activeBotId === null ? (
               /* General Mode Chat History List */
               <div className="flex-1 overflow-y-auto bg-black px-4 py-2 dark:bg-black">
