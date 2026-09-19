@@ -328,10 +328,10 @@ export default function ConversationsList({
         return (
           <div
             className={cn(
-              "group flex h-9 w-full items-center justify-between rounded-[3px] text-xs transition-all duration-150 mb-1.5 cursor-pointer select-none border",
+              "group flex h-9 w-full items-center justify-between rounded-[3px] text-xs transition-all duration-150 mb-1.5 cursor-pointer select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)]",
               isActive
-                ? "bg-[#27272a] border-white/20 text-white font-medium shadow-sm"
-                : "bg-[#121214] border-white/10 text-zinc-300 hover:bg-[#1c1c20] hover:text-white hover:border-white/20"
+                ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+                : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
             )}
             key={chat._id}
           >
