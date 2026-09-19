@@ -38,7 +38,7 @@ export async function PostConversation(
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('PostConversation API Error:', {
+      console.warn('PostConversation API Error:', {
         status: response.status,
         statusText: response.statusText,
         body: errorText,
@@ -57,7 +57,7 @@ export async function PostConversation(
     // Unwrap data if present to avoid nesting
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
-    console.error('PostConversation Error:', error);
+    console.warn('PostConversation Error:', error);
     return {
       success: false,
       message: 'An unexpected error occurred. Please try again.',
@@ -97,7 +97,7 @@ export async function PostConversationStream(
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('PostConversationStream API Error:', {
+      console.warn('PostConversationStream API Error:', {
         status: response.status,
         statusText: response.statusText,
         body: errorText,
@@ -143,7 +143,7 @@ export async function PostConversationStream(
               onChunk(parsed);
             }
           } catch (err) {
-            console.error('Failed to parse SSE JSON:', rawData, err);
+            console.warn('Failed to parse SSE JSON:', rawData, err);
           }
         }
       }
@@ -151,7 +151,7 @@ export async function PostConversationStream(
 
     return { success: true, message: 'Success' };
   } catch (error: any) {
-    console.error('PostConversationStream Error:', error);
+    console.warn('PostConversationStream Error:', error);
     return {
       success: false,
       message: 'An unexpected error occurred. Please try again.',
@@ -201,7 +201,7 @@ export async function PostConversationWithFile(
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
-    console.error('PostConversationWithFile Error:', error);
+    console.warn('PostConversationWithFile Error:', error);
     return {
       success: false,
       message: 'An unexpected error occurred. Please try again.',
@@ -277,7 +277,7 @@ export async function fetchConversationList(
     const data = await res.json();
     return { success: true, message: 'Success', data: data.data };
   } catch (error: any) {
-    console.error('fetchConversationList Error:', error);
+    console.warn('fetchConversationList Error:', error);
     return {
       success: false,
       message: 'Failed to fetch conversations.',
@@ -315,7 +315,7 @@ export async function fetchSavedConversationList(
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data.conversations };
   } catch (error: any) {
-    console.error('fetchSavedConversationList Error:', error);
+    console.warn('fetchSavedConversationList Error:', error);
     return {
       success: false,
       message: 'Failed to fetch saved conversations.',
@@ -354,7 +354,7 @@ export async function searchConversations(
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data };
   } catch (error: any) {
-    console.error('searchConversations Error:', error);
+    console.warn('searchConversations Error:', error);
     return {
       success: false,
       message: 'Search failed.',
@@ -397,7 +397,7 @@ export async function loadSingleConversation(
     // I'll wrap it in standard ApiResponse structure.
     return { success: true, message: 'Success', data: data?.data || data };
   } catch (error: any) {
-    console.error('loadSingleConversation Error:', error);
+    console.warn('loadSingleConversation Error:', error);
     return {
       success: false,
       message: 'Failed to load conversation.',
@@ -428,7 +428,7 @@ export async function loadSingleSharedConversation(
     const data = await response.json();
     return { success: true, message: 'Success', data: data?.data || data };
   } catch (error: any) {
-    console.error('loadSingleSharedConversation Error:', error);
+    console.warn('loadSingleSharedConversation Error:', error);
     return {
       success: false,
       message: 'Failed to load shared conversation.',
@@ -464,7 +464,7 @@ export const deleteConversation = async (
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
-    console.error('Error deleting session:', error);
+    console.warn('Error deleting session:', error);
     return {
       success: false,
       message: 'Failed to delete conversation.',
@@ -502,7 +502,7 @@ export const shareConversation = async (
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
-    console.error('shareConversation Error:', error);
+    console.warn('shareConversation Error:', error);
     return {
       success: false,
       message: 'Failed to share conversation.',
@@ -544,7 +544,7 @@ export async function renameConversationAction(
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
-    console.error('renameConversationAction Error:', error);
+    console.warn('renameConversationAction Error:', error);
     return {
       success: false,
       message: 'Failed to rename conversation.',
@@ -586,7 +586,7 @@ export async function saveConversationAction(
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
-    console.error('saveConversationAction Error:', error);
+    console.warn('saveConversationAction Error:', error);
     return {
       success: false,
       message: 'Failed to save conversation.',

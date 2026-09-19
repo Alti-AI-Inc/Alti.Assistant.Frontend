@@ -77,7 +77,7 @@ export function useConversations(
         );
         if (!response.success) {
           if (response.statusCode !== 401 && response.statusCode !== 403) {
-            console.error(
+            console.warn(
               'fetchConversationList failed:',
               response.debugMessage,
               response.message,
@@ -99,7 +99,7 @@ export function useConversations(
         }
         return response.data!;
       } catch (error) {
-        console.error('fetchConversationList exception:', error);
+        console.warn('fetchConversationList exception:', error);
         return {
           conversations: [],
           pagination: {
@@ -132,7 +132,7 @@ export function useSavedConversations(accessToken?: string) {
         const response = await fetchSavedConversationList(accessToken);
         if (!response.success) {
           if (response.statusCode !== 401 && response.statusCode !== 403) {
-            console.error(
+            console.warn(
               'fetchSavedConversationList failed:',
               response.debugMessage,
               response.message,
@@ -143,7 +143,7 @@ export function useSavedConversations(accessToken?: string) {
         }
         return response.data;
       } catch (error) {
-        console.error('fetchSavedConversationList exception:', error);
+        console.warn('fetchSavedConversationList exception:', error);
         return [];
       }
     },
@@ -170,7 +170,7 @@ export function useActiveConversation(
         );
 
         if (!response.success) {
-          console.error(
+          console.warn(
             'loadSingleConversation failed:',
             response.debugMessage,
             response.message,
@@ -227,7 +227,7 @@ export function useActiveConversation(
 
         return data;
       } catch (error) {
-        console.error('loadSingleConversation exception:', error);
+        console.warn('loadSingleConversation exception:', error);
         return { messages: [] };
       }
     },
@@ -244,7 +244,7 @@ export function useSharedConversation(id: string) {
         const response = await loadSingleSharedConversation(id);
 
         if (!response.success) {
-          console.error(
+          console.warn(
             'loadSingleSharedConversation failed:',
             response.debugMessage,
             response.message,
@@ -300,7 +300,7 @@ export function useSharedConversation(id: string) {
 
         return conversation;
       } catch (error) {
-        console.error('loadSingleSharedConversation exception:', error);
+        console.warn('loadSingleSharedConversation exception:', error);
         return { messages: [] };
       }
     },
@@ -321,7 +321,7 @@ export function useDeleteConversation() {
   return useMutation({
     mutationFn: async (conversationId: string) => {
       if (!data?.accessToken) {
-        console.error('No access token');
+        console.warn('No access token');
         return null; // throw new Error('No access token');
       }
       try {
@@ -330,7 +330,7 @@ export function useDeleteConversation() {
           conversationId,
         );
         if (!response.success) {
-          console.error(
+          console.warn(
             'deleteConversation failed:',
             response.debugMessage,
             response.message,
@@ -340,7 +340,7 @@ export function useDeleteConversation() {
         }
         return response.data;
       } catch (error) {
-        console.error('deleteConversation exception:', error);
+        console.warn('deleteConversation exception:', error);
         return null;
         // throw error;
       }
@@ -419,7 +419,7 @@ export function useSearchConversations(
       try {
         const response = await searchConversations(accessToken!, searchTerm!);
         if (!response.success) {
-          console.error(
+          console.warn(
             'searchConversations failed:',
             response.debugMessage,
             response.message,
@@ -428,7 +428,7 @@ export function useSearchConversations(
         }
         return response.data;
       } catch (error) {
-        console.error('searchConversations exception:', error);
+        console.warn('searchConversations exception:', error);
         return [];
       }
     },
