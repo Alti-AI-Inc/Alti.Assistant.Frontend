@@ -1180,29 +1180,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {/* Column 2: Secondary Content navigation panel */}
       {(isLeftSidebarOpen || !SHOW_WORKSPACES) && (
         <div className="flex h-full min-w-0 flex-1 flex-col bg-black overflow-hidden select-none">
-          {/* Top Bar Row with Unified Collapse Button */}
-          {activeTab !== 'account' && (
+          {/* Top Bar Row */}
+          {activeTab !== 'account' && isLeftSidebarOpen && (
             <div className="flex w-full flex-none items-center gap-2 border-b border-zinc-800/60 bg-black px-4 pt-3 pb-3 dark:bg-black">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    onClick={toggleLeftSidebar}
-                    className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
-                  >
-                    <PanelLeftClose strokeWidth={1.5} className="size-4 text-zinc-800" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent
-                  side={isLeftSidebarOpen ? 'bottom' : 'right'}
-                  className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
-                >
-                  {isLeftSidebarOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
-                </TooltipContent>
-              </Tooltip>
-
-              {isLeftSidebarOpen && (
-                activeBotId === null ? (
+              {activeBotId === null ? (
                   /* General Mode */
                 <>
                   <div className="flex h-9 flex-1 items-center overflow-hidden rounded-[3px] bg-white px-2.5 shadow-sm transition-all duration-200">
@@ -1333,14 +1314,13 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   </Tooltip>
                 </>
               )
-            )}
+            }
           </div>
           )}
 
-          {isLeftSidebarOpen && (
-            <>
-              {/* Navigation Body */}
-              <div className="min-h-0 flex-1 overflow-y-auto">
+          {/* Navigation Body or collapsed spacer */}
+          {isLeftSidebarOpen ? (
+            <div className="min-h-0 flex-1 overflow-y-auto">
                 {activeTab === 'account' ? (
                   <div className="flex min-h-full flex-col justify-between px-4 pt-4 pb-4">
                     <div className="space-y-1.5">
@@ -1831,62 +1811,117 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 </div>
             )}
           </div>
+        ) : (
+          <div className="flex-1" />
+        )}
 
-
-          {/* Footer Area */}
-          <div className="sticky bottom-0 z-30 flex h-[64px] w-full flex-none flex-col justify-center border-t border-zinc-800/60 bg-black p-4 py-2.5">
-            {isLoggedIn && activeTab === 'account' ? (
-              <div className="flex h-11 w-full items-center justify-center">
-                <Button
-                  variant="default"
-                  className="w-full justify-center gap-2 rounded-[3px] border border-transparent bg-white font-normal text-black hover:bg-zinc-100"
-                  onClick={() => {
-                    setActiveTab('search');
-                    router.push(isLoggedIn ? '/c/new-search' : '/');
-                  }}
-                >
-                  Return to App
-                </Button>
-              </div>
-            ) : (
-              <div className="flex h-11 w-full items-center justify-center">
-                {!isLoggedIn ? (
-                  <div className="flex w-full items-center gap-2">
-                    <Button
-                      type="button"
-                      variant="default"
-                      className="flex-1 cursor-pointer rounded-[3px] bg-white px-0 font-normal text-black hover:bg-zinc-100"
-                      onClick={() =>
-                        onOpen({ type: 'auth-modal', actionId: 'login' })
-                      }
-                    >
-                      Login
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="default"
-                      className="flex-1 cursor-pointer rounded-[3px] bg-white px-0 font-normal text-black hover:bg-zinc-100"
-                      onClick={() =>
-                        onOpen({ type: 'auth-modal', actionId: 'register' })
-                      }
-                    >
-                      Register
-                    </Button>
-                  </div>
-                ) : (
-                  <Button
-                    variant="outline"
-                    onClick={() => setActiveTab('account')}
-                    className="w-full cursor-pointer rounded-[3px] border border-transparent bg-white font-normal text-zinc-900 shadow-sm transition-all duration-300 outline-none select-none hover:bg-zinc-100 dark:border-transparent dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100"
+        {/* Footer Area */}
+        <div className="sticky bottom-0 z-30 flex h-[64px] w-full flex-none flex-col justify-center border-t border-zinc-800/60 bg-black p-4 py-2.5">
+          {!isLeftSidebarOpen ? (
+            <div className="flex h-11 w-full items-center justify-center">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={toggleLeftSidebar}
+                    className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
                   >
-                    My Account
+                    <PanelLeftClose strokeWidth={1.5} className="size-4 rotate-180 text-zinc-800" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="right"
+                  className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                >
+                  Expand Sidebar
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          ) : isLoggedIn && activeTab === 'account' ? (
+            <div className="flex h-11 w-full items-center gap-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={toggleLeftSidebar}
+                    className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
+                  >
+                    <PanelLeftClose strokeWidth={1.5} className="size-4 text-zinc-800" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                >
+                  Collapse Sidebar
+                </TooltipContent>
+              </Tooltip>
+              <Button
+                variant="default"
+                className="flex-1 justify-center gap-2 rounded-[3px] border border-transparent bg-white font-normal text-black hover:bg-zinc-100"
+                onClick={() => {
+                  setActiveTab('search');
+                  router.push(isLoggedIn ? '/c/new-search' : '/');
+                }}
+              >
+                Return to App
+              </Button>
+            </div>
+          ) : (
+            <div className="flex h-11 w-full items-center gap-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={toggleLeftSidebar}
+                    className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
+                  >
+                    <PanelLeftClose strokeWidth={1.5} className="size-4 text-zinc-800" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                >
+                  Collapse Sidebar
+                </TooltipContent>
+              </Tooltip>
+
+              {!isLoggedIn ? (
+                <div className="flex flex-1 items-center gap-2">
+                  <Button
+                    type="button"
+                    variant="default"
+                    className="flex-1 cursor-pointer rounded-[3px] bg-white px-0 font-normal text-black hover:bg-zinc-100"
+                    onClick={() =>
+                      onOpen({ type: 'auth-modal', actionId: 'login' })
+                    }
+                  >
+                    Login
                   </Button>
-                )}
-              </div>
-            )}
-          </div>
-        </>
-      )}
+                  <Button
+                    type="button"
+                    variant="default"
+                    className="flex-1 cursor-pointer rounded-[3px] bg-white px-0 font-normal text-black hover:bg-zinc-100"
+                    onClick={() =>
+                      onOpen({ type: 'auth-modal', actionId: 'register' })
+                    }
+                  >
+                    Register
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  onClick={() => setActiveTab('account')}
+                  className="flex-1 cursor-pointer rounded-[3px] border border-transparent bg-white font-normal text-zinc-900 shadow-sm transition-all duration-300 outline-none select-none hover:bg-zinc-100 dark:border-transparent dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100"
+                >
+                  My Account
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
     </div>
   )}
 
