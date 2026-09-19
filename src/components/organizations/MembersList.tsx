@@ -295,7 +295,7 @@ function MembersListComponent({
             return (
               <div
                 key={member._id}
-                className="group relative w-full h-12 flex items-center bg-white dark:bg-gray-900/30 border border-black/10 dark:border-white/10 rounded-2xl shadow-xs pr-2 pl-4 gap-0"
+                className="group relative w-full h-12 flex items-center bg-white dark:bg-gray-900/30 border border-black/10 dark:border-white/10 rounded-[5px] shadow-xs pr-2 pl-4 gap-0"
               >
                 {/* Email */}
                 <div className="flex-1 min-w-0 pr-4">
@@ -312,38 +312,38 @@ function MembersListComponent({
                   <div className="flex-none w-[105px] h-full flex items-center justify-center">
                     {isTenantAdminOrOwner ? (
                       <DropdownMenu>
-                        <DropdownMenuTrigger className="flex items-center gap-1 text-xs font-semibold text-gray-800 dark:text-gray-200 hover:text-gray-500 hover:bg-black/5 dark:hover:bg-white/5 px-2 py-1 rounded-md transition-all cursor-pointer border-none outline-none focus:outline-none select-none">
+                        <DropdownMenuTrigger className="flex items-center gap-1 text-xs font-semibold text-gray-800 dark:text-gray-200 hover:text-gray-500 hover:bg-black/5 dark:hover:bg-white/5 px-2 py-1 rounded-[3px] transition-all cursor-pointer border-none outline-none focus:outline-none select-none">
                           {getPlanDisplay(mockRoles[member._id] ?? memberRole)}
                           <ChevronDown className="h-3 w-3 text-gray-400" />
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="center" className="border-black/10 dark:border-white/10 bg-white dark:bg-zinc-955 min-w-[100px] rounded-xl shadow-lg z-30">
+                        <DropdownMenuContent align="center" className="border-black/10 dark:border-white/10 bg-white dark:bg-zinc-955 min-w-[100px] rounded-[5px] shadow-lg z-30">
                           <DropdownMenuItem
                             onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-10')}
-                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-[3px]"
                           >
                             $10
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-20')}
-                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-[3px]"
                           >
                             $20
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-50')}
-                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-[3px]"
                           >
                             $50
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-100')}
-                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-[3px]"
                           >
                             $100
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-200')}
-                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
+                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-[3px]"
                           >
                             $200
                           </DropdownMenuItem>
@@ -366,7 +366,7 @@ function MembersListComponent({
                         <button
                           type="button"
                           onClick={() => setMemberToRemove(member)}
-                          className="h-7 w-7 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 transition-all duration-150 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100"
+                          className="h-7 w-7 rounded-[3px] text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 transition-all duration-150 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100"
                           title={isInvitation ? "Cancel Invitation" : "Remove Member"}
                         >
                           <Trash2 className="h-4 w-4" />

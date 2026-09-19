@@ -46,7 +46,7 @@ export default function AdminTeamMembersPage() {
 
       {/* Fixed Bottom Bar */}
       {totalPages > 1 && (
-        <div className="h-[52px] border-t border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-white dark:bg-gray-950 z-20">
+        <div className="h-[64px] border-t border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-white dark:bg-gray-950 z-20">
           <button
             type="button"
             onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
