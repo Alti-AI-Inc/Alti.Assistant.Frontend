@@ -328,28 +328,31 @@ export default function ConversationsList({
         return (
           <div
             className={cn(
-              "group flex h-9 w-full items-center justify-between rounded-lg text-xs font-normal text-left transition-all duration-300 border mb-1.5 cursor-pointer select-none",
+              "group flex h-9 w-full items-center justify-between rounded-[3px] text-xs font-normal text-left transition-all duration-200 mb-1.5 cursor-pointer select-none shadow-sm",
               isActive
-                ? "bg-[#0000ff]/15 border-[#0000ff] text-white font-semibold shadow-[0_0_20px_rgba(0,0,255,0.55)]"
-                : "bg-[#0000ff]/10 border-[#0000ff]/35 text-zinc-300 hover:bg-[#0000ff]/20 hover:border-[#0000ff]/50 hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] hover:text-white"
+                ? "bg-[#d0d0d0] text-black"
+                : "bg-[#e1e1e1] text-black hover:bg-[#d8d8d8]"
             )}
             key={chat._id}
           >
             <span
-              className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center"
+              className="flex-1 cursor-pointer truncate px-2.5 py-2 flex items-center text-black"
               onClick={() => handleConversationClick(chat.conversationId)}
             >
-              <span className="truncate">{getDisplayTitle(chat.title)}</span>
+              <span className="truncate text-black font-normal">{getDisplayTitle(chat.title)}</span>
             </span>
 
             <DropdownMenu>
               <DropdownMenuTrigger className="focus-visible:outline-none">
-                <EllipsisVertical className={cn(
-                  "mr-2 rotate-90 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-colors",
-                  isActive ? "text-white" : "text-zinc-400 group-hover:text-zinc-100"
-                )} />
+                <EllipsisVertical
+                  strokeWidth={1.5}
+                  className={cn(
+                    "mr-2 rotate-90 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-colors",
+                    isActive ? "text-black" : "text-zinc-700 hover:text-black"
+                  )}
+                />
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="rounded-2xl">
+              <DropdownMenuContent align="end" className="rounded-[3px]">
                 <DropdownMenuItem
                   onClick={() => {
                     setTimeout(() => {
