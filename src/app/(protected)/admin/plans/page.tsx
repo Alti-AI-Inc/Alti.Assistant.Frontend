@@ -26,7 +26,7 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo',
     description:
       'Test out Aphura’s capabilities with basic search and model limits.',
-    features: ['100 Search'],
+    features: ['100 Inputs'],
   },
   {
     id: 'basic',
@@ -35,7 +35,7 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo',
     description:
       'For casual users looking for more queries and standard model access.',
-    features: ['500 Search'],
+    features: ['500 Inputs'],
   },
   {
     id: 'individual',
@@ -44,7 +44,7 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo',
     description:
       'For developers requiring advanced reasoning and deep research.',
-    features: ['1,000 Search'],
+    features: ['1,000 Inputs'],
   },
   {
     id: 'professional',
@@ -53,7 +53,7 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo',
     description:
       'For small teams needing collaborative workspaces and higher limits.',
-    features: ['2,500 Search'],
+    features: ['2,500 Inputs'],
   },
   {
     id: 'business',
@@ -61,7 +61,7 @@ const ALL_PLANS: PricingPlan[] = [
     price: '$100',
     period: '/mo',
     description: 'Uncapped search throughput and enterprise-grade models.',
-    features: ['5,000 Search'],
+    features: ['5,000 Inputs'],
   },
   {
     id: 'enterprise',
@@ -70,7 +70,7 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo',
     description:
       'For large-scale operations requiring maximum throughput and limits.',
-    features: ['10,000 Search'],
+    features: ['10,000 Inputs'],
   },
 ];
 
