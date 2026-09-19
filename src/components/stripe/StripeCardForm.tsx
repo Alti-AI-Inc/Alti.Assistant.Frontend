@@ -136,7 +136,7 @@ export function StripeCardForm({
       <div className="space-y-4">
         {/* Error Banner when Stripe is not available */}
         {!isAvailable && status === 'error' && (
-          <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-900/30 dark:bg-amber-950/20">
+          <div className="rounded-[5px] border border-amber-200 bg-amber-50 p-4 dark:border-amber-900/30 dark:bg-amber-950/20">
             <div className="flex gap-3">
               <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
               <div className="space-y-1 flex-1">
@@ -171,12 +171,12 @@ export function StripeCardForm({
             onChange={(e) => setCardholderName(e.target.value)}
             placeholder="Enter Cardholder Name"
             disabled={disabled || !isAvailable}
-            className="h-10 text-sm font-sans text-[#09090b] dark:text-[#fafafa] placeholder:text-[#71717a] dark:placeholder:text-[#a1a1aa] border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-black/20 focus:shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-lg"
+            className="h-10 text-sm font-sans text-[#09090b] dark:text-[#fafafa] placeholder:text-[#71717a] dark:placeholder:text-[#a1a1aa] border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-black/20 focus:shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-[5px]"
           />
 
           <div
             className={cn(
-              "flex h-10 w-full min-w-0 rounded-lg border bg-white dark:bg-zinc-900 px-3 shadow-xs transition-all outline-none items-center",
+              "flex h-10 w-full min-w-0 rounded-[5px] border bg-white dark:bg-zinc-900 px-3 shadow-xs transition-all outline-none items-center",
               !isAvailable
                 ? "border-zinc-150 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 opacity-60 cursor-not-allowed"
                 : focusedField === 'number'
@@ -217,7 +217,7 @@ export function StripeCardForm({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div
             className={cn(
-              "flex h-10 w-full min-w-0 rounded-lg border bg-white dark:bg-zinc-900 px-3 shadow-xs transition-all outline-none items-center",
+              "flex h-10 w-full min-w-0 rounded-[5px] border bg-white dark:bg-zinc-900 px-3 shadow-xs transition-all outline-none items-center",
               !isAvailable
                 ? "border-zinc-150 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 opacity-60 cursor-not-allowed"
                 : focusedField === 'expiry'
@@ -250,7 +250,7 @@ export function StripeCardForm({
 
           <div
             className={cn(
-              "flex h-10 w-full min-w-0 rounded-lg border bg-white dark:bg-zinc-900 px-3 shadow-xs transition-all outline-none items-center",
+              "flex h-10 w-full min-w-0 rounded-[5px] border bg-white dark:bg-zinc-900 px-3 shadow-xs transition-all outline-none items-center",
               !isAvailable
                 ? "border-zinc-150 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 opacity-60 cursor-not-allowed"
                 : focusedField === 'cvc'

@@ -93,7 +93,7 @@ function BillingFormContent() {
         <Button
           onClick={handleSaveCard}
           disabled={isSaving || !isCardComplete || !isCardReady || !isAvailable}
-          className="bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 text-xs h-10 px-6 rounded-lg shadow-md hover:shadow-lg transition-all shrink-0"
+          className="bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 text-xs h-10 px-6 rounded-[3px] shadow-md hover:shadow-lg transition-all shrink-0"
         >
           {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin shrink-0" />}
           {isSaving ? 'Saving Card...' : 'Save Card'}

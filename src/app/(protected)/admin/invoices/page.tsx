@@ -161,7 +161,7 @@ export default function AdminInvoicesPage() {
           <div className="flex flex-col space-y-3 relative z-10 !mt-0">
             
             {/* Desktop Table Headers */}
-            <div className="hidden md:flex items-center justify-between py-2 px-4 gap-4 sticky top-0 bg-white/80 dark:bg-gray-955/80 backdrop-blur-md z-20 border-b border-black/10 dark:border-white/10 mb-4 rounded-t-lg">
+            <div className="hidden md:flex items-center justify-between py-2 px-4 gap-4 sticky top-0 bg-white/80 dark:bg-gray-955/80 backdrop-blur-md z-20 border-b border-black/10 dark:border-white/10 mb-4 rounded-[5px]">
               <div className="flex items-center gap-4 flex-1">
                 <div className="flex-1 min-w-0">
                   <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Invoice ID</span>
@@ -179,7 +179,7 @@ export default function AdminInvoicesPage() {
             {paginatedInvoices.map((invoice) => (
               <div
                 key={invoice.id}
-                className="group flex flex-col md:flex-row md:items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-2xl shadow-xs gap-4 hover:border-black/20 dark:hover:border-white/20 transition-all duration-150"
+                className="group flex flex-col md:flex-row md:items-center justify-between py-3 px-4 border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900/30 rounded-[5px] shadow-xs gap-4 hover:border-black/20 dark:hover:border-white/20 transition-all duration-150"
               >
                 <div className="flex flex-col md:flex-row md:items-center gap-4 flex-1">
                   
@@ -210,7 +210,7 @@ export default function AdminInvoicesPage() {
                       size="sm"
                       onClick={() => handleDownloadPDF(invoice)}
                       disabled={isGenerating === invoice.id}
-                      className="text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1.5 cursor-pointer bg-blue-50/50 dark:bg-blue-950/20 px-3 py-1 rounded-lg"
+                      className="text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1.5 cursor-pointer bg-blue-50/50 dark:bg-blue-950/20 px-3 py-1 rounded-[3px]"
                     >
                       <Download className="h-3.5 w-3.5" />
                       {isGenerating === invoice.id ? 'Generating...' : 'PDF'}
