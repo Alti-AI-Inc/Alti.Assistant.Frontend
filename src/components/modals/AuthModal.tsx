@@ -213,7 +213,7 @@ export function AuthModal() {
                           {...field}
                           type="email"
                           placeholder="Email Address"
-                          className="w-full rounded-[5px] border-none bg-[#d4d4d8] bg-auth-input p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
+                          className="w-full rounded-[5px] border-none bg-[#e1e1e1] bg-auth-input p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
                         />
                       </FormControl>
                       <FormMessage />
@@ -254,7 +254,7 @@ export function AuthModal() {
                           {...field}
                           type="email"
                           placeholder="Email Address"
-                          className="w-full rounded-[5px] border-none bg-[#d4d4d8] bg-auth-input p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
+                          className="w-full rounded-[5px] border-none bg-[#e1e1e1] bg-auth-input p-3 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
                         />
                       </FormControl>
                       <FormMessage />
@@ -273,7 +273,7 @@ export function AuthModal() {
                             {...field}
                             type={isPasswordVisible ? 'text' : 'password'}
                             placeholder="Password"
-                            className="w-full rounded-[5px] border-none bg-[#d4d4d8] bg-auth-input p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
+                            className="w-full rounded-[5px] border-none bg-[#e1e1e1] bg-auth-input p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
                           />
                         </FormControl>
                         <button
@@ -308,7 +308,7 @@ export function AuthModal() {
                               isConfirmPasswordVisible ? 'text' : 'password'
                             }
                             placeholder="Confirm Password"
-                            className="w-full rounded-[5px] border-none bg-[#d4d4d8] bg-auth-input p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
+                            className="w-full rounded-[5px] border-none bg-[#e1e1e1] bg-auth-input p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
                           />
                         </FormControl>
                         <button
@@ -375,7 +375,7 @@ export function AuthModal() {
                   setVerifyCode(e.target.value.replace(/\D/g, '').slice(0, 6));
                   setVerifyError(null);
                 }}
-                className="w-full rounded-[5px] border-none bg-[#d4d4d8] bg-auth-input p-3 text-center text-xl tracking-[0.5em] text-black outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white"
+                className="w-full rounded-[5px] border-none bg-[#e1e1e1] bg-auth-input p-3 text-center text-xl tracking-[0.5em] text-black outline-none focus-visible:ring-0 dark:bg-zinc-800 dark:text-white"
               />
 
               {verifyError && (
