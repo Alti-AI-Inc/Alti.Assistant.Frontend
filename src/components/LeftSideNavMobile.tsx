@@ -1044,9 +1044,14 @@ const LeftSideNavMobile = () => {
                     router.push('/admin');
                     close();
                   }}
-                  className="group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border border-[#0000ff]/35 bg-[#0000ff]/10 px-3 text-left text-xs text-zinc-300 transition-all duration-300 select-none hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)] focus:outline-none"
+                  className={cn(
+                    "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
+                    pathname.startsWith('/admin')
+                      ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+                      : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+                  )}
                 >
-                  <Shield className="h-3.5 w-3.5 flex-shrink-0 text-[#8080ff] transition-colors group-hover:text-white" />
+                  <Shield className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin') ? "text-white" : "text-zinc-400 group-hover:text-white")} />
                   <span>Owner Platform</span>
                 </button>
               )}
@@ -1058,10 +1063,10 @@ const LeftSideNavMobile = () => {
                       close();
                     }}
                     className={cn(
-                      'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 text-left text-xs transition-all duration-300 select-none focus:outline-none',
+                      "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
                       pathname.startsWith('/admin/plans')
-                        ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
-                        : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
+                        ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+                        : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
                     )}
                   >
                     <LayoutGrid
@@ -1069,7 +1074,7 @@ const LeftSideNavMobile = () => {
                         'h-3.5 w-3.5 flex-shrink-0 transition-colors',
                         pathname.startsWith('/admin/plans')
                           ? 'text-white'
-                          : 'text-[#8080ff] group-hover:text-white',
+                          : 'text-zinc-400 group-hover:text-white',
                       )}
                     />
                     <span>Plans</span>
@@ -1081,10 +1086,10 @@ const LeftSideNavMobile = () => {
                       close();
                     }}
                     className={cn(
-                      'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 text-left text-xs transition-all duration-300 select-none focus:outline-none',
+                      "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
                       pathname.startsWith('/admin/team-members')
-                        ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
-                        : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
+                        ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+                        : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
                     )}
                   >
                     <Users
@@ -1092,7 +1097,7 @@ const LeftSideNavMobile = () => {
                         'h-3.5 w-3.5 flex-shrink-0 transition-colors',
                         pathname.startsWith('/admin/team-members')
                           ? 'text-white'
-                          : 'text-[#8080ff] group-hover:text-white',
+                          : 'text-zinc-400 group-hover:text-white',
                       )}
                     />
                     <span>Members</span>
@@ -1103,10 +1108,10 @@ const LeftSideNavMobile = () => {
                       close();
                     }}
                     className={cn(
-                      'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 text-left text-xs transition-all duration-300 select-none focus:outline-none',
+                      "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
                       pathname.startsWith('/admin/billing')
-                        ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
-                        : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
+                        ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+                        : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
                     )}
                   >
                     <CreditCard
@@ -1114,7 +1119,7 @@ const LeftSideNavMobile = () => {
                         'h-3.5 w-3.5 flex-shrink-0 transition-colors',
                         pathname.startsWith('/admin/billing')
                           ? 'text-white'
-                          : 'text-[#8080ff] group-hover:text-white',
+                          : 'text-zinc-400 group-hover:text-white',
                       )}
                     />
                     <span>Billing</span>
@@ -1125,10 +1130,10 @@ const LeftSideNavMobile = () => {
                       close();
                     }}
                     className={cn(
-                      'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 text-left text-xs transition-all duration-300 select-none focus:outline-none',
+                      "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
                       pathname.startsWith('/admin/invoices')
-                        ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
-                        : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
+                        ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+                        : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
                     )}
                   >
                     <FileText
@@ -1136,7 +1141,7 @@ const LeftSideNavMobile = () => {
                         'h-3.5 w-3.5 flex-shrink-0 transition-colors',
                         pathname.startsWith('/admin/invoices')
                           ? 'text-white'
-                          : 'text-[#8080ff] group-hover:text-white',
+                          : 'text-zinc-400 group-hover:text-white',
                       )}
                     />
                     <span>Invoices</span>
@@ -1151,10 +1156,10 @@ const LeftSideNavMobile = () => {
                     close();
                   }}
                   className={cn(
-                    'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 text-left text-xs transition-all duration-300 select-none focus:outline-none',
+                    "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
                     pathname.startsWith('/change-password')
-                      ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
-                      : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
+                      ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+                      : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
                   )}
                 >
                   <KeyRound
@@ -1162,7 +1167,7 @@ const LeftSideNavMobile = () => {
                       'h-3.5 w-3.5 flex-shrink-0 transition-colors',
                       pathname.startsWith('/change-password')
                         ? 'text-white'
-                        : 'text-[#8080ff] group-hover:text-white',
+                        : 'text-zinc-400 group-hover:text-white',
                     )}
                   />
                   <span>Change Password</span>
@@ -1176,10 +1181,10 @@ const LeftSideNavMobile = () => {
                     close();
                   }}
                   className={cn(
-                    'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 text-left text-xs transition-all duration-300 select-none focus:outline-none',
+                    "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
                     pathname.startsWith('/legal')
-                      ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
-                      : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
+                      ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+                      : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
                   )}
                 >
                   <Scale
@@ -1187,7 +1192,7 @@ const LeftSideNavMobile = () => {
                       'h-3.5 w-3.5 flex-shrink-0 transition-colors',
                       pathname.startsWith('/legal')
                         ? 'text-white'
-                        : 'text-[#8080ff] group-hover:text-white',
+                        : 'text-zinc-400 group-hover:text-white',
                     )}
                   />
                   <span>Legal Documents</span>
@@ -1201,10 +1206,10 @@ const LeftSideNavMobile = () => {
                     close();
                   }}
                   className={cn(
-                    'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 text-left text-xs transition-all duration-300 select-none focus:outline-none',
+                    "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
                     pathname.startsWith('/contact-support')
-                      ? 'border-[#0000ff] bg-[#0000ff]/25 font-semibold text-white shadow-[0_0_15px_rgba(0,0,255,0.45)]'
-                      : 'border-[#0000ff]/35 bg-[#0000ff]/10 text-zinc-300 hover:border-[#0000ff]/50 hover:bg-[#0000ff]/20 hover:text-white hover:shadow-[0_0_15px_rgba(0,0,255,0.35)]',
+                      ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+                      : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
                   )}
                 >
                   <Mail
@@ -1212,7 +1217,7 @@ const LeftSideNavMobile = () => {
                       'h-3.5 w-3.5 flex-shrink-0 transition-colors',
                       pathname.startsWith('/contact-support')
                         ? 'text-white'
-                        : 'text-[#8080ff] group-hover:text-white',
+                        : 'text-zinc-400 group-hover:text-white',
                     )}
                   />
                   <span>Contact Support</span>
@@ -1224,9 +1229,9 @@ const LeftSideNavMobile = () => {
                   onOpen({ type: 'logout' });
                   close();
                 }}
-                className="group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-lg border border-red-500/30 bg-red-500/10 px-3 text-left text-xs text-red-200 transition-all duration-300 select-none hover:border-red-500/50 hover:bg-red-500/20 hover:text-white hover:shadow-[0_0_15px_rgba(239,68,68,0.25)] focus:outline-none"
+                className="group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] bg-[#1e1e24] text-red-400 px-3 text-left text-xs transition-all duration-150 select-none hover:bg-[#282830] hover:text-red-300 shadow-[0_2px_8px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)] focus:outline-none"
               >
-                <LogOut className="h-3.5 w-3.5 flex-shrink-0 text-red-400 transition-colors group-hover:text-white" />
+                <LogOut className="h-3.5 w-3.5 flex-shrink-0 text-red-400 transition-colors group-hover:text-red-300" />
                 <span>Logout Account</span>
               </button>
             </div>
