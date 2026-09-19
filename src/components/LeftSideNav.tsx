@@ -1188,7 +1188,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   <button
                     type="button"
                     onClick={toggleLeftSidebar}
-                    className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-[#e1e1e1] text-zinc-800 shadow-sm transition-all duration-200 hover:bg-[#d0d0d0] hover:text-black focus:outline-none"
+                    className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
                   >
                     <PanelLeftClose strokeWidth={1.5} className="size-4 text-zinc-800" />
                   </button>
@@ -1205,7 +1205,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                 activeBotId === null ? (
                   /* General Mode */
                 <>
-                  <div className="flex h-9 flex-1 items-center overflow-hidden rounded-[3px] bg-[#e1e1e1] px-2.5 shadow-sm transition-all duration-200">
+                  <div className="flex h-9 flex-1 items-center overflow-hidden rounded-[3px] bg-white px-2.5 shadow-sm transition-all duration-200">
                     <input
                       type="text"
                       placeholder="Search..."
@@ -1226,7 +1226,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                           close();
                           router.push(isLoggedIn ? '/c/new-search' : '/');
                         }}
-                        className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-[#e1e1e1] text-zinc-800 shadow-sm transition-all duration-200 hover:bg-[#d0d0d0] hover:text-black focus:outline-none"
+                        className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
                       >
                         <Plus strokeWidth={1.5} className="size-4 text-zinc-800" />
                       </button>
@@ -1242,7 +1242,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               ) : (
                 /* Space Mode */
                 <>
-                  <div className="flex h-9 flex-1 items-center overflow-hidden rounded-[3px] bg-[#e1e1e1] shadow-sm transition-all duration-200">
+                  <div className="flex h-9 flex-1 items-center overflow-hidden rounded-[3px] bg-white shadow-sm transition-all duration-200">
                     <div className="flex h-full flex-1 items-center px-2.5">
                       <input
                         type="text"
@@ -1256,7 +1256,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                       <DropdownMenuTrigger asChild>
                         <button
                           type="button"
-                          className="flex h-full w-9 cursor-pointer items-center justify-center border-l border-black/10 text-zinc-700 transition-colors hover:bg-[#d0d0d0] hover:text-black focus:outline-none"
+                          className="flex h-full w-9 cursor-pointer items-center justify-center border-l border-black/10 text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-black focus:outline-none"
                           title="Space Settings"
                         >
                           <EllipsisVertical className="size-4 text-zinc-800" />
@@ -1315,7 +1315,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                           setActiveConversation(null);
                           router.push(`/spaces?bot=${activeBotId}`);
                         }}
-                        className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-[#e1e1e1] text-zinc-800 shadow-sm transition-all duration-200 hover:bg-[#d0d0d0] hover:text-black focus:outline-none"
+                        className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
                       >
                         <Plus strokeWidth={1.5} className="size-4 text-zinc-800" />
                       </button>
@@ -1839,7 +1839,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               <div className="flex h-11 w-full items-center justify-center">
                 <Button
                   variant="default"
-                  className="w-full justify-center gap-2 rounded-[3px] border border-transparent bg-[#e1e1e1] font-normal text-black hover:bg-[#d0d0d0]"
+                  className="w-full justify-center gap-2 rounded-[3px] border border-transparent bg-white font-normal text-black hover:bg-zinc-100"
                   onClick={() => {
                     setActiveTab('search');
                     router.push(isLoggedIn ? '/c/new-search' : '/');
@@ -1855,7 +1855,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     <Button
                       type="button"
                       variant="default"
-                      className="flex-1 cursor-pointer rounded-[3px] bg-[#e1e1e1] px-0 font-normal text-black hover:bg-[#d0d0d0]"
+                      className="flex-1 cursor-pointer rounded-[3px] bg-white px-0 font-normal text-black hover:bg-zinc-100"
                       onClick={() =>
                         onOpen({ type: 'auth-modal', actionId: 'login' })
                       }
@@ -1865,7 +1865,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     <Button
                       type="button"
                       variant="default"
-                      className="flex-1 cursor-pointer rounded-[3px] bg-[#e1e1e1] px-0 font-normal text-black hover:bg-[#d0d0d0]"
+                      className="flex-1 cursor-pointer rounded-[3px] bg-white px-0 font-normal text-black hover:bg-zinc-100"
                       onClick={() =>
                         onOpen({ type: 'auth-modal', actionId: 'register' })
                       }
@@ -1877,7 +1877,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   <Button
                     variant="outline"
                     onClick={() => setActiveTab('account')}
-                    className="w-full cursor-pointer rounded-[3px] border border-transparent bg-[#e1e1e1] font-normal text-zinc-900 shadow-sm transition-all duration-300 outline-none select-none hover:bg-[#d0d0d0] dark:border-transparent dark:bg-[#e1e1e1] dark:text-zinc-900 dark:hover:bg-[#d0d0d0]"
+                    className="w-full cursor-pointer rounded-[3px] border border-transparent bg-white font-normal text-zinc-900 shadow-sm transition-all duration-300 outline-none select-none hover:bg-zinc-100 dark:border-transparent dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100"
                   >
                     My Account
                   </Button>

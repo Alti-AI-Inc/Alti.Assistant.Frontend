@@ -1220,7 +1220,7 @@ const LeftSideNavMobile = () => {
             <div className="animate-in fade-in flex h-full min-h-0 flex-col duration-200">
               {/* Search Bar Row */}
               <div className="flex w-full flex-none items-center border-b border-zinc-800/60 bg-black px-4 pt-3 pb-3 dark:bg-black">
-                <div className="flex h-9 w-full items-center overflow-hidden rounded-[3px] bg-[#e1e1e1] shadow-sm transition-all duration-200">
+                <div className="flex h-9 w-full items-center overflow-hidden rounded-[3px] bg-white shadow-sm transition-all duration-200">
                   <div className="flex h-full flex-1 items-center px-2.5">
                     <input
                       type="text"
@@ -1242,7 +1242,7 @@ const LeftSideNavMobile = () => {
                           close();
                           router.push(isLoggedIn ? '/c/new-search' : '/');
                         }}
-                        className="flex h-full w-9 items-center justify-center border-l border-black/10 text-zinc-700 transition-colors hover:bg-[#d0d0d0] hover:text-black focus:outline-none"
+                        className="flex h-full w-9 items-center justify-center border-l border-black/10 text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-black focus:outline-none"
                       >
                         <Plus strokeWidth={1.5} className="size-4 text-zinc-800" />
                       </button>
@@ -1629,7 +1629,7 @@ const LeftSideNavMobile = () => {
             <div className="flex h-11 w-full items-center justify-center">
               <Button
                 variant="default"
-                className="w-full justify-center gap-2 rounded-[3px] border border-transparent bg-[#e1e1e1] font-normal text-black hover:bg-[#d0d0d0]"
+                className="w-full justify-center gap-2 rounded-[3px] border border-transparent bg-white font-normal text-black hover:bg-zinc-100"
                 onClick={() => {
                   setActiveTab('search');
                   router.push(isLoggedIn ? '/c/new-search' : '/');
@@ -1646,7 +1646,7 @@ const LeftSideNavMobile = () => {
                   <Button
                     type="button"
                     variant="default"
-                    className="flex-1 cursor-pointer rounded-[3px] bg-[#e1e1e1] px-0 font-normal text-black hover:bg-[#d0d0d0]"
+                    className="flex-1 cursor-pointer rounded-[3px] bg-white px-0 font-normal text-black hover:bg-zinc-100"
                     onClick={() => {
                       close();
                       onOpen({ type: 'auth-modal', actionId: 'login' });
@@ -1657,7 +1657,7 @@ const LeftSideNavMobile = () => {
                   <Button
                     type="button"
                     variant="default"
-                    className="flex-1 cursor-pointer rounded-[3px] bg-[#e1e1e1] px-0 font-normal text-black hover:bg-[#d0d0d0]"
+                    className="flex-1 cursor-pointer rounded-[3px] bg-white px-0 font-normal text-black hover:bg-zinc-100"
                     onClick={() => {
                       close();
                       onOpen({ type: 'auth-modal', actionId: 'register' });
@@ -1670,7 +1670,7 @@ const LeftSideNavMobile = () => {
                 <Button
                   variant="outline"
                   onClick={() => setActiveTab('account')}
-                  className="w-full cursor-pointer rounded-[3px] border border-transparent bg-[#e1e1e1] font-normal text-zinc-900 shadow-sm transition-all duration-300 outline-none select-none hover:bg-[#d0d0d0] dark:border-transparent dark:bg-[#e1e1e1] dark:text-zinc-900 dark:hover:bg-[#d0d0d0]"
+                  className="w-full cursor-pointer rounded-[3px] border border-transparent bg-white font-normal text-zinc-900 shadow-sm transition-all duration-300 outline-none select-none hover:bg-zinc-100 dark:border-transparent dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100"
                 >
                   My Account
                 </Button>
