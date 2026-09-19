@@ -1182,32 +1182,29 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
       {(isLeftSidebarOpen || !SHOW_WORKSPACES) && (
         <div className="flex h-full min-w-0 flex-1 flex-col bg-black overflow-hidden select-none">
           {/* Top Bar Row with Unified Collapse Button */}
-          <div className="flex w-full flex-none items-center gap-2 border-b border-zinc-800/60 bg-black px-4 pt-3 pb-3 dark:bg-black">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={toggleLeftSidebar}
-                  className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-[#e1e1e1] text-zinc-800 shadow-sm transition-all duration-200 hover:bg-[#d0d0d0] hover:text-black focus:outline-none"
+          {activeTab !== 'account' && (
+            <div className="flex w-full flex-none items-center gap-2 border-b border-zinc-800/60 bg-black px-4 pt-3 pb-3 dark:bg-black">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={toggleLeftSidebar}
+                    className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-[#e1e1e1] text-zinc-800 shadow-sm transition-all duration-200 hover:bg-[#d0d0d0] hover:text-black focus:outline-none"
+                  >
+                    <PanelLeftClose strokeWidth={1.5} className="size-4 text-zinc-800" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side={isLeftSidebarOpen ? 'bottom' : 'right'}
+                  className="border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
                 >
-                  <PanelLeftClose strokeWidth={1.5} className="size-4 text-zinc-800" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent
-                side={isLeftSidebarOpen ? 'bottom' : 'right'}
-                className="border border-b-2 border-white/10 border-b-white bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
-              >
-                {isLeftSidebarOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
-              </TooltipContent>
-            </Tooltip>
+                  {isLeftSidebarOpen ? 'Collapse Sidebar' : 'Expand Sidebar'}
+                </TooltipContent>
+              </Tooltip>
 
-            {isLeftSidebarOpen && (
-              activeTab === 'account' ? (
-                <div className="flex h-9 flex-1 items-center px-1">
-                  <span className="text-xs font-semibold text-white">Account Settings</span>
-                </div>
-              ) : activeBotId === null ? (
-                /* General Mode */
+              {isLeftSidebarOpen && (
+                activeBotId === null ? (
+                  /* General Mode */
                 <>
                   <div className="flex h-9 flex-1 items-center overflow-hidden rounded-[3px] bg-[#e1e1e1] px-2.5 shadow-sm transition-all duration-200">
                     <input
@@ -1339,6 +1336,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
               )
             )}
           </div>
+          )}
 
           {isLeftSidebarOpen && (
             <>
