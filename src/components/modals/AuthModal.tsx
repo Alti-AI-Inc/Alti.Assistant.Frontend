@@ -17,7 +17,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { useModalStore } from '@/stores/useModalStore';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -28,20 +27,11 @@ const loginSchema = z.object({
   password: z.string().optional(),
 });
 
-const registerSchema = z
-  .object({
-    email: z.string().email({ message: 'Please enter a valid email address' }),
-    password: z
-      .string()
-      .min(6, { message: 'Password must be at least 6 characters long' }),
-    confirmPassword: z
-      .string()
-      .min(6, { message: 'Password must be at least 6 characters long' }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword'],
-  });
+const registerSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  password: z.string().optional(),
+  confirmPassword: z.string().optional(),
+});
 
 export function AuthModal() {
   const { isOpen, type, onClose, actionId } = useModalStore();
@@ -53,8 +43,6 @@ export function AuthModal() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
 
   // Registration specific state
   const [showVerification, setShowVerification] = useState(false);
@@ -125,8 +113,8 @@ export function AuthModal() {
     try {
       const response = await RegisterUser({
         email: values.email,
-        password: values.password,
-        confirmPassword: values.confirmPassword,
+        password: values.password || '',
+        confirmPassword: values.confirmPassword || '',
       });
 
       if (response.success) {
@@ -175,16 +163,14 @@ export function AuthModal() {
         </DialogDescription>
 
         {/* Header */}
-        {(showVerification || view !== 'login') && (
+        {showVerification && (
           <div className="flex flex-col items-center space-y-2 text-center pt-2">
             <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">
-              {showVerification ? 'Verify Email' : 'Register Account'}
+              Verify Email
             </h2>
-            {showVerification && (
-              <p className="text-sm text-gray-500 dark:text-zinc-400">
-                Enter the 6-digit confirmation code sent to your email
-              </p>
-            )}
+            <p className="text-sm text-gray-500 dark:text-zinc-400">
+              Enter the 6-digit confirmation code sent to your email
+            </p>
           </div>
         )}
 
@@ -262,76 +248,6 @@ export function AuthModal() {
                   )}
                 />
 
-                <FormField
-                  control={registerForm.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="relative">
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type={isPasswordVisible ? 'text' : 'password'}
-                            placeholder="Password"
-                            className="w-full rounded-[5px] border-none bg-[#e1e1e1] bg-auth-input p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
-                          />
-                        </FormControl>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setIsPasswordVisible(!isPasswordVisible)
-                          }
-                          className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600 dark:text-zinc-400 dark:hover:text-white"
-                        >
-                          {isPasswordVisible ? (
-                            <EyeOff className="size-5" />
-                          ) : (
-                            <Eye className="size-5" />
-                          )}
-                        </button>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={registerForm.control}
-                  name="confirmPassword"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="relative">
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type={
-                              isConfirmPasswordVisible ? 'text' : 'password'
-                            }
-                            placeholder="Confirm Password"
-                            className="w-full rounded-[5px] border-none bg-[#e1e1e1] bg-auth-input p-3 pr-10 text-sm text-black outline-none placeholder:text-zinc-500 focus-visible:ring-0 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400"
-                          />
-                        </FormControl>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setIsConfirmPasswordVisible(
-                              !isConfirmPasswordVisible,
-                            )
-                          }
-                          className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600 dark:text-zinc-400 dark:hover:text-white"
-                        >
-                          {isConfirmPasswordVisible ? (
-                            <EyeOff className="size-5" />
-                          ) : (
-                            <Eye className="size-5" />
-                          )}
-                        </button>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 <button
                   type="submit"
                   disabled={isLoading}
@@ -344,20 +260,6 @@ export function AuthModal() {
                 </button>
               </form>
             </Form>
-
-            <div className="text-center text-sm text-gray-500 dark:text-zinc-400">
-              Already have an account?{' '}
-              <button
-                type="button"
-                onClick={() => {
-                  setView('login');
-                  setErrorMessage(null);
-                }}
-                className="font-semibold text-black hover:underline dark:text-white"
-              >
-                Login
-              </button>
-            </div>
           </div>
         )}
 
