@@ -36,7 +36,6 @@ import {
   EllipsisVertical,
   FileText,
   ImageIcon,
-  KeyRound,
   LayoutGrid,
   Loader2,
   LogOut,
@@ -1440,27 +1439,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   </>
                 )}
 
-                {!isSuperAdmin && (
-                  <button
-                    onClick={() => router.push('/change-password')}
-                    className={cn(
-                      "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
-                      pathname.startsWith('/change-password')
-                        ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                        : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                    )}
-                  >
-                    <KeyRound
-                      className={cn(
-                        'h-3.5 w-3.5 flex-shrink-0 transition-colors',
-                        pathname.startsWith('/change-password')
-                          ? 'text-white'
-                          : 'text-zinc-400 group-hover:text-white',
-                      )}
-                    />
-                    <span>Change Password</span>
-                  </button>
-                )}
 
                 {!isSuperAdmin && (
                   <button
