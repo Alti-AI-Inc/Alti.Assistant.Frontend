@@ -188,9 +188,9 @@ select:autofill:active {
 
 /* Gray input fields autofill override */
 input.bg-auth-input {
-  --autofill-bg: #EFEFF0 !important;
+  --autofill-bg: #d4d4d8 !important;
   --autofill-color: #1f2937 !important;
-  background-color: #EFEFF0 !important;
+  background-color: #d4d4d8 !important;
   color: #1f2937 !important;
 }
 
@@ -209,11 +209,11 @@ input.bg-auth-input:autofill,
 input.bg-auth-input:autofill:hover,
 input.bg-auth-input:autofill:focus,
 input.bg-auth-input:autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px #EFEFF0 inset !important;
-  box-shadow: 0 0 0 1000px #EFEFF0 inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #d4d4d8 inset !important;
+  box-shadow: 0 0 0 1000px #d4d4d8 inset !important;
   -webkit-text-fill-color: #1f2937 !important;
   color: #1f2937 !important;
-  background-color: #EFEFF0 !important;
+  background-color: #d4d4d8 !important;
   transition: background-color 50000s ease-in-out 0s, box-shadow 50000s ease-in-out 0s !important;
 }
 
