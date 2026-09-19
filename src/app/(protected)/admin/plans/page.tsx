@@ -22,8 +22,8 @@ const ALL_PLANS: PricingPlan[] = [
   {
     id: 'free',
     name: 'Starter',
-    price: 'Free',
-    period: ' (One-time trial)',
+    price: '$5',
+    period: '/mo',
     description:
       'Test out Aphura’s capabilities with basic search and model limits.',
     features: ['100 Search', '10 Research', '10 Monitor'],
@@ -160,11 +160,10 @@ export default function PlansPage() {
         ) : (
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col gap-4">
-              {ALL_PLANS.filter(p => !(p.id === 'free' && hideTrial)).map(
+              {ALL_PLANS.map(
                 plan => {
-                  const isFree = plan.id === 'free';
-                  const displayPrice = isFree ? 'FREE' : plan.price;
-                  const displayPeriod = isFree ? '/trial' : '/month';
+                  const displayPrice = plan.price;
+                  const displayPeriod = '/month';
 
                   return (
                     <Card
