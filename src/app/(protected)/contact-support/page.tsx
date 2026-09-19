@@ -112,13 +112,13 @@ const SupportContent = () => {
 
       {/* Sent Confirmation Modal */}
       <Dialog open={isSuccessOpen} onOpenChange={setIsSuccessOpen}>
-        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[350px] sm:max-w-[350px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[300px] sm:max-w-[300px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
           {/* Centered Content Section */}
-          <div className="px-6 pt-5 pb-4 text-center">
+          <div className="px-5 pt-5 pb-4 text-center">
             <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
               Message Sent
             </h2>
-            <p className="mt-2 text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed px-1">
+            <p className="mt-2 text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed">
               Your message has been sent.
               <br />
               Our team will reply to you soon.
