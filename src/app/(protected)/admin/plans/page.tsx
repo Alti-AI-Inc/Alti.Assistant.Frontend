@@ -119,7 +119,7 @@ export default function PlansPage() {
                   return (
                     <Card
                       key={plan.id}
-                      className="w-full rounded-md border-black/5 bg-white/80 p-5 shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-white/5 dark:bg-zinc-950/50"
+                      className="w-full rounded-[5px] border-black/5 bg-white/80 p-5 shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-white/5 dark:bg-zinc-950/50"
                     >
                       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         {/* Left Column: Pricing */}
@@ -159,7 +159,7 @@ export default function PlansPage() {
                             {plan.id === currentPlanId ? (
                               <button
                                 type="button"
-                                className="h-9 w-full cursor-pointer rounded-md border border-transparent bg-black text-xs font-bold text-white transition-all hover:opacity-90 active:scale-95 dark:bg-white dark:text-black"
+                                className="h-9 w-full cursor-pointer rounded-[3px] border border-transparent bg-black text-xs font-bold text-white transition-all hover:opacity-90 active:scale-95 dark:bg-white dark:text-black"
                               >
                                 Current Plan
                               </button>
@@ -181,7 +181,7 @@ export default function PlansPage() {
                                     }}
                                     disabled={isDisabled}
                                     aria-disabled={isDisabled}
-                                    className={`h-9 w-full rounded-md text-xs font-bold ${isDisabled ? 'cursor-not-allowed bg-zinc-200 text-zinc-400' : 'bg-[#0000ff] text-white hover:opacity-90 active:scale-95'} transition-all`}
+                                    className={`h-9 w-full rounded-[3px] text-xs font-bold ${isDisabled ? 'cursor-not-allowed bg-zinc-200 text-zinc-400' : 'bg-[#0000ff] text-white hover:opacity-90 active:scale-95'} transition-all`}
                                   >
                                     Select Plan
                                   </button>
