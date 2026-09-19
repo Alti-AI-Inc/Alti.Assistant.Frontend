@@ -1541,7 +1541,7 @@ const FullConversation = ({
         className={cn(
           'w-full shrink-0 px-4 transition-all duration-300 sm:px-6 lg:px-8',
           !showAsNewChat
-            ? 'mt-auto flex min-h-[64px] items-center justify-center border-t border-black/10 bg-[#e1e1e1] py-2 dark:border-zinc-800/60 dark:bg-zinc-950'
+            ? 'mt-auto flex min-h-[64px] items-center justify-center border-t border-black/10 bg-[#e1e1e1] py-0 dark:border-zinc-800/60 dark:bg-zinc-950'
             : 'border-t-0 bg-transparent pt-3 pb-0',
         )}
       >
