@@ -336,10 +336,9 @@ export default function ConversationsList({
             key={chat._id}
           >
             <span
-              className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center gap-2.5"
+              className="flex-1 cursor-pointer truncate px-3 py-2 flex items-center"
               onClick={() => handleConversationClick(chat.conversationId)}
             >
-              {getDisplayIcon(chat)}
               <span className="truncate">{getDisplayTitle(chat.title)}</span>
             </span>
 
