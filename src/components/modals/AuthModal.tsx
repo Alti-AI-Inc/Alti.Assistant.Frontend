@@ -34,6 +34,9 @@ export function AuthModal() {
       setEmail('');
       setOtp(['', '', '', '', '', '']);
       setErrorMessage(null);
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('otp_sent_at');
+      }
     }
   }, [actionId, isOpen]);
 
@@ -54,6 +57,9 @@ export function AuthModal() {
         setEmail('');
         setOtp(['', '', '', '', '', '']);
         setErrorMessage(null);
+        if (typeof window !== 'undefined') {
+          sessionStorage.removeItem('otp_sent_at');
+        }
       }, 300);
     }
   };
@@ -80,11 +86,17 @@ export function AuthModal() {
         });
 
         if (response.success) {
+          if (typeof window !== 'undefined') {
+            sessionStorage.setItem('otp_sent_at', Date.now().toString());
+          }
           setStep('otp');
         } else {
           setErrorMessage(response.message);
         }
       } else {
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('otp_sent_at', Date.now().toString());
+        }
         setStep('otp');
       }
     } catch {
@@ -178,10 +190,26 @@ export function AuthModal() {
             redirect: false,
           });
         }
+        if (typeof window !== 'undefined') {
+          sessionStorage.removeItem('otp_sent_at');
+        }
         onClose();
         window.location.reload();
       } else {
-        setErrorMessage(response.message || 'Invalid code. Please try again.');
+        const rawMsg = response.message || '';
+        const sentAtStr = typeof window !== 'undefined' ? sessionStorage.getItem('otp_sent_at') : null;
+        const sentAt = sentAtStr ? parseInt(sentAtStr, 10) : 0;
+        const isExpired = sentAt > 0 && Date.now() - sentAt > 5 * 60 * 1000;
+
+        if (/invalid or expired/i.test(rawMsg)) {
+          setErrorMessage(isExpired ? 'Token expired' : 'Invalid token');
+        } else if (/expired/i.test(rawMsg)) {
+          setErrorMessage('Token expired');
+        } else if (/invalid/i.test(rawMsg)) {
+          setErrorMessage('Invalid token');
+        } else {
+          setErrorMessage(rawMsg || 'Invalid token');
+        }
       }
     } catch {
       setErrorMessage('An error occurred. Please try again.');
