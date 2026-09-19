@@ -328,18 +328,20 @@ export default function ConversationsList({
         return (
           <div
             className={cn(
-              "group flex h-9 w-full items-center justify-between rounded-[3px] text-xs font-normal text-left transition-all duration-200 mb-1.5 cursor-pointer select-none shadow-sm",
+              "group flex h-9 w-full items-center justify-between rounded-[3px] text-xs transition-all duration-150 mb-1.5 cursor-pointer select-none border",
               isActive
-                ? "bg-[#d0d0d0] text-black"
-                : "bg-[#e1e1e1] text-black hover:bg-[#d8d8d8]"
+                ? "bg-[#273554] border-white/20 text-white font-medium shadow-sm"
+                : "bg-[#172033] border-white/[0.06] text-zinc-300 hover:bg-[#1e2942] hover:text-white hover:border-white/10"
             )}
             key={chat._id}
           >
             <span
-              className="flex-1 cursor-pointer truncate px-2.5 py-2 flex items-center text-black"
+              className="flex-1 cursor-pointer truncate px-2.5 py-2 flex items-center"
               onClick={() => handleConversationClick(chat.conversationId)}
             >
-              <span className="truncate text-black font-normal">{getDisplayTitle(chat.title)}</span>
+              <span className={cn("truncate", isActive ? "text-white font-medium" : "text-zinc-200 group-hover:text-white font-normal")}>
+                {getDisplayTitle(chat.title)}
+              </span>
             </span>
 
             <DropdownMenu>
@@ -348,7 +350,7 @@ export default function ConversationsList({
                   strokeWidth={1.5}
                   className={cn(
                     "mr-2 rotate-90 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-colors",
-                    isActive ? "text-black" : "text-zinc-700 hover:text-black"
+                    isActive ? "text-white" : "text-zinc-400 hover:text-white"
                   )}
                 />
               </DropdownMenuTrigger>
