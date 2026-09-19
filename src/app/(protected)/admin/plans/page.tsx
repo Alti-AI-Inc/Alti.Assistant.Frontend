@@ -4,8 +4,6 @@ import PaymentConfirmationModal from '@/components/stripe/PaymentConfirmationMod
 import StripeProviderWithErrorBoundary from '@/components/stripe/StripeProvider';
 import { Card } from '@/components/ui/card';
 import { useTenant } from '@/contexts/TenantContext';
-import { Loader2 } from 'lucide-react';
-import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -75,10 +73,7 @@ const ALL_PLANS: PricingPlan[] = [
 ];
 
 export default function PlansPage() {
-  const { data: session } = useSession();
   const { currentTenant } = useTenant();
-  const [hideTrial, setHideTrial] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [currentPlanId, setCurrentPlanId] = useState('free');
 
   // Custom Confirmation Dialog States
@@ -90,45 +85,6 @@ export default function PlansPage() {
     !currentTenant ||
     currentTenant.role === 'owner' ||
     currentTenant.role === 'admin';
-
-  useEffect(() => {
-    const checkSubscriptionAndTrial = async () => {
-      if (!session?.accessToken) {
-        setIsLoading(false);
-        return;
-      }
-      try {
-        const apiUrl =
-          process.env.NEXT_PUBLIC_API_URL || 'https://api.altihq.com/api/v1';
-        const res = await fetch(`${apiUrl}/auth/user/single-user`, {
-          headers: {
-            Authorization: `Bearer ${session.accessToken}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        if (res.ok) {
-          const body = await res.json();
-          if (body?.success && body?.data) {
-            const user = body.data;
-            const isSubscribed = user.isSubscribed;
-            const promptsUsed = user.freePlanUsage?.promptsUsed ?? 0;
-            const imagesUsed = user.freePlanUsage?.imagesUsed ?? 0;
-
-            // Hide trial if subscribed OR trial usage limits have been reached
-            if (isSubscribed || promptsUsed >= 100 || imagesUsed >= 1) {
-              setHideTrial(true);
-            }
-          }
-        }
-      } catch (err) {
-        console.error('Failed to check user subscription status:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkSubscriptionAndTrial();
-  }, [session]);
 
   // Restore persisted selection so hard-refresh preserves the chosen plan
   useEffect(() => {
@@ -153,13 +109,8 @@ export default function PlansPage() {
 
       {/* Main Workspace Body */}
       <div className="min-h-0 flex-1 overflow-y-auto px-8 py-6">
-        {isLoading ? (
-          <div className="flex h-64 items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />
-          </div>
-        ) : (
-          <div className="mx-auto max-w-7xl">
-            <div className="flex flex-col gap-4">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col gap-4">
               {ALL_PLANS.map(
                 plan => {
                   const displayPrice = plan.price;
@@ -246,7 +197,6 @@ export default function PlansPage() {
               )}
             </div>
           </div>
-        )}
       </div>
 
       {/* Real Stripe payment modal */}
