@@ -1924,10 +1924,10 @@ export default function ChatInput({
                         ? handleCreateTask
                         : handleSubmit
                     }
-                    className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-black/5 bg-[#e1e1e1] text-zinc-800 transition-all hover:bg-[#d0d0d0] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900"
+                    className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-[#0000ff] bg-[#0000ff] text-white shadow-[0_0_12px_rgba(0,0,255,0.4)] transition-all hover:bg-[#0000ff]/90 hover:shadow-[0_0_16px_rgba(0,0,255,0.55)] active:scale-95 focus:outline-none"
                     aria-label="Send Prompt"
                   >
-                    <ArrowUp strokeWidth={1.5} className="size-3.5" />
+                    <ArrowUp strokeWidth={1.5} className="size-3.5 text-white" />
                   </button>
                 )}
               </TooltipTrigger>

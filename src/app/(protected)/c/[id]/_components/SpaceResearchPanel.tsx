@@ -404,7 +404,10 @@ const SpaceResearchPanel = ({ spaceId }: { spaceId: string }) => {
               onClick={query.trim() ? handleSubmit : toggleListening}
               disabled={isSubmitting}
               className={cn(
-                'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md border border-black/5 bg-[#e1e1e1] text-zinc-800 transition-all hover:bg-[#d0d0d0] focus:outline-none disabled:opacity-50 dark:border-zinc-700/50 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900',
+                'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-md transition-all focus:outline-none disabled:opacity-50',
+                query.trim()
+                  ? 'border border-[#0000ff] bg-[#0000ff] text-white shadow-[0_0_12px_rgba(0,0,255,0.4)] hover:bg-[#0000ff]/90 hover:shadow-[0_0_16px_rgba(0,0,255,0.55)] active:scale-95'
+                  : 'border border-black/5 bg-[#e1e1e1] text-zinc-800 hover:bg-[#d0d0d0] dark:border-zinc-700/50 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900',
                 isListening &&
                   !query.trim() &&
                   'animate-pulse bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700',
