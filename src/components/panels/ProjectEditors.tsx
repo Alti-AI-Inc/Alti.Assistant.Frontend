@@ -298,10 +298,10 @@ export function DataEditor({ bot }: EditorProps) {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-500 transition-colors hover:text-zinc-800 focus:outline-none dark:text-zinc-400 dark:hover:text-zinc-100"
+                className="flex size-6 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-400 transition-colors hover:text-zinc-600 focus:outline-none dark:text-zinc-500 dark:hover:text-zinc-300"
                 aria-label="Attach files"
               >
-                <Paperclip strokeWidth={1.5} className="size-5" />
+                <Paperclip strokeWidth={1.5} className="size-3.5" />
               </button>
 
               <div 

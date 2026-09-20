@@ -1771,7 +1771,7 @@ export default function ChatInput({
 
           <div
             ref={containerRef}
-            className="relative flex min-h-[52px] w-full items-center gap-3 rounded-[5px] border border-zinc-300 bg-white px-3 py-1.5 shadow-xs transition-all duration-300 dark:border-zinc-700/80 dark:bg-zinc-800"
+            className="relative flex min-h-[52px] w-full items-center gap-1.5 rounded-[5px] border border-zinc-300 bg-white px-3 py-1.5 shadow-xs transition-all duration-300 dark:border-zinc-700/80 dark:bg-zinc-800"
           >
             {/* Attach Files Button */}
             <Tooltip>
@@ -1781,12 +1781,12 @@ export default function ChatInput({
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isLoadingResponse}
                   className={cn(
-                    'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-500 transition-colors hover:text-zinc-800 focus:outline-none dark:text-zinc-400 dark:hover:text-zinc-100',
+                    'flex size-6 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-400 transition-colors hover:text-zinc-600 focus:outline-none dark:text-zinc-500 dark:hover:text-zinc-300',
                     isLoadingResponse && 'cursor-not-allowed opacity-50',
                   )}
                   aria-label="Attach files"
                 >
-                  <Paperclip strokeWidth={1.5} className="size-5" />
+                  <Paperclip strokeWidth={1.5} className="size-3.5" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
@@ -1838,7 +1838,7 @@ export default function ChatInput({
                             : 'Enter prompt here...'
               }
               style={{ backgroundColor: 'transparent' }}
-              className="max-h-[160px] min-h-[36px] w-full flex-1 resize-none border-none bg-transparent px-1 py-1.5 text-gray-900 shadow-none outline-none placeholder:text-sm focus-visible:ring-0 dark:text-white"
+              className="max-h-[160px] min-h-[36px] w-full flex-1 resize-none border-none bg-transparent pl-0.5 pr-1 py-2 text-sm leading-5 text-gray-900 shadow-none outline-none placeholder:text-sm placeholder:text-zinc-400 focus-visible:ring-0 dark:text-white dark:placeholder:text-zinc-500"
               autoFocus
             />
 
