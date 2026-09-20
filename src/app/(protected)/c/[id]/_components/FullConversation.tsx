@@ -1055,7 +1055,7 @@ const FullConversation = ({
         <div
           className={cn(
             'mx-auto w-full space-y-6 py-6',
-            isSplit ? '' : 'max-w-5xl',
+            isSplit ? '' : 'max-w-4xl',
           )}
         >
           {mcpServerId && (
@@ -1547,7 +1547,7 @@ const FullConversation = ({
         <div
           className={cn(
             'mx-auto w-full transition-all duration-300',
-            showAsNewChat ? 'max-w-[796px]' : 'max-w-5xl',
+            showAsNewChat ? 'max-w-[796px]' : 'max-w-4xl',
           )}
         >
           {showAsNewChat && (

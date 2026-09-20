@@ -1693,7 +1693,7 @@ export default function ChatInput({
       <div
         className={cn(
           'relative z-20 mx-auto w-full space-y-6 px-0 transition-all duration-300',
-          isNewChat ? 'max-w-[796px]' : 'max-w-5xl',
+          isNewChat ? 'max-w-[796px]' : 'max-w-4xl',
         )}
       >
         {appParam && (
