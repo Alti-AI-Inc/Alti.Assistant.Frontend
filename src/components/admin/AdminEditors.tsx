@@ -314,10 +314,10 @@ export function AdminDataEditor() {
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="flex cursor-pointer items-center focus:outline-none"
-            aria-label="Upload"
+            className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-500 transition-colors hover:text-zinc-800 focus:outline-none dark:text-zinc-400 dark:hover:text-zinc-100"
+            aria-label="Attach files"
           >
-            <Paperclip className="size-7 flex-shrink-0 rounded-lg border-2 border-gray-300 bg-black p-1.5 text-white transition-colors hover:bg-gray-800" />
+            <Paperclip strokeWidth={1.5} className="size-5" />
           </button>
 
           <div 

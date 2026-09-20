@@ -1781,12 +1781,12 @@ export default function ChatInput({
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isLoadingResponse}
                   className={cn(
-                    'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-black/5 bg-[#e1e1e1] text-zinc-800 transition-all hover:bg-[#d0d0d0] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-900',
+                    'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-500 transition-colors hover:text-zinc-800 focus:outline-none dark:text-zinc-400 dark:hover:text-zinc-100',
                     isLoadingResponse && 'cursor-not-allowed opacity-50',
                   )}
                   aria-label="Attach files"
                 >
-                  <Paperclip strokeWidth={1.5} className="size-3.5" />
+                  <Paperclip strokeWidth={1.5} className="size-5" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
