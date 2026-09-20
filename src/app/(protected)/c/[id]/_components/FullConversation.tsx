@@ -1055,7 +1055,7 @@ const FullConversation = ({
         <div
           className={cn(
             'mx-auto w-full space-y-6 py-6',
-            isSplit ? '' : 'max-w-[796px]',
+            isSplit ? '' : 'max-w-5xl',
           )}
         >
           {mcpServerId && (
@@ -1544,7 +1544,12 @@ const FullConversation = ({
             : 'border-t-0 bg-transparent pt-3 pb-0',
         )}
       >
-        <div className="mx-auto w-full max-w-[796px]">
+        <div
+          className={cn(
+            'mx-auto w-full transition-all duration-300',
+            showAsNewChat ? 'max-w-[796px]' : 'max-w-5xl',
+          )}
+        >
           {showAsNewChat && (
             <div className="mb-6 flex justify-center">
               <img

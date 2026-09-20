@@ -1690,7 +1690,12 @@ export default function ChatInput({
         />
       )}
 
-      <div className="relative z-20 mx-auto w-full max-w-[796px] space-y-6 px-0">
+      <div
+        className={cn(
+          'relative z-20 mx-auto w-full space-y-6 px-0 transition-all duration-300',
+          isNewChat ? 'max-w-[796px]' : 'max-w-5xl',
+        )}
+      >
         {appParam && (
           <div className="animate-in fade-in mb-3 flex items-center justify-between rounded-xl border border-indigo-200/50 bg-indigo-50/50 px-4 py-2.5 shadow-xs duration-300 dark:border-indigo-900/50 dark:bg-indigo-950/20">
             <div className="flex items-center gap-2.5">

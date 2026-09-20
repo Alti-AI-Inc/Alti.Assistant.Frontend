@@ -13,7 +13,7 @@ export function WarningMessageModal({
   description = 'Please attach a file to start the review.',
 }: DocumentReviewConfirmationProps) {
   return (
-    <div className="mx-auto mb-4 w-full max-w-[796px] rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-sm">
+    <div className="mx-auto mb-4 w-full rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-sm">
       <div className="flex items-center gap-3">
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-100">
           <AlertTriangle className="h-4 w-4 text-amber-600" />

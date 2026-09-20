@@ -67,7 +67,7 @@ export function PlanDataComponent({
   }
 
   return (
-    <div className="w-full max-w-[796px] overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm my-4 flex flex-col transition-all duration-300 hover:border-zinc-300 dark:hover:border-zinc-700">
+    <div className="w-full overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm my-4 flex flex-col transition-all duration-300 hover:border-zinc-300 dark:hover:border-zinc-700">
       {/* Header */}
       <div className="border-b border-zinc-150 dark:border-zinc-800 p-5 bg-zinc-50/50 dark:bg-zinc-800/10">
         <div className="flex gap-3.5">
