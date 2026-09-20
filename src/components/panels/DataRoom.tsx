@@ -131,11 +131,6 @@ export const DataRoom = ({
         {/* Files List */}
 
         {matterFiles.length === 0 ? (
-          // <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-center dark:border-gray-700 dark:bg-gray-900">
-          //   <p className="text-xs text-gray-600 dark:text-gray-400">
-          //     No files uploaded for this matter yet
-          //   </p>
-          // </div>
           <></>
         ) : (
           <div className="space-y-2">

@@ -27,7 +27,6 @@ import {
   Image as ImageIcon,
   Video as VideoIcon,
   Volume2,
-  Zap,
   Microscope,
   PenTool,
   ClipboardCheck,

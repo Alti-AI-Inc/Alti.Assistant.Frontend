@@ -3,14 +3,12 @@ import { useEffect, Suspense } from 'react';
 
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
-import { cn } from '@/lib/utils';
-import { useConversationsStore, OPTIONS } from '@/stores/useConverstionsStore';
+import { useConversationsStore } from '@/stores/useConverstionsStore';
 import { useSession } from 'next-auth/react';
 
 function App() {
   const { data } = useSession();
   const { activeConversation, setActiveConversation, selectedOption, setSelectedOption } = useConversationsStore();
-  // const { data } = useSession();
   // console.log(data?.accessToken);
   useEffect(() => {
     setActiveConversation(null);

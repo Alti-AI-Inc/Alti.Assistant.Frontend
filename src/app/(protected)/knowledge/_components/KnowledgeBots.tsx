@@ -2,8 +2,6 @@
 
 import KnowledgeBaseFileUpload from '@/components/KnowledgeBaseFileUpload';
 import { Button } from '@/components/ui/button';
-// import { DeleteFilledIcon } from "@/components/dashboard/delete";
-// import DeleteModal from "@/components/delete";
 import { Input } from '@/components/ui/input';
 
 import { Spinner } from '@/components/ui/spinner';
@@ -18,7 +16,6 @@ import { ArrowLeft, SquarePen, Trash } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { FileList } from './FileList';
-// import { FileViewer } from './_components/FileViewer';
 
 function KnowledgeBots() {
   const router = useRouter();
@@ -138,14 +135,6 @@ function KnowledgeBots() {
             : 'flex-row flex-wrap gap-5'
         }`}
       >
-        {/* {!activeConversation?.knowledgebaseId && !isLoading && (
-          <div
-            className="flex size-40 cursor-pointer items-center justify-center rounded-2xl bg-black text-white"
-            onClick={() => onOpen({ type: 'create-knowledge-base' })}
-          >
-            New Bot
-          </div>
-        )} */}
         {isLoading || isLoadingFiles ? (
           <div className="flex h-[calc(100vh_-180px)] flex-1 items-center justify-center">
             <Spinner /> Loading...

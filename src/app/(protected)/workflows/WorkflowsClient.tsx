@@ -4,10 +4,8 @@ import { useEffect } from 'react';
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
 import { cn } from '@/lib/utils';
 import { useConversationsStore } from '@/stores/useConverstionsStore';
-import { useSession } from 'next-auth/react';
 
 function WorkflowsClient() {
-  const { data } = useSession();
   const { activeConversation, setActiveConversation } = useConversationsStore();
 
   useEffect(() => {

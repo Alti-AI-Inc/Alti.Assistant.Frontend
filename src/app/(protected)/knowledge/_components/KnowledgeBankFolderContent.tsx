@@ -6,7 +6,6 @@ import { useKnowledgeBankFolderContent } from '@/hooks/useKnowledgeBank';
 import { useModalStore } from '@/stores/useModalStore';
 import { Download, File, LoaderCircle, Trash } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-// import { Download, File, LoaderCircle, Trash } from 'lucide-react';
 import { useState } from 'react';
 
 export function KnowledgeBankFolderContent({ folderId }: { folderId: string }) {

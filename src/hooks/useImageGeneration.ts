@@ -487,7 +487,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       );
 
       // Add a simple "generating" message to chat
-      // const store = useImageGenStore.getState();
 
       setWorkflow('generating');
     },

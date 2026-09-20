@@ -724,7 +724,6 @@ const FullConversation = ({
   })();
 
   // console.log('activeConversation?.messages', activeConversation?.messages);
-  // const lastMessageRole = activeConversation?.messages.at(-1)?.role;
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   // Helper functions for ModeSelector

@@ -581,8 +581,6 @@ export default function ChatInput({
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  // const [message, setMessage] = useState('');
-
   const handleSelectOption = useCallback(
     (value: OPTIONS) => {
       const isDeselecting = selectedOption === value;
@@ -752,18 +750,6 @@ export default function ChatInput({
         return '/search/stream';
       case OPTIONS.MONITOR:
         return '/search/stream';
-      // case OPTIONS.GENERATE_PLAN:
-      //   return '/search/plan';
-      // case OPTIONS.GENERATE_REPORT:
-      //   return '/search/report';
-      // case OPTIONS.DRAFT_EMAIL:
-      //   return '/search/email';
-      // case OPTIONS.SUMMARIZE:
-      //   return '/search/summarize';
-      // case OPTIONS.EXTRACT_DATA:
-      //   return '/search/extract';
-      // case OPTIONS.Transcribe:
-      //   return '/search/transcribe';
       case OPTIONS.DRAFT_DOCUMENT:
         return '/documents/assistant';
       case OPTIONS.IMAGE:
@@ -774,10 +760,6 @@ export default function ChatInput({
   };
 
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}${getApiEndpoint()}`;
-  // console.log('apiUrl', apiUrl);
-  // console.log('token', data?.accessToken);
-  // console.log('userid', data?.user);
-  // console.log('knowledgebaseId', activeConversation?.knowledgebaseId);
   const mutation = useMutation({
     mutationFn: async ({
       message: userMessage,
