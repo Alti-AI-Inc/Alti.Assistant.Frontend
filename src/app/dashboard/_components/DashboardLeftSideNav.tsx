@@ -28,7 +28,7 @@ const DashboardLeftSideNav = () => {
 
   return (
     <>
-      <div className="fixed left-0 top-0 h-screen w-64 bg-white dark:bg-zinc-900 border-r border-black/10 dark:border-zinc-800/80 flex flex-col pt-4 pb-2">
+      <div className="hidden md:flex fixed left-0 top-0 h-screen w-64 bg-white dark:bg-zinc-900 border-r border-black/10 dark:border-zinc-800/80 flex-col pt-4 pb-2">
         <div
           className={cn(
             'bg-white dark:bg-zinc-900 sticky top-0 z-30 flex w-full items-center justify-between px-4 pt-2',

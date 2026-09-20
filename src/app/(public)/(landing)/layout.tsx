@@ -15,6 +15,7 @@ import { useSidebarStore } from '@/stores/useSidebarStore';
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function PublicLayout({
   children,
@@ -23,13 +24,14 @@ export default function PublicLayout({
 }>) {
   // ✅ Hook must be called inside component
   const { isLeftSidebarOpen } = useSidebarStore();
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <div className="fixed inset-0 flex flex-col overflow-hidden bg-background">
+    <div className="fixed inset-0 flex h-dvh flex-col overflow-hidden bg-background">
       {/* Header - Mobile only */}
       <header className="bg-white dark:bg-zinc-900 border-b border-black/10 dark:border-zinc-800 text-foreground fixed top-0 left-0 z-50 flex w-full items-center justify-between px-4 py-3 md:hidden">
         {/* Mobile Drawer (Sheet) */}
-        <Sheet>
+        <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
           <SheetTrigger asChild>
             <button className="rounded-md p-2">
               <Menu className="h-6 w-6" />

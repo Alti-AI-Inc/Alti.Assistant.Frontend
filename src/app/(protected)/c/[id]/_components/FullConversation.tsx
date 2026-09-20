@@ -1188,8 +1188,8 @@ const FullConversation = ({
                           console.error('Error details:', e);
                         }}
                       />
-                      {/* Hover Overlay */}
-                      <div className="absolute inset-0 flex items-center justify-center gap-3 bg-black/40 opacity-0 backdrop-blur-xs transition-all duration-300 group-hover:opacity-100">
+                      {/* Hover Overlay — always visible on mobile, hover on desktop */}
+                      <div className="absolute inset-0 flex items-center justify-center gap-3 bg-black/40 opacity-100 md:opacity-0 backdrop-blur-xs transition-all duration-300 md:group-hover:opacity-100">
                         <button
                           onClick={() => {
                             const img =
@@ -1465,16 +1465,16 @@ const FullConversation = ({
           )}
         />
       ) : isSplitScreen ? (
-        <div className="relative flex min-h-0 flex-grow flex-row bg-transparent transition-colors duration-300">
-          {/* Left Column: Chat history (45%) */}
+        <div className="relative flex min-h-0 flex-grow flex-col md:flex-row bg-transparent transition-colors duration-300">
+          {/* Left Column: Chat history */}
           <div
-            className="flex h-full min-h-0 w-[45%] flex-col overflow-y-auto border-r border-black/5 dark:border-zinc-800/80"
+            className="flex min-h-0 w-full md:w-[45%] flex-col overflow-y-auto border-b md:border-b-0 md:border-r border-black/5 dark:border-zinc-800/80 max-h-[50vh] md:max-h-none md:h-full"
             ref={messagesContainerRef}
           >
             {renderMessagesContent(true)}
           </div>
-          {/* Right Column: IDE panel (55%) */}
-          <div className="flex h-full min-h-0 w-[55%] flex-col justify-start overflow-y-auto bg-zinc-950/20 p-6">
+          {/* Right Column: IDE panel */}
+          <div className="flex min-h-0 w-full md:w-[55%] flex-col justify-start overflow-y-auto bg-zinc-950/20 p-4 md:p-6 flex-1 md:h-full">
             {codeData ? (
               <CodeIDEWidget
                 code={codeData.code}

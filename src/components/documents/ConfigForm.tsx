@@ -344,7 +344,7 @@ export function ConfigForm() {
           </p>
         </div>
         <div className="flex flex-col gap-5">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {renderSelect(
               'Report Type',
               reportGenerationConfig.reportType || '',
@@ -578,7 +578,7 @@ export function ConfigForm() {
           </p>
         </div>
         <div className="flex flex-col gap-5">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {renderSelect(
               'Plan Type',
               planGenerationConfig.planType || '',
@@ -630,7 +630,7 @@ export function ConfigForm() {
               updatePlanGenerationConfig({ brainstormAspects: vals as any }),
           )}
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {renderTextInput(
               'Budget',
               planGenerationConfig.constraints?.budget?.toString() || '',
@@ -683,7 +683,7 @@ export function ConfigForm() {
           </p>
         </div>
         <div className="flex flex-col gap-5">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {renderSelect(
               'Brainstorm Type',
               brainstormConfig.brainstormType || '',
@@ -750,7 +750,7 @@ export function ConfigForm() {
             val => updateBrainstormConfig({ additionalInstructions: val }),
           )}
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {renderTextInput(
               'Budget Constraint',
               brainstormConfig.constraints?.budget,
@@ -847,7 +847,7 @@ export function ConfigForm() {
           </div>
 
           {!isDetectMode && (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {renderSelect(
                 'Source Language',
                 translationConfig.sourceLanguage,

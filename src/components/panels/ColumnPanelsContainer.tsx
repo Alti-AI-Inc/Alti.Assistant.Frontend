@@ -135,7 +135,7 @@ export const ColumnPanelsContainer = () => {
   return (
     <div className="flex h-full w-full bg-gray-50 dark:bg-gray-900">
       {/* Panels Container - Always visible */}
-      <div className="flex overflow-hidden">
+      <div className="flex flex-col md:flex-row overflow-hidden">
         {/* Panel 1 - Workspace with Chat Options */}
         <ColumnPanel
           id="panel1"

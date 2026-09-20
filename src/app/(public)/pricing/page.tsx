@@ -33,7 +33,7 @@ export default function PricingPage() {
   ];
   return (
     <Tabs defaultValue="chat" className="mx-auto mt-10 w-5xl">
-      <TabsList className="mx-auto mb-10 grid w-[400px] grid-cols-2">
+      <TabsList className="mx-auto mb-10 grid w-full max-w-[400px] grid-cols-2">
         <TabsTrigger className="cursor-pointer" value="chat">
           Chat
         </TabsTrigger>

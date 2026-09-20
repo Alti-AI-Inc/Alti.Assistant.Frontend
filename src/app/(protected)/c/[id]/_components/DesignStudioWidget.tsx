@@ -30,7 +30,7 @@ export default function DesignStudioWidget({
   return (
     <div className="flex flex-col h-full w-full bg-white dark:bg-[#09090b] rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-sm relative">
       {/* Top Toolbar */}
-      <div className="flex items-center justify-between p-3 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50">
+      <div className="flex flex-wrap items-center justify-between gap-2 p-3 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50">
         <div className="flex items-center gap-2">
           <div className="p-1.5 bg-indigo-500/10 text-indigo-600 rounded-lg">
             <LayoutTemplate className="w-5 h-5" />

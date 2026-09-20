@@ -321,7 +321,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Main Workspace Body */}
-      <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6">
+      <div className="flex-1 overflow-y-auto min-h-0 px-4 py-4 md:px-8 md:py-6">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
 
 

@@ -199,7 +199,7 @@ export default function page() {
   return (
     <div className="mx-auto mt-4 mb-10 max-w-4xl p-4">
       <Tabs defaultValue="privacyPolicy">
-        <TabsList className="mx-auto mb-10 w-[400px]">
+        <TabsList className="mx-auto mb-10 w-full max-w-[400px]">
           <TabsTrigger className="cursor-pointer" value="privacyPolicy">
             Privacy Policy
           </TabsTrigger>

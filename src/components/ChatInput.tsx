@@ -1838,13 +1838,13 @@ export default function ChatInput({
                             : 'Enter prompt here...'
               }
               style={{ backgroundColor: 'transparent' }}
-              className="max-h-[160px] min-h-[36px] w-full flex-1 resize-none border-none bg-transparent pl-0.5 pr-1 py-2 text-sm leading-5 text-gray-900 shadow-none outline-none placeholder:text-sm placeholder:text-zinc-400 focus-visible:ring-0 dark:text-white dark:placeholder:text-zinc-500"
+              className="max-h-[160px] min-h-[36px] w-full flex-1 resize-none border-none bg-transparent pl-0.5 pr-1 py-2 text-base md:text-sm leading-5 text-gray-900 shadow-none outline-none placeholder:text-sm placeholder:text-zinc-400 focus-visible:ring-0 dark:text-white dark:placeholder:text-zinc-500"
               autoFocus
             />
 
             {/* Monitor Frequency Selector */}
             {selectedOption === OPTIONS.MONITOR && (
-              <div className="relative w-28 flex-shrink-0">
+              <div className="relative w-20 md:w-28 flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -1997,7 +1997,7 @@ export default function ChatInput({
 
                 {/* Trigger Section */}
                 <div className="flex min-w-0 flex-grow items-center gap-2">
-                  <span className="xs:inline hidden text-[10px] font-semibold tracking-wider text-zinc-400 uppercase select-none dark:text-zinc-500">
+                  <span className="sm:inline hidden text-[10px] font-semibold tracking-wider text-zinc-400 uppercase select-none dark:text-zinc-500">
                     Trigger
                   </span>
                   <div className="flex flex-shrink-0 rounded-lg border border-black/5 bg-zinc-100 p-0.5 dark:border-zinc-700/50 dark:bg-zinc-800">

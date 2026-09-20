@@ -2,7 +2,7 @@ export default function Page() {
   return (
     <div className="mx-auto -mt-10 flex min-h-[calc(100vh-80px)] flex-col items-center justify-center">
       <div className="flex flex-col gap-8">
-        <h1 className="text-center text-5xl font-semibold">API Cloud</h1>
+        <h1 className="text-center text-3xl font-semibold md:text-5xl">API Cloud</h1>
         <h4 className="text-center text-2xl font-semibold">
           Private AI Inference via API
         </h4>

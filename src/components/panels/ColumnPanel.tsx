@@ -65,7 +65,7 @@ export const ColumnPanel = ({
       {isVisible && (
         <>
           <div
-            className="relative flex flex-col overflow-hidden border-r border-gray-200 bg-white transition-all duration-300 ease-in-out dark:border-gray-800 dark:bg-gray-950"
+            className="relative flex flex-col overflow-hidden border-b md:border-b-0 md:border-r border-gray-200 bg-white transition-all duration-300 ease-in-out dark:border-gray-800 dark:bg-gray-950 max-md:!w-full max-md:!min-w-0 max-md:!max-w-none"
             style={{
               width: `${width}px`,
               minWidth: `${width}px`,
