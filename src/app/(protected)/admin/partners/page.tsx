@@ -271,12 +271,13 @@ export default function AdminPartnersPage() {
             {/* Structured list identical in layout to user lists */}
             <div className="flex-1 min-h-0 overflow-y-auto pr-1">
               {filteredPartners.length === 0 ? null : (
-                <div className="flex flex-col gap-2 pb-4">
-                  {filteredPartners.map(({ item, index }) => (
-                    <div
-                      key={index}
-                      className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center animate-in fade-in-50 duration-150"
-                    >
+                <div className="overflow-x-auto">
+                  <div className="flex flex-col gap-2 pb-4 min-w-[800px]">
+                    {filteredPartners.map(({ item, index }) => (
+                      <div
+                        key={index}
+                        className="grid grid-cols-12 min-w-[800px] gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center animate-in fade-in-50 duration-150"
+                      >
                       {/* Left Icon (KeyRound) & Content column merged */}
                       <div className="col-span-10 flex items-center gap-5 min-w-0">
                         <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-none">
@@ -485,7 +486,8 @@ export default function AdminPartnersPage() {
                     </div>
                   ))}
                 </div>
-              )}
+              </div>
+            )}
             </div>
           </div>
         </div>

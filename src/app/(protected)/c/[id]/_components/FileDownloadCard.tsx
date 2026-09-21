@@ -1,6 +1,6 @@
 import { FileText, Download } from 'lucide-react';
 import Link from 'next/link';
-import { GeneratedDocument } from '@/stores/useConverstionsStore';
+import { GeneratedDocument } from '@/stores/useConversationsStore';
 import { Button } from '@/components/ui/button';
 
 interface FileDownloadCardProps {

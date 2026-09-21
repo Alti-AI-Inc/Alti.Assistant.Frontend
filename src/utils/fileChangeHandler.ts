@@ -3,7 +3,7 @@
  * Encapsulates file upload logic for different options
  */
 
-import { OPTIONS } from '@/stores/useConverstionsStore';
+import { OPTIONS } from '@/stores/useConversationsStore';
 import { compressImage } from '@/utils/imageCompression';
 import {
   isFileUploadAllowed,

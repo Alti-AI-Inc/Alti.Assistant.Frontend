@@ -10,7 +10,7 @@ import { useActiveConversation } from '@/hooks/useConversations';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { useTranslation } from '@/hooks/useTranslation';
 import { cn, containsYouTubeUrl } from '@/lib/utils';
-import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
+import { OPTIONS, useConversationsStore } from '@/stores/useConversationsStore';
 import { useDocumentStore } from '@/stores/useDocumentStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
@@ -699,6 +699,7 @@ const FullConversation = ({
       const timer = setTimeout(() => scrollToBottom('smooth'), 100);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [isLoadingResponse, activeConversation?.messages?.length]);
 
   // When showStartLastMessage transitions from true -> false (response arrived),
@@ -710,6 +711,7 @@ const FullConversation = ({
       return () => clearTimeout(timer);
     }
     prevShowStartLastMessage.current = showStartLastMessage;
+    return undefined;
   }, [showStartLastMessage]);
 
   // When showStartLastMessage is set, scroll to the user's message

@@ -59,10 +59,6 @@ const getConnectSrc = () => {
 };
 
 const nextConfig: NextConfig = {
-  // Force a unique build ID on every deploy so browsers never serve stale JS chunks
-  generateBuildId: async () => {
-    return `build-${Date.now()}`;
-  },
   turbopack: {
     root: process.cwd(),
   },
@@ -75,14 +71,14 @@ const nextConfig: NextConfig = {
       dynamic: 0,
     },
   },
-  reactStrictMode: false,
+  reactStrictMode: true,
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'storage.googleapis.com',
         port: '',
-        pathname: '/insosearch_assistant_generated_photo/**',
+        pathname: '/aphura_assistant_generated_photo/**',
       },
       {
         protocol: 'https',
@@ -98,7 +94,15 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: '*.googleusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
       },
     ],
   },
@@ -155,7 +159,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
+            value: 'camera=(), microphone=(self), geolocation=()',
           },
         ],
       },

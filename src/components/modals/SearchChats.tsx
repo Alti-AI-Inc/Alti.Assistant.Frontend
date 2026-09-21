@@ -9,7 +9,7 @@ import {
 import { useSearchConversations } from '@/hooks/useConversations';
 import { useDebounce } from '@/hooks/useDebounce';
 import { formatConversationTitle } from '@/lib/utils';
-import { ActiveConversation } from '@/stores/useConverstionsStore';
+import { ActiveConversation } from '@/stores/useConversationsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';

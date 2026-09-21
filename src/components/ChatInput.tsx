@@ -44,7 +44,7 @@ import {
   OPTIONS,
   ROLES,
   useConversationsStore,
-} from '@/stores/useConverstionsStore';
+} from '@/stores/useConversationsStore';
 import { useBotsStore } from '@/stores/useBotsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { createFileChangeHandler } from '@/utils/fileChangeHandler';
@@ -2209,7 +2209,7 @@ export default function ChatInput({
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isLoadingResponse}
                   className={cn(
-                    'flex size-6 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-400 transition-colors hover:text-zinc-600 focus:outline-none dark:text-zinc-500 dark:hover:text-zinc-300',
+                    'flex size-8 sm:size-6 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-400 transition-colors hover:text-zinc-600 focus:outline-none dark:text-zinc-500 dark:hover:text-zinc-300',
                     isLoadingResponse && 'cursor-not-allowed opacity-50',
                   )}
                   aria-label="Attach files"
@@ -2323,7 +2323,7 @@ export default function ChatInput({
                   <button
                     type="button"
                     disabled
-                    className="text-zinc-650 dark:text-zinc-350 flex size-8 flex-shrink-0 cursor-not-allowed items-center justify-center rounded-[3px] border border-black/5 bg-[#e1e1e1] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-900"
+                    className="text-zinc-650 dark:text-zinc-350 flex size-10 sm:size-8 flex-shrink-0 cursor-not-allowed items-center justify-center rounded-[3px] border border-black/5 bg-[#e1e1e1] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-900"
                   >
                     <ArrowUp strokeWidth={1.5} className="size-3.5" />
                   </button>
@@ -2332,7 +2332,7 @@ export default function ChatInput({
                     type="button"
                     onClick={toggleListening}
                     className={cn(
-                      'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-[#0000ff] bg-[#0000ff] text-white transition-all hover:bg-[#0000ff]/90 focus:outline-none active:scale-95',
+                      'flex size-10 sm:size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-[#0000ff] bg-[#0000ff] text-white transition-all hover:bg-[#0000ff]/90 focus:outline-none active:scale-95',
                       isListening &&
                         'animate-pulse !border-red-600 !bg-red-600 text-white hover:!bg-red-700',
                     )}
@@ -2352,7 +2352,7 @@ export default function ChatInput({
                         ? handleCreateTask
                         : handleSubmit
                     }
-                    className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-[#0000ff] bg-[#0000ff] text-white transition-all hover:bg-[#0000ff]/90 focus:outline-none active:scale-95"
+                    className="flex size-10 sm:size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-[#0000ff] bg-[#0000ff] text-white transition-all hover:bg-[#0000ff]/90 focus:outline-none active:scale-95"
                     aria-label="Send Prompt"
                   >
                     <ArrowUp

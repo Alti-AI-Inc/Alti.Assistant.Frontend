@@ -17,7 +17,7 @@ import {
 import SpaceInboxView from '@/components/panels/SpaceInboxView';
 import { cn } from '@/lib/utils';
 import { useBotsStore } from '@/stores/useBotsStore';
-import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
+import { OPTIONS, useConversationsStore } from '@/stores/useConversationsStore';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   AlertCircle,

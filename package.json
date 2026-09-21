@@ -66,7 +66,7 @@
     "@types/react-dom": "^19",
     "@typescript-eslint/parser": "^8.29.0",
     "eslint": "^9",
-    "eslint-config-next": "15.2.4",
+    "eslint-config-next": "16.0.8",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.6",
@@ -76,7 +76,7 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "ngrok": "^4.3.0",
+    "@ngrok/ngrok": "^2.0.0",
     "concurrently": "^8.2.0",
     "http-proxy": "^1.18.1",
     "minimist": "^1.2.8"

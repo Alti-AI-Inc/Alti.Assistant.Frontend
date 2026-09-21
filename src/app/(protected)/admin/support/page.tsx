@@ -180,12 +180,13 @@ export default function AdminSupportInboxPage() {
                   No customer support requests found.
                 </div>
               ) : (
-                <div className="flex flex-col gap-2 pb-4">
-                  {filteredRequests.map((req) => (
-                    <div
-                      key={req.id}
-                      className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center animate-in fade-in-50 duration-150"
-                    >
+                <div className="overflow-x-auto">
+                  <div className="flex flex-col gap-2 pb-4 min-w-[800px]">
+                    {filteredRequests.map((req) => (
+                      <div
+                        key={req.id}
+                        className="grid grid-cols-12 min-w-[800px] gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center animate-in fade-in-50 duration-150"
+                      >
                       {/* Left icon & Content columns */}
                       <div className="col-span-11 flex items-center gap-5 min-w-0">
                         <div className="h-8 w-8 rounded-lg bg-indigo-50 dark:bg-indigo-955/40 text-indigo-650 dark:text-indigo-400 flex items-center justify-center flex-none">
@@ -267,7 +268,8 @@ export default function AdminSupportInboxPage() {
                     </div>
                   ))}
                 </div>
-              )}
+              </div>
+            )}
             </div>
           </div>
         </div>

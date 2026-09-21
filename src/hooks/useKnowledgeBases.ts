@@ -7,7 +7,7 @@ import {
   KnowledgeBaseFilesResponse,
   loadSingleBaseConversation,
 } from '@/actions/knowledgeBaseAction';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useConversationsStore } from '@/stores/useConversationsStore';
 import {
   useMutation,
   useQuery,

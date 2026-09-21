@@ -3,7 +3,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { useDocumentStore } from '@/stores/useDocumentStore';
-import { useConversationsStore, ROLES } from '@/stores/useConverstionsStore';
+import { useConversationsStore, ROLES } from '@/stores/useConversationsStore';
 import {
   generateDocument,
   startDocumentConversation,

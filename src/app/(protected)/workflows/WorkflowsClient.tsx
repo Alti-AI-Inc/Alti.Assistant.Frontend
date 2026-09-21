@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
 import { cn } from '@/lib/utils';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useConversationsStore } from '@/stores/useConversationsStore';
 
 function WorkflowsClient() {
   const { activeConversation, setActiveConversation } = useConversationsStore();

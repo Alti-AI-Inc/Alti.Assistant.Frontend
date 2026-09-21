@@ -25,7 +25,7 @@ import { useMonitorsQuery } from '@/hooks/useMonitors';
 import { allApps, APP } from '@/lib/all-apps';
 import { cn } from '@/lib/utils';
 import { useBotsStore } from '@/stores/useBotsStore';
-import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
+import { OPTIONS, useConversationsStore } from '@/stores/useConversationsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { SidebarTab, useSidebarStore } from '@/stores/useSidebarStore';

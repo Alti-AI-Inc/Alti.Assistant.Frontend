@@ -62,6 +62,7 @@ export function StripeCardForm({
       });
       return () => observer.disconnect();
     }
+    return undefined;
   }, []);
 
   // Notify parent on completion change

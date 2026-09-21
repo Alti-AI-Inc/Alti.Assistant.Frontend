@@ -9,7 +9,7 @@ import {
   generateImage,
 } from '@/actions/imageActions';
 import { useImageGenStore } from '@/stores/useImageGenStore';
-import { useConversationsStore, ROLES } from '@/stores/useConverstionsStore';
+import { useConversationsStore, ROLES } from '@/stores/useConversationsStore';
 import { useMutation, QueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useRef } from 'react';
@@ -60,7 +60,7 @@ interface UseImageGenerationOptions {
  * - Suggestions are stored in imageGenStore only, NOT added to main chat
  * - Waits for conversationId from analyzeIntent before subsequent calls
  * - Clears input on submit (handled by ChatInput)
- * - Follows same pattern as useConverstionsStore for message handling
+ * - Follows same pattern as useConversationsStore for message handling
  * - Redirects URL to /c/{conversationId} after initialization (matches standard chat)
  */
 export function useImageGeneration(options?: UseImageGenerationOptions) {

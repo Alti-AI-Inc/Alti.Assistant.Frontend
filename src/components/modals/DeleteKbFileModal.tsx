@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useDeleteKnowledgeBaseFile } from '@/hooks/useKnowledgeBases';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useConversationsStore } from '@/stores/useConversationsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { LoaderCircle } from 'lucide-react';
 

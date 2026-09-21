@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-import { useConversationsStore, ROLES } from '@/stores/useConverstionsStore';
+import { useConversationsStore, ROLES } from '@/stores/useConversationsStore';
 import {
   submitDirectRewrite,
   handleRewriteRequest,

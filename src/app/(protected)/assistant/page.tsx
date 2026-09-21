@@ -4,7 +4,7 @@ import { useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useConversationsStore } from '@/stores/useConversationsStore';
 import { useBotsStore } from '@/stores/useBotsStore';
 
 import { cn } from '@/lib/utils';

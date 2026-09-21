@@ -1,6 +1,6 @@
 import { Bot, FileText } from 'lucide-react';
 import { useDocumentStore } from '@/stores/useDocumentStore';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useConversationsStore } from '@/stores/useConversationsStore';
 import { cn } from '@/lib/utils';
 
 export function ModeSelector({

@@ -26,7 +26,7 @@ export interface TaskRun {
 }
 
 import TaskHistoryLogs from './_components/TaskHistoryLogs';
-import { OPTIONS, useConversationsStore } from '@/stores/useConverstionsStore';
+import { OPTIONS, useConversationsStore } from '@/stores/useConversationsStore';
 import { useBotsStore } from '@/stores/useBotsStore';
 
 type TaskType = 'one-time' | 'recurring';

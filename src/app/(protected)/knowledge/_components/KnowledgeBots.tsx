@@ -10,7 +10,7 @@ import {
   useKnowledgeBaseFiles,
   useKnowledgeBases,
 } from '@/hooks/useKnowledgeBases';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useConversationsStore } from '@/stores/useConversationsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { ArrowLeft, SquarePen, Trash } from 'lucide-react';
 import { useSession } from 'next-auth/react';

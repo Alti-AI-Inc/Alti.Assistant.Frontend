@@ -312,6 +312,7 @@ export async function getFileBlob(file: KnowledgeBaseFile | KnowledgeBankFile) {
     return blob;
   } catch (error) {
     console.log(error);
+    return undefined;
   }
 }
 export const deleteKnowledgeBaseFile = async (

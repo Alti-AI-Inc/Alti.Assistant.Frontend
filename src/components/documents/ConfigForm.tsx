@@ -1,5 +1,5 @@
 import { useDocumentStore } from '@/stores/useDocumentStore';
-import { useConversationsStore, OPTIONS } from '@/stores/useConverstionsStore';
+import { useConversationsStore, OPTIONS } from '@/stores/useConversationsStore';
 import { DocumentType } from '@/types/document-generation';
 import { cn } from '@/lib/utils';
 import { BrainstormConfig } from '@/types/brainstorm';

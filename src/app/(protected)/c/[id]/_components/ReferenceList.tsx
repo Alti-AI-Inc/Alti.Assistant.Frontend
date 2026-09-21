@@ -1,4 +1,4 @@
-import { Reference } from '@/stores/useConverstionsStore';
+import { Reference } from '@/stores/useConversationsStore';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Globe, FileText } from 'lucide-react';

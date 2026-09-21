@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { useBotsStore } from '@/stores/useBotsStore';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useConversationsStore } from '@/stores/useConversationsStore';
 import { Dialog, DialogContent, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { 
@@ -121,6 +121,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
       const interval = setInterval(fetchRuns, 1000);
       return () => clearInterval(interval);
     }
+    return undefined;
   }, [activeTab]);
 
   if (!bot) return null;

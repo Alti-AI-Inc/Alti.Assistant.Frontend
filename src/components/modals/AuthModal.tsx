@@ -55,6 +55,7 @@ export function AuthModal() {
       }, 50);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [step]);
 
   useEffect(() => {
@@ -62,6 +63,7 @@ export function AuthModal() {
       const timer = setTimeout(() => setResendCooldown(c => c - 1), 1000);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [resendCooldown]);
 
   const handleResendCode = async () => {

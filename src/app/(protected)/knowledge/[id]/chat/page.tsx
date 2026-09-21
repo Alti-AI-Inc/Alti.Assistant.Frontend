@@ -2,7 +2,7 @@
 
 import FullConversation from '@/app/(protected)/c/[id]/_components/FullConversation';
 import { useKnowledgeBases } from '@/hooks/useKnowledgeBases';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useConversationsStore } from '@/stores/useConversationsStore';
 import { useSession } from 'next-auth/react';
 import { use, useEffect } from 'react';
 

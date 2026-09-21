@@ -4,7 +4,7 @@ import {
   generateDirectReport,
   handleReportRequest,
 } from '@/actions/reportActions';
-import { ROLES, useConversationsStore } from '@/stores/useConverstionsStore';
+import { ROLES, useConversationsStore } from '@/stores/useConversationsStore';
 import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 

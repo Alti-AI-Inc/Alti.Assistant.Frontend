@@ -13,7 +13,7 @@ import {
   ActiveConversation,
   ROLES,
   useConversationsStore,
-} from '@/stores/useConverstionsStore';
+} from '@/stores/useConversationsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {
   useInfiniteQuery,

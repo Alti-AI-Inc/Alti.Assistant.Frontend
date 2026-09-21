@@ -13,7 +13,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useConversationsStore } from '@/stores/useConversationsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { Menu, SquarePen } from 'lucide-react';
@@ -48,7 +48,7 @@ export default function ProtectedLayoutClient({
         {/* Left Sidebar Mobile Drawer */}
         <Sheet
           open={drawerOpen}
-          onOpenChange={() => (drawerOpen ? close() : open)}
+          onOpenChange={(isOpen) => (isOpen ? open() : close())}
         >
           <SheetTrigger asChild onClick={open}>
             <button className="rounded-md p-2">

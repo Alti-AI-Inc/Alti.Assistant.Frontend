@@ -3,7 +3,7 @@
  * Provides helper functions for file validation and processing
  */
 
-import { OPTIONS } from '@/stores/useConverstionsStore';
+import { OPTIONS } from '@/stores/useConversationsStore';
 
 export const FILE_UPLOAD_OPTIONS = [
   OPTIONS.SEARCH,

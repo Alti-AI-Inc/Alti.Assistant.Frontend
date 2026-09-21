@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import useTenantStore from '@/stores/useTenantStore';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useConversationsStore } from '@/stores/useConversationsStore';
 import { useKnowledgebaseStore } from '@/stores/useKnowledgebaseStore';
 import { useDocumentStore } from '@/stores/useDocumentStore';
 import { useImageGenStore } from '@/stores/useImageGenStore';

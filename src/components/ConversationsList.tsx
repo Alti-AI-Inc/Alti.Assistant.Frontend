@@ -8,7 +8,7 @@ import { Conversation } from '@/actions/conversationsAction';
 import { useConversations } from '@/hooks/useConversations';
 import { cn, formatConversationTitle } from '@/lib/utils';
 import { OPTIONS } from '@/types/conversation';
-import { useConversationsStore } from '@/stores/useConverstionsStore';
+import { useConversationsStore } from '@/stores/useConversationsStore';
 import { useDrawerStore } from '@/stores/useDrawerStore';
 import { useModalStore } from '@/stores/useModalStore';
 import {

@@ -2,7 +2,7 @@ import {
   generateStructuredBrainstorm,
   postBrainstormAssistant,
 } from '@/actions/brainstormActions';
-import { ROLES, useConversationsStore } from '@/stores/useConverstionsStore';
+import { ROLES, useConversationsStore } from '@/stores/useConversationsStore';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
