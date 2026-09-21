@@ -70,6 +70,15 @@ const ALL_PLANS: PricingPlan[] = [
       'For large-scale operations requiring maximum throughput and limits.',
     features: ['10,000 Prompts'],
   },
+  {
+    id: 'institutional',
+    name: 'Institutional',
+    price: '$500',
+    period: '/mo',
+    description:
+      'Dedicated capacity and premier throughput for high-volume institutions.',
+    features: ['25,000 Prompts'],
+  },
 ];
 
 export default function PlansPage() {

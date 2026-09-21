@@ -96,6 +96,7 @@ export function OrganizationTenantOverview({
 
   const getPlanDisplay = (role: string) => {
     const r = role.toLowerCase();
+    if (r.includes('500')) return '$500';
     if (r.includes('200')) return '$200';
     if (r.includes('100')) return '$100';
     if (r.includes('50')) return '$50';
@@ -384,6 +385,7 @@ export function OrganizationTenantOverview({
                     { val: 'plan-50', price: '$50/month', features: ['2,500 Prompts'] },
                     { val: 'plan-100', price: '$100/month', features: ['5,000 Prompts'] },
                     { val: 'plan-200', price: '$200/month', features: ['10,000 Prompts'] },
+                    { val: 'plan-500', price: '$500/month', features: ['25,000 Prompts'] },
                   ].map((p) => (
                     <button
                       key={p.val}
