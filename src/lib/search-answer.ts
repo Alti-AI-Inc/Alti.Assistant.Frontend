@@ -8,6 +8,9 @@ const HEDGE_LINE_PATTERNS = [
   /^[\*\#\-\s]*(?:summary|answer|direct answer|quick answer|overview|result|takeaway|key takeaway|response|notes)[\*\#\s]*[:\-]?\s*$/i,
   /\b(?:key\s*note|note|side\s*note|important\s*note|fun\s*fact|takeaway|key\s*takeaway|additional\s*note|fyi)\s*[:\-]/i,
   /\b(?:as an aside|worth noting that|it is worth noting|interesting fact|fun fact)\b/i,
+  /^(?:the|this)\s+(?:page|website|article|site|link|document|hub|portal)\s+(?:is|serves as|provides|features|covers|contains|lists)\b/i,
+  /\b(?:team hub|official home of|official site of|homepage of|landing page)\b/i,
+  /\b(?:welcome to the official|visit the official)\b/i,
   /depends on the (current )?date/i,
   /which isn't provided/i,
   /not provided here/i,
@@ -274,6 +277,21 @@ export function extractDirectSearchAnswer(
         ].includes(w),
     );
 
+  const isScoreQuery =
+    /\b(score|scores|beat|won|lost|win|loss|winner|final|result|results|outcome)\b/i.test(
+      query,
+    );
+  const isScheduleQuery =
+    /\b(when|next|schedule|time|date|upcoming|kickoff|start|playing)\b/i.test(
+      query,
+    );
+  const isPriceQuery =
+    /\b(price|cost|worth|stock|valuation|market cap|quote)\b/i.test(query);
+  const isPersonQuery =
+    /\b(who|ceo|founder|coach|quarterback|president|player|author|leader)\b/i.test(
+      query,
+    );
+
   interface ScoredCandidate {
     text: string;
     score: number;
@@ -306,11 +324,11 @@ export function extractDirectSearchAnswer(
         }
       }
 
-      // Boost primary authority domains (official leagues, .gov, .edu, primary news wires)
+      // Boost primary authority domains (official leagues, official teams, .gov, .edu, primary news wires)
       const urlLower = (item.url || '').toLowerCase();
       if (
         /\.gov\b|\.edu\b/.test(urlLower) ||
-        /official|nfl\.com|mlb\.com|nba\.com|nhl\.com|reuters\.com|bloomberg\.com|apnews\.com|wsj\.com|sec\.gov|cdc\.gov|weather\.gov/i.test(
+        /official|nfl\.com|espn\.com|detroitlions\.com|mlb\.com|nba\.com|nhl\.com|cbssports\.com|foxsports\.com|theathletic\.com|si\.com|reuters\.com|bloomberg\.com|apnews\.com|wsj\.com|sec\.gov|cdc\.gov|weather\.gov/i.test(
           urlLower,
         )
       ) {
@@ -322,20 +340,64 @@ export function extractDirectSearchAnswer(
         score += 6;
       }
       if (/\b(rumor|rumored|might be|could possibly|unconfirmed|speculation|guess)\b/i.test(para)) {
-        score -= 12;
+        score -= 15;
       }
 
-      // Bonus for direct answer phrasing matching query intent
+      // Heavily penalize page descriptions / hubs
       if (
-        /next\s+[\w\s]+\s+game:/i.test(para) ||
-        /is scheduled for/i.test(para) ||
-        /will take place on/i.test(para) ||
-        /starts at/i.test(para) ||
-        /(sunday|monday|tuesday|wednesday|thursday|friday|saturday),\s+(january|february|march|april|may|june|july|august|september|october|november|december)/i.test(
-          para,
-        )
+        /^(?:the|this)\s+(?:page|website|article|site|hub|portal)\b/i.test(para) ||
+        /\b(?:team hub|official home of|official site of)\b/i.test(para)
       ) {
-        score += 15;
+        score -= 50;
+      }
+
+      // Query Intent: Score / Game Outcome
+      if (isScoreQuery) {
+        const hasScorePattern = /\b\d{1,3}\s*[-–—]\s*\d{1,3}\b/.test(para);
+        const hasOutcomeVerb =
+          /\b(beat|defeated|won|lost|loss|victory|edged|fell to)\b/i.test(para);
+
+        if (hasScorePattern && hasOutcomeVerb) {
+          score += 40;
+        } else if (hasScorePattern || hasOutcomeVerb) {
+          score += 20;
+        } else {
+          score -= 25;
+        }
+      }
+
+      // Query Intent: Schedule / Next Game
+      if (isScheduleQuery) {
+        if (
+          /next\s+[\w\s]+\s+game:/i.test(para) ||
+          /is scheduled for/i.test(para) ||
+          /will take place on/i.test(para) ||
+          /will play/i.test(para) ||
+          /starts at/i.test(para) ||
+          /(sunday|monday|tuesday|wednesday|thursday|friday|saturday),\s+(january|february|march|april|may|june|july|august|september|october|november|december)/i.test(
+            para,
+          )
+        ) {
+          score += 35;
+        } else {
+          score -= 15;
+        }
+      }
+
+      // Query Intent: Price / Stock Valuation
+      if (isPriceQuery) {
+        if (/\$\s*\d+(?:\.\d+)?|\b\d+(?:\.\d+)?\s*(?:usd|dollars|cents)\b/i.test(para)) {
+          score += 35;
+        } else {
+          score -= 15;
+        }
+      }
+
+      // Query Intent: Personnel / Leadership
+      if (isPersonQuery) {
+        if (/\b(?:is the|serves as|coached by|plays for|founded by|named)\b/i.test(para)) {
+          score += 25;
+        }
       }
 
       // Heavily penalize bullet dumps or lists of all weeks
@@ -349,12 +411,12 @@ export function extractDirectSearchAnswer(
         score -= 10;
       }
 
-      // Concise direct answers (10 to 60 words) get preference over long articles
+      // Concise direct answers (5 to 40 words) get preference
       const wordCount = para.split(/\s+/).length;
       if (wordCount >= 5 && wordCount <= 40) {
         score += 8;
       } else if (wordCount > 100) {
-        score -= 4;
+        score -= 6;
       }
 
       if (score > 0) {
