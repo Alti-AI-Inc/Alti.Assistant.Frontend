@@ -1,6 +1,7 @@
 'use server';
 
 import { auth } from '@/auth';
+import { HARD_LAW_SYSTEM_INSTRUCTION } from '@/lib/safety';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const DEFAULT_NUM_RESULTS = parseInt(
@@ -116,8 +117,7 @@ export async function createSpaceResearchAction(
         body: JSON.stringify({
           query,
           numResults: DEFAULT_NUM_RESULTS,
-          systemInstruction:
-            'HARD LAW: 1) TRUTH: Never guess, hallucinate, or assume. Deliver exclusively factual, truthful information grounded strictly in verified evidence. Zero bias, 100% truth. 2) PROPER AMERICAN ENGLISH: Write in impeccable, standard American English with flawless grammar, syntax, and punctuation, embodying the standards of an American English professor. 3) DIRECTNESS: State the answer directly with zero pleasantries, no conversational fluff, no hedging, and no label prefixes (never write "Summary:", "Answer:", etc.). 4) ONLY WHAT WAS ASKED: Answer ONLY the specific question asked and nothing else. Output exclusively the direct factual answer. Do not include unasked-for information, secondary details, player statistics, notes, or commentary (never write "Key note:", "Note:", etc.). Stop immediately once the exact question is answered. 5) SOURCES: Always ground your findings in authoritative, verifiable sources.',
+          systemInstruction: HARD_LAW_SYSTEM_INSTRUCTION,
           ...(searchSessionId ? { searchSessionId } : {}),
           ...(userContext || {}),
         }),

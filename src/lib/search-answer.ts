@@ -1,3 +1,5 @@
+import { isHarmfulContent, SAFETY_REFUSAL_MESSAGE } from './safety';
+
 /**
  * Utility to extract a clean, direct, and accurate answer from Exa search results.
  * Filters out scraping hedges, meta-commentary, and repetitive source listings,
@@ -229,9 +231,13 @@ function cleanSummaryText(text: string): string {
       .filter(Boolean);
 
     for (const sent of sentences) {
-      if (isHedgeLine(sent)) continue;
+      if (isHedgeLine(sent) || isHarmfulContent(sent)) continue;
       const stripped = stripInlineFluff(sent);
-      if (stripped && !isHedgeLine(stripped)) {
+      if (
+        stripped &&
+        !isHedgeLine(stripped) &&
+        !isHarmfulContent(stripped)
+      ) {
         cleanSentences.push(stripped);
       }
     }
@@ -248,6 +254,10 @@ export function extractDirectSearchAnswer(
   results: Array<{ summary?: string; title?: string; url?: string }>,
   targetTimeZone?: string,
 ): string {
+  if (isHarmfulContent(query)) {
+    return SAFETY_REFUSAL_MESSAGE;
+  }
+
   if (!results || results.length === 0) {
     return 'No results found.';
   }

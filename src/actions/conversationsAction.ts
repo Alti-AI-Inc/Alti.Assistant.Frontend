@@ -1,4 +1,5 @@
 import { apiClient } from '@/lib/api-client';
+import { HARD_LAW_SYSTEM_INSTRUCTION } from '@/lib/safety';
 import { ConversationMessage } from '@/types/conversation';
 
 export interface ApiResponse<T = any> {
@@ -32,8 +33,7 @@ export async function PostConversation(
         timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
         localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
         localTime: new Date().toLocaleTimeString('en-US'),
-        systemInstruction:
-          'HARD LAW: 1) TRUTH: Never guess, hallucinate, or assume. Deliver exclusively factual, truthful information grounded strictly in verified evidence. Zero bias, 100% truth. 2) PROPER AMERICAN ENGLISH: Write in impeccable, standard American English with flawless grammar, syntax, and punctuation, embodying the standards of an American English professor. 3) DIRECTNESS: State the answer directly with zero pleasantries, no conversational fluff, no hedging, and no label prefixes (never write "Summary:", "Answer:", etc.). 4) ONLY WHAT WAS ASKED: Answer ONLY the specific question asked and nothing else. Output exclusively the direct factual answer. Do not include unasked-for information, secondary details, player statistics, notes, or commentary (never write "Key note:", "Note:", etc.). Stop immediately once the exact question is answered. 5) SOURCES: Always ground your findings in authoritative, verifiable sources.',
+        systemInstruction: HARD_LAW_SYSTEM_INSTRUCTION,
         ...extraParams,
       }),
     });
@@ -102,8 +102,7 @@ export async function PostConversationStream(
         timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
         localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
         localTime: new Date().toLocaleTimeString('en-US'),
-        systemInstruction:
-          'HARD LAW: 1) TRUTH: Never guess, hallucinate, or assume. Deliver exclusively factual, truthful information grounded strictly in verified evidence. Zero bias, 100% truth. 2) PROPER AMERICAN ENGLISH: Write in impeccable, standard American English with flawless grammar, syntax, and punctuation, embodying the standards of an American English professor. 3) DIRECTNESS: State the answer directly with zero pleasantries, no conversational fluff, no hedging, and no label prefixes (never write "Summary:", "Answer:", etc.). 4) ONLY WHAT WAS ASKED: Answer ONLY the specific question asked and nothing else. Output exclusively the direct factual answer. Do not include unasked-for information, secondary details, player statistics, notes, or commentary (never write "Key note:", "Note:", etc.). Stop immediately once the exact question is answered. 5) SOURCES: Always ground your findings in authoritative, verifiable sources.',
+        systemInstruction: HARD_LAW_SYSTEM_INSTRUCTION,
         ...extraParams,
       }),
     });

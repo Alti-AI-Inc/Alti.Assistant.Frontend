@@ -86,6 +86,7 @@ import { PENDING_MONITOR_DRAFT_KEY } from './monitors/monitor-utils';
 import { Textarea } from './ui/textarea';
 import { WarningMessageModal } from './WarningMessageModal';
 import PreFlightPanel, { PreFlightSettings } from './research/PreFlightPanel';
+import { isHarmfulContent, SAFETY_REFUSAL_MESSAGE } from '@/lib/safety';
 
 interface ChatInputProps {
   conversationId?: string;
@@ -804,6 +805,26 @@ export default function ChatInput({
       immediateId?: string;
     }) => {
       const isHomePage = pathname === '/';
+
+      if (isHarmfulContent(userMessage)) {
+        return {
+          success: true,
+          message: 'Success',
+          isStreamed: false,
+          data: {
+            conversationId:
+              immediateId ||
+              (isNewChatId(conversationId)
+                ? `chat-${Date.now()}`
+                : conversationId),
+            responseMessage: {
+              answer: SAFETY_REFUSAL_MESSAGE,
+              reference: [],
+            },
+          },
+        };
+      }
+
       const accessToken = data?.accessToken;
 
       if (!accessToken) {
@@ -1376,6 +1397,10 @@ export default function ChatInput({
 
       // Determine the appropriate response text based on the context
       const getResponseText = () => {
+        if (response.data?.responseMessage?.answer === SAFETY_REFUSAL_MESSAGE) {
+          return SAFETY_REFUSAL_MESSAGE;
+        }
+
         const isKbId =
           activeBot?.data && /^[0-9a-fA-F]{24}$/.test(activeBot.data);
         if (activeConversation?.knowledgebaseId || isKbId) {
