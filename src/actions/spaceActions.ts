@@ -34,7 +34,12 @@ export interface SpaceInput {
   isPrivate?: boolean;
 }
 
-async function getAuthHeader(): Promise<Record<string, string>> {
+async function getAuthHeader(
+  tokenOverride?: string,
+): Promise<Record<string, string>> {
+  if (tokenOverride) {
+    return { Authorization: `Bearer ${tokenOverride}` };
+  }
   const session = await auth();
   if (!session?.accessToken) {
     throw new Error('Unauthorized');
@@ -44,9 +49,10 @@ async function getAuthHeader(): Promise<Record<string, string>> {
 
 export async function createSpaceAction(
   data: SpaceInput,
+  tokenOverride?: string,
 ): Promise<ApiResponse<Space>> {
   try {
-    const authHeader = await getAuthHeader();
+    const authHeader = await getAuthHeader(tokenOverride);
     const response = await fetch(`${API_URL}/spaces/create-space`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...authHeader },
@@ -74,9 +80,11 @@ export async function createSpaceAction(
   }
 }
 
-export async function getSpacesAction(): Promise<ApiResponse<Space[]>> {
+export async function getSpacesAction(
+  tokenOverride?: string,
+): Promise<ApiResponse<Space[]>> {
   try {
-    const authHeader = await getAuthHeader();
+    const authHeader = await getAuthHeader(tokenOverride);
     const response = await fetch(`${API_URL}/spaces/get-all`, {
       headers: authHeader,
     });

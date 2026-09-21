@@ -43,11 +43,20 @@ export async function PostConversation(
         statusText: response.statusText,
         body: errorText,
       });
+      let parsedMsg = '';
+      try {
+        parsedMsg = JSON.parse(errorText)?.message;
+      } catch {}
+      const is404 =
+        response.status === 404 ||
+        parsedMsg === 'Not found' ||
+        parsedMsg === 'Api not found';
       return {
         success: false,
-        message:
-          JSON.parse(errorText)?.message ||
-          'This is not you this is an error on our side, please try again later.',
+        message: is404
+          ? 'Service is temporarily unavailable. Please try again shortly.'
+          : parsedMsg ||
+            'This is not you this is an error on our side, please try again later.',
         debugMessage: `HTTP Error ${response.status}: ${errorText}`,
         statusCode: response.status,
       };
@@ -102,11 +111,20 @@ export async function PostConversationStream(
         statusText: response.statusText,
         body: errorText,
       });
+      let parsedMsg = '';
+      try {
+        parsedMsg = JSON.parse(errorText)?.message;
+      } catch {}
+      const is404 =
+        response.status === 404 ||
+        parsedMsg === 'Not found' ||
+        parsedMsg === 'Api not found';
       return {
         success: false,
-        message:
-          JSON.parse(errorText)?.message ||
-          'This is not you this is an error on our side, please try again later.',
+        message: is404
+          ? 'Service is temporarily unavailable. Please try again shortly.'
+          : parsedMsg ||
+            'This is not you this is an error on our side, please try again later.',
         debugMessage: `HTTP Error ${response.status}: ${errorText}`,
         statusCode: response.status,
       };

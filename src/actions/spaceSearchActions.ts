@@ -55,7 +55,12 @@ export interface SpaceSearchSession {
   [key: string]: unknown;
 }
 
-async function getAuthHeader(): Promise<Record<string, string>> {
+async function getAuthHeader(
+  tokenOverride?: string,
+): Promise<Record<string, string>> {
+  if (tokenOverride) {
+    return { Authorization: `Bearer ${tokenOverride}` };
+  }
   const session = await auth();
   if (!session?.accessToken) {
     throw new Error('Unauthorized');
@@ -67,9 +72,10 @@ export async function createSpaceSearchAction(
   spaceId: string,
   query: string,
   searchSessionId?: string,
+  tokenOverride?: string,
 ): Promise<ApiResponse<SpaceSearchTurn>> {
   try {
-    const authHeader = await getAuthHeader();
+    const authHeader = await getAuthHeader(tokenOverride);
     const response = await fetch(
       `${API_URL}/spaces/${spaceId}/searches/create-search`,
       {

@@ -527,9 +527,11 @@ const FullConversation = ({
       const queryLen = queryConversation.messages?.length || 0;
       const activeLen = activeConversation?.messages?.length || 0;
       if (
-        queryConversation.conversationId !==
-          activeConversation?.conversationId ||
-        queryLen >= activeLen
+        (queryConversation.conversationId !==
+          activeConversation?.conversationId &&
+          queryLen > 0) ||
+        (queryLen >= activeLen && queryLen > 0) ||
+        (!activeLen && queryLen > 0)
       ) {
         setActiveConversation(queryConversation);
       }

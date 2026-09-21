@@ -8,6 +8,10 @@ import {
   PostConversationStream,
   PostConversationWithFile,
 } from '@/actions/conversationsAction';
+import { createSpaceSearchAction } from '@/actions/spaceSearchActions';
+import { createSpaceResearchAction } from '@/actions/spaceResearchActions';
+import { getOrEnsureSpaceId } from '@/lib/space-utils';
+import { saveLocalConversation } from '@/hooks/useConversations';
 import {
   Tooltip,
   TooltipContent,
@@ -848,6 +852,173 @@ export default function ChatInput({
 
         return await PostConversationWithFile(formData, data.accessToken);
       }
+
+      if (
+        selectedOption === OPTIONS.SEARCH ||
+        selectedOption === OPTIONS.MONITOR ||
+        conversationId === 'new-search' ||
+        pathname === '/c/new-search' ||
+        conversationId === 'new-monitor' ||
+        pathname === '/c/new-monitor'
+      ) {
+        try {
+          const spaceId = await getOrEnsureSpaceId(accessToken);
+          const searchRes = await createSpaceSearchAction(
+            spaceId,
+            userMessage,
+            isNewChatId(conversationId) ? undefined : conversationId,
+            accessToken,
+          );
+
+          if (!searchRes.success || !searchRes.data) {
+            return {
+              success: false,
+              message:
+                searchRes.message || 'Search failed. Please try again.',
+            };
+          }
+
+          const turn = searchRes.data;
+          const results = turn.results || [];
+
+          let answer = '';
+          if (results.length > 0) {
+            const validSummaries = results.filter(
+              r => r.summary && r.summary.trim().length > 0,
+            );
+            if (validSummaries.length === 1) {
+              answer = validSummaries[0].summary!;
+            } else if (validSummaries.length > 1) {
+              answer = validSummaries
+                .map(
+                  (r, idx) =>
+                    `### ${r.title || `Source ${idx + 1}`}\n${r.summary}`,
+                )
+                .join('\n\n');
+            } else {
+              answer = `Found ${results.length} results for "${userMessage}".`;
+            }
+          } else {
+            answer = `No results found for "${userMessage}". Please try another query.`;
+          }
+
+          const references = results.map(r => ({
+            title: r.title || r.url,
+            url: r.url,
+            summary: r.summary,
+            favicon: r.favicon,
+          }));
+
+          const resolvedId =
+            turn.searchSession ||
+            turn.id ||
+            turn._id ||
+            (isNewChatId(conversationId)
+              ? `search-${Date.now()}`
+              : conversationId);
+
+          return {
+            success: true,
+            message: 'Success',
+            isStreamed: false,
+            data: {
+              conversationId: resolvedId,
+              responseMessage: {
+                answer,
+                reference: references,
+              },
+            },
+          };
+        } catch (err: any) {
+          return {
+            success: false,
+            message: err?.message || 'Search failed. Please try again.',
+          };
+        }
+      }
+
+      if (
+        selectedOption === OPTIONS.RESEARCH ||
+        conversationId === 'new-research' ||
+        pathname === '/c/new-research'
+      ) {
+        try {
+          const spaceId = await getOrEnsureSpaceId(accessToken);
+          const researchRes = await createSpaceResearchAction(
+            spaceId,
+            userMessage,
+            isNewChatId(conversationId) ? undefined : conversationId,
+            accessToken,
+          );
+
+          if (!researchRes.success || !researchRes.data) {
+            return {
+              success: false,
+              message:
+                researchRes.message ||
+                'Research failed. Please try again.',
+            };
+          }
+
+          const turn = researchRes.data;
+          const results = turn.results || [];
+
+          let answer = '';
+          if (results.length > 0) {
+            const validSummaries = results.filter(
+              r => r.summary && r.summary.trim().length > 0,
+            );
+            if (validSummaries.length === 1) {
+              answer = validSummaries[0].summary!;
+            } else if (validSummaries.length > 1) {
+              answer = validSummaries
+                .map(
+                  (r, idx) =>
+                    `### ${r.title || `Source ${idx + 1}`}\n${r.summary}`,
+                )
+                .join('\n\n');
+            } else {
+              answer = `Found ${results.length} research findings for "${userMessage}".`;
+            }
+          } else {
+            answer = `No research findings found for "${userMessage}". Please try another query.`;
+          }
+
+          const references = results.map(r => ({
+            title: r.title || r.url,
+            url: r.url,
+            summary: r.summary,
+            favicon: r.favicon,
+          }));
+
+          const resolvedId =
+            turn.searchSession ||
+            turn.id ||
+            turn._id ||
+            (isNewChatId(conversationId)
+              ? `research-${Date.now()}`
+              : conversationId);
+
+          return {
+            success: true,
+            message: 'Success',
+            isStreamed: false,
+            data: {
+              conversationId: resolvedId,
+              responseMessage: {
+                answer,
+                reference: references,
+              },
+            },
+          };
+        } catch (err: any) {
+          return {
+            success: false,
+            message: err?.message || 'Research failed. Please try again.',
+          };
+        }
+      }
+
       const isKbId =
         activeBot?.data && /^[0-9a-fA-F]{24}$/.test(activeBot.data);
       const targetApiUrl =
@@ -859,14 +1030,6 @@ export default function ChatInput({
         undefined;
 
       const extraParams: Record<string, any> = {};
-      if (selectedOption === OPTIONS.RESEARCH) {
-        Object.assign(extraParams, researchSettings);
-        extraParams.researchTier = researchTier;
-      }
-      if (selectedOption === OPTIONS.MONITOR) {
-        extraParams.frequency =
-          monitorFrequency === 'Frequency' ? '1 Hour' : monitorFrequency;
-      }
       const categoryVal = appParam
         ? 'mcp'
         : getCategoryFromOption(selectedOption);
@@ -981,8 +1144,13 @@ export default function ChatInput({
             },
           });
         }
+        const displayError =
+          response?.message === 'Not found' ||
+          response?.message === 'Api not found'
+            ? 'Service is temporarily unavailable. Please try again shortly.'
+            : response?.message || 'An unexpected error occurred.';
         updateActiveConversation(
-          response?.message || 'An unexpected error occurred.',
+          displayError,
           ROLES.ASSISTANT,
         );
         setShowStartLastMessage(false);
@@ -1059,6 +1227,14 @@ export default function ChatInput({
         }
 
         switch (selectedOption) {
+          case OPTIONS.SEARCH:
+          case OPTIONS.MONITOR:
+            return (
+              response.data?.responseMessage?.answer ||
+              response.data?.content ||
+              response.data?.summary ||
+              ''
+            );
           case OPTIONS.IMAGE:
           case OPTIONS.AUDIO:
           case OPTIONS.VIDEO:
@@ -1081,9 +1257,10 @@ export default function ChatInput({
             return response.data?.responseMessage?.answer;
           case OPTIONS.RESEARCH:
             return (
+              response.data?.responseMessage?.answer ||
               response.data?.synthesis ||
               response.data?.content ||
-              response.data?.responseMessage?.answer
+              ''
             );
           case OPTIONS.PRESENTATION:
             return response.data?.message;
@@ -1096,8 +1273,10 @@ export default function ChatInput({
         }
       };
 
+      const assistantText = getResponseText();
+
       if (!response.isStreamed) {
-        updateActiveConversation(getResponseText(), ROLES.ASSISTANT, newId, {
+        updateActiveConversation(assistantText, ROLES.ASSISTANT, newId, {
           ...(imageUrl && { imageUrl }),
           ...(name && { video: { name } }),
           ...(reference && { reference }),
@@ -1107,6 +1286,37 @@ export default function ChatInput({
       }
 
       if (response?.data) {
+        const convData = {
+          conversationId: newId,
+          title: userMessage.slice(0, 40) || 'New Chat',
+          updatedAt: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
+          messages: [
+            {
+              role: ROLES.USER,
+              content: userMessage,
+              timestamp: new Date().toISOString(),
+            },
+            {
+              role: ROLES.ASSISTANT,
+              content: assistantText,
+              metadata: {
+                ...(imageUrl && { imageUrl }),
+                ...(name && { video: { name } }),
+                ...(reference && { reference }),
+                ...(document && { document }),
+                ...(audioUrl && { audioUrl }),
+              },
+              timestamp: new Date().toISOString(),
+            },
+          ],
+        };
+        saveLocalConversation(convData);
+        queryClient.setQueryData(
+          ['activeConversation', newId, data?.accessToken],
+          convData,
+        );
+
         setTimeout(() => {
           queryClient.invalidateQueries({
             queryKey: ['conversations', data?.accessToken],
