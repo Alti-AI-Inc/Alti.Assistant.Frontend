@@ -392,10 +392,17 @@ export function extractDirectSearchAnswer(
         '',
       )
       .replace(/^[:\-\*\#\s]+/, '')
+      .replace(/\s{2,}/g, ' ')
+      .replace(/\s+([,.:;!?])/g, '$1')
+      .replace(/([,.:;!?])([A-Za-z])/g, '$1 $2')
+      .replace(/[,;:\-\s]+$/, '')
       .trim();
 
     if (cleaned.length > 0) {
       cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+      if (!/[.!?]$/.test(cleaned)) {
+        cleaned += '.';
+      }
     }
 
     const localConverted = convertUtcToLocalTimezone(cleaned, timeZone);

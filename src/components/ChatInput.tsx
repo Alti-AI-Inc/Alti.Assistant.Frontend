@@ -1329,6 +1329,19 @@ export default function ChatInput({
       if (response.data?.sources) {
         reference = response.data.sources;
       }
+      if (
+        (!reference || reference.length === 0) &&
+        Array.isArray(response.data?.results)
+      ) {
+        reference = response.data.results
+          .filter((r: any) => !r.url?.toLowerCase().includes('exa.ai'))
+          .map((r: any) => ({
+            title: r.title || r.url,
+            url: r.url,
+            summary: r.summary,
+            favicon: r.favicon,
+          }));
+      }
 
       const document =
         response.data?.document || response.data?.responseMessage?.document;

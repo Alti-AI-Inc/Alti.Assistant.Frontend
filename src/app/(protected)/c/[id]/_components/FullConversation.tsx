@@ -1156,13 +1156,19 @@ const FullConversation = ({
                               {!!(
                                 message.metadata?.reference?.length ||
                                 message.metadata?.sources?.length ||
-                                message.metadata?.citations?.length
+                                message.metadata?.citations?.length ||
+                                (message as any)?.reference?.length ||
+                                (message as any)?.sources?.length ||
+                                (message as any)?.citations?.length
                               ) && (
                                 <ReferencesList
                                   references={
-                                    message.metadata.reference ||
-                                    message.metadata.sources ||
-                                    message.metadata.citations ||
+                                    message.metadata?.reference ||
+                                    message.metadata?.sources ||
+                                    message.metadata?.citations ||
+                                    (message as any)?.reference ||
+                                    (message as any)?.sources ||
+                                    (message as any)?.citations ||
                                     []
                                   }
                                   webSearchQueries={

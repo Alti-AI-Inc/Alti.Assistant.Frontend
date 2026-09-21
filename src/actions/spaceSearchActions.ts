@@ -86,7 +86,7 @@ export async function createSpaceSearchAction(
           query,
           numResults: DEFAULT_NUM_RESULTS,
           systemInstruction:
-            'HARD LAW: You must never guess, hallucinate, speculate, or make assumptions. Deliver only verified, factual, truthful information grounded strictly in real evidence and sources. Zero bias, 100% truth. Be direct and concise: provide ONLY the factual answer with NO pleasantries, NO conversational fluff, NO hedging, and NO label prefixes (never write "Summary:", "Answer:", etc.). Deliver only the direct truth.',
+            'HARD LAW: 1) TRUTH: Never guess, hallucinate, or assume. Deliver exclusively factual, truthful information grounded strictly in verified evidence. Zero bias, 100% truth. 2) PROPER AMERICAN ENGLISH: Write in impeccable, standard American English with flawless grammar, syntax, and punctuation, embodying the standards of an American English professor. 3) DIRECTNESS: State the answer directly with zero pleasantries, no conversational fluff, no hedging, and no label prefixes (never write "Summary:", "Answer:", etc.). 4) SOURCES: Always cite and ground your findings in authoritative, verifiable sources.',
           ...(searchSessionId ? { searchSessionId } : {}),
           ...(userContext || {}),
         }),
