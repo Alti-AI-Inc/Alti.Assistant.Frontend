@@ -9,14 +9,22 @@ const HEDGE_LINE_PATTERNS = [
   /which isn't provided/i,
   /not provided here/i,
   /please share/i,
+  /if you('re| are) (asking|looking|wondering|referring)/i,
   /if you('d| would) like/i,
-  /i can (parse|fetch|provide)/i,
-  /i cannot (determine|find)/i,
+  /in the provided (page|text|document|excerpt|context|source|article)/i,
+  /the provided (page|text|document|excerpt|context|source|article)/i,
+  /from the provided/i,
+  /based on the (provided|excerpt|page|source)/i,
+  /according to the (page|website|schedule|article|provided|text|source)/i,
+  /the (page|article|excerpt|website) (lists|shows|states|notes|reports|confirms|mentions)/i,
+  /the final score shown is/i,
   /here's what the .+ shows:?/i,
   /the page lists/i,
   /the schedule excerpt includes/i,
-  /according to the (page|website|schedule|article)/i,
   /for more details,/i,
+  /please note that/i,
+  /i can (parse|fetch|provide)/i,
+  /i cannot (determine|find)/i,
   /\b(it is believed|it is assumed|it might be|could potentially|rumored that|unverified claim|pure speculation)\b/i,
 ];
 
@@ -131,6 +139,40 @@ export function convertUtcToLocalTimezone(
 }
 
 /**
+ * Strips inline scraping artifacts, meta-commentary, and conversational filler from text.
+ */
+export function stripInlineFluff(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(
+      /\s*(?:,\s*)?(?:in|from|based on|according to)\s+the\s+provided\s+(?:page|text|document|excerpt|source|link|article)[^.,;]*/gi,
+      '',
+    )
+    .replace(
+      /\s*(?:,\s*)?according to (?:the official schedule|the page|the website|sources)[^.,;]*/gi,
+      '',
+    )
+    .replace(
+      /^(?:as of (?:today|now)|according to [^,]+,|the official schedule confirms that)\s*/gi,
+      '',
+    )
+    .replace(
+      /^(?:hey boss,?\s*(?:i found the answer for you:?)?|here(?:'s| is) (?:what|the answer:?)|to answer your question:?)\s*/gi,
+      '',
+    )
+    .replace(
+      /^if you(?:'re| are) (?:asking|looking|wondering|referring) (?:about|for|to) [^,]+,\s*/gi,
+      '',
+    )
+    .replace(
+      /^(?:the final score shown is|the score shown is|the final score is)\s*/gi,
+      '',
+    )
+    .replace(/\s*,\s*the final score shown is\s*/gi, ', final score: ')
+    .trim();
+}
+
+/**
  * Checks if a block of text is conversational filler or scraping hedge.
  */
 function isHedgeLine(line: string): boolean {
@@ -140,19 +182,34 @@ function isHedgeLine(line: string): boolean {
 }
 
 /**
- * Cleans conversational and scraping noise from a summary text.
+ * Cleans conversational and scraping noise from a summary text sentence-by-sentence.
  */
 function cleanSummaryText(text: string): string {
   if (!text) return '';
 
-  const lines = text
+  const paragraphs = text
     .split(/\n+/)
     .map(l => l.trim())
     .filter(Boolean);
 
-  const cleanLines = lines.filter(line => !isHedgeLine(line));
+  const cleanSentences: string[] = [];
 
-  return cleanLines.join('\n').trim();
+  for (const para of paragraphs) {
+    const sentences = para
+      .split(/(?<=[.!?])\s+(?=[A-Z0-9])/g)
+      .map(s => s.trim())
+      .filter(Boolean);
+
+    for (const sent of sentences) {
+      if (isHedgeLine(sent)) continue;
+      const stripped = stripInlineFluff(sent);
+      if (stripped && !isHedgeLine(stripped)) {
+        cleanSentences.push(stripped);
+      }
+    }
+  }
+
+  return cleanSentences.join(' ').trim();
 }
 
 /**
@@ -280,12 +337,7 @@ export function extractDirectSearchAnswer(
       }
 
       if (score > 0) {
-        let directText = para
-          .replace(
-            /^(as of (today|now)|according to [^,]+,|the official schedule confirms that)\s*/i,
-            '',
-          )
-          .trim();
+        let directText = stripInlineFluff(para);
 
         if (directText.length > 0) {
           directText = directText.charAt(0).toUpperCase() + directText.slice(1);
@@ -304,13 +356,20 @@ export function extractDirectSearchAnswer(
       return 'No direct record found for this query.';
     }
 
-    let cleaned = rawText
-      .replace(
-        /^(hey boss,?\s*(i found the answer for you:?)?|here('s| is) (what|the answer:?)|to answer your question:?)\s*/i,
-        '',
-      )
+    let cleaned = stripInlineFluff(rawText)
       .replace(/^[:\-\s]+/, '')
       .trim();
+
+    // Deduplicate and filter sentences to eliminate residual fluff
+    const sentences = cleaned
+      .split(/(?<=[.!?])\s+(?=[A-Z0-9])/g)
+      .map(s => s.trim())
+      .filter(Boolean)
+      .filter(s => !isHedgeLine(s));
+
+    if (sentences.length > 0) {
+      cleaned = sentences.slice(0, 2).join(' ');
+    }
 
     if (cleaned.length > 0) {
       cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
