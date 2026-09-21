@@ -6,28 +6,44 @@
 import { OPTIONS } from '@/stores/useConverstionsStore';
 
 export const FILE_UPLOAD_OPTIONS = [
+  OPTIONS.SEARCH,
+  OPTIONS.RESEARCH,
+  OPTIONS.MONITOR,
   OPTIONS.REVIEW_DOCUMENTS,
   OPTIONS.REWRITE,
   OPTIONS.TRANSLATE_DOCUMENTS,
   OPTIONS.GENERATE_PLAN,
   OPTIONS.REVIEW_CONTRACT,
+  OPTIONS.WRITE_CONTRACT,
   OPTIONS.IMAGE,
   OPTIONS.EDIT_IMAGE,
   OPTIONS.GENERATE_REPORT,
   OPTIONS.CODE,
+  OPTIONS.DEBUG_CODE,
+  OPTIONS.DRAFT_DOCUMENT,
+  OPTIONS.SUMMARIZE,
+  OPTIONS.EXTRACT_DATA,
 ] as const;
 
 /**
  * Options that specifically handle document files
  */
 export const DOCUMENT_OPTIONS = [
+  OPTIONS.SEARCH,
+  OPTIONS.RESEARCH,
+  OPTIONS.MONITOR,
   OPTIONS.REVIEW_DOCUMENTS,
   OPTIONS.REWRITE,
   OPTIONS.TRANSLATE_DOCUMENTS,
   OPTIONS.GENERATE_PLAN,
   OPTIONS.REVIEW_CONTRACT,
+  OPTIONS.WRITE_CONTRACT,
   OPTIONS.GENERATE_REPORT,
   OPTIONS.CODE,
+  OPTIONS.DEBUG_CODE,
+  OPTIONS.DRAFT_DOCUMENT,
+  OPTIONS.SUMMARIZE,
+  OPTIONS.EXTRACT_DATA,
 ] as const;
 
 /**
@@ -36,8 +52,7 @@ export const DOCUMENT_OPTIONS = [
  * @returns Whether file upload is allowed
  */
 export const isFileUploadAllowed = (option: OPTIONS | null): boolean => {
-  if (!option) return true; // Allow doc uploads in default chat mode
-  return FILE_UPLOAD_OPTIONS.includes(option as any);
+  return true; // Always allow file attachment when user clicks attach files
 };
 
 /**
@@ -46,8 +61,8 @@ export const isFileUploadAllowed = (option: OPTIONS | null): boolean => {
  * @returns Whether the option handles documents
  */
 export const isDocumentOption = (option: OPTIONS | null): boolean => {
-  if (!option) return true; // Default chat mode treats files as documents
-  return DOCUMENT_OPTIONS.includes(option as any);
+  if (option === OPTIONS.IMAGE || option === OPTIONS.EDIT_IMAGE) return false;
+  return true;
 };
 
 /**
