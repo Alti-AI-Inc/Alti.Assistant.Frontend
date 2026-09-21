@@ -1,27 +1,20 @@
 import { StateCreator } from 'zustand';
-import { RewriteIntent, RewriteMode, RewriteStyle } from '@/types/rewrite';
+import { RewriteIntent, RewriteMode as RewriteModeType, RewriteStyle } from '@/types/rewrite';
+import { createAsyncActionSlice, FeatureSlice } from './createAsyncActionSlice';
 
 export interface RewriteConfig {
   intent: RewriteIntent;
   style: RewriteStyle;
-  mode: RewriteMode;
+  mode: RewriteModeType;
   outputFormat: 'text' | 'file' | 'both';
   targetAudience?: string;
   additionalInstructions?: string;
   textContent?: string;
 }
 
-export interface RewriteSlice {
-  rewriteConfig: RewriteConfig;
-  rewriteMode: 'assistant' | 'direct' | 'select_mode' | 'chat' | null;
+export type RewriteMode = 'assistant' | 'direct' | 'select_mode' | 'chat' | null;
 
-  setRewriteConfig: (config: Partial<RewriteConfig>) => void;
-  updateRewriteConfig: (config: Partial<RewriteConfig>) => void;
-  resetRewriteConfig: () => void;
-  setRewriteMode: (
-    mode: 'assistant' | 'direct' | 'select_mode' | 'chat' | null,
-  ) => void;
-}
+export type RewriteSlice = FeatureSlice<'rewrite', RewriteConfig, RewriteMode>;
 
 const DEFAULT_REWRITE_CONFIG: RewriteConfig = {
   intent: 'professional',
@@ -35,25 +28,4 @@ export const createRewriteSlice: StateCreator<
   [],
   [],
   RewriteSlice
-> = set => ({
-  rewriteConfig: DEFAULT_REWRITE_CONFIG,
-  rewriteMode: 'assistant',
-
-  setRewriteConfig: config =>
-    set(state => ({
-      rewriteConfig: { ...state.rewriteConfig, ...config },
-    })),
-
-  updateRewriteConfig: config =>
-    set(state => ({
-      rewriteConfig: { ...state.rewriteConfig, ...config },
-    })),
-
-  resetRewriteConfig: () =>
-    set({
-      rewriteConfig: DEFAULT_REWRITE_CONFIG,
-      rewriteMode: null,
-    }),
-
-  setRewriteMode: mode => set({ rewriteMode: mode }),
-});
+> = createAsyncActionSlice<'rewrite', RewriteConfig, RewriteMode>('rewrite', DEFAULT_REWRITE_CONFIG, 'assistant', null);

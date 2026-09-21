@@ -1,17 +1,10 @@
 import { StateCreator } from 'zustand';
 import { PlanGenerationConfig } from '@/types/plan-generation';
+import { createAsyncActionSlice, FeatureSlice } from './createAsyncActionSlice';
 
-export interface PlanGenerationSlice {
-  planGenerationConfig: PlanGenerationConfig;
-  planGenerationMode: 'assistant' | 'direct' | 'select_mode' | null;
+export type PlanGenerationMode = 'assistant' | 'direct' | 'select_mode' | null;
 
-  setPlanGenerationConfig: (config: Partial<PlanGenerationConfig>) => void;
-  updatePlanGenerationConfig: (config: Partial<PlanGenerationConfig>) => void;
-  resetPlanGenerationConfig: () => void;
-  setPlanGenerationMode: (
-    mode: 'assistant' | 'direct' | 'select_mode' | null,
-  ) => void;
-}
+export type PlanGenerationSlice = FeatureSlice<'planGeneration', PlanGenerationConfig, PlanGenerationMode>;
 
 const DEFAULT_PLAN_GENERATION_CONFIG: PlanGenerationConfig = {
   planType: 'business_plan',
@@ -27,24 +20,4 @@ export const createPlanGenerationSlice: StateCreator<
   [],
   [],
   PlanGenerationSlice
-> = set => ({
-  planGenerationConfig: DEFAULT_PLAN_GENERATION_CONFIG,
-  planGenerationMode: 'assistant',
-
-  setPlanGenerationConfig: config =>
-    set(state => ({
-      planGenerationConfig: { ...state.planGenerationConfig, ...config },
-    })),
-
-  updatePlanGenerationConfig: config =>
-    set(state => ({
-      planGenerationConfig: { ...state.planGenerationConfig, ...config },
-    })),
-
-  resetPlanGenerationConfig: () =>
-    set({
-      planGenerationConfig: DEFAULT_PLAN_GENERATION_CONFIG,
-    }),
-
-  setPlanGenerationMode: mode => set({ planGenerationMode: mode }),
-});
+> = createAsyncActionSlice<'planGeneration', PlanGenerationConfig, PlanGenerationMode>('planGeneration', DEFAULT_PLAN_GENERATION_CONFIG, 'assistant');

@@ -1,17 +1,10 @@
 import { StateCreator } from 'zustand';
 import { BrainstormConfig } from '@/types/brainstorm';
+import { createAsyncActionSlice, FeatureSlice } from './createAsyncActionSlice';
 
-export interface BrainstormSlice {
-  brainstormConfig: BrainstormConfig;
-  brainstormMode: 'assistant' | 'structured' | 'select_mode' | null;
+export type BrainstormMode = 'assistant' | 'structured' | 'select_mode' | null;
 
-  setBrainstormConfig: (config: Partial<BrainstormConfig>) => void;
-  updateBrainstormConfig: (config: Partial<BrainstormConfig>) => void;
-  resetBrainstormConfig: () => void;
-  setBrainstormMode: (
-    mode: 'assistant' | 'structured' | 'select_mode' | null,
-  ) => void;
-}
+export type BrainstormSlice = FeatureSlice<'brainstorm', BrainstormConfig, BrainstormMode>;
 
 const DEFAULT_BRAINSTORM_CONFIG: BrainstormConfig = {};
 
@@ -20,25 +13,4 @@ export const createBrainstormSlice: StateCreator<
   [],
   [],
   BrainstormSlice
-> = set => ({
-  brainstormConfig: DEFAULT_BRAINSTORM_CONFIG,
-  brainstormMode: 'assistant',
-
-  setBrainstormConfig: config =>
-    set(state => ({
-      brainstormConfig: { ...state.brainstormConfig, ...config },
-    })),
-
-  updateBrainstormConfig: config =>
-    set(state => ({
-      brainstormConfig: { ...state.brainstormConfig, ...config },
-    })),
-
-  resetBrainstormConfig: () =>
-    set({
-      brainstormConfig: DEFAULT_BRAINSTORM_CONFIG,
-      // brainstormMode: null,
-    }),
-
-  setBrainstormMode: mode => set({ brainstormMode: mode }),
-});
+> = createAsyncActionSlice<'brainstorm', BrainstormConfig, BrainstormMode>('brainstorm', DEFAULT_BRAINSTORM_CONFIG, 'assistant');

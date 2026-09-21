@@ -1,19 +1,10 @@
 import { StateCreator } from 'zustand';
 import { ReportGenerationConfig } from '@/types/report-generation';
+import { createAsyncActionSlice, FeatureSlice } from './createAsyncActionSlice';
 
-export interface ReportGenerationSlice {
-  reportGenerationConfig: ReportGenerationConfig;
-  reportGenerationMode: 'assistant' | 'direct' | 'select_mode' | null;
+export type ReportGenerationMode = 'assistant' | 'direct' | 'select_mode' | null;
 
-  setReportGenerationConfig: (config: Partial<ReportGenerationConfig>) => void;
-  updateReportGenerationConfig: (
-    config: Partial<ReportGenerationConfig>,
-  ) => void;
-  resetReportGenerationConfig: () => void;
-  setReportGenerationMode: (
-    mode: 'assistant' | 'direct' | 'select_mode' | null,
-  ) => void;
-}
+export type ReportGenerationSlice = FeatureSlice<'reportGeneration', ReportGenerationConfig, ReportGenerationMode>;
 
 const DEFAULT_REPORT_GENERATION_CONFIG: ReportGenerationConfig = {};
 
@@ -22,24 +13,4 @@ export const createReportGenerationSlice: StateCreator<
   [],
   [],
   ReportGenerationSlice
-> = set => ({
-  reportGenerationConfig: DEFAULT_REPORT_GENERATION_CONFIG,
-  reportGenerationMode: 'assistant',
-
-  setReportGenerationConfig: config =>
-    set(state => ({
-      reportGenerationConfig: { ...state.reportGenerationConfig, ...config },
-    })),
-
-  updateReportGenerationConfig: config =>
-    set(state => ({
-      reportGenerationConfig: { ...state.reportGenerationConfig, ...config },
-    })),
-
-  resetReportGenerationConfig: () =>
-    set({
-      reportGenerationConfig: DEFAULT_REPORT_GENERATION_CONFIG,
-    }),
-
-  setReportGenerationMode: mode => set({ reportGenerationMode: mode }),
-});
+> = createAsyncActionSlice<'reportGeneration', ReportGenerationConfig, ReportGenerationMode>('reportGeneration', DEFAULT_REPORT_GENERATION_CONFIG, 'assistant');

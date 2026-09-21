@@ -88,97 +88,18 @@ import { WarningMessageModal } from './WarningMessageModal';
 import PreFlightPanel, { PreFlightSettings } from './research/PreFlightPanel';
 import { isHarmfulContent, SAFETY_REFUSAL_MESSAGE } from '@/lib/safety';
 
-interface ChatInputProps {
-  conversationId?: string;
-  imageGenHook?: ReturnType<typeof useImageGeneration>;
-  selectedFiles?: File[];
-  onFilesChange?: (files: File[]) => void;
-  isStudio?: boolean;
-  isConversationLoading?: boolean;
-  showAsNewChat?: boolean;
-}
-
-// Helper function to check if dynamic ID is a new chat
-const isNewChatId = (id?: string) => {
-  return (
-    !id ||
-    id === 'new-chat' ||
-    id === 'new-search' ||
-    id === 'new-research' ||
-    id === 'new-monitor'
-  );
-};
-
-const extractDomainFromUrl = (urlStr?: string): string => {
-  if (!urlStr) return '';
-  try {
-    const url = new URL(urlStr);
-    return url.hostname.replace(/^www\./, '').toLowerCase();
-  } catch {
-    return '';
-  }
-};
-
-const deduplicateReferences = (refs: any[]): any[] => {
-  if (!Array.isArray(refs) || refs.length === 0) return [];
-  const seenKeys = new Set<string>();
-  const deduplicated: any[] = [];
-
-  for (const ref of refs) {
-    if (!ref) continue;
-    const url = (ref.url || '').toLowerCase();
-    const domain = (ref.domain || extractDomainFromUrl(ref.url)).toLowerCase();
-
-    if (domain.includes('exa.ai') || url.includes('exa.ai')) {
-      continue;
-    }
-
-    const key =
-      domain && domain !== 'web'
-        ? domain
-        : (ref.title || ref.url || '').toLowerCase();
-    if (!key) continue;
-
-    if (!seenKeys.has(key)) {
-      seenKeys.add(key);
-      deduplicated.push(ref);
-    }
-  }
-
-  return deduplicated;
-};
-
-// Helper function to get file icon based on extension
-const getFileIcon = (fileName: string) => {
-  const extension = fileName.split('.').pop()?.toLowerCase();
-  switch (extension) {
-    case 'pdf':
-      return <FileText className="size-5 text-red-500" />;
-    case 'doc':
-    case 'docx':
-      return <FileType className="size-5 text-blue-500" />;
-    case 'xls':
-    case 'xlsx':
-    case 'csv':
-      return <FileSpreadsheet className="size-5 text-green-600" />;
-    case 'jpg':
-    case 'jpeg':
-    case 'png':
-    case 'gif':
-    case 'webp':
-      return <ImageIcon className="size-5 text-purple-500" />;
-    case 'ppt':
-    case 'pptx':
-      return <Presentation className="size-5 text-orange-500" />;
-    default:
-      return <File className="size-5 text-gray-500" />;
-  }
-};
-
-// Helper function to get file extension
-const getFileExtension = (fileName: string) => {
-  return fileName.split('.').pop()?.toUpperCase() || 'FILE';
-};
+import {
+  ChatInputProps,
+  isNewChatId,
+  extractDomainFromUrl,
+  deduplicateReferences,
+  getFileIcon,
+  getFileExtension,
+} from './chat-input/utils';
+import { FileAttachmentPreview } from './chat-input/FileAttachmentPreview';
+import { useSpeechRecognition } from './chat-input/useSpeechRecognition';
+import { useTaskCreation } from './chat-input/useTaskCreation';
+import { useSearchHandler } from './chat-input/useSearchHandler';
 
 export default function ChatInput({
   conversationId,
@@ -220,99 +141,8 @@ export default function ChatInput({
     [],
   );
   const [isAudioRecording, setIsAudioRecording] = useState(false);
-  const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef<any>(null);
-
-  const startListening = () => {
-    const SpeechRecognition =
-      (window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      toast.error(
-        'Speech recognition is not supported in this browser. Please try Chrome, Safari, or Edge.',
-      );
-      return;
-    }
-
-    try {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = 'en-US';
-
-      recognition.onstart = () => {
-        setIsListening(true);
-      };
-
-      recognition.onresult = (event: any) => {
-        let interimTranscript = '';
-        let finalTranscript = '';
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-          if (event.results[i].isFinal) {
-            finalTranscript += event.results[i][0].transcript;
-          } else {
-            interimTranscript += event.results[i][0].transcript;
-          }
-        }
-        const text = finalTranscript + interimTranscript;
-        if (text.trim()) {
-          setMessage(text);
-        }
-      };
-
-      recognition.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
-        if (event.error !== 'no-speech') {
-          stopListening();
-        }
-      };
-
-      recognition.onend = () => {
-        setIsListening(false);
-      };
-
-      recognitionRef.current = recognition;
-      recognition.start();
-    } catch (err) {
-      console.error('Failed to start SpeechRecognition:', err);
-      setIsListening(false);
-    }
-  };
-
-  const stopListening = () => {
-    if (recognitionRef.current) {
-      try {
-        recognitionRef.current.stop();
-      } catch (err) {
-        console.error('Error stopping recognition:', err);
-      }
-      recognitionRef.current = null;
-    }
-    setIsListening(false);
-  };
-
-  const toggleListening = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (isListening) {
-      stopListening();
-    } else {
-      startListening();
-    }
-  };
-
-  useEffect(() => {
-    return () => {
-      if (recognitionRef.current) {
-        try {
-          recognitionRef.current.stop();
-        } catch (err) {
-          console.error(err);
-        }
-      }
-    };
-  }, []);
+  
+  const { isListening, startListening, stopListening, toggleListening } = useSpeechRecognition({ setMessage });
   const [researchSettings, setResearchSettings] = useState<PreFlightSettings>({
     depth: 'thorough',
     consensusLevel: 'majority',
@@ -361,75 +191,32 @@ export default function ChatInput({
 
   const [isDragging, setIsDragging] = useState(false);
 
-  // Tasks form states
-  const [taskType, setTaskType] = useState<'one-time' | 'recurring'>(
-    'one-time',
-  );
-  const [triggerType, setTriggerType] = useState<'scheduled' | 'event'>(
-    'scheduled',
-  );
-  const [scheduledTime, setScheduledTime] = useState('');
-  const [eventTrigger, setEventTrigger] = useState('');
-
   // Monitor scan frequency state
   const [monitorFrequency, setMonitorFrequency] = useState<string>('Frequency');
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
-  const handleCreateTask = () => {
-    // Stop recording/listening if active
-    stopListening();
+  const { onOpen } = useModalStore();
+  
+  const {
+    taskType,
+    setTaskType,
+    triggerType,
+    setTriggerType,
+    scheduledTime,
+    setScheduledTime,
+    eventTrigger,
+    setEventTrigger,
+    handleCreateTask,
+  } = useTaskCreation({
+    message,
+    data,
+    onOpen,
+    setMessage,
+    stopListening,
+    activeBotId,
+  });
 
-    if (!message.trim()) return;
-
-    if (!data?.accessToken) {
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('pending_prompt', message.trim());
-      }
-      onOpen({ type: 'auth-modal', actionId: 'register' });
-      return;
-    }
-
-    const taskName = message.trim();
-    const runId = Math.random().toString(36).substring(7);
-    const newRun = {
-      id: runId,
-      taskName,
-      timestamp: new Date().toISOString(),
-      status: 'running' as const,
-      summary: `Initiating workflow: "${taskName}" using triggers: [Type: ${taskType}, Trigger: ${triggerType === 'scheduled' ? scheduledTime : eventTrigger}]`,
-      botId: activeBotId || undefined,
-    };
-
-    const existing = localStorage.getItem('aphura_task_runs');
-    const runsList = existing ? JSON.parse(existing) : [];
-    runsList.unshift(newRun);
-    localStorage.setItem('aphura_task_runs', JSON.stringify(runsList));
-
-    toast.success('Task scheduled successfully', {
-      description: 'You can monitor execution logs in the sidebar Inbox tab.',
-    });
-
-    setMessage('');
-    setScheduledTime('');
-    setEventTrigger('');
-
-    // Simulate completion
-    setTimeout(() => {
-      const currentRuns = JSON.parse(
-        localStorage.getItem('aphura_task_runs') || '[]',
-      );
-      const targetRun = currentRuns.find((r: any) => r.id === runId);
-      if (targetRun) {
-        targetRun.status = 'success';
-        targetRun.duration = 2450;
-        targetRun.summary = `Successfully executed task automation pipeline. Verified triggers, loaded task inputs, and completed task: "${taskName}".`;
-        localStorage.setItem(
-          'aphura_task_runs',
-          JSON.stringify(currentRuns),
-        );
-      }
-    }, 3000);
-  };
+  const { handleSearchOrResearch } = useSearchHandler();
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -607,7 +394,7 @@ export default function ChatInput({
     }
   }, [isExistingConversation, conversationId, pathname, setSelectedOption]);
 
-  const { onOpen } = useModalStore();
+
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
@@ -933,184 +720,19 @@ export default function ChatInput({
         localTime: new Date().toLocaleTimeString('en-US'),
       };
 
-      if (
-        selectedOption === OPTIONS.SEARCH ||
-        selectedOption === OPTIONS.MONITOR ||
-        conversationId === 'new-search' ||
-        pathname === '/c/new-search' ||
-        conversationId === 'new-monitor' ||
-        pathname === '/c/new-monitor'
-      ) {
-        try {
-          const spaceId = await getOrEnsureSpaceId(accessToken);
-          const searchRes = await createSpaceSearchAction(
-            spaceId,
-            userMessage,
-            isNewChatId(conversationId) ? undefined : conversationId,
-            accessToken,
-            userContext,
-          );
+      const searchOrResearchResult = await handleSearchOrResearch({
+        selectedOption,
+        conversationId,
+        pathname,
+        accessToken,
+        userMessage,
+        immediateId,
+        userContext,
+        userTimeZone,
+      });
 
-          if (searchRes.success && searchRes.data) {
-            const turn = searchRes.data;
-            const results = Array.isArray(turn)
-              ? turn
-              : turn.results || (Array.isArray(turn.data) ? turn.data : []);
-
-            // Only return the search result if we actually got usable results
-            if (results.length > 0) {
-              const answer = extractDirectSearchAnswer(
-                userMessage,
-                results,
-                userTimeZone,
-              );
-
-              const references = deduplicateReferences(
-                results
-                  .filter(r => !r.url?.toLowerCase().includes('exa.ai'))
-                  .map(r => ({
-                    title: r.title || r.url,
-                    url: r.url,
-                    summary: r.summary,
-                    favicon: r.favicon,
-                  })),
-              );
-
-              const resolvedId =
-                turn.searchSession ||
-                turn.id ||
-                turn._id ||
-                immediateId ||
-                (isNewChatId(conversationId)
-                  ? `search-${Date.now()}`
-                  : conversationId);
-
-              return {
-                success: true,
-                message: 'Success',
-                isStreamed: false,
-                data: {
-                  conversationId: resolvedId,
-                  responseMessage: {
-                    answer,
-                    reference: references,
-                  },
-                },
-              };
-            }
-
-            // Check if the turn itself carries a direct answer
-            const turnAny = turn as any;
-            const turnAnswer = turnAny?.answer || turnAny?.summary || turnAny?.response || turnAny?.content || '';
-            if (turnAnswer && typeof turnAnswer === 'string' && turnAnswer.trim().length > 0) {
-              const resolvedId =
-                turn.searchSession || turn.id || turn._id || immediateId ||
-                (isNewChatId(conversationId) ? `search-${Date.now()}` : conversationId);
-              return {
-                success: true,
-                message: 'Success',
-                isStreamed: false,
-                data: {
-                  conversationId: resolvedId,
-                  responseMessage: { answer: turnAnswer.trim(), reference: [] },
-                },
-              };
-            }
-          }
-
-          // Search failed or returned empty — fall through to regular AI chat
-          console.warn('[SEARCH FALLBACK] Exa search returned no results, falling back to AI chat.');
-        } catch (err: any) {
-          console.warn('[SEARCH FALLBACK] Search threw error, falling back to AI chat:', err?.message);
-        }
-      }
-
-      if (
-        selectedOption === OPTIONS.RESEARCH ||
-        conversationId === 'new-research' ||
-        pathname === '/c/new-research'
-      ) {
-        try {
-          const spaceId = await getOrEnsureSpaceId(accessToken);
-          const researchRes = await createSpaceResearchAction(
-            spaceId,
-            userMessage,
-            isNewChatId(conversationId) ? undefined : conversationId,
-            accessToken,
-            userContext,
-          );
-
-          if (researchRes.success && researchRes.data) {
-            const turn = researchRes.data;
-            const results = Array.isArray(turn)
-              ? turn
-              : turn.results || (Array.isArray(turn.data) ? turn.data : []);
-
-            if (results.length > 0) {
-              const answer = extractDirectSearchAnswer(
-                userMessage,
-                results,
-                userTimeZone,
-              );
-
-              const references = deduplicateReferences(
-                results
-                  .filter(r => !r.url?.toLowerCase().includes('exa.ai'))
-                  .map(r => ({
-                    title: r.title || r.url,
-                    url: r.url,
-                    summary: r.summary,
-                    favicon: r.favicon,
-                  })),
-              );
-
-              const resolvedId =
-                turn.searchSession ||
-                turn.id ||
-                turn._id ||
-                immediateId ||
-                (isNewChatId(conversationId)
-                  ? `research-${Date.now()}`
-                  : conversationId);
-
-              return {
-                success: true,
-                message: 'Success',
-                isStreamed: false,
-                data: {
-                  conversationId: resolvedId,
-                  responseMessage: {
-                    answer,
-                    reference: references,
-                  },
-                },
-              };
-            }
-
-            // Check if the turn itself carries a direct answer
-            const turnAny = turn as any;
-            const turnAnswer = turnAny?.answer || turnAny?.summary || turnAny?.response || turnAny?.content || '';
-            if (turnAnswer && typeof turnAnswer === 'string' && turnAnswer.trim().length > 0) {
-              const resolvedId =
-                turn.searchSession || turn.id || turn._id || immediateId ||
-                (isNewChatId(conversationId) ? `research-${Date.now()}` : conversationId);
-              return {
-                success: true,
-                message: 'Success',
-                isStreamed: false,
-                data: {
-                  conversationId: resolvedId,
-                  responseMessage: { answer: turnAnswer.trim(), reference: [] },
-                },
-              };
-            }
-          }
-
-          // Research failed or returned empty — fall through to regular AI chat
-          console.warn('[RESEARCH FALLBACK] Research returned no results, falling back to AI chat.');
-        } catch (err: any) {
-          console.warn('[RESEARCH FALLBACK] Research threw error, falling back to AI chat:', err?.message);
-        }
+      if (searchOrResearchResult) {
+        return searchOrResearchResult;
       }
 
       const isKbId =
@@ -2054,57 +1676,12 @@ export default function ChatInput({
     activeConversation?.messages && activeConversation.messages.length > 0;
 
   const attachmentsPreview = (
-    <>
-      {/* Image Preview */}
-      {imageBase64 && (
-        <div className="relative w-fit">
-          <img
-            src={imageBase64}
-            alt="Uploaded preview"
-            className="h-12 w-12 rounded-lg object-cover"
-          />
-          <button
-            onClick={handleRemoveImage}
-            className="absolute -top-2 -right-2 rounded-full bg-red-400 p-1 text-white hover:bg-red-600"
-          >
-            <Plus className="bold size-3 rotate-45" />
-          </button>
-        </div>
-      )}
-
-      {/* File Cards Preview */}
-      {selectedFiles && selectedFiles.length > 0 && (
-        <div className="custom-scrollbar flex max-h-[80px] flex-wrap gap-2 overflow-y-auto">
-          {selectedFiles.map((file, index) => (
-            <div
-              key={index}
-              className="animate-in fade-in inline-flex max-w-[140px] items-center gap-2 rounded-[3px] border border-black/10 bg-white px-2.5 py-1.5 shadow-xs duration-200 dark:border-zinc-700 dark:bg-zinc-800"
-            >
-              <FileText className="size-4 flex-shrink-0 text-gray-500" />
-              <div className="flex min-w-0 flex-1 flex-col">
-                <span
-                  className="text-gray-705 truncate text-xs font-semibold dark:text-zinc-300"
-                  title={file.name}
-                >
-                  {file.name}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  const updated = selectedFiles.filter((_, i) => i !== index);
-                  setSelectedFiles(updated);
-                }}
-                className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
-                title="Remove file"
-              >
-                <X className="size-3.5" />
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-    </>
+    <FileAttachmentPreview
+      imageBase64={imageBase64}
+      handleRemoveImage={handleRemoveImage}
+      selectedFiles={selectedFiles}
+      setSelectedFiles={setSelectedFiles}
+    />
   );
 
   return (
