@@ -908,12 +908,14 @@ export default function ChatInput({
             userTimeZone,
           );
 
-          const references = results.map(r => ({
-            title: r.title || r.url,
-            url: r.url,
-            summary: r.summary,
-            favicon: r.favicon,
-          }));
+          const references = results
+            .filter(r => !r.url?.toLowerCase().includes('exa.ai'))
+            .map(r => ({
+              title: r.title || r.url,
+              url: r.url,
+              summary: r.summary,
+              favicon: r.favicon,
+            }));
 
           const resolvedId =
             turn.searchSession ||
@@ -976,12 +978,14 @@ export default function ChatInput({
             userTimeZone,
           );
 
-          const references = results.map(r => ({
-            title: r.title || r.url,
-            url: r.url,
-            summary: r.summary,
-            favicon: r.favicon,
-          }));
+          const references = results
+            .filter(r => !r.url?.toLowerCase().includes('exa.ai'))
+            .map(r => ({
+              title: r.title || r.url,
+              url: r.url,
+              summary: r.summary,
+              favicon: r.favicon,
+            }));
 
           const resolvedId =
             turn.searchSession ||

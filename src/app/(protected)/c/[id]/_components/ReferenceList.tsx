@@ -24,8 +24,15 @@ export default function ReferencesList({
     }
   };
 
+  // Filter out internal/search proxy domains like exa.ai
+  const validReferences = references.filter(ref => {
+    const domain = (ref.domain || (ref.url ? getDomain(ref.url) : '')).toLowerCase();
+    const url = (ref.url || '').toLowerCase();
+    return !domain.includes('exa.ai') && !url.includes('exa.ai');
+  });
+
   // Cap at top 5 sources to list cleanly in one row
-  const displayReferences = references.slice(0, 5);
+  const displayReferences = validReferences.slice(0, 5);
 
   return (
     <div className="inline-flex flex-wrap items-center gap-2">
