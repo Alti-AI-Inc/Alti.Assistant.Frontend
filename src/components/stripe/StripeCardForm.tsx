@@ -169,7 +169,7 @@ export function StripeCardForm({
             type="text"
             value={cardholderName}
             onChange={(e) => setCardholderName(e.target.value)}
-            placeholder="Enter Cardholder Name"
+            placeholder="Cardholder Name"
             disabled={disabled || !isAvailable}
             className="h-10 text-sm font-sans text-[#09090b] dark:text-[#fafafa] placeholder:text-[#71717a] dark:placeholder:text-[#a1a1aa] border border-zinc-200 dark:border-zinc-800 !bg-white dark:!bg-zinc-900 focus:!bg-white dark:focus:!bg-zinc-900 focus-visible:!bg-white dark:focus-visible:!bg-zinc-900 active:!bg-white dark:active:!bg-zinc-900 autofill:!bg-white dark:autofill:!bg-zinc-900 autofill:shadow-[0_0_0_1000px_white_inset] dark:autofill:shadow-[0_0_0_1000px_#18181b_inset] focus:outline-none focus-visible:outline-none focus:ring-1 focus:ring-black/20 focus:shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 focus-visible:shadow-sm rounded-[5px]"
           />
@@ -192,7 +192,7 @@ export function StripeCardForm({
               {isAvailable ? (
                 <CardNumberElement
                   id="card-number"
-                  options={{ ...baseElementOptions, showIcon: false, placeholder: 'Enter Card Number' }}
+                  options={{ ...baseElementOptions, showIcon: false, placeholder: 'Card Number' }}
                   onChange={(e: StripeCardNumberElementChangeEvent) => {
                     handleError(e.error);
                     setNumberComplete(e.complete);
