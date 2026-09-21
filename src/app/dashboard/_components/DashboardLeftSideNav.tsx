@@ -149,12 +149,7 @@ const DashboardLeftSideNav = () => {
                   )}
                   {!isSuperAdmin && (
                     <DropdownMenuItem onClick={() => router.push('/legal')}>
-                      <Scale className="text-black" /> Legal Documents
-                    </DropdownMenuItem>
-                  )}
-                  {!isSuperAdmin && (
-                    <DropdownMenuItem onClick={() => router.push('/contact-support')}>
-                      <Mail className="text-black dark:text-white" /> Contact Support
+                      <Scale className="text-black" /> Legal
                     </DropdownMenuItem>
                   )}
                 </DropdownMenuGroup>

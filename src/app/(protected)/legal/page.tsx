@@ -611,7 +611,7 @@ export default function page() {
         {/* Dynamic Header */}
         <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center justify-between px-8 flex-none bg-white dark:bg-gray-950">
           <h1 className="text-base font-semibold text-gray-900 dark:text-white">
-            Legal Documents
+            Legal
           </h1>
           <TabsList className="bg-white dark:bg-zinc-800 p-[3px] rounded-lg h-9 border border-black/10 dark:border-white/10 shadow-xs">
             <TabsTrigger
