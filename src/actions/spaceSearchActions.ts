@@ -1,7 +1,6 @@
 'use server';
 
 import { auth } from '@/auth';
-import { HARD_LAW_SYSTEM_INSTRUCTION } from '@/lib/safety';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const DEFAULT_NUM_RESULTS = parseInt(
@@ -92,6 +91,7 @@ export async function createSpaceSearchAction(
       },
     );
     const result = await response.json().catch(() => null);
+    console.log('[SEARCH DEBUG] status:', response.status, 'result keys:', result ? Object.keys(result) : 'null', 'data keys:', result?.data ? Object.keys(result.data) : 'no data', 'results length:', result?.data?.results?.length ?? result?.results?.length ?? 'none');
     if (!response.ok) {
       return {
         success: false,

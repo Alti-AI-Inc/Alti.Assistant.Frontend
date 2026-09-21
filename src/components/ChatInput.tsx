@@ -959,6 +959,7 @@ export default function ChatInput({
           }
 
           const turn = searchRes.data;
+          console.log('[CHATINPUT DEBUG] searchRes.success:', searchRes.success, 'turn type:', typeof turn, 'Array.isArray:', Array.isArray(turn), 'turn.results:', turn?.results?.length, 'turn keys:', turn ? Object.keys(turn) : 'null');
           const results = Array.isArray(turn)
             ? turn
             : turn.results || (Array.isArray(turn.data) ? turn.data : []);

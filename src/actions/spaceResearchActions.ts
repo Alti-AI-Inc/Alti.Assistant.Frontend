@@ -1,7 +1,6 @@
 'use server';
 
 import { auth } from '@/auth';
-import { HARD_LAW_SYSTEM_INSTRUCTION } from '@/lib/safety';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const DEFAULT_NUM_RESULTS = parseInt(
