@@ -34,6 +34,7 @@ const HEDGE_LINE_PATTERNS = [
   /i can (parse|fetch|provide)/i,
   /i cannot (determine|find)/i,
   /\b(it is believed|it is assumed|it might be|could potentially|rumored that|unverified claim|pure speculation)\b/i,
+  /\b(?:simulation|simulated|hypothetical|madden|prediction|predicted|projected|forecast|mock|concept)\b/i,
 ];
 
 const MONTHS: Record<string, number> = {
@@ -229,6 +230,24 @@ export function normalizeSportsTeamNames(text: string): string {
     '(?:beat|beats|defeated|defeats|edged|edges|lost to|lost|fell to|won against|won over|won|topped|played|plays|facing|faces|tied|scored|trailed|led|recorded|posted)';
 
   for (const [nickname, meta] of Object.entries(MAJOR_SPORTS_TEAMS)) {
+    // City name as subject: "Buffalo defeated Detroit" -> "The Buffalo Bills defeated the Detroit Lions" (only if not already followed by nickname)
+    const citySubjectRegex = new RegExp(
+      `(\\b(?:The\\s+)?)${meta.city}\\b(?!\\s+${nickname})\\s+(${sportsVerbs})\\b`,
+      'gi',
+    );
+    res = res.replace(citySubjectRegex, (match, prefix, verb, offset) => {
+      const isStart = offset === 0 || /[.!?]\s*$/.test(res.slice(0, offset));
+      const thePrefix = isStart ? 'The ' : 'the ';
+      return `${thePrefix}${meta.full} ${verb}`;
+    });
+
+    // City name as object: "defeated Detroit" -> "defeated the Detroit Lions" (only if not already followed by nickname)
+    const cityObjectRegex = new RegExp(
+      `\\b(${sportsVerbs})\\s+(?:the\\s+)?${meta.city}\\b(?!\\s+${nickname})`,
+      'gi',
+    );
+    res = res.replace(cityObjectRegex, `$1 the ${meta.full}`);
+
     // Subject position: "The Bills beat" or "Bills beat"
     const subjectRegex = new RegExp(
       `(\\b(?:The\\s+)?)(?<!${meta.city}\\s+)${nickname}\\s+(${sportsVerbs})\\b`,
@@ -328,7 +347,14 @@ export function stripInlineFluff(text: string): string {
       /^(?:the final score shown is|the score shown is|the final score is)\s*/gi,
       '',
     )
-    .replace(/\s*,\s*the final score shown is\s*/gi, ', final score: ')
+    .replace(
+      /^in\s+(?:the\s+)?.+?\b(?:game|match|matchup)\b(?:[\s,]+(?:on|at)\s+[A-Za-z0-9\s’'.-]+(?:,\s*\d{4})?)?[,:\s]*/i,
+      '',
+    )
+    .replace(
+      /^(?:on\s+(?:sunday|monday|tuesday|wednesday|thursday|friday|saturday|january|february|march|april|may|june|july|august|september|october|november|december)[^,]+,\s*)/gi,
+      '',
+    )
     .replace(
       /^(?:according to\s+(?:the\s+)?(?:game\s+recap|recap|report|story),?\s*)/gi,
       '',
@@ -485,11 +511,27 @@ export function extractDirectSearchAnswer(
       const urlLower = (item.url || '').toLowerCase();
       if (
         /\.gov\b|\.edu\b/.test(urlLower) ||
-        /official|nfl\.com|espn\.com|detroitlions\.com|mlb\.com|nba\.com|nhl\.com|cbssports\.com|foxsports\.com|theathletic\.com|si\.com|reuters\.com|bloomberg\.com|apnews\.com|wsj\.com|sec\.gov|cdc\.gov|weather\.gov/i.test(
+        /official|nfl\.com|espn\.com|detroitlions\.com|buffalobills\.com|mlb\.com|nba\.com|nhl\.com|cbssports\.com|foxsports\.com|theathletic\.com|si\.com|reuters\.com|bloomberg\.com|apnews\.com|wsj\.com|sec\.gov|cdc\.gov|weather\.gov/i.test(
           urlLower,
         )
       ) {
-        score += 10;
+        score += 15;
+      }
+
+      // Boost if paragraph matches sports franchises mentioned in query
+      for (const [nickname, meta] of Object.entries(MAJOR_SPORTS_TEAMS)) {
+        const queryHasTeam =
+          queryTerms.includes(nickname.toLowerCase()) ||
+          queryTerms.includes(meta.city.toLowerCase());
+        if (queryHasTeam) {
+          const paraHasTeam =
+            lowerPara.includes(nickname.toLowerCase()) ||
+            lowerPara.includes(meta.city.toLowerCase()) ||
+            lowerPara.includes(meta.full.toLowerCase());
+          if (paraHasTeam) {
+            score += 15;
+          }
+        }
       }
 
       // Factual certainty bonus vs speculation penalty
@@ -510,6 +552,17 @@ export function extractDirectSearchAnswer(
 
       // Query Intent: Score / Game Outcome
       if (isScoreQuery) {
+        const metaText = `${item.url || ''} ${item.title || ''} ${para}`.toLowerCase();
+
+        // Disqualify simulated, hypothetical, mock, prediction, preview, or betting odds in score queries
+        if (
+          /\b(?:simulation|simulated|hypothetical|madden|prediction|predicted|projected|preview|odds|spread|over\/under|concept|mock draft|game preview)\b/i.test(
+            metaText,
+          )
+        ) {
+          score -= 100;
+        }
+
         const hasScorePattern = /\b\d{1,3}\s*[-–—]\s*\d{1,3}\b/.test(para);
         const hasOutcomeVerb =
           /\b(beat|defeated|won|lost|loss|victory|edged|fell to)\b/i.test(para);
@@ -520,6 +573,10 @@ export function extractDirectSearchAnswer(
           score += 20;
         } else {
           score -= 25;
+        }
+
+        if (/\b(?:final|recap|box\s*score|post-game|defeated|beat)\b/i.test(para)) {
+          score += 15;
         }
       }
 
