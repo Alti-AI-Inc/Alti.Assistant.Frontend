@@ -24,7 +24,7 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo',
     description:
       'Test out Aphura’s capabilities with basic search and model limits.',
-    features: ['100 Prompts'],
+    features: ['250 Prompts'],
   },
   {
     id: 'basic',
