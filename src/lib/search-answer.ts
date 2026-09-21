@@ -139,21 +139,25 @@ export function extractDirectSearchAnswer(
   // Sort by highest score first
   scoredCandidates.sort((a, b) => b.score - a.score);
 
-  const formatAssistantPersona = (rawText: string): string => {
+  const formatDirectAnswer = (rawText: string): string => {
     if (!rawText || rawText.trim().length === 0) {
-      return "Hey boss, couldn't find a direct record on that one. Try giving me a bit more detail.";
+      return 'No direct record found for this query.';
     }
 
-    const trimmed = rawText.replace(/^[:\-\s]+/, '').trim();
-    if (/^hey boss/i.test(trimmed)) {
-      return trimmed;
+    let cleaned = rawText
+      .replace(/^(hey boss,?\s*(i found the answer for you:?)?|here('s| is) (what|the answer:?)|to answer your question:?)\s*/i, '')
+      .replace(/^[:\-\s]+/, '')
+      .trim();
+
+    if (cleaned.length > 0) {
+      cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
     }
 
-    return `Hey boss, I found the answer for you: ${trimmed}`;
+    return cleaned || 'No direct record found for this query.';
   };
 
   if (scoredCandidates.length > 0) {
-    return formatAssistantPersona(scoredCandidates[0].text);
+    return formatDirectAnswer(scoredCandidates[0].text);
   }
 
   // Fallback: pick first cleaned summary without hedging
@@ -161,10 +165,10 @@ export function extractDirectSearchAnswer(
     if (item.summary) {
       const cleaned = cleanSummaryText(item.summary);
       if (cleaned) {
-        return formatAssistantPersona(cleaned);
+        return formatDirectAnswer(cleaned);
       }
     }
   }
 
-  return formatAssistantPersona(results[0]?.summary || '');
+  return formatDirectAnswer(results[0]?.summary || '');
 }
