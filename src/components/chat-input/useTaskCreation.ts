@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { storage, STORAGE_KEYS } from '@/lib/storage';
 
 interface UseTaskCreationProps {
   message: string;
-  data: any;
-  onOpen: any;
+  data: { accessToken?: string } | null | undefined;
+  onOpen: (modal: { type: ModalType; actionId?: string }) => void;
   setMessage: (message: string) => void;
   stopListening: () => void;
   activeBotId?: string | null;
@@ -47,10 +48,19 @@ export function useTaskCreation({
       botId: activeBotId || undefined,
     };
 
-    const existing = localStorage.getItem('aphura_task_runs');
-    const runsList = existing ? JSON.parse(existing) : [];
+    interface TaskRunRecord {
+      id: string;
+      taskName: string;
+      timestamp: string;
+      status: string;
+      summary: string;
+      botId?: string;
+      duration?: number;
+    }
+
+    const runsList = storage.get<TaskRunRecord[]>(STORAGE_KEYS.TASK_RUNS) || [];
     runsList.unshift(newRun);
-    localStorage.setItem('aphura_task_runs', JSON.stringify(runsList));
+    storage.set(STORAGE_KEYS.TASK_RUNS, runsList);
 
     toast.success('Task scheduled successfully', {
       description: 'You can monitor execution logs in the sidebar Inbox tab.',
@@ -62,18 +72,13 @@ export function useTaskCreation({
 
     // Simulate completion
     setTimeout(() => {
-      const currentRuns = JSON.parse(
-        localStorage.getItem('aphura_task_runs') || '[]',
-      );
-      const targetRun = currentRuns.find((r: any) => r.id === runId);
+      const currentRuns = storage.get<TaskRunRecord[]>(STORAGE_KEYS.TASK_RUNS) || [];
+      const targetRun = currentRuns.find((r) => r.id === runId);
       if (targetRun) {
         targetRun.status = 'success';
         targetRun.duration = 2450;
         targetRun.summary = `Successfully executed task automation pipeline. Verified triggers, loaded task inputs, and completed task: "${taskName}".`;
-        localStorage.setItem(
-          'aphura_task_runs',
-          JSON.stringify(currentRuns),
-        );
+        storage.set(STORAGE_KEYS.TASK_RUNS, currentRuns);
       }
     }, 3000);
   };

@@ -152,7 +152,7 @@ export const AdminSecondarySidebar = () => {
                     {group.groupName}
                   </div>
                 )}
-                {group.items.map((item: { name: string; href: string; icon: any; exact?: boolean }) => {
+                {group.items.map((item: { name: string; href: string; icon: React.ElementType; exact?: boolean }) => {
                   const currentPlan = searchParams?.get('plan');
                   const isActive = item.exact 
                     ? pathname === item.href 

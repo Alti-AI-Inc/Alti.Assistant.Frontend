@@ -6,7 +6,7 @@ import { Globe, FileText } from 'lucide-react';
 interface ReferencesProps {
   references: Reference[];
   webSearchQueries?: string[];
-  searchEntryPoint?: any;
+  searchEntryPoint?: unknown;
 }
 
 export default function ReferencesList({
@@ -65,7 +65,7 @@ export default function ReferencesList({
           const domain =
             ref.domain || (isWeb ? getDomain(ref.url!) : 'Document');
           const title =
-            (ref as any).extractedTitle ||
+            ref.extractedTitle ||
             ref.title ||
             domain ||
             'Source';

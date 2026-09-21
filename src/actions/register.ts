@@ -23,7 +23,7 @@ export async function RegisterUser({
   password: string;
   confirmPassword: string;
   invitationToken?: string;
-}): Promise<ApiResponse<any>> {
+}): Promise<ApiResponse<unknown>> {
   try {
     const body: Record<string, string> = { email, password, confirmPassword };
     if (invitationToken) body.invitationToken = invitationToken;
@@ -43,7 +43,7 @@ export async function RegisterUser({
       Array.isArray(data.errorMessages) &&
       data.errorMessages.length > 0
     ) {
-      errorMessage = data.errorMessages.map((e: any) => e.message).join(', ');
+      errorMessage = data.errorMessages.map((e: { message?: string }) => e.message || '').filter(Boolean).join(', ');
     }
 
     return {
@@ -52,12 +52,12 @@ export async function RegisterUser({
       data: data.data || data,
       statusCode: response.status,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('RegisterUser Error:', error);
     return {
       success: false,
-      message: error?.message || 'Failed to register.',
-      debugMessage: error?.message || String(error),
+      message: error instanceof Error ? error.message : 'Failed to register.',
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -65,7 +65,7 @@ export async function RegisterUser({
 
 export async function confirmRegistration(
   token: string,
-): Promise<ApiResponse<any>> {
+): Promise<ApiResponse<{ accessToken?: string; [key: string]: unknown }>> {
   try {
     const response = await fetch(`${API_URL}/auth/register/confirmation`, {
       method: 'POST',
@@ -79,12 +79,12 @@ export async function confirmRegistration(
       data: data.data || data,
       statusCode: response.status,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('confirmRegistration Error:', error);
     return {
       success: false,
-      message: error?.message || 'Failed to verify code.',
-      debugMessage: error?.message || String(error),
+      message: error instanceof Error ? error.message : 'Failed to verify code.',
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -120,7 +120,7 @@ export async function checkEmailStatus(
 
 export async function resendConfirmation(
   email: string,
-): Promise<ApiResponse<any>> {
+): Promise<ApiResponse<unknown>> {
   try {
     const response = await fetch(
       `${API_URL}/auth/register/resend-confirmation`,
@@ -148,7 +148,7 @@ export async function resendConfirmation(
       data: data.data || data,
       statusCode: response.status,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('resendConfirmation Error:', error);
     return {
       success: false,

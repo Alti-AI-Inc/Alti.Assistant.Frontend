@@ -71,11 +71,11 @@ export async function createSpaceAction(
       message: result?.message || 'Space created',
       data: result?.data ?? result,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('createSpaceAction Error:', error);
     return {
       success: false,
-      message: error.message || 'Failed to create space',
+      message: error instanceof Error ? error.message : 'Failed to create space',
     };
   }
 }
@@ -101,11 +101,11 @@ export async function getSpacesAction(
       message: result?.message || 'Success',
       data: result?.data ?? [],
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('getSpacesAction Error:', error);
     return {
       success: false,
-      message: error.message || 'Failed to fetch spaces',
+      message: error instanceof Error ? error.message : 'Failed to fetch spaces',
     };
   }
 }
@@ -129,11 +129,11 @@ export async function getSpaceAction(id: string): Promise<ApiResponse<Space>> {
       message: result?.message || 'Success',
       data: result?.data ?? result,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('getSpaceAction Error:', error);
     return {
       success: false,
-      message: error.message || 'Failed to fetch space',
+      message: error instanceof Error ? error.message : 'Failed to fetch space',
     };
   }
 }
@@ -162,11 +162,11 @@ export async function updateSpaceAction(
       message: result?.message || 'Space updated',
       data: result?.data ?? result,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('updateSpaceAction Error:', error);
     return {
       success: false,
-      message: error.message || 'Failed to update space',
+      message: error instanceof Error ? error.message : 'Failed to update space',
     };
   }
 }
@@ -189,11 +189,11 @@ export async function deleteSpaceAction(
       };
     }
     return { success: true, message: 'Space deleted' };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('deleteSpaceAction Error:', error);
     return {
       success: false,
-      message: error.message || 'Failed to delete space',
+      message: error instanceof Error ? error.message : 'Failed to delete space',
     };
   }
 }

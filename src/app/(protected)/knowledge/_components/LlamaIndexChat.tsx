@@ -174,10 +174,10 @@ export const LlamaIndexChat = () => {
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         }
       ]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Indexing Error:', error);
       setIndexState('error');
-      setErrorMessage(error.message || 'Failed to complete document vector indexing.');
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to complete document vector indexing.');
     }
   };
 
@@ -212,7 +212,6 @@ export const LlamaIndexChat = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session?.accessToken || ''}`,
           },
           body: JSON.stringify({ query: userPrompt }),
         });
@@ -256,19 +255,19 @@ export const LlamaIndexChat = () => {
                     setMessages(prev => [...prev, botMessage]);
                     setStreamingContent('');
                   }
-                } catch (e) {
+                } catch {
                   // non-fatal parser error
                 }
               }
             }
           }
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('SSE Error:', error);
         setMessages(prev => [...prev, {
           id: `error-${Date.now()}`,
           role: 'assistant',
-          content: `Error in live streaming: **${error.message}**`,
+          content: `Error in live streaming: **${error instanceof Error ? error.message : String(error)}**`,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         }]);
       } finally {
@@ -279,7 +278,7 @@ export const LlamaIndexChat = () => {
 
     // Direct REST endpoints routing
     let endpoint = '/rag-system/query';
-    let requestBody: any = { query: userPrompt };
+    let requestBody: Record<string, unknown> = { query: userPrompt };
 
     switch (queryMode) {
       case 'advanced-router':
@@ -346,13 +345,13 @@ export const LlamaIndexChat = () => {
       };
 
       setMessages(prev => [...prev, botMessage]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Query Error:', error);
       const botTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const errorMessage: Message = {
         id: `error-${Date.now()}`,
         role: 'assistant',
-        content: `Error retrieving data from the vault: **${error.message || 'Server timeout or connection failed.'}**`,
+        content: `Error retrieving data from the vault: **${error instanceof Error ? error.message : 'Server timeout or connection failed.'}**`,
         timestamp: botTimestamp,
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -467,13 +466,13 @@ export const LlamaIndexChat = () => {
       }
 
       fetchVaultFiles();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to delete document:', error);
-      alert(error.message || 'Failed to delete document from the vault.');
+      alert(error instanceof Error ? error.message : 'Failed to delete document from the vault.');
     }
   };
 
-  const handleActivateFile = (selectedFile: any) => {
+  const handleActivateFile = (selectedFile: { fileName: string }) => {
     setFile(null);
     setIndexedFileName(selectedFile.fileName);
     setIndexState('indexed');

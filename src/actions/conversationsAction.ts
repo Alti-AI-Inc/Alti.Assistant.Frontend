@@ -1,6 +1,6 @@
 import { apiClient } from '@/lib/api-client';
 import { HARD_LAW_SYSTEM_INSTRUCTION } from '@/lib/safety';
-import { ConversationMessage } from '@/types/conversation';
+import { ConversationMessage, Reference } from '@/types/conversation';
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -8,6 +8,7 @@ export interface ApiResponse<T = any> {
   data?: T;
   debugMessage?: string;
   statusCode?: number;
+  isStreamed?: boolean;
 }
 
 export async function PostConversation(
@@ -16,7 +17,7 @@ export async function PostConversation(
   accessToken: string,
   conversationId?: string,
   knowledgebaseId?: string,
-  extraParams?: Record<string, any>,
+  extraParams?: Record<string, unknown>,
 ): Promise<ApiResponse> {
   try {
     const response = await apiClient(apiUrl, {
@@ -62,11 +63,11 @@ export async function PostConversation(
     const data = await response.json();
     // Unwrap data if present to avoid nesting
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       message: 'An unexpected error occurred. Please try again.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -77,8 +78,8 @@ export async function PostConversationStream(
   accessToken: string,
   conversationId?: string,
   knowledgebaseId?: string,
-  extraParams?: Record<string, any>,
-  onChunk?: (chunk: { type: string; content?: string; reference?: any[]; citations?: any[]; conversationId?: string }) => void,
+  extraParams?: Record<string, unknown>,
+  onChunk?: (chunk: { type: string; content?: string; reference?: Reference[]; citations?: Reference[]; conversationId?: string }) => void,
 ): Promise<ApiResponse> {
   try {
     const response = await apiClient(apiUrl, {
@@ -159,11 +160,11 @@ export async function PostConversationStream(
     }
 
     return { success: true, message: 'Success' };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       message: 'An unexpected error occurred. Please try again.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -208,11 +209,11 @@ export async function PostConversationWithFile(
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       message: 'An unexpected error occurred. Please try again.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -283,11 +284,11 @@ export async function fetchConversationList(
 
     const data = await res.json();
     return { success: true, message: 'Success', data: data.data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       message: 'Failed to fetch conversations.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -320,11 +321,11 @@ export async function fetchSavedConversationList(
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data.conversations };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       message: 'Failed to fetch saved conversations.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -358,11 +359,11 @@ export async function searchConversations(
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       message: 'Search failed.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -400,11 +401,11 @@ export async function loadSingleConversation(
     // Usually backend returns { success: true, data: ... } or just data.
     // I'll wrap it in standard ApiResponse structure.
     return { success: true, message: 'Success', data: data?.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       message: 'Failed to load conversation.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -430,11 +431,11 @@ export async function loadSingleSharedConversation(
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data?.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       message: 'Failed to load shared conversation.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -465,11 +466,11 @@ export const deleteConversation = async (
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       message: 'Failed to delete conversation.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 };
@@ -502,11 +503,11 @@ export const shareConversation = async (
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       message: 'Failed to share conversation.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 };
@@ -543,11 +544,11 @@ export async function renameConversationAction(
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       message: 'Failed to rename conversation.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -584,11 +585,11 @@ export async function saveConversationAction(
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       message: 'Failed to save conversation.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }

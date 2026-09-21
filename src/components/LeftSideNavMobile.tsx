@@ -1,5 +1,6 @@
 'use client';
 
+import { useNavState } from './left-side-nav/useNavState';
 import { createKnowledgeBaseAction } from '@/actions/knowledgeBaseAction';
 import { getFileIconComponent } from '@/components/panels/ProjectEditors';
 import { Dialog, DialogClose, DialogContent } from '@/components/ui/dialog';
@@ -159,662 +160,126 @@ const AVAILABLE_MCP_APPS = (() => {
 })();
 
 const LeftSideNavMobile = () => {
-  const { data } = useSession();
-  const router = useRouter();
-  const pathname = usePathname();
-  const { close } = useDrawerStore();
-  const { mode, currentTenant } = useTenant();
-
-  const isAdminMode = pathname.startsWith('/admin');
-  const isAdminSection = isAdminMode;
-
-  const userEmail = data?.user?.email?.toLowerCase();
-  const isGlobalAdmin =
-    data?.user?.role === 'admin' || data?.user?.role === 'super_admin';
-  const isTenantOwner =
-    mode === 'tenant' &&
-    (currentTenant?.role === 'admin' || currentTenant?.role === 'owner');
-  const isTenantAdmin = mode === 'tenant' && currentTenant?.role === 'manager';
-
-  const isAdmin =
-    userEmail === 'admin@aphura.ai' || isGlobalAdmin || isTenantOwner;
-  const isManager = isGlobalAdmin || isTenantOwner || isTenantAdmin;
-  const isSuperAdmin = data?.user?.role === 'super_admin';
-
-  const { onOpen } = useModalStore();
+  const state = useNavState({ side: 'left' });
   const {
-    activeConversation,
-    selectedOption,
-    setActiveConversation,
-    setSelectedOption,
-    setShowStartLastMessage,
-    setUserMessage,
-  } = useConversationsStore();
-
-  const isLoggedIn = data?.accessToken;
-  const {
-    bots,
+    SHOW_WORKSPACES,
+    activeAppSlug,
+    activeBot,
     activeBotId,
-    setActiveBotId,
-    projectTab,
-    setProjectTab,
-    reorderBots,
-    editBot,
-    deleteBot,
-    threads,
-    activeBotThreadId,
-    setActiveBotThreadId,
-    deleteThread,
-    addBotAsync,
-  } = useBotsStore();
-  const activeBot = bots.find(b => b.id === activeBotId);
-  const {
-    isRightSidebarOpen,
-    toggleRightSidebar,
-    toggleGlobalInbox,
-    isGlobalInboxOpen,
+    activeConnectorId,
+    activeConversation,
     activeTab,
+    addBotAsync,
+    allGuardrails,
+    allInstructions,
+    appsFilterTab,
+    botToDelete,
+    botToRename,
+    bots,
+    connectedAppSlugs,
+    currentEditIndex,
+    currentTenant,
+    deleteBot,
+    displayedApps,
+    dragOverAppIndex,
+    dragOverIndex,
+    draggedAppIndex,
+    draggedIndex,
+    editBot,
+    editIndexParam,
+    filteredApps,
+    getPlusButtonProps,
+    getSpaceInitials,
+    getSpaceSectionUrl,
+    getThreadIcon,
+    handleCreateSpace,
+    handleLogoMouseEnter,
+    handleTabChange,
+    hideSidebar,
+    isAdmin,
+    isAdminMode,
+    isAdminSection,
+    isCreateSpaceOpen,
+    isCreatingSpace,
+    isGlobalAdmin,
+    isGlobalInboxOpen,
+    isLeftSidebarOpen,
+    isLoggedIn,
+    isManager,
+    isRightSidebarOpen,
+    isSpaceMonitorSection,
+    isSpaceResearchSection,
+    isSuperAdmin,
+    isTenantAdmin,
+    isTenantOwner,
+    localAppsOrder,
+    logoHovered,
+    mode,
+    monitorParam,
+    newSpaceName,
+    onOpen,
+    pathname,
+    plusProps,
+    projectTab,
+    renameValue,
+    reorderApps,
+    reorderBots,
+    researchSessions,
+    router,
+    searchParams,
+    searchQuery,
+    searchSessions,
+    selectedOption,
+    sessionParam,
+    setActiveBotId,
+    setActiveBotThreadId,
+    setActiveConversation,
     setActiveTab,
-  } = useSidebarStore();
-
-  const { data: inboxItems = [] } = useInboxQuery(
-    data?.user?.id,
-    undefined,
-    false,
-    data?.accessToken,
-  );
-
-  const [isCreateSpaceOpen, setIsCreateSpaceOpen] = useState(false);
-  const [newSpaceName, setNewSpaceName] = useState('');
-  const [isCreatingSpace, setIsCreatingSpace] = useState(false);
-
-  const handleCreateSpace = async () => {
-    if (!newSpaceName.trim()) return;
-    setIsCreatingSpace(true);
-    try {
-      let backendId = '';
-      const token = data?.accessToken;
-      if (token) {
-        const kbResponse = await createKnowledgeBaseAction(
-          newSpaceName.trim(),
-          token,
-        );
-        if (kbResponse.success && kbResponse.data?.id) {
-          backendId = kbResponse.data.id;
-        }
-      }
-      const newBot = await addBotAsync(
-        {
-          name: newSpaceName.trim(),
-          description: `Custom Project Workspace: ${newSpaceName.trim()}`,
-          instructions: '',
-          model: 'Gemini 1.5 Pro',
-          avatar: '🤖',
-          guardrails: '',
-          data: backendId || undefined,
-          isShared: false,
-        },
-        token || undefined,
-      );
-
-      setIsCreateSpaceOpen(false);
-      setNewSpaceName('');
-      setActiveBotId(newBot.id);
-      router.push(`/spaces?bot=${newBot.id}`);
-    } catch (err: any) {
-      console.error(err);
-      toast.error('Failed to create space');
-    } finally {
-      setIsCreatingSpace(false);
-    }
-  };
-
-  const unreadInboxCount = inboxItems.filter(item => !item.isRead).length;
-  const [searchQuery, setSearchQuery] = useState('');
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-  const [botToDelete, setBotToDelete] = useState<string | null>(null);
-  const [spaceItemToDelete, setSpaceItemToDelete] = useState<{
-    type: 'data' | 'instructions' | 'guardrails';
-    index: number;
-    name: string;
-  } | null>(null);
-  const [botToRename, setBotToRename] = useState<string | null>(null);
-
-  const [localAppsOrder, setLocalAppsOrder] = useState<APP[]>([]);
-  const [draggedAppIndex, setDraggedAppIndex] = useState<number | null>(null);
-  const [dragOverAppIndex, setDragOverAppIndex] = useState<number | null>(null);
-
-  const reorderApps = (fromIdx: number, toIdx: number) => {
-    const updated = [...localAppsOrder];
-    const [removed] = updated.splice(fromIdx, 1);
-    updated.splice(toIdx, 0, removed);
-    setLocalAppsOrder(updated);
-
-    const orderSlugs = updated.map(a => a.app_name.toLowerCase());
-    localStorage.setItem('mcp_app_order', JSON.stringify(orderSlugs));
-  };
-  const [renameValue, setRenameValue] = useState('');
-
-  useEffect(() => {
-    if (botToRename) {
-      const targetBot = bots.find(b => b.id === botToRename);
-      setRenameValue(targetBot?.name || '');
-    }
-  }, [botToRename, bots]);
-
-  const [tasks, setTasks] = useState<any[]>([]);
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const savedTasks = localStorage.getItem('aphura_automations');
-      if (savedTasks) {
-        setTasks(JSON.parse(savedTasks));
-      } else {
-        setTasks([]);
-      }
-    };
-
-    handleStorageChange();
-
-    window.addEventListener('storage', handleStorageChange);
-    window.addEventListener(
-      'aphura_automations_updated',
-      handleStorageChange,
-    );
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener(
-        'aphura_automations_updated',
-        handleStorageChange,
-      );
-    };
-  }, [pathname]);
-  const searchParams = useSearchParams();
-  const isSpaceMonitorSection =
-    pathname.startsWith('/spaces') &&
-    searchParams?.get('section') === 'monitor';
-  const getSpaceSectionUrl = (section?: 'monitor') => {
-    const nextParams = new URLSearchParams();
-
-    if (activeBotId) {
-      nextParams.set('bot', activeBotId);
-    }
-
-    if (!section) {
-      const sessionParam = searchParams?.get('session');
-      if (sessionParam) {
-        nextParams.set('session', sessionParam);
-      }
-    } else {
-      nextParams.set('section', section);
-    }
-
-    const queryString = nextParams.toString();
-    return queryString ? `/spaces?${queryString}` : '/spaces';
-  };
-  const activeAppSlug = searchParams?.get('app');
-  const activeConnectorId = searchParams?.get('connector') || 'file';
-  const viewParam = searchParams?.get('view');
-  const editIndexParam = searchParams?.get('editIndex');
-  const currentEditIndex =
-    editIndexParam !== null && editIndexParam !== undefined
-      ? parseInt(editIndexParam, 10)
-      : -1;
-
-  const [connectedAppSlugs, setConnectedAppSlugs] = useState<Set<string>>(
-    new Set(),
-  );
-
-  const { data: connections } = useConnectionsQuery(data?.accessToken);
-
-  useEffect(() => {
-    if (connections) {
-      const activeSlugs = new Set(
-        connections
-          .map(account => account.toolkit?.slug?.toLowerCase())
-          .filter(Boolean),
-      );
-
-      // Seed sample apps for testing if this is meram.michael@gmail.com
-      if (data?.user?.email?.toLowerCase() === 'meram.michael@gmail.com') {
-        const sampleSlugs = ['slack', 'google-maps', 'postgres', 'evernote'];
-        sampleSlugs.forEach(slug => activeSlugs.add(slug));
-      }
-
-      setConnectedAppSlugs(activeSlugs);
-
-      // Resolve connected apps
-      const connected = allApps.filter(app =>
-        activeSlugs.has(app.app_name.toLowerCase()),
-      );
-
-      let savedOrder: string[] = [];
-      try {
-        const stored = localStorage.getItem('mcp_app_order');
-        if (stored) savedOrder = JSON.parse(stored);
-      } catch (e) {}
-
-      let sorted: APP[] = [];
-      if (savedOrder && savedOrder.length > 0) {
-        savedOrder.forEach(slug => {
-          const match = connected.find(
-            a => a.app_name.toLowerCase() === slug.toLowerCase(),
-          );
-          if (match) sorted.push(match);
-        });
-        const remaining = connected.filter(
-          a => !savedOrder.includes(a.app_name.toLowerCase()),
-        );
-        remaining.sort((a, b) =>
-          a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }),
-        );
-        sorted = [...sorted, ...remaining];
-      } else {
-        sorted = connected.sort((a, b) =>
-          a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }),
-        );
-      }
-      setLocalAppsOrder(sorted);
-    }
-  }, [connections, data?.user?.email]);
-
-  const filteredApps = useMemo(() => {
-    return AVAILABLE_MCP_APPS.filter(
-      app =>
-        app.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        app.description.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
-  }, [searchQuery]);
-
-  const displayedApps = useMemo(() => {
-    if (searchQuery.trim() !== '') {
-      return filteredApps;
-    }
-    const connected = AVAILABLE_MCP_APPS.filter(app =>
-      connectedAppSlugs.has(app.app_name.toLowerCase()),
-    );
-    const nonConnected = AVAILABLE_MCP_APPS.filter(
-      app => !connectedAppSlugs.has(app.app_name.toLowerCase()),
-    );
-    return [...connected, ...nonConnected];
-  }, [searchQuery, filteredApps, connectedAppSlugs]);
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      setActiveTab('search');
-      return;
-    }
-    if (isSuperAdmin) {
-      setActiveTab('account');
-      return;
-    }
-    if (pathname === '/spaces' || pathname.startsWith('/spaces')) {
-      setActiveTab('search');
-    } else if (pathname === '/tasks' || pathname.startsWith('/tasks')) {
-      setActiveTab('search');
-    } else if (pathname === '/apps' || pathname.startsWith('/apps')) {
-      setActiveTab('search');
-    } else if (pathname === '/' || pathname.startsWith('/c/')) {
-      if (selectedOption === OPTIONS.RESEARCH) {
-        setActiveTab('research');
-      } else if (selectedOption === OPTIONS.CODE) {
-        setActiveTab('code');
-      } else if (
-        selectedOption === OPTIONS.DRAFT_DOCUMENT ||
-        selectedOption === OPTIONS.REWRITE ||
-        selectedOption === OPTIONS.TRANSLATE_DOCUMENTS ||
-        selectedOption === OPTIONS.BRAINSTORM ||
-        selectedOption === OPTIONS.GENERATE_PLAN ||
-        selectedOption === OPTIONS.REVIEW_CONTRACT ||
-        selectedOption === OPTIONS.GENERATE_REPORT
-      ) {
-        setActiveTab('write');
-      } else if (
-        selectedOption === OPTIONS.IMAGE ||
-        selectedOption === OPTIONS.EDIT_IMAGE
-      ) {
-        setActiveTab('image');
-      } else if (selectedOption === OPTIONS.AUDIO) {
-        setActiveTab('audio');
-      } else if (selectedOption === OPTIONS.VIDEO) {
-        setActiveTab('video');
-      } else {
-        setActiveTab('search');
-      }
-    } else if (
-      pathname.startsWith('/instructions') ||
-      pathname.startsWith('/guardrails') ||
-      pathname.startsWith('/platform-knowledge') ||
-      pathname.startsWith('/legal') ||
-      pathname.startsWith('/admin') ||
-      pathname.startsWith('/platform-memory') ||
-      pathname.startsWith('/change-password') ||
-      pathname.startsWith('/invite-friends')
-    ) {
-      setActiveTab('account');
-    } else if (pathname.startsWith('/knowledge')) {
-      setActiveTab('none');
-    }
-  }, [pathname, selectedOption, isLoggedIn]);
-
-  // Reset active tab to search when user logs out
-  useEffect(() => {
-    if (!isLoggedIn) {
-      setActiveTab('search');
-    }
-  }, [isLoggedIn]);
-
-  // Prefetch new chat route for instantaneous navigation
-  useEffect(() => {
-    router.prefetch(isLoggedIn ? '/c/new-search' : '/');
-  }, [isLoggedIn, router]);
-
-  const handleTabChange = (tab: SidebarTab) => {
-    const targetPath = isLoggedIn ? '/c/new-search' : '/';
-    setActiveTab(tab);
-    if (tab === 'bots') {
-      setActiveConversation(null);
-      router.push('/spaces');
-      close();
-    } else if (tab === 'search') {
-      setSelectedOption(null);
-      if (pathname !== targetPath) {
-        setActiveConversation(null);
-        router.push(targetPath);
-      }
-      close();
-    } else if (tab === 'research') {
-      setSelectedOption(OPTIONS.RESEARCH);
-      if (pathname !== targetPath) {
-        setActiveConversation(null);
-        router.push(targetPath);
-      }
-      close();
-    } else if (tab === 'write') {
-      setSelectedOption(OPTIONS.DRAFT_DOCUMENT);
-      if (pathname !== targetPath) {
-        setActiveConversation(null);
-        router.push(targetPath);
-      }
-      close();
-    } else if (tab === 'code') {
-      setSelectedOption(OPTIONS.CODE);
-      if (pathname !== targetPath) {
-        setActiveConversation(null);
-        router.push(targetPath);
-      }
-      close();
-    } else if (tab === 'image') {
-      setSelectedOption(OPTIONS.IMAGE);
-      if (pathname !== targetPath) {
-        setActiveConversation(null);
-        router.push(targetPath);
-      }
-      close();
-    } else if (tab === 'audio') {
-      setSelectedOption(OPTIONS.AUDIO);
-      if (pathname !== targetPath) {
-        setActiveConversation(null);
-        router.push(targetPath);
-      }
-      close();
-    } else if (tab === 'apps') {
-      setActiveConversation(null);
-      router.push('/apps');
-      close();
-    } else if (tab === 'tasks') {
-      setActiveConversation(null);
-      router.push('/tasks');
-      close();
-    } else if (tab === 'video') {
-      setSelectedOption(OPTIONS.VIDEO);
-      if (pathname !== targetPath) {
-        setActiveConversation(null);
-        router.push(targetPath);
-      }
-      close();
-    }
-  };
-
-  const getPlusButtonProps = () => {
-    switch (activeTab) {
-      case 'tasks':
-        return {
-          visible: true,
-          label: 'New Task',
-          onClick: () => {
-            router.push('/tasks');
-            window.dispatchEvent(new Event('aphura_new_task_click'));
-            close();
-          },
-        };
-      case 'search':
-        return {
-          visible: true,
-          label: 'New Chat',
-          onClick: () => {
-            setActiveConversation(null);
-            setShowStartLastMessage(false);
-            setUserMessage('');
-            setSelectedOption(null);
-            close();
-            router.push(isLoggedIn ? '/c/new-search' : '/');
-          },
-        };
-      case 'research':
-        return {
-          visible: true,
-          label: 'New Research',
-          onClick: () => {
-            setActiveConversation(null);
-            setShowStartLastMessage(false);
-            setUserMessage('');
-            setSelectedOption(OPTIONS.RESEARCH);
-            close();
-            router.push(isLoggedIn ? '/c/new-research' : '/');
-          },
-        };
-      case 'write':
-        return {
-          visible: true,
-          label: 'New Document',
-          onClick: () => {
-            setActiveConversation(null);
-            setShowStartLastMessage(false);
-            setUserMessage('');
-            setSelectedOption(OPTIONS.DRAFT_DOCUMENT);
-            close();
-            router.push(isLoggedIn ? '/c/new-search' : '/');
-          },
-        };
-
-      case 'code':
-        return {
-          visible: true,
-          label: 'New Code',
-          onClick: () => {
-            setActiveConversation(null);
-            setShowStartLastMessage(false);
-            setUserMessage('');
-            setSelectedOption(OPTIONS.CODE);
-            close();
-            router.push(isLoggedIn ? '/c/new-search' : '/');
-          },
-        };
-      case 'image':
-        return {
-          visible: true,
-          label: 'New Image',
-          onClick: () => {
-            setActiveConversation(null);
-            setShowStartLastMessage(false);
-            setUserMessage('');
-            setSelectedOption(OPTIONS.IMAGE);
-            close();
-            router.push(isLoggedIn ? '/c/new-search' : '/');
-          },
-        };
-      case 'audio':
-        return {
-          visible: true,
-          label: 'New Audio',
-          onClick: () => {
-            setActiveConversation(null);
-            setShowStartLastMessage(false);
-            setUserMessage('');
-            setSelectedOption(OPTIONS.AUDIO);
-            close();
-            router.push(isLoggedIn ? '/c/new-search' : '/');
-          },
-        };
-      case 'video':
-        return {
-          visible: true,
-          label: 'New Video',
-          onClick: () => {
-            setActiveConversation(null);
-            setShowStartLastMessage(false);
-            setUserMessage('');
-            setSelectedOption(OPTIONS.VIDEO);
-            close();
-            router.push(isLoggedIn ? '/c/new-search' : '/');
-          },
-        };
-      case 'bots':
-        return {
-          visible: true,
-          label: 'New Space',
-          onClick: () => {
-            setActiveBotId(null);
-            router.push('/spaces');
-            close();
-          },
-        };
-      default:
-        return {
-          visible: false,
-          label: '',
-          onClick: () => {},
-        };
-    }
-  };
-
-  const getThreadIcon = (title: string, isSelected: boolean) => {
-    const iconColorClass = isSelected
-      ? 'h-3.5 w-3.5 text-white flex-shrink-0'
-      : 'h-3.5 w-3.5 text-[#8080ff] flex-shrink-0 group-hover:text-white transition-colors';
-
-    const lower = (title || '').toLowerCase();
-
-    if (
-      lower.includes('image') ||
-      lower.includes('art') ||
-      lower.includes('draw') ||
-      lower.includes('logo') ||
-      lower.includes('paint') ||
-      lower.includes('picture') ||
-      lower.includes('photo') ||
-      lower.includes('canvas')
-    ) {
-      return <ImageIcon className={iconColorClass} />;
-    }
-    if (
-      lower.includes('video') ||
-      lower.includes('movie') ||
-      lower.includes('clip') ||
-      lower.includes('animate') ||
-      lower.includes('mp4')
-    ) {
-      return <Video className={iconColorClass} />;
-    }
-    if (
-      lower.includes('audio') ||
-      lower.includes('voice') ||
-      lower.includes('music') ||
-      lower.includes('sound') ||
-      lower.includes('transcribe') ||
-      lower.includes('speech') ||
-      lower.includes('mp3')
-    ) {
-      return <Music className={iconColorClass} />;
-    }
-    if (
-      lower.includes('code') ||
-      lower.includes('debug') ||
-      lower.includes('python') ||
-      lower.includes('rust') ||
-      lower.includes('js') ||
-      lower.includes('ts') ||
-      lower.includes('html') ||
-      lower.includes('css')
-    ) {
-      return <Code2 className={iconColorClass} />;
-    }
-    if (
-      lower.includes('search') ||
-      lower.includes('google') ||
-      lower.includes('web') ||
-      lower.includes('research') ||
-      lower.includes('find') ||
-      lower.includes('query')
-    ) {
-      return <Search className={iconColorClass} />;
-    }
-    if (
-      lower.includes('write') ||
-      lower.includes('draft') ||
-      lower.includes('email') ||
-      lower.includes('article') ||
-      lower.includes('copy') ||
-      lower.includes('text') ||
-      lower.includes('essay')
-    ) {
-      return <PenTool className={iconColorClass} />;
-    }
-    if (
-      lower.includes('review') ||
-      lower.includes('contract') ||
-      lower.includes('check') ||
-      lower.includes('audit') ||
-      lower.includes('guardrail')
-    ) {
-      return <ClipboardCheck className={iconColorClass} />;
-    }
-    return <MessageSquare className={iconColorClass} />;
-  };
-
-  const getSpaceInitials = (name: string) => {
-    if (!name) return '';
-    const words = name.trim().split(/\s+/);
-    if (words.length >= 2) {
-      return (
-        words[0].substring(0, 1) + words[1].substring(0, 1)
-      ).toUpperCase();
-    }
-    return name.substring(0, 2).toUpperCase();
-  };
-
-  let allFiles: { name: string; size: number }[] = [];
-  if (activeBot) {
-    try {
-      allFiles = activeBot.data ? JSON.parse(activeBot.data) : [];
-    } catch (e) {
-      allFiles = activeBot.data ? [{ name: activeBot.data, size: 0 }] : [];
-    }
-  }
-  const allInstructions = activeBot?.instructions
-    ? activeBot.instructions.split('\n\n').filter(Boolean)
-    : [];
-  const allGuardrails = activeBot?.guardrails
-    ? activeBot.guardrails.split('\n\n').filter(Boolean)
-    : [];
-
-  const plusProps = getPlusButtonProps();
-
-  const SHOW_WORKSPACES = false;
-
+    setAppsFilterTab,
+    setBotToDelete,
+    setBotToRename,
+    setConnectedAppSlugs,
+    setDragOverAppIndex,
+    setDragOverIndex,
+    setDraggedAppIndex,
+    setDraggedIndex,
+    setIsCreateSpaceOpen,
+    setIsCreatingSpace,
+    setLocalAppsOrder,
+    setLogoHovered,
+    setNewSpaceName,
+    setProjectTab,
+    setRenameValue,
+    setResearchSessions,
+    setSearchQuery,
+    setSearchSessions,
+    setSelectedOption,
+    setShowSpaceConfig,
+    setShowStartLastMessage,
+    setSpaceItemToDelete,
+    setTasks,
+    setUserMessage,
+    showSpaceConfig,
+    spaceItemToDelete,
+    tasks,
+    toggleGlobalInbox,
+    toggleLeftSidebar,
+    toggleRightSidebar,
+    unreadInboxCount,
+    userEmail,
+    viewParam,
+    data,
+    inboxItems,
+    spaceMonitors,
+    allFiles,
+    isLoadingSpaceMonitors,
+    threads,
+    deleteThread,
+    connections,
+    setThreads,
+    activeBotThreadId
+  } = useNavState();
+  
   return (
     <div className="flex h-full w-full overflow-hidden">
       {SHOW_WORKSPACES && (
@@ -1504,7 +969,7 @@ const LeftSideNavMobile = () => {
                                     close();
                                   }}
                                 >
-                                  {getThreadIcon(thread.title, isSelected)}
+                                  {getThreadIcon(thread.title || '', isSelected)}
                                   <span className="truncate">
                                     {thread.title || 'Untitled Space Chat'}
                                   </span>

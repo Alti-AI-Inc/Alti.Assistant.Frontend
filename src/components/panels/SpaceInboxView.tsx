@@ -4,30 +4,32 @@ import { Search, Inbox, Clock } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { storage, STORAGE_KEYS } from '@/lib/storage';
 
 interface SpaceInboxViewProps {
   botId: string;
 }
 
+interface SpaceRunItem {
+  id: string;
+  taskName: string;
+  summary: string;
+  timestamp?: string;
+  status?: string;
+  botId?: string;
+  duration?: number;
+}
+
 export default function SpaceInboxView({ botId }: SpaceInboxViewProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [runs, setRuns] = useState<any[]>([]);
+  const [runs, setRuns] = useState<SpaceRunItem[]>([]);
 
   // Fetch runs for this space
   useEffect(() => {
     const fetchRuns = () => {
-      const savedRuns = localStorage.getItem('aphura_task_runs');
-      if (savedRuns) {
-        try {
-          const allRuns = JSON.parse(savedRuns);
-          // Filter runs by botId
-          setRuns(allRuns.filter((r: any) => r.botId === botId));
-        } catch (e) {
-          setRuns([]);
-        }
-      } else {
-        setRuns([]);
-      }
+      const allRuns = storage.get<SpaceRunItem[]>(STORAGE_KEYS.TASK_RUNS) || [];
+      // Filter runs by botId
+      setRuns(allRuns.filter((r) => r.botId === botId));
     };
 
     fetchRuns();
@@ -41,18 +43,13 @@ export default function SpaceInboxView({ botId }: SpaceInboxViewProps) {
   );
 
   const handleClearSpaceRuns = () => {
-    const savedRuns = localStorage.getItem('aphura_task_runs');
-    if (savedRuns) {
-      try {
-        const allRuns = JSON.parse(savedRuns);
-        // Keep runs that do not belong to this botId
-        const updatedRuns = allRuns.filter((r: any) => r.botId !== botId);
-        localStorage.setItem('aphura_task_runs', JSON.stringify(updatedRuns));
-        setRuns([]);
-        toast.success('Space inbox history cleared');
-      } catch (e) {
-        console.error(e);
-      }
+    const allRuns = storage.get<SpaceRunItem[]>(STORAGE_KEYS.TASK_RUNS);
+    if (allRuns) {
+      // Keep runs that do not belong to this botId
+      const updatedRuns = allRuns.filter((r) => r.botId !== botId);
+      storage.set(STORAGE_KEYS.TASK_RUNS, updatedRuns);
+      setRuns([]);
+      toast.success('Space inbox history cleared');
     }
   };
 
@@ -120,7 +117,7 @@ export default function SpaceInboxView({ botId }: SpaceInboxViewProps) {
               <div className="flex items-center justify-between pt-2 border-t border-black/5 dark:border-white/5 text-[10px] text-gray-400">
                 <div className="flex items-center gap-1">
                   <Clock className="size-3 text-zinc-400" />
-                  <span>{new Date(run.timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
+                  <span>{run.timestamp ? new Date(run.timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : ''}</span>
                 </div>
                 {run.duration && <span>{Math.round(run.duration / 100) / 10}s</span>}
               </div>

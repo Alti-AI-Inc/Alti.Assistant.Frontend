@@ -14,8 +14,10 @@ import {
   ROLES,
   useConversationsStore,
 } from '@/stores/useConversationsStore';
+import { ConversationMessage } from '@/types/conversation';
 import { useModalStore } from '@/stores/useModalStore';
 import {
+  InfiniteData,
   useInfiniteQuery,
   useMutation,
   useQuery,
@@ -24,7 +26,7 @@ import {
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 
-export const DEFAULT_SAMPLE_CONVERSATIONS: (Conversation & { messages: any[] })[] = [
+export const DEFAULT_SAMPLE_CONVERSATIONS: (Conversation & { messages: ConversationMessage[] })[] = [
   {
     _id: 'mock_conv_1',
     conversationId: 'market-analysis-top-tech',
@@ -147,19 +149,20 @@ Recent performance across major technology equities highlights resilient revenue
   },
 ];
 
-export function getLocalConversations(): (Conversation & { messages: any[] })[] {
+export function getLocalConversations(): (Conversation & { messages: ConversationMessage[] })[] {
   if (typeof window === 'undefined') return DEFAULT_SAMPLE_CONVERSATIONS;
   try {
     const raw = localStorage.getItem('aphura_conversations');
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed.map((item: any) => {
+        return parsed.map((item: Conversation & { messages?: ConversationMessage[] }) => {
           const id = item.conversationId || item._id;
           return {
             ...item,
             _id: item._id || id,
             conversationId: item.conversationId || id,
+            messages: (item.messages || []) as ConversationMessage[],
           };
         });
       }
@@ -174,14 +177,18 @@ export function getLocalConversations(): (Conversation & { messages: any[] })[] 
   }
 }
 
-export function saveLocalConversation(conv: any) {
+export function saveLocalConversation(conv: Partial<Conversation & { messages?: ConversationMessage[] }>) {
   if (typeof window === 'undefined') return;
   try {
     const list = getLocalConversations();
     const targetId = conv.conversationId || conv._id;
     if (!targetId) return;
 
-    const normalizedConv = {
+    const normalizedConv: Conversation & { messages: ConversationMessage[] } = {
+      title: 'New Chat',
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+      messages: [],
       ...conv,
       _id: conv._id || targetId,
       conversationId: conv.conversationId || targetId,
@@ -295,7 +302,7 @@ export function useConversations(
             if (s._id) serverIds.add(s._id);
           }
 
-          const merged: any[] = serverConversations.map(s => ({
+          const merged: Conversation[] = serverConversations.map(s => ({
             ...s,
             _id: s._id || s.conversationId,
             conversationId: s.conversationId || s._id,
@@ -321,11 +328,13 @@ export function useConversations(
 
           // Sort descending by lastActivity / updatedAt / createdAt
           merged.sort((a, b) => {
+            const lastActivityA = (a as { lastActivity?: string }).lastActivity;
+            const lastActivityB = (b as { lastActivity?: string }).lastActivity;
             const timeA = new Date(
-              a.updatedAt || a.lastActivity || a.createdAt || 0,
+              a.updatedAt || lastActivityA || a.createdAt || 0,
             ).getTime();
             const timeB = new Date(
-              b.updatedAt || b.lastActivity || b.createdAt || 0,
+              b.updatedAt || lastActivityB || b.createdAt || 0,
             ).getTime();
             return timeB - timeA;
           });
@@ -448,7 +457,7 @@ export function useActiveConversation(
         if (!response.success || !response.data) {
           const localList = getLocalConversations();
           const found = localList.find(
-            (c: any) => c.conversationId === conversationId || c._id === conversationId,
+            (c) => c.conversationId === conversationId || c._id === conversationId,
           );
           if (found) {
             return found;
@@ -460,7 +469,7 @@ export function useActiveConversation(
 
         // Sanitize messages to avoid showing success text in UI
         if (data && data.messages) {
-          data.messages = data.messages.map((msg: any) => {
+          data.messages = data.messages.map((msg: ConversationMessage) => {
             if (msg.role === 'assistant') {
               // Document generation metadata mapping
               if (msg.metadata?.documentGenerated && !msg.metadata.document) {
@@ -476,7 +485,7 @@ export function useActiveConversation(
                       format: exportResult.format,
                       size: exportResult.size,
                     },
-                    url: uploadResult.publicUrl || uploadResult.url,
+                    url: uploadResult.publicUrl || uploadResult.url || '',
                     metadata: {
                       title:
                         collectedParams?.title ||
@@ -527,7 +536,7 @@ export function useSharedConversation(id: string) {
 
         // Sanitize messages to avoid showing success text in UI
         if (conversation && conversation.messages) {
-          conversation.messages = conversation.messages.map((msg: any) => {
+          conversation.messages = conversation.messages.map((msg: ConversationMessage) => {
             if (msg.role === 'assistant') {
               // Document generation metadata mapping
               if (msg.metadata?.documentGenerated && !msg.metadata.document) {
@@ -543,7 +552,7 @@ export function useSharedConversation(id: string) {
                       format: exportResult.format,
                       size: exportResult.size,
                     },
-                    url: uploadResult.publicUrl || uploadResult.url,
+                    url: uploadResult.publicUrl || uploadResult.url || '',
                     metadata: {
                       title:
                         collectedParams?.title ||
@@ -609,11 +618,11 @@ export function useDeleteConversation() {
 
       // Find the conversationId associated with this deletedId in cache to handle navigation
       let targetConvId = deletedId;
-      const conversationListQueries = queryClient.getQueriesData<any>({ queryKey: ['conversations'] });
+      const conversationListQueries = queryClient.getQueriesData<InfiniteData<ConversationListResponse>>({ queryKey: ['conversations'] });
       for (const [, queryData] of conversationListQueries) {
         if (queryData?.pages) {
           for (const page of queryData.pages) {
-            const found = page.conversations?.find((c: any) => c._id === deletedId);
+            const found = page.conversations?.find((c: Conversation) => c._id === deletedId);
             if (found) {
               targetConvId = found.conversationId;
               break;
@@ -635,24 +644,24 @@ export function useDeleteConversation() {
       }
 
       // Manually remove from infinite query cache ('conversations')
-      queryClient.setQueriesData<any>({ queryKey: ['conversations'] }, (oldData: any) => {
+      queryClient.setQueriesData<InfiniteData<ConversationListResponse>>({ queryKey: ['conversations'] }, (oldData) => {
         if (!oldData) return oldData;
         return {
           ...oldData,
-          pages: oldData.pages.map((page: any) => ({
+          pages: oldData.pages.map((page) => ({
             ...page,
             conversations: (page.conversations || []).filter(
-              (chat: any) => chat._id !== deletedId && chat.conversationId !== targetConvId
+              (chat: Conversation) => chat._id !== deletedId && chat.conversationId !== targetConvId
             ),
           })),
         };
       });
 
       // Manually remove from saved conversations cache ('saved-conversations')
-      queryClient.setQueriesData<any>({ queryKey: ['saved-conversations'] }, (oldData: any) => {
+      queryClient.setQueriesData<Conversation[]>({ queryKey: ['saved-conversations'] }, (oldData) => {
         if (!oldData) return oldData;
         return oldData.filter(
-          (chat: any) => chat._id !== deletedId && chat.conversationId !== targetConvId
+          (chat: Conversation) => chat._id !== deletedId && chat.conversationId !== targetConvId
         );
       });
 
@@ -713,13 +722,13 @@ export function useRenameConversation() {
       }
 
       // 4. Manually update infinite query cache ('conversations')
-      queryClient.setQueriesData<any>({ queryKey: ['conversations'] }, (oldData: any) => {
+      queryClient.setQueriesData<InfiniteData<ConversationListResponse>>({ queryKey: ['conversations'] }, (oldData) => {
         if (!oldData?.pages) return oldData;
         return {
           ...oldData,
-          pages: oldData.pages.map((page: any) => ({
+          pages: oldData.pages.map((page) => ({
             ...page,
-            conversations: (page.conversations || []).map((chat: any) => {
+            conversations: (page.conversations || []).map((chat: Conversation) => {
               if (
                 chat.conversationId === conversationId ||
                 chat._id === conversationId
@@ -733,9 +742,9 @@ export function useRenameConversation() {
       });
 
       // 5. Manually update saved conversations cache ('saved-conversations')
-      queryClient.setQueriesData<any>({ queryKey: ['saved-conversations'] }, (oldData: any) => {
+      queryClient.setQueriesData<Conversation[]>({ queryKey: ['saved-conversations'] }, (oldData) => {
         if (!oldData || !Array.isArray(oldData)) return oldData;
-        return oldData.map((chat: any) => {
+        return oldData.map((chat: Conversation) => {
           if (
             chat.conversationId === conversationId ||
             chat._id === conversationId
@@ -766,7 +775,7 @@ export function useSearchConversations(
         if (!response.success || !response.data?.length) {
           const localList = getLocalConversations();
           const term = (searchTerm || '').toLowerCase();
-          return localList.filter((c: any) =>
+          return localList.filter((c) =>
             (c.title || '').toLowerCase().includes(term),
           );
         }
@@ -774,7 +783,7 @@ export function useSearchConversations(
       } catch (error) {
         const localList = getLocalConversations();
         const term = (searchTerm || '').toLowerCase();
-        return localList.filter((c: any) =>
+        return localList.filter((c) =>
           (c.title || '').toLowerCase().includes(term),
         );
       }

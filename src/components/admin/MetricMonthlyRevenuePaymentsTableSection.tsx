@@ -63,8 +63,18 @@ export function MetricMonthlyRevenuePaymentsTableSection() {
         // - res.data is an array of subscriptions
         // - res.data = { subscriptions: [...], totalSubscriptions, totalRevenue }
         // - res.data = { data: [...] }
-        const payload: any = res.data;
-        const subs: any[] = Array.isArray(payload)
+        interface RawSubscription {
+          _id: string;
+          userId?: { email?: string } | null;
+          productId?: { name?: string; plan?: string; price?: number | string } | null;
+          plan_name?: string;
+          price?: number | string | null;
+          createdAt?: string;
+          currentPeriodStart?: string;
+        }
+
+        const payload = res.data as { subscriptions?: RawSubscription[]; data?: RawSubscription[] } | RawSubscription[];
+        const subs: RawSubscription[] = Array.isArray(payload)
           ? payload
           : Array.isArray(payload.subscriptions)
             ? payload.subscriptions

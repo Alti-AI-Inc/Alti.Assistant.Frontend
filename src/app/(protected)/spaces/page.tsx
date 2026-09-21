@@ -428,10 +428,10 @@ function MyChatbotsContent() {
       // 5. Select new bot and route to active view
       setActiveBotId(newBot.id);
       router.push(`/spaces?bot=${newBot.id}`);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error creating space:', err);
       setError(
-        err.message || 'An error occurred during space workspace creation.',
+        err instanceof Error ? err.message : 'An error occurred during space workspace creation.',
       );
       toast.error('Failed to fully initialize the space workspace.');
     } finally {

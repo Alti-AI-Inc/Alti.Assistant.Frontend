@@ -618,7 +618,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         if (store.conversationId && accessToken && queryClient) {
           queryClient.setQueryData(
             ['activeConversation', store.conversationId, accessToken],
-            (oldData: any) => {
+            (oldData: ActiveConversation | undefined) => {
               if (!oldData) return oldData;
 
               const newMessage = {

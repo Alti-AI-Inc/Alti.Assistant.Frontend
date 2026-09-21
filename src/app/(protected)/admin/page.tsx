@@ -143,7 +143,7 @@ export default function AdminDashboardPage() {
           : (paymentsPayload?.data ?? []);
         // compute totalRevenueCentsFromPayments robustly, handling string price ids
         const totalRevenueCentsFromPayments = paymentsList.reduce(
-          (s: number, p: any) => {
+          (s: number, p: { price?: number | string | null; productId?: { price?: number | null }; product?: { price?: number | null } }) => {
             // p.price may be cents (number), dollars (number), or a stripe price id string
             if (p == null) return s;
             if (typeof p.price === 'number') {
@@ -213,31 +213,41 @@ export default function AdminDashboardPage() {
         if (typeof totalRevenueFromApi === 'number') {
           totalRevenueCentsFromSubs = Math.round(totalRevenueFromApi * 100);
         } else {
-          totalRevenueCentsFromSubs = subsList.reduce((acc: number, s: any) => {
-            const product = s.productId ?? s.product ?? null;
-            if (product && typeof product.price === 'number')
-              return acc + Math.round(product.price * 100);
-            // try s.price if numeric
-            if (typeof s.price === 'number') {
-              return (
-                acc +
-                (s.price > 1000
-                  ? Math.round(s.price)
-                  : Math.round(s.price * 100))
-              );
-            }
-            if (typeof s.price === 'string') {
-              const parsed = parseFloat(s.price);
-              if (!Number.isNaN(parsed))
+          totalRevenueCentsFromSubs = subsList.reduce(
+            (
+              acc: number,
+              s: {
+                productId?: { price?: number | null };
+                product?: { price?: number | null };
+                price?: number | string | null;
+              },
+            ) => {
+              const product = s.productId ?? s.product ?? null;
+              if (product && typeof product.price === 'number')
+                return acc + Math.round(product.price * 100);
+              // try s.price if numeric
+              if (typeof s.price === 'number') {
                 return (
                   acc +
-                  (parsed > 1000
-                    ? Math.round(parsed)
-                    : Math.round(parsed * 100))
+                  (s.price > 1000
+                    ? Math.round(s.price)
+                    : Math.round(s.price * 100))
                 );
-            }
-            return acc;
-          }, 0);
+              }
+              if (typeof s.price === 'string') {
+                const parsed = parseFloat(s.price);
+                if (!Number.isNaN(parsed))
+                  return (
+                    acc +
+                    (parsed > 1000
+                      ? Math.round(parsed)
+                      : Math.round(parsed * 100))
+                  );
+              }
+              return acc;
+            },
+            0,
+          );
         }
 
         const totalRevenueCents =
@@ -254,8 +264,8 @@ export default function AdminDashboardPage() {
           totalTeams,
         });
         setApiError(null);
-      } catch (err: any) {
-        setApiError(err?.message || String(err));
+      } catch (err: unknown) {
+        setApiError(err instanceof Error ? err.message : String(err));
       }
     }
 
@@ -293,7 +303,7 @@ export default function AdminDashboardPage() {
     title: string;
     value: string;
     delta: string;
-    icon: any;
+    icon: React.ElementType;
     href?: string;
     linkLabel?: string;
   }[] = [

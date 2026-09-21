@@ -22,6 +22,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Streamdown } from 'streamdown';
 import ReferencesList from './ReferenceList';
 import SpaceSearchPanel from './SpaceSearchPanel';
+import { ConversationMessage, ROLES } from '@/types/conversation';
 
 import { useBotsStore } from '@/stores/useBotsStore';
 import { toast } from 'sonner';
@@ -222,7 +223,7 @@ const FullConversation = ({
 
     // 1. Get the last user query
     const lastUserMessage =
-      activeConversation?.messages?.filter((m: any) => m.role === 'user')?.pop()
+      activeConversation?.messages?.filter((m: ConversationMessage) => m.role === ROLES.USER)?.pop()
         ?.content || '';
 
     // 2. Parse keywords to determine target databases
@@ -595,14 +596,14 @@ const FullConversation = ({
 
       // Check if last assistant message already has the document
       const lastAssistantMsg = queryConversation.messages
-        ?.filter((m: any) => m.role === 'assistant')
+        ?.filter((m: ConversationMessage) => m.role === ROLES.ASSISTANT)
         .pop();
 
       if (!lastAssistantMsg?.metadata?.document) {
         // Add download card to conversation
         updateActiveConversation(
           'Your presentation is ready! Click below to download.',
-          'assistant' as any,
+          ROLES.ASSISTANT,
           convId,
           {
             document: {
@@ -944,7 +945,7 @@ const FullConversation = ({
   ]);
 
   const lastAssistantMessage = activeConversation?.messages
-    ?.filter((m: any) => m.role === 'assistant')
+    ?.filter((m: ConversationMessage) => m.role === ROLES.ASSISTANT)
     ?.pop();
 
   const codeData =

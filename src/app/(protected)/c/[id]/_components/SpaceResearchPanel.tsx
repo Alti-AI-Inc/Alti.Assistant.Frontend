@@ -15,6 +15,18 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Streamdown } from 'streamdown';
 
+interface SpeechRecognitionResultEvent {
+  resultIndex: number;
+  results: ArrayLike<{
+    isFinal: boolean;
+    [index: number]: { transcript: string };
+  }>;
+}
+
+interface SpeechRecognitionErrorEvent {
+  error: string;
+}
+
 const getHostname = (url?: string) => {
   if (!url) return '';
   try {
@@ -197,7 +209,7 @@ const SpaceResearchPanel = ({ spaceId }: { spaceId: string }) => {
 
       recognition.onstart = () => setIsListening(true);
 
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event: SpeechRecognitionResultEvent) => {
         let interimTranscript = '';
         let finalTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -211,7 +223,7 @@ const SpaceResearchPanel = ({ spaceId }: { spaceId: string }) => {
         if (text.trim()) setQuery(text);
       };
 
-      recognition.onerror = (event: any) => {
+      recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error('Speech recognition error:', event.error);
         if (event.error !== 'no-speech') stopListening();
       };

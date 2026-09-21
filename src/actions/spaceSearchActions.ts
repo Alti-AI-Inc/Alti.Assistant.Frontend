@@ -39,6 +39,12 @@ export interface SpaceSearchTurn {
   resultCount?: number;
   status?: string;
   createdAt?: string;
+  answer?: string;
+  responseMessage?: {
+    answer?: string;
+    reference?: unknown[];
+    [key: string]: unknown;
+  };
   [key: string]: unknown;
 }
 
@@ -103,9 +109,9 @@ export async function createSpaceSearchAction(
       message: result?.message || 'Search complete',
       data: result?.data ?? result,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('createSpaceSearchAction Error:', error);
-    return { success: false, message: error.message || 'Failed to run search' };
+    return { success: false, message: error instanceof Error ? error.message : 'Failed to run search' };
   }
 }
 
@@ -131,11 +137,11 @@ export async function getSpaceSearchesAction(
       message: result?.message || 'Success',
       data: result?.data ?? [],
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('getSpaceSearchesAction Error:', error);
     return {
       success: false,
-      message: error.message || 'Failed to fetch searches',
+      message: error instanceof Error ? error.message : 'Failed to fetch searches',
     };
   }
 }

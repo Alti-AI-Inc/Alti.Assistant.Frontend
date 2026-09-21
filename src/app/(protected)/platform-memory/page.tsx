@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { Brain, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { storage, STORAGE_KEYS } from '@/lib/storage';
 
 const MemoryContent = () => {
   const [selected, setSelected] = useState('1-month');
@@ -10,7 +11,7 @@ const MemoryContent = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const stored = localStorage.getItem('aphura_memory_retention');
+    const stored = storage.getString(STORAGE_KEYS.MEMORY_RETENTION);
     if (stored) {
       setSelected(stored);
     }
@@ -18,7 +19,7 @@ const MemoryContent = () => {
 
   const handleSelect = (val: string) => {
     setSelected(val);
-    localStorage.setItem('aphura_memory_retention', val);
+    storage.set(STORAGE_KEYS.MEMORY_RETENTION, val);
   };
 
   const options = [

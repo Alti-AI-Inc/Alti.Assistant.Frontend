@@ -170,7 +170,7 @@ export async function getTenantMembers(): Promise<ApiResponse<TenantMember[]>> {
       message: result.message,
       data,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error getting tenant members:', error);
     return {
       success: false,
@@ -206,7 +206,7 @@ export async function getTenantMember(
     }
 
     return await response.json();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error getting tenant member:', error);
     return {
       success: false,
@@ -253,7 +253,7 @@ export async function getTenantMemberByTenantId(
       message: result.message,
       data,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error getting tenant members by tenant ID:', error);
     return {
       success: false,
@@ -371,7 +371,7 @@ export async function getPendingInvitations(): Promise<
         ? result.data
         : (result.data?.invitations ?? []),
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error getting pending invitations:', error);
     return {
       success: false,
@@ -482,7 +482,7 @@ export async function verifyInvitationToken(
       message: typeof raw.message === 'string' ? raw.message : undefined,
       data: normalized,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error verifying invitation token:', error);
     return {
       success: false,
@@ -540,7 +540,7 @@ export async function acceptInvitation(
     }
 
     return await response.json();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error accepting invitation:', error);
     return {
       success: false,
@@ -612,7 +612,7 @@ export async function updateMemberRole(
       data,
       message: typeof result.message === 'string' ? result.message : undefined,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating member role:', error);
     return {
       success: false,
@@ -648,7 +648,7 @@ export async function removeMember(
     }
 
     return await response.json();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error removing member:', error);
     return {
       success: false,
@@ -684,7 +684,7 @@ export async function getUserInvitations(): Promise<
     }
 
     return await response.json();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error getting user invitations:', error);
     return {
       success: false,
@@ -723,7 +723,7 @@ export async function cancelInvitation(
     }
 
     return await response.json();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error canceling invitation:', error);
     return {
       success: false,

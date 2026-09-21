@@ -1305,8 +1305,8 @@ const AppCard = ({
           } else {
             throw new Error('JSON must be a flat key-value object.');
           }
-        } catch (err: any) {
-          setErrorMessage(`Invalid JSON format: ${err.message}`);
+        } catch (err: unknown) {
+          setErrorMessage(`Invalid JSON format: ${err instanceof Error ? err.message : String(err)}`);
           setIsConnecting(false);
           return;
         }
@@ -1320,8 +1320,8 @@ const AppCard = ({
       } else {
         setErrorMessage(res.debugMessage || res.message || 'Failed to install application.');
       }
-    } catch (err: any) {
-      setErrorMessage(err.message || 'An unexpected error occurred.');
+    } catch (err: unknown) {
+      setErrorMessage(err instanceof Error ? err.message : 'An unexpected error occurred.');
     } finally {
       setIsConnecting(false);
     }
@@ -1360,8 +1360,8 @@ const AppCard = ({
           if (typeof parsed === 'object' && parsed !== null) {
             Object.assign(finalEnv, parsed);
           }
-        } catch (err: any) {
-          setErrorMessage(`Invalid JSON in advanced variables: ${err.message}`);
+        } catch (err: unknown) {
+          setErrorMessage(`Invalid JSON in advanced variables: ${err instanceof Error ? err.message : String(err)}`);
           setIsConnecting(false);
           return;
         }
@@ -1375,8 +1375,8 @@ const AppCard = ({
       } else {
         setErrorMessage(res.debugMessage || res.message || 'Failed to authenticate with credentials.');
       }
-    } catch (err: any) {
-      setErrorMessage(err.message || 'An unexpected error occurred.');
+    } catch (err: unknown) {
+      setErrorMessage(err instanceof Error ? err.message : 'An unexpected error occurred.');
     } finally {
       setIsConnecting(false);
     }
@@ -1442,8 +1442,8 @@ const AppCard = ({
       } else {
         toast.error(res.debugMessage || res.message || 'Failed to disconnect application.');
       }
-    } catch (err: any) {
-      toast.error(err.message || 'An unexpected error occurred.');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'An unexpected error occurred.');
     } finally {
       setIsDisconnecting(false);
     }

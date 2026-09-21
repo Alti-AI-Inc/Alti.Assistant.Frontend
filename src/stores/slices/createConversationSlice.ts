@@ -1,6 +1,10 @@
 import { StateCreator } from 'zustand';
 import {
   ActiveConversation,
+  ConversationMessage,
+  InteractiveTableData,
+  UniversalChartData,
+  UniversalFormData,
   OPTIONS,
   ROLES,
   Reference,
@@ -66,16 +70,16 @@ export interface ConversationSlice {
       needsMoreInfo?: boolean;
       missingParams?: string[];
       // New interactive widget extras
-      tableData?: any;
-      chartData?: any;
-      formData?: any;
-      reportData?: any;
+      tableData?: InteractiveTableData;
+      chartData?: UniversalChartData;
+      formData?: UniversalFormData;
+      reportData?: GeneratedReport;
     },
   ) => void;
   streamActiveConversation: (
     chunkText: string,
     conversationId?: string,
-    metadata?: any,
+    metadata?: ConversationMessage['metadata'],
   ) => void;
   setLoadingActiveConversation: (loading: boolean) => void;
   setLoadingResponse: (loading: boolean) => void;

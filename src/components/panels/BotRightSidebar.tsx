@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useBotsStore } from '@/stores/useBotsStore';
 import { useConversationsStore } from '@/stores/useConversationsStore';
 import { Dialog, DialogContent, DialogTrigger, DialogClose } from '@/components/ui/dialog';
+import { storage, STORAGE_KEYS } from '@/lib/storage';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { 
   Plus, 
@@ -108,12 +109,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   // Fetch runs for Inbox
   useEffect(() => {
     const fetchRuns = () => {
-      const savedRuns = localStorage.getItem('aphura_task_runs');
-      if (savedRuns) {
-        setRuns(JSON.parse(savedRuns));
-      } else {
-        setRuns([]);
-      }
+      setRuns(storage.get<any[]>(STORAGE_KEYS.TASK_RUNS) || []);
     };
 
     fetchRuns();
@@ -223,7 +219,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   };
 
   const handleClearRuns = () => {
-    localStorage.removeItem('aphura_task_runs');
+    storage.remove(STORAGE_KEYS.TASK_RUNS);
     setRuns([]);
     toast.success('Run history cleared');
   };

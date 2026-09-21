@@ -72,8 +72,8 @@ export const getConnections = async (
     // Map active MCP servers to standard connection structures
     const serversList = data?.servers || [];
     const connections: Connection[] = serversList
-      .filter((s: any) => s.status === 'active' || s.status === 'connected')
-      .map((s: any) => ({
+      .filter((s: { id: string; status: string }) => s.status === 'active' || s.status === 'connected')
+      .map((s: { id: string; status: string }) => ({
         _id: s.id,
         userId: '',
         authConfigId: '',
@@ -87,12 +87,12 @@ export const getConnections = async (
       }));
 
     return { success: true, message: 'Success', data: connections };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('getConnections Error:', error);
     return {
       success: false,
       message: 'Failed to fetch connections.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -118,12 +118,12 @@ export const installApp = async (
     );
     const data = await response.json();
     return data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('installApp Error:', error);
     return {
       success: false,
       message: 'Failed to install application.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -147,12 +147,12 @@ export const stopApp = async (
     );
     const data = await response.json();
     return data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('stopApp Error:', error);
     return {
       success: false,
       message: 'Failed to stop application.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }

@@ -93,11 +93,11 @@ export function StripeProvider({ children }: StripeProviderProps) {
 
       // Re-create the promise since the resolved one can still be used
       setState({ status: 'ready', stripe: loadStripe(key) });
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('[StripeProvider] Initialization error:', err);
       setState({
         status: 'error',
-        message: err?.message || 'An unexpected error occurred while initializing the payment system.',
+        message: err instanceof Error ? err.message : 'An unexpected error occurred while initializing the payment system.',
       });
     }
   }, []);

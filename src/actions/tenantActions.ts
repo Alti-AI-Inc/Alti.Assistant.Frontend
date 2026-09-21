@@ -180,12 +180,12 @@ export async function checkSubdomainAvailability(
     }
 
     return await response.json();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error checking subdomain:', error);
     return {
       success: false,
       data: { subdomain, available: false },
-      message: error.message || 'Failed to check subdomain availability',
+      message: error instanceof Error ? error.message : 'Failed to check subdomain availability',
     };
   }
 }
@@ -218,7 +218,7 @@ export async function createTenant(
     }
 
     return await response.json();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating tenant:', error);
     throw error;
   }
@@ -247,7 +247,7 @@ export async function getTenantById(
     }
 
     return await response.json();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error getting tenant by ID:', error);
     return {
       success: false,
@@ -281,7 +281,7 @@ export async function getCurrentTenant(): Promise<ApiResponse<Tenant>> {
     }
 
     return await response.json();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error getting current tenant:', error);
     return {
       success: false,
@@ -391,7 +391,7 @@ export async function getUserTenants(): Promise<ApiResponse<UserTenant[]>> {
       data: tenants,
       message: typeof result.message === 'string' ? result.message : undefined,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error getting user tenants:', error);
     return {
       success: false,
@@ -455,9 +455,9 @@ export async function getTenantUserCount(
       data: { usersCount },
       message: typeof json.message === 'string' ? json.message : undefined,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error getting tenant user count:', error);
-    return fail(error.message || 'Failed to fetch tenant user count');
+    return fail(error instanceof Error ? error.message : 'Failed to fetch tenant user count');
   }
 }
 
@@ -488,7 +488,7 @@ export async function updateTenantSettings(
     }
 
     return await response.json();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating tenant settings:', error);
     return {
       success: false,
@@ -522,7 +522,7 @@ export async function getTenantUsage(): Promise<ApiResponse<TenantUsage>> {
     }
 
     return await response.json();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error getting tenant usage:', error);
     return {
       success: false,
@@ -562,7 +562,7 @@ export async function switchTenant(
     }
 
     return await response.json();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error switching tenant:', error);
     return {
       success: false,

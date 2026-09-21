@@ -1,6 +1,6 @@
 'use server';
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   message: string;
   data?: T;
@@ -28,12 +28,12 @@ export async function getVideoUrl(
     const data = await response.json();
     const videoUrl = data?.data?.response?.videoUrl || null;
     return { success: true, message: 'Success', data: videoUrl };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('getVideoUrl Error:', error);
     return {
       success: false,
       message: 'Failed to get video URL.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }

@@ -43,11 +43,11 @@ export function createAsyncActionSlice<K extends string, TConfig, TMode>(
       }) as any),
     [resetConfigKey]: () =>
       set(() => {
-        const resetState: any = { [configKey]: defaultConfig };
+        const resetState: Record<string, unknown> = { [configKey]: defaultConfig };
         if (resetModeTo !== undefined) {
           resetState[modeKey] = resetModeTo;
         }
-        return resetState;
+        return resetState as unknown as Partial<FeatureSlice<K, TConfig, TMode>>;
       }),
     [setModeKey]: (mode: TMode) => set({ [modeKey]: mode } as any),
   } as any);

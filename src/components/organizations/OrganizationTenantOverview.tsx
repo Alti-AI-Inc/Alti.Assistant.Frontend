@@ -30,6 +30,7 @@ import { Loader2, ArrowUp, ChevronDown } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
+import { storage, STORAGE_KEYS } from '@/lib/storage';
 
 export interface OrganizationTenantOverviewProps {
   /** Org picker list; omit when `fixedTenantId` is set */
@@ -280,19 +281,12 @@ export function OrganizationTenantOverview({
 
       if (response.success && response.data) {
         // Save the invited name locally
-        if (typeof window !== 'undefined') {
-          try {
-            const saved = localStorage.getItem('aphura_invited_names') || '{}';
-            const parsed = JSON.parse(saved);
-            parsed[inviteEmail.toLowerCase().trim()] = {
-              firstName: '',
-              lastName: '',
-            };
-            localStorage.setItem('aphura_invited_names', JSON.stringify(parsed));
-          } catch (e) {
-            console.error(e);
-          }
-        }
+        const parsed = storage.get<Record<string, { firstName: string; lastName: string }>>(STORAGE_KEYS.INVITED_NAMES) || {};
+        parsed[inviteEmail.toLowerCase().trim()] = {
+          firstName: '',
+          lastName: '',
+        };
+        storage.set(STORAGE_KEYS.INVITED_NAMES, parsed);
 
         toast.success('Invitation sent successfully!');
         setInviteEmail('');
@@ -301,9 +295,9 @@ export function OrganizationTenantOverview({
       } else {
         toast.error(response.message || 'Failed to send invitation');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to invite member:', error);
-      toast.error(error?.message || 'An error occurred while sending the invitation');
+      toast.error(error instanceof Error ? error.message : 'An error occurred while sending the invitation');
     } finally {
       setIsInviting(false);
     }

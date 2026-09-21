@@ -25,12 +25,12 @@ interface InteractiveFormWidgetProps {
 
 export default function InteractiveFormWidget({ formData }: InteractiveFormWidgetProps) {
   const { title, description, fields, submitLabel = 'Submit to Aphura Swarm' } = formData;
-  const [formValues, setFormValues] = useState<Record<string, any>>({});
+  const [formValues, setFormValues] = useState<Record<string, unknown>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = (fieldId: string, val: any) => {
+  const handleInputChange = (fieldId: string, val: unknown) => {
     setFormValues((prev) => ({ ...prev, [fieldId]: val }));
     if (errors[fieldId]) {
       setErrors((prev) => ({ ...prev, [fieldId]: '' }));
@@ -38,7 +38,7 @@ export default function InteractiveFormWidget({ formData }: InteractiveFormWidge
   };
 
   const handleCheckboxChange = (fieldId: string, option: string, isChecked: boolean) => {
-    const currentList: string[] = formValues[fieldId] || [];
+    const currentList: string[] = Array.isArray(formValues[fieldId]) ? (formValues[fieldId] as string[]) : [];
     let newList: string[];
     if (isChecked) {
       newList = [...currentList, option];
@@ -134,7 +134,7 @@ export default function InteractiveFormWidget({ formData }: InteractiveFormWidge
                 <Input
                   type="text"
                   placeholder={field.placeholder || 'Enter value...'}
-                  value={formValues[field.id] || ''}
+                  value={(formValues[field.id] as string) || ''}
                   onChange={(e) => handleInputChange(field.id, e.target.value)}
                   className={`h-9 text-xs focus-visible:ring-zinc-400 bg-zinc-50 dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-800 ${
                     hasError ? 'border-red-400 focus-visible:ring-red-400' : ''
@@ -144,7 +144,7 @@ export default function InteractiveFormWidget({ formData }: InteractiveFormWidge
 
               {field.type === 'select' && (
                 <select
-                  value={formValues[field.id] || ''}
+                  value={(formValues[field.id] as string) || ''}
                   onChange={(e) => handleInputChange(field.id, e.target.value)}
                   className={`w-full rounded-lg border h-9 text-xs px-3 focus:outline-hidden focus:ring-1 focus:ring-zinc-400 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-zinc-200 dark:border-zinc-800 ${
                     hasError ? 'border-red-400 focus:ring-red-400' : ''
@@ -182,7 +182,9 @@ export default function InteractiveFormWidget({ formData }: InteractiveFormWidge
               {field.type === 'checkbox' && (
                 <div className="grid grid-cols-2 gap-2 pt-0.5">
                   {field.options?.map((opt) => {
-                    const isChecked = (formValues[field.id] || []).includes(opt);
+                    const isChecked = Array.isArray(formValues[field.id])
+                      ? (formValues[field.id] as string[]).includes(opt)
+                      : false;
                     return (
                       <label key={opt} className="flex items-center space-x-2 text-xs font-medium text-zinc-700 dark:text-zinc-300 cursor-pointer select-none">
                         <input

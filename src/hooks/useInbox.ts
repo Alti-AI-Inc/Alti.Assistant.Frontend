@@ -26,7 +26,7 @@ export interface InboxItem {
       stepId: string;
       success: boolean;
       duration?: number;
-      result?: any;
+      result?: unknown;
       error?: string;
     }>;
   };

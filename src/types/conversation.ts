@@ -57,13 +57,42 @@ export enum OPTIONS {
 }
 
 export interface Reference {
-  title: string;
-  url: string;
-  source: string;
-  snippet: string;
-  relevanceScore: number;
-  searchQuery: string;
+  title?: string;
+  url?: string;
+  source?: string;
+  snippet?: string;
+  relevanceScore?: number;
+  searchQuery?: string;
   domain?: string;
+  extractedTitle?: string;
+  [key: string]: unknown;
+}
+
+export interface InteractiveTableData {
+  title: string;
+  columns: Array<{ key: string; label: string }>;
+  rows: Record<string, unknown>[];
+}
+
+export interface UniversalChartData {
+  title: string;
+  type?: 'area' | 'bar' | 'line' | 'pie';
+  series: Array<{ label: string; value: number }>;
+  yLabel?: string;
+}
+
+export interface UniversalFormData {
+  title: string;
+  description?: string;
+  fields: Array<{
+    id: string;
+    label: string;
+    type: 'text' | 'select' | 'radio' | 'checkbox';
+    placeholder?: string;
+    options?: string[];
+    required?: boolean;
+  }>;
+  submitLabel?: string;
 }
 
 export interface GeneratedDocument {
@@ -71,15 +100,17 @@ export interface GeneratedDocument {
   format?: string;
   file?: {
     filePath?: string;
-    fileName: string;
-    format: string;
+    fileName?: string;
+    format?: string;
     size?: number;
   };
   url: string;
-  metadata?: {
+  metadata?: import('./document-generation').DocumentMetadata | {
     title?: string;
     documentType?: string;
-    [key: string]: any;
+    includeDate?: boolean;
+    includeTitle?: boolean;
+    [key: string]: unknown;
   };
 }
 
@@ -94,8 +125,8 @@ export type ConversationMessage = {
     timestamp?: string;
     model?: string;
     reference?: Reference[];
-    sources?: any[];
-    citations?: any[];
+    sources?: Reference[];
+    citations?: Reference[];
     images?: null | string;
     imageUrl?: string; // New property to align with backend
     audioUrl?: string;
@@ -103,6 +134,10 @@ export type ConversationMessage = {
       name: string;
     };
     document?: GeneratedDocument;
+    documentGenerated?: boolean;
+    exportResult?: { format: string; filePath: string; fileName: string; size?: number };
+    uploadResult?: { publicUrl?: string; url?: string };
+    collectedParams?: { content?: string; title?: string; documentType?: string };
     brainstormData?: BrainstormData;
     brainstormMetadata?: BrainstormMetadata;
     ideaAnalysis?: IdeaAnalysis;
@@ -126,10 +161,10 @@ export type ConversationMessage = {
       symbol: string;
       type: 'stock' | 'crypto' | 'forex';
     };
-    tableData?: any;
-    chartData?: any;
-    formData?: any;
-    reportData?: any;
+    tableData?: InteractiveTableData;
+    chartData?: UniversalChartData;
+    formData?: UniversalFormData;
+    reportData?: import('./report-generation').GeneratedReport;
   };
 };
 
@@ -149,9 +184,9 @@ export type ActiveConversation = {
     category?: string;
     customData?: {
       mcpServerId?: string;
-      [key: string]: any;
+      [key: string]: unknown;
     };
-    [key: string]: any;
+    [key: string]: unknown;
   };
 };
 

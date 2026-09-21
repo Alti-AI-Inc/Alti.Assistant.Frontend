@@ -21,6 +21,7 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
+import { storage, STORAGE_KEYS } from '@/lib/storage';
 
 interface SupportRequest {
   id: string;
@@ -89,18 +90,12 @@ export default function AdminSupportInboxPage() {
 
 
   useEffect(() => {
-    const existing = localStorage.getItem('aphura_support_requests');
+    const existing = storage.get<SupportRequest[]>(STORAGE_KEYS.SUPPORT_REQUESTS);
     if (existing) {
-      try {
-        setRequests(JSON.parse(existing));
-      } catch (e) {
-        console.error(e);
-        setRequests(DEFAULT_SUPPORT_REQUESTS);
-        localStorage.setItem('aphura_support_requests', JSON.stringify(DEFAULT_SUPPORT_REQUESTS));
-      }
+      setRequests(existing);
     } else {
       setRequests(DEFAULT_SUPPORT_REQUESTS);
-      localStorage.setItem('aphura_support_requests', JSON.stringify(DEFAULT_SUPPORT_REQUESTS));
+      storage.set(STORAGE_KEYS.SUPPORT_REQUESTS, DEFAULT_SUPPORT_REQUESTS);
     }
   }, []);
 
@@ -123,7 +118,7 @@ export default function AdminSupportInboxPage() {
       });
 
       setRequests(updatedRequests);
-      localStorage.setItem('aphura_support_requests', JSON.stringify(updatedRequests));
+      storage.set(STORAGE_KEYS.SUPPORT_REQUESTS, updatedRequests);
       toast.success(`Response sent successfully to ${viewingRequest.email}`);
       setIsSubmittingResponse(false);
       setViewingRequest(null);

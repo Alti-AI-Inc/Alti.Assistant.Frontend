@@ -35,12 +35,12 @@ export const uploadfileToKnowledgeBaseAction = async (
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('uploadfileToKnowledgeBaseAction Error:', error);
     return {
       success: false,
       message: 'Failed to upload file.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -77,11 +77,11 @@ export async function fetchKnowledgeBaseList(
       message: 'Success',
       data: data?.data?.knowledgeBases ?? [],
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
       success: false,
       message: 'Failed to fetch knowledge base list.',
-      debugMessage: error?.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
       data: [],
     };
@@ -115,12 +115,12 @@ export async function fetchKnowledgeBaseConversations(
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('fetchKnowledgeBaseConversations Error:', error);
     return {
       success: false,
       message: 'Failed to fetch conversations.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -155,12 +155,12 @@ export async function createKnowledgeBaseAction(
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('createKnowledgeBaseAction Error:', error);
     return {
       success: false,
       message: 'Failed to create knowledge base.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -197,12 +197,12 @@ export async function PostKnowledgeConversation(
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('PostKnowledgeConversation Error:', error);
     return {
       success: false,
       message: 'Failed to post message.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -234,12 +234,12 @@ export async function loadSingleBaseConversation(
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('loadSingleBaseConversation Error:', error);
     return {
       success: false,
       message: 'Failed to load conversation.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -292,12 +292,12 @@ export async function getKnowledgeBaseFiles(
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data?.data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('getKnowledgeBaseFiles Error:', error);
     return {
       success: false,
       message: 'Failed to fetch files.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -337,12 +337,12 @@ export const deleteKnowledgeBaseFile = async (
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('deleteKnowledgeBaseFile Error:', error);
     return {
       success: false,
       message: 'Failed to delete file.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -371,12 +371,12 @@ export const deleteKnowledgeBase = async (
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('deleteKnowledgeBase Error:', error);
     return {
       success: false,
       message: 'Failed to delete knowledge base.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }

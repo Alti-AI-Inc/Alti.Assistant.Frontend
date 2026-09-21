@@ -3,12 +3,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AreaChart, TrendingUp, TrendingDown, DollarSign, Activity, Award, Shield } from 'lucide-react';
 
+export interface FinancialLiveData {
+  volume?: number | string;
+  source?: string;
+  [key: string]: unknown;
+}
+
 interface FinancialWidgetProps {
   ticker: {
     symbol: string;
     type: 'stock' | 'crypto' | 'forex';
   };
-  liveData?: any;
+  liveData?: FinancialLiveData;
 }
 
 export default function FinancialWidget({ ticker, liveData }: FinancialWidgetProps) {
@@ -127,7 +133,7 @@ export default function FinancialWidget({ ticker, liveData }: FinancialWidgetPro
   }, [activeTab, resolvedSymbol]);
 
   // Formatting utility
-  const formatValue = (val: any) => {
+  const formatValue = (val: unknown) => {
     if (val === undefined || val === null) return 'N/A';
     if (typeof val === 'number') {
       return val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 });

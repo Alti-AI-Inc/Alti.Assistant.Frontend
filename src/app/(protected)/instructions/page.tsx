@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useState, useEffect, Suspense } from 'react';
 import { toast } from 'sonner';
+import { storage, STORAGE_KEYS } from '@/lib/storage';
 
 const InstructionsContent = () => {
   const [instructionsList, setInstructionsList] = useState<{ id: string; text: string; timestamp: string }[]>([]);
@@ -29,9 +30,9 @@ const InstructionsContent = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const storedInst = localStorage.getItem('aphura_instructions');
+    const storedInst = storage.get<{ id: string; text: string; timestamp: string }[]>(STORAGE_KEYS.INSTRUCTIONS);
     if (storedInst) {
-      setInstructionsList(JSON.parse(storedInst));
+      setInstructionsList(storedInst);
     } else {
       const defaults = [
         {
@@ -51,7 +52,7 @@ const InstructionsContent = () => {
         }
       ];
       setInstructionsList(defaults);
-      localStorage.setItem('aphura_instructions', JSON.stringify(defaults));
+      storage.set(STORAGE_KEYS.INSTRUCTIONS, defaults);
     }
   }, []);
 
@@ -78,7 +79,7 @@ const InstructionsContent = () => {
       
       const updatedList = [newItem, ...instructionsList];
       setInstructionsList(updatedList);
-      localStorage.setItem('aphura_instructions', JSON.stringify(updatedList));
+      storage.set(STORAGE_KEYS.INSTRUCTIONS, updatedList);
       setInputVal('');
       setIsSaving(false);
     }, 300);
@@ -87,7 +88,7 @@ const InstructionsContent = () => {
   const handleDeleteInstruction = (id: string) => {
     const updatedList = instructionsList.filter(item => item.id !== id);
     setInstructionsList(updatedList);
-    localStorage.setItem('aphura_instructions', JSON.stringify(updatedList));
+    storage.set(STORAGE_KEYS.INSTRUCTIONS, updatedList);
   };
 
   const filteredInstructions = instructionsList.filter(item =>

@@ -4,6 +4,7 @@ import { Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { storage, STORAGE_KEYS } from '@/lib/storage';
 
 export default function InboxPage() {
   const router = useRouter();
@@ -13,16 +14,7 @@ export default function InboxPage() {
   // Fetch runs for Inbox
   useEffect(() => {
     const fetchRuns = () => {
-      const savedRuns = localStorage.getItem('aphura_task_runs');
-      if (savedRuns) {
-        try {
-          setRuns(JSON.parse(savedRuns));
-        } catch (e) {
-          setRuns([]);
-        }
-      } else {
-        setRuns([]);
-      }
+      setRuns(storage.get<any[]>(STORAGE_KEYS.TASK_RUNS) || []);
     };
 
     fetchRuns();

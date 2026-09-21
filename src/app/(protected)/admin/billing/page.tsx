@@ -68,9 +68,9 @@ function BillingFormContent() {
       } else {
         throw new Error(response.message || 'Failed to add card to organization.');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      toast.error(err?.message || 'Failed to save card. Please check details and try again.');
+      toast.error(err instanceof Error ? err.message : 'Failed to save card. Please check details and try again.');
     } finally {
       setIsSaving(false);
     }

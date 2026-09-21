@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useState, useEffect, Suspense } from 'react';
 import { toast } from 'sonner';
+import { storage, STORAGE_KEYS } from '@/lib/storage';
 
 const GuardrailsContent = () => {
   const [guardrailsList, setGuardrailsList] = useState<{ id: string; text: string; timestamp: string }[]>([]);
@@ -29,9 +30,9 @@ const GuardrailsContent = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const storedGuard = localStorage.getItem('aphura_guardrails');
+    const storedGuard = storage.get<{ id: string; text: string; timestamp: string }[]>(STORAGE_KEYS.GUARDRAILS);
     if (storedGuard) {
-      setGuardrailsList(JSON.parse(storedGuard));
+      setGuardrailsList(storedGuard);
     } else {
       const defaults = [
         {
@@ -51,7 +52,7 @@ const GuardrailsContent = () => {
         }
       ];
       setGuardrailsList(defaults);
-      localStorage.setItem('aphura_guardrails', JSON.stringify(defaults));
+      storage.set(STORAGE_KEYS.GUARDRAILS, defaults);
     }
   }, []);
 
@@ -78,7 +79,7 @@ const GuardrailsContent = () => {
 
       const updatedList = [newItem, ...guardrailsList];
       setGuardrailsList(updatedList);
-      localStorage.setItem('aphura_guardrails', JSON.stringify(updatedList));
+      storage.set(STORAGE_KEYS.GUARDRAILS, updatedList);
       setInputVal('');
       setIsSaving(false);
     }, 300);
@@ -87,7 +88,7 @@ const GuardrailsContent = () => {
   const handleDeleteGuardrail = (id: string) => {
     const updatedList = guardrailsList.filter(item => item.id !== id);
     setGuardrailsList(updatedList);
-    localStorage.setItem('aphura_guardrails', JSON.stringify(updatedList));
+    storage.set(STORAGE_KEYS.GUARDRAILS, updatedList);
   };
 
   const filteredGuardrails = guardrailsList.filter(item =>

@@ -12,7 +12,7 @@ import {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   message: string;
   data?: T;
@@ -25,7 +25,7 @@ export interface ApiResponse<T = any> {
 export async function startDocumentConversation(
   payload: StartDocConversationRequest,
   accessToken: string,
-): Promise<ApiResponse<any>> {
+): Promise<ApiResponse<DocConversationResponse['data']>> {
   try {
     const response = await apiClient(`${API_BASE_URL}/documents/assistant`, {
       method: 'POST',
@@ -38,12 +38,12 @@ export async function startDocumentConversation(
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('startDocumentConversation Error:', error);
     return {
       success: false,
       message: 'Failed to start document conversation.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -52,7 +52,7 @@ export async function startDocumentConversation(
 export async function continueDocumentConversation(
   payload: ContinueDocConversationRequest,
   accessToken: string,
-): Promise<ApiResponse<any>> {
+): Promise<ApiResponse<DocConversationResponse['data']>> {
   try {
     const response = await apiClient(`${API_BASE_URL}/documents/assistant`, {
       method: 'POST',
@@ -65,12 +65,12 @@ export async function continueDocumentConversation(
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('continueDocumentConversation Error:', error);
     return {
       success: false,
       message: 'Failed to continue document conversation.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -81,7 +81,7 @@ export async function continueDocumentConversation(
 export async function generateDocument(
   payload: BaseGenerationRequest,
   accessToken: string,
-): Promise<ApiResponse<any>> {
+): Promise<ApiResponse<DirectGenerationResponse['data']>> {
   try {
     const response = await apiClient(`${API_BASE_URL}/documents/generate`, {
       method: 'POST',
@@ -94,12 +94,12 @@ export async function generateDocument(
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('generateDocument Error:', error);
     return {
       success: false,
       message: 'Failed to generate document.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -110,7 +110,7 @@ export async function generateDocument(
 export async function uploadReviewDocumentAssistant(
   formData: FormData,
   accessToken: string,
-): Promise<ApiResponse<any>> {
+): Promise<ApiResponse<ReviewResponse['data']>> {
   try {
     const response = await apiClient(
       `${API_BASE_URL}/document-review/assistant`,
@@ -126,12 +126,12 @@ export async function uploadReviewDocumentAssistant(
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('uploadReviewDocumentAssistant Error:', error);
     return {
       success: false,
       message: 'Failed to upload review document.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -140,7 +140,7 @@ export async function uploadReviewDocumentAssistant(
 export async function submitDirectReview(
   formData: FormData,
   accessToken: string,
-): Promise<ApiResponse<any>> {
+): Promise<ApiResponse<ReviewResponse['data']>> {
   try {
     const response = await apiClient(
       `${API_BASE_URL}/document-review/assistant`,
@@ -156,12 +156,12 @@ export async function submitDirectReview(
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('submitDirectReview Error:', error);
     return {
       success: false,
       message: 'Failed to submit review.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }

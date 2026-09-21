@@ -47,6 +47,12 @@ export interface SpaceResearchTurn {
   tags?: string[];
   createdAt?: string;
   updatedAt?: string;
+  answer?: string;
+  responseMessage?: {
+    answer?: string;
+    reference?: unknown[];
+    [key: string]: unknown;
+  };
   [key: string]: unknown;
 }
 
@@ -134,11 +140,11 @@ export async function createSpaceResearchAction(
       message: result?.message || 'Research complete',
       data: result?.data ?? result,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('createSpaceResearchAction Error:', error);
     return {
       success: false,
-      message: error.message || 'Failed to run research',
+      message: error instanceof Error ? error.message : 'Failed to run research',
     };
   }
 }
@@ -176,11 +182,11 @@ export async function getSpaceResearchSessionsAction(
       message: result?.message || 'Success',
       data: sessions as SpaceResearchSession[],
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('getSpaceResearchSessionsAction Error:', error);
     return {
       success: false,
-      message: error.message || 'Failed to fetch research sessions',
+      message: error instanceof Error ? error.message : 'Failed to fetch research sessions',
     };
   }
 }
@@ -218,11 +224,11 @@ export async function getSpaceResearchSessionByIdAction(
       message: result?.message || 'Success',
       data: session,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('getSpaceResearchSessionByIdAction Error:', error);
     return {
       success: false,
-      message: error.message || 'Failed to fetch research session',
+      message: error instanceof Error ? error.message : 'Failed to fetch research session',
     };
   }
 }

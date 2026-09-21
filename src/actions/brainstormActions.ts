@@ -44,12 +44,12 @@ export async function postBrainstormAssistant(
       data: data.data || data,
       statusCode: data.statusCode,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('postBrainstormAssistant error:', error);
     return {
       success: false,
       message: 'Failed to process brainstorm assistant request. Try again.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -111,12 +111,12 @@ export async function generateStructuredBrainstorm(
       data: data.data || data,
       statusCode: data.statusCode,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('generateStructuredBrainstorm error:', error);
     return {
       success: false,
       message: 'Failed to generate structured brainstorm. Try again.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }

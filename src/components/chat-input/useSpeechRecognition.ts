@@ -31,7 +31,19 @@ export function useSpeechRecognition({ setMessage }: UseSpeechRecognitionProps) 
         setIsListening(true);
       };
 
-      recognition.onresult = (event: any) => {
+interface SpeechRecognitionResultEvent {
+  resultIndex: number;
+  results: ArrayLike<{
+    isFinal: boolean;
+    [index: number]: { transcript: string };
+  }>;
+}
+
+interface SpeechRecognitionErrorEvent {
+  error: string;
+}
+
+      recognition.onresult = (event: SpeechRecognitionResultEvent) => {
         let interimTranscript = '';
         let finalTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -47,7 +59,7 @@ export function useSpeechRecognition({ setMessage }: UseSpeechRecognitionProps) 
         }
       };
 
-      recognition.onerror = (event: any) => {
+      recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error('Speech recognition error:', event.error);
         if (event.error !== 'no-speech') {
           stopListening();

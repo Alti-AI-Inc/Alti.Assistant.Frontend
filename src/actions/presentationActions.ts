@@ -67,12 +67,12 @@ export async function getPresentationStatus(
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('getPresentationStatus Error:', error);
     return {
       success: false,
       message: 'Failed to get presentation status.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }

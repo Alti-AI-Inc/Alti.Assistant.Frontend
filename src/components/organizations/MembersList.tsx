@@ -29,6 +29,7 @@ import { memo, useState, useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { MemberRoleSelector } from './MemberRoleSelector';
 import type { TenantMember } from '@/types/tenant';
+import { storage, STORAGE_KEYS } from '@/lib/storage';
 
 interface MembersListProps {
   members: (TenantMember & { isInvitation?: boolean; firstName?: string; lastName?: string })[];
@@ -52,17 +53,9 @@ const getInvitedName = (email: string) => {
   if (e === 'daniel@example.com') return { firstName: 'Daniel', lastName: 'Hardman' };
   if (e === 'katrina@example.com') return { firstName: 'Katrina', lastName: 'Bennett' };
 
-  if (typeof window === 'undefined') return { firstName: '', lastName: '' };
-  try {
-    const saved = localStorage.getItem('aphura_invited_names');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (parsed[e]) {
-        return parsed[e];
-      }
-    }
-  } catch (e) {
-    console.error(e);
+  const saved = storage.get<Record<string, { firstName: string; lastName: string }>>(STORAGE_KEYS.INVITED_NAMES);
+  if (saved && saved[e]) {
+    return saved[e];
   }
   return { firstName: '', lastName: '' };
 };
@@ -277,14 +270,14 @@ function MembersListComponent({
 
 
         {paginatedMembers
-          .filter((member: any) => member?.userId?._id)
-          .map((member: any) => {
+          .filter((member) => member?.userId?._id)
+          .map((member) => {
             const userId = member.userId._id;
             const email = member.userId.email;
             const isCurrentUser = userId === session?.user?.id;
             const isInvitation = member.isInvitation || member.status === 'pending';
             const memberRole = String(
-              member.tenantRole ?? member.role ?? 'member',
+              ('tenantRole' in member && member.tenantRole) || member.role || 'member',
             ).toLowerCase();
             
             // Retrieve names with lookups

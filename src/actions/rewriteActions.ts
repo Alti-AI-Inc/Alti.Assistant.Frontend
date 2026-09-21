@@ -30,12 +30,12 @@ export async function submitDirectRewrite(
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('submitDirectRewrite Error:', error);
     return {
       success: false,
       message: 'Failed to submit rewrite.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -76,12 +76,12 @@ export async function handleRewriteRequest(
 
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('handleRewriteRequest Error:', error);
     return {
       success: false,
       message: 'Failed to handle rewrite request.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }

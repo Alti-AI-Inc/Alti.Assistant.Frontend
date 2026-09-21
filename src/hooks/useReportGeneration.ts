@@ -4,6 +4,7 @@ import {
   generateDirectReport,
   handleReportRequest,
 } from '@/actions/reportActions';
+import type { ReportAssistantRequest } from '@/types/report-generation';
 import { ROLES, useConversationsStore } from '@/stores/useConversationsStore';
 import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
@@ -63,7 +64,7 @@ export const useReportGeneration = () => {
       );
     } else {
       // Text-only flow - use JSON
-      const payload: any = {
+      const payload: ReportAssistantRequest = {
         message,
       };
 

@@ -149,13 +149,13 @@ export async function analyzeImageIntent(
 
     const data = await response.json();
     return data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('analyzeImageIntent Error:', error);
     return {
       statusCode: 500,
       success: false,
       message: 'Failed to analyze image intent.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -192,13 +192,13 @@ export async function evaluatePrompt(
 
     const data = await response.json();
     return data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('evaluatePrompt Error:', error);
     return {
       statusCode: 500,
       success: false,
       message: 'Failed to evaluate prompt.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -229,13 +229,13 @@ export async function addDetail(
 
     const data = await response.json();
     return data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('addDetail Error:', error);
     return {
       statusCode: 500,
       success: false,
       message: 'Failed to add detail.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -267,13 +267,13 @@ export async function finalizePrompt(
 
     const data = await response.json();
     return data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('finalizePrompt Error:', error);
     return {
       statusCode: 500,
       success: false,
       message: 'Failed to finalize prompt.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -308,13 +308,13 @@ export async function generateImage(
 
     const data = await response.json();
     return data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('generateImage Error:', error);
     return {
       statusCode: 500,
       success: false,
       message: 'Failed to generate image.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -350,13 +350,13 @@ export async function editImage(
 
     const data = await response.json();
     return data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('editImage Error:', error);
     return {
       statusCode: 500,
       success: false,
       message: 'Failed to edit image.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }

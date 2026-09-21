@@ -3,8 +3,22 @@
 import React, { useState } from 'react';
 import { Trophy, TrendingUp, DollarSign, Activity, Percent, ArrowUpRight } from 'lucide-react';
 
+export interface SportsData {
+  homeTeam?: string;
+  awayTeam?: string;
+  homeMoneyline?: string;
+  awayMoneyline?: string;
+  spread?: string;
+  totalOverUnder?: string;
+  expertPick?: string;
+  valueBetRating?: string;
+  roiPercentage?: string;
+  arbitrageGap?: string;
+  [key: string]: unknown;
+}
+
 interface SportsWidgetProps {
-  sportsData?: any;
+  sportsData?: SportsData;
 }
 
 export default function SportsWidget({ sportsData }: SportsWidgetProps) {

@@ -4,14 +4,14 @@ describe('logger', () => {
   const originalEnv = process.env.NODE_ENV;
 
   afterEach(() => {
-    process.env.NODE_ENV = originalEnv;
+    (process.env as Record<string, string | undefined>).NODE_ENV = originalEnv;
     vi.restoreAllMocks();
     vi.resetModules();
   });
 
   describe('logger.debug', () => {
     it('does not call console.log in production', async () => {
-      process.env.NODE_ENV = 'production';
+      (process.env as Record<string, string | undefined>).NODE_ENV = 'production';
       vi.resetModules();
 
       const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -22,7 +22,7 @@ describe('logger', () => {
     });
 
     it('calls console.log in development', async () => {
-      process.env.NODE_ENV = 'development';
+      (process.env as Record<string, string | undefined>).NODE_ENV = 'development';
       vi.resetModules();
 
       const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});

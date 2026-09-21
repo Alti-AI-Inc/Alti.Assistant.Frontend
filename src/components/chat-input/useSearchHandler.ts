@@ -12,7 +12,7 @@ interface SearchHandlerArgs {
   accessToken: string;
   userMessage: string;
   immediateId?: string;
-  userContext: any;
+  userContext: Record<string, unknown> | null | undefined;
   userTimeZone: string;
 }
 
@@ -42,7 +42,9 @@ export function useSearchHandler() {
           userMessage,
           isNewChatId(conversationId) ? undefined : conversationId,
           accessToken,
-          userContext,
+          userContext
+            ? (userContext as { timezone?: string; localDate?: string; localTime?: string })
+            : undefined,
         );
 
         if (searchRes.success && searchRes.data) {
@@ -60,8 +62,8 @@ export function useSearchHandler() {
 
             const references = deduplicateReferences(
               results
-                .filter((r: any) => !r.url?.toLowerCase().includes('exa.ai'))
-                .map((r: any) => ({
+                .filter((r: { url?: string }) => !r.url?.toLowerCase().includes('exa.ai'))
+                .map((r: { title?: string; url?: string; summary?: string; favicon?: string }) => ({
                   title: r.title || r.url,
                   url: r.url,
                   summary: r.summary,
@@ -73,10 +75,15 @@ export function useSearchHandler() {
               turn.searchSession ||
               turn.id ||
               turn._id ||
+              conversationId ||
               immediateId ||
-              (isNewChatId(conversationId)
-                ? `search-${Date.now()}`
-                : conversationId);
+              `search-${Date.now()}`;
+
+            const turnAnswer =
+              turn.responseMessage?.answer ||
+              turn.answer ||
+              answer ||
+              'Here is what I found:';
 
             return {
               success: true,
@@ -85,15 +92,15 @@ export function useSearchHandler() {
               data: {
                 conversationId: resolvedId,
                 responseMessage: {
-                  answer,
+                  answer: turnAnswer.trim(),
                   reference: references,
                 },
               },
             };
           }
 
-          const turnAny = turn as any;
-          const turnAnswer = turnAny?.answer || turnAny?.summary || turnAny?.response || turnAny?.content || '';
+          const turnRecord = turn as Record<string, unknown>;
+          const turnAnswer = (turnRecord?.answer || turnRecord?.summary || turnRecord?.response || turnRecord?.content || '') as string;
           if (turnAnswer && typeof turnAnswer === 'string' && turnAnswer.trim().length > 0) {
             const resolvedId =
               turn.searchSession || turn.id || turn._id || immediateId ||
@@ -110,8 +117,8 @@ export function useSearchHandler() {
           }
         }
         console.warn('[SEARCH FALLBACK] Exa search returned no results, falling back to AI chat.');
-      } catch (err: any) {
-        console.warn('[SEARCH FALLBACK] Search threw error, falling back to AI chat:', err?.message);
+      } catch (err: unknown) {
+        console.warn('[SEARCH FALLBACK] Search threw error, falling back to AI chat:', err instanceof Error ? err.message : String(err));
       }
     }
 
@@ -127,7 +134,9 @@ export function useSearchHandler() {
           userMessage,
           isNewChatId(conversationId) ? undefined : conversationId,
           accessToken,
-          userContext,
+          userContext
+            ? (userContext as { timezone?: string; localDate?: string; localTime?: string })
+            : undefined,
         );
 
         if (researchRes.success && researchRes.data) {
@@ -145,8 +154,8 @@ export function useSearchHandler() {
 
             const references = deduplicateReferences(
               results
-                .filter((r: any) => !r.url?.toLowerCase().includes('exa.ai'))
-                .map((r: any) => ({
+                .filter((r: { url?: string }) => !r.url?.toLowerCase().includes('exa.ai'))
+                .map((r: { title?: string; url?: string; summary?: string; favicon?: string }) => ({
                   title: r.title || r.url,
                   url: r.url,
                   summary: r.summary,
@@ -177,8 +186,8 @@ export function useSearchHandler() {
             };
           }
 
-          const turnAny = turn as any;
-          const turnAnswer = turnAny?.answer || turnAny?.summary || turnAny?.response || turnAny?.content || '';
+          const turnRecord = turn as Record<string, unknown>;
+          const turnAnswer = (turnRecord?.answer || turnRecord?.summary || turnRecord?.response || turnRecord?.content || '') as string;
           if (turnAnswer && typeof turnAnswer === 'string' && turnAnswer.trim().length > 0) {
             const resolvedId =
               turn.searchSession || turn.id || turn._id || immediateId ||
@@ -195,8 +204,8 @@ export function useSearchHandler() {
           }
         }
         console.warn('[RESEARCH FALLBACK] Research returned no results, falling back to AI chat.');
-      } catch (err: any) {
-        console.warn('[RESEARCH FALLBACK] Research threw error, falling back to AI chat:', err?.message);
+      } catch (err: unknown) {
+        console.warn('[RESEARCH FALLBACK] Research threw error, falling back to AI chat:', err instanceof Error ? err.message : String(err));
       }
     }
 

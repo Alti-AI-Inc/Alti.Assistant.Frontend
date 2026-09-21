@@ -55,12 +55,12 @@ export async function postPlanAssistant(
       data: data.data || data,
       statusCode: data.statusCode,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('postPlanAssistant error:', error);
     return {
       success: false,
       message: 'Failed to process plan assistant request. Try again.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -103,12 +103,12 @@ export async function postPlanAssistantWithFile(
       data: data.data || data,
       statusCode: data.statusCode,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('postPlanAssistantWithFile error:', error);
     return {
       success: false,
       message: 'Failed to process plan assistant with file. Try again.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -178,12 +178,12 @@ export async function generateDirectPlan(
       data: data.data || data,
       statusCode: data.statusCode,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('generateDirectPlan error:', error);
     return {
       success: false,
       message: 'Failed to generate direct plan. Try again.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }

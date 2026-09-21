@@ -31,10 +31,12 @@ export const extractDomainFromUrl = (urlStr?: string): string => {
   }
 };
 
-export const deduplicateReferences = (refs: any[]): any[] => {
+export const deduplicateReferences = <T extends { url?: string; domain?: string; title?: string }>(
+  refs: T[],
+): T[] => {
   if (!Array.isArray(refs) || refs.length === 0) return [];
   const seenKeys = new Set<string>();
-  const deduplicated: any[] = [];
+  const deduplicated: T[] = [];
 
   for (const ref of refs) {
     if (!ref) continue;

@@ -101,12 +101,12 @@ export const fileUploadAction = async (
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('fileUploadAction Error:', error);
     return {
       success: false,
       message: 'Failed to upload file.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -143,12 +143,12 @@ export async function fetchKnowledgeBankFolders(
       message: 'Success',
       data: data?.data?.folders ?? [],
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('fetchKnowledgeBankFolders Error:', error);
     return {
       success: false,
       message: 'Failed to fetch folders.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -181,12 +181,12 @@ export async function fetchKnowledgeBankFolderContent(
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data?.data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('fetchKnowledgeBankFolderContent Error:', error);
     return {
       success: false,
       message: 'Failed to fetch folder content.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -223,12 +223,12 @@ export async function createKnowledgeBankFolderAction(
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('createKnowledgeBankFolderAction Error:', error);
     return {
       success: false,
       message: 'Failed to create folder.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -266,12 +266,12 @@ export async function updateKnowledgeBankFolderAction(
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('updateKnowledgeBankFolderAction Error:', error);
     return {
       success: false,
       message: 'Failed to update folder.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -303,12 +303,12 @@ export const uploadfileToKnowledgeBankAction = async (
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('uploadfileToKnowledgeBankAction Error:', error);
     return {
       success: false,
       message: 'Failed to upload file to knowledge bank.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -339,12 +339,12 @@ export const processKnowledgeBankFile = async (
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('processKnowledgeBankFile Error:', error);
     return {
       success: false,
       message: 'Failed to process file.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -374,12 +374,12 @@ export const deleteKnowledgeBankFolderAction = async (
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('deleteKnowledgeBankFolderAction Error:', error);
     return {
       success: false,
       message: 'Failed to delete folder.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -409,12 +409,12 @@ export const deleteKnowledgeBankFile = async (
     }
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('deleteKnowledgeBankFile Error:', error);
     return {
       success: false,
       message: 'Failed to delete file.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }

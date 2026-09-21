@@ -54,12 +54,12 @@ export async function postContractAssistant(
       data: data.data || data,
       statusCode: data.statusCode,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('postContractAssistant error:', error);
     return {
       success: false,
       message: 'Failed to process contract review request. Try again.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -102,12 +102,12 @@ export async function postContractAssistantWithFile(
       data: data.data || data,
       statusCode: data.statusCode,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('postContractAssistantWithFile error:', error);
     return {
       success: false,
       message: 'Failed to process contract review with file. Try again.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -170,12 +170,12 @@ export async function submitDirectContractReview(
       data: data.data || data,
       statusCode: data.statusCode,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('submitDirectContractReview error:', error);
     return {
       success: false,
       message: 'Failed to submit direct contract review. Try again.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }

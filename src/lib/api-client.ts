@@ -119,10 +119,10 @@ export async function apiClientJson<T = unknown>(
 
     if (!response.ok) {
       const errorText = await response.text();
-      let parsedError: any = null;
+      let parsedError: { message?: string } | null = null;
       try {
         parsedError = JSON.parse(errorText);
-      } catch (e) {
+      } catch {
         // Not a JSON response
       }
 

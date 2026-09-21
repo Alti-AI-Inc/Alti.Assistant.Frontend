@@ -7,6 +7,9 @@ import {
   PostConversation,
   PostConversationStream,
   PostConversationWithFile,
+  Conversation,
+  ConversationListResponse,
+  ApiResponse,
 } from '@/actions/conversationsAction';
 import { createSpaceSearchAction } from '@/actions/spaceSearchActions';
 import { createSpaceResearchAction } from '@/actions/spaceResearchActions';
@@ -48,7 +51,7 @@ import {
 import { useBotsStore } from '@/stores/useBotsStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { createFileChangeHandler } from '@/utils/fileChangeHandler';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowUp,
   File,
@@ -885,9 +888,9 @@ export default function ChatInput({
       if (isNew) {
         saveLocalConversation(initialEntry);
 
-        queryClient.setQueriesData<any>(
+        queryClient.setQueriesData<InfiniteData<ConversationListResponse>>(
           { queryKey: ['conversations'] },
-          (oldData: any) => {
+          (oldData) => {
             if (!oldData || !oldData.pages || oldData.pages.length === 0) {
               return {
                 pageParams: [1],
@@ -908,10 +911,10 @@ export default function ChatInput({
             }
             return {
               ...oldData,
-              pages: oldData.pages.map((page: any, index: number) => {
+              pages: oldData.pages.map((page, index: number) => {
                 if (index === 0) {
                   const remaining = (page.conversations || []).filter(
-                    (c: any) =>
+                    (c: Conversation) =>
                       c &&
                       c._id !== generatedId &&
                       c.conversationId !== generatedId,
@@ -934,9 +937,9 @@ export default function ChatInput({
       return { immediateId: generatedId, chatTitle };
     },
     onSuccess: (
-      response: any,
+      response: ApiResponse,
       { message: userMessage, immediateId },
-      context: any,
+      context: { immediateId?: string; chatTitle?: string } | undefined,
     ) => {
       const initId = immediateId || context?.immediateId;
       const newId =
@@ -1032,8 +1035,8 @@ export default function ChatInput({
         Array.isArray(response.data?.results)
       ) {
         rawReference = response.data.results
-          .filter((r: any) => !r.url?.toLowerCase().includes('exa.ai'))
-          .map((r: any) => ({
+          .filter((r: { url?: string }) => !r.url?.toLowerCase().includes('exa.ai'))
+          .map((r: { title?: string; url?: string; summary?: string; favicon?: string }) => ({
             title: r.title || r.url,
             url: r.url,
             summary: r.summary,
@@ -1164,16 +1167,16 @@ export default function ChatInput({
         );
 
         // Update React Query's conversations cache directly
-        queryClient.setQueriesData<any>(
+        queryClient.setQueriesData<InfiniteData<ConversationListResponse>>(
           { queryKey: ['conversations'] },
-          (oldData: any) => {
+          (oldData) => {
             if (!oldData || !oldData.pages) return oldData;
             return {
               ...oldData,
-              pages: oldData.pages.map((page: any, idx: number) => {
+              pages: oldData.pages.map((page, idx: number) => {
                 if (idx === 0) {
                   const remaining = (page.conversations || []).filter(
-                    (c: any) =>
+                    (c: Conversation) =>
                       c &&
                       c._id !== newId &&
                       c.conversationId !== newId &&
@@ -1219,7 +1222,7 @@ export default function ChatInput({
       setShowStartLastMessage(false);
       setLoadingResponse(false);
     },
-    onError: (error, { message: userMessage, immediateId }: any) => {
+    onError: (error, { message: userMessage, immediateId }: { message?: string; immediateId?: string }) => {
       console.error('Message post failed:', error);
       setShowStartLastMessage(false);
       setLoadingResponse(false);

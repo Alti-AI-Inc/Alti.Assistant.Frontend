@@ -210,7 +210,7 @@ function InboxClient() {
                 </h4>
                 
                 <div className="space-y-2">
-                  {activeItem.payload.results.map((step: any, index: number) => {
+                  {activeItem.payload.results.map((step: { success?: boolean; stepId?: string; error?: string; duration?: number }, index: number) => {
                     const stepSuccess = step.success;
                     return (
                       <div 

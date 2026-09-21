@@ -20,10 +20,29 @@ interface Link {
   target: string;
 }
 
+interface InteractiveTopologySource {
+  title?: string;
+  url?: string;
+  snippet?: string;
+  domain?: string;
+  [key: string]: unknown;
+}
+
+interface InteractiveTopologyKnowledgeNode {
+  id: string;
+  label: string;
+  type: 'source' | 'theme';
+  url?: string;
+  snippet?: string;
+  score?: number;
+  domain?: string;
+  [key: string]: unknown;
+}
+
 interface InteractiveTopologyProps {
-  sources: any[];
+  sources: InteractiveTopologySource[];
   knowledgeGraph?: {
-    nodes?: Array<{ id: string; label: string; type: 'source' | 'theme'; [key: string]: any }>;
+    nodes?: InteractiveTopologyKnowledgeNode[];
     links?: Array<{ source: string; target: string }>;
   };
 }
@@ -52,7 +71,7 @@ export default function InteractiveTopology({ sources, knowledgeGraph }: Interac
           url: n.url,
           snippet: n.snippet,
           score: n.score || 80,
-          domain: n.domain || (n.url ? new URL(n.url).hostname : undefined),
+          domain: n.domain || (n.url && typeof n.url === 'string' ? new URL(n.url).hostname : undefined),
           x: 400 + Math.cos(angle) * radius,
           y: 200 + Math.sin(angle) * radius
         };
@@ -80,7 +99,7 @@ export default function InteractiveTopology({ sources, knowledgeGraph }: Interac
           url: src.url,
           snippet: src.snippet,
           score: Math.round(80 + Math.random() * 20),
-          domain: src.url && src.url !== '#' ? new URL(src.url).hostname : 'Grounding Web Reference',
+          domain: src.url && typeof src.url === 'string' && src.url !== '#' ? new URL(src.url).hostname : 'Grounding Web Reference',
           x: 400 + Math.cos(angle) * radius,
           y: 200 + Math.sin(angle) * radius
         });

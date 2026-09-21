@@ -3,8 +3,27 @@
 import React, { useState } from 'react';
 import { Home, DollarSign, BarChart2, Shield, Calendar } from 'lucide-react';
 
+export interface RealEstateComp {
+  address?: string;
+  price?: string;
+  date?: string;
+  size?: string;
+  [key: string]: unknown;
+}
+
+export interface RealEstateData {
+  address?: string;
+  valuation?: string;
+  lowRange?: string;
+  highRange?: string;
+  marketIndex?: string;
+  conformingLimit?: string;
+  comps?: RealEstateComp[];
+  [key: string]: unknown;
+}
+
 interface RealEstateWidgetProps {
-  realEstateData?: any;
+  realEstateData?: RealEstateData;
 }
 
 export default function RealEstateWidget({ realEstateData }: RealEstateWidgetProps) {
@@ -117,7 +136,7 @@ export default function RealEstateWidget({ realEstateData }: RealEstateWidgetPro
                 </tr>
               </thead>
               <tbody>
-                {data.comps.map((comp: any, idx: number) => (
+                {(data.comps || []).map((comp: RealEstateComp, idx: number) => (
                   <tr key={idx} className="border-b border-[#2b2f3a]/50 text-white font-medium hover:bg-[#171b26]/50">
                     <td className="py-3 flex items-center space-x-1">
                       <Home className="h-3 w-3 text-primary" />

@@ -10,7 +10,7 @@ import {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   message: string;
   data?: T;
@@ -59,12 +59,12 @@ export async function postReportAssistant(
       data: data.data || data,
       statusCode: data.statusCode,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('postReportAssistant error:', error);
     return {
       success: false,
       message: 'Failed to process report assistant request. Try again.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -112,12 +112,12 @@ export async function postReportAssistantWithFile(
       data: data.data || data,
       statusCode: data.statusCode,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('postReportAssistantWithFile error:', error);
     return {
       success: false,
       message: 'Failed to process report request with file. Try again.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -164,12 +164,12 @@ export async function generateDirectReport(
       data: data.data || data,
       statusCode: data.statusCode,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('generateDirectReport error:', error);
     return {
       success: false,
       message: 'Failed to generate report. Try again.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }

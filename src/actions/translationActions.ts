@@ -38,12 +38,12 @@ export async function submitDirectTranslate(
       data: data.data || data,
       statusCode: data.statusCode,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('submitDirectTranslate Error:', error);
     return {
       success: false,
       message: 'Failed to translate text.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -71,12 +71,12 @@ export async function submitDetectLanguage(
       data: data.data || data,
       statusCode: data.statusCode,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('submitDetectLanguage Error:', error);
     return {
       success: false,
       message: 'Failed to detect language.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }
@@ -113,12 +113,12 @@ export async function handleTranslationAssistant(
       data: data.data || data,
       statusCode: data.statusCode,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('handleTranslationAssistant Error:', error);
     return {
       success: false,
       message: 'Failed to process translation request.',
-      debugMessage: error.message || String(error),
+      debugMessage: error instanceof Error ? error.message : String(error),
       statusCode: 500,
     };
   }

@@ -30,7 +30,7 @@ interface TenantStore {
 
 const useTenantStore = create<TenantStore>()(
   persist(
-    (set: any, get: any) => ({
+    (set, get) => ({
       mode: 'personal',
       activeTenantId: null,
       tenants: [],
@@ -115,7 +115,7 @@ const useTenantStore = create<TenantStore>()(
     }),
     {
       name: 'tenant-store',
-      onRehydrateStorage: () => (state: any) => {
+      onRehydrateStorage: () => (state: TenantStore | undefined) => {
         //
         state?.setHydrated();
       },
