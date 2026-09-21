@@ -132,32 +132,6 @@ const getFileExtension = (fileName: string) => {
   return fileName.split('.').pop()?.toUpperCase() || 'FILE';
 };
 
-const ANONYMOUS_PROMPT_LIMIT = 10;
-const ANONYMOUS_PROMPT_COUNT_KEY = 'anonymous-prompt-count';
-
-const extractAssistantText = (payload: any): string => {
-  const target = payload?.data || payload;
-
-  if (typeof target === 'string') return target;
-  if (!target || typeof target !== 'object') return '';
-
-  // Handle common API response shapes first.
-  if (typeof target.reply === 'string') return target.reply;
-  if (typeof target.answer === 'string') return target.answer;
-  if (typeof target.response === 'string') return target.response;
-  if (typeof target.message === 'string') return target.message;
-  if (typeof target.text === 'string') return target.text;
-  if (typeof target.content === 'string') return target.content;
-
-  if (typeof target.data?.reply === 'string') return target.data.reply;
-  if (typeof target.data?.answer === 'string') return target.data.answer;
-  if (typeof target.data?.response === 'string') return target.data.response;
-  if (typeof target.data?.message === 'string') return target.data.message;
-  if (typeof target.data?.text === 'string') return target.data.text;
-  if (typeof target.data?.content === 'string') return target.data.content;
-
-  return JSON.stringify(target);
-};
 
 export default function ChatInput({
   conversationId,
@@ -359,6 +333,15 @@ export default function ChatInput({
     stopListening();
 
     if (!message.trim()) return;
+
+    if (!data?.accessToken) {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('pending_prompt', message.trim());
+      }
+      onOpen({ type: 'auth-modal', actionId: 'register' });
+      return;
+    }
+
     const taskName = message.trim();
     const runId = Math.random().toString(36).substring(7);
     const newRun = {
@@ -774,60 +757,14 @@ export default function ChatInput({
       const accessToken = data?.accessToken;
 
       if (!accessToken) {
-        if (!isHomePage) {
-          console.error('No access token');
-          router.push('/login');
-          return null;
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('pending_prompt', userMessage.trim());
         }
-
-        const currentPromptCount = Number(
-          localStorage.getItem(ANONYMOUS_PROMPT_COUNT_KEY) || '0',
-        );
-
-        if (currentPromptCount >= ANONYMOUS_PROMPT_LIMIT) {
-          router.push('/register');
-          return {
-            success: false,
-            message:
-              'You have reached the 10 prompt limit. Please register to continue chatting.',
-          };
-        }
-
-        try {
-          const base =
-            process.env.NEXT_PUBLIC_API_URL || 'https://api.altihq.com/api/v1';
-          const res = await fetch(`${base}/vertex/anonymous-response`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ prompt: userMessage }),
-          });
-          const resData = await res.json();
-          const answerText = extractAssistantText(resData);
-
-          localStorage.setItem(
-            ANONYMOUS_PROMPT_COUNT_KEY,
-            String(currentPromptCount + 1),
-          );
-
-          return {
-            success: true,
-            message: 'Success',
-            data: {
-              conversationId: isNewChatId(conversationId)
-                ? undefined
-                : conversationId,
-              responseMessage: { answer: answerText },
-            },
-          };
-        } catch (err: any) {
-          console.error('Anonymous chat API failed', err);
-          return {
-            success: false,
-            message: 'Anonymous chat API failed: ' + err.message,
-          };
-        }
+        onOpen({ type: 'auth-modal', actionId: 'register' });
+        return {
+          success: false,
+          message: 'Please sign up or log in to continue.',
+        };
       }
 
       const getCategoryFromOption = (
@@ -1206,6 +1143,14 @@ export default function ChatInput({
 
     if (!message?.trim()) return;
 
+    if (!data?.accessToken) {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('pending_prompt', message.trim());
+      }
+      onOpen({ type: 'auth-modal', actionId: 'register' });
+      return;
+    }
+
     if (selectedOption === OPTIONS.MONITOR && !pathname.startsWith('/spaces')) {
       if (typeof window !== 'undefined') {
         window.sessionStorage.setItem(
@@ -1524,6 +1469,16 @@ export default function ChatInput({
       textarea.style.height = `${textarea.scrollHeight}px`;
     }
   }, [message]);
+
+  useEffect(() => {
+    if (data?.accessToken && typeof window !== 'undefined') {
+      const pendingPrompt = sessionStorage.getItem('pending_prompt');
+      if (pendingPrompt) {
+        setMessage(pendingPrompt);
+        sessionStorage.removeItem('pending_prompt');
+      }
+    }
+  }, [data?.accessToken]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
