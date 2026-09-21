@@ -1,5 +1,5 @@
 {
-  "name": "insosearch-chat-frontend",
+  "name": "aphura-frontend",
   "version": "3.0.46",
   "private": true,
   "scripts": {
@@ -79,7 +79,7 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "@ngrok/ngrok": "^2.0.0",
+
     "concurrently": "^8.2.0",
     "http-proxy": "^1.18.1",
     "minimist": "^1.2.8",
