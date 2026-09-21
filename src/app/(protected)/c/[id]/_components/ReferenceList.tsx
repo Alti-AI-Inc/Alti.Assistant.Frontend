@@ -48,7 +48,7 @@ export default function ReferencesList({
 
           const pillContent = (
             <>
-              <div className="w-3.5 h-3.5 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800">
+              <div className="w-3.5 h-3.5 rounded-[3px] overflow-hidden flex-shrink-0 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800">
                 {isWeb ? (
                   <img
                     src={faviconUrl}
@@ -86,7 +86,7 @@ export default function ReferencesList({
                 target="_blank"
                 rel="noopener noreferrer"
                 title={title}
-                className="group inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white dark:bg-zinc-900 border border-black/10 dark:border-zinc-800 hover:border-black/25 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-800/80 transition-all text-xs text-zinc-700 dark:text-zinc-300 shadow-xs"
+                className="group inline-flex items-center gap-1.5 px-2 py-1 rounded-[5px] bg-white dark:bg-zinc-900 border border-black/10 dark:border-zinc-800 hover:border-black/25 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-800/80 transition-all text-xs text-zinc-700 dark:text-zinc-300 shadow-xs"
               >
                 {pillContent}
               </Link>
@@ -97,7 +97,7 @@ export default function ReferencesList({
             <div
               key={index}
               title={ref.snippet || title}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white dark:bg-zinc-900 border border-black/10 dark:border-zinc-800 text-xs text-zinc-700 dark:text-zinc-300 shadow-xs cursor-default"
+              className="inline-flex items-center gap-1.5 px-2 py-1 rounded-[5px] bg-white dark:bg-zinc-900 border border-black/10 dark:border-zinc-800 text-xs text-zinc-700 dark:text-zinc-300 shadow-xs cursor-default"
             >
               {pillContent}
             </div>

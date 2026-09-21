@@ -507,54 +507,10 @@ const LeftSideNavMobile = () => {
     }
   }, [isLoggedIn]);
 
-  // Synchronize tab and option selection with activeConversation.is_deep_search
+  // Prefetch new chat route for instantaneous navigation
   useEffect(() => {
-    if (isSuperAdmin) return;
-    if (activeConversation) {
-      const isDeepSearch = !!(activeConversation as any).is_deep_search;
-      if (isDeepSearch) {
-        setActiveTab('research');
-        if (selectedOption !== OPTIONS.RESEARCH) {
-          setSelectedOption(OPTIONS.RESEARCH);
-        }
-      } else {
-        // Only set to search if not on the bots page or apps page or data page or assistant/workflows
-        if (
-          pathname !== '/spaces' &&
-          !pathname.startsWith('/spaces') &&
-          pathname !== '/tasks' &&
-          !pathname.startsWith('/tasks') &&
-          pathname !== '/apps' &&
-          pathname !== '/workflows' &&
-          pathname !== '/assistant' &&
-          !pathname.startsWith('/assistant') &&
-          pathname !== '/knowledge' &&
-          !pathname.startsWith('/knowledge') &&
-          pathname !== '/instructions' &&
-          !pathname.startsWith('/instructions') &&
-          pathname !== '/guardrails' &&
-          !pathname.startsWith('/guardrails') &&
-          pathname !== '/platform-knowledge' &&
-          !pathname.startsWith('/platform-knowledge') &&
-          pathname !== '/legal' &&
-          !pathname.startsWith('/legal') &&
-          !pathname.startsWith('/admin') &&
-          pathname !== '/platform-memory' &&
-          !pathname.startsWith('/platform-memory') &&
-          pathname !== '/change-password' &&
-          !pathname.startsWith('/change-password') &&
-          pathname !== '/contact-support' &&
-          !pathname.startsWith('/contact-support') &&
-          pathname !== '/invite-friends' &&
-          !pathname.startsWith('/invite-friends')
-        ) {
-          // Removed: We no longer guess the activeTab from the conversation title,
-          // because it causes the tab to unexpectedly switch away from the current tab
-          // when clicking a history item. (e.g. clicking image history while on image tab)
-        }
-      }
-    }
-  }, [activeConversation, selectedOption, setSelectedOption, pathname]);
+    router.prefetch(isLoggedIn ? '/c/new-search' : '/');
+  }, [isLoggedIn, router]);
 
   const handleTabChange = (tab: SidebarTab) => {
     const targetPath = isLoggedIn ? '/c/new-search' : '/';
@@ -1232,20 +1188,19 @@ const LeftSideNavMobile = () => {
                   </div>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <button
-                        type="button"
+                      <Link
+                        href={isLoggedIn ? '/c/new-search' : '/'}
+                        prefetch={true}
                         onClick={() => {
-                          setActiveConversation(null);
                           setShowStartLastMessage(false);
                           setUserMessage('');
                           setSelectedOption(null);
                           close();
-                          router.push(isLoggedIn ? '/c/new-search' : '/');
                         }}
                         className="flex h-full w-9 items-center justify-center border-l border-black/10 text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-black focus:outline-none"
                       >
                         <Plus strokeWidth={1.5} className="size-4 text-zinc-800" />
-                      </button>
+                      </Link>
                     </TooltipTrigger>
                     <TooltipContent
                       side="bottom"

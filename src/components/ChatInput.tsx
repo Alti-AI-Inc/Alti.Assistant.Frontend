@@ -2252,7 +2252,7 @@ export default function ChatInput({
               <TooltipContent side="bottom">
                 <p>
                   {isLoadingResponse
-                    ? 'Assistant is thinking...'
+                    ? 'Aphura is thinking...'
                     : !message?.trim()
                       ? isListening
                         ? 'Stop listening'

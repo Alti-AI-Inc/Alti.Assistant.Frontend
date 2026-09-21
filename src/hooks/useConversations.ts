@@ -431,8 +431,18 @@ export function useActiveConversation(
   conversationId: string,
   accessToken?: string,
 ) {
+  const isNew =
+    !conversationId ||
+    conversationId.startsWith('new') ||
+    conversationId === 'new-chat' ||
+    conversationId === 'new-search' ||
+    conversationId === 'new-research' ||
+    conversationId === 'new-monitor';
+
   return useQuery({
     queryKey: ['activeConversation', conversationId, accessToken],
+    enabled: !!accessToken && !!conversationId && !isNew,
+    initialData: isNew ? { messages: [] } : undefined,
     queryFn: async () => {
       if (!accessToken) return { messages: [] };
 
@@ -511,7 +521,6 @@ export function useActiveConversation(
         return { messages: [] };
       }
     },
-    enabled: !!conversationId && conversationId !== 'new-chat' && !!accessToken,
     // staleTime: 1000 * 60 * 2, // 2 min
   });
 }

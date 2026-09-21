@@ -1103,7 +1103,7 @@ const FullConversation = ({
                     >
                       <div
                         className={cn(
-                          'w-fit max-w-[85%] rounded-lg border border-black/10 bg-white px-4 py-2.5 text-sm leading-relaxed font-medium text-zinc-900 shadow-sm transition-colors duration-300 dark:bg-white dark:text-zinc-900',
+                          'w-fit max-w-[85%] rounded-[5px] border border-black/10 bg-white px-4 py-2.5 text-sm leading-relaxed font-medium text-zinc-900 shadow-sm transition-colors duration-300 dark:bg-white dark:text-zinc-900',
                           showStartLastMessage && 'mt-8',
                         )}
                       >
@@ -1394,9 +1394,7 @@ const FullConversation = ({
                   />
                 </div>
                 <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                  {scanningStatus === 'Thinking...'
-                    ? 'Thinking...'
-                    : scanningStatus}
+                  Aphura is thinking...
                 </span>
               </div>
             ))}

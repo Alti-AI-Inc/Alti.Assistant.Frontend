@@ -635,11 +635,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     }
   }, [isLoggedIn]);
 
-  // Synchronize tab and option selection with activeConversation.is_deep_search
+  // Prefetch new chat route for instantaneous navigation
   useEffect(() => {
-    // We no longer sync the sidebar activeTab with the active conversation type
-    // to keep the chat history as one unified list.
-  }, []);
+    router.prefetch(isLoggedIn ? '/c/new-search' : '/');
+  }, [isLoggedIn, router]);
 
   const handleTabChange = (tab: SidebarTab) => {
     const targetPath = isLoggedIn ? '/c/new-search' : '/';
@@ -1197,20 +1196,19 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   </div>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <button
-                        type="button"
+                      <Link
+                        href={isLoggedIn ? '/c/new-search' : '/'}
+                        prefetch={true}
                         onClick={() => {
-                          setActiveConversation(null);
                           setShowStartLastMessage(false);
                           setUserMessage('');
                           setSelectedOption(null);
                           close();
-                          router.push(isLoggedIn ? '/c/new-search' : '/');
                         }}
                         className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
                       >
                         <Plus strokeWidth={1.5} className="size-4 text-zinc-800" />
-                      </button>
+                      </Link>
                     </TooltipTrigger>
                     <TooltipContent
                       side="bottom"
