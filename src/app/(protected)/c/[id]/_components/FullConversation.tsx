@@ -523,7 +523,7 @@ const FullConversation = ({
 
   // Sync query result into Zustand
   useEffect(() => {
-    if (queryConversation && !showStartLastMessage) {
+    if (queryConversation && !showStartLastMessage && !isLoadingResponse) {
       const queryLen = queryConversation.messages?.length || 0;
       const activeLen = activeConversation?.messages?.length || 0;
       if (
@@ -540,6 +540,7 @@ const FullConversation = ({
     queryConversation,
     setActiveConversation,
     showStartLastMessage,
+    isLoadingResponse,
     activeConversation?.conversationId,
     activeConversation?.messages?.length,
   ]);
@@ -547,10 +548,11 @@ const FullConversation = ({
   // Reset active conversation state when entering new-chat routes to prevent race conditions
   useEffect(() => {
     if (
-      conversationId === 'new-chat' ||
-      conversationId === 'new-search' ||
-      conversationId === 'new-research' ||
-      conversationId === 'new-monitor'
+      !isLoadingResponse &&
+      (conversationId === 'new-chat' ||
+        conversationId === 'new-search' ||
+        conversationId === 'new-research' ||
+        conversationId === 'new-monitor')
     ) {
       setActiveConversation(null);
       if (conversationId === 'new-search') {
@@ -561,7 +563,7 @@ const FullConversation = ({
         setSelectedOption(OPTIONS.MONITOR);
       }
     }
-  }, [conversationId, setActiveConversation, setSelectedOption]);
+  }, [conversationId, setActiveConversation, setSelectedOption, isLoadingResponse]);
 
   // Track which conversation's presentation metadata we've already processed
   const processedPresentationRef = useRef<string | null>(null);
@@ -1487,10 +1489,7 @@ const FullConversation = ({
     >
       {isLoading &&
       !isNewChatRoute &&
-      !(
-        activeConversation?.conversationId === conversationId &&
-        activeConversation?.messages?.length > 0
-      ) ? (
+      !activeConversation?.messages?.length ? (
         <div className="flex flex-grow items-center justify-center bg-transparent py-4">
           <div className="flex items-center space-x-2.5 text-zinc-500 dark:text-zinc-400">
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-500/10 border-t-indigo-500"></div>

@@ -1285,25 +1285,6 @@ export default function ChatInput({
         setLoadingResponse(false);
         return;
       }
-      setShowStartLastMessage(false);
-
-      if (isNewChatId(conversationId) && newId) {
-        if (activeBotId && pathname.startsWith('/spaces')) {
-          useBotsStore
-            .getState()
-            .addThread(
-              activeBotId,
-              newId,
-              userMessage.slice(0, 50) || 'New Chat',
-            );
-          router.replace(
-            `/spaces?bot=${activeBotId}&thread=${newId}`,
-          );
-        } else {
-          router.replace(`/c/${newId}`);
-        }
-      }
-
       // Extract media and attachments based on the new agent JSON schemas or legacy schema
       let imageUrl =
         response.data?.responseMessage?.images?.[0] ||
@@ -1493,13 +1474,29 @@ export default function ChatInput({
           queryClient.invalidateQueries({
             queryKey: ['conversations'],
           });
-          if (newId) {
-            queryClient.invalidateQueries({
-              queryKey: ['activeConversation', newId, data?.accessToken],
-            });
+        }, 2000);
+
+        if (isNewChatId(conversationId) && newId) {
+          if (activeBotId && pathname.startsWith('/spaces')) {
+            useBotsStore
+              .getState()
+              .addThread(
+                activeBotId,
+                newId,
+                userMessage.slice(0, 50) || 'New Chat',
+              );
+            router.replace(
+              `/spaces?bot=${activeBotId}&thread=${newId}`,
+            );
+          } else {
+            if (typeof window !== 'undefined') {
+              window.history.replaceState(null, '', `/c/${newId}`);
+            }
+            router.replace(`/c/${newId}`, { scroll: false });
           }
-        }, 1000);
+        }
       }
+      setShowStartLastMessage(false);
       setLoadingResponse(false);
     },
     onError: (error, { message: userMessage, immediateId }: any) => {
