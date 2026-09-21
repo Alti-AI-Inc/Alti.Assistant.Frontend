@@ -28,7 +28,7 @@ export default function ReferencesList({ references, webSearchQueries, searchEnt
 
   return (
     <div className="w-full mt-4 mb-6">
-      <Accordion type="single" collapsible className="border-none">
+      <Accordion type="single" collapsible defaultValue="references" className="border-none">
         <AccordionItem value="references" className="border-none">
           <AccordionTrigger className="flex items-center gap-2 py-2.5 px-4 rounded-xl bg-white border border-black/10 hover:bg-zinc-50 dark:bg-zinc-900/50 dark:border-zinc-800 dark:hover:bg-zinc-900/80 transition-all duration-300 text-sm font-semibold tracking-wide text-zinc-800 dark:text-zinc-200 focus-visible:ring-0 focus-visible:ring-offset-0 focus:no-underline hover:no-underline">
             <div className="flex items-center gap-2">

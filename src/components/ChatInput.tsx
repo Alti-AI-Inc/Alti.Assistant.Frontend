@@ -11,6 +11,7 @@ import {
 import { createSpaceSearchAction } from '@/actions/spaceSearchActions';
 import { createSpaceResearchAction } from '@/actions/spaceResearchActions';
 import { getOrEnsureSpaceId } from '@/lib/space-utils';
+import { extractDirectSearchAnswer } from '@/lib/search-answer';
 import { saveLocalConversation } from '@/hooks/useConversations';
 import {
   Tooltip,
@@ -880,27 +881,7 @@ export default function ChatInput({
 
           const turn = searchRes.data;
           const results = turn.results || [];
-
-          let answer = '';
-          if (results.length > 0) {
-            const validSummaries = results.filter(
-              r => r.summary && r.summary.trim().length > 0,
-            );
-            if (validSummaries.length === 1) {
-              answer = validSummaries[0].summary!;
-            } else if (validSummaries.length > 1) {
-              answer = validSummaries
-                .map(
-                  (r, idx) =>
-                    `### ${r.title || `Source ${idx + 1}`}\n${r.summary}`,
-                )
-                .join('\n\n');
-            } else {
-              answer = `Found ${results.length} results for "${userMessage}".`;
-            }
-          } else {
-            answer = `No results found for "${userMessage}". Please try another query.`;
-          }
+          const answer = extractDirectSearchAnswer(userMessage, results);
 
           const references = results.map(r => ({
             title: r.title || r.url,
@@ -962,27 +943,7 @@ export default function ChatInput({
 
           const turn = researchRes.data;
           const results = turn.results || [];
-
-          let answer = '';
-          if (results.length > 0) {
-            const validSummaries = results.filter(
-              r => r.summary && r.summary.trim().length > 0,
-            );
-            if (validSummaries.length === 1) {
-              answer = validSummaries[0].summary!;
-            } else if (validSummaries.length > 1) {
-              answer = validSummaries
-                .map(
-                  (r, idx) =>
-                    `### ${r.title || `Source ${idx + 1}`}\n${r.summary}`,
-                )
-                .join('\n\n');
-            } else {
-              answer = `Found ${results.length} research findings for "${userMessage}".`;
-            }
-          } else {
-            answer = `No research findings found for "${userMessage}". Please try another query.`;
-          }
+          const answer = extractDirectSearchAnswer(userMessage, results);
 
           const references = results.map(r => ({
             title: r.title || r.url,
