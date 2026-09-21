@@ -146,6 +146,92 @@ export function convertUtcToLocalTimezone(
   return result;
 }
 
+const MAJOR_SPORTS_TEAMS: Record<string, { city: string; full: string }> = {
+  // NFL
+  bills: { city: 'Buffalo', full: 'Buffalo Bills' },
+  dolphins: { city: 'Miami', full: 'Miami Dolphins' },
+  patriots: { city: 'New England', full: 'New England Patriots' },
+  jets: { city: 'New York', full: 'New York Jets' },
+  ravens: { city: 'Baltimore', full: 'Baltimore Ravens' },
+  bengals: { city: 'Cincinnati', full: 'Cincinnati Bengals' },
+  browns: { city: 'Cleveland', full: 'Cleveland Browns' },
+  steelers: { city: 'Pittsburgh', full: 'Pittsburgh Steelers' },
+  texans: { city: 'Houston', full: 'Houston Texans' },
+  colts: { city: 'Indianapolis', full: 'Indianapolis Colts' },
+  jaguars: { city: 'Jacksonville', full: 'Jacksonville Jaguars' },
+  titans: { city: 'Tennessee', full: 'Tennessee Titans' },
+  broncos: { city: 'Denver', full: 'Denver Broncos' },
+  chiefs: { city: 'Kansas City', full: 'Kansas City Chiefs' },
+  raiders: { city: 'Las Vegas', full: 'Las Vegas Raiders' },
+  chargers: { city: 'Los Angeles', full: 'Los Angeles Chargers' },
+  cowboys: { city: 'Dallas', full: 'Dallas Cowboys' },
+  giants: { city: 'New York', full: 'New York Giants' },
+  eagles: { city: 'Philadelphia', full: 'Philadelphia Eagles' },
+  commanders: { city: 'Washington', full: 'Washington Commanders' },
+  bears: { city: 'Chicago', full: 'Chicago Bears' },
+  lions: { city: 'Detroit', full: 'Detroit Lions' },
+  packers: { city: 'Green Bay', full: 'Green Bay Packers' },
+  vikings: { city: 'Minnesota', full: 'Minnesota Vikings' },
+  falcons: { city: 'Atlanta', full: 'Atlanta Falcons' },
+  panthers: { city: 'Carolina', full: 'Carolina Panthers' },
+  saints: { city: 'New Orleans', full: 'New Orleans Saints' },
+  buccaneers: { city: 'Tampa Bay', full: 'Tampa Bay Buccaneers' },
+  bucs: { city: 'Tampa Bay', full: 'Tampa Bay Buccaneers' },
+  cardinals: { city: 'Arizona', full: 'Arizona Cardinals' },
+  rams: { city: 'Los Angeles', full: 'Los Angeles Rams' },
+  '49ers': { city: 'San Francisco', full: 'San Francisco 49ers' },
+  seahawks: { city: 'Seattle', full: 'Seattle Seahawks' },
+
+  // NBA
+  celtics: { city: 'Boston', full: 'Boston Celtics' },
+  knicks: { city: 'New York', full: 'New York Knicks' },
+  warriors: { city: 'Golden State', full: 'Golden State Warriors' },
+  lakers: { city: 'Los Angeles', full: 'Los Angeles Lakers' },
+  bulls: { city: 'Chicago', full: 'Chicago Bulls' },
+  heat: { city: 'Miami', full: 'Miami Heat' },
+  bucks: { city: 'Milwaukee', full: 'Milwaukee Bucks' },
+  suns: { city: 'Phoenix', full: 'Phoenix Suns' },
+  mavericks: { city: 'Dallas', full: 'Dallas Mavericks' },
+  mavs: { city: 'Dallas', full: 'Dallas Mavericks' },
+  nuggets: { city: 'Denver', full: 'Denver Nuggets' },
+  clippers: { city: 'Los Angeles', full: 'Los Angeles Clippers' },
+};
+
+/**
+ * Normalizes sports team nicknames to their full formal name (e.g., "The Bills beat" -> "The Buffalo Bills beat").
+ */
+export function normalizeSportsTeamNames(text: string): string {
+  if (!text) return '';
+  let res = text;
+  const sportsVerbs =
+    '(?:beat|beats|defeated|defeats|edged|edges|lost to|fell to|won against|won over|topped)';
+
+  for (const [nickname, meta] of Object.entries(MAJOR_SPORTS_TEAMS)) {
+    // Subject position: "The Bills beat" or "Bills beat"
+    const subjectRegex = new RegExp(
+      `\\b(?:The\\s+)?(?<!${meta.city}\\s+)${nickname}\\s+(${sportsVerbs})\\b`,
+      'gi',
+    );
+    res = res.replace(subjectRegex, `The ${meta.full} $1`);
+
+    // Object position: "beat the Lions" or "beat Lions"
+    const objectRegex = new RegExp(
+      `\\b(${sportsVerbs})\\s+(?:the\\s+)?(?<!${meta.city}\\s+)${nickname}\\b`,
+      'gi',
+    );
+    res = res.replace(objectRegex, `$1 the ${meta.full}`);
+
+    // Fall to / Lost to: "fell to (the) Bills"
+    const fellToRegex = new RegExp(
+      `\\b(fell to|lost to)\\s+(?:the\\s+)?(?<!${meta.city}\\s+)${nickname}\\b`,
+      'gi',
+    );
+    res = res.replace(fellToRegex, `$1 the ${meta.full}`);
+  }
+
+  return res;
+}
+
 /**
  * Strips inline scraping artifacts, meta-commentary, and conversational filler from text.
  */
@@ -199,6 +285,19 @@ export function stripInlineFluff(text: string): string {
       '',
     )
     .replace(/\s*,\s*the final score shown is\s*/gi, ', final score: ')
+    .replace(
+      /^(?:according to\s+(?:the\s+)?(?:game\s+recap|recap|report|story),?\s*)/gi,
+      '',
+    )
+    .replace(
+      /\s*(?:,\s*)?(?:in|from|per|during|according to|as reported in|as stated in|as seen in)\s+(?:the\s+|this\s+)?(?:game\s+recap|recap|box\s*score|game\s+summary|game\s+story|post-game\s+recap|article|news\s+report|report|story|post|coverage|press\s+release)[^.,;!?]*/gi,
+      '',
+    )
+    .replace(
+      /\s*(?:in|from|per|during)\s+(?:the\s+|this\s+)?(?:game\s+recap|recap|box\s*score|game\s+summary|game\s+story|post-game\s+recap|article|news\s+report|report|story|post)\s*(?=[.,;!?]|$)/gi,
+      '',
+    )
+    .replace(/\b(?:game\s+recap|box\s*score|game\s+summary)\b/gi, '')
     .trim();
 }
 
@@ -513,7 +612,8 @@ export function extractDirectSearchAnswer(
       }
     }
 
-    const localConverted = convertUtcToLocalTimezone(cleaned, timeZone);
+    const normalized = normalizeSportsTeamNames(cleaned);
+    const localConverted = convertUtcToLocalTimezone(normalized, timeZone);
     return localConverted || 'No direct record found for this query.';
   };
 
