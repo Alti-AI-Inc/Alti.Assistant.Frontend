@@ -5,6 +5,7 @@
  */
 
 const HEDGE_LINE_PATTERNS = [
+  /^[\*\#\-\s]*(?:summary|answer|direct answer|quick answer|overview|result|takeaway|key takeaway|response|notes)[\*\#\s]*[:\-]?\s*$/i,
   /depends on the (current )?date/i,
   /which isn't provided/i,
   /not provided here/i,
@@ -145,23 +146,31 @@ export function stripInlineFluff(text: string): string {
   if (!text) return '';
   return text
     .replace(
-      /\s*(?:,\s*)?(?:in|from|based on|according to)\s+the\s+provided\s+(?:page|text|document|excerpt|source|link|article)[^.,;]*/gi,
+      /^[\*\#\-\s]*(?:summary|answer|direct answer|quick answer|overview|result|takeaway|key takeaway|response|key points)[\*\#\s]*[:\-]+[\*\#\s]*/gi,
       '',
     )
     .replace(
-      /\s*(?:,\s*)?according to (?:the official schedule|the page|the website|sources)[^.,;]*/gi,
+      /(?:^|\n)[\*\#\-\s]*(?:summary|answer|direct answer|quick answer|overview|result|takeaway|key takeaway|response|key points)[\*\#\s]*[:\-]+[\*\#\s]*/gi,
+      '\n',
+    )
+    .replace(
+      /^(?:in summary,?\s*|to summarize,?\s*|in conclusion,?\s*|overall,?\s*|essentially,?\s*|basically,?\s*|sure,?\s*|certainly,?\s*|here(?:'s| is) (?:what|the answer:?|the information:?|the details:?)|to answer your question:?|hey boss,?\s*(?:i found the answer for you:?)?)\s*/gi,
       '',
     )
     .replace(
-      /^(?:as of (?:today|now)|according to [^,]+,|the official schedule confirms that)\s*/gi,
+      /\s*(?:,\s*)?(?:in|from|based on|according to)\s+the\s+provided\s+(?:page|text|document|excerpt|source|link|article|data)[^.,;]*/gi,
       '',
     )
     .replace(
-      /^(?:hey boss,?\s*(?:i found the answer for you:?)?|here(?:'s| is) (?:what|the answer:?)|to answer your question:?)\s*/gi,
+      /\s*(?:,\s*)?according to (?:the official schedule|the page|the website|sources|search results)[^.,;]*/gi,
       '',
     )
     .replace(
-      /^if you(?:'re| are) (?:asking|looking|wondering|referring) (?:about|for|to) [^,]+,\s*/gi,
+      /^(?:as of (?:today|now)|according to [^,]+,|the official schedule confirms that|based on (?:our|the) (?:search|results|records|data),?)\s*/gi,
+      '',
+    )
+    .replace(
+      /^if you(?:'re| are) (?:asking|looking|wondering|referring|seeking) (?:about|for|to) [^,]+,\s*/gi,
       '',
     )
     .replace(
@@ -357,7 +366,11 @@ export function extractDirectSearchAnswer(
     }
 
     let cleaned = stripInlineFluff(rawText)
-      .replace(/^[:\-\s]+/, '')
+      .replace(
+        /^[\*\#\-\s]*(?:summary|answer|direct answer|quick answer|overview|result|takeaway|key takeaway|response|key points)[\*\#\s]*[:\-]+[\*\#\s]*/gi,
+        '',
+      )
+      .replace(/^[:\-\*\#\s]+/, '')
       .trim();
 
     // Deduplicate and filter sentences to eliminate residual fluff
@@ -365,11 +378,21 @@ export function extractDirectSearchAnswer(
       .split(/(?<=[.!?])\s+(?=[A-Z0-9])/g)
       .map(s => s.trim())
       .filter(Boolean)
-      .filter(s => !isHedgeLine(s));
+      .filter(s => !isHedgeLine(s))
+      .map(s => stripInlineFluff(s));
 
     if (sentences.length > 0) {
       cleaned = sentences.slice(0, 2).join(' ');
     }
+
+    // Final clean of any residual leading label or punctuation
+    cleaned = cleaned
+      .replace(
+        /^[\*\#\-\s]*(?:summary|answer|direct answer|quick answer|overview|result|takeaway|key takeaway|response|key points)[\*\#\s]*[:\-]+[\*\#\s]*/gi,
+        '',
+      )
+      .replace(/^[:\-\*\#\s]+/, '')
+      .trim();
 
     if (cleaned.length > 0) {
       cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);

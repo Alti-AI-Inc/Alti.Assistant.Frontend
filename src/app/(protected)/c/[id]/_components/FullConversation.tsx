@@ -1087,10 +1087,19 @@ const FullConversation = ({
           {activeConversation?.messages.length &&
             activeConversation.messages.map((message, idx) => {
               const isLastAssistant = message === lastAssistantMessage;
-              const displayContent =
+              const rawContent =
                 isLastAssistant && codeData
                   ? codeData.leftText
                   : message.content;
+              const displayContent =
+                message.role === 'assistant' && rawContent
+                  ? rawContent
+                      .replace(
+                        /^[\*\#\-\s]*(?:summary|answer|direct answer|quick answer|overview|result)[\*\#\s]*[:\-]+[\*\#\s]*/i,
+                        '',
+                      )
+                      .replace(/^[:\-\*\#\s]+/, '')
+                  : rawContent;
               const isContentEmpty = !displayContent?.trim();
 
               return (
