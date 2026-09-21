@@ -24,15 +24,35 @@ export default function ReferencesList({
     }
   };
 
-  // Filter out internal/search proxy domains like exa.ai
-  const validReferences = references.filter(ref => {
-    const domain = (ref.domain || (ref.url ? getDomain(ref.url) : '')).toLowerCase();
-    const url = (ref.url || '').toLowerCase();
-    return !domain.includes('exa.ai') && !url.includes('exa.ai');
-  });
+  // Filter out internal/search proxy domains like exa.ai and strictly deduplicate by domain
+  const seenDomains = new Set<string>();
+  const uniqueReferences: Reference[] = [];
 
-  // Cap at top 5 sources to list cleanly in one row
-  const displayReferences = validReferences.slice(0, 5);
+  for (const ref of references) {
+    const domain = (
+      ref.domain || (ref.url ? getDomain(ref.url) : '')
+    ).toLowerCase();
+    const url = (ref.url || '').toLowerCase();
+
+    if (
+      !domain ||
+      domain === 'web' ||
+      domain.includes('exa.ai') ||
+      url.includes('exa.ai')
+    ) {
+      continue;
+    }
+
+    if (!seenDomains.has(domain)) {
+      seenDomains.add(domain);
+      uniqueReferences.push(ref);
+    }
+  }
+
+  // Cap at top 5 unique sources to list cleanly in one row
+  const displayReferences = uniqueReferences.slice(0, 5);
+
+  if (displayReferences.length === 0) return null;
 
   return (
     <div className="inline-flex flex-wrap items-center gap-2">

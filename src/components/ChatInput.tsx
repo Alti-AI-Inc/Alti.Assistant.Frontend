@@ -108,6 +108,46 @@ const isNewChatId = (id?: string) => {
   );
 };
 
+const extractDomainFromUrl = (urlStr?: string): string => {
+  if (!urlStr) return '';
+  try {
+    const url = new URL(urlStr);
+    return url.hostname.replace(/^www\./, '').toLowerCase();
+  } catch {
+    return '';
+  }
+};
+
+const deduplicateReferences = (refs: any[]): any[] => {
+  if (!Array.isArray(refs) || refs.length === 0) return [];
+  const seenKeys = new Set<string>();
+  const deduplicated: any[] = [];
+
+  for (const ref of refs) {
+    if (!ref) continue;
+    const url = (ref.url || '').toLowerCase();
+    const domain = (ref.domain || extractDomainFromUrl(ref.url)).toLowerCase();
+
+    if (
+      domain.includes('exa.ai') ||
+      url.includes('exa.ai')
+    ) {
+      continue;
+    }
+
+    const key = domain && domain !== 'web' ? domain : (ref.title || ref.url || '').toLowerCase();
+    if (!key) continue;
+
+    if (!seenKeys.has(key)) {
+      seenKeys.add(key);
+      deduplicated.push(ref);
+    }
+  }
+
+  return deduplicated;
+};
+
+
 // Helper function to get file icon based on extension
 const getFileIcon = (fileName: string) => {
   const extension = fileName.split('.').pop()?.toLowerCase();
@@ -908,14 +948,16 @@ export default function ChatInput({
             userTimeZone,
           );
 
-          const references = results
-            .filter(r => !r.url?.toLowerCase().includes('exa.ai'))
-            .map(r => ({
-              title: r.title || r.url,
-              url: r.url,
-              summary: r.summary,
-              favicon: r.favicon,
-            }));
+          const references = deduplicateReferences(
+            results
+              .filter(r => !r.url?.toLowerCase().includes('exa.ai'))
+              .map(r => ({
+                title: r.title || r.url,
+                url: r.url,
+                summary: r.summary,
+                favicon: r.favicon,
+              })),
+          );
 
           const resolvedId =
             turn.searchSession ||
@@ -978,14 +1020,16 @@ export default function ChatInput({
             userTimeZone,
           );
 
-          const references = results
-            .filter(r => !r.url?.toLowerCase().includes('exa.ai'))
-            .map(r => ({
-              title: r.title || r.url,
-              url: r.url,
-              summary: r.summary,
-              favicon: r.favicon,
-            }));
+          const references = deduplicateReferences(
+            results
+              .filter(r => !r.url?.toLowerCase().includes('exa.ai'))
+              .map(r => ({
+                title: r.title || r.url,
+                url: r.url,
+                summary: r.summary,
+                favicon: r.favicon,
+              })),
+          );
 
           const resolvedId =
             turn.searchSession ||
@@ -1083,8 +1127,8 @@ export default function ChatInput({
               useConversationsStore
                 .getState()
                 .streamActiveConversation('', resolvedConversationId, {
-                  reference: chunk.reference,
-                  citations: chunk.citations,
+                  reference: deduplicateReferences(chunk.reference || []),
+                  citations: deduplicateReferences(chunk.citations || []),
                 });
             }
           },
@@ -1106,7 +1150,9 @@ export default function ChatInput({
             conversationId: resolvedConversationId || immediateId,
             responseMessage: {
               answer: lastMessage?.content || '',
-              reference: lastMessage?.metadata?.reference || [],
+              reference: deduplicateReferences(
+                lastMessage?.metadata?.reference || [],
+              ),
             },
           },
         };
@@ -1303,18 +1349,18 @@ export default function ChatInput({
         audioUrl = `data:audio/mp3;base64,${response.data.audioBase64}`;
       }
 
-      let reference =
+      let rawReference =
         response.data?.responseMessage?.reference ||
         response.data?.reference ||
         response.data?.citations;
       if (response.data?.sources) {
-        reference = response.data.sources;
+        rawReference = response.data.sources;
       }
       if (
-        (!reference || reference.length === 0) &&
+        (!rawReference || rawReference.length === 0) &&
         Array.isArray(response.data?.results)
       ) {
-        reference = response.data.results
+        rawReference = response.data.results
           .filter((r: any) => !r.url?.toLowerCase().includes('exa.ai'))
           .map((r: any) => ({
             title: r.title || r.url,
@@ -1323,6 +1369,7 @@ export default function ChatInput({
             favicon: r.favicon,
           }));
       }
+      const reference = deduplicateReferences(rawReference || []);
 
       const document =
         response.data?.document || response.data?.responseMessage?.document;
