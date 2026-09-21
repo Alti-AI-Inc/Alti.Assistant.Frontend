@@ -73,6 +73,7 @@ export async function createSpaceSearchAction(
   query: string,
   searchSessionId?: string,
   tokenOverride?: string,
+  userContext?: { timezone?: string; localDate?: string; localTime?: string },
 ): Promise<ApiResponse<SpaceSearchTurn>> {
   try {
     const authHeader = await getAuthHeader(tokenOverride);
@@ -85,6 +86,7 @@ export async function createSpaceSearchAction(
           query,
           numResults: DEFAULT_NUM_RESULTS,
           ...(searchSessionId ? { searchSessionId } : {}),
+          ...(userContext || {}),
         }),
       },
     );

@@ -854,6 +854,21 @@ export default function ChatInput({
         return await PostConversationWithFile(formData, data.accessToken);
       }
 
+      const userTimeZone =
+        typeof window !== 'undefined'
+          ? Intl.DateTimeFormat().resolvedOptions().timeZone
+          : 'America/New_York';
+      const userContext = {
+        timezone: userTimeZone,
+        localDate: new Date().toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+        localTime: new Date().toLocaleTimeString('en-US'),
+      };
+
       if (
         selectedOption === OPTIONS.SEARCH ||
         selectedOption === OPTIONS.MONITOR ||
@@ -869,6 +884,7 @@ export default function ChatInput({
             userMessage,
             isNewChatId(conversationId) ? undefined : conversationId,
             accessToken,
+            userContext,
           );
 
           if (!searchRes.success || !searchRes.data) {
@@ -881,7 +897,11 @@ export default function ChatInput({
 
           const turn = searchRes.data;
           const results = turn.results || [];
-          const answer = extractDirectSearchAnswer(userMessage, results);
+          const answer = extractDirectSearchAnswer(
+            userMessage,
+            results,
+            userTimeZone,
+          );
 
           const references = results.map(r => ({
             title: r.title || r.url,
@@ -930,6 +950,7 @@ export default function ChatInput({
             userMessage,
             isNewChatId(conversationId) ? undefined : conversationId,
             accessToken,
+            userContext,
           );
 
           if (!researchRes.success || !researchRes.data) {
@@ -943,7 +964,11 @@ export default function ChatInput({
 
           const turn = researchRes.data;
           const results = turn.results || [];
-          const answer = extractDirectSearchAnswer(userMessage, results);
+          const answer = extractDirectSearchAnswer(
+            userMessage,
+            results,
+            userTimeZone,
+          );
 
           const references = results.map(r => ({
             title: r.title || r.url,
