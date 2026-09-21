@@ -198,21 +198,47 @@ const MAJOR_SPORTS_TEAMS: Record<string, { city: string; full: string }> = {
 };
 
 /**
- * Normalizes sports team nicknames to their full formal name (e.g., "The Bills beat" -> "The Buffalo Bills beat").
+ * Normalizes sports team nicknames and colloquial terms to their full, formal, and traditional titles.
  */
 export function normalizeSportsTeamNames(text: string): string {
   if (!text) return '';
   let res = text;
+
+  // Replace common colloquialisms and slang with proper traditional English
+  const slangReplacements: [RegExp, string][] = [
+    [/\b(?:gonna)\b/gi, 'going to'],
+    [/\b(?:wanna)\b/gi, 'want to'],
+    [/\b(?:gotta)\b/gi, 'must'],
+    [/\b(?:kinda)\b/gi, 'somewhat'],
+    [/\b(?:sorta)\b/gi, 'somewhat'],
+    [/\b(?:cuz|'cause)\b/gi, 'because'],
+    [/\b(?:y'all)\b/gi, 'you all'],
+    [/\b(?:stats)\b/gi, 'statistics'],
+    [/\b(?:info)\b/gi, 'information'],
+    [/\b(?:pics?|photos?)\b/gi, 'photographs'],
+    [/\b(?:vids?)\b/gi, 'videos'],
+    [/\b(?:docs?)\b/gi, 'documents'],
+    [/\b(?:apps?)\b/gi, 'applications'],
+  ];
+
+  for (const [pattern, replacement] of slangReplacements) {
+    res = res.replace(pattern, replacement);
+  }
+
   const sportsVerbs =
-    '(?:beat|beats|defeated|defeats|edged|edges|lost to|fell to|won against|won over|topped)';
+    '(?:beat|beats|defeated|defeats|edged|edges|lost to|lost|fell to|won against|won over|won|topped|played|plays|facing|faces|tied|scored|trailed|led|recorded|posted)';
 
   for (const [nickname, meta] of Object.entries(MAJOR_SPORTS_TEAMS)) {
     // Subject position: "The Bills beat" or "Bills beat"
     const subjectRegex = new RegExp(
-      `\\b(?:The\\s+)?(?<!${meta.city}\\s+)${nickname}\\s+(${sportsVerbs})\\b`,
+      `(\\b(?:The\\s+)?)(?<!${meta.city}\\s+)${nickname}\\s+(${sportsVerbs})\\b`,
       'gi',
     );
-    res = res.replace(subjectRegex, `The ${meta.full} $1`);
+    res = res.replace(subjectRegex, (match, prefix, verb, offset) => {
+      const isStart = offset === 0 || /[.!?]\s*$/.test(res.slice(0, offset));
+      const thePrefix = isStart ? 'The ' : 'the ';
+      return `${thePrefix}${meta.full} ${verb}`;
+    });
 
     // Object position: "beat the Lions" or "beat Lions"
     const objectRegex = new RegExp(
@@ -221,13 +247,31 @@ export function normalizeSportsTeamNames(text: string): string {
     );
     res = res.replace(objectRegex, `$1 the ${meta.full}`);
 
-    // Fall to / Lost to: "fell to (the) Bills"
-    const fellToRegex = new RegExp(
-      `\\b(fell to|lost to)\\s+(?:the\\s+)?(?<!${meta.city}\\s+)${nickname}\\b`,
+    // Preposition position: "against the Bills", "over the Lions", "to the Bills", "versus the Chiefs"
+    const prepRegex = new RegExp(
+      `\\b(against|over|to|versus|vs\\.?)\\s+(?:the\\s+)?(?<!${meta.city}\\s+)${nickname}\\b`,
       'gi',
     );
-    res = res.replace(fellToRegex, `$1 the ${meta.full}`);
+    res = res.replace(prepRegex, `$1 the ${meta.full}`);
+
+    // "between the Bills and the Lions"
+    const betweenRegex = new RegExp(
+      `\\b(between)\\s+(?:the\\s+)?(?<!${meta.city}\\s+)${nickname}\\b`,
+      'gi',
+    );
+    res = res.replace(betweenRegex, `$1 the ${meta.full}`);
+
+    // "and the Lions" in sports matchup context
+    const andRegex = new RegExp(
+      `\\b(and)\\s+(?:the\\s+)?(?<!${meta.city}\\s+)${nickname}\\b`,
+      'gi',
+    );
+    res = res.replace(andRegex, `$1 the ${meta.full}`);
   }
+
+  // Clean double "the the" or awkward casing
+  res = res.replace(/\bthe\s+the\b/gi, 'the');
+  res = res.replace(/\bThe\s+the\b/g, 'The');
 
   return res;
 }
