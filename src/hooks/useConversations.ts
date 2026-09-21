@@ -23,7 +23,6 @@ import {
 } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
-import { toast } from 'sonner';
 
 export const DEFAULT_SAMPLE_CONVERSATIONS: (Conversation & { messages: any[] })[] = [
   {
@@ -761,12 +760,10 @@ export function useRenameConversation() {
         });
       });
 
-      toast.success('Chat renamed');
       onClose();
     },
     onError: error => {
       console.error('Rename error:', error);
-      toast.error('Failed to rename chat');
     },
   });
 }
