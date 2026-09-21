@@ -75,6 +75,7 @@ const getPlanDisplay = (role: string) => {
   if (r.includes('50') || r === 'manager') return '$50';
   if (r.includes('20')) return '$20';
   if (r.includes('10')) return '$10';
+  if (r.includes('5') || r.includes('free') || r.includes('starter')) return '$5';
   return '$10';
 };
 
@@ -318,6 +319,12 @@ function MembersListComponent({
                           <ChevronDown className="h-3 w-3 text-gray-400" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="center" className="border-black/10 dark:border-white/10 bg-white dark:bg-zinc-955 min-w-[100px] rounded-[5px] shadow-lg z-30">
+                          <DropdownMenuItem
+                            onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-5')}
+                            className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-[3px]"
+                          >
+                            $5
+                          </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => handleUpdatePlan(member._id, email, isInvitation, 'plan-10')}
                             className="text-xs cursor-pointer font-semibold py-1.5 px-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-[3px]"

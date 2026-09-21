@@ -102,6 +102,7 @@ export function OrganizationTenantOverview({
     if (r.includes('50')) return '$50';
     if (r.includes('20')) return '$20';
     if (r.includes('10')) return '$10';
+    if (r.includes('5') || r.includes('free') || r.includes('starter')) return '$5';
     return 'Select Plan';
   };
 
@@ -380,6 +381,7 @@ export function OrganizationTenantOverview({
               <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-zinc-955 border border-black/10 dark:border-white/10 rounded-[5px] shadow-lg z-50 overflow-hidden animate-in slide-in-from-top-2 duration-150 w-full">
                 <div className="flex flex-col p-1.5 gap-0.5 bg-white dark:bg-zinc-955">
                   {[
+                    { val: 'plan-5', price: '$5/month', features: ['250 Prompts'] },
                     { val: 'plan-10', price: '$10/month', features: ['500 Prompts'] },
                     { val: 'plan-20', price: '$20/month', features: ['1,000 Prompts'] },
                     { val: 'plan-50', price: '$50/month', features: ['2,500 Prompts'] },
