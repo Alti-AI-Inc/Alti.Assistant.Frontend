@@ -1141,7 +1141,7 @@ const FullConversation = ({
                               {displayContent}
                             </Streamdown>
 
-                            <div className="mt-2 flex flex-wrap items-center gap-2.5">
+                            <div className="mt-4 flex flex-wrap items-center gap-3">
                               <CopyButton content={displayContent} />
 
                               {!!(
