@@ -7,43 +7,30 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-import { renameConversationAction } from '@/actions/conversationsAction';
 import { useModalStore } from '@/stores/useModalStore';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LoaderCircle } from 'lucide-react';
-import { useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
+import { useRenameConversation } from '@/hooks/useConversations';
 
 const RenameChat = () => {
-  const { data: session } = useSession();
   const { isOpen, onClose, actionId, title: currentTitle } = useModalStore();
   const [title, setTitle] = useState(currentTitle || '');
 
-  const queryClient = useQueryClient();
+  useEffect(() => {
+    if (isOpen) {
+      setTitle(currentTitle || '');
+    }
+  }, [isOpen, currentTitle]);
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: () => {
-      if (!session?.accessToken || !actionId) {
-        console.error('Id not found');
-        return Promise.reject(new Error('Id or Token not found'));
-      }
-      return renameConversationAction(actionId, title, session.accessToken);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        predicate: q =>
-          q.queryKey[0] === 'conversations' ||
-          q.queryKey[0] === 'saved-conversations',
-      });
-      onClose();
-      setTitle('');
-    },
-    onError: error => {
-      console.error('Rename failed', error);
-    },
-  });
+  const { mutate, isPending } = useRenameConversation();
+
+  const handleRename = () => {
+    const trimmed = title.trim();
+    if (!trimmed || !actionId || isPending) return;
+    mutate({ conversationId: actionId, newTitle: trimmed });
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -59,19 +46,23 @@ const RenameChat = () => {
           autoFocus
           placeholder="New title"
           className="w-full px-3 py-2 shadow-none focus:ring-0 focus-visible:ring-0 bg-white text-black"
-          onKeyPress={e => {
+          onKeyDown={e => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
-              mutate();
+              handleRename();
             }
           }}
         />
         <DialogFooter className="justify-end">
-          <Button variant="outline" onClick={onClose} className="bg-white text-black hover:bg-zinc-100 hover:text-black border-zinc-200">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="bg-white text-black hover:bg-zinc-100 hover:text-black border-zinc-200"
+          >
             Cancel
           </Button>
           <Button
-            onClick={() => mutate()}
+            onClick={handleRename}
             disabled={isPending || !title?.trim()}
           >
             {isPending && <LoaderCircle className="mr-2 animate-spin" />}

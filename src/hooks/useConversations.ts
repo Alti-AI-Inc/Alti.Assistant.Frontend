@@ -6,6 +6,7 @@ import {
   fetchSavedConversationList,
   loadSingleConversation,
   loadSingleSharedConversation,
+  renameConversationAction,
   searchConversations,
 } from '@/actions/conversationsAction';
 import {
@@ -22,6 +23,7 @@ import {
 } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 export const DEFAULT_SAMPLE_CONVERSATIONS: (Conversation & { messages: any[] })[] = [
   {
@@ -170,8 +172,12 @@ export function saveLocalConversation(conv: any) {
   if (typeof window === 'undefined') return;
   try {
     const list = getLocalConversations();
+    const targetId = conv.conversationId || conv._id;
     const idx = list.findIndex(
-      c => c.conversationId === conv.conversationId || c._id === conv._id,
+      c =>
+        (targetId && (c.conversationId === targetId || c._id === targetId)) ||
+        (conv.conversationId && c.conversationId === conv.conversationId) ||
+        (conv._id && c._id === conv._id),
     );
     if (idx >= 0) {
       list[idx] = { ...list[idx], ...conv };
@@ -578,6 +584,97 @@ export function useDeleteConversation() {
       // });
 
       onClose();
+    },
+  });
+}
+
+export function useRenameConversation() {
+  const queryClient = useQueryClient();
+  const { activeConversation, setActiveConversation } = useConversationsStore();
+  const { data } = useSession();
+  const { onClose } = useModalStore();
+
+  return useMutation({
+    mutationFn: async ({
+      conversationId,
+      newTitle,
+    }: {
+      conversationId: string;
+      newTitle: string;
+    }) => {
+      // 1. Always update local storage for mock/cached conversations
+      saveLocalConversation({ conversationId, title: newTitle });
+
+      // 2. Call backend if user is authenticated
+      if (data?.accessToken) {
+        try {
+          const res = await renameConversationAction(
+            conversationId,
+            newTitle,
+            data.accessToken,
+          );
+          if (!res.success && res.debugMessage) {
+            console.warn('Backend rename warning:', res.debugMessage);
+          }
+        } catch (error) {
+          console.warn('renameConversationAction exception:', error);
+        }
+      }
+
+      return { conversationId, newTitle };
+    },
+    onSuccess: ({ conversationId, newTitle }) => {
+      // 3. Update active conversation in store if it matches
+      if (
+        activeConversation?.conversationId === conversationId ||
+        activeConversation?._id === conversationId
+      ) {
+        setActiveConversation({
+          ...activeConversation,
+          title: newTitle,
+        });
+      }
+
+      // 4. Manually update infinite query cache ('conversations')
+      queryClient.setQueriesData<any>({ queryKey: ['conversations'] }, (oldData: any) => {
+        if (!oldData?.pages) return oldData;
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page: any) => ({
+            ...page,
+            conversations: (page.conversations || []).map((chat: any) => {
+              if (
+                chat.conversationId === conversationId ||
+                chat._id === conversationId
+              ) {
+                return { ...chat, title: newTitle };
+              }
+              return chat;
+            }),
+          })),
+        };
+      });
+
+      // 5. Manually update saved conversations cache ('saved-conversations')
+      queryClient.setQueriesData<any>({ queryKey: ['saved-conversations'] }, (oldData: any) => {
+        if (!oldData || !Array.isArray(oldData)) return oldData;
+        return oldData.map((chat: any) => {
+          if (
+            chat.conversationId === conversationId ||
+            chat._id === conversationId
+          ) {
+            return { ...chat, title: newTitle };
+          }
+          return chat;
+        });
+      });
+
+      toast.success('Chat renamed');
+      onClose();
+    },
+    onError: error => {
+      console.error('Rename error:', error);
+      toast.error('Failed to rename chat');
     },
   });
 }
