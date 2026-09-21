@@ -220,7 +220,21 @@ export default function ConversationsList({
   const rawConversations: Conversation[] =
     data?.pages.flatMap(p => p.conversations) ?? [];
   const conversations = Array.from(
-    new Map(rawConversations.map(chat => [chat._id, chat])).values(),
+    new Map(
+      rawConversations
+        .filter(chat => Boolean(chat && (chat.conversationId || chat._id)))
+        .map(chat => {
+          const id = (chat.conversationId || chat._id)!;
+          return [
+            id,
+            {
+              ...chat,
+              _id: chat._id || id,
+              conversationId: chat.conversationId || id,
+            },
+          ];
+        }),
+    ).values(),
   ).filter(chat => {
     if (!chat.title) return true;
     const clean = formatConversationTitle(chat.title);
@@ -323,7 +337,11 @@ export default function ConversationsList({
     <div className="space-y-1.5">
 
       {filteredConversations.map(chat => {
-        const isActive = activeConversation && chat.conversationId === (activeConversation as any).conversationId;
+        const chatId = (chat.conversationId || chat._id)!;
+        const isActive =
+          activeConversation &&
+          (chatId === (activeConversation as any).conversationId ||
+            chatId === (activeConversation as any)._id);
         return (
           <div
             className={cn(
@@ -332,11 +350,11 @@ export default function ConversationsList({
                 ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
                 : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
             )}
-            key={chat._id}
+            key={chatId}
           >
             <span
               className="flex-1 cursor-pointer truncate px-2.5 py-2 flex items-center"
-              onClick={() => handleConversationClick(chat.conversationId)}
+              onClick={() => handleConversationClick(chatId)}
             >
               <span className={cn("truncate", isActive ? "text-white font-medium" : "text-zinc-200 group-hover:text-white font-normal")}>
                 {getDisplayTitle(chat.title)}
@@ -359,7 +377,7 @@ export default function ConversationsList({
                     setTimeout(() => {
                       onOpen({
                         type: 'rename-chat',
-                        actionId: chat.conversationId,
+                        actionId: chatId,
                         title: formatConversationTitle(chat.title),
                       });
                     }, 0);
@@ -375,7 +393,7 @@ export default function ConversationsList({
                     setTimeout(() => {
                       onOpen({
                         type: 'delete-conversation',
-                        actionId: chat._id,
+                        actionId: chatId,
                       });
                     }, 0);
                   }}

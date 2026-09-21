@@ -12,7 +12,10 @@ import { createSpaceSearchAction } from '@/actions/spaceSearchActions';
 import { createSpaceResearchAction } from '@/actions/spaceResearchActions';
 import { getOrEnsureSpaceId } from '@/lib/space-utils';
 import { extractDirectSearchAnswer } from '@/lib/search-answer';
-import { saveLocalConversation } from '@/hooks/useConversations';
+import {
+  saveLocalConversation,
+  removeLocalConversation,
+} from '@/hooks/useConversations';
 import {
   Tooltip,
   TooltipContent,
@@ -753,10 +756,12 @@ export default function ChatInput({
       message: userMessage,
       file,
       files,
+      immediateId,
     }: {
       message: string;
       file?: File;
       files?: File[];
+      immediateId?: string;
     }) => {
       const isHomePage = pathname === '/';
       const accessToken = data?.accessToken;
@@ -914,6 +919,7 @@ export default function ChatInput({
             turn.searchSession ||
             turn.id ||
             turn._id ||
+            immediateId ||
             (isNewChatId(conversationId)
               ? `search-${Date.now()}`
               : conversationId);
@@ -981,6 +987,7 @@ export default function ChatInput({
             turn.searchSession ||
             turn.id ||
             turn._id ||
+            immediateId ||
             (isNewChatId(conversationId)
               ? `research-${Date.now()}`
               : conversationId);
@@ -1036,7 +1043,8 @@ export default function ChatInput({
       const isSearchStream = targetApiUrl.endsWith('/search/stream');
 
       if (isOrchestrator || isSearchStream) {
-        let resolvedConversationId = conversationId;
+        let resolvedConversationId =
+          (isNewChatId(conversationId) ? immediateId : conversationId) || '';
         // Seed initial empty assistant response placeholder in store so we can stream into it
         useConversationsStore
           .getState()
@@ -1091,7 +1099,7 @@ export default function ChatInput({
           message: 'Success',
           isStreamed: true,
           data: {
-            conversationId: resolvedConversationId,
+            conversationId: resolvedConversationId || immediateId,
             responseMessage: {
               answer: lastMessage?.content || '',
               reference: lastMessage?.metadata?.reference || [],
@@ -1111,11 +1119,106 @@ export default function ChatInput({
         extraParams,
       );
     },
-    onMutate: ({ message: userMessage }) => {
-      updateActiveConversation(userMessage, ROLES.USER);
+    onMutate: ({ message: userMessage, immediateId }) => {
+      const isNew = isNewChatId(conversationId);
+      const generatedId =
+        immediateId ||
+        (isNew
+          ? selectedOption === OPTIONS.SEARCH ||
+            conversationId === 'new-search' ||
+            pathname === '/c/new-search'
+            ? `search-${Date.now()}`
+            : selectedOption === OPTIONS.RESEARCH ||
+                conversationId === 'new-research' ||
+                pathname === '/c/new-research'
+              ? `research-${Date.now()}`
+              : `chat-${Date.now()}`
+          : conversationId || `chat-${Date.now()}`);
+
+      const chatTitle = userMessage.trim().slice(0, 45) || 'New Chat';
+
+      const initialEntry = {
+        _id: generatedId,
+        conversationId: generatedId,
+        title: chatTitle,
+        updatedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+        status: 'active' as const,
+        messageCount: 1,
+        isPublic: false,
+        is_deep_search: selectedOption === OPTIONS.RESEARCH,
+        lastActivity: new Date().toISOString(),
+        messages: [
+          {
+            role: ROLES.USER,
+            content: userMessage,
+            timestamp: new Date().toISOString(),
+          },
+        ],
+      };
+
+      if (isNew) {
+        saveLocalConversation(initialEntry);
+
+        queryClient.setQueriesData<any>(
+          { queryKey: ['conversations'] },
+          (oldData: any) => {
+            if (!oldData || !oldData.pages || oldData.pages.length === 0) {
+              return {
+                pageParams: [1],
+                pages: [
+                  {
+                    conversations: [initialEntry],
+                    pagination: {
+                      page: 1,
+                      limit: 20,
+                      total: 1,
+                      pages: 1,
+                      hasNext: false,
+                      hasPrev: false,
+                    },
+                  },
+                ],
+              };
+            }
+            return {
+              ...oldData,
+              pages: oldData.pages.map((page: any, index: number) => {
+                if (index === 0) {
+                  const remaining = (page.conversations || []).filter(
+                    (c: any) =>
+                      c &&
+                      c._id !== generatedId &&
+                      c.conversationId !== generatedId,
+                  );
+                  return {
+                    ...page,
+                    conversations: [initialEntry, ...remaining],
+                  };
+                }
+                return page;
+              }),
+            };
+          },
+        );
+      }
+
+      updateActiveConversation(userMessage, ROLES.USER, generatedId);
       setLoadingResponse(true);
+
+      return { immediateId: generatedId, chatTitle };
     },
-    onSuccess: (response: any, { message: userMessage }) => {
+    onSuccess: (
+      response: any,
+      { message: userMessage, immediateId },
+      context: any,
+    ) => {
+      const initId = immediateId || context?.immediateId;
+      const newId =
+        response?.data?.conversationId ||
+        initId ||
+        (isNewChatId(conversationId) ? `chat-${Date.now()}` : conversationId);
+
       if (!response || !response.success) {
         console.error(
           'PostConversation failed:',
@@ -1138,7 +1241,37 @@ export default function ChatInput({
         updateActiveConversation(
           displayError,
           ROLES.ASSISTANT,
+          newId,
         );
+
+        if (initId) {
+          const errorConv = {
+            _id: newId,
+            conversationId: newId,
+            title: userMessage.slice(0, 45) || 'New Chat',
+            updatedAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
+            status: 'active' as const,
+            messageCount: 2,
+            isPublic: false,
+            is_deep_search: selectedOption === OPTIONS.RESEARCH,
+            lastActivity: new Date().toISOString(),
+            messages: [
+              {
+                role: ROLES.USER,
+                content: userMessage,
+                timestamp: new Date().toISOString(),
+              },
+              {
+                role: ROLES.ASSISTANT,
+                content: displayError,
+                timestamp: new Date().toISOString(),
+              },
+            ],
+          };
+          saveLocalConversation(errorConv);
+        }
+
         setShowStartLastMessage(false);
         setLoadingResponse(false);
         return;
@@ -1149,24 +1282,21 @@ export default function ChatInput({
         return;
       }
       setShowStartLastMessage(false);
-      const newId = isNewChatId(conversationId)
-        ? response.data.conversationId
-        : conversationId;
 
-      if (isNewChatId(conversationId) && response.data.conversationId) {
+      if (isNewChatId(conversationId) && newId) {
         if (activeBotId && pathname.startsWith('/spaces')) {
           useBotsStore
             .getState()
             .addThread(
               activeBotId,
-              response.data.conversationId,
+              newId,
               userMessage.slice(0, 50) || 'New Chat',
             );
           router.replace(
-            `/spaces?bot=${activeBotId}&thread=${response.data.conversationId}`,
+            `/spaces?bot=${activeBotId}&thread=${newId}`,
           );
         } else {
-          router.replace(`/c/${response.data.conversationId}`);
+          router.replace(`/c/${newId}`);
         }
       }
 
@@ -1272,11 +1402,21 @@ export default function ChatInput({
       }
 
       if (response?.data) {
+        if (initId && initId !== newId) {
+          removeLocalConversation(initId);
+        }
+
         const convData = {
+          _id: newId,
           conversationId: newId,
-          title: userMessage.slice(0, 40) || 'New Chat',
+          title: userMessage.slice(0, 45) || 'New Chat',
           updatedAt: new Date().toISOString(),
           createdAt: new Date().toISOString(),
+          status: 'active' as const,
+          messageCount: 2,
+          isPublic: false,
+          is_deep_search: selectedOption === OPTIONS.RESEARCH,
+          lastActivity: new Date().toISOString(),
           messages: [
             {
               role: ROLES.USER,
@@ -1303,23 +1443,49 @@ export default function ChatInput({
           convData,
         );
 
+        // Update React Query's conversations cache directly
+        queryClient.setQueriesData<any>(
+          { queryKey: ['conversations'] },
+          (oldData: any) => {
+            if (!oldData || !oldData.pages) return oldData;
+            return {
+              ...oldData,
+              pages: oldData.pages.map((page: any, idx: number) => {
+                if (idx === 0) {
+                  const remaining = (page.conversations || []).filter(
+                    (c: any) =>
+                      c &&
+                      c._id !== newId &&
+                      c.conversationId !== newId &&
+                      (initId
+                        ? c._id !== initId && c.conversationId !== initId
+                        : true),
+                  );
+                  return {
+                    ...page,
+                    conversations: [convData, ...remaining],
+                  };
+                }
+                return page;
+              }),
+            };
+          },
+        );
+
         setTimeout(() => {
           queryClient.invalidateQueries({
-            queryKey: ['conversations', data?.accessToken],
+            queryKey: ['conversations'],
           });
-          const targetId = isNewChatId(conversationId)
-            ? response.data.conversationId
-            : conversationId;
-          if (targetId) {
+          if (newId) {
             queryClient.invalidateQueries({
-              queryKey: ['activeConversation', targetId, data?.accessToken],
+              queryKey: ['activeConversation', newId, data?.accessToken],
             });
           }
         }, 1000);
       }
       setLoadingResponse(false);
     },
-    onError: error => {
+    onError: (error, { message: userMessage, immediateId }: any) => {
       console.error('Message post failed:', error);
       setShowStartLastMessage(false);
       setLoadingResponse(false);
@@ -1633,10 +1799,24 @@ export default function ChatInput({
       default:
         // Use regular mutation for options that just need a standardized API call
         // The specific URL is already determined by getApiEndpoint()
+        const isNew = isNewChatId(conversationId);
+        const immediateId = isNew
+          ? selectedOption === OPTIONS.SEARCH ||
+            conversationId === 'new-search' ||
+            pathname === '/c/new-search'
+            ? `search-${Date.now()}`
+            : selectedOption === OPTIONS.RESEARCH ||
+                conversationId === 'new-research' ||
+                pathname === '/c/new-research'
+              ? `research-${Date.now()}`
+              : `chat-${Date.now()}`
+          : conversationId || `chat-${Date.now()}`;
+
         mutation.mutate({
           message,
           file: selectedFile || undefined,
           files: selectedFiles,
+          immediateId,
         });
         setSelectedFiles([]);
     }

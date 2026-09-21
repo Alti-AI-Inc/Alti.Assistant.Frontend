@@ -155,7 +155,14 @@ export function getLocalConversations(): (Conversation & { messages: any[] })[] 
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
+        return parsed.map((item: any) => {
+          const id = item.conversationId || item._id;
+          return {
+            ...item,
+            _id: item._id || id,
+            conversationId: item.conversationId || id,
+          };
+        });
       }
     }
     localStorage.setItem(
@@ -173,16 +180,25 @@ export function saveLocalConversation(conv: any) {
   try {
     const list = getLocalConversations();
     const targetId = conv.conversationId || conv._id;
+    if (!targetId) return;
+
+    const normalizedConv = {
+      ...conv,
+      _id: conv._id || targetId,
+      conversationId: conv.conversationId || targetId,
+    };
+
     const idx = list.findIndex(
       c =>
         (targetId && (c.conversationId === targetId || c._id === targetId)) ||
-        (conv.conversationId && c.conversationId === conv.conversationId) ||
-        (conv._id && c._id === conv._id),
+        (normalizedConv.conversationId &&
+          c.conversationId === normalizedConv.conversationId) ||
+        (normalizedConv._id && c._id === normalizedConv._id),
     );
     if (idx >= 0) {
-      list[idx] = { ...list[idx], ...conv };
+      list[idx] = { ...list[idx], ...normalizedConv };
     } else {
-      list.unshift(conv);
+      list.unshift(normalizedConv);
     }
     localStorage.setItem('aphura_conversations', JSON.stringify(list));
   } catch {}
@@ -229,14 +245,24 @@ export function useConversations(
     queryKey: ['conversations', accessToken, isDeepSearch, category],
     initialPageParam: 1,
     queryFn: async ({ pageParam }) => {
+      const pageNum =
+        typeof pageParam === 'number'
+          ? (pageParam as number)
+          : Number(pageParam || 1);
+
       if (!accessToken) {
+        const localList = getLocalConversations().map(c => ({
+          ...c,
+          _id: c._id || c.conversationId,
+          conversationId: c.conversationId || c._id,
+        }));
         return {
-          conversations: [],
+          conversations: localList,
           pagination: {
             page: 1,
             limit: 20,
-            total: 0,
-            pages: 0,
+            total: localList.length,
+            pages: 1,
             hasNext: false,
             hasPrev: false,
           },
@@ -246,42 +272,108 @@ export function useConversations(
       try {
         const response = await fetchConversationList(
           accessToken,
-          typeof pageParam === 'number'
-            ? (pageParam as number)
-            : Number(pageParam || 1),
+          pageNum,
           isDeepSearch,
           category,
         );
-        if (!response.success || !response.data?.conversations?.length) {
-          if (
-            !response.success &&
-            response.statusCode !== 401 &&
-            response.statusCode !== 403
-          ) {
-            console.warn(
-              'fetchConversationList failed:',
-              response.debugMessage,
-              response.message,
-            );
+
+        const serverConversations =
+          response.success && response.data?.conversations
+            ? response.data.conversations
+            : [];
+
+        // For page 1, merge server conversations with real local conversations seamlessly
+        if (pageNum === 1) {
+          const localList = getLocalConversations().map(c => ({
+            ...c,
+            _id: c._id || c.conversationId,
+            conversationId: c.conversationId || c._id,
+          }));
+
+          const serverIds = new Set<string>();
+          for (const s of serverConversations) {
+            if (s.conversationId) serverIds.add(s.conversationId);
+            if (s._id) serverIds.add(s._id);
           }
 
-          const localList = getLocalConversations();
+          const merged: any[] = serverConversations.map(s => ({
+            ...s,
+            _id: s._id || s.conversationId,
+            conversationId: s.conversationId || s._id,
+          }));
+
+          for (const local of localList) {
+            // Don't include sample mock conversations if user has real server conversations
+            if (local._id?.startsWith('mock_conv_') && serverConversations.length > 0) {
+              continue;
+            }
+            const localKey = local.conversationId || local._id;
+            if (
+              localKey &&
+              !serverIds.has(localKey) &&
+              !serverIds.has(local.conversationId) &&
+              !serverIds.has(local._id)
+            ) {
+              merged.push(local);
+              if (local.conversationId) serverIds.add(local.conversationId);
+              if (local._id) serverIds.add(local._id);
+            }
+          }
+
+          // Sort descending by lastActivity / updatedAt / createdAt
+          merged.sort((a, b) => {
+            const timeA = new Date(
+              a.updatedAt || a.lastActivity || a.createdAt || 0,
+            ).getTime();
+            const timeB = new Date(
+              b.updatedAt || b.lastActivity || b.createdAt || 0,
+            ).getTime();
+            return timeB - timeA;
+          });
+
           return {
-            conversations: localList,
-            pagination: {
+            conversations: merged,
+            pagination: response.data?.pagination || {
               page: 1,
               limit: 20,
-              total: localList.length,
-              pages: 1,
+              total: merged.length,
+              pages: Math.ceil(merged.length / 20) || 1,
+              hasNext: response.data?.pagination?.hasNext || false,
+              hasPrev: false,
+            },
+          };
+        }
+
+        // Subsequent pages (pageNum > 1)
+        if (!response.success || !response.data?.conversations?.length) {
+          return {
+            conversations: [],
+            pagination: {
+              page: pageNum,
+              limit: 20,
+              total: 0,
+              pages: 0,
               hasNext: false,
               hasPrev: false,
             },
           };
         }
-        return response.data!;
+
+        return {
+          ...response.data,
+          conversations: response.data.conversations.map(s => ({
+            ...s,
+            _id: s._id || s.conversationId,
+            conversationId: s.conversationId || s._id,
+          })),
+        };
       } catch (error) {
         console.warn('fetchConversationList exception:', error);
-        const localList = getLocalConversations();
+        const localList = getLocalConversations().map(c => ({
+          ...c,
+          _id: c._id || c.conversationId,
+          conversationId: c.conversationId || c._id,
+        }));
         return {
           conversations: localList,
           pagination: {
@@ -297,9 +389,9 @@ export function useConversations(
     },
     getNextPageParam: lastPage =>
       lastPage.pagination.hasNext ? lastPage.pagination.page + 1 : undefined,
-    enabled: !!accessToken,
+    enabled: true,
     retry: false,
-    staleTime: 1000 * 60 * 10, // 10 min caching
+    staleTime: 1000 * 30, // 30s caching
   });
 }
 export function useSavedConversations(accessToken?: string) {
