@@ -1098,6 +1098,10 @@ const FullConversation = ({
                         /^[\*\#\-\s]*(?:summary|answer|direct answer|quick answer|overview|result)[\*\#\s]*[:\-]+[\*\#\s]*/i,
                         '',
                       )
+                      .replace(
+                        /\s*(?:[\.\;\,\-]\s*)?(?:key\s*note|note|side\s*note|important\s*note|fun\s*fact|takeaway|key\s*takeaway|additional\s*note|fyi)\s*[:\-].*$/i,
+                        '.',
+                      )
                       .replace(/^[:\-\*\#\s]+/, '')
                   : rawContent;
               const isContentEmpty = !displayContent?.trim();

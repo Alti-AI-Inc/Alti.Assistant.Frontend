@@ -6,6 +6,8 @@
 
 const HEDGE_LINE_PATTERNS = [
   /^[\*\#\-\s]*(?:summary|answer|direct answer|quick answer|overview|result|takeaway|key takeaway|response|notes)[\*\#\s]*[:\-]?\s*$/i,
+  /\b(?:key\s*note|note|side\s*note|important\s*note|fun\s*fact|takeaway|key\s*takeaway|additional\s*note|fyi)\s*[:\-]/i,
+  /\b(?:as an aside|worth noting that|it is worth noting|interesting fact|fun fact)\b/i,
   /depends on the (current )?date/i,
   /which isn't provided/i,
   /not provided here/i,
@@ -145,6 +147,16 @@ export function convertUtcToLocalTimezone(
 export function stripInlineFluff(text: string): string {
   if (!text) return '';
   return text
+    // Strip trailing note clauses e.g. ". Key note: ...", "; note: ...", "- note: ..."
+    .replace(
+      /\s*(?:[\.\;\,\-]\s*)?(?:key\s*note|note|side\s*note|important\s*note|fun\s*fact|takeaway|key\s*takeaway|additional\s*note|fyi)\s*[:\-].*$/i,
+      '.',
+    )
+    // Strip inline note statements
+    .replace(
+      /\b(?:key\s*note|note|side\s*note|important\s*note|fun\s*fact|takeaway|key\s*takeaway|additional\s*note|fyi)\s*[:\-][^.]*(?:\.|$)/gi,
+      '',
+    )
     .replace(
       /^[\*\#\-\s]*(?:summary|answer|direct answer|quick answer|overview|result|takeaway|key takeaway|response|key points)[\*\#\s]*[:\-]+[\*\#\s]*/gi,
       '',
@@ -373,20 +385,40 @@ export function extractDirectSearchAnswer(
       .replace(/^[:\-\*\#\s]+/, '')
       .trim();
 
-    // Deduplicate and filter sentences to eliminate residual fluff
-    const sentences = cleaned
+    // Deduplicate and filter sentences to eliminate residual fluff, notes, and unasked-for commentary
+    const validSentences = cleaned
       .split(/(?<=[.!?])\s+(?=[A-Z0-9])/g)
       .map(s => s.trim())
       .filter(Boolean)
       .filter(s => !isHedgeLine(s))
-      .map(s => stripInlineFluff(s));
+      .map(s => stripInlineFluff(s))
+      .filter(s => s.trim().length > 0 && !isHedgeLine(s));
 
-    if (sentences.length > 0) {
-      cleaned = sentences.slice(0, 2).join(' ');
+    if (validSentences.length > 0) {
+      // If the primary sentence has >= 6 words, it constitutes the direct answer.
+      // Strictly avoid appending secondary sentences to prevent unasked-for information, stats, or notes.
+      const firstSentence = validSentences[0];
+      const wordCount = firstSentence.split(/\s+/).length;
+
+      if (wordCount >= 6) {
+        cleaned = firstSentence;
+      } else if (validSentences.length > 1) {
+        const secondSentence = validSentences[1];
+        if (
+          !isHedgeLine(secondSentence) &&
+          !/\b(?:note|additionally|furthermore|moreover|also|he also|they also)\b/i.test(secondSentence)
+        ) {
+          cleaned = `${firstSentence} ${secondSentence}`;
+        } else {
+          cleaned = firstSentence;
+        }
+      } else {
+        cleaned = firstSentence;
+      }
     }
 
-    // Final clean of any residual leading label or punctuation
-    cleaned = cleaned
+    // Final clean of any residual leading label, note clause, or punctuation
+    cleaned = stripInlineFluff(cleaned)
       .replace(
         /^[\*\#\-\s]*(?:summary|answer|direct answer|quick answer|overview|result|takeaway|key takeaway|response|key points)[\*\#\s]*[:\-]+[\*\#\s]*/gi,
         '',
