@@ -86,7 +86,6 @@ export async function createSpaceSearchAction(
         body: JSON.stringify({
           query,
           numResults: DEFAULT_NUM_RESULTS,
-          systemInstruction: HARD_LAW_SYSTEM_INSTRUCTION,
           ...(searchSessionId ? { searchSessionId } : {}),
           ...(userContext || {}),
         }),
