@@ -10,7 +10,7 @@ const MemoryContent = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    const stored = localStorage.getItem('insosearch_memory_retention');
+    const stored = localStorage.getItem('aphura_memory_retention');
     if (stored) {
       setSelected(stored);
     }
@@ -18,7 +18,7 @@ const MemoryContent = () => {
 
   const handleSelect = (val: string) => {
     setSelected(val);
-    localStorage.setItem('insosearch_memory_retention', val);
+    localStorage.setItem('aphura_memory_retention', val);
   };
 
   const options = [

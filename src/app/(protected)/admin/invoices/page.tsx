@@ -48,7 +48,7 @@ export default function AdminInvoicesPage() {
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);
       doc.setTextColor(lightGray[0], lightGray[1], lightGray[2]);
-      doc.text('www.insosearch.com', 20, 31);
+      doc.text('www.aphura.ai', 20, 31);
 
       // Invoice Title and Info Card
       doc.setFont('helvetica', 'bold');
@@ -112,7 +112,7 @@ export default function AdminInvoicesPage() {
       doc.setFontSize(8);
       doc.setTextColor(150, 150, 150);
       doc.text(
-        'Thank you for partnering with Aphura! If you have any billing queries, reach out at support@insosearch.com',
+        'Thank you for partnering with Aphura! If you have any billing queries, reach out at support@aphura.ai',
         20,
         150
       );

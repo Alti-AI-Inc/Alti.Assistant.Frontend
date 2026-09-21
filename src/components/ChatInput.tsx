@@ -400,10 +400,10 @@ export default function ChatInput({
       botId: activeBotId || undefined,
     };
 
-    const existing = localStorage.getItem('insosearch_task_runs');
+    const existing = localStorage.getItem('aphura_task_runs');
     const runsList = existing ? JSON.parse(existing) : [];
     runsList.unshift(newRun);
-    localStorage.setItem('insosearch_task_runs', JSON.stringify(runsList));
+    localStorage.setItem('aphura_task_runs', JSON.stringify(runsList));
 
     toast.success('Task scheduled successfully', {
       description: 'You can monitor execution logs in the sidebar Inbox tab.',
@@ -416,7 +416,7 @@ export default function ChatInput({
     // Simulate completion
     setTimeout(() => {
       const currentRuns = JSON.parse(
-        localStorage.getItem('insosearch_task_runs') || '[]',
+        localStorage.getItem('aphura_task_runs') || '[]',
       );
       const targetRun = currentRuns.find((r: any) => r.id === runId);
       if (targetRun) {
@@ -424,7 +424,7 @@ export default function ChatInput({
         targetRun.duration = 2450;
         targetRun.summary = `Successfully executed task automation pipeline. Verified triggers, loaded task inputs, and completed task: "${taskName}".`;
         localStorage.setItem(
-          'insosearch_task_runs',
+          'aphura_task_runs',
           JSON.stringify(currentRuns),
         );
       }

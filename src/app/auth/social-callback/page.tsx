@@ -19,7 +19,7 @@ function PopupCallbackHandler() {
     if (window.opener) {
       // Running inside popup — relay to parent and close
       window.opener.postMessage(
-        { type: 'insosearch-google-auth', token, error },
+        { type: 'aphura-google-auth', token, error },
         window.location.origin,
       );
       window.close();

@@ -101,14 +101,14 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
       }
       setActiveTab('inbox');
     };
-    window.addEventListener('insosearch_inbox_click', handleInboxClick);
-    return () => window.removeEventListener('insosearch_inbox_click', handleInboxClick);
+    window.addEventListener('aphura_inbox_click', handleInboxClick);
+    return () => window.removeEventListener('aphura_inbox_click', handleInboxClick);
   }, [selectedOption, setSelectedOption]);
 
   // Fetch runs for Inbox
   useEffect(() => {
     const fetchRuns = () => {
-      const savedRuns = localStorage.getItem('insosearch_task_runs');
+      const savedRuns = localStorage.getItem('aphura_task_runs');
       if (savedRuns) {
         setRuns(JSON.parse(savedRuns));
       } else {
@@ -222,7 +222,7 @@ export default function BotRightSidebar({ botId, activeThreadId }: BotRightSideb
   };
 
   const handleClearRuns = () => {
-    localStorage.removeItem('insosearch_task_runs');
+    localStorage.removeItem('aphura_task_runs');
     setRuns([]);
     toast.success('Run history cleared');
   };

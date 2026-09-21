@@ -283,13 +283,13 @@ export function OrganizationTenantOverview({
         // Save the invited name locally
         if (typeof window !== 'undefined') {
           try {
-            const saved = localStorage.getItem('insosearch_invited_names') || '{}';
+            const saved = localStorage.getItem('aphura_invited_names') || '{}';
             const parsed = JSON.parse(saved);
             parsed[inviteEmail.toLowerCase().trim()] = {
               firstName: '',
               lastName: '',
             };
-            localStorage.setItem('insosearch_invited_names', JSON.stringify(parsed));
+            localStorage.setItem('aphura_invited_names', JSON.stringify(parsed));
           } catch (e) {
             console.error(e);
           }

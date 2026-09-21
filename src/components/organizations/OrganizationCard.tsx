@@ -80,7 +80,7 @@ export function OrganizationCard({ organization }: OrganizationCardProps) {
               {organization.name}
             </h3>
             <p className="text-muted-foreground truncate text-sm">
-              {organization.subdomain}.insosearch.ai
+              {organization.subdomain}.aphura.ai
             </p>
           </div>
         </div>

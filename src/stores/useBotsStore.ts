@@ -295,7 +295,7 @@ export const useBotsStore = create<BotsState>()(
       },
     }),
     {
-      name: 'insosearch-custom-bots',
+      name: 'aphura-custom-bots',
       // bots is intentionally excluded: it must always come fresh from GET /spaces,
       // not from stale localStorage, otherwise hydration can clobber fetched data
       partialize: state => ({

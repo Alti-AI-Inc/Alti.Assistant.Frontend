@@ -177,7 +177,7 @@ const LeftSideNavMobile = () => {
   const isTenantAdmin = mode === 'tenant' && currentTenant?.role === 'manager';
 
   const isAdmin =
-    userEmail === 'admin@insosearch.com' || isGlobalAdmin || isTenantOwner;
+    userEmail === 'admin@aphura.ai' || isGlobalAdmin || isTenantOwner;
   const isManager = isGlobalAdmin || isTenantOwner || isTenantAdmin;
   const isSuperAdmin = data?.user?.role === 'super_admin';
 
@@ -307,7 +307,7 @@ const LeftSideNavMobile = () => {
 
   useEffect(() => {
     const handleStorageChange = () => {
-      const savedTasks = localStorage.getItem('insosearch_automations');
+      const savedTasks = localStorage.getItem('aphura_automations');
       if (savedTasks) {
         setTasks(JSON.parse(savedTasks));
       } else {
@@ -319,14 +319,14 @@ const LeftSideNavMobile = () => {
 
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener(
-      'insosearch_automations_updated',
+      'aphura_automations_updated',
       handleStorageChange,
     );
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener(
-        'insosearch_automations_updated',
+        'aphura_automations_updated',
         handleStorageChange,
       );
     };
@@ -586,7 +586,7 @@ const LeftSideNavMobile = () => {
           label: 'New Task',
           onClick: () => {
             router.push('/tasks');
-            window.dispatchEvent(new Event('insosearch_new_task_click'));
+            window.dispatchEvent(new Event('aphura_new_task_click'));
             close();
           },
         };

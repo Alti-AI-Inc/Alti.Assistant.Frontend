@@ -141,7 +141,7 @@ export function SubdomainChecker({
       )}
       <p className="text-muted-foreground text-xs">
         Your organization will be available at{' '}
-        <span className="font-medium">{value || 'subdomain'}.insosearch.ai</span>
+        <span className="font-medium">{value || 'subdomain'}.aphura.ai</span>
       </p>
     </div>
   );

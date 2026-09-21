@@ -17,7 +17,7 @@ interface LiveVoiceAgentProps {
   roomName?: string;
 }
 
-export default function LiveVoiceAgent({ roomName = 'insosearch-chat-room' }: LiveVoiceAgentProps) {
+export default function LiveVoiceAgent({ roomName = 'aphura-chat-room' }: LiveVoiceAgentProps) {
   const [token, setToken] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);
 

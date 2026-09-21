@@ -20,7 +20,7 @@ export default function Page() {
             With zero data collection and
           </p>
           <p>
-            full support for bring your own data, insosearch is built for enterprises
+            full support for bring your own data, Aphura is built for enterprises
             and organizations that prioritize
           </p>
           <p>
