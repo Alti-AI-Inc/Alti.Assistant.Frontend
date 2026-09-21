@@ -951,76 +951,77 @@ export default function ChatInput({
             userContext,
           );
 
-          if (!searchRes.success || !searchRes.data) {
-            return {
-              success: false,
-              message: searchRes.message || 'Search failed. Please try again.',
-            };
-          }
+          if (searchRes.success && searchRes.data) {
+            const turn = searchRes.data;
+            const results = Array.isArray(turn)
+              ? turn
+              : turn.results || (Array.isArray(turn.data) ? turn.data : []);
 
-          const turn = searchRes.data;
-          console.log('[CHATINPUT DEBUG] full turn:', JSON.stringify(turn, null, 2));
-          const results = Array.isArray(turn)
-            ? turn
-            : turn.results || (Array.isArray(turn.data) ? turn.data : []);
+            // Only return the search result if we actually got usable results
+            if (results.length > 0) {
+              const answer = extractDirectSearchAnswer(
+                userMessage,
+                results,
+                userTimeZone,
+              );
 
-          let answer: string;
-          if (results.length > 0) {
-            answer = extractDirectSearchAnswer(
-              userMessage,
-              results,
-              userTimeZone,
-            );
-          } else {
-            // Backend returned no Exa results — check if the turn itself carries a direct answer
+              const references = deduplicateReferences(
+                results
+                  .filter(r => !r.url?.toLowerCase().includes('exa.ai'))
+                  .map(r => ({
+                    title: r.title || r.url,
+                    url: r.url,
+                    summary: r.summary,
+                    favicon: r.favicon,
+                  })),
+              );
+
+              const resolvedId =
+                turn.searchSession ||
+                turn.id ||
+                turn._id ||
+                immediateId ||
+                (isNewChatId(conversationId)
+                  ? `search-${Date.now()}`
+                  : conversationId);
+
+              return {
+                success: true,
+                message: 'Success',
+                isStreamed: false,
+                data: {
+                  conversationId: resolvedId,
+                  responseMessage: {
+                    answer,
+                    reference: references,
+                  },
+                },
+              };
+            }
+
+            // Check if the turn itself carries a direct answer
             const turnAny = turn as any;
             const turnAnswer = turnAny?.answer || turnAny?.summary || turnAny?.response || turnAny?.content || '';
             if (turnAnswer && typeof turnAnswer === 'string' && turnAnswer.trim().length > 0) {
-              answer = turnAnswer.trim();
-            } else if (turnAny?.status === 'failed' && turnAny?.errorMessage) {
-              answer = `Search service error: ${turnAny.errorMessage}`;
-            } else {
-              answer = 'No results found.';
+              const resolvedId =
+                turn.searchSession || turn.id || turn._id || immediateId ||
+                (isNewChatId(conversationId) ? `search-${Date.now()}` : conversationId);
+              return {
+                success: true,
+                message: 'Success',
+                isStreamed: false,
+                data: {
+                  conversationId: resolvedId,
+                  responseMessage: { answer: turnAnswer.trim(), reference: [] },
+                },
+              };
             }
           }
 
-          const references = deduplicateReferences(
-            results
-              .filter(r => !r.url?.toLowerCase().includes('exa.ai'))
-              .map(r => ({
-                title: r.title || r.url,
-                url: r.url,
-                summary: r.summary,
-                favicon: r.favicon,
-              })),
-          );
-
-          const resolvedId =
-            turn.searchSession ||
-            turn.id ||
-            turn._id ||
-            immediateId ||
-            (isNewChatId(conversationId)
-              ? `search-${Date.now()}`
-              : conversationId);
-
-          return {
-            success: true,
-            message: 'Success',
-            isStreamed: false,
-            data: {
-              conversationId: resolvedId,
-              responseMessage: {
-                answer,
-                reference: references,
-              },
-            },
-          };
+          // Search failed or returned empty — fall through to regular AI chat
+          console.warn('[SEARCH FALLBACK] Exa search returned no results, falling back to AI chat.');
         } catch (err: any) {
-          return {
-            success: false,
-            message: err?.message || 'Search failed. Please try again.',
-          };
+          console.warn('[SEARCH FALLBACK] Search threw error, falling back to AI chat:', err?.message);
         }
       }
 
@@ -1039,76 +1040,76 @@ export default function ChatInput({
             userContext,
           );
 
-          if (!researchRes.success || !researchRes.data) {
-            return {
-              success: false,
-              message:
-                researchRes.message || 'Research failed. Please try again.',
-            };
-          }
+          if (researchRes.success && researchRes.data) {
+            const turn = researchRes.data;
+            const results = Array.isArray(turn)
+              ? turn
+              : turn.results || (Array.isArray(turn.data) ? turn.data : []);
 
-          const turn = researchRes.data;
-          console.log('[RESEARCH DEBUG] full turn:', JSON.stringify(turn, null, 2));
-          const results = Array.isArray(turn)
-            ? turn
-            : turn.results || (Array.isArray(turn.data) ? turn.data : []);
+            if (results.length > 0) {
+              const answer = extractDirectSearchAnswer(
+                userMessage,
+                results,
+                userTimeZone,
+              );
 
-          let answer: string;
-          if (results.length > 0) {
-            answer = extractDirectSearchAnswer(
-              userMessage,
-              results,
-              userTimeZone,
-            );
-          } else {
+              const references = deduplicateReferences(
+                results
+                  .filter(r => !r.url?.toLowerCase().includes('exa.ai'))
+                  .map(r => ({
+                    title: r.title || r.url,
+                    url: r.url,
+                    summary: r.summary,
+                    favicon: r.favicon,
+                  })),
+              );
+
+              const resolvedId =
+                turn.searchSession ||
+                turn.id ||
+                turn._id ||
+                immediateId ||
+                (isNewChatId(conversationId)
+                  ? `research-${Date.now()}`
+                  : conversationId);
+
+              return {
+                success: true,
+                message: 'Success',
+                isStreamed: false,
+                data: {
+                  conversationId: resolvedId,
+                  responseMessage: {
+                    answer,
+                    reference: references,
+                  },
+                },
+              };
+            }
+
+            // Check if the turn itself carries a direct answer
             const turnAny = turn as any;
             const turnAnswer = turnAny?.answer || turnAny?.summary || turnAny?.response || turnAny?.content || '';
             if (turnAnswer && typeof turnAnswer === 'string' && turnAnswer.trim().length > 0) {
-              answer = turnAnswer.trim();
-            } else if (turnAny?.status === 'failed' && turnAny?.errorMessage) {
-              answer = `Search service error: ${turnAny.errorMessage}`;
-            } else {
-              answer = 'No results found.';
+              const resolvedId =
+                turn.searchSession || turn.id || turn._id || immediateId ||
+                (isNewChatId(conversationId) ? `research-${Date.now()}` : conversationId);
+              return {
+                success: true,
+                message: 'Success',
+                isStreamed: false,
+                data: {
+                  conversationId: resolvedId,
+                  responseMessage: { answer: turnAnswer.trim(), reference: [] },
+                },
+              };
             }
           }
 
-          const references = deduplicateReferences(
-            results
-              .filter(r => !r.url?.toLowerCase().includes('exa.ai'))
-              .map(r => ({
-                title: r.title || r.url,
-                url: r.url,
-                summary: r.summary,
-                favicon: r.favicon,
-              })),
-          );
-
-          const resolvedId =
-            turn.searchSession ||
-            turn.id ||
-            turn._id ||
-            immediateId ||
-            (isNewChatId(conversationId)
-              ? `research-${Date.now()}`
-              : conversationId);
-
-          return {
-            success: true,
-            message: 'Success',
-            isStreamed: false,
-            data: {
-              conversationId: resolvedId,
-              responseMessage: {
-                answer,
-                reference: references,
-              },
-            },
-          };
+          // Research failed or returned empty — fall through to regular AI chat
+          console.warn('[RESEARCH FALLBACK] Research returned no results, falling back to AI chat.');
         } catch (err: any) {
-          return {
-            success: false,
-            message: err?.message || 'Research failed. Please try again.',
-          };
+          console.warn('[RESEARCH FALLBACK] Research threw error, falling back to AI chat:', err?.message);
         }
       }
 
