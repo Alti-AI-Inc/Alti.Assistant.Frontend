@@ -129,14 +129,14 @@ const deduplicateReferences = (refs: any[]): any[] => {
     const url = (ref.url || '').toLowerCase();
     const domain = (ref.domain || extractDomainFromUrl(ref.url)).toLowerCase();
 
-    if (
-      domain.includes('exa.ai') ||
-      url.includes('exa.ai')
-    ) {
+    if (domain.includes('exa.ai') || url.includes('exa.ai')) {
       continue;
     }
 
-    const key = domain && domain !== 'web' ? domain : (ref.title || ref.url || '').toLowerCase();
+    const key =
+      domain && domain !== 'web'
+        ? domain
+        : (ref.title || ref.url || '').toLowerCase();
     if (!key) continue;
 
     if (!seenKeys.has(key)) {
@@ -147,7 +147,6 @@ const deduplicateReferences = (refs: any[]): any[] => {
 
   return deduplicated;
 };
-
 
 // Helper function to get file icon based on extension
 const getFileIcon = (fileName: string) => {
@@ -180,7 +179,6 @@ const getFileIcon = (fileName: string) => {
 const getFileExtension = (fileName: string) => {
   return fileName.split('.').pop()?.toUpperCase() || 'FILE';
 };
-
 
 export default function ChatInput({
   conversationId,
@@ -956,13 +954,14 @@ export default function ChatInput({
           if (!searchRes.success || !searchRes.data) {
             return {
               success: false,
-              message:
-                searchRes.message || 'Search failed. Please try again.',
+              message: searchRes.message || 'Search failed. Please try again.',
             };
           }
 
           const turn = searchRes.data;
-          const results = turn.results || [];
+          const results = Array.isArray(turn)
+            ? turn
+            : turn.results || (Array.isArray(turn.data) ? turn.data : []);
           const answer = extractDirectSearchAnswer(
             userMessage,
             results,
@@ -1028,13 +1027,14 @@ export default function ChatInput({
             return {
               success: false,
               message:
-                researchRes.message ||
-                'Research failed. Please try again.',
+                researchRes.message || 'Research failed. Please try again.',
             };
           }
 
           const turn = researchRes.data;
-          const results = turn.results || [];
+          const results = Array.isArray(turn)
+            ? turn
+            : turn.results || (Array.isArray(turn.data) ? turn.data : []);
           const answer = extractDirectSearchAnswer(
             userMessage,
             results,
@@ -1309,11 +1309,7 @@ export default function ChatInput({
           response?.message === 'Api not found'
             ? 'Service is temporarily unavailable. Please try again shortly.'
             : response?.message || 'An unexpected error occurred.';
-        updateActiveConversation(
-          displayError,
-          ROLES.ASSISTANT,
-          newId,
-        );
+        updateActiveConversation(displayError, ROLES.ASSISTANT, newId);
 
         if (initId) {
           const errorConv = {
@@ -1557,9 +1553,7 @@ export default function ChatInput({
                 newId,
                 userMessage.slice(0, 50) || 'New Chat',
               );
-            router.replace(
-              `/spaces?bot=${activeBotId}&thread=${newId}`,
-            );
+            router.replace(`/spaces?bot=${activeBotId}&thread=${newId}`);
           } else {
             if (typeof window !== 'undefined') {
               window.history.replaceState(null, '', `/c/${newId}`);
@@ -2066,9 +2060,7 @@ export default function ChatInput({
               <button
                 type="button"
                 onClick={() => {
-                  const updated = selectedFiles.filter(
-                    (_, i) => i !== index,
-                  );
+                  const updated = selectedFiles.filter((_, i) => i !== index);
                   setSelectedFiles(updated);
                 }}
                 className="flex-shrink-0 rounded-md p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
@@ -2242,13 +2234,13 @@ export default function ChatInput({
                             : 'Enter prompt here...'
               }
               style={{ backgroundColor: 'transparent' }}
-              className="max-h-[160px] min-h-[36px] w-full flex-1 resize-none border-none bg-transparent pl-0.5 pr-1 py-2 text-base md:text-sm leading-5 text-gray-900 shadow-none outline-none placeholder:text-sm placeholder:text-zinc-400 focus-visible:ring-0 dark:text-white dark:placeholder:text-zinc-500"
+              className="max-h-[160px] min-h-[36px] w-full flex-1 resize-none border-none bg-transparent py-2 pr-1 pl-0.5 text-base leading-5 text-gray-900 shadow-none outline-none placeholder:text-sm placeholder:text-zinc-400 focus-visible:ring-0 md:text-sm dark:text-white dark:placeholder:text-zinc-500"
               autoFocus
             />
 
             {/* Monitor Frequency Selector */}
             {selectedOption === OPTIONS.MONITOR && (
-              <div className="relative w-20 md:w-28 flex-shrink-0">
+              <div className="relative w-20 flex-shrink-0 md:w-28">
                 <button
                   type="button"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -2308,7 +2300,7 @@ export default function ChatInput({
                     type="button"
                     onClick={toggleListening}
                     className={cn(
-                      'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-[#0000ff] bg-[#0000ff] text-white transition-all hover:bg-[#0000ff]/90 active:scale-95 focus:outline-none',
+                      'flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-[#0000ff] bg-[#0000ff] text-white transition-all hover:bg-[#0000ff]/90 focus:outline-none active:scale-95',
                       isListening &&
                         'animate-pulse !border-red-600 !bg-red-600 text-white hover:!bg-red-700',
                     )}
@@ -2328,10 +2320,13 @@ export default function ChatInput({
                         ? handleCreateTask
                         : handleSubmit
                     }
-                    className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-[#0000ff] bg-[#0000ff] text-white transition-all hover:bg-[#0000ff]/90 active:scale-95 focus:outline-none"
+                    className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-[#0000ff] bg-[#0000ff] text-white transition-all hover:bg-[#0000ff]/90 focus:outline-none active:scale-95"
                     aria-label="Send Prompt"
                   >
-                    <ArrowUp strokeWidth={1.5} className="size-3.5 text-white" />
+                    <ArrowUp
+                      strokeWidth={1.5}
+                      className="size-3.5 text-white"
+                    />
                   </button>
                 )}
               </TooltipTrigger>
@@ -2401,7 +2396,7 @@ export default function ChatInput({
 
                 {/* Trigger Section */}
                 <div className="flex min-w-0 flex-grow items-center gap-2">
-                  <span className="sm:inline hidden text-[10px] font-semibold tracking-wider text-zinc-400 uppercase select-none dark:text-zinc-500">
+                  <span className="hidden text-[10px] font-semibold tracking-wider text-zinc-400 uppercase select-none sm:inline dark:text-zinc-500">
                     Trigger
                   </span>
                   <div className="flex flex-shrink-0 rounded-lg border border-black/5 bg-zinc-100 p-0.5 dark:border-zinc-700/50 dark:bg-zinc-800">
