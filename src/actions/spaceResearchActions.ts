@@ -6,7 +6,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const DEFAULT_NUM_RESULTS = parseInt(
   process.env.SPACE_SEARCH_NUM_RESULTS ||
     process.env.NEXT_PUBLIC_SPACE_SEARCH_NUM_RESULTS ||
-    '5',
+    '8',
   10,
 );
 

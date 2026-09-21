@@ -227,6 +227,25 @@ export function extractDirectSearchAnswer(
         }
       }
 
+      // Boost primary authority domains (official leagues, .gov, .edu, primary news wires)
+      const urlLower = (item.url || '').toLowerCase();
+      if (
+        /\.gov\b|\.edu\b/.test(urlLower) ||
+        /official|nfl\.com|mlb\.com|nba\.com|nhl\.com|reuters\.com|bloomberg\.com|apnews\.com|wsj\.com|sec\.gov|cdc\.gov|weather\.gov/i.test(
+          urlLower,
+        )
+      ) {
+        score += 10;
+      }
+
+      // Factual certainty bonus vs speculation penalty
+      if (/\b(official|confirmed|scheduled|announced|record|verified)\b/i.test(para)) {
+        score += 6;
+      }
+      if (/\b(rumor|rumored|might be|could possibly|unconfirmed|speculation|guess)\b/i.test(para)) {
+        score -= 12;
+      }
+
       // Bonus for direct answer phrasing matching query intent
       if (
         /next\s+[\w\s]+\s+game:/i.test(para) ||
