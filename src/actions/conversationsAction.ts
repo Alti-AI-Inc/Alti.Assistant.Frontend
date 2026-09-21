@@ -32,6 +32,8 @@ export async function PostConversation(
         timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
         localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
         localTime: new Date().toLocaleTimeString('en-US'),
+        systemInstruction:
+          'HARD LAW: You must never guess, hallucinate, speculate, or make assumptions. Deliver only verified, factual, truthful information grounded strictly in real evidence and sources. Zero bias, 100% truth.',
         ...extraParams,
       }),
     });
@@ -100,6 +102,8 @@ export async function PostConversationStream(
         timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
         localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
         localTime: new Date().toLocaleTimeString('en-US'),
+        systemInstruction:
+          'HARD LAW: You must never guess, hallucinate, speculate, or make assumptions. Deliver only verified, factual, truthful information grounded strictly in real evidence and sources. Zero bias, 100% truth.',
         ...extraParams,
       }),
     });

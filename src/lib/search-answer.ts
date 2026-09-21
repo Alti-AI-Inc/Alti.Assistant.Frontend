@@ -17,6 +17,7 @@ const HEDGE_LINE_PATTERNS = [
   /the schedule excerpt includes/i,
   /according to the (page|website|schedule|article)/i,
   /for more details,/i,
+  /\b(it is believed|it is assumed|it might be|could potentially|rumored that|unverified claim|pure speculation)\b/i,
 ];
 
 const MONTHS: Record<string, number> = {
@@ -319,19 +320,20 @@ export function extractDirectSearchAnswer(
     return localConverted || 'No direct record found for this query.';
   };
 
-  if (scoredCandidates.length > 0) {
+  // HARD LAW: Deliver only verified factual records. Never guess or hallucinate.
+  if (scoredCandidates.length > 0 && scoredCandidates[0].score >= 5) {
     return formatDirectAnswer(scoredCandidates[0].text);
   }
 
-  // Fallback: pick first cleaned summary without hedging
+  // Fallback: pick first verified clean summary without hedging
   for (const item of results) {
     if (item.summary) {
       const cleaned = cleanSummaryText(item.summary);
-      if (cleaned) {
+      if (cleaned && !isHedgeLine(cleaned)) {
         return formatDirectAnswer(cleaned);
       }
     }
   }
 
-  return formatDirectAnswer(results[0]?.summary || '');
+  return 'No verified factual record found for this query.';
 }

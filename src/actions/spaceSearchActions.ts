@@ -85,6 +85,8 @@ export async function createSpaceSearchAction(
         body: JSON.stringify({
           query,
           numResults: DEFAULT_NUM_RESULTS,
+          systemInstruction:
+            'HARD LAW: You must never guess, hallucinate, speculate, or make assumptions. Deliver only verified, factual, truthful information grounded strictly in real evidence and sources. Zero bias, 100% truth.',
           ...(searchSessionId ? { searchSessionId } : {}),
           ...(userContext || {}),
         }),
