@@ -104,7 +104,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
     reset,
   } = useImageGenStore();
 
-  // console.log('conversationId', conversationId);
+  //
 
   // Conversation store for updating chat UI
   const { updateActiveConversation, setLoadingResponse, setUserMessage } =
@@ -129,12 +129,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
 
       const historyContext = getHistoryContext(activeConversation);
 
-      console.log('[useImageGeneration] evaluatePrompt - sending:', {
-        originalPrompt: prompt,
-        fullPrompt: prompt, // prompt is already full if needed, but we pass history separately now
-        conversationId: convId,
-        historyContextLength: historyContext.length,
-      });
 
       return evaluatePrompt(prompt, convId, historyContext, accessToken);
     },
@@ -194,11 +188,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         return null;
       }
 
-      console.log('[useImageGeneration] analyzeIntent - calling API:', {
-        request,
-        hasImage,
-        conversationId: existingConversationId,
-      });
 
       return analyzeImageIntent(
         request,
@@ -246,17 +235,10 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         // SAFEGUARD: If intent is edit but no image is uploaded, DO NOT REDIRECT.
         const currentStore = useImageGenStore.getState();
         if (respIsEditable && !currentStore.imageBase64 && needsRedirect) {
-          console.log(
-            '[useImageGeneration] Blocking redirect for implicit edit without image',
-          );
           needsRedirect = false;
         }
 
         if (needsRedirect) {
-          console.log(
-            '[useImageGeneration] Redirecting to conversation:',
-            backendConversationId,
-          );
 
           // Ensure the User message is associated with this new ID in the store
           // so it persists/shows up after redirect if store state is preserved
@@ -288,9 +270,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         // Workflow #2: Edit flow
         // Check if we have an image in the store (set by ChatInput)
         if (store.imageBase64) {
-          console.log(
-            '[useImageGeneration] Intent is edit and image exists. Triggering edit...',
-          );
           // Auto-trigger edit
           await editImageMutation.mutateAsync({
             prompt: request,
@@ -298,9 +277,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
           });
         } else {
           // No image yet - ask user
-          console.log(
-            '[useImageGeneration] Intent is edit but no image. Asking user...',
-          );
           setWorkflow('editing');
           updateActiveConversation(
             'Please upload the image you want to edit.',
@@ -313,7 +289,7 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         // Workflow #1: Generation flow
         // STRICT CHECK: Only proceed if original user intent was 'generate'
         if (store.intent === 'generate') {
-          // console.log('[useImageGeneration] Setting workflow to evaluating');
+          //
           setWorkflow('evaluating');
 
           // Only chain if we didn't redirect (same conversation ID)
@@ -321,19 +297,10 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
           const effectiveCurrentId = existingConversationId;
 
           if (backendConversationId === effectiveCurrentId) {
-            console.log(
-              '[useImageGeneration] Staying on same page, letting useEffect handle continuation...',
-            );
           } else {
-            console.log(
-              '[useImageGeneration] Redirecting, letting useEffect handle continuation on new page...',
-            );
           }
         } else {
           // Mismatch: User wanted 'edit' (UI), but backend said 'generate' (Content)
-          console.warn(
-            '[useImageGeneration] Intent mismatch. User: edit, Backend: generate. Stopping.',
-          );
           setLoadingResponse(false);
           updateActiveConversation(
             'It looks like you might want to generate a new image instead of editing. To edit, please make sure you attach an image and describe the changes you want to make.',
@@ -365,11 +332,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         return null; // throw new Error(...)
       }
 
-      console.log('[useImageGeneration] addDetail - sending:', {
-        conversationId: currentConvId,
-        userId: currentUserId,
-        detail,
-      });
 
       return addDetail(currentConvId, currentUserId, detail, accessToken);
     },
@@ -406,10 +368,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // Check if conversation ID changed (e.g. from new-chat to real ID)
       const store = useImageGenStore.getState();
       if (newConvId && newConvId !== store.conversationId) {
-        console.log(
-          '[useImageGeneration] addDetail - conversation ID changed/assigned:',
-          newConvId,
-        );
         setConversationId(newConvId);
         if (router) {
           router.push(`/c/${newConvId}`);
@@ -452,10 +410,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // The conversation is already synchronized to the backend database
       // since the evaluatePrompt and addDetail APIs save their messages in real-time.
 
-      console.log('[useImageGeneration] finalizePrompt - sending:', {
-        conversationId: currentConvId,
-        userId: currentUserId,
-      });
 
       return finalizePrompt(currentConvId, currentUserId, accessToken);
     },
@@ -481,10 +435,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       setEnhancedPrompt(prompt);
       setConversationHistory(history);
 
-      console.log(
-        '[useImageGeneration] finalizePrompt - enhanced prompt:',
-        prompt,
-      );
 
       // Add a simple "generating" message to chat
 
@@ -511,13 +461,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         return null;
       }
 
-      console.log('[useImageGeneration] generateImage - sending:', {
-        prompt,
-        aspectRatio: currentAspectRatio,
-        negativePrompt: currentNegativePrompt || undefined,
-        conversationId: currentConvId,
-        userId: currentUserId,
-      });
 
       return generateImage(
         prompt,
@@ -600,13 +543,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         return null;
       }
 
-      console.log('[useImageGeneration] editImage - sending:', {
-        prompt,
-        conversationId: currentConvId,
-        userId: currentUserId,
-        aspectRatio: currentAspectRatio,
-        imageBase64Length: base64.length,
-      });
 
       return editImage(
         prompt,
@@ -637,10 +573,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         setError(errorMsg);
         setLoadingResponse(false);
 
-        console.log(
-          '[useImageGeneration] editImage error - sending error message:',
-          errorMsg,
-        );
         const store = useImageGenStore.getState();
         updateActiveConversation(
           `Retry: ${errorMsg}`,
@@ -653,10 +585,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       const { responseMessage } = response.data;
       const { answer, image } = responseMessage;
 
-      console.log(
-        '[useImageGeneration] editImage success - image object:',
-        image,
-      );
 
       // Handle nested url structure from edit response
       // The server sometimes returns { url: { url: "..." } } or just { url: "..." }
@@ -667,10 +595,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
           ? (image.url as any).url
           : image.url;
 
-      console.log(
-        '[useImageGeneration] editImage - extracted imageUrl:',
-        imageUrl,
-      );
 
       setGeneratedImage({
         url: imageUrl,
@@ -679,14 +603,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       });
 
       const store = useImageGenStore.getState();
-      console.log(
-        '[useImageGeneration] editImage - updating conversation with:',
-        {
-          answer,
-          conversationId: store.conversationId,
-          imageUrl,
-        },
-      );
 
       // 1. Update Zustand Store (Local State)
       // Only add to chat if we have an image
@@ -761,10 +677,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // If we have an explicit conversation ID from the UI (e.g. existing chat),
       // ensure it's set in the store so all subsequent steps use it.
       if (outgoingConversationId) {
-        console.log(
-          '[useImageGeneration] handleImageRequest outgoingConversationId',
-          outgoingConversationId,
-        );
         setConversationId(outgoingConversationId);
       }
 
@@ -772,10 +684,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // (which might have just been set above, or exists from a previous step)
       const currentConversationId =
         outgoingConversationId || useImageGenStore.getState().conversationId;
-      console.log(
-        '[useImageGeneration] handleImageRequest currentConversationId',
-        currentConversationId,
-      );
 
       if (hasImage && existingImageBase64) {
         startImageEditing(existingImageBase64);
@@ -795,24 +703,12 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
           msg => msg.metadata?.imageUrl || msg.metadata?.images,
         ) ?? false;
 
-      console.log('[useImageGeneration] handleImageRequest check:', {
-        conversationId: {
-          store: useImageGenStore.getState().conversationId,
-          outgoing: outgoingConversationId,
-          effective: currentConversationId,
-        },
-        hasPriorImages,
-        message,
-      });
 
       // SPLIT WORKFLOW:
       // 1. Existing Chat + Has Prior Images -> Direct Generation (Skip Analyze/Evaluate)
       // 2. New Chat OR No Prior Images -> Full Analyze-Evaluate Flow
 
       if (currentConversationId && hasPriorImages && !hasImage) {
-        console.log(
-          '[useImageGeneration] Existing context detected. Skipping analysis, going straight to generation.',
-        );
 
         // Update UI immediately
         updateActiveConversation(
@@ -827,9 +723,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         });
       } else {
         // Full Flow (Analyze -> Evaluate -> ...)
-        console.log(
-          '[useImageGeneration] New context or no prior images. Starting full analysis workflow.',
-        );
 
         await analyzeIntentMutation.mutateAsync({
           request: message, // Send ONLY the recent message, backend handles history if needed for analysis
@@ -858,16 +751,12 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
         setWorkflow('collecting');
       } else {
         // User is done - finalize and generate (auto-chain)
-        console.log(
-          '[useImageGeneration] User confirmed - finalizing and generating...',
-        );
 
         await finalizePromptMutation.mutateAsync();
 
         // Get the enhanced prompt from store after finalize
         const store = useImageGenStore.getState();
         const finalPrompt = store.enhancedPrompt;
-        console.log('[useImageGeneration] Using enhanced prompt:', finalPrompt);
 
         if (finalPrompt) {
           await generateImageMutation.mutateAsync({ prompt: finalPrompt });
@@ -927,10 +816,6 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
       // Check if we have a conversation ID and we are on the correct page for it
       // Wait for the URL to reflect the new conversation ID before continuing
       if (conversationId && accessToken && pathname?.includes(conversationId)) {
-        console.log(
-          '[useImageGeneration] Resuming evaluation flow for conversation:',
-          conversationId,
-        );
 
         // We need to find the prompt from the history since it's not passed via URL
         const { activeConversation } = useConversationsStore.getState();
@@ -942,19 +827,12 @@ export function useImageGeneration(options?: UseImageGenerationOptions) {
           ?.slice(-1)[0]?.content;
 
         if (lastUserMessage) {
-          console.log(
-            '[useImageGeneration] Found pending prompt from history:',
-            lastUserMessage,
-          );
           hasResumedEvaluation.current = true;
           evaluatePromptMutation.mutate({
             prompt: lastUserMessage,
             convId: conversationId,
           });
         } else {
-          console.warn(
-            '[useImageGeneration] Could not find pending prompt in history to resume evaluation',
-          );
         }
       }
     }

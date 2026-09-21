@@ -78,7 +78,6 @@ export async function fetchKnowledgeBaseList(
       data: data?.data?.knowledgeBases ?? [],
     };
   } catch (error: any) {
-    console.warn('fetchKnowledgeBaseList Warning:', error?.message || String(error));
     return {
       success: false,
       message: 'Failed to fetch knowledge base list.',
@@ -311,7 +310,6 @@ export async function getFileBlob(file: KnowledgeBaseFile | KnowledgeBankFile) {
 
     return blob;
   } catch (error) {
-    console.log(error);
     return undefined;
   }
 }

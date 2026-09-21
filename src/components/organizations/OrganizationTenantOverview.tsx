@@ -199,7 +199,6 @@ export function OrganizationTenantOverview({
             membersList = alt.data;
           }
         } catch (e) {
-          console.warn('getTenantMemberByTenantId fallback failed:', e);
         }
       }
 

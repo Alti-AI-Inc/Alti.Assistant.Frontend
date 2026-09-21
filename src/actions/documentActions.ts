@@ -37,7 +37,6 @@ export async function startDocumentConversation(
     });
 
     const data = await response.json();
-    console.log('[documentActions] startDocumentConversation response:', data);
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
     console.error('startDocumentConversation Error:', error);
@@ -65,10 +64,6 @@ export async function continueDocumentConversation(
     });
 
     const data = await response.json();
-    console.log(
-      '[documentActions] continueDocumentConversation response:',
-      data,
-    );
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
     console.error('continueDocumentConversation Error:', error);
@@ -98,7 +93,6 @@ export async function generateDocument(
     });
 
     const data = await response.json();
-    console.log('[documentActions] generateDocument response:', data);
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
     console.error('generateDocument Error:', error);
@@ -131,10 +125,6 @@ export async function uploadReviewDocumentAssistant(
     );
 
     const data = await response.json();
-    console.log(
-      '[documentActions] uploadReviewDocumentAssistant response:',
-      data,
-    );
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
     console.error('uploadReviewDocumentAssistant Error:', error);
@@ -165,7 +155,6 @@ export async function submitDirectReview(
     );
 
     const data = await response.json();
-    console.log('[documentActions] submitDirectReview response:', data);
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
     console.error('submitDirectReview Error:', error);

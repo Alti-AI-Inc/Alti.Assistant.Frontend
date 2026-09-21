@@ -178,19 +178,11 @@ export function PaymentConfirmationModal({
           setIsCardReady(false);
         }
       } else {
-        console.warn(
-          'Stripe payment methods fetch returned unsuccessful response, falling back to add card form:',
-          response.message,
-        );
         setPaymentMethods([]);
         setStep('add_card');
         setIsCardReady(false);
       }
     } catch (err) {
-      console.warn(
-        'Error fetching payment methods, falling back to add card form:',
-        err,
-      );
       setPaymentMethods([]);
       setStep('add_card');
       setIsCardReady(false);
@@ -364,7 +356,6 @@ export function PaymentConfirmationModal({
       return;
     }
 
-    console.log('CardElement reference obtained, starting payment...');
 
     setStep('processing');
     setError('');
@@ -372,7 +363,6 @@ export function PaymentConfirmationModal({
     try {
       // Step 1: Create payment method from card element
       setProcessingMessage('Validating card...');
-      console.log('Creating payment method from CardElement...');
       const { error: pmError, paymentMethod } =
         await stripe.createPaymentMethod({
           type: 'card',
@@ -391,17 +381,14 @@ export function PaymentConfirmationModal({
         throw new Error('Failed to create payment method');
       }
 
-      console.log('Payment method created:', paymentMethod.id);
 
       // Step 2: Attach payment method to customer (save it)
       setProcessingMessage('Saving payment method...');
-      console.log('Adding payment method to tenant with ID:', paymentMethod.id);
       const addMethodResponse = await addPaymentMethodToTenant(
         paymentMethod.id,
         accessToken,
       );
 
-      console.log('Add payment method response:', addMethodResponse);
 
       if (!addMethodResponse.success) {
         throw new Error(
@@ -433,16 +420,13 @@ export function PaymentConfirmationModal({
         throw new Error('No client secret received from payment intent');
       }
 
-      console.log('Payment Intent created with client secret');
 
       // Step 4: Confirm payment with the saved payment method
       setProcessingMessage('Confirming card...');
-      console.log('Confirming payment with saved payment method...');
       const confirmResult = await stripe.confirmCardPayment(clientSecret, {
         payment_method: paymentMethod.id,
       });
 
-      console.log('Confirm result:', confirmResult);
 
       if (confirmResult.error) {
         console.error('Payment confirmation error:', confirmResult.error);
@@ -451,17 +435,14 @@ export function PaymentConfirmationModal({
         );
       }
 
-      console.log('Payment confirmed successfully');
 
       // Step 5: Create subscription
       setProcessingMessage('Creating subscription...');
-      console.log('Creating subscription with plan price ID:', plan.priceId);
       const subscriptionResponse = await createTenantSubscription(
         plan.priceId,
         accessToken,
       );
 
-      console.log('Create subscription response:', subscriptionResponse);
 
       if (!subscriptionResponse.success) {
         throw new Error(

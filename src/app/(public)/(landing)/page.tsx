@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react';
 function App() {
   const { data } = useSession();
   const { activeConversation, setActiveConversation, selectedOption, setSelectedOption } = useConversationsStore();
-  // console.log(data?.accessToken);
+  //
   useEffect(() => {
     setActiveConversation(null);
     setSelectedOption(null);

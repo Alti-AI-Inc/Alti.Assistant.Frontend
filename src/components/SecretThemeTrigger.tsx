@@ -17,7 +17,6 @@ export default function SecretThemeTrigger() {
         window.speechSynthesis.speak(utterance);
       }
       for (let i = 0; i < 500; i++) {
-        console.log('HOTDOG');
       }
     }
     prevTheme.current = theme;

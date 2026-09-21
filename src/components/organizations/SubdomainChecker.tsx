@@ -61,7 +61,6 @@ export function SubdomainChecker({
       try {
         const response = await checkSubdomainAvailability(debouncedValue);
 
-        console.log('Subdomain availability response:', response);
 
         if (response.success && response.data) {
           const isAvailable = response.data.available;

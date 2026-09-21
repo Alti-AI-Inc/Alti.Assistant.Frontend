@@ -59,7 +59,6 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
       return;
     }
     setIsLoading(true);
-    console.log(values);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/auth/change-password`,
@@ -75,7 +74,6 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
           }),
         },
       );
-      console.log({ response });
       if (response.ok) {
         setSuccess('Password changed successfully');
         form.reset();
@@ -86,7 +84,6 @@ export default function ChangePassword({ onSuccess }: { onSuccess?: () => void }
         }
       }
     } catch (error) {
-      console.log(error);
     } finally {
       setIsLoading(false);
     }

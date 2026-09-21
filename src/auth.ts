@@ -64,7 +64,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.warn('Missing email or password in credentials');
           return null;
         }
         try {

@@ -212,7 +212,6 @@ function MyChatbotsContent() {
             currentMeta.tuningError !== newError ||
             currentMeta.tuningDatasetUri !== newDatasetUri
           ) {
-            console.log('[Tuning Poll] Status updated:', newStatus);
             useBotsStore.getState().editBot(
               activeBot.id,
               {
@@ -320,22 +319,13 @@ function MyChatbotsContent() {
 
       // 1. If authenticated, create a backend knowledgebase
       if (session?.accessToken) {
-        console.log('[Wizard] Creating backend knowledge base:', projectName);
         const kbResponse = await createKnowledgeBaseAction(
           projectName,
           session.accessToken,
         );
         if (kbResponse.success && kbResponse.data?.id) {
           backendId = kbResponse.data.id;
-          console.log(
-            '[Wizard] Backend knowledge base created with ID:',
-            backendId,
-          );
         } else {
-          console.warn(
-            '[Wizard] Failed to create backend knowledge base:',
-            kbResponse.message,
-          );
         }
       }
 
@@ -365,10 +355,6 @@ function MyChatbotsContent() {
 
       // 3. Sequentially upload files to the knowledgebase if files are selected
       if (selectedFiles.length > 0 && backendId && session?.accessToken) {
-        console.log(
-          '[Wizard] Sequentially uploading files to knowledge base:',
-          backendId,
-        );
         for (const file of selectedFiles) {
           const formData = new FormData();
           formData.append('file', file);
@@ -380,7 +366,6 @@ function MyChatbotsContent() {
               session.accessToken,
             );
             if (uploadRes.success) {
-              console.log('[Wizard] File successfully uploaded:', file.name);
             } else {
               console.error(
                 '[Wizard] File upload failed:',

@@ -91,7 +91,6 @@ export async function createSpaceSearchAction(
       },
     );
     const result = await response.json().catch(() => null);
-    console.log('[SEARCH DEBUG] status:', response.status, 'result keys:', result ? Object.keys(result) : 'null', 'data keys:', result?.data ? Object.keys(result.data) : 'no data', 'results length:', result?.data?.results?.length ?? result?.results?.length ?? 'none');
     if (!response.ok) {
       return {
         success: false,

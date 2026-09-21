@@ -29,7 +29,6 @@ export async function submitDirectRewrite(
     });
 
     const data = await response.json();
-    console.log('[rewriteActions] submitDirectRewrite response:', data);
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
     console.error('submitDirectRewrite Error:', error);
@@ -69,7 +68,6 @@ export async function handleRewriteRequest(
       body = JSON.stringify(payload);
       headers['Content-Type'] = 'application/json';
     }
-    console.log('[rewriteActions] handleRewriteRequest payload:', payload);
     const response = await fetch(`${API_BASE_URL}/rewrite/assistant`, {
       method: 'POST',
       headers,
@@ -77,7 +75,6 @@ export async function handleRewriteRequest(
     });
 
     const data = await response.json();
-    console.log('[rewriteActions] handleRewriteRequest response:', data);
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
     console.error('handleRewriteRequest Error:', error);

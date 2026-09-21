@@ -161,7 +161,6 @@ export function TenantProvider({ children }: { children: ReactNode }) {
 
           // Auto-switch to default workspace tenant if not already active
           if (storeTenants.length > 0 && (!activeTenantId || mode !== 'tenant')) {
-            console.log('Auto-switching to default tenant:', storeTenants[0].id);
             await switchToTenantMode(storeTenants[0].id);
           }
         }

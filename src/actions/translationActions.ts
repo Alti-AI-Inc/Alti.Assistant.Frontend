@@ -32,7 +32,6 @@ export async function submitDirectTranslate(
     });
 
     const data = await response.json();
-    console.log('[translationActions] submitDirectTranslate response:', data);
     return {
       success: data.success ?? true,
       message: data.message || 'Success',
@@ -66,7 +65,6 @@ export async function submitDetectLanguage(
     });
 
     const data = await response.json();
-    console.log('[translationActions] submitDetectLanguage response:', data);
     return {
       success: data.success ?? true,
       message: data.message || 'Success',
@@ -102,10 +100,6 @@ export async function handleTranslationAssistant(
       headers['Content-Type'] = 'application/json';
     }
 
-    console.log(
-      '[translationActions] handleTranslationAssistant payload:',
-      payload,
-    );
     const response = await fetch(`${API_BASE_URL}/translation/assistant`, {
       method: 'POST',
       headers,
@@ -113,10 +107,6 @@ export async function handleTranslationAssistant(
     });
 
     const data = await response.json();
-    console.log(
-      '[translationActions] handleTranslationAssistant response:',
-      data,
-    );
     return {
       success: data.success ?? true,
       message: data.message || 'Request processed',

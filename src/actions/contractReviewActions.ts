@@ -26,10 +26,6 @@ export async function postContractAssistant(
   accessToken: string,
 ): Promise<ApiResponse<ContractAssistantResponseData>> {
   const apiUrl = `${API_BASE_URL}/legal-contract-review/assistant`;
-  console.log(
-    '[contractReviewActions] postContractAssistant payload:',
-    payload,
-  );
 
   try {
     const response = await fetch(apiUrl, {
@@ -52,10 +48,6 @@ export async function postContractAssistant(
     }
 
     const data = await response.json();
-    console.log(
-      '[contractReviewActions] postContractAssistant response:',
-      data,
-    );
     return {
       success: data.success ?? true,
       message: data.message || 'Success',
@@ -82,10 +74,6 @@ export async function postContractAssistantWithFile(
   accessToken: string,
 ): Promise<ApiResponse<ContractAssistantResponseData>> {
   const apiUrl = `${API_BASE_URL}/legal-contract-review/assistant`;
-  console.log(
-    '[contractReviewActions] postContractAssistantWithFile formData keys:',
-    Array.from(formData.keys()),
-  );
 
   try {
     const response = await fetch(apiUrl, {
@@ -108,10 +96,6 @@ export async function postContractAssistantWithFile(
     }
 
     const data = await response.json();
-    console.log(
-      '[contractReviewActions] postContractAssistantWithFile response:',
-      data,
-    );
     return {
       success: data.success ?? true,
       message: data.message || 'Success',
@@ -159,10 +143,6 @@ export async function submitDirectContractReview(
     formData.append('additionalInstructions', config.additionalInstructions);
   }
 
-  console.log(
-    '[contractReviewActions] submitDirectContractReview formData keys:',
-    Array.from(formData.keys()),
-  );
 
   try {
     const response = await fetch(apiUrl, {
@@ -184,10 +164,6 @@ export async function submitDirectContractReview(
     }
 
     const data = await response.json();
-    console.log(
-      '[contractReviewActions] submitDirectContractReview response:',
-      data,
-    );
     return {
       success: data.success ?? true,
       message: data.message || 'Success',

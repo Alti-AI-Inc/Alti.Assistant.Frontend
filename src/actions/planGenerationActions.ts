@@ -27,7 +27,6 @@ export async function postPlanAssistant(
   accessToken: string,
 ): Promise<ApiResponse<PlanAssistantResponseData>> {
   const apiUrl = `${API_BASE_URL}/plan-generator/assistant`;
-  console.log('[planGenerationActions] postPlanAssistant payload:', payload);
 
   try {
     const response = await fetch(apiUrl, {
@@ -50,7 +49,6 @@ export async function postPlanAssistant(
     }
 
     const data = await response.json();
-    console.log('[planGenerationActions] postPlanAssistant response:', data);
     return {
       success: data.success ?? true,
       message: data.message || 'Success',
@@ -77,10 +75,6 @@ export async function postPlanAssistantWithFile(
   accessToken: string,
 ): Promise<ApiResponse<PlanAssistantResponseData>> {
   const apiUrl = `${API_BASE_URL}/plan-generator/assistant`;
-  console.log(
-    '[planGenerationActions] postPlanAssistantWithFile formData keys:',
-    Array.from(formData.keys()),
-  );
 
   try {
     const response = await fetch(apiUrl, {
@@ -103,10 +97,6 @@ export async function postPlanAssistantWithFile(
     }
 
     const data = await response.json();
-    console.log(
-      '[planGenerationActions] postPlanAssistantWithFile response:',
-      data,
-    );
     return {
       success: data.success ?? true,
       message: data.message || 'Success',
@@ -160,7 +150,6 @@ export async function generateDirectPlan(
     }),
   };
 
-  console.log('[planGenerationActions] generateDirectPlan payload:', payload);
 
   try {
     const response = await fetch(apiUrl, {
@@ -183,7 +172,6 @@ export async function generateDirectPlan(
     }
 
     const data = await response.json();
-    console.log('[planGenerationActions] generateDirectPlan response:', data);
     return {
       success: data.success ?? true,
       message: data.message || 'Success',

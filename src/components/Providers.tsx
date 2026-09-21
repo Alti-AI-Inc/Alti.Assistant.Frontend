@@ -34,9 +34,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         message.includes('Failed to find Server Action');
 
       if (isChunkLoadError) {
-        console.warn(
-          'Aphura Shield: Detected chunk loading or Server Action mismatch. Performing automatic recovery refresh...',
-        );
         window.location.reload();
       }
     };
@@ -52,9 +49,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         reasonStr.includes('Failed to find Server Action');
 
       if (isChunkLoadError) {
-        console.warn(
-          'Aphura Shield: Detected unhandled chunk/Server Action rejection. Performing automatic recovery refresh...',
-        );
         window.location.reload();
       }
     };
@@ -112,7 +106,6 @@ function AuthWatcher({ children }: { children: React.ReactNode }) {
     }
 
     if (session?.accessToken && session?.isTokenExpired) {
-      console.log('isTokenExpired', session?.isTokenExpired);
       signOut({ redirect: true, callbackUrl: '/' });
     }
   }, [pathname, session, status, router, publicPaths]);

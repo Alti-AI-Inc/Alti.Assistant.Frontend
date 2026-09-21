@@ -26,7 +26,6 @@ import { addPaymentMethod } from '@/actions/stripeActions';
 const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
 if (!publishableKey) {
-  console.warn('Missing NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY');
 }
 
 const stripePromise = publishableKey ? loadStripe(publishableKey) : null;
@@ -79,18 +78,12 @@ function PaymentMethodForm({
       }
 
       // "You then use this ID when calling your backend API to attach or add the payment method"
-      console.log('paymentMethod payload', {
-        customerId,
-        paymentMethodId: paymentMethod.id,
-        accessToken,
-      });
       const result = await addPaymentMethod(
         customerId,
         paymentMethod.id,
         accessToken,
       );
 
-      console.log('addPaymentMethod result', result);
 
       if (result.success) {
         onSuccess();

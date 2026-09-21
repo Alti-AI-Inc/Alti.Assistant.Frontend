@@ -115,10 +115,6 @@ export default function AcceptInvitePage({
               await update({ accessToken: switchResponse.data.accessToken });
             }
           } catch (switchErr) {
-            console.warn(
-              'Failed to switch tenant context after accept:',
-              switchErr,
-            );
           }
         }
 

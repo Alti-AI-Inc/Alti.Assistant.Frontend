@@ -38,13 +38,11 @@ export default function TelemetryConsole({ conversationId, active, onComplete }:
     const base = process.env.NEXT_PUBLIC_API_URL || 'https://api.altihq.com/api/v1';
     const sseUrl = `${base}/deep-research/telemetry?conversationId=${conversationId}`;
     
-    console.log('[TelemetryConsole] Connecting to SSE stream:', sseUrl);
     const eventSource = new EventSource(sseUrl);
 
     eventSource.onmessage = (event) => {
       try {
         const data: TelemetryEvent = JSON.parse(event.data);
-        console.log('[TelemetryConsole] Received event:', data);
 
         if (data.percentage !== undefined) {
           setPercentage(data.percentage);
@@ -81,7 +79,6 @@ export default function TelemetryConsole({ conversationId, active, onComplete }:
     };
 
     eventSource.onerror = (err) => {
-      console.warn('[TelemetryConsole] EventSource error, closing connection:', err);
       eventSource.close();
     };
 

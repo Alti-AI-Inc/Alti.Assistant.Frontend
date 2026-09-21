@@ -55,7 +55,6 @@ const KnowledgeBankFileUpload = ({ folderId }: { folderId: string }) => {
       } catch (error) {
         setIsUploadded(false);
         setIsUploading(false);
-        console.log(error);
       } finally {
         setIsUploading(false);
       }

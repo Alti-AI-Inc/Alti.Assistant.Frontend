@@ -56,7 +56,6 @@ export function useKnowledgeBases(accessToken?: string) {
     queryFn: async () => {
       const response = await fetchKnowledgeBaseList(accessToken!);
       if (!response.success) {
-        console.warn('fetchKnowledgeBaseList failed:', response.debugMessage || response.message);
         return [];
       }
       return response.data;
@@ -78,10 +77,6 @@ export function useKnowledgeBaseConversations(
         accessToken!,
       );
       if (!response.success) {
-        console.warn(
-          'fetchKnowledgeBaseConversations failed:',
-          response.debugMessage || response.message,
-        );
         return {
           conversations: [],
           totalCount: 0,

@@ -729,7 +729,7 @@ const FullConversation = ({
     return -1;
   })();
 
-  // console.log('activeConversation?.messages', activeConversation?.messages);
+  //
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   // Helper functions for ModeSelector

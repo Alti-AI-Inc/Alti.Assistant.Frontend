@@ -66,7 +66,6 @@ export async function getPresentationStatus(
     }
 
     const data = await response.json();
-    console.log('[presentationActions] getPresentationStatus response:', data);
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: any) {
     console.error('getPresentationStatus Error:', error);

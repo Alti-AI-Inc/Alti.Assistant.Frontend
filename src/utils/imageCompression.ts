@@ -65,20 +65,6 @@ export const compressImage = (
         const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
 
         // Log compression stats for debugging
-        console.log('[ImageCompression]', {
-          originalSize: file.size,
-          originalDimensions: `${img.width}x${img.height}`,
-          newDimensions: `${width}x${height}`,
-          originalBase64Length: (event.target?.result as string).length,
-          compressedBase64Length: compressedDataUrl.length,
-          compressionRatio:
-            (
-              (((event.target?.result as string).length -
-                compressedDataUrl.length) /
-                (event.target?.result as string).length) *
-              100
-            ).toFixed(2) + '%',
-        });
 
         resolve(compressedDataUrl);
       };

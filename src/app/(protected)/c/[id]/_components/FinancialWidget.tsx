@@ -91,7 +91,6 @@ export default function FinancialWidget({ ticker, liveData }: FinancialWidgetPro
           script.parentNode.removeChild(script);
         }
       } catch (e) {
-        console.warn('Failed to cleanup TradingView script:', e);
       }
     };
   }, [activeTab, resolvedSymbol]);

@@ -99,7 +99,6 @@ export async function apiClient(
 
     return response;
   } catch (error) {
-    console.warn('API Client Warning:', error instanceof Error ? error.message : String(error));
     throw error;
   }
 }

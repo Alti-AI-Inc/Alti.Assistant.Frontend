@@ -131,18 +131,6 @@ export async function analyzeImageIntent(
   accessToken: string,
 ): Promise<ApiResponse<ImageIntentResponse>> {
   try {
-    console.log(
-      '[imageActions] analyzeImageIntent payload:',
-      JSON.stringify(
-        {
-          request,
-          hasImage,
-          conversationId,
-        },
-        null,
-        2,
-      ),
-    );
     const response = await apiClient(
       `${API_URL}/enhanced-image/analyze-image-intent`,
       {
@@ -160,10 +148,6 @@ export async function analyzeImageIntent(
     );
 
     const data = await response.json();
-    console.log(
-      '[imageActions] analyzeImageIntent response:',
-      JSON.stringify(data, null, 2),
-    );
     return data;
   } catch (error: any) {
     console.error('analyzeImageIntent Error:', error);
@@ -186,18 +170,6 @@ export async function evaluatePrompt(
   accessToken: string,
 ): Promise<ApiResponse<EvaluatePromptResponse>> {
   try {
-    console.log(
-      '[imageActions] evaluatePrompt payload:',
-      JSON.stringify(
-        {
-          prompt,
-          conversationId,
-          conversationHistory,
-        },
-        null,
-        2,
-      ),
-    );
 
     const finalPrompt = conversationHistory
       ? `Conversation History:\n${conversationHistory}\n\nCurrent Request: ${prompt}`
@@ -219,10 +191,6 @@ export async function evaluatePrompt(
     );
 
     const data = await response.json();
-    console.log(
-      '[imageActions] evaluatePrompt response:',
-      JSON.stringify(data, null, 2),
-    );
     return data;
   } catch (error: any) {
     console.error('evaluatePrompt Error:', error);
@@ -245,18 +213,6 @@ export async function addDetail(
   accessToken: string,
 ): Promise<ApiResponse<AddDetailResponse>> {
   try {
-    console.log(
-      '[imageActions] addDetail payload:',
-      JSON.stringify(
-        {
-          conversationId,
-          userId,
-          detail,
-        },
-        null,
-        2,
-      ),
-    );
 
     const response = await apiClient(`${API_URL}/enhanced-image/add-detail`, {
       method: 'POST',
@@ -272,10 +228,6 @@ export async function addDetail(
     });
 
     const data = await response.json();
-    console.log(
-      '[imageActions] addDetail response:',
-      JSON.stringify(data, null, 2),
-    );
     return data;
   } catch (error: any) {
     console.error('addDetail Error:', error);
@@ -297,17 +249,6 @@ export async function finalizePrompt(
   accessToken: string,
 ): Promise<ApiResponse<FinalizePromptResponse>> {
   try {
-    console.log(
-      '[imageActions] finalizePrompt payload:',
-      JSON.stringify(
-        {
-          conversationId,
-          userId,
-        },
-        null,
-        2,
-      ),
-    );
 
     const response = await apiClient(
       `${API_URL}/enhanced-image/finalize-prompt`,
@@ -325,10 +266,6 @@ export async function finalizePrompt(
     );
 
     const data = await response.json();
-    console.log(
-      '[imageActions] finalizePrompt response:',
-      JSON.stringify(data, null, 2),
-    );
     return data;
   } catch (error: any) {
     console.error('finalizePrompt Error:', error);
@@ -353,20 +290,6 @@ export async function generateImage(
   userId?: string,
 ): Promise<ApiResponse<GenerateImageResponse>> {
   try {
-    console.log(
-      '[imageActions] generateImage payload:',
-      JSON.stringify(
-        {
-          prompt,
-          aspectRatio,
-          negativePrompt,
-          conversationId,
-          userId,
-        },
-        null,
-        2,
-      ),
-    );
 
     const response = await apiClient(`${API_URL}/enhanced-image/generate`, {
       method: 'POST',
@@ -384,10 +307,6 @@ export async function generateImage(
     });
 
     const data = await response.json();
-    console.log(
-      '[imageActions] generateImage response:',
-      JSON.stringify(data, null, 2),
-    );
     return data;
   } catch (error: any) {
     console.error('generateImage Error:', error);
@@ -413,22 +332,6 @@ export async function editImage(
   aspectRatio?: string,
 ): Promise<ApiResponse<EditImageResponse>> {
   try {
-    console.log(
-      '[imageActions] editImage payload:',
-      JSON.stringify(
-        {
-          prompt,
-          imageBase64: imageBase64
-            ? `${imageBase64.slice(0, 50)}...`
-            : undefined,
-          conversationId,
-          userId,
-          aspectRatio,
-        },
-        null,
-        2,
-      ),
-    );
 
     const response = await apiClient(`${API_URL}/enhanced-image/edit`, {
       method: 'POST',
@@ -446,10 +349,6 @@ export async function editImage(
     });
 
     const data = await response.json();
-    console.log(
-      '[imageActions] editImage response:',
-      JSON.stringify(data, null, 2),
-    );
     return data;
   } catch (error: any) {
     console.error('editImage Error:', error);

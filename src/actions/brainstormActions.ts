@@ -22,7 +22,6 @@ export async function postBrainstormAssistant(
   accessToken: string,
 ): Promise<ApiResponse<BrainstormResponse | any>> {
   const apiUrl = `${API_BASE_URL}/brainstorm/assistant`;
-  console.log('[brainstormActions] postBrainstormAssistant payload:', payload);
 
   try {
     const response = await fetch(apiUrl, {
@@ -39,7 +38,6 @@ export async function postBrainstormAssistant(
     }
 
     const data = await response.json();
-    console.log('[brainstormActions] postBrainstormAssistant data:', data);
     return {
       success: data.success ?? true,
       message: data.message || 'Success',
@@ -91,10 +89,6 @@ export async function generateStructuredBrainstorm(
     ...cleanConfig,
     ...(constraints && { constraints }),
   };
-  console.log(
-    '[brainstormActions] generateStructuredBrainstorm payload:',
-    payload,
-  );
 
   try {
     const response = await fetch(apiUrl, {
@@ -111,7 +105,6 @@ export async function generateStructuredBrainstorm(
     }
 
     const data = await response.json();
-    console.log('[brainstormActions] generateStructuredBrainstorm data:', data);
     return {
       success: data.success ?? true,
       message: data.message || 'Success',

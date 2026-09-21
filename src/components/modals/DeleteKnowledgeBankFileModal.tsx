@@ -21,7 +21,6 @@ export function DeleteKnowledgeBankFileModal() {
 
   const deleteMutation = useDeleteKnowledgeBankFile(folderId!, onClose);
 
-  console.log('folder id in modal', { folderId });
 
   const handleDelete = async () => {
     if (fileId) deleteMutation.mutate({ fileId });

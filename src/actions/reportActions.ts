@@ -27,7 +27,6 @@ export async function postReportAssistant(
   accessToken: string,
 ): Promise<ApiResponse<ReportAssistantResponse>> {
   const apiUrl = `${API_BASE_URL}/reports/assistant`;
-  console.log('[reportActions] postReportAssistant payload:', payload);
 
   try {
     const response = await fetch(apiUrl, {
@@ -54,7 +53,6 @@ export async function postReportAssistant(
     }
 
     const data = await response.json();
-    console.log('[reportActions] postReportAssistant response:', data);
     return {
       success: data.success ?? true,
       message: data.message || 'Success',
@@ -81,10 +79,6 @@ export async function postReportAssistantWithFile(
   accessToken: string,
 ): Promise<ApiResponse<ReportAssistantResponse>> {
   const apiUrl = `${API_BASE_URL}/reports/assistant`;
-  console.log(
-    '[reportActions] postReportAssistantWithFile formData:',
-    formData,
-  );
 
   try {
     const response = await fetch(apiUrl, {
@@ -112,7 +106,6 @@ export async function postReportAssistantWithFile(
     }
 
     const data = await response.json();
-    console.log('[reportActions] postReportAssistantWithFile response:', data);
     return {
       success: data.success ?? true,
       message: data.message || 'Success',
@@ -139,7 +132,6 @@ export async function generateDirectReport(
   accessToken: string,
 ): Promise<ApiResponse<DirectReportResponse>> {
   const apiUrl = `${API_BASE_URL}/reports/generate`;
-  console.log('[reportActions] generateDirectReport payload:', payload);
 
   try {
     const response = await fetch(apiUrl, {
@@ -166,7 +158,6 @@ export async function generateDirectReport(
     }
 
     const data = await response.json();
-    console.log('[reportActions] generateDirectReport response:', data);
     return {
       success: data.success ?? true,
       message: data.message || 'Report generated successfully',

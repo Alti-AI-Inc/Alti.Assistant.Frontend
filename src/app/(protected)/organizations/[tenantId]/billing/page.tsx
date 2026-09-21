@@ -115,12 +115,6 @@ export default function OrganizationBillingPage({
           getPaymentMethods(session.accessToken),
         ]);
 
-      console.log('[Billing Page] Tenant Response:', tenantResponse);
-      console.log('[Billing Page] Tenant Data:', tenantResponse.data);
-      console.log(
-        '[Billing Page] Payment Methods:',
-        paymentMethodsResponse.data,
-      );
 
       if (tenantResponse.success && tenantResponse.data) {
         const tenant = tenantResponse.data;
@@ -143,17 +137,12 @@ export default function OrganizationBillingPage({
           unlimitedSeats: unlimitedSeats,
         };
 
-        console.log(
-          '[Billing Page] Transformed subscription data:',
-          subscriptionData,
-        );
         setSubscription(subscriptionData);
       }
 
       if (usageResponse.success && usageResponse.data) {
         setUsage(usageResponse.data);
       }
-      console.log('[Payment Methods] Response:', paymentMethodsResponse);
       if (paymentMethodsResponse.success && paymentMethodsResponse.data) {
         setPaymentMethods(paymentMethodsResponse.data);
       }

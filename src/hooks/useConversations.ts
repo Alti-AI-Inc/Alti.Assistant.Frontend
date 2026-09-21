@@ -367,7 +367,6 @@ export function useConversations(
           })),
         };
       } catch (error) {
-        console.warn('fetchConversationList exception:', error);
         const localList = getLocalConversations().map(c => ({
           ...c,
           _id: c._id || c.conversationId,
@@ -405,18 +404,12 @@ export function useSavedConversations(accessToken?: string) {
         const response = await fetchSavedConversationList(accessToken);
         if (!response.success) {
           if (response.statusCode !== 401 && response.statusCode !== 403) {
-            console.warn(
-              'fetchSavedConversationList failed:',
-              response.debugMessage,
-              response.message,
-            );
           }
 
           return [];
         }
         return response.data;
       } catch (error) {
-        console.warn('fetchSavedConversationList exception:', error);
         return [];
       }
     },
@@ -453,11 +446,6 @@ export function useActiveConversation(
         );
 
         if (!response.success || !response.data) {
-          console.warn(
-            'loadSingleConversation failed:',
-            response.debugMessage,
-            response.message,
-          );
           const localList = getLocalConversations();
           const found = localList.find(
             (c: any) => c.conversationId === conversationId || c._id === conversationId,
@@ -517,7 +505,6 @@ export function useActiveConversation(
 
         return data;
       } catch (error) {
-        console.warn('loadSingleConversation exception:', error);
         return { messages: [] };
       }
     },
@@ -533,11 +520,6 @@ export function useSharedConversation(id: string) {
         const response = await loadSingleSharedConversation(id);
 
         if (!response.success) {
-          console.warn(
-            'loadSingleSharedConversation failed:',
-            response.debugMessage,
-            response.message,
-          );
           return { messages: [] };
         }
 
@@ -589,7 +571,6 @@ export function useSharedConversation(id: string) {
 
         return conversation;
       } catch (error) {
-        console.warn('loadSingleSharedConversation exception:', error);
         return { messages: [] };
       }
     },
@@ -620,13 +601,11 @@ export function useDeleteConversation() {
         );
         return response?.data || { success: true };
       } catch (error) {
-        console.warn('deleteConversation exception:', error);
         return { success: true };
       }
     },
     onSuccess: (resp, deletedId) => {
       if (!resp) return;
-      console.log('Deleted conversation: resp', resp);
 
       // Find the conversationId associated with this deletedId in cache to handle navigation
       let targetConvId = deletedId;
@@ -714,10 +693,8 @@ export function useRenameConversation() {
             data.accessToken,
           );
           if (!res.success && res.debugMessage) {
-            console.warn('Backend rename warning:', res.debugMessage);
           }
         } catch (error) {
-          console.warn('renameConversationAction exception:', error);
         }
       }
 
@@ -795,7 +772,6 @@ export function useSearchConversations(
         }
         return response.data;
       } catch (error) {
-        console.warn('searchConversations exception:', error);
         const localList = getLocalConversations();
         const term = (searchTerm || '').toLowerCase();
         return localList.filter((c: any) =>

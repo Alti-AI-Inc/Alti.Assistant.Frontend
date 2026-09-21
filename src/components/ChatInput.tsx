@@ -1743,7 +1743,7 @@ export default function ChatInput({
         } else {
           // Assistant mode (default)
           const hasContent = rewriteConfig.textContent?.trim() || selectedFile;
-          // console.log('hasContent', rewriteConfig.textContent);
+          //
 
           if (!hasContent) {
             if (isExistingConversation) {

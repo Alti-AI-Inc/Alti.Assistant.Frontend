@@ -65,10 +65,8 @@ export function StripeProvider({ children }: StripeProviderProps) {
           if (res.success && res.data) {
             key = res.data;
           } else {
-            console.warn('[StripeProvider] Server action returned:', res.message);
           }
         } catch (fetchErr) {
-          console.warn('[StripeProvider] Server action failed:', fetchErr);
         }
       }
 
