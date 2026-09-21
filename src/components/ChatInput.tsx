@@ -959,15 +959,27 @@ export default function ChatInput({
           }
 
           const turn = searchRes.data;
-          console.log('[CHATINPUT DEBUG] searchRes.success:', searchRes.success, 'turn type:', typeof turn, 'Array.isArray:', Array.isArray(turn), 'turn.results:', turn?.results?.length, 'turn keys:', turn ? Object.keys(turn) : 'null');
+          console.log('[CHATINPUT DEBUG] full turn:', JSON.stringify(turn, null, 2));
           const results = Array.isArray(turn)
             ? turn
             : turn.results || (Array.isArray(turn.data) ? turn.data : []);
-          const answer = extractDirectSearchAnswer(
-            userMessage,
-            results,
-            userTimeZone,
-          );
+
+          let answer: string;
+          if (results.length > 0) {
+            answer = extractDirectSearchAnswer(
+              userMessage,
+              results,
+              userTimeZone,
+            );
+          } else {
+            // Backend returned no Exa results — check if the turn itself carries a direct answer
+            const turnAnswer = (turn as any)?.answer || (turn as any)?.summary || (turn as any)?.response || (turn as any)?.content || '';
+            if (turnAnswer && typeof turnAnswer === 'string' && turnAnswer.trim().length > 0) {
+              answer = turnAnswer.trim();
+            } else {
+              answer = 'No results found.';
+            }
+          }
 
           const references = deduplicateReferences(
             results
@@ -1033,14 +1045,26 @@ export default function ChatInput({
           }
 
           const turn = researchRes.data;
+          console.log('[RESEARCH DEBUG] full turn:', JSON.stringify(turn, null, 2));
           const results = Array.isArray(turn)
             ? turn
             : turn.results || (Array.isArray(turn.data) ? turn.data : []);
-          const answer = extractDirectSearchAnswer(
-            userMessage,
-            results,
-            userTimeZone,
-          );
+
+          let answer: string;
+          if (results.length > 0) {
+            answer = extractDirectSearchAnswer(
+              userMessage,
+              results,
+              userTimeZone,
+            );
+          } else {
+            const turnAnswer = (turn as any)?.answer || (turn as any)?.summary || (turn as any)?.response || (turn as any)?.content || '';
+            if (turnAnswer && typeof turnAnswer === 'string' && turnAnswer.trim().length > 0) {
+              answer = turnAnswer.trim();
+            } else {
+              answer = 'No results found.';
+            }
+          }
 
           const references = deduplicateReferences(
             results
