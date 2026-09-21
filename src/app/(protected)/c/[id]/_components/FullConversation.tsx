@@ -1141,8 +1141,29 @@ const FullConversation = ({
                               {displayContent}
                             </Streamdown>
 
-                            <div className="mt-2 flex items-center gap-2">
+                            <div className="mt-2 flex flex-wrap items-center gap-2.5">
                               <CopyButton content={displayContent} />
+
+                              {!!(
+                                message.metadata?.reference?.length ||
+                                message.metadata?.sources?.length ||
+                                message.metadata?.citations?.length
+                              ) && (
+                                <ReferencesList
+                                  references={
+                                    message.metadata.reference ||
+                                    message.metadata.sources ||
+                                    message.metadata.citations ||
+                                    []
+                                  }
+                                  webSearchQueries={
+                                    (message.metadata as any).webSearchQueries
+                                  }
+                                  searchEntryPoint={
+                                    (message.metadata as any).searchEntryPoint
+                                  }
+                                />
+                              )}
 
                               {displayContent?.includes('```') && (
                                 <button
@@ -1150,7 +1171,7 @@ const FullConversation = ({
                                     setSelectedOption(OPTIONS.CODE);
                                     toast.success('Code opened in Sandbox!');
                                   }}
-                                  className="flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-semibold text-zinc-500 transition-all duration-200 hover:bg-black/5 dark:text-zinc-400 dark:hover:bg-white/5"
+                                  className="flex items-center gap-1 rounded-[5px] px-2 py-1 text-[11px] font-semibold text-zinc-500 transition-all duration-200 hover:bg-black/5 dark:text-zinc-400 dark:hover:bg-white/5"
                                   title="Open in Sandbox"
                                 >
                                   <Code className="size-3.5" />
@@ -1251,11 +1272,12 @@ const FullConversation = ({
                   {message.metadata?.document && (
                     <FileDownloadCard document={message.metadata.document} />
                   )}
-                  {!!(
-                    message.metadata?.reference?.length ||
-                    message.metadata?.sources?.length ||
-                    message.metadata?.citations?.length
-                  ) && (
+                  {isContentEmpty &&
+                    !!(
+                      message.metadata?.reference?.length ||
+                      message.metadata?.sources?.length ||
+                      message.metadata?.citations?.length
+                    ) && (
                     <ReferencesList
                       references={
                         message.metadata.reference ||

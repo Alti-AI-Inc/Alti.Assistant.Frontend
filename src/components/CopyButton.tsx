@@ -41,13 +41,13 @@ const CopyButton = ({
     <Button
       onClick={handleCopy}
       variant="ghost"
-      className={`-ml-2 size-8 transition-all duration-200 hover:opacity-70 ${className}`}
+      className={`-ml-1 size-7 p-0 flex items-center justify-center transition-all duration-200 hover:opacity-70 ${className}`}
       title={isCopied ? 'Copied!' : 'Copy to clipboard'}
     >
       {isCopied ? (
-        <Check className="mt-2 size-4 text-slate-400 transition-all duration-200" />
+        <Check className="size-3.5 text-zinc-400 transition-all duration-200" />
       ) : (
-        <Copy className="mt-2 size-4 text-slate-400 transition-all duration-200" />
+        <Copy className="size-3.5 text-zinc-400 transition-all duration-200" />
       )}
     </Button>
   );

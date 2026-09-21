@@ -28,11 +28,11 @@ export default function ReferencesList({
   const displayReferences = references.slice(0, 5);
 
   return (
-    <div className="w-full mt-3 mb-2 flex flex-wrap items-center gap-2">
+    <div className="inline-flex flex-wrap items-center gap-2">
       <span className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 select-none">
         Sources:
       </span>
-      <div className="flex flex-wrap items-center gap-1.5">
+      <div className="inline-flex flex-wrap items-center gap-1.5">
         {displayReferences.map((ref, index) => {
           const isWeb = !!ref.url;
           const domain =
