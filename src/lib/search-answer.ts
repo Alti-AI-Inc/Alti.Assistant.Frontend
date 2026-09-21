@@ -169,12 +169,16 @@ export function stripInlineFluff(text: string): string {
       '\n',
     )
     .replace(
-      /^(?:in summary,?\s*|to summarize,?\s*|in conclusion,?\s*|overall,?\s*|essentially,?\s*|basically,?\s*|sure,?\s*|certainly,?\s*|here(?:'s| is) (?:what|the answer:?|the information:?|the details:?)|to answer your question:?|hey boss,?\s*(?:i found the answer for you:?)?)\s*/gi,
+      /^(?:in summary,?\s*|to summarize,?\s*|in conclusion,?\s*|overall,?\s*|essentially,?\s*|basically,?\s*|sure,?\s*|certainly,?\s*|here(?:'s| is) (?:what|the answer:?|the information:?|the details:?)|to answer your question:?|hey boss,?\s*(?:i found the answer for you:?)?|disclaimer:\s*|update:\s*|correction:\s*)\s*/gi,
       '',
     )
     .replace(
       /\s*(?:,\s*)?(?:in|from|based on|according to)\s+the\s+provided\s+(?:page|text|document|excerpt|source|link|article|data)[^.,;]*/gi,
       '',
+    )
+    .replace(
+      /\s*(?:,\s*)?(?:for more (?:information|details)|to learn more|read more at|find out more)[^.,;]*(?:\.|$)/gi,
+      '.',
     )
     .replace(
       /\s*(?:,\s*)?according to (?:the official schedule|the page|the website|sources|search results)[^.,;]*/gi,
