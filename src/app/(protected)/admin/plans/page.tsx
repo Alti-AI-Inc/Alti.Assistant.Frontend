@@ -159,7 +159,7 @@ export default function PlansPage() {
                             {plan.id === currentPlanId ? (
                               <button
                                 type="button"
-                                className="h-9 w-full cursor-pointer rounded-[3px] border border-transparent bg-black text-xs font-bold text-white transition-all hover:opacity-90 active:scale-95 dark:bg-white dark:text-black"
+                                className="h-9 w-full cursor-pointer rounded-[3px] border border-transparent bg-[#0000ff] text-xs font-bold text-white transition-all hover:opacity-90 active:scale-95"
                               >
                                 Current Plan
                               </button>
@@ -181,7 +181,7 @@ export default function PlansPage() {
                                     }}
                                     disabled={isDisabled}
                                     aria-disabled={isDisabled}
-                                    className={`h-9 w-full rounded-[3px] text-xs font-bold ${isDisabled ? 'cursor-not-allowed bg-zinc-200 text-zinc-400' : 'bg-[#0000ff] text-white hover:opacity-90 active:scale-95'} transition-all`}
+                                    className={`h-9 w-full rounded-[3px] text-xs font-bold ${isDisabled ? 'cursor-not-allowed bg-zinc-200 text-zinc-400' : 'bg-black text-white hover:opacity-90 active:scale-95 dark:bg-white dark:text-black'} transition-all`}
                                   >
                                     Select Plan
                                   </button>
