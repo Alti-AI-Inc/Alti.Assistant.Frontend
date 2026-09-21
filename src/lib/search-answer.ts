@@ -139,8 +139,21 @@ export function extractDirectSearchAnswer(
   // Sort by highest score first
   scoredCandidates.sort((a, b) => b.score - a.score);
 
+  const formatAssistantPersona = (rawText: string): string => {
+    if (!rawText || rawText.trim().length === 0) {
+      return "Hey boss, couldn't find a direct record on that one. Try giving me a bit more detail.";
+    }
+
+    const trimmed = rawText.replace(/^[:\-\s]+/, '').trim();
+    if (/^hey boss/i.test(trimmed)) {
+      return trimmed;
+    }
+
+    return `Hey boss, I found the answer for you: ${trimmed}`;
+  };
+
   if (scoredCandidates.length > 0) {
-    return scoredCandidates[0].text;
+    return formatAssistantPersona(scoredCandidates[0].text);
   }
 
   // Fallback: pick first cleaned summary without hedging
@@ -148,10 +161,10 @@ export function extractDirectSearchAnswer(
     if (item.summary) {
       const cleaned = cleanSummaryText(item.summary);
       if (cleaned) {
-        return cleaned;
+        return formatAssistantPersona(cleaned);
       }
     }
   }
 
-  return results[0]?.summary || 'No direct answer found for this query.';
+  return formatAssistantPersona(results[0]?.summary || '');
 }
