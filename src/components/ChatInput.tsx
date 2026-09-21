@@ -973,9 +973,12 @@ export default function ChatInput({
             );
           } else {
             // Backend returned no Exa results — check if the turn itself carries a direct answer
-            const turnAnswer = (turn as any)?.answer || (turn as any)?.summary || (turn as any)?.response || (turn as any)?.content || '';
+            const turnAny = turn as any;
+            const turnAnswer = turnAny?.answer || turnAny?.summary || turnAny?.response || turnAny?.content || '';
             if (turnAnswer && typeof turnAnswer === 'string' && turnAnswer.trim().length > 0) {
               answer = turnAnswer.trim();
+            } else if (turnAny?.status === 'failed' && turnAny?.errorMessage) {
+              answer = `Search service error: ${turnAny.errorMessage}`;
             } else {
               answer = 'No results found.';
             }
@@ -1058,9 +1061,12 @@ export default function ChatInput({
               userTimeZone,
             );
           } else {
-            const turnAnswer = (turn as any)?.answer || (turn as any)?.summary || (turn as any)?.response || (turn as any)?.content || '';
+            const turnAny = turn as any;
+            const turnAnswer = turnAny?.answer || turnAny?.summary || turnAny?.response || turnAny?.content || '';
             if (turnAnswer && typeof turnAnswer === 'string' && turnAnswer.trim().length > 0) {
               answer = turnAnswer.trim();
+            } else if (turnAny?.status === 'failed' && turnAny?.errorMessage) {
+              answer = `Search service error: ${turnAny.errorMessage}`;
             } else {
               answer = 'No results found.';
             }
