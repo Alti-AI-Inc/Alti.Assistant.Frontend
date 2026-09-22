@@ -1342,6 +1342,10 @@ const FullConversation = ({
                   {((message.metadata as any)?.domain === 'cisa_kev' ||
                     (message.metadata as any)?.domain === 'nist_nvd_cve' ||
                     (message.metadata as any)?.cveId) && (
+                    <SecurityVulnerabilityWidget
+                      vulnerabilityData={message.metadata}
+                    />
+                  )}
 
                   {((message.metadata as any)?.domain === 'academic') && (
                     <AcademicWidget academicData={message.metadata} />
@@ -1354,11 +1358,6 @@ const FullConversation = ({
                   )}
                   {((message.metadata as any)?.domain === 'census_bps') && (
                     <CensusWidget censusData={message.metadata} />
-                  )}
-
-                    <SecurityVulnerabilityWidget
-                      vulnerabilityData={message.metadata}
-                    />
                   )}
 
                   {message.metadata?.brainstormData && (
