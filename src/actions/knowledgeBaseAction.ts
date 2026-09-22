@@ -303,15 +303,16 @@ export async function getKnowledgeBaseFiles(
   }
 }
 
-export async function getFileBlob(file: KnowledgeBaseFile | KnowledgeBankFile) {
+export async function getFileBlob(file: KnowledgeBaseFile | KnowledgeBankFile): Promise<Blob | undefined> {
   try {
+    if (!file?.gcsUrl) return undefined;
     const response = await apiClient(file.gcsUrl, { skipTenantHeader: true });
     const blob = await response.blob();
-
     return blob;
   } catch (error) {
     return undefined;
   }
+  return undefined;
 }
 export const deleteKnowledgeBaseFile = async (
   fileId: string,
