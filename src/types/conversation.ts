@@ -138,6 +138,7 @@ export type ConversationMessage = {
     exportResult?: { format: string; filePath: string; fileName: string; size?: number };
     uploadResult?: { publicUrl?: string; url?: string };
     collectedParams?: { content?: string; title?: string; documentType?: string };
+    status?: string;
     brainstormData?: BrainstormData;
     brainstormMetadata?: BrainstormMetadata;
     ideaAnalysis?: IdeaAnalysis;

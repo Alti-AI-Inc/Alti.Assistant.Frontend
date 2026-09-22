@@ -74,6 +74,7 @@ export interface ConversationSlice {
       chartData?: UniversalChartData;
       formData?: UniversalFormData;
       reportData?: GeneratedReport;
+      status?: string;
     },
   ) => void;
   streamActiveConversation: (
@@ -126,6 +127,7 @@ export const createConversationSlice: StateCreator<
           ...(extras.videoName && { video: { name: extras.videoName } }),
           ...(extras.reference && { reference: extras.reference }),
           ...(extras.document && { document: extras.document }),
+          ...(extras.status && { status: extras.status }),
           ...(extras.brainstormData && {
             brainstormData: extras.brainstormData,
             brainstormMetadata: extras.metadata,

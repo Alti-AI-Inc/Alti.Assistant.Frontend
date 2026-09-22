@@ -802,12 +802,20 @@ export default function ChatInput({
                   resolvedConversationId,
                 );
             } else if (chunk.type === 'metadata') {
+              const metaPayload: any = {};
+              if (chunk.reference || chunk.references) {
+                metaPayload.reference = deduplicateReferences(chunk.reference || chunk.references || []);
+              }
+              if (chunk.citations) {
+                metaPayload.citations = deduplicateReferences(chunk.citations || []);
+              }
+              if (chunk.status) {
+                metaPayload.status = chunk.status;
+              }
+
               useConversationsStore
                 .getState()
-                .streamActiveConversation('', resolvedConversationId, {
-                  reference: deduplicateReferences(chunk.reference || []),
-                  citations: deduplicateReferences(chunk.citations || []),
-                });
+                .streamActiveConversation('', resolvedConversationId, metaPayload);
             }
           },
         );
@@ -1945,7 +1953,9 @@ export default function ChatInput({
               <TooltipContent side="bottom">
                 <p>
                   {isLoadingResponse
-                    ? 'Aphura is thinking...'
+                    ? `Aphura is ${
+                        activeConversation?.messages?.filter(m => m.role === ROLES.ASSISTANT).pop()?.metadata?.status || 'thinking...'
+                      }`
                     : !message?.trim()
                       ? isListening
                         ? 'Stop listening'
