@@ -19,10 +19,10 @@ export default function FinancialWidget({ ticker, liveData }: FinancialWidgetPro
   
   const getTradingViewSymbol = (sym: string) => {
     const s = sym.toUpperCase();
-    if (['BTC', 'ETH', 'SOL', 'DOGE'].includes(s)) return \`COINBASE:\${s}USD\`;
+    if (['BTC', 'ETH', 'SOL', 'DOGE'].includes(s)) return `COINBASE:${s}USD`;
     const techStocks = ['AAPL', 'MSFT', 'NVDA', 'GOOGL', 'AMZN', 'META', 'TSLA', 'QQQ'];
-    if (techStocks.includes(s)) return \`NASDAQ:\${s}\`;
-    if (s === 'SPY') return \`NYSEARCA:\${s}\`;
+    if (techStocks.includes(s)) return `NASDAQ:${s}`;
+    if (s === 'SPY') return `NYSEARCA:${s}`;
     return s;
   };
 
@@ -33,16 +33,16 @@ export default function FinancialWidget({ ticker, liveData }: FinancialWidgetPro
       <TradingViewTickerTape />
       
       <div className="flex border-y border-[#2b2f3a] bg-[#171b26] px-4 py-3 gap-2 overflow-x-auto">
-        <button onClick={() => setActiveTab('chart')} className={\`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all \${activeTab === 'chart' ? 'bg-blue-500/20 text-blue-400' : 'text-zinc-400 hover:text-white hover:bg-white/5'}\`}>
+        <button onClick={() => setActiveTab('chart')} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${activeTab === 'chart' ? 'bg-blue-500/20 text-blue-400' : 'text-zinc-400 hover:text-white hover:bg-white/5'}`}>
           <BarChart2 className="w-4 h-4" /> Native Chart
         </button>
-        <button onClick={() => setActiveTab('technical')} className={\`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all \${activeTab === 'technical' ? 'bg-blue-500/20 text-blue-400' : 'text-zinc-400 hover:text-white hover:bg-white/5'}\`}>
+        <button onClick={() => setActiveTab('technical')} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${activeTab === 'technical' ? 'bg-blue-500/20 text-blue-400' : 'text-zinc-400 hover:text-white hover:bg-white/5'}`}>
           <Activity className="w-4 h-4" /> Technical Analysis
         </button>
-        <button onClick={() => setActiveTab('market')} className={\`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all \${activeTab === 'market' ? 'bg-blue-500/20 text-blue-400' : 'text-zinc-400 hover:text-white hover:bg-white/5'}\`}>
+        <button onClick={() => setActiveTab('market')} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${activeTab === 'market' ? 'bg-blue-500/20 text-blue-400' : 'text-zinc-400 hover:text-white hover:bg-white/5'}`}>
           <Monitor className="w-4 h-4" /> Market Overview
         </button>
-        <button onClick={() => setActiveTab('heatmap')} className={\`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all \${activeTab === 'heatmap' ? 'bg-blue-500/20 text-blue-400' : 'text-zinc-400 hover:text-white hover:bg-white/5'}\`}>
+        <button onClick={() => setActiveTab('heatmap')} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${activeTab === 'heatmap' ? 'bg-blue-500/20 text-blue-400' : 'text-zinc-400 hover:text-white hover:bg-white/5'}`}>
           <Map className="w-4 h-4" /> S&P 500 Heatmap
         </button>
       </div>
