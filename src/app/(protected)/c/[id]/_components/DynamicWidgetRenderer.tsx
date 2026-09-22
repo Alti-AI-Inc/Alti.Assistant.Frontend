@@ -8,7 +8,7 @@ import SecurityVulnerabilityWidget from './SecurityVulnerabilityWidget';
 import AcademicWidget from './AcademicWidget';
 import LegalWidget from './LegalWidget';
 import MedicalWidget from './MedicalWidget';
-import CensusWidget from './CensusWidget';
+import CensusWidget from './CensusWidget';\nimport SecWidget from './SecWidget';
 
 export default function DynamicWidgetRenderer({ metadata }: { metadata?: any }) {
   if (!metadata) return null;
@@ -21,7 +21,7 @@ export default function DynamicWidgetRenderer({ metadata }: { metadata?: any }) 
   const isAcademic = domain === 'academic';
   const isLegal = domain === 'legal';
   const isMedical = domain === 'medical';
-  const isCensus = domain === 'census_bps';
+  const isCensus = domain === 'census_bps';\n  const isSec = domain === 'sec_edgar';
 
   return (
     <div className="flex flex-col gap-4 mt-2 w-full animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -32,7 +32,7 @@ export default function DynamicWidgetRenderer({ metadata }: { metadata?: any }) 
       {isAcademic && <AcademicWidget academicData={metadata} />}
       {isLegal && <LegalWidget legalData={metadata} />}
       {isMedical && <MedicalWidget medicalData={metadata} />}
-      {isCensus && <CensusWidget censusData={metadata} />}
+      {isCensus && <CensusWidget censusData={metadata} />}\n      {isSec && <SecWidget secData={metadata} />}
     </div>
   );
 }
