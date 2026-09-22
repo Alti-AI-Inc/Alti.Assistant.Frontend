@@ -1,7 +1,7 @@
 'use client';
-
 import React from 'react';
 import { Activity, Pill, AlertTriangle, Info } from 'lucide-react';
+import WidgetContainer from './WidgetContainer';
 
 export interface MedicalDrug {
   openfda?: { brand_name?: string[]; generic_name?: string[]; manufacturer_name?: string[] };
@@ -10,25 +10,18 @@ export interface MedicalDrug {
   [key: string]: unknown;
 }
 
-interface MedicalWidgetProps {
-  medicalData?: { drugs?: MedicalDrug[] };
-}
-
-export default function MedicalWidget({ medicalData }: MedicalWidgetProps) {
+export default function MedicalWidget({ medicalData }: { medicalData?: { drugs?: MedicalDrug[] } }) {
   const drugs = medicalData?.drugs || [];
 
   return (
-    <div className="relative my-4 overflow-hidden rounded-2xl border border-[#2b2f3a] bg-[#11141c] text-[#d1d4dc] shadow-2xl transition-all duration-300 hover:border-primary/40">
-      <div className="flex items-center space-x-3 border-b border-[#2b2f3a] bg-[#171b26] px-6 py-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/10 text-rose-400">
-          <Activity className="h-5 w-5" />
-        </div>
-        <div>
-          <h3 className="text-sm font-bold tracking-wide text-white">Medical & Drug Data</h3>
-          <p className="text-xs text-zinc-400">OpenFDA API</p>
-        </div>
-      </div>
-      <div className="p-6 space-y-4">
+    <WidgetContainer 
+      icon={Activity} 
+      iconColorClass="text-rose-400" 
+      iconBgClass="bg-rose-500/10" 
+      title="Medical & Drug Data" 
+      subtitle="OpenFDA API"
+    >
+      <div className="space-y-4">
         {drugs.length === 0 ? <p className="text-sm text-zinc-400">No drug data found.</p> : drugs.map((drug, idx) => (
           <div key={idx} className="rounded-xl border border-white/5 bg-white/[0.02] p-4 transition-all hover:bg-white/[0.04]">
             <div className="flex items-start justify-between mb-3">
@@ -42,7 +35,6 @@ export default function MedicalWidget({ medicalData }: MedicalWidgetProps) {
                 </p>
               </div>
             </div>
-            
             <div className="space-y-3">
               {drug.purpose && drug.purpose.length > 0 && (
                 <div className="rounded-lg bg-zinc-500/5 p-3">
@@ -64,6 +56,6 @@ export default function MedicalWidget({ medicalData }: MedicalWidgetProps) {
           </div>
         ))}
       </div>
-    </div>
+    </WidgetContainer>
   );
 }

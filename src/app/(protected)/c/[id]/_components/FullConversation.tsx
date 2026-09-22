@@ -1318,9 +1318,11 @@ const FullConversation = ({
                         (message.metadata as any).webSearchQueries
                       }
                       searchEntryPoint={
-                  <DynamicWidgetRenderer metadata={message.metadata} />
+                        (message.metadata as any).searchEntryPoint
+                      }
                     />
                   )}
+                  <DynamicWidgetRenderer metadata={message.metadata} />
                   {message.metadata?.planData && (
                     <PlanDataComponent
                       plan={message.metadata.planData}
