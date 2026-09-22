@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { createChart, ColorType, CrosshairMode } from 'lightweight-charts';
+import { createChart, ColorType, CrosshairMode, CandlestickSeries, AreaSeries, HistogramSeries, LineSeries } from 'lightweight-charts';
 import { TrendingUp, BarChart2, Activity } from 'lucide-react';
 
 interface TradingViewNativeWidgetProps {
@@ -41,7 +41,7 @@ export default function TradingViewNativeWidget({ data, type, ticker }: TradingV
 
     switch (type) {
       case 'candlestick':
-        series = chart.addCandlestickSeries({
+        series = chart.addSeries(CandlestickSeries, {
           upColor: '#22c55e',
           downColor: '#ef4444',
           borderVisible: false,
@@ -50,20 +50,20 @@ export default function TradingViewNativeWidget({ data, type, ticker }: TradingV
         });
         break;
       case 'area':
-        series = chart.addAreaSeries({
+        series = chart.addSeries(AreaSeries, {
           lineColor: '#3b82f6',
           topColor: 'rgba(59, 130, 246, 0.4)',
           bottomColor: 'rgba(59, 130, 246, 0.0)',
         });
         break;
       case 'histogram':
-        series = chart.addHistogramSeries({
+        series = chart.addSeries(HistogramSeries, {
           color: '#8b5cf6',
         });
         break;
       case 'line':
       default:
-        series = chart.addLineSeries({
+        series = chart.addSeries(LineSeries, {
           color: '#3b82f6',
         });
         break;
