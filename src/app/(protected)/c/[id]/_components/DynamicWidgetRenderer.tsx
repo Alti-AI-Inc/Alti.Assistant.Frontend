@@ -11,6 +11,11 @@ import MedicalWidget from './MedicalWidget';
 import CensusWidget from './CensusWidget';
 import SecWidget from './SecWidget';
 import ImageWidget from './ImageWidget';
+// ─── NEW TOGETHER AI-POWERED WIDGETS ────────────────────────────────
+import VideoGenerationWidget from './VideoGenerationWidget';
+import AudioWidget from './AudioWidget';
+import CodeResultWidget from './CodeResultWidget';
+import VisionWidget from './VisionWidget';
 
 export default function DynamicWidgetRenderer({ metadata }: { metadata?: any }) {
   if (!metadata) return null;
@@ -26,6 +31,11 @@ export default function DynamicWidgetRenderer({ metadata }: { metadata?: any }) 
   const isCensus = domain === 'census_bps';
   const isSec = domain === 'sec_edgar';
   const isImage = domain === 'image_generation';
+  // ─── NEW DOMAIN DETECTIONS ──────────────────────────────────────────
+  const isVideo = domain === 'video_generation';
+  const isAudio = domain === 'audio_generation';
+  const isCode = domain === 'code_result';
+  const isVision = domain === 'vision_analysis';
 
   return (
     <div className="flex flex-col gap-4 mt-2 w-full animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -39,6 +49,11 @@ export default function DynamicWidgetRenderer({ metadata }: { metadata?: any }) 
       {isCensus && <CensusWidget censusData={metadata} />}
       {isSec && <SecWidget secData={metadata} />}
       {isImage && <ImageWidget imageData={metadata} />}
+      {/* ─── NEW TOGETHER AI WIDGETS ───────────────────────────────────── */}
+      {isVideo && <VideoGenerationWidget videoData={metadata} />}
+      {isAudio && <AudioWidget audioData={metadata} />}
+      {isCode && <CodeResultWidget codeData={metadata} />}
+      {isVision && <VisionWidget visionData={metadata} />}
     </div>
   );
 }
