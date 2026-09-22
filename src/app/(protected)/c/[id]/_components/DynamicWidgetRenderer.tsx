@@ -10,6 +10,7 @@ import LegalWidget from './LegalWidget';
 import MedicalWidget from './MedicalWidget';
 import CensusWidget from './CensusWidget';
 import SecWidget from './SecWidget';
+import ImageWidget from './ImageWidget';
 
 export default function DynamicWidgetRenderer({ metadata }: { metadata?: any }) {
   if (!metadata) return null;
@@ -24,6 +25,7 @@ export default function DynamicWidgetRenderer({ metadata }: { metadata?: any }) 
   const isMedical = domain === 'medical';
   const isCensus = domain === 'census_bps';
   const isSec = domain === 'sec_edgar';
+  const isImage = domain === 'image_generation';
 
   return (
     <div className="flex flex-col gap-4 mt-2 w-full animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -36,6 +38,7 @@ export default function DynamicWidgetRenderer({ metadata }: { metadata?: any }) 
       {isMedical && <MedicalWidget medicalData={metadata} />}
       {isCensus && <CensusWidget censusData={metadata} />}
       {isSec && <SecWidget secData={metadata} />}
+      {isImage && <ImageWidget imageData={metadata} />}
     </div>
   );
 }
