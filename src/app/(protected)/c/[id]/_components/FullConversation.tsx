@@ -34,6 +34,10 @@ import AudioComponent from './AudioComponent';
 import FileDownloadCard from './FileDownloadCard';
 import FinancialWidget from './FinancialWidget';
 import RealEstateWidget from './RealEstateWidget';
+import AcademicWidget from './AcademicWidget';
+import LegalWidget from './LegalWidget';
+import MedicalWidget from './MedicalWidget';
+import CensusWidget from './CensusWidget';
 import SecurityVulnerabilityWidget from './SecurityVulnerabilityWidget';
 import SportsWidget from './SportsWidget';
 import VideoComponent from './VideoComponent';
@@ -1338,6 +1342,20 @@ const FullConversation = ({
                   {((message.metadata as any)?.domain === 'cisa_kev' ||
                     (message.metadata as any)?.domain === 'nist_nvd_cve' ||
                     (message.metadata as any)?.cveId) && (
+
+                  {((message.metadata as any)?.domain === 'academic') && (
+                    <AcademicWidget academicData={message.metadata} />
+                  )}
+                  {((message.metadata as any)?.domain === 'legal') && (
+                    <LegalWidget legalData={message.metadata} />
+                  )}
+                  {((message.metadata as any)?.domain === 'medical') && (
+                    <MedicalWidget medicalData={message.metadata} />
+                  )}
+                  {((message.metadata as any)?.domain === 'census_bps') && (
+                    <CensusWidget censusData={message.metadata} />
+                  )}
+
                     <SecurityVulnerabilityWidget
                       vulnerabilityData={message.metadata}
                     />
