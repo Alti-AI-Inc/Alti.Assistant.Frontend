@@ -803,8 +803,8 @@ export default function ChatInput({
                 );
             } else if (chunk.type === 'metadata') {
               const metaPayload: any = {};
-              if (chunk.reference || chunk.references) {
-                metaPayload.reference = deduplicateReferences(chunk.reference || chunk.references || []);
+              if (chunk.reference || (chunk as any).references) {
+                metaPayload.reference = deduplicateReferences(chunk.reference || (chunk as any).references || []);
               }
               if (chunk.citations) {
                 metaPayload.citations = deduplicateReferences(chunk.citations || []);
