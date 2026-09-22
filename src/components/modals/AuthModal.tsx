@@ -311,7 +311,7 @@ export function AuthModal() {
             <DialogDescription className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
               {view === 'login'
                 ? 'Enter your email to receive a secure login code.'
-                : 'Create an account to run your search. 100 prompts included on us.'}
+                : 'Create an account to run your search. 250 prompts included on us.'}
             </DialogDescription>
           </div>
         ) : (
