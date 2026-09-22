@@ -20,8 +20,8 @@ import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { Streamdown } from 'streamdown';
-import ReferencesList from './ReferenceList';$(printf '
-')import DynamicWidgetRenderer from './DynamicWidgetRenderer';
+import ReferencesList from './ReferenceList';
+import DynamicWidgetRenderer from './DynamicWidgetRenderer';
 import SpaceSearchPanel from './SpaceSearchPanel';
 import { ConversationMessage, ROLES } from '@/types/conversation';
 
