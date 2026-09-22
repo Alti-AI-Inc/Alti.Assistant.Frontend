@@ -471,7 +471,7 @@ export function AuthModal() {
                   }}
                   className="font-semibold text-black dark:text-white hover:underline ml-1 cursor-pointer"
                 >
-                  Create Free Account (100 Prompts)
+                  Register
                 </button>
               </p>
             )}
