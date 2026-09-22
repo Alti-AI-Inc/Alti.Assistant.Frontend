@@ -20,7 +20,8 @@ import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { Streamdown } from 'streamdown';
-import ReferencesList from './ReferenceList';
+import ReferencesList from './ReferenceList';$(printf '
+')import DynamicWidgetRenderer from './DynamicWidgetRenderer';
 import SpaceSearchPanel from './SpaceSearchPanel';
 import { ConversationMessage, ROLES } from '@/types/conversation';
 
@@ -1317,53 +1318,7 @@ const FullConversation = ({
                         (message.metadata as any).webSearchQueries
                       }
                       searchEntryPoint={
-                        (message.metadata as any).searchEntryPoint
-                      }
-                    />
-                  )}
-                  {message.metadata?.financialTicker && (
-                    <FinancialWidget
-                      ticker={message.metadata.financialTicker}
-                      liveData={message.metadata}
-                    />
-                  )}
-
-                  {((message.metadata as any)?.domain === 'sports_odds' ||
-                    (message.metadata as any)?.homeTeam) && (
-                    <SportsWidget sportsData={message.metadata} />
-                  )}
-
-                  {((message.metadata as any)?.domain === 'real_estate' ||
-                    (message.metadata as any)?.domain === 'census_bps' ||
-                    (message.metadata as any)?.address) && (
-                    <RealEstateWidget realEstateData={message.metadata} />
-                  )}
-
-                  {((message.metadata as any)?.domain === 'cisa_kev' ||
-                    (message.metadata as any)?.domain === 'nist_nvd_cve' ||
-                    (message.metadata as any)?.cveId) && (
-                    <SecurityVulnerabilityWidget
-                      vulnerabilityData={message.metadata}
-                    />
-                  )}
-
-                  {((message.metadata as any)?.domain === 'academic') && (
-                    <AcademicWidget academicData={message.metadata} />
-                  )}
-                  {((message.metadata as any)?.domain === 'legal') && (
-                    <LegalWidget legalData={message.metadata} />
-                  )}
-                  {((message.metadata as any)?.domain === 'medical') && (
-                    <MedicalWidget medicalData={message.metadata} />
-                  )}
-                  {((message.metadata as any)?.domain === 'census_bps') && (
-                    <CensusWidget censusData={message.metadata} />
-                  )}
-
-                  {message.metadata?.brainstormData && (
-                    <BrainstormData
-                      data={message.metadata.brainstormData}
-                      analysis={message.metadata.ideaAnalysis}
+                  <DynamicWidgetRenderer metadata={message.metadata} />
                     />
                   )}
                   {message.metadata?.planData && (
