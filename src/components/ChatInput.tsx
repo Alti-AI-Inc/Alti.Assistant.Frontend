@@ -803,14 +803,15 @@ export default function ChatInput({
                 );
             } else if (chunk.type === 'metadata') {
               const metaPayload: any = {};
-              if (chunk.reference || (chunk as any).references) {
-                metaPayload.reference = deduplicateReferences(chunk.reference || (chunk as any).references || []);
+              const metadataChunk = chunk as any;
+              if (metadataChunk.reference || metadataChunk.references) {
+                metaPayload.reference = deduplicateReferences(metadataChunk.reference || metadataChunk.references || []);
               }
-              if (chunk.citations) {
-                metaPayload.citations = deduplicateReferences(chunk.citations || []);
+              if (metadataChunk.citations) {
+                metaPayload.citations = deduplicateReferences(metadataChunk.citations || []);
               }
-              if (chunk.status) {
-                metaPayload.status = chunk.status;
+              if (metadataChunk.status) {
+                metaPayload.status = metadataChunk.status;
               }
 
               useConversationsStore
