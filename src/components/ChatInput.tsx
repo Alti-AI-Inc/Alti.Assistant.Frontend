@@ -682,7 +682,7 @@ export default function ChatInput({
       case OPTIONS.VIDEO:
         return '/video/execute';
       case OPTIONS.RESEARCH:
-        return '/deep-research/execute';
+        return '/deep-research/orchestrate';
       case OPTIONS.SEARCH:
         return '/search/stream';
       // case OPTIONS.GENERATE_PLAN:
