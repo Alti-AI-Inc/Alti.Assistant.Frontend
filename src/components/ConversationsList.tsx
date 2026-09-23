@@ -336,39 +336,7 @@ export default function ConversationsList({
   return (
     <div className="space-y-1.5">
 
-      {(() => {
-        // ─── Date Grouping Logic (ChatGPT-style) ──────────────────
-        const now = new Date();
-        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const yesterdayStart = new Date(todayStart.getTime() - 86400000);
-        const prev7Start = new Date(todayStart.getTime() - 7 * 86400000);
-        const prev30Start = new Date(todayStart.getTime() - 30 * 86400000);
-
-        const groups: { label: string; items: typeof filteredConversations }[] = [
-          { label: 'Today', items: [] },
-          { label: 'Yesterday', items: [] },
-          { label: 'Previous 7 Days', items: [] },
-          { label: 'Previous 30 Days', items: [] },
-          { label: 'Older', items: [] },
-        ];
-
-        for (const chat of filteredConversations) {
-          const d = new Date(chat.updatedAt || chat.createdAt || 0);
-          if (d >= todayStart) groups[0].items.push(chat);
-          else if (d >= yesterdayStart) groups[1].items.push(chat);
-          else if (d >= prev7Start) groups[2].items.push(chat);
-          else if (d >= prev30Start) groups[3].items.push(chat);
-          else groups[4].items.push(chat);
-        }
-
-        return groups
-          .filter(g => g.items.length > 0)
-          .map(group => (
-            <div key={group.label}>
-              <div className="sticky top-0 z-10 px-2 pt-4 pb-1.5 text-[10px] font-semibold uppercase tracking-widest text-zinc-500 bg-[#121215]">
-                {group.label}
-              </div>
-              {group.items.map(chat => {
+      {filteredConversations.map(chat => {
         const chatId = (chat.conversationId || chat._id)!;
         const isActive =
           activeConversation &&
@@ -437,10 +405,7 @@ export default function ConversationsList({
             </DropdownMenu>
           </div>
         );
-              })}
-            </div>
-          ));
-      })()}
+      })}
 
       {hasNextPage && (
         <div
