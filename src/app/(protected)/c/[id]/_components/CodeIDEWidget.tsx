@@ -12,8 +12,11 @@ interface CodeIDEWidgetProps {
 }
 
 export default function CodeIDEWidget({ code, language, guideText }: CodeIDEWidgetProps) {
-  const [activeTab, setActiveTab] = useState<'editor' | 'guide'>('editor');
+  const [activeTab, setActiveTab] = useState<'editor' | 'guide' | 'preview'>('editor');
   const [copied, setCopied] = useState(false);
+
+  // Can we preview this language in an iframe?
+  const canPreview = ['html', 'css', 'javascript', 'js', 'svg'].includes(language.toLowerCase());
 
   // Auto-detect extension based on language
   const getFileExtension = (lang: string) => {
@@ -74,7 +77,7 @@ export default function CodeIDEWidget({ code, language, guideText }: CodeIDEWidg
   const lines = code.trim().split('\n');
 
   return (
-    <div className="flex flex-col h-[75vh] min-h-[500px] w-full rounded-2xl border border-black/10 dark:border-zinc-800 bg-[#121214] text-zinc-300 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-right-8 duration-300 select-none">
+    <div className="flex flex-col h-[60vh] sm:h-[75vh] min-h-[350px] sm:min-h-[500px] w-full rounded-2xl border border-black/10 dark:border-zinc-800 bg-[#121214] text-zinc-300 shadow-2xl overflow-hidden animate-in fade-in slide-in-from-right-8 duration-300 select-none">
       {/* IDE Top Bar */}
       <div className="flex items-center justify-between px-4 h-12 bg-[#1A1A1E] border-b border-zinc-800 shrink-0">
         {/* Window controls and active file */}
@@ -115,6 +118,21 @@ export default function CodeIDEWidget({ code, language, guideText }: CodeIDEWidg
               >
                 <BookOpen className="size-3.5 text-emerald-400" />
                 <span>Run Guide</span>
+              </button>
+            )}
+
+            {canPreview && (
+              <button
+                onClick={() => setActiveTab('preview')}
+                className={cn(
+                  'flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all duration-200 focus:outline-none',
+                  activeTab === 'preview'
+                    ? 'bg-zinc-800/80 text-white shadow-xs border border-zinc-700/50'
+                    : 'text-zinc-500 hover:text-zinc-300'
+                )}
+              >
+                <Play className="size-3.5 text-green-400" />
+                <span>Preview</span>
               </button>
             )}
           </div>
@@ -182,6 +200,24 @@ export default function CodeIDEWidget({ code, language, guideText }: CodeIDEWidg
             <div className="prose prose-invert max-w-none prose-sm select-text whitespace-pre-wrap">
               {guideText}
             </div>
+          </div>
+        )}
+
+        {/* ─── Live Preview Pane ──────────────────────────────── */}
+        {activeTab === 'preview' && canPreview && (
+          <div className="w-full h-full bg-white rounded-b-2xl overflow-hidden">
+            <iframe
+              srcDoc={
+                language.toLowerCase() === 'html'
+                  ? code
+                  : language.toLowerCase() === 'css'
+                    ? `<html><head><style>${code}</style></head><body><div class="demo">CSS Preview</div></body></html>`
+                    : `<html><head><style>body{font-family:system-ui;padding:16px;background:#fff;color:#111}</style></head><body><pre id="output"></pre><script>try{const _log=console.log;const _out=[];console.log=(...a)=>_out.push(a.map(String).join(' '));${code};document.getElementById('output').textContent=_out.join('\\n')||'(no output)'}catch(e){document.getElementById('output').textContent='Error: '+e.message}<\/script></body></html>`
+              }
+              sandbox="allow-scripts"
+              className="w-full h-full border-0"
+              title="Code Preview"
+            />
           </div>
         )}
       </div>

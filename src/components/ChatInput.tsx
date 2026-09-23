@@ -716,7 +716,47 @@ export default function ChatInput({
           );
         }
 
-        return await PostConversationWithFile(formData, data.accessToken);
+        // Stream file upload response
+        const fileController = new AbortController();
+        abortControllerRef.current = fileController;
+
+        let fileConversationId = convId || '';
+        useConversationsStore
+          .getState()
+          .streamActiveConversation('', fileConversationId || undefined);
+
+        const fileResult = await PostConversationWithFile(
+          formData,
+          data.accessToken,
+          chunk => {
+            if (chunk.type === 'connected' && chunk.conversationId) {
+              fileConversationId = chunk.conversationId;
+            } else if (chunk.type === 'text' && chunk.content) {
+              setLoadingResponse(false);
+              useConversationsStore
+                .getState()
+                .streamActiveConversation(chunk.content, fileConversationId);
+            } else if (chunk.type === 'metadata') {
+              const metadataChunk = chunk as any;
+              const metaPayload: any = {};
+              if (metadataChunk.reference || metadataChunk.references) {
+                metaPayload.reference = deduplicateReferences(metadataChunk.reference || metadataChunk.references || []);
+              }
+              if (metadataChunk.citations) {
+                metaPayload.citations = deduplicateReferences(metadataChunk.citations || []);
+              }
+              if (metadataChunk.status) {
+                metaPayload.status = metadataChunk.status;
+              }
+              useConversationsStore
+                .getState()
+                .streamActiveConversation('', fileConversationId, metaPayload);
+            }
+          },
+          fileController.signal,
+        );
+        abortControllerRef.current = null;
+        return fileResult;
       }
 
       const userTimeZone =

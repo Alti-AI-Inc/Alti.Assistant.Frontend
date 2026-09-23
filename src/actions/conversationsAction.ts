@@ -34,7 +34,16 @@ export async function PostConversation(
         timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
         localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
         localTime: new Date().toLocaleTimeString('en-US'),
-        systemInstruction: HARD_LAW_SYSTEM_INSTRUCTION,
+        systemInstruction: (() => {
+          let instruction = HARD_LAW_SYSTEM_INSTRUCTION;
+          if (typeof window !== 'undefined') {
+            const aboutUser = localStorage.getItem('aphura_about_user');
+            const customInstructions = localStorage.getItem('aphura_custom_instructions');
+            if (aboutUser) instruction += `\n\n[User Profile] ${aboutUser}`;
+            if (customInstructions) instruction += `\n\n[User Preferences] ${customInstructions}`;
+          }
+          return instruction;
+        })(),
         ...extraParams,
       }),
     });
@@ -99,7 +108,16 @@ export async function PostConversationStream(
         timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
         localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
         localTime: new Date().toLocaleTimeString('en-US'),
-        systemInstruction: HARD_LAW_SYSTEM_INSTRUCTION,
+        systemInstruction: (() => {
+          let instruction = HARD_LAW_SYSTEM_INSTRUCTION;
+          if (typeof window !== 'undefined') {
+            const aboutUser = localStorage.getItem('aphura_about_user');
+            const customInstructions = localStorage.getItem('aphura_custom_instructions');
+            if (aboutUser) instruction += `\n\n[User Profile] ${aboutUser}`;
+            if (customInstructions) instruction += `\n\n[User Preferences] ${customInstructions}`;
+          }
+          return instruction;
+        })(),
         ...extraParams,
       }),
     });
@@ -175,6 +193,8 @@ export async function PostConversationStream(
 export async function PostConversationWithFile(
   formData: FormData,
   accessToken: string,
+  onChunk?: (chunk: { type: string; content?: string; reference?: Reference[]; citations?: Reference[]; conversationId?: string }) => void,
+  signal?: AbortSignal,
 ): Promise<ApiResponse> {
   try {
     const timezone = typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York';
@@ -184,6 +204,7 @@ export async function PostConversationWithFile(
     formData.append('timezone', timezone);
     formData.append('localDate', localDate);
     formData.append('localTime', localTime);
+    formData.append('stream', 'true');
 
     const response = await apiClient(
       `${process.env.NEXT_PUBLIC_API_URL}/search/assistant_v2`,
@@ -194,6 +215,7 @@ export async function PostConversationWithFile(
           // Content-Type is set automatically for FormData
         },
         body: formData,
+        signal,
       },
     );
 
@@ -209,6 +231,39 @@ export async function PostConversationWithFile(
       };
     }
 
+    // Check if response is SSE streaming
+    const contentType = response.headers.get('content-type') || '';
+    if (contentType.includes('text/event-stream') || contentType.includes('application/octet-stream')) {
+      const reader = response.body?.getReader();
+      if (!reader) {
+        return { success: false, message: 'Response body is not readable.' };
+      }
+
+      const decoder = new TextDecoder('utf-8');
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed || !trimmed.startsWith('data: ')) continue;
+          try {
+            const parsed = JSON.parse(trimmed.slice(6));
+            if (onChunk) onChunk(parsed);
+          } catch {}
+        }
+      }
+
+      return { success: true, message: 'Success' };
+    }
+
+    // Fallback: non-streaming JSON response
     const data = await response.json();
     return { success: true, message: 'Success', data: data.data || data };
   } catch (error: unknown) {

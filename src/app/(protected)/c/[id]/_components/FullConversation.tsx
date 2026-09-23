@@ -5,7 +5,6 @@ import { ConfigForm } from '@/components/documents/ConfigForm';
 import { ModeSelector } from '@/components/documents/ModeSelector';
 import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
-import TelemetryConsole from '@/components/research/TelemetryConsole';
 import { useActiveConversation } from '@/hooks/useConversations';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -201,331 +200,25 @@ const FullConversation = ({
     }
   };
 
-  // Real-time Scanning & Streaming Thought State
-  interface ScannedSource {
-    name: string;
-    domain: string;
-    status: 'idle' | 'scanning' | 'completed';
-  }
-
-  const [scanningStatus, setScanningStatus] = useState('Thinking...');
-  const [scannedSources, setScannedSources] = useState<ScannedSource[]>([]);
-  const [logs, setLogs] = useState<string[]>([]);
-  const consoleEndRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (logs.length > 0) {
-      consoleEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [logs]);
+  // ─── Real-time Tool Status (driven by SSE metadata.status) ──────
+  const [toolStatusHistory, setToolStatusHistory] = useState<string[]>([]);
 
   useEffect(() => {
     if (!isLoadingResponse) {
-      setScanningStatus('Thinking...');
-      setScannedSources([]);
-      setLogs([]);
+      setToolStatusHistory([]);
       return;
     }
-
-    // 1. Get the last user query
-    const lastUserMessage =
-      activeConversation?.messages?.filter((m: ConversationMessage) => m.role === ROLES.USER)?.pop()
-        ?.content || '';
-
-    // 2. Parse keywords to determine target databases
-    const query = lastUserMessage.toLowerCase();
-    const sources: ScannedSource[] = [];
-
-    if (/inflation|cpi|unemployment|bls|wages|labor/i.test(query)) {
-      sources.push({
-        name: 'Bureau of Labor Statistics',
-        domain: 'bls.gov',
-        status: 'idle',
+    // Track tool status updates from the agent's SSE stream
+    const lastMsg = activeConversation?.messages
+      ?.filter((m: ConversationMessage) => m.role === ROLES.ASSISTANT)
+      ?.pop();
+    const status = lastMsg?.metadata?.status;
+    if (status && typeof status === 'string' && status !== 'thinking...') {
+      setToolStatusHistory(prev => {
+        if (prev[prev.length - 1] === status) return prev;
+        return [...prev.slice(-4), status]; // keep last 5
       });
     }
-    if (/gdp|spending|bea|savings/i.test(query)) {
-      sources.push({
-        name: 'Bureau of Economic Analysis',
-        domain: 'bea.gov',
-        status: 'idle',
-      });
-    }
-    if (/mortgage|rate|rates|fred|interest|conforming/i.test(query)) {
-      sources.push({
-        name: 'Freddie Mac Mortgage',
-        domain: 'fred.stlouisfed.org',
-        status: 'idle',
-      });
-    }
-    if (/treasury|yield|yields|debt|bond|bonds/i.test(query)) {
-      sources.push({
-        name: 'U.S. Treasury Curves',
-        domain: 'fiscaldata.treasury.gov',
-        status: 'idle',
-      });
-    }
-    if (/conforming|fhfa|hpi|home price/i.test(query)) {
-      sources.push({
-        name: 'FHFA Home Prices',
-        domain: 'fhfa.gov',
-        status: 'idle',
-      });
-    }
-    if (/sec|10-k|10-q|filing|edgar/i.test(query)) {
-      sources.push({
-        name: 'SEC EDGAR Corporate Filings',
-        domain: 'sec.gov',
-        status: 'idle',
-      });
-    }
-    if (/cisa|kev|cve|vulnerability|threat|exploit/i.test(query)) {
-      sources.push({
-        name: 'CISA Exploited Threats',
-        domain: 'cisa.gov/kev',
-        status: 'idle',
-      });
-    }
-    if (/court|docket|law|caselaw|scotus|judicial/i.test(query)) {
-      sources.push({
-        name: 'RECAP Judicial Index',
-        domain: 'courtlistener.com',
-        status: 'idle',
-      });
-    }
-    if (/fara|lobbying|secrets|pac|campaign/i.test(query)) {
-      sources.push({
-        name: 'FARA & OpenSecrets',
-        domain: 'opensecrets.org',
-        status: 'idle',
-      });
-    }
-    if (/patent|uspto/i.test(query)) {
-      sources.push({
-        name: 'USPTO PatentsView',
-        domain: 'patentsview.org',
-        status: 'idle',
-      });
-    }
-    if (/clinical|fda|drug|trials/i.test(query)) {
-      sources.push({
-        name: 'ClinicalTrials & openFDA',
-        domain: 'clinicaltrials.gov',
-        status: 'idle',
-      });
-    }
-    if (
-      /opencorporates|corporate\s+registry|company\s+lookup|business\s+registry/i.test(
-        query,
-      )
-    ) {
-      sources.push({
-        name: 'OpenCorporates Registry',
-        domain: 'opencorporates.com',
-        status: 'idle',
-      });
-    }
-    if (
-      /nhtsa|vehicle\s+recall|vin|crash\s+rating|car\s+recall|defect/i.test(
-        query,
-      )
-    ) {
-      sources.push({
-        name: 'NHTSA Vehicle Safety',
-        domain: 'vpic.nhtsa.dot.gov',
-        status: 'idle',
-      });
-    }
-    if (
-      /fbi\s+crime|crime\s+stats|arrest\s+rates|regional\s+safety|crime\s+explorer/i.test(
-        query,
-      )
-    ) {
-      sources.push({
-        name: 'FBI Crime Data Explorer',
-        domain: 'cde.ucr.cgis.fbi.gov',
-        status: 'idle',
-      });
-    }
-    if (
-      /cpsc|product\s+recall|toy\s+recall|appliance\s+warning|hazard\s+recall/i.test(
-        query,
-      )
-    ) {
-      sources.push({
-        name: 'CPSC Product Safety',
-        domain: 'cpsc.gov/recalls',
-        status: 'idle',
-      });
-    }
-    if (
-      /nsf\s+award|nsf\s+grant|science\s+funding|research\s+grant|technology\s+award/i.test(
-        query,
-      )
-    ) {
-      sources.push({
-        name: 'NSF Award Index',
-        domain: 'nsf.gov/awards',
-        status: 'idle',
-      });
-    }
-    if (
-      /eu\s+tender|european\s+tender|eu\s+procurement|ted\s+procurement/i.test(
-        query,
-      )
-    ) {
-      sources.push({
-        name: 'EU TED Procurement',
-        domain: 'ted.europa.eu',
-        status: 'idle',
-      });
-    }
-    if (
-      /usda\s+fas|crop\s+production|agricultural\s+export|agricultural\s+trade|usda\s+export|agricultural\s+supply/i.test(
-        query,
-      )
-    ) {
-      sources.push({
-        name: 'USDA FAS Global Trade',
-        domain: 'apps.fas.usda.gov',
-        status: 'idle',
-      });
-    }
-    if (
-      /ntsb|carol|aviation\s+accident|flight\s+crash|aviation\s+safety|ntsb\s+report/i.test(
-        query,
-      )
-    ) {
-      sources.push({
-        name: 'NTSB CAROL Registry',
-        domain: 'carol.ntsb.gov',
-        status: 'idle',
-      });
-    }
-    if (
-      /cfpb\s+enforcement|cfpb\s+suit|cfpb\s+penalty|consent\s+order|predatory\s+lending|financial\s+settlement/i.test(
-        query,
-      )
-    ) {
-      sources.push({
-        name: 'CFPB Enforcement Actions',
-        domain: 'consumerfinance.gov/enforcement',
-        status: 'idle',
-      });
-    }
-    if (
-      /epa\s+iris|iris|toxicology|carcinogen|chemical\s+hazard|epa\s+hazard/i.test(
-        query,
-      )
-    ) {
-      sources.push({
-        name: 'EPA IRIS Toxicity DB',
-        domain: 'epa.gov/iris',
-        status: 'idle',
-      });
-    }
-
-    if (sources.length === 0) {
-      sources.push({
-        name: 'Global Grounding Registry',
-        domain: 'grounding.live',
-        status: 'idle',
-      });
-      sources.push({
-        name: 'Public registries',
-        domain: 'comtrade.un.org',
-        status: 'idle',
-      });
-    }
-
-    setScannedSources(sources);
-
-    // 3. Generate steps & logs
-    const allLogs: string[] = [];
-    allLogs.push('[system] Initiating deep semantic grounding audit...');
-    allLogs.push('[network] Resolving secure public endpoint routes...');
-
-    sources.forEach(src => {
-      allLogs.push(`[dns] Resolving host for ${src.domain}...`);
-      allLogs.push(
-        `[fetch] GET secure connection to https://${src.domain}/api/v1/query...`,
-      );
-      allLogs.push(`[status] 200 OK - connection established with ${src.name}`);
-      allLogs.push(
-        `[parse] Extracting factual key-value vectors from ${src.domain}...`,
-      );
-    });
-    allLogs.push(
-      '[consensus] Performing cross-channel semantic consensus checks...',
-    );
-    allLogs.push(
-      '[grounding] Anchoring verified data vectors to prevent hallucination...',
-    );
-    allLogs.push(
-      '[synthesis] Stream compiled. Dispatching live response synthesis...',
-    );
-
-    setLogs([allLogs[0]]);
-    setScanningStatus(
-      sources[0] ? `searching ${sources[0].name}...` : 'Thinking...',
-    );
-
-    let currentLogIndex = 1;
-    const interval = setInterval(() => {
-      if (currentLogIndex >= allLogs.length) {
-        clearInterval(interval);
-        return;
-      }
-
-      const newLog = allLogs[currentLogIndex];
-      setLogs(prev => [...prev, newLog]);
-
-      // Keep legacy scanningStatus updated for compatibility
-      if (newLog.includes('established with')) {
-        setScanningStatus(
-          `retrieved data from ${newLog.split('established with ')[1]}...`,
-        );
-      } else if (newLog.includes('Performing')) {
-        setScanningStatus('cross-checking sources...');
-      } else if (newLog.includes('Anchoring')) {
-        setScanningStatus('grounding verified facts...');
-      } else if (newLog.includes('Dispatching')) {
-        setScanningStatus('synthesizing response...');
-      } else if (newLog.includes('Resolving host for')) {
-        setScanningStatus(
-          `scanning ${newLog.split('Resolving host for ')[1]}...`,
-        );
-      }
-
-      // Update sources status based on current log
-      setScannedSources(prevSources => {
-        return prevSources.map((src, idx) => {
-          const isSrcLog =
-            newLog.includes(src.domain) || newLog.includes(src.name);
-          if (isSrcLog) {
-            if (newLog.includes('[dns]') || newLog.includes('[fetch]')) {
-              return { ...src, status: 'scanning' };
-            } else if (
-              newLog.includes('[status]') ||
-              newLog.includes('[parse]')
-            ) {
-              return { ...src, status: 'completed' };
-            }
-          }
-          // Complete any source whose log sequence has finished
-          const srcLogsEndIndex = 2 + (idx + 1) * 4;
-          if (currentLogIndex >= srcLogsEndIndex) {
-            return { ...src, status: 'completed' };
-          }
-          return src;
-        });
-      });
-
-      currentLogIndex++;
-    }, 550);
-
-    return () => {
-      clearInterval(interval);
-    };
   }, [isLoadingResponse, activeConversation?.messages]);
 
   // Sync query result into Zustand
@@ -1417,35 +1110,40 @@ const FullConversation = ({
               </>
             )}
           {/* Loading message - visible in the messages area */}
-          {isLoadingResponse &&
-            (selectedOption === OPTIONS.RESEARCH ? (
-              <TelemetryConsole
-                conversationId={
-                  activeConversation?.conversationId || conversationId
-                }
-                active={isLoadingResponse}
-              />
-            ) : (
-              <div className="flex items-center gap-2.5 px-1 py-3">
-                <div className="flex gap-1">
-                  <div
-                    className="h-2 w-2 animate-bounce rounded-full bg-zinc-400 dark:bg-zinc-500"
-                    style={{ animationDelay: '0ms' }}
-                  />
-                  <div
-                    className="h-2 w-2 animate-bounce rounded-full bg-zinc-400 dark:bg-zinc-500"
-                    style={{ animationDelay: '150ms' }}
-                  />
-                  <div
-                    className="h-2 w-2 animate-bounce rounded-full bg-zinc-400 dark:bg-zinc-500"
-                    style={{ animationDelay: '300ms' }}
-                  />
+          {isLoadingResponse && (
+              <div className="flex items-start gap-2.5 px-1 py-3">
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1">
+                      <div
+                        className="h-2 w-2 animate-bounce rounded-full bg-[#0000ff]"
+                        style={{ animationDelay: '0ms' }}
+                      />
+                      <div
+                        className="h-2 w-2 animate-bounce rounded-full bg-[#0000ff]"
+                        style={{ animationDelay: '150ms' }}
+                      />
+                      <div
+                        className="h-2 w-2 animate-bounce rounded-full bg-[#0000ff]"
+                        style={{ animationDelay: '300ms' }}
+                      />
+                    </div>
+                    <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                      Aphura is {lastAssistantMessage?.metadata?.status || 'thinking...'}
+                    </span>
+                  </div>
+                  {toolStatusHistory.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 ml-7">
+                      {toolStatusHistory.map((s, i) => (
+                        <span key={i} className="text-[10px] text-zinc-400 dark:text-zinc-500 font-mono">
+                          {i === toolStatusHistory.length - 1 ? '→' : '✓'} {s}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                  Aphura is {lastAssistantMessage?.metadata?.status || 'thinking...'}
-                </span>
               </div>
-            ))}
+            )}
 
           <div ref={messagesEndRef} />
         </div>

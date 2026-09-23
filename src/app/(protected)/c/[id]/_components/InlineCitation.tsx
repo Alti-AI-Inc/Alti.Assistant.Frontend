@@ -22,6 +22,7 @@ export default function InlineCitation({ index, title, url, snippet, source }: I
       className="relative inline-flex"
       onMouseEnter={() => setShowCard(true)}
       onMouseLeave={() => setShowCard(false)}
+      onClick={() => setShowCard(prev => !prev)}
     >
       <button
         type="button"
