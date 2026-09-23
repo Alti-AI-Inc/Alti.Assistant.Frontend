@@ -80,6 +80,7 @@ export async function PostConversationStream(
   knowledgebaseId?: string,
   extraParams?: Record<string, unknown>,
   onChunk?: (chunk: { type: string; content?: string; reference?: Reference[]; citations?: Reference[]; conversationId?: string }) => void,
+  signal?: AbortSignal,
 ): Promise<ApiResponse> {
   try {
     const response = await apiClient(apiUrl, {
@@ -88,6 +89,7 @@ export async function PostConversationStream(
         Authorization: `Bearer ${accessToken}`,
         'content-type': 'application/json',
       },
+      signal,
       body: JSON.stringify({
         message,
         prompt: message,

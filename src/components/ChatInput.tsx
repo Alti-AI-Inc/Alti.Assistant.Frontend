@@ -79,6 +79,7 @@ import {
   Mic,
   Search,
   Globe,
+  Square,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -145,6 +146,16 @@ export default function ChatInput({
   );
   const [isAudioRecording, setIsAudioRecording] = useState(false);
   
+  // ─── Stream Cancellation ────────────────────────────────────────────
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const stopGenerating = useCallback(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setLoadingResponse(false);
+  }, [setLoadingResponse]);
+
   const { isListening, startListening, stopListening, toggleListening } = useSpeechRecognition({ setMessage });
   const [researchSettings, setResearchSettings] = useState<PreFlightSettings>({
     depth: 'thorough',
@@ -781,6 +792,10 @@ export default function ChatInput({
               : resolvedConversationId,
           );
 
+        // Create AbortController for stream cancellation
+        const controller = new AbortController();
+        abortControllerRef.current = controller;
+
         const result = await PostConversationStream(
           targetApiUrl,
           userMessage,
@@ -801,6 +816,14 @@ export default function ChatInput({
                   chunk.content,
                   resolvedConversationId,
                 );
+            } else if (chunk.type === 'tool_status' || chunk.type === 'tool_call') {
+              // Real tool execution telemetry from the agent
+              const toolChunk = chunk as any;
+              useConversationsStore
+                .getState()
+                .streamActiveConversation('', resolvedConversationId, {
+                  status: toolChunk.tool ? `Using ${toolChunk.tool}...` : (toolChunk.status || toolChunk.content || 'Processing...'),
+                });
             } else if (chunk.type === 'metadata') {
               const metaPayload: any = {};
               const metadataChunk = chunk as any;
@@ -819,7 +842,10 @@ export default function ChatInput({
                 .streamActiveConversation('', resolvedConversationId, metaPayload);
             }
           },
+          controller.signal,
         );
+
+        abortControllerRef.current = null;
 
         if (!result.success) {
           return result;
@@ -1818,6 +1844,13 @@ export default function ChatInput({
               value={message}
               onChange={e => setMessage(e.target.value)}
               onKeyDown={e => {
+                // Escape to stop generating
+                if (e.key === 'Escape' && isLoadingResponse) {
+                  e.preventDefault();
+                  stopGenerating();
+                  return;
+                }
+                // Enter or Cmd/Ctrl+Enter to submit
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
                   if (
@@ -1911,10 +1944,11 @@ export default function ChatInput({
                 {isLoadingResponse ? (
                   <button
                     type="button"
-                    disabled
-                    className="text-zinc-650 dark:text-zinc-350 flex size-10 sm:size-8 flex-shrink-0 cursor-not-allowed items-center justify-center rounded-[3px] border border-black/5 bg-[#e1e1e1] focus:outline-none dark:border-zinc-700/50 dark:bg-zinc-900"
+                    onClick={stopGenerating}
+                    className="text-white flex size-10 sm:size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-red-500/50 bg-red-600 hover:bg-red-700 transition-all focus:outline-none active:scale-95 animate-pulse"
+                    aria-label="Stop Generating"
                   >
-                    <ArrowUp strokeWidth={1.5} className="size-3.5" />
+                    <Square strokeWidth={1.5} className="size-3 fill-current" />
                   </button>
                 ) : !message?.trim() ? (
                   <button

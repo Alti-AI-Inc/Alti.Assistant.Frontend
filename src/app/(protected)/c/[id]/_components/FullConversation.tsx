@@ -43,6 +43,7 @@ import SecurityVulnerabilityWidget from './SecurityVulnerabilityWidget';
 import SportsWidget from './SportsWidget';
 import VideoComponent from './VideoComponent';
 import VideoComponentForContent from './YoutubePlayer';
+import InlineCitation from './InlineCitation';
 
 import { getPresentationStatus } from '@/actions/presentationActions';
 import { useBrainstorm } from '@/hooks/useBrainstorm';
@@ -1166,6 +1167,33 @@ const FullConversation = ({
 
                             <div className="mt-4 flex flex-wrap items-center gap-3">
                               <CopyButton content={displayContent} />
+
+                              {/* ─── Inline Citation Badges (Perplexity-style) ──── */}
+                              {(() => {
+                                const refs = message.metadata?.reference ||
+                                  message.metadata?.sources ||
+                                  message.metadata?.citations ||
+                                  (message as any)?.reference ||
+                                  (message as any)?.sources ||
+                                  (message as any)?.citations ||
+                                  [];
+                                if (!refs.length) return null;
+                                return (
+                                  <div className="flex flex-wrap items-center gap-1">
+                                    <span className="text-[10px] text-zinc-500 dark:text-zinc-400 mr-1 font-medium">Sources:</span>
+                                    {refs.slice(0, 8).map((ref: any, i: number) => (
+                                      <InlineCitation
+                                        key={`src-${i}`}
+                                        index={i + 1}
+                                        title={ref.title}
+                                        url={ref.url || ref.link}
+                                        snippet={ref.snippet || ref.description || ref.text}
+                                        source={ref.source}
+                                      />
+                                    ))}
+                                  </div>
+                                );
+                              })()}
 
                               {!!(
                                 message.metadata?.reference?.length ||
