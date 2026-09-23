@@ -17,7 +17,7 @@ export default function ImageWidget({ imageData }: { imageData?: ImageData }) {
       iconColorClass="text-fuchsia-400" 
       iconBgClass="bg-fuchsia-500/10" 
       title="Generated Image" 
-      subtitle={imageData.prompt}
+      subtitle={imageData.prompt || 'AI Image Generation'}
     >
       <div className="rounded-xl overflow-hidden border border-white/10 bg-black/20">
         {/* eslint-disable-next-line @next/next/no-img-element */}
