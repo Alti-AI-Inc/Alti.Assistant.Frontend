@@ -54,7 +54,7 @@ export function useInboxQuery(userId?: string, category?: string, archived?: boo
       });
       
       if (!response.success) {
-        console.error('Failed to fetch user inbox items:', response.debugMessage);
+        console.warn('Failed to fetch user inbox items:', response.debugMessage);
         return [];
       }
       

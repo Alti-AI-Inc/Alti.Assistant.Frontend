@@ -1,48 +1,115 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import {
-  LiveKitRoom,
-  RoomAudioRenderer,
-  BarVisualizer,
-  VoiceAssistantControlBar,
-  DisconnectButton,
-  useConnectionState,
-} from '@livekit/components-react';
-import '@livekit/components-styles';
-import { ConnectionState } from 'livekit-client';
-import { Sparkles, Mic, Loader2 } from 'lucide-react';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import { Sparkles, Mic, Loader2, Square, Volume2 } from 'lucide-react';
 
 interface LiveVoiceAgentProps {
   roomName?: string;
 }
 
 export default function LiveVoiceAgent({ roomName = 'aphura-chat-room' }: LiveVoiceAgentProps) {
-  const [token, setToken] = useState<string | null>(null);
-  const [isFetching, setIsFetching] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'listening' | 'thinking' | 'speaking'>('idle');
+  const [transcript, setTranscript] = useState('');
+  
+  const recognitionRef = useRef<any>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Fetch token from the backend streaming controller
-  const startConversation = useCallback(async () => {
+  useEffect(() => {
+    // Initialize Web Speech API
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event: any) => {
+        const current = event.resultIndex;
+        const result = event.results[current];
+        const text = result[0].transcript;
+        setTranscript(text);
+        
+        if (result.isFinal) {
+          handleUserUtterance(text);
+        }
+      };
+
+      recognition.onstart = () => setStatus('listening');
+      recognition.onend = () => {
+        // Only reset if we are just listening (not processing)
+        setStatus((prev) => prev === 'listening' ? 'idle' : prev);
+      };
+
+      recognitionRef.current = recognition;
+    }
+  }, []);
+
+  const handleUserUtterance = async (text: string) => {
+    if (!text.trim()) return;
+    setStatus('thinking');
+    
     try {
-      setIsFetching(true);
-      // Calls the Aphura Streaming Controller to generate a LiveKit JWT
-      const response = await fetch(`/api/v1/streaming/token?room=${roomName}`);
-      const data = await response.json();
+      // 1. Send text to agent
+      const res = await fetch('/api/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: text }],
+          model: 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo'
+        })
+      });
+      const data = await res.json();
+      const aiReply = data.choices?.[0]?.message?.content || "I didn't quite get that.";
       
-      if (data.success && data.data?.token) {
-        setToken(data.data.token);
+      // 2. Generate Speech via Together TTS
+      setStatus('speaking');
+      const ttsRes = await fetch('/api/v1/llm/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: aiReply.slice(0, 500) }) // truncate for speed
+      });
+      
+      if (ttsRes.ok) {
+        const audioBlob = await ttsRes.blob();
+        const url = URL.createObjectURL(audioBlob);
+        
+        if (!audioRef.current) {
+          audioRef.current = new Audio(url);
+        } else {
+          audioRef.current.src = url;
+        }
+        
+        audioRef.current.onended = () => {
+          setStatus('idle');
+          if (isActive) {
+             recognitionRef.current?.start();
+          }
+        };
+        
+        await audioRef.current.play();
       } else {
-        console.error('Failed to get token:', data);
+        setStatus('idle');
       }
     } catch (error) {
-      console.error('Error fetching LiveKit token:', error);
-    } finally {
-      setIsFetching(false);
+      console.warn('Voice agent error:', error);
+      setStatus('idle');
     }
-  }, [roomName]);
+  };
 
-  const handleDisconnected = () => {
-    setToken(null);
+  const toggleConversation = () => {
+    if (isActive) {
+      setIsActive(false);
+      setStatus('idle');
+      recognitionRef.current?.stop();
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    } else {
+      setIsActive(true);
+      setStatus('listening');
+      recognitionRef.current?.start();
+    }
   };
 
   return (
@@ -53,85 +120,63 @@ export default function LiveVoiceAgent({ roomName = 'aphura-chat-room' }: LiveVo
           <Sparkles className="size-4 text-indigo-500 animate-pulse" />
           Aphura Voice Assistant
         </span>
-        <div className="text-xs font-mono text-zinc-500">Aphura Cloud powered</div>
+        <div className="text-xs font-mono text-zinc-500">Together AI Native</div>
       </div>
 
       {/* Main Content Area */}
       <div className="p-8 min-h-[250px] flex flex-col items-center justify-center relative bg-gradient-to-b from-white to-zinc-50 dark:from-zinc-950 dark:to-zinc-900">
-        {!token ? (
-          // Connect Button State
-          <div className="flex flex-col items-center gap-4 animate-in fade-in zoom-in duration-300">
-            <div className="size-16 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center mb-2">
-              <Mic className="size-8 text-indigo-600 dark:text-indigo-400" />
-            </div>
-            <p className="text-sm text-center text-zinc-600 dark:text-zinc-400 max-w-xs mb-2">
-              Start a real-time conversation with Aphura using your microphone.
-            </p>
-            <button
-              onClick={startConversation}
-              disabled={isFetching}
-              className="px-6 py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium shadow-md hover:shadow-indigo-500/25 transition-all disabled:opacity-70 flex items-center gap-2"
-            >
-              {isFetching ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Connecting...
-                </>
-              ) : (
-                'Start Conversation'
-              )}
-            </button>
+        
+        {/* Status Indicator */}
+        <div className="mb-8 flex flex-col items-center">
+          <div className={`size-20 rounded-full flex items-center justify-center transition-all duration-500 ${
+            status === 'listening' ? 'bg-indigo-100 dark:bg-indigo-900/40 scale-110 shadow-[0_0_30px_rgba(99,102,241,0.4)]' : 
+            status === 'thinking' ? 'bg-amber-100 dark:bg-amber-900/40 animate-pulse' :
+            status === 'speaking' ? 'bg-emerald-100 dark:bg-emerald-900/40 scale-105 shadow-[0_0_20px_rgba(16,185,129,0.3)]' :
+            'bg-zinc-100 dark:bg-zinc-800'
+          }`}>
+            {status === 'speaking' ? (
+              <Volume2 className={`size-8 text-emerald-600 dark:text-emerald-400 ${status === 'speaking' ? 'animate-bounce' : ''}`} />
+            ) : status === 'thinking' ? (
+              <Loader2 className="size-8 text-amber-600 dark:text-amber-400 animate-spin" />
+            ) : (
+              <Mic className={`size-8 ${status === 'listening' ? 'text-indigo-600 dark:text-indigo-400' : 'text-zinc-400'}`} />
+            )}
           </div>
-        ) : (
-          // Active Room State
-          <LiveKitRoom
-            token={token}
-            serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL || 'ws://localhost:7880'}
-            connect={true}
-            audio={true}
-            video={false}
-            onDisconnected={handleDisconnected}
-            className="w-full flex flex-col items-center justify-center gap-8 animate-in fade-in duration-500"
-          >
-            <ConnectionStatus />
-            
-            {/* Visualizer and State Indicator */}
-            <div className="flex flex-col items-center gap-6 w-full max-w-md">
-              <div className="h-24 w-full flex items-center justify-center bg-zinc-100 dark:bg-zinc-900/50 rounded-xl border border-zinc-200 dark:border-zinc-800/50 overflow-hidden">
-                <BarVisualizer state="speaking" barCount={7} options={{ minHeight: 20 }} />
-              </div>
-              
-              <div className="h-8 flex items-center justify-center">
-                <div className="text-sm font-medium text-indigo-500 animate-pulse">Voice Assistant Active</div>
-              </div>
-            </div>
+          
+          <p className="mt-4 text-sm font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
+            {status}
+          </p>
+        </div>
 
-            {/* Controls */}
-            <div className="flex items-center gap-4 mt-4">
-              <VoiceAssistantControlBar />
-              <DisconnectButton className="px-4 py-2 bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded-full font-medium text-sm hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">
-                End Call
-              </DisconnectButton>
-            </div>
-            
-            <RoomAudioRenderer />
-          </LiveKitRoom>
+        {/* Transcript Box */}
+        {isActive && (
+          <div className="w-full max-w-md h-20 mb-8 flex items-center justify-center text-center">
+            <p className="text-lg text-zinc-700 dark:text-zinc-300 italic opacity-80">
+              {transcript ? `"${transcript}"` : (status === 'listening' ? 'Listening...' : '')}
+            </p>
+          </div>
         )}
+
+        {/* Control Button */}
+        <button
+          onClick={toggleConversation}
+          className={`px-8 py-3 rounded-full font-medium shadow-md transition-all flex items-center gap-2 ${
+            isActive 
+              ? 'bg-red-500 hover:bg-red-600 text-white shadow-red-500/25' 
+              : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-500/25'
+          }`}
+        >
+          {isActive ? (
+            <>
+              <Square className="size-4 fill-current" /> End Conversation
+            </>
+          ) : (
+            <>
+              <Mic className="size-4" /> Start Voice Agent
+            </>
+          )}
+        </button>
       </div>
     </div>
   );
-}
-
-// Helper component to show connecting state
-function ConnectionStatus() {
-  const state = useConnectionState();
-  if (state === ConnectionState.Connecting) {
-    return (
-      <div className="absolute top-4 right-4 flex items-center gap-2 text-xs font-medium text-zinc-500 bg-white/80 dark:bg-zinc-900/80 px-3 py-1.5 rounded-full backdrop-blur-md border border-zinc-200 dark:border-zinc-800">
-        <Loader2 className="size-3 animate-spin" />
-        Connecting to socket...
-      </div>
-    );
-  }
-  return null;
 }
