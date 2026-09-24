@@ -11,7 +11,7 @@ export default function LibertyPlatformWidget({ platformData }: { platformData?:
       icon={Server} 
       iconColorClass="text-rose-400" 
       iconBgClass="bg-rose-500/10" 
-      title="Liberty Center One" 
+      title="Aphura" 
       subtitle="Enterprise Sovereign Platform"
     >
       <div className="space-y-4">

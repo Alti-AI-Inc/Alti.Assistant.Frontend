@@ -8,7 +8,7 @@ export function DesktopStatusBadge() {
   useEffect(() => {
     const checkStatus = async () => {
       try {
-        // Ping the Liberty Center One backend
+        // Ping the Aphura backend
         const res = await fetch('/api/v1/desktop/status');
         const data = await res.json();
         setIsConnected(data.connected);
