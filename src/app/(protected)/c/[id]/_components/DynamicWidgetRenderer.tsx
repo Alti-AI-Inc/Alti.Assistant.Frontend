@@ -22,7 +22,7 @@ import MultiAgentWidget from './MultiAgentWidget';
 import TemporalWorkflowWidget from './TemporalWorkflowWidget';
 import LibertyPlatformWidget from './LibertyPlatformWidget';
 import MapboxWidget from './MapboxWidget';
-
+import VSCodeWidget from "./VSCodeWidget";
 export default function DynamicWidgetRenderer({ metadata }: { metadata?: any }) {
   if (!metadata) return null;
 
@@ -48,7 +48,7 @@ export default function DynamicWidgetRenderer({ metadata }: { metadata?: any }) 
   const isTemporal = domain === 'temporal_workflow';
   const isLiberty = domain === 'liberty_platform';
   const isMapbox = domain === 'mapbox_location';
-
+  const isVSCode = domain === "vscode_ide";
   return (
     <div className="flex flex-col gap-4 mt-2 w-full animate-in fade-in slide-in-from-bottom-2 duration-500">
       {isFinance && <FinancialWidget ticker={metadata.financialTicker} liveData={metadata} />}
@@ -72,6 +72,6 @@ export default function DynamicWidgetRenderer({ metadata }: { metadata?: any }) 
       {isTemporal && <TemporalWorkflowWidget workflowData={metadata} />}
       {isLiberty && <LibertyPlatformWidget platformData={metadata} />}
       {isMapbox && <MapboxWidget locationData={metadata} />}
-    </div>
+      {isVSCode && <VSCodeWidget workspaceData={metadata} />}    </div>
   );
 }
