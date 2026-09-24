@@ -798,7 +798,19 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
                     </div>
 
-                    <div className="mt-auto pt-4">
+                    <div className="mt-auto pt-4 space-y-1.5">
+                      <button
+                        onClick={() => router.push('/settings')}
+                        className={cn(
+                          'group flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs transition-all duration-150 select-none hover:bg-[#282830] focus:outline-none',
+                          pathname === '/settings'
+                            ? 'bg-[#282830] text-white'
+                            : 'text-zinc-400 hover:text-white',
+                        )}
+                      >
+                        <svg className="h-3.5 w-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                        <span>Settings</span>
+                      </button>
                       <button
                         onClick={() => onOpen({ type: 'logout' })}
                         className="group flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] bg-[#1e1e24] text-red-400 px-3 text-left text-xs transition-all duration-150 select-none hover:bg-[#282830] hover:text-red-300 shadow-[0_2px_8px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)] focus:outline-none"

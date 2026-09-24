@@ -14,7 +14,7 @@ import { useDocumentStore } from '@/stores/useDocumentStore';
 import { useModalStore } from '@/stores/useModalStore';
 import { useSidebarStore } from '@/stores/useSidebarStore';
 import { useQueryClient } from '@tanstack/react-query';
-import { Code, Download, Edit3, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Code, Download, Edit3, ShieldCheck, Sparkles } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -43,6 +43,9 @@ import SportsWidget from './SportsWidget';
 import VideoComponent from './VideoComponent';
 import VideoComponentForContent from './YoutubePlayer';
 import InlineCitation from './InlineCitation';
+import { renderContentWithCitations } from './CitationProcessor';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { MessageSkeleton } from '@/components/MessageSkeleton';
 
 import { getPresentationStatus } from '@/actions/presentationActions';
 import { useBrainstorm } from '@/hooks/useBrainstorm';
@@ -855,7 +858,19 @@ const FullConversation = ({
                         ) : (
                           <div className="group relative">
                             <Streamdown className="w-full rounded-lg text-sm leading-relaxed">
-                              {displayContent}
+                              {(() => {
+                                const refs = message.metadata?.reference ||
+                                  message.metadata?.sources ||
+                                  message.metadata?.citations ||
+                                  (message as any)?.reference ||
+                                  (message as any)?.sources ||
+                                  (message as any)?.citations ||
+                                  [];
+                                if (refs.length && displayContent.match(/\[\d+\]/)) {
+                                  return renderContentWithCitations(displayContent, refs);
+                                }
+                                return displayContent;
+                              })()}
                             </Streamdown>
 
                             <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -929,6 +944,43 @@ const FullConversation = ({
                                 </button>
                               )}
                             </div>
+
+                            {/* ─── Perplexity-style Follow-Up Suggestion Chips ─── */}
+                            {(() => {
+                              const followUps: string[] =
+                                message.metadata?.followUps ||
+                                (message as any)?.followUps ||
+                                (message.metadata?.responseMessage as any)?.followUps ||
+                                [];
+                              if (!followUps.length) return null;
+                              return (
+                                <div className="mt-3 pt-3 border-t border-black/5 dark:border-white/5 space-y-2">
+                                  <p className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
+                                    <Sparkles className="size-3 text-blue-500" />
+                                    Related Questions
+                                  </p>
+                                  <div className="flex flex-col gap-1.5">
+                                    {followUps.map((q: string, idx: number) => (
+                                      <button
+                                        key={`fu-${idx}`}
+                                        onClick={() => {
+                                          const inputEl = document.querySelector('textarea') as HTMLTextAreaElement | null;
+                                          if (inputEl) {
+                                            inputEl.value = q;
+                                            inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+                                            inputEl.focus();
+                                          }
+                                        }}
+                                        className="text-left text-xs text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 bg-black/[0.02] dark:bg-white/[0.02] hover:bg-black/[0.05] dark:hover:bg-white/[0.05] px-3 py-2 rounded-lg border border-black/5 dark:border-white/5 transition-all flex items-center justify-between group"
+                                      >
+                                        <span>{q}</span>
+                                        <ArrowRight className="size-3 opacity-0 group-hover:opacity-100 transition-opacity text-blue-500 shrink-0 ml-2" />
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              );
+                            })()}
                           </div>
                         )}
                       </div>
@@ -1043,7 +1095,9 @@ const FullConversation = ({
                       }
                     />
                   )}
-                  <DynamicWidgetRenderer metadata={message.metadata} />
+                  <ErrorBoundary label="Widget">
+                    <DynamicWidgetRenderer metadata={message.metadata} />
+                  </ErrorBoundary>
                   {message.metadata?.planData && (
                     <PlanDataComponent
                       plan={message.metadata.planData}
@@ -1193,11 +1247,10 @@ const FullConversation = ({
       {isLoading &&
       !isNewChatRoute &&
       !activeConversation?.messages?.length ? (
-        <div className="flex flex-grow items-center justify-center bg-transparent py-4">
-          <div className="flex items-center space-x-2.5 text-zinc-500 dark:text-zinc-400">
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-500/10 border-t-indigo-500"></div>
-            <span className="text-xs font-semibold">loading chat...</span>
-          </div>
+        <div className="flex flex-grow flex-col gap-1 bg-transparent px-4 py-6">
+          <MessageSkeleton />
+          <MessageSkeleton />
+          <MessageSkeleton />
         </div>
       ) : selectedOption === OPTIONS.TASK ? (
         <div

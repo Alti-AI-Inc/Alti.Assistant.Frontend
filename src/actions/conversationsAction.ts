@@ -92,35 +92,69 @@ export async function PostConversationStream(
   signal?: AbortSignal,
 ): Promise<ApiResponse> {
   try {
-    const response = await apiClient(apiUrl, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
-      },
-      signal,
-      body: JSON.stringify({
-        message,
-        prompt: message,
-        stream: true,
-        ...(conversationId && { conversationId }),
-        ...(knowledgebaseId && { knowledgebaseId }),
-        timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
-        localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
-        localTime: new Date().toLocaleTimeString('en-US'),
-        systemInstruction: (() => {
-          let instruction = HARD_LAW_SYSTEM_INSTRUCTION;
-          if (typeof window !== 'undefined') {
-            const aboutUser = localStorage.getItem('aphura_about_user');
-            const customInstructions = localStorage.getItem('aphura_custom_instructions');
-            if (aboutUser) instruction += `\n\n[User Profile] ${aboutUser}`;
-            if (customInstructions) instruction += `\n\n[User Preferences] ${customInstructions}`;
-          }
-          return instruction;
-        })(),
-        ...extraParams,
-      }),
-    });
+    // ── SSE fetch with retry on transient failures ──
+    const MAX_RETRIES = 2;
+    let lastError: Error | null = null;
+    let response: Response | null = null;
+
+    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+      try {
+        response = await apiClient(apiUrl, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'content-type': 'application/json',
+          },
+          signal,
+          body: JSON.stringify({
+            message,
+            prompt: message,
+            stream: true,
+            ...(conversationId && { conversationId }),
+            ...(knowledgebaseId && { knowledgebaseId }),
+            timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
+            localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+            localTime: new Date().toLocaleTimeString('en-US'),
+            systemInstruction: (() => {
+              let instruction = HARD_LAW_SYSTEM_INSTRUCTION;
+              if (typeof window !== 'undefined') {
+                const aboutUser = localStorage.getItem('aphura_about_user');
+                const customInstructions = localStorage.getItem('aphura_custom_instructions');
+                if (aboutUser) instruction += `\n\n[User Profile] ${aboutUser}`;
+                if (customInstructions) instruction += `\n\n[User Preferences] ${customInstructions}`;
+              }
+              return instruction;
+            })(),
+            ...extraParams,
+          }),
+        });
+
+        // Retry on gateway errors
+        if (response && [502, 503, 504].includes(response.status) && attempt < MAX_RETRIES) {
+          const delay = (attempt + 1) * 1500; // 1.5s, 3s
+          await new Promise(r => setTimeout(r, delay));
+          continue;
+        }
+        break; // Success or non-retryable error
+      } catch (err: any) {
+        lastError = err;
+        if (signal?.aborted) throw err; // Don't retry aborted requests
+        if (attempt < MAX_RETRIES) {
+          const delay = (attempt + 1) * 1500;
+          await new Promise(r => setTimeout(r, delay));
+          continue;
+        }
+        throw err;
+      }
+    }
+
+    if (!response) {
+      return {
+        success: false,
+        message: 'Failed to connect after retries.',
+        debugMessage: lastError?.message,
+      };
+    }
 
     if (!response.ok) {
       const errorText = await response.text();

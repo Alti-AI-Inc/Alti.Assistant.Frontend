@@ -94,6 +94,7 @@ export function useSearchHandler() {
                 responseMessage: {
                   answer: turnAnswer.trim(),
                   reference: references,
+                  followUps: turn.responseMessage?.followUps || turn.followUps || [],
                 },
               },
             };
@@ -172,6 +173,12 @@ export function useSearchHandler() {
                 ? `research-${Date.now()}`
                 : conversationId);
 
+            const resAnswer =
+              turn.responseMessage?.answer ||
+              turn.answer ||
+              answer ||
+              'Here is what I found:';
+
             return {
               success: true,
               message: 'Success',
@@ -179,8 +186,9 @@ export function useSearchHandler() {
               data: {
                 conversationId: resolvedId,
                 responseMessage: {
-                  answer,
+                  answer: resAnswer.trim(),
                   reference: references,
+                  followUps: turn.responseMessage?.followUps || turn.followUps || [],
                 },
               },
             };
