@@ -1,5 +1,6 @@
 import { ModalProvider } from '@/components/modals/ModalProvider';
 import Providers from '@/components/Providers';
+import { DesktopStatusBadge } from '@/components/DesktopStatusBadge';
 import type { Metadata, Viewport } from 'next';
 import { Exo_2 } from 'next/font/google';
 import { Toaster } from 'sonner';
@@ -100,6 +101,7 @@ export default function RootLayout({
         <Providers>
           {children}
           <ModalProvider />
+          <DesktopStatusBadge />
           <Toaster richColors position="top-right" />
         </Providers>
       </body>
