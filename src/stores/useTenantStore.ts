@@ -38,6 +38,10 @@ const useTenantStore = create<TenantStore>()(
       isHydrated: false,
 
       switchToPersonalMode: () => {
+        // Clear context-specific data when switching to personal mode
+        import('./useConverstionsStore').then((m) => m.useConversationsStore.getState().clearConversationData?.());
+        import('./useKnowledgebaseStore').then((m) => m.useKnowledgebaseStore.getState().clearKnowledgeBaseData?.());
+        
         set({
           mode: 'personal',
           activeTenantId: null,
@@ -46,7 +50,14 @@ const useTenantStore = create<TenantStore>()(
       },
 
       switchToTenantMode: (tenantId: string) => {
-        const { tenants } = get();
+        const { tenants, activeTenantId } = get();
+        
+        // Only clear context if actually switching to a different tenant
+        if (activeTenantId !== tenantId) {
+          import('./useConverstionsStore').then((m) => m.useConversationsStore.getState().clearConversationData?.());
+          import('./useKnowledgebaseStore').then((m) => m.useKnowledgebaseStore.getState().clearKnowledgeBaseData?.());
+        }
+        
         const tenant = tenants.find((t: Tenant) => t.id === tenantId);
 
         if (tenant) {
@@ -81,6 +92,8 @@ const useTenantStore = create<TenantStore>()(
             set({ currentTenant });
           } else {
             // Tenant no longer exists, switch to personal mode
+            import('./useConverstionsStore').then((m) => m.useConversationsStore.getState().clearConversationData?.());
+            import('./useKnowledgebaseStore').then((m) => m.useKnowledgebaseStore.getState().clearKnowledgeBaseData?.());
             set({
               mode: 'personal',
               activeTenantId: null,

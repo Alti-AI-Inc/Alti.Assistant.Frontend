@@ -598,7 +598,7 @@ export async function addPaymentMethod(
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ customerId, paymentMethodId }),
+        body: JSON.stringify({ paymentMethodId }),
       },
     );
 

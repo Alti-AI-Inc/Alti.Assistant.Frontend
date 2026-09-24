@@ -11,8 +11,8 @@ const geistExo2 = Exo_2({
 });
 
 export const metadata: Metadata = {
-  title: 'Inso Chat',
-  description: 'Inso Chat',
+  title: 'Aphura',
+  description: 'Real-Time Intelligence',
 };
 
 export default function RootLayout({
