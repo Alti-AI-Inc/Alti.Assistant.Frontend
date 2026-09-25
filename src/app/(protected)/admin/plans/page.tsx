@@ -85,7 +85,7 @@ const ALL_PLANS: PricingPlan[] = [
     period: '/mo per GB',
     description:
       'Enterprise-grade RAG indexing and embedding storage powered by Together AI.',
-    features: ['Vector Storage', 'Real-time inference indexing'],
+    features: ['Vector Storage'],
   },
 ];
 
