@@ -102,7 +102,7 @@ export default function RootLayout({
           {children}
           <ModalProvider />
           <DesktopStatusBadge />
-          <Toaster richColors position="top-right" />
+          
         </Providers>
       </body>
     </html>
