@@ -26,7 +26,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL || 'https://aphura.ai'),
   title: {
-    default: 'Aphura — Sovereign Data Intelligence Engine',
+    default: 'Aphura',
     template: '%s | Aphura',
   },
   description:
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://aphura.ai',
     siteName: 'Aphura AI',
-    title: 'Aphura — Sovereign Data Intelligence Engine',
+    title: 'Aphura',
     description:
       "The world's most powerful sovereign data intelligence engine. Real-time neural search, 45 autonomous tools, direct government data moats, and high-velocity reasoning.",
     images: [
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Aphura — Sovereign Data Intelligence Engine',
+    title: 'Aphura',
     description:
       "The world's most powerful sovereign data intelligence engine. Real-time neural search, 45 autonomous tools, direct government data moats, and high-velocity reasoning.",
     images: ['/icon.png'],
