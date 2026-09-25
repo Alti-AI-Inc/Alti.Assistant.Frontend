@@ -32,7 +32,7 @@ export default function InstructionsPage() {
 
   return (
     <div className="flex h-full w-full flex-col bg-[#e1e1e1] dark:bg-zinc-950 overflow-y-auto">
-      <header className="flex h-14 shrink-0 items-center justify-between border-b border-black/10 px-6 dark:border-white/10">
+      <header className="bg-white dark:bg-zinc-950 flex h-14 shrink-0 items-center justify-between border-b border-black/10 px-6 dark:border-white/10">
         <h1 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
           Instructions
         </h1>
