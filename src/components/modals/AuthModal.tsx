@@ -367,7 +367,7 @@ export function AuthModal() {
               {isLoading && (
                 <span className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-current border-r-transparent"></span>
               )}
-              {view === 'login' ? 'Login' : 'Create Free Account'}
+              {view === 'login' ? 'Login' : 'Create Account or Register'}
             </button>
           </form>
         ) : (
