@@ -135,33 +135,7 @@ export function StripeCardForm({
   return (
     <div className={cn('space-y-4 py-2', className)}>
       <div className="space-y-4">
-        {/* Error Banner when Stripe is not available */}
-        {!isAvailable && status === 'error' && (
-          <div className="rounded-[5px] border border-amber-200 bg-amber-50 p-4 dark:border-amber-900/30 dark:bg-amber-950/20">
-            <div className="flex gap-3">
-              <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
-              <div className="space-y-1 flex-1">
-                <h4 className="text-sm font-semibold text-amber-800 dark:text-amber-400">
-                  Payment System Configured in Degraded Mode
-                </h4>
-                <p className="text-xs text-amber-700 dark:text-amber-450 leading-relaxed">
-                  {message || 'Failed to initialize payment gateway. Please check your Stripe keys.'}
-                </p>
-                {retry && (
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      retry();
-                    }}
-                    className="mt-2 text-xs font-semibold text-amber-900 dark:text-amber-400 hover:underline flex items-center gap-1"
-                  >
-                    Retry connection
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+
 
         {/* Row 1: Cardholder Name & Card Number in 2-column grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
