@@ -212,7 +212,37 @@ export default function CodeIDEWidget({ code, language, guideText }: CodeIDEWidg
                   ? code
                   : language.toLowerCase() === 'css'
                     ? `<html><head><style>${code}</style></head><body><div class="demo">CSS Preview</div></body></html>`
-                    : `<html><head><style>body{font-family:system-ui;padding:16px;background:#fff;color:#111}</style></head><body><pre id="output"></pre><script>try{const _log=console.log;const _out=[];console.log=(...a)=>_out.push(a.map(String).join(' '));${code};document.getElementById('output').textContent=_out.join('\\n')||'(no output)'}catch(e){document.getElementById('output').textContent='Error: '+e.message}<\/script></body></html>`
+                    : language.toLowerCase() === 'react' || language.toLowerCase() === 'jsx' || language.toLowerCase() === 'tsx'
+                      ? `
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>body{padding:16px;font-family:system-ui;}</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" data-type="module">
+    ${code.replace(/import\s+.*?from\s+['"].*?['"];?/g, '')}
+    
+    // Automatically render the default export if available
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    
+    // Try to find a component to render - look for Default export or App
+    if (typeof App !== 'undefined') {
+      root.render(React.createElement(App));
+    } else if (typeof Default !== 'undefined') {
+      root.render(React.createElement(Default));
+    } else {
+      root.render(React.createElement('div', {style:{color:'red'}}, 'No App component found to render. Please export an App component.'));
+    }
+  </script>
+</body>
+</html>`
+                      : `<html><head><style>body{font-family:system-ui;padding:16px;background:#fff;color:#111}</style></head><body><pre id="output"></pre><script>try{const _log=console.log;const _out=[];console.log=(...a)=>_out.push(a.map(String).join(' '));${code};document.getElementById('output').textContent=_out.join('\\n')||'(no output)'}catch(e){document.getElementById('output').textContent='Error: '+e.message}</script></body></html>`
               }
               sandbox="allow-scripts"
               className="w-full h-full border-0"
@@ -220,14 +250,13 @@ export default function CodeIDEWidget({ code, language, guideText }: CodeIDEWidg
             />
           </div>
         )}
-      </div>
 
       {/* Status Bar */}
       <div className="flex items-center justify-between px-4 h-8 bg-[#1A1A1E] text-zinc-500 text-[11px] font-medium border-t border-zinc-800 shrink-0 select-none">
         <div className="flex items-center gap-3">
           <span className="flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-            <span>Connected: Vertex AI</span>
+            <span>Connected: Liberty Center One</span>
           </span>
           <span>•</span>
           <span>{language.toUpperCase()}</span>
