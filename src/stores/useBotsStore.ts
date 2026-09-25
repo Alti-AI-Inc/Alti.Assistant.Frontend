@@ -106,7 +106,7 @@ export const useBotsStore = create<BotsState>()(
                   state.activeBotId === id ? botId : state.activeBotId,
               }));
             } else {
-              console.error(
+              console.warn(
                 `Failed to create space on backend: ${result.message}`,
               );
               toast.error(
@@ -114,7 +114,7 @@ export const useBotsStore = create<BotsState>()(
               );
             }
           })
-          .catch(err => console.error('Failed to sync addBot to backend', err));
+          .catch(err => console.warn('Failed to sync addBot to backend', err));
 
         return newBot;
       },
@@ -152,13 +152,13 @@ export const useBotsStore = create<BotsState>()(
             }));
             return mappedBot;
           } else {
-            console.error(
+            console.warn(
               `Failed to create space on backend: ${result.message}`,
             );
             toast.error(result.message || 'Space was not saved to the server');
           }
         } catch (err) {
-          console.error('Failed to sync addBotAsync to backend', err);
+          console.warn('Failed to sync addBotAsync to backend', err);
           toast.error('Space was not saved to the server');
         }
 
@@ -183,7 +183,7 @@ export const useBotsStore = create<BotsState>()(
                 : undefined,
           }).then(result => {
             if (!result.success) {
-              console.error(
+              console.warn(
                 `Failed to update space on backend: ${result.message}`,
               );
               toast.error(
@@ -209,7 +209,7 @@ export const useBotsStore = create<BotsState>()(
         if (isMongoId) {
           deleteSpaceAction(id).then(result => {
             if (!result.success) {
-              console.error(
+              console.warn(
                 `Failed to delete space on backend: ${result.message}`,
               );
               toast.error(
@@ -285,12 +285,12 @@ export const useBotsStore = create<BotsState>()(
             );
             set({ bots: mapped });
           } else {
-            console.error(
+            console.warn(
               `Failed to fetch spaces from backend: ${result.message}`,
             );
           }
         } catch (error) {
-          console.error('Failed to fetch bots from backend', error);
+          console.warn('Failed to fetch bots from backend', error);
         }
       },
     }),

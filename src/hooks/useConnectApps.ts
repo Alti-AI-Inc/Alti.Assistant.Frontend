@@ -11,7 +11,7 @@ export const useConnectionsQuery = (accessToken?: string) => {
     queryFn: async () => {
       const response = await getConnections(accessToken);
       if (!response.success) {
-        console.error('getConnections failed:', response.debugMessage);
+        // console.warn('getConnections failed:', response.debugMessage);
         return [];
       }
       return response.data!;
