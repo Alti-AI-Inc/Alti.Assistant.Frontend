@@ -23,8 +23,10 @@ export default function Error({
       <h1 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
         Something went wrong
       </h1>
-      <p style={{ color: '#888', marginBottom: '1.5rem' }}>
-        An unexpected error occurred.
+      <p style={{ color: '#ff5555', marginBottom: '1.5rem', whiteSpace: 'pre-wrap', maxWidth: '800px' }}>
+        {error.message || String(error)}
+        {'\n\n'}
+        {error.stack}
       </p>
       <button
         onClick={reset}
