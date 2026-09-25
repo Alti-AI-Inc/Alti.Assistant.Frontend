@@ -135,23 +135,24 @@ export default function InstructionsPage() {
           {filteredInstructions.map((inst) => (
               <div
                 key={inst.id}
-                className="group relative flex flex-col gap-3 rounded-2xl bg-white dark:bg-zinc-900 p-5 shadow-sm border border-black/5 dark:border-white/10 transition-all hover:shadow-md hover:border-black/10 dark:hover:border-white/20"
+                className="group relative flex min-h-[52px] w-full flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-[5px] border border-zinc-300 bg-white px-4 py-2 shadow-xs transition-all hover:border-[#0000ff]/50 dark:border-zinc-700/80 dark:bg-zinc-800"
               >
-                <div className="flex items-start justify-between gap-4">
-                  <p className="text-[14px] leading-relaxed text-zinc-700 dark:text-zinc-300 whitespace-pre-wrap break-words flex-1">
-                    {inst.text}
-                  </p>
-                  <button
-                    onClick={() => handleDelete(inst.id)}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-zinc-400 opacity-0 transition-all hover:bg-red-50 hover:text-red-600 group-hover:opacity-100 dark:hover:bg-red-950/30 dark:hover:text-red-400"
-                    title="Delete instruction"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+                
+              <p className="text-[14px] leading-relaxed text-zinc-900 dark:text-zinc-100 whitespace-pre-wrap break-words flex-1">
+                {inst.text}
+              </p>
+              <div className="flex items-center gap-4 shrink-0">
+                <div className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider hidden sm:block">
+                  {new Date(inst.createdAt).toLocaleDateString()}
                 </div>
-                <div className="text-[10px] font-medium text-zinc-400 uppercase tracking-wider">
-                  Added {new Date(inst.createdAt).toLocaleDateString()}
-                </div>
+                <button
+                  onClick={() => handleDelete(inst.id)}
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-zinc-400 opacity-0 transition-all hover:bg-red-50 hover:text-red-600 group-hover:opacity-100 dark:hover:bg-red-950/30 dark:hover:text-red-400"
+                  title="Delete instruction"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
               </div>
 
             ))

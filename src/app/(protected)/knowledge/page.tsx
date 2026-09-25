@@ -155,35 +155,31 @@ export default function KnowledgePage() {
           {filteredFiles.map((file) => (
             <div
               key={file.id}
-              className="group relative flex flex-col gap-3 rounded-2xl bg-white dark:bg-zinc-900 p-5 shadow-sm border border-black/5 dark:border-white/10 transition-all hover:shadow-md hover:border-black/10 dark:hover:border-white/20"
+              className="group relative flex min-h-[52px] w-full items-center justify-between gap-4 rounded-[5px] border border-zinc-300 bg-white px-4 py-2 shadow-xs transition-all hover:border-[#0000ff]/50 dark:border-zinc-700/80 dark:bg-zinc-800"
             >
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3 overflow-hidden flex-1">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#0000ff]/10 text-[#0000ff] dark:bg-[#0000ff]/20">
-                    <FileIcon className="h-5 w-5" />
-                  </div>
-                  <div className="flex flex-col overflow-hidden">
-                    <p className="text-[14px] font-medium leading-none text-zinc-900 dark:text-zinc-100 truncate">
-                      {file.name}
-                    </p>
-                    <p className="text-[12px] text-zinc-500 mt-1">
-                      {formatSize(file.size)} • {file.type || 'Unknown type'}
-                    </p>
-                  </div>
+              <div className="flex items-center gap-3 overflow-hidden flex-1">
+                <FileIcon className="h-4 w-4 text-zinc-400 shrink-0" />
+                <p className="text-[14px] font-medium leading-none text-zinc-900 dark:text-zinc-100 truncate">
+                  {file.name}
+                </p>
+                <p className="text-[12px] text-zinc-500 whitespace-nowrap ml-2 hidden sm:block">
+                  {formatSize(file.size)}
+                </p>
+              </div>
+              <div className="flex items-center gap-4 shrink-0">
+                <div className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider hidden md:block">
+                  {new Date(file.createdAt).toLocaleDateString()}
                 </div>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDelete(file.id);
                   }}
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-zinc-400 opacity-0 transition-all hover:bg-red-50 hover:text-red-600 group-hover:opacity-100 dark:hover:bg-red-950/30 dark:hover:text-red-400"
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-zinc-400 opacity-0 transition-all hover:bg-red-50 hover:text-red-600 group-hover:opacity-100 dark:hover:bg-red-950/30 dark:hover:text-red-400"
                   title="Delete file"
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-3.5 w-3.5" />
                 </button>
-              </div>
-              <div className="text-[10px] font-medium text-zinc-400 uppercase tracking-wider">
-                Indexed {new Date(file.createdAt).toLocaleDateString()}
               </div>
             </div>
           ))}
