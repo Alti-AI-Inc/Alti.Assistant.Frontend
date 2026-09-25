@@ -29,7 +29,7 @@ export async function convertToMarkdown(fileBuffer: Buffer, mimeType: string, fi
 /**
  * Advanced Recursive Character Text Splitter (Pure open-source logic)
  */
-export function chunkMarkdown(text: string, chunkSize: number = 2000, overlap: number = 200): string[] {
+export function chunkMarkdown(text: string, filename: string, chunkSize: number = 2000, overlap: number = 200): string[] {
   const chunks: string[] = [];
   const separators = ['\\n\\n## ', '\\n\\n', '\\n', '. ', ' '];
   
@@ -51,7 +51,12 @@ export function chunkMarkdown(text: string, chunkSize: number = 2000, overlap: n
       }
     }
     
-    chunks.push(text.slice(currentIndex, bestBreak).trim());
+    // [Aphura World-Class Citation Engine]
+    // Hardcode the file citation permanently into the physical text of the chunk
+    // so it is mathematically embedded and retrieved alongside the data.
+    const rawChunk = text.slice(currentIndex, bestBreak).trim();
+    const citationHeader = `\n[SOURCE CITATION: ${filename}]\n`;
+    chunks.push(citationHeader + rawChunk);
     currentIndex = bestBreak - overlap; // Sliding window overlap
   }
   

@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     
     // 2. Chunk it via recursive character split (preserving overlap)
     // (We would normally bulk-upload these chunks, but for managed storage we send the optimized markdown)
-    const optimalChunks = chunkMarkdown(markdownContent, 2048, 256);
+    const optimalChunks = chunkMarkdown(markdownContent, file.name, 2048, 256);
     
     // Forward the optimized Markdown file directly to Together AI Managed Storage
     const togetherFormData = new FormData();
