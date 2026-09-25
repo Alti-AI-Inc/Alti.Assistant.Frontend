@@ -1,91 +1,184 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { User, MessageSquare, Save } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Search, Plus, Trash2, FileText, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
+import { Textarea } from '@/components/ui/textarea';
 
-const STORAGE_KEYS = {
-  aboutUser: 'aphura_about_user',
-  customInstructions: 'aphura_custom_instructions',
-};
+const STORAGE_KEY = 'aphura_custom_instructions_array';
+const LEGACY_KEY = 'aphura_custom_instructions';
+
+interface Instruction {
+  id: string;
+  text: string;
+  createdAt: number;
+}
 
 export default function InstructionsPage() {
-  const [aboutYou, setAboutYou] = useState('');
-  const [instructions, setInstructions] = useState('');
-  const [isSaving, setIsSaving] = useState(false);
+  const [instructions, setInstructions] = useState<Instruction[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [newInstruction, setNewInstruction] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setAboutYou(localStorage.getItem(STORAGE_KEYS.aboutUser) || '');
-      setInstructions(localStorage.getItem(STORAGE_KEYS.customInstructions) || '');
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          setInstructions(JSON.parse(saved));
+        } catch (e) {
+          console.error('Failed to parse instructions', e);
+        }
+      } else {
+        // Migrate legacy instructions if they exist
+        const legacy = localStorage.getItem(LEGACY_KEY);
+        if (legacy && legacy.trim()) {
+          const migrated: Instruction[] = [{
+            id: Date.now().toString(),
+            text: legacy,
+            createdAt: Date.now()
+          }];
+          setInstructions(migrated);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+        }
+      }
     }
   }, []);
 
-  const handleSave = async () => {
-    setIsSaving(true);
-    localStorage.setItem(STORAGE_KEYS.aboutUser, aboutYou);
-    localStorage.setItem(STORAGE_KEYS.customInstructions, instructions);
-    await new Promise(r => setTimeout(r, 600));
-    setIsSaving(false);
-    toast.success('Instructions saved successfully');
+  const saveInstructions = (newInstructions: Instruction[]) => {
+    setInstructions(newInstructions);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newInstructions));
   };
 
+  const handleAdd = () => {
+    if (!newInstruction.trim()) return;
+    const item: Instruction = {
+      id: Date.now().toString(),
+      text: newInstruction.trim(),
+      createdAt: Date.now(),
+    };
+    saveInstructions([item, ...instructions]);
+    setNewInstruction('');
+    toast.success('Instruction added');
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'; // Reset height
+    }
+  };
+
+  const handleDelete = (id: string) => {
+    saveInstructions(instructions.filter(i => i.id !== id));
+    toast.success('Instruction removed');
+  };
+
+  const filteredInstructions = instructions.filter(i => 
+    i.text.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="flex h-full w-full flex-col bg-[#e1e1e1] dark:bg-zinc-950 overflow-y-auto">
-      <header className="bg-white dark:bg-zinc-950 flex h-14 shrink-0 items-center justify-between border-b border-black/10 px-6 dark:border-white/10">
-        <h1 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+    <div className="flex h-full w-full flex-col bg-[#e1e1e1] dark:bg-zinc-950 overflow-hidden">
+      <header className="flex h-[52px] shrink-0 items-center justify-between border-b border-black/10 px-8 dark:border-white/10 bg-white dark:bg-zinc-950">
+        <h1 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
           Instructions
         </h1>
       </header>
 
-      <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6 lg:px-8 space-y-12 pb-24">
-        {/* About You Section */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-2">
-            <User className="h-4 w-4 text-zinc-400" />
-            <h2 className="text-sm font-semibold text-zinc-900 dark:text-white">About You</h2>
-          </div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            Tell Aphura about yourself — role, industry, expertise. This context is included in every conversation.
-          </p>
-          <textarea
-            value={aboutYou}
-            onChange={(e) => setAboutYou(e.target.value)}
-            placeholder="e.g. I'm a startup founder building fintech products. I prefer practical, actionable answers with code examples in TypeScript."
-            className="h-32 w-full resize-none rounded-lg border border-black/10 bg-white dark:bg-zinc-900 p-4 text-sm text-zinc-900 focus:border-[#0000ff] focus:outline-none focus:ring-1 focus:ring-[#0000ff] dark:border-white/10 dark:text-white dark:focus:border-[#0000ff]"
-          />
-        </section>
-
-        {/* Custom Instructions Section */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-2">
-            <MessageSquare className="h-4 w-4 text-zinc-400" />
-            <h2 className="text-sm font-semibold text-zinc-900 dark:text-white">Custom Instructions</h2>
-          </div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            How should Aphura respond? These instructions shape every response.
-          </p>
-          <textarea
-            value={instructions}
-            onChange={(e) => setInstructions(e.target.value)}
-            placeholder="e.g. Always cite sources. Use bullet points. Keep answers under 300 words unless I ask for detail."
-            className="h-32 w-full resize-none rounded-lg border border-black/10 bg-white dark:bg-zinc-900 p-4 text-sm text-zinc-900 focus:border-[#0000ff] focus:outline-none focus:ring-1 focus:ring-[#0000ff] dark:border-white/10 dark:text-white dark:focus:border-[#0000ff]"
-          />
-        </section>
+      <div className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6 lg:px-8 flex flex-col overflow-y-auto">
         
-        <button
-          onClick={handleSave}
-          disabled={isSaving}
-          className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[#0000ff] text-sm font-medium text-white transition-all hover:bg-[#0000ff]/90 disabled:opacity-50"
-        >
-          {isSaving ? (
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+        {/* Main Prompt Box Container */}
+        <div className="relative flex w-full flex-col gap-2 bg-white dark:bg-zinc-900 rounded-3xl p-3 shadow-[0_2px_15px_rgba(0,0,0,0.06)] dark:shadow-[0_2px_20px_rgba(0,0,0,0.2)] border border-black/5 dark:border-white/10 z-10">
+          <Textarea
+            ref={textareaRef}
+            value={newInstruction}
+            onChange={(e) => {
+              setNewInstruction(e.target.value);
+              e.target.style.height = 'auto';
+              e.target.style.height = `${e.target.scrollHeight}px`;
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleAdd();
+              }
+            }}
+            placeholder="How should Aphura respond? Type a new instruction..."
+            className="w-full resize-none border-none bg-transparent px-4 py-3 text-[15px] focus-visible:ring-0 text-zinc-900 placeholder:text-zinc-500 dark:text-zinc-100 dark:placeholder:text-zinc-500 max-h-[40dvh] min-h-[44px]"
+            style={{ overflowY: 'auto' }}
+          />
+          <div className="flex items-center justify-between px-2 pt-2 border-t border-black/5 dark:border-white/5">
+            <div className="flex items-center text-[11px] text-zinc-400 font-medium">
+              <SparklesIcon className="mr-1.5 h-3.5 w-3.5" />
+              Press Enter to add instruction
+            </div>
+            <button
+              onClick={handleAdd}
+              disabled={!newInstruction.trim()}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0000ff] text-white transition-all hover:bg-[#0000ff]/90 disabled:opacity-50 disabled:bg-[#0000ff]/50 disabled:cursor-not-allowed shadow-sm"
+            >
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Search Bar */}
+        <div className="relative mt-8 mb-6">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search instructions..."
+            className="w-full h-11 rounded-full bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 pl-11 pr-4 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-[#0000ff]/50 focus:ring-1 focus:ring-[#0000ff]/50 transition-all shadow-sm"
+          />
+        </div>
+
+        {/* Instructions List (Floating Style) */}
+        <div className="flex flex-col gap-4 pb-24">
+          {filteredInstructions.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <div className="h-12 w-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center mb-4">
+                <FileText className="h-6 w-6 text-zinc-400" />
+              </div>
+              <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-1">No instructions found</h3>
+              <p className="text-xs text-zinc-500">
+                {searchQuery ? "Try adjusting your search terms" : "Add your first custom instruction above"}
+              </p>
+            </div>
           ) : (
-            <Save className="h-4 w-4" />
+            filteredInstructions.map((inst) => (
+              <div
+                key={inst.id}
+                className="group relative flex flex-col gap-3 rounded-2xl bg-white dark:bg-zinc-900 p-5 shadow-sm border border-black/5 dark:border-white/10 transition-all hover:shadow-md hover:border-black/10 dark:hover:border-white/20"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <p className="text-[14px] leading-relaxed text-zinc-700 dark:text-zinc-300 whitespace-pre-wrap break-words flex-1">
+                    {inst.text}
+                  </p>
+                  <button
+                    onClick={() => handleDelete(inst.id)}
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-zinc-400 opacity-0 transition-all hover:bg-red-50 hover:text-red-600 group-hover:opacity-100 dark:hover:bg-red-950/30 dark:hover:text-red-400"
+                    title="Delete instruction"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="text-[10px] font-medium text-zinc-400 uppercase tracking-wider">
+                  Added {new Date(inst.createdAt).toLocaleDateString()}
+                </div>
+              </div>
+            ))
           )}
-          {isSaving ? 'Saving...' : 'Save Instructions'}
-        </button>
+        </div>
+
       </div>
     </div>
+  );
+}
+
+function SparklesIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+    </svg>
   );
 }
