@@ -127,7 +127,7 @@ export default function PlansPage() {
       {/* Main Workspace Body */}
       <div className="min-h-0 flex-1 overflow-y-auto px-8 py-3">
         <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
               {ALL_PLANS.map(
                 plan => {
                   const displayPrice = plan.price;
@@ -136,7 +136,7 @@ export default function PlansPage() {
                   return (
                     <Card
                       key={plan.id}
-                      className="w-full rounded-[5px] border-black/5 bg-white/80 px-5 py-2.5 shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-white/5 dark:bg-zinc-950/50"
+                      className="w-full rounded-[5px] border-black/5 bg-white/80 px-5 py-3 shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-white/5 dark:bg-zinc-950/50"
                     >
                       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         {/* Left Column: Pricing */}
