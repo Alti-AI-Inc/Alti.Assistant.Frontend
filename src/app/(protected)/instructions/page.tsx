@@ -132,18 +132,7 @@ export default function InstructionsPage() {
 
         {/* Instructions List (Floating Style) */}
         <div className="flex flex-col gap-4 pb-24">
-          {filteredInstructions.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <div className="h-12 w-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center mb-4">
-                <FileText className="h-6 w-6 text-zinc-400" />
-              </div>
-              <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-1">No instructions found</h3>
-              <p className="text-xs text-zinc-500">
-                {searchQuery ? "Try adjusting your search terms" : "Add your first custom instruction above"}
-              </p>
-            </div>
-          ) : (
-            filteredInstructions.map((inst) => (
+          {filteredInstructions.map((inst) => (
               <div
                 key={inst.id}
                 className="group relative flex flex-col gap-3 rounded-2xl bg-white dark:bg-zinc-900 p-5 shadow-sm border border-black/5 dark:border-white/10 transition-all hover:shadow-md hover:border-black/10 dark:hover:border-white/20"
@@ -164,8 +153,9 @@ export default function InstructionsPage() {
                   Added {new Date(inst.createdAt).toLocaleDateString()}
                 </div>
               </div>
+
             ))
-          )}
+          }
         </div>
 
       </div>
