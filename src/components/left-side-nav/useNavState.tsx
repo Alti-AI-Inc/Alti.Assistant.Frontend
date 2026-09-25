@@ -617,7 +617,7 @@ export const useNavState = ({ side = 'left' }: { side?: 'left' | 'right' } = {})
     } else if (
       pathname.startsWith('/instructions') ||
       pathname.startsWith('/guardrails') ||
-      pathname.startsWith('/knowledge') ||
+      pathname.startsWith('/knowledge') || pathname.startsWith('/connectors') ||
       pathname.startsWith('/platform-knowledge') ||
       pathname.startsWith('/legal') ||
       pathname.startsWith('/admin') ||
