@@ -90,7 +90,7 @@ export default function PricingPage() {
             </div>
             <div className="mt-4 md:mt-0 text-right">
               <div className="text-2xl font-bold text-white">$1</div>
-              <div className="text-xs text-zinc-500 uppercase font-semibold tracking-wider">per GB / month</div>
+              <div className="text-xs text-zinc-500 uppercase font-semibold tracking-wider">/gb/month</div>
             </div>
           </CardContent>
         </Card>

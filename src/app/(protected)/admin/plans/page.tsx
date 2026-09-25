@@ -131,7 +131,7 @@ export default function PlansPage() {
               {ALL_PLANS.map(
                 plan => {
                   const displayPrice = plan.price;
-                  const displayPeriod = plan.id === 'managed-storage' ? '/month per GB' : '/month';
+                  const displayPeriod = plan.id === 'managed-storage' ? '/gb/month' : '/month';
 
                   return (
                     <Card
