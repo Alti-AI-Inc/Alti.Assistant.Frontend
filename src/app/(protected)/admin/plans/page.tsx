@@ -22,7 +22,7 @@ interface PricingPlan {
     description:
       'Enterprise-grade RAG indexing and embedding storage powered by Together AI.',
     features: ['Vector Storage', 'Real-time inference indexing'],
-  },
+  }
 ];
 }
 
