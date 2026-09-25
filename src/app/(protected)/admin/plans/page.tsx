@@ -18,6 +18,15 @@ interface PricingPlan {
 
 const ALL_PLANS: PricingPlan[] = [
   {
+    id: 'managed-storage',
+    name: 'Managed Storage',
+    price: '$1',
+    period: '/mo per GB',
+    description:
+      'Enterprise-grade RAG indexing and embedding storage powered by Together AI.',
+    features: ['Vector Storage'],
+  },
+  {
     id: 'free',
     name: 'Starter',
     price: '$5',
@@ -77,15 +86,6 @@ const ALL_PLANS: PricingPlan[] = [
     description:
       'Dedicated capacity and premier throughput for high-volume institutions.',
     features: ['25,000 Prompts'],
-  },
-  {
-    id: 'managed-storage',
-    name: 'Managed Storage',
-    price: '$1',
-    period: '/mo per GB',
-    description:
-      'Enterprise-grade RAG indexing and embedding storage powered by Together AI.',
-    features: ['Vector Storage'],
   },
 ];
 
