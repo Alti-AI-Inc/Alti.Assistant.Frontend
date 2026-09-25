@@ -1073,6 +1073,18 @@ export default function ChatInput({
 
         setShowStartLastMessage(false);
         setLoadingResponse(false);
+        
+        if (isNewChatId(conversationId)) {
+          if (activeBotId && isStudio) {
+            router.replace(`/spaces?bot=${activeBotId}&thread=${newId}`);
+          } else {
+            if (typeof window !== 'undefined') {
+              window.history.replaceState(null, '', `/c/${newId}`);
+            }
+            router.replace(`/c/${newId}`, { scroll: false });
+          }
+        }
+        
         return;
       }
       if (!response?.data) {
