@@ -73,7 +73,9 @@ export default function GuardrailsPage() {
       <div className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6 lg:px-8 flex flex-col overflow-y-auto">
         
         {/* Main Prompt Box Container */}
-        <div className="relative flex w-full flex-col gap-2 bg-white dark:bg-zinc-900 rounded-3xl p-3 shadow-[0_2px_15px_rgba(0,0,0,0.06)] dark:shadow-[0_2px_20px_rgba(0,0,0,0.2)] border border-black/5 dark:border-white/10 z-10">
+        <div
+          className="relative flex min-h-[52px] w-full items-center gap-1.5 rounded-[5px] border border-zinc-300 bg-white px-3 py-1.5 shadow-xs transition-all duration-300 dark:border-zinc-700/80 dark:bg-zinc-800 z-10"
+        >
           <Textarea
             ref={textareaRef}
             value={newGuardrail}
@@ -88,23 +90,19 @@ export default function GuardrailsPage() {
                 handleAdd();
               }
             }}
-            placeholder="Define a strict boundary or rule Aphura must not cross..."
-            className="w-full resize-none border-none bg-transparent px-4 py-3 text-[15px] focus-visible:ring-0 text-zinc-900 placeholder:text-zinc-500 dark:text-zinc-100 dark:placeholder:text-zinc-500 max-h-[40dvh] min-h-[44px]"
-            style={{ overflowY: 'auto' }}
+            placeholder="Enter prompt here..."
+            className="w-full resize-none border-none bg-transparent px-2 py-2 text-[15px] focus-visible:ring-0 text-zinc-900 placeholder:text-zinc-500 dark:text-zinc-100 dark:placeholder:text-zinc-500 min-h-0"
+            style={{ overflowY: 'auto', maxHeight: '40dvh' }}
           />
-          <div className="flex items-center justify-between px-2 pt-2 border-t border-black/5 dark:border-white/5">
-            <div className="flex items-center text-[11px] text-zinc-400 font-medium">
-              <Shield className="mr-1.5 h-3.5 w-3.5" />
-              Press Enter to add guardrail
-            </div>
-            <button
-              onClick={handleAdd}
-              disabled={!newGuardrail.trim()}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0000ff] text-white transition-all hover:bg-[#0000ff]/90 disabled:opacity-50 disabled:bg-[#0000ff]/50 disabled:cursor-not-allowed shadow-sm"
-            >
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          </div>
+
+          <button
+            onClick={handleAdd}
+            disabled={!newGuardrail.trim()}
+            className="flex size-10 sm:size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-[#0000ff] bg-[#0000ff] text-white transition-all hover:bg-[#0000ff]/90 focus:outline-none active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Add"
+          >
+            <ArrowRight strokeWidth={2} className="size-3.5" />
+          </button>
         </div>
 
         {/* Search Bar */}
