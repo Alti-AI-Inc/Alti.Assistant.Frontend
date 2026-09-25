@@ -11,6 +11,48 @@ export interface ApiResponse<T = any> {
   isStreamed?: boolean;
 }
 
+
+async function buildSystemInstruction(prompt: string) {
+  let instruction = HARD_LAW_SYSTEM_INSTRUCTION;
+  if (typeof window !== 'undefined') {
+    try {
+      const instStr = localStorage.getItem('aphura_custom_instructions_array');
+      if (instStr) {
+        const instructions = JSON.parse(instStr);
+        if (Array.isArray(instructions) && instructions.length > 0) {
+          instruction += '\n\n[User Custom Instructions]\n' + instructions.map((i: any) => '- ' + i.text).join('\n');
+        }
+      }
+    } catch(e) {}
+    
+    try {
+      const guardStr = localStorage.getItem('aphura_custom_guardrails_array');
+      if (guardStr) {
+        const guardrails = JSON.parse(guardStr);
+        if (Array.isArray(guardrails) && guardrails.length > 0) {
+          instruction += '\n\n[STRICT SYSTEM GUARDRAILS (DO NOT VIOLATE)]\n' + guardrails.map((g: any) => '- ' + g.text).join('\n');
+        }
+      }
+    } catch(e) {}
+
+    try {
+      const kbStr = localStorage.getItem('aphura_knowledge_files');
+      if (kbStr && JSON.parse(kbStr).length > 0 && prompt) {
+        const ragRes = await fetch('/api/knowledge/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: prompt })
+        });
+        const ragData = await ragRes.json();
+        if (ragData.success && ragData.context) {
+          instruction += '\n\n[RETRIEVED KNOWLEDGE BASE CONTEXT (Together AI Multi-Stage RAG)]\n' + ragData.context + '\n\n[CRITICAL RAG DIRECTIVE: ZERO HALLUCINATION & EXACT CITATION]\n1. You must ONLY use the information provided in the RETRIEVED KNOWLEDGE BASE CONTEXT above.\n2. If the answer is not explicitly contained in the context, you MUST state "I do not have enough information to answer that based on the provided documents."\n3. DO NOT hallucinate, infer, or use outside knowledge.\n4. You MUST cite your source for every claim using the exact filename provided in the context, formatted as [File: filename.ext].';
+        }
+      }
+    } catch(e) {}
+  }
+  return instruction;
+}
+
 export async function PostConversation(
   apiUrl: string,
   message: string,
