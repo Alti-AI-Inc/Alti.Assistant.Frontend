@@ -34,31 +34,7 @@ export async function PostConversation(
         timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
         localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
         localTime: new Date().toLocaleTimeString('en-US'),
-        systemInstruction: (() => {
-          let instruction = HARD_LAW_SYSTEM_INSTRUCTION;
-          if (typeof window !== 'undefined') {
-            try {
-              const instStr = localStorage.getItem('aphura_custom_instructions_array');
-              if (instStr) {
-                const instructions = JSON.parse(instStr);
-                if (Array.isArray(instructions) && instructions.length > 0) {
-                  instruction += '\n\n[User Custom Instructions]\n' + instructions.map(i => '- ' + i.text).join('\n');
-                }
-              }
-            } catch(e) {}
-            
-            try {
-              const guardStr = localStorage.getItem('aphura_custom_guardrails_array');
-              if (guardStr) {
-                const guardrails = JSON.parse(guardStr);
-                if (Array.isArray(guardrails) && guardrails.length > 0) {
-                  instruction += '\n\n[STRICT SYSTEM GUARDRAILS (DO NOT VIOLATE)]\n' + guardrails.map(g => '- ' + g.text).join('\n');
-                }
-              }
-            } catch(e) {}
-          }
-          return instruction;
-        })(),
+        systemInstruction: await buildSystemInstruction(prompt),
         ...extraParams,
       }),
     });
@@ -130,31 +106,7 @@ export async function PostConversationStream(
             timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
             localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
             localTime: new Date().toLocaleTimeString('en-US'),
-            systemInstruction: (() => {
-              let instruction = HARD_LAW_SYSTEM_INSTRUCTION;
-              if (typeof window !== 'undefined') {
-                try {
-                  const instStr = localStorage.getItem('aphura_custom_instructions_array');
-                  if (instStr) {
-                    const instructions = JSON.parse(instStr);
-                    if (Array.isArray(instructions) && instructions.length > 0) {
-                      instruction += '\n\n[User Custom Instructions]\n' + instructions.map(i => '- ' + i.text).join('\n');
-                    }
-                  }
-                } catch(e) {}
-                
-                try {
-                  const guardStr = localStorage.getItem('aphura_custom_guardrails_array');
-                  if (guardStr) {
-                    const guardrails = JSON.parse(guardStr);
-                    if (Array.isArray(guardrails) && guardrails.length > 0) {
-                      instruction += '\n\n[STRICT SYSTEM GUARDRAILS (DO NOT VIOLATE)]\n' + guardrails.map(g => '- ' + g.text).join('\n');
-                    }
-                  }
-                } catch(e) {}
-              }
-              return instruction;
-            })(),
+            systemInstruction: await buildSystemInstruction(prompt),
             ...extraParams,
           }),
         });
