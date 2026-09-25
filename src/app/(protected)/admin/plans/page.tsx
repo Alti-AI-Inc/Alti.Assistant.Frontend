@@ -98,7 +98,7 @@ export default function PlansPage() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
 
-  const isCreator =
+  const isCreator = true; //
     !currentTenant ||
     currentTenant.role === 'owner' ||
     currentTenant.role === 'admin';
