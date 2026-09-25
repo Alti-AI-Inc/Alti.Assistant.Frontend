@@ -858,19 +858,7 @@ const FullConversation = ({
                         ) : (
                           <div className="group relative">
                             <Streamdown className="w-full rounded-lg text-sm leading-relaxed">
-                              {(() => {
-                                const refs = message.metadata?.reference ||
-                                  message.metadata?.sources ||
-                                  message.metadata?.citations ||
-                                  (message as any)?.reference ||
-                                  (message as any)?.sources ||
-                                  (message as any)?.citations ||
-                                  [];
-                                if (refs.length && displayContent.match(/\[\d+\]/)) {
-                                  return renderContentWithCitations(displayContent, refs);
-                                }
-                                return displayContent;
-                              })()}
+                              {displayContent}
                             </Streamdown>
 
                             <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -948,9 +936,9 @@ const FullConversation = ({
                             {/* ─── Perplexity-style Follow-Up Suggestion Chips ─── */}
                             {(() => {
                               const followUps: string[] =
-                                message.metadata?.followUps ||
+                                (message.metadata as any)?.followUps ||
                                 (message as any)?.followUps ||
-                                (message.metadata?.responseMessage as any)?.followUps ||
+                                (message.metadata as any)?.responseMessage?.followUps ||
                                 [];
                               if (!followUps.length) return null;
                               return (
