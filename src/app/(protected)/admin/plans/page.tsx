@@ -18,6 +18,14 @@ interface PricingPlan {
 
 const ALL_PLANS: PricingPlan[] = [
   {
+    id: 'free',
+    name: 'Starter',
+    price: '$5',
+    period: '/mo',
+    description: 'Entry-level plan for basic queries and prototyping.',
+    features: ['250 Prompts'],
+  },
+  {
     id: 'basic',
     name: 'Basic',
     price: '$10',
