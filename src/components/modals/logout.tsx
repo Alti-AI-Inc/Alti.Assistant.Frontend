@@ -29,7 +29,7 @@ export function Logout() {
           <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">
             Logout
           </h2>
-          <p className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
+          <p className="mt-3 pb-2 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1">
             Are you sure you want to logout?
           </p>
         </div>
