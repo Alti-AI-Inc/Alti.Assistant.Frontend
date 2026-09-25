@@ -89,7 +89,7 @@ export default function InstructionsPage() {
         <div
           className="relative flex min-h-[52px] w-full items-center gap-1.5 rounded-[5px] border border-zinc-300 bg-white px-3 py-1.5 shadow-xs transition-all duration-300 dark:border-zinc-700/80 dark:bg-zinc-800 z-10"
         >
-          <textarea
+          <textarea rows={1}
             ref={textareaRef}
             value={newInstruction}
             onChange={(e) => {
