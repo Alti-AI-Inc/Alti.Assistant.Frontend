@@ -101,7 +101,7 @@ export default function KnowledgePage() {
         </h1>
       </header>
 
-      <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6 lg:px-8 flex flex-col overflow-y-auto">
+      <div className="mx-auto w-full flex-1 px-8 py-6 flex flex-col overflow-y-auto">
         
         {/* Hidden File Input */}
         <input 
