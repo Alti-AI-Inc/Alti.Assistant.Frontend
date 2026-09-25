@@ -37,10 +37,25 @@ export async function PostConversation(
         systemInstruction: (() => {
           let instruction = HARD_LAW_SYSTEM_INSTRUCTION;
           if (typeof window !== 'undefined') {
-            const aboutUser = localStorage.getItem('aphura_about_user');
-            const customInstructions = localStorage.getItem('aphura_custom_instructions');
-            if (aboutUser) instruction += `\n\n[User Profile] ${aboutUser}`;
-            if (customInstructions) instruction += `\n\n[User Preferences] ${customInstructions}`;
+            try {
+              const instStr = localStorage.getItem('aphura_custom_instructions_array');
+              if (instStr) {
+                const instructions = JSON.parse(instStr);
+                if (Array.isArray(instructions) && instructions.length > 0) {
+                  instruction += '\n\n[User Custom Instructions]\n' + instructions.map(i => '- ' + i.text).join('\n');
+                }
+              }
+            } catch(e) {}
+            
+            try {
+              const guardStr = localStorage.getItem('aphura_custom_guardrails_array');
+              if (guardStr) {
+                const guardrails = JSON.parse(guardStr);
+                if (Array.isArray(guardrails) && guardrails.length > 0) {
+                  instruction += '\n\n[STRICT SYSTEM GUARDRAILS (DO NOT VIOLATE)]\n' + guardrails.map(g => '- ' + g.text).join('\n');
+                }
+              }
+            } catch(e) {}
           }
           return instruction;
         })(),
@@ -118,10 +133,25 @@ export async function PostConversationStream(
             systemInstruction: (() => {
               let instruction = HARD_LAW_SYSTEM_INSTRUCTION;
               if (typeof window !== 'undefined') {
-                const aboutUser = localStorage.getItem('aphura_about_user');
-                const customInstructions = localStorage.getItem('aphura_custom_instructions');
-                if (aboutUser) instruction += `\n\n[User Profile] ${aboutUser}`;
-                if (customInstructions) instruction += `\n\n[User Preferences] ${customInstructions}`;
+                try {
+                  const instStr = localStorage.getItem('aphura_custom_instructions_array');
+                  if (instStr) {
+                    const instructions = JSON.parse(instStr);
+                    if (Array.isArray(instructions) && instructions.length > 0) {
+                      instruction += '\n\n[User Custom Instructions]\n' + instructions.map(i => '- ' + i.text).join('\n');
+                    }
+                  }
+                } catch(e) {}
+                
+                try {
+                  const guardStr = localStorage.getItem('aphura_custom_guardrails_array');
+                  if (guardStr) {
+                    const guardrails = JSON.parse(guardStr);
+                    if (Array.isArray(guardrails) && guardrails.length > 0) {
+                      instruction += '\n\n[STRICT SYSTEM GUARDRAILS (DO NOT VIOLATE)]\n' + guardrails.map(g => '- ' + g.text).join('\n');
+                    }
+                  }
+                } catch(e) {}
               }
               return instruction;
             })(),
