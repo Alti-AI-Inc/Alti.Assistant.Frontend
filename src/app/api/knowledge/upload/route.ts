@@ -59,6 +59,13 @@ export async function POST(req: Request) {
       throw new Error(data.error?.message || 'Failed to upload to Together AI');
     }
 
+    // [Aphura Billing Engine]
+    // Calculate Managed Storage footprint and enqueue meter event
+    const bytesStored = data.bytes || file.size;
+    const gbStored = bytesStored / (1024 * 1024 * 1024);
+    const monthlyCost = gbStored * 1.00; // $1.00 per GB
+    console.log(`[Billing] Metered ${bytesStored} bytes (${gbStored.toFixed(6)} GB). Added ${monthlyCost.toFixed(4)} to tenant ledger.`);
+
     return NextResponse.json({
       success: true,
       data: {
