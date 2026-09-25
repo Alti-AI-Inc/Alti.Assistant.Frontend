@@ -79,6 +79,23 @@ export default function PricingPage() {
           ))}
         </div>
       </TabsContent>
+      
+      {/* Managed Storage Pricing Row */}
+      <div className="mt-12 w-full">
+        <Card className="border-2 bg-zinc-900 border-zinc-800">
+          <CardContent className="flex flex-col md:flex-row items-center justify-between p-6">
+            <div className="text-left">
+              <h3 className="text-xl font-bold text-white mb-1">Aphura Managed Storage</h3>
+              <p className="text-sm text-zinc-400">Enterprise-grade RAG indexing and embedding storage powered by Together AI.</p>
+            </div>
+            <div className="mt-4 md:mt-0 text-right">
+              <div className="text-2xl font-bold text-white">$1</div>
+              <div className="text-xs text-zinc-500 uppercase font-semibold tracking-wider">per GB / month</div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
     </Tabs>
   );
 }
