@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { ShieldCheck, ShieldAlert } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 export function DesktopStatusBadge() {
   const [isConnected, setIsConnected] = useState(false);
@@ -22,19 +22,12 @@ export function DesktopStatusBadge() {
     return () => clearInterval(interval);
   }, []);
 
+  if (!isConnected) return null;
+
   return (
-    <div className={`fixed bottom-4 left-4 z-50 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide border shadow-sm backdrop-blur-md transition-all duration-300 ${isConnected ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20'}`}>
-      {isConnected ? (
-        <>
-          <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Sovereign Bridge Active</span>
-        </>
-      ) : (
-        <>
-          <ShieldAlert className="w-3.5 h-3.5" />
-          <span>Sovereign Bridge Disconnected</span>
-        </>
-      )}
+    <div className="fixed bottom-4 left-4 z-50 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide border shadow-sm backdrop-blur-md transition-all duration-300 bg-emerald-500/10 text-emerald-500 border-emerald-500/20">
+      <ShieldCheck className="w-3.5 h-3.5" />
+      <span>Sovereign Bridge Active</span>
     </div>
   );
 }
