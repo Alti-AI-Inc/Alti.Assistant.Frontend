@@ -617,6 +617,7 @@ export const useNavState = ({ side = 'left' }: { side?: 'left' | 'right' } = {})
     } else if (
       pathname.startsWith('/instructions') ||
       pathname.startsWith('/guardrails') ||
+      pathname.startsWith('/knowledge') ||
       pathname.startsWith('/platform-knowledge') ||
       pathname.startsWith('/legal') ||
       pathname.startsWith('/admin') ||
@@ -625,9 +626,7 @@ export const useNavState = ({ side = 'left' }: { side?: 'left' | 'right' } = {})
       pathname.startsWith('/invite-friends')
     ) {
       setActiveTab('account');
-    } else if (pathname.startsWith('/knowledge')) {
-      setActiveTab('none');
-    }
+    } 
   }, [pathname, isLoggedIn]);
 
   // Reset active tab to search when user logs out
