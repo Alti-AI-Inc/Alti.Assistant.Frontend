@@ -33,7 +33,7 @@ export default function TaskPresets({ onSelectPreset }: TaskPresetsProps) {
       title: 'Daily Report Summary',
       description: 'Generate and compile daily performance and ESG metrics reports.',
       icon: <Sparkles className="size-5 text-indigo-500" />,
-      prompt: 'Audit and summarize Liberty cost reports from Together Dedicated Endpoints and compile an automated markdown daily usage summary.',
+      prompt: 'Audit and summarize Aphura Cloud cost reports from Together Dedicated Endpoints and compile an automated markdown daily usage summary.',
       taskType: 'recurring',
       triggerType: 'scheduled',
       schedule: 'Every day at 9 AM',

@@ -256,7 +256,7 @@ export const allApps: APP[] = [
   {
     "title": "MinIO Storage",
     "description": "Securely list, read, upload, and manage files inside MinIO buckets programmatically.",
-    "image": "https://logos.composio.dev/api/liberty-console",
+    "image": "https://logos.composio.dev/api/aphura-console",
     "app_name": "minio-s3",
     "isAvailable": true
   },
@@ -562,17 +562,17 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Liberty Console",
-    "description": "List active instances, read EC2 console logs, query S3 buckets, and view Prometheus alert metrics inside Liberty console panels.",
-    "image": "https://logos.composio.dev/api/liberty-console",
-    "app_name": "liberty-console",
+    "title": "Aphura Cloud Console",
+    "description": "List active instances, read EC2 console logs, query S3 buckets, and view Prometheus alert metrics inside Aphura Cloud console panels.",
+    "image": "https://logos.composio.dev/api/aphura-console",
+    "app_name": "aphura-console",
     "isAvailable": true
   },
   {
-    "title": "Liberty Cluster",
-    "description": "Inspect Liberty VM profiles, query cloud storage buckets, retrieve cloud logging events, and audit project metrics inside Liberty Cloud.",
+    "title": "Aphura Cloud Cluster",
+    "description": "Inspect Aphura Cloud VM profiles, query cloud storage buckets, retrieve cloud logging events, and audit project metrics inside Aphura Cloud.",
     "image": "https://logos.composio.dev/api/google",
-    "app_name": "liberty-cloud",
+    "app_name": "aphura-cloud",
     "isAvailable": true
   },
   {

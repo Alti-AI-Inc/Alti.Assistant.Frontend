@@ -63,7 +63,7 @@ export async function PostConversation(
         message: is404
           ? 'Service is temporarily unavailable. Please try again shortly.'
           : parsedMsg ||
-            'The Liberty Center One backend API is currently offline. Please boot the backend services to enable real-time inference.',
+            'The Aphura Cloud backend API is currently offline. Please boot the backend services to enable real-time inference.',
         debugMessage: `HTTP Error ${response.status}: ${errorText}`,
         statusCode: response.status,
       };
@@ -171,7 +171,7 @@ export async function PostConversationStream(
         message: is404
           ? 'Service is temporarily unavailable. Please try again shortly.'
           : parsedMsg ||
-            'The Liberty Center One backend API is currently offline. Please boot the backend services to enable real-time inference.',
+            'The Aphura Cloud backend API is currently offline. Please boot the backend services to enable real-time inference.',
         debugMessage: `HTTP Error ${response.status}: ${errorText}`,
         statusCode: response.status,
       };

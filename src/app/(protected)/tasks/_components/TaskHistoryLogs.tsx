@@ -36,7 +36,7 @@ export default function TaskHistoryLogs({
       `[${new Date().toISOString()}] [network] Resolving secure public endpoint routes...`,
     ];
 
-    if (taskName.includes('Report') || taskName.includes('Liberty')) {
+    if (taskName.includes('Report') || taskName.includes('Aphura Cloud')) {
       lines.push(
         `[${new Date().toISOString()}] [fetch] GET secure connection to https://monitoring.cloud.aphura.ai/v3...`,
         `[${new Date().toISOString()}] [status] 200 OK - connection established with Aphura Cloud Monitoring API`,

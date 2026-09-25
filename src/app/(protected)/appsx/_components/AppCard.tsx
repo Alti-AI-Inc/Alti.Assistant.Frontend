@@ -829,7 +829,7 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
       "KAFKA_CLIENT_ID": "aphura-mcp-client"
     }
   },
-  "liberty-console": {
+  "aphura-console": {
     requiredEnv: ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_REGION"],
     labels: {
       "AWS_ACCESS_KEY_ID": "MinIO Access Key",
@@ -842,14 +842,14 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
       "AWS_REGION": "us-east-1"
     }
   },
-  "liberty-cloud": {
+  "aphura-cloud": {
     requiredEnv: ["LIBERTY_PROJECT_ID", "GCP_SA_KEY"],
     labels: {
-      "LIBERTY_PROJECT_ID": "Liberty Project ID",
-      "GCP_SA_KEY": "Liberty Center Key"
+      "LIBERTY_PROJECT_ID": "Aphura Project ID",
+      "GCP_SA_KEY": "Aphura Cloud Key"
     },
     placeholders: {
-      "LIBERTY_PROJECT_ID": "my-liberty-project",
+      "LIBERTY_PROJECT_ID": "my-aphura-project",
       "GCP_SA_KEY": "{\"type\": \"service_account\", ..."
     }
   },

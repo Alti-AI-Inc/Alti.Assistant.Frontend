@@ -100,8 +100,8 @@ Recent performance across major technology equities highlights resilient revenue
   },
   {
     _id: 'mock_conv_4',
-    conversationId: 'liberty-scaling',
-    title: 'Liberty Bare-Metal Scaling',
+    conversationId: 'aphura-scaling',
+    title: 'Aphura Bare-Metal Scaling',
     updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 7).toISOString(),
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
     messages: [

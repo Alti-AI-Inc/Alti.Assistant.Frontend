@@ -62,7 +62,7 @@ export default function page() {
           {
             text: '2.2 AI Processing.',
             description:
-              'To deliver our AI features, your prompts, messages, and relevant context (such as documents in your knowledge base) are processed exclusively using Together.ai native models hosted on Liberty Center One. Your data is transmitted to Google APIs solely for the purpose of generating AI responses to your requests. Please see Section 4 (Third-Party Service Providers) for more details.',
+              'To deliver our AI features, your prompts, messages, and relevant context (such as documents in your knowledge base) are processed exclusively using Together.ai native models hosted on Aphura Cloud. Your data is transmitted to Google APIs solely for the purpose of generating AI responses to your requests. Please see Section 4 (Third-Party Service Providers) for more details.',
           },
           {
             text: '2.3 Search and Research Features.',
@@ -107,7 +107,7 @@ export default function page() {
           {
             text: '3.3 Cloud Infrastructure.',
             description:
-              'Your data is stored on servers hosted on Liberty Center One infrastructure. Uploaded files are stored in MinIO Sovereign Storage. Our database services include MongoDB Atlas (user and conversation data), PostgreSQL (knowledge base embeddings and retrieval-augmented generation data), Redis (caching and session management), and Qdrant (vector search).',
+              'Your data is stored on servers hosted on Aphura Cloud infrastructure. Uploaded files are stored in MinIO Sovereign Storage. Our database services include MongoDB Atlas (user and conversation data), PostgreSQL (knowledge base embeddings and retrieval-augmented generation data), Redis (caching and session management), and Qdrant (vector search).',
           },
           {
             text: '3.4 Access Controls.',
@@ -135,7 +135,7 @@ export default function page() {
               <li>
                 <strong>AI Model Providers:</strong> Together.ai
                 receives your prompts and relevant context to generate AI responses. All 
-                AI models are hosted exclusively on Liberty Center One. We configure our 
+                AI models are hosted exclusively on Aphura Cloud. We configure our 
                 usage to request that the models do not use your data for training.
               </li>
               <li>
@@ -153,7 +153,7 @@ export default function page() {
                 authentication.
               </li>
               <li>
-                <strong>Cloud Infrastructure:</strong> Liberty Center One
+                <strong>Cloud Infrastructure:</strong> Aphura Cloud
                 provides hosting, storage, document processing (Document AI), and
                 translation services. MongoDB Atlas provides database hosting.
               </li>
@@ -261,7 +261,7 @@ export default function page() {
       {
         heading: '4. Description of the Platform',
         content:
-          'Aphura is an AI-powered productivity and intelligence platform that provides access to advanced artificial intelligence capabilities including, but not limited to, conversational AI chat, deep research, web search, image and video generation, audio transcription, code generation, writing and editing tools, legal contract review, presentation creation, report generation, knowledge base management with retrieval-augmented generation (RAG), and third-party integrations. The Platform routes and processes your requests exclusively using Together.ai native models hosted on Liberty Center One to deliver responses.',
+          'Aphura is an AI-powered productivity and intelligence platform that provides access to advanced artificial intelligence capabilities including, but not limited to, conversational AI chat, deep research, web search, image and video generation, audio transcription, code generation, writing and editing tools, legal contract review, presentation creation, report generation, knowledge base management with retrieval-augmented generation (RAG), and third-party integrations. The Platform routes and processes your requests exclusively using Together.ai native models hosted on Aphura Cloud to deliver responses.',
       },
       {
         heading: '5. Subscription Plans and Payments',

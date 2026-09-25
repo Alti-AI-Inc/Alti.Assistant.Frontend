@@ -77,7 +77,7 @@ export default function TasksClient() {
       const defaultTasks: AutomationTask[] = [
         {
           id: 'task-1',
-          prompt: 'Audit and summarize Liberty cost reports from Together Dedicated Endpoints and compile an automated markdown daily usage summary.',
+          prompt: 'Audit and summarize Aphura Cloud cost reports from Together Dedicated Endpoints and compile an automated markdown daily usage summary.',
           taskType: 'recurring',
           triggerType: 'scheduled',
           schedule: 'Every day at 9 AM',
@@ -116,11 +116,11 @@ export default function TasksClient() {
         const defaultRuns: TaskRun[] = [
           {
             id: 'run-1',
-            taskName: 'Audit and summarize Liberty cost rep...',
+            taskName: 'Audit and summarize Aphura Cloud cost rep...',
             timestamp: new Date(Date.now() - 3600000 * 4).toISOString(),
             status: 'success',
             duration: 3200,
-            summary: 'Generated daily Liberty usage and cost optimization report. Compiled 4 recommendation metrics, reducing computed Together Dedicated Endpoints endpoint waste by 12%.',
+            summary: 'Generated daily Aphura Cloud usage and cost optimization report. Compiled 4 recommendation metrics, reducing computed Together Dedicated Endpoints endpoint waste by 12%.',
           },
           {
             id: 'run-2',
@@ -149,11 +149,11 @@ export default function TasksClient() {
       const defaultRuns: TaskRun[] = [
         {
           id: 'run-1',
-          taskName: 'Audit and summarize Liberty cost rep...',
+          taskName: 'Audit and summarize Aphura Cloud cost rep...',
           timestamp: new Date(Date.now() - 3600000 * 4).toISOString(),
           status: 'success',
           duration: 3200,
-          summary: 'Generated daily Liberty usage and cost optimization report. Compiled 4 recommendation metrics, reducing computed Together Dedicated Endpoints endpoint waste by 12%.',
+          summary: 'Generated daily Aphura Cloud usage and cost optimization report. Compiled 4 recommendation metrics, reducing computed Together Dedicated Endpoints endpoint waste by 12%.',
         },
         {
           id: 'run-2',
@@ -291,8 +291,8 @@ export default function TasksClient() {
     setTimeout(() => {
       let finalSummary = 'Successfully executed automated agent run. Output: Completed all actions specified in the prompt.';
       const p = newTask.prompt.toLowerCase();
-      if (p.includes('liberty') || p.includes('cost') || p.includes('report')) {
-        finalSummary = 'Generated daily Liberty usage and cost optimization report. Compiled 4 recommendation metrics, reducing computed Together Dedicated Endpoints endpoint waste by 12%.';
+      if (p.includes('aphura') || p.includes('cost') || p.includes('report')) {
+        finalSummary = 'Generated daily Aphura Cloud usage and cost optimization report. Compiled 4 recommendation metrics, reducing computed Together Dedicated Endpoints endpoint waste by 12%.';
       } else if (p.includes('email') || p.includes('reply') || p.includes('responder')) {
         finalSummary = 'Drafted context-aware auto-response to client query. Summarized action points and saved in Gmail Drafts (ID: d_10f8b3c84).';
       } else if (p.includes('storage') || p.includes('database') || p.includes('audit')) {
