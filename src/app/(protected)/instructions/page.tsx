@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Search, Plus, Trash2, FileText, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
-import { Textarea } from '@/components/ui/textarea';
+
 
 const STORAGE_KEY = 'aphura_custom_instructions_array';
 const LEGACY_KEY = 'aphura_custom_instructions';
@@ -89,7 +89,7 @@ export default function InstructionsPage() {
         <div
           className="relative flex min-h-[52px] w-full items-center gap-1.5 rounded-[5px] border border-zinc-300 bg-white px-3 py-1.5 shadow-xs transition-all duration-300 dark:border-zinc-700/80 dark:bg-zinc-800 z-10"
         >
-          <Textarea
+          <textarea
             ref={textareaRef}
             value={newInstruction}
             onChange={(e) => {
@@ -104,14 +104,14 @@ export default function InstructionsPage() {
               }
             }}
             placeholder="Enter prompt here..."
-            className="w-full resize-none border-none bg-transparent px-2 py-2 text-[15px] focus-visible:ring-0 text-zinc-900 placeholder:text-zinc-500 dark:text-zinc-100 dark:placeholder:text-zinc-500 min-h-0"
+            className="w-full resize-none border-none bg-transparent px-2 py-2 text-[15px] focus-visible:ring-0 outline-none text-zinc-900 placeholder:text-zinc-500 dark:text-zinc-100 dark:placeholder:text-zinc-500 min-h-0"
             style={{ overflowY: 'auto', maxHeight: '40dvh' }}
           />
 
           <button
             onClick={handleAdd}
             disabled={!newInstruction.trim()}
-            className="flex size-10 sm:size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-[#0000ff] bg-[#0000ff] text-white transition-all hover:bg-[#0000ff]/90 focus:outline-none active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex size-10 sm:size-8 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] border border-[#0000ff] bg-[#0000ff] text-white transition-all hover:bg-[#0000ff]/90 focus:outline-none active:scale-95 disabled:cursor-not-allowed"
             aria-label="Add"
           >
             <ArrowRight strokeWidth={2} className="size-3.5" />
@@ -126,7 +126,7 @@ export default function InstructionsPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search instructions..."
-            className="w-full h-11 rounded-full bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/10 pl-11 pr-4 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-[#0000ff]/50 focus:ring-1 focus:ring-[#0000ff]/50 transition-all shadow-sm"
+            className="w-full min-h-[52px] rounded-[5px] bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700/80 pl-11 pr-4 text-[15px] text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-[#0000ff] focus:ring-1 focus:ring-[#0000ff] transition-all shadow-xs"
           />
         </div>
 
