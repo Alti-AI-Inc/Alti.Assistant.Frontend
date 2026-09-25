@@ -105,7 +105,7 @@ export default function GuardrailsPage() {
                 handleAdd();
               }
             }}
-            placeholder="Enter prompt here..."
+            placeholder="Enter guardrail here..."
             className="w-full resize-none border-none bg-transparent px-2 py-2 text-[15px] focus-visible:ring-0 outline-none text-zinc-900 placeholder:text-zinc-500 dark:text-zinc-100 dark:placeholder:text-zinc-500 min-h-0"
             style={{ overflowY: 'auto', maxHeight: '40dvh' }}
           />
