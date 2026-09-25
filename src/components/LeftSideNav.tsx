@@ -686,7 +686,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
                     )}
                   >
-                    <Shield, Database className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin') ? "text-white" : "text-zinc-400 group-hover:text-white")} />
+                    <Shield className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin') ? "text-white" : "text-zinc-400 group-hover:text-white")} />
                     <span>Owner Platform</span>
                   </button>
                 )}
@@ -1070,7 +1070,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                                     )}
                                   >
                                     <div className="flex flex-1 items-center gap-2 truncate px-3 py-2">
-                                      <Shield, Database className="h-3.5 w-3.5 flex-shrink-0 text-red-400" />
+                                      <Shield className="h-3.5 w-3.5 flex-shrink-0 text-red-400" />
                                       <span
                                         className="truncate"
                                         title={guardrail}
