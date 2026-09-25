@@ -13,7 +13,17 @@ interface PricingPlan {
   price: string;
   period: string;
   description: string;
-  features: string[];
+  features: string[
+  {
+    id: 'managed-storage',
+    name: 'Managed Storage',
+    price: '$1',
+    period: '/mo per GB',
+    description:
+      'Enterprise-grade RAG indexing and embedding storage powered by Together AI.',
+    features: ['Vector Storage', 'Real-time inference indexing'],
+  },
+];
 }
 
 const ALL_PLANS: PricingPlan[] = [
