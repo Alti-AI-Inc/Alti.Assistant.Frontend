@@ -23,7 +23,7 @@ export function Logout() {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[270px] sm:max-w-[270px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
+      <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[320px] sm:max-w-[320px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden">
         {/* Centered Content Section */}
         <div className="px-5 pt-5 pb-4 text-center">
           <h2 className="text-[17px] font-semibold text-black dark:text-white leading-tight">

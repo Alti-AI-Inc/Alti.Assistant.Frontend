@@ -190,7 +190,7 @@ export default function KnowledgePage() {
         <IosConfirmModal
           isOpen={deleteId !== null}
           title="Delete File"
-          description="Are you sure you want to delete this file from the knowledge base?"
+          description="Are you sure you want to delete this file?"
           confirmText="Delete"
           onCancel={() => setDeleteId(null)}
           onConfirm={() => {
