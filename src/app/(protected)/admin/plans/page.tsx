@@ -13,29 +13,8 @@ interface PricingPlan {
   price: string;
   period: string;
   description: string;
-  features: string[
-  {
-    id: 'managed-storage',
-    name: 'Managed Storage',
-    price: '$1',
-    period: '/mo per GB',
-    description:
-      'Enterprise-grade RAG indexing and embedding storage powered by Together AI.',
-    features: ['Vector Storage', 'Real-time inference indexing'],
-  }
-];
-}
-
-const ALL_PLANS: PricingPlan[] = [
-  {
-    id: 'free',
-    name: 'Starter',
-    price: '$5',
-    period: '/mo',
-    description:
-      'Test out Aphura’s capabilities with basic search and model limits.',
-    features: ['250 Prompts'],
-  },
+  features: string[];
+  
   {
     id: 'basic',
     name: 'Basic',
@@ -88,6 +67,15 @@ const ALL_PLANS: PricingPlan[] = [
     description:
       'Dedicated capacity and premier throughput for high-volume institutions.',
     features: ['25,000 Prompts'],
+  },
+  {
+    id: 'managed-storage',
+    name: 'Managed Storage',
+    price: '$1',
+    period: '/mo per GB',
+    description:
+      'Enterprise-grade RAG indexing and embedding storage powered by Together AI.',
+    features: ['Vector Storage', 'Real-time inference indexing'],
   },
 ];
 
