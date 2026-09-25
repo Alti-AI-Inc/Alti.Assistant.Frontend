@@ -1023,7 +1023,7 @@ export default function ChatInput({
         (isNewChatId(conversationId) ? `chat-${Date.now()}` : conversationId);
 
       if (!response || !response.success) {
-        console.error(
+        console.warn(
           'PostConversation failed:',
           response?.debugMessage || 'Unknown error',
         );
@@ -1298,7 +1298,7 @@ export default function ChatInput({
       setLoadingResponse(false);
     },
     onError: (error, { message: userMessage, immediateId }: { message?: string; immediateId?: string }) => {
-      console.error('Message post failed:', error);
+      console.warn('Message post failed:', error);
       setShowStartLastMessage(false);
       setLoadingResponse(false);
     },
