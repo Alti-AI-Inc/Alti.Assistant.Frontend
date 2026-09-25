@@ -186,6 +186,18 @@ export default function KnowledgePage() {
 
       </div>
 
+      
+        <IosConfirmModal
+          isOpen={deleteId !== null}
+          title="Delete File"
+          description="Are you sure you want to delete this file from the knowledge base?"
+          confirmText="Delete"
+          onCancel={() => setDeleteId(null)}
+          onConfirm={() => {
+            if (deleteId) handleDelete(deleteId);
+            setDeleteId(null);
+          }}
+        />
       {/* Full-screen Drag Overlay */}
       {isDragging && (
         <div className="absolute inset-0 z-50 bg-[#0000ff]/5 backdrop-blur-[2px] flex items-center justify-center border-4 border-dashed border-[#0000ff]/30 m-4 rounded-xl pointer-events-none">
