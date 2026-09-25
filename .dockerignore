@@ -1,14 +1,4 @@
-.dockerignore
-.gitignore
-.git
-.env
-.env.*
-!.env.example
 node_modules
 .next
-out
-.DS_Store
-*.log
-README.md
-*.md
-Aphura Backend
+.git
+.env
