@@ -45,7 +45,7 @@ export default function GuardrailsPage() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col bg-white dark:bg-zinc-950 overflow-y-auto">
+    <div className="flex h-full w-full flex-col bg-[#e1e1e1] dark:bg-zinc-950 overflow-y-auto">
       <header className="flex h-14 shrink-0 items-center justify-between border-b border-black/10 px-6 dark:border-white/10">
         <h1 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
           Guardrails
@@ -84,7 +84,7 @@ export default function GuardrailsPage() {
                 className={`flex items-center justify-between rounded-lg border p-4 text-left transition-all ${
                   style === s.value
                     ? 'border-[#0000ff] bg-[#0000ff]/10 text-[#0000ff] dark:text-[#8080ff]'
-                    : 'border-black/10 bg-transparent text-zinc-600 hover:bg-black/5 dark:border-white/10 dark:text-zinc-400 dark:hover:bg-white/5'
+                    : 'border-black/10 bg-white dark:bg-zinc-900 text-zinc-600 hover:bg-black/5 dark:border-white/10 dark:text-zinc-400 dark:hover:bg-white/5'
                 }`}
               >
                 <span className="text-sm">{s.label}</span>

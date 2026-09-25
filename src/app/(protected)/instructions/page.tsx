@@ -31,7 +31,7 @@ export default function InstructionsPage() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col bg-white dark:bg-zinc-950 overflow-y-auto">
+    <div className="flex h-full w-full flex-col bg-[#e1e1e1] dark:bg-zinc-950 overflow-y-auto">
       <header className="flex h-14 shrink-0 items-center justify-between border-b border-black/10 px-6 dark:border-white/10">
         <h1 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
           Instructions
@@ -52,7 +52,7 @@ export default function InstructionsPage() {
             value={aboutYou}
             onChange={(e) => setAboutYou(e.target.value)}
             placeholder="e.g. I'm a startup founder building fintech products. I prefer practical, actionable answers with code examples in TypeScript."
-            className="h-32 w-full resize-none rounded-lg border border-black/10 bg-transparent p-4 text-sm text-zinc-900 focus:border-[#0000ff] focus:outline-none focus:ring-1 focus:ring-[#0000ff] dark:border-white/10 dark:text-white dark:focus:border-[#0000ff]"
+            className="h-32 w-full resize-none rounded-lg border border-black/10 bg-white dark:bg-zinc-900 p-4 text-sm text-zinc-900 focus:border-[#0000ff] focus:outline-none focus:ring-1 focus:ring-[#0000ff] dark:border-white/10 dark:text-white dark:focus:border-[#0000ff]"
           />
         </section>
 
@@ -69,7 +69,7 @@ export default function InstructionsPage() {
             value={instructions}
             onChange={(e) => setInstructions(e.target.value)}
             placeholder="e.g. Always cite sources. Use bullet points. Keep answers under 300 words unless I ask for detail."
-            className="h-32 w-full resize-none rounded-lg border border-black/10 bg-transparent p-4 text-sm text-zinc-900 focus:border-[#0000ff] focus:outline-none focus:ring-1 focus:ring-[#0000ff] dark:border-white/10 dark:text-white dark:focus:border-[#0000ff]"
+            className="h-32 w-full resize-none rounded-lg border border-black/10 bg-white dark:bg-zinc-900 p-4 text-sm text-zinc-900 focus:border-[#0000ff] focus:outline-none focus:ring-1 focus:ring-[#0000ff] dark:border-white/10 dark:text-white dark:focus:border-[#0000ff]"
           />
         </section>
         
