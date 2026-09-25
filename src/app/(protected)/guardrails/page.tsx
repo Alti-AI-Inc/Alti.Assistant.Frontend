@@ -1,252 +1,111 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
-import {
-  AlertCircle,
-  Search,
-  Trash2,
-  ArrowUp,
-} from 'lucide-react';
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect } from 'react';
+import { Cpu, Shield, Save } from 'lucide-react';
 import { toast } from 'sonner';
-import { storage, STORAGE_KEYS } from '@/lib/storage';
 
-const GuardrailsContent = () => {
-  const [guardrailsList, setGuardrailsList] = useState<{ id: string; text: string; timestamp: string }[]>([]);
-  const [inputVal, setInputVal] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+const STORAGE_KEYS = {
+  preferredModel: 'aphura_preferred_model',
+  responseStyle: 'aphura_response_style',
+};
+
+const MODELS = [
+  { value: 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo', label: 'Llama 3.1 70B (Default)' },
+  { value: 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo', label: 'Llama 3.1 8B (Fast)' },
+  { value: 'Qwen/QwQ-32B', label: 'QwQ 32B (Reasoning)' },
+  { value: 'meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo', label: 'Llama 3.2 90B Vision' },
+];
+
+const RESPONSE_STYLES = [
+  { value: 'default', label: 'Balanced' },
+  { value: 'concise', label: 'Concise — short, direct answers' },
+  { value: 'detailed', label: 'Detailed — thorough explanations' },
+  { value: 'technical', label: 'Technical — code-focused, precise' },
+];
+
+export default function GuardrailsPage() {
+  const [model, setModel] = useState(MODELS[0].value);
+  const [style, setStyle] = useState('default');
   const [isSaving, setIsSaving] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-  const [isAudioRecording, setIsAudioRecording] = useState(false);
-  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   useEffect(() => {
-    setIsMounted(true);
-    const storedGuard = storage.get<{ id: string; text: string; timestamp: string }[]>(STORAGE_KEYS.GUARDRAILS);
-    if (storedGuard) {
-      setGuardrailsList(storedGuard);
-    } else {
-      const defaults = [
-        {
-          id: 'guard-1',
-          text: 'Do not mention specific pricing details of competitor platforms.',
-          timestamp: '05/26/2026, 12:00 PM'
-        },
-        {
-          id: 'guard-2',
-          text: 'Under no circumstances should you reference internal database keys or source code URLs.',
-          timestamp: '05/26/2026, 12:05 PM'
-        },
-        {
-          id: 'guard-3',
-          text: 'Do not output HTML blocks unless specifically asked by the user.',
-          timestamp: '05/26/2026, 12:10 PM'
-        }
-      ];
-      setGuardrailsList(defaults);
-      storage.set(STORAGE_KEYS.GUARDRAILS, defaults);
+    if (typeof window !== 'undefined') {
+      setModel(localStorage.getItem(STORAGE_KEYS.preferredModel) || MODELS[0].value);
+      setStyle(localStorage.getItem(STORAGE_KEYS.responseStyle) || 'default');
     }
   }, []);
 
-  const handleAddGuardrail = () => {
-    if (!inputVal.trim()) {
-      toast.error('Please enter a safety rule.');
-      return;
-    }
-
+  const handleSave = async () => {
     setIsSaving(true);
-    setTimeout(() => {
-      const newItem = {
-        id: `guard-${Date.now()}`,
-        text: inputVal.trim(),
-        timestamp: new Date().toLocaleString('en-US', {
-          month: '2-digit',
-          day: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: true
-        })
-      };
-
-      const updatedList = [newItem, ...guardrailsList];
-      setGuardrailsList(updatedList);
-      storage.set(STORAGE_KEYS.GUARDRAILS, updatedList);
-      setInputVal('');
-      setIsSaving(false);
-    }, 300);
+    localStorage.setItem(STORAGE_KEYS.preferredModel, model);
+    localStorage.setItem(STORAGE_KEYS.responseStyle, style);
+    await new Promise(r => setTimeout(r, 600));
+    setIsSaving(false);
+    toast.success('Guardrails saved successfully');
   };
-
-  const handleDeleteGuardrail = (id: string) => {
-    const updatedList = guardrailsList.filter(item => item.id !== id);
-    setGuardrailsList(updatedList);
-    storage.set(STORAGE_KEYS.GUARDRAILS, updatedList);
-  };
-
-  const filteredGuardrails = guardrailsList.filter(item =>
-    item.text.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  if (!isMounted) {
-    return <div className="text-sm text-gray-555 p-8">Loading platform guardrails...</div>;
-  }
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#e1e1e1] dark:bg-gray-955">
-      {/* Top Navbar / Header */}
-      <div className="h-[52px] border-b border-black/10 dark:border-white/10 flex items-center px-8 flex-none bg-white dark:bg-gray-955 justify-between">
-        <h1 className="text-base font-semibold text-gray-900 dark:text-white">
-          Platform Guardrails
+    <div className="flex h-full w-full flex-col bg-white dark:bg-zinc-950 overflow-y-auto">
+      <header className="flex h-14 shrink-0 items-center justify-between border-b border-black/10 px-6 dark:border-white/10">
+        <h1 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+          Guardrails
         </h1>
-      </div>
+      </header>
 
-      {/* Main Body */}
-      <div className="flex-1 overflow-y-auto min-h-0 px-8 py-6 flex justify-center">
-        <div className="w-full space-y-6">
-          {/* Top Add Guardrail Box (Matching Platform Knowledge Upload style) */}
-          <div className="relative w-full h-12 flex-none flex items-center gap-2 bg-white dark:bg-gray-900 border border-black/10 dark:border-white/10 rounded-xl shadow-sm pr-2 pl-4 transition-all">
-            <input
-              placeholder="Enter guardrail here..."
-              value={inputVal}
-              onChange={(e) => setInputVal(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  handleAddGuardrail();
-                }
-              }}
-              disabled={isSaving}
-              className="flex-1 min-w-0 h-full bg-transparent border-none py-0 text-base text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-            />
-            <div className="flex-none ml-2 flex items-center gap-2">
-              <Button
-                size="sm"
-                onClick={handleAddGuardrail}
-                disabled={isSaving || !inputVal.trim()}
-                className="h-8 px-4 rounded-md cursor-pointer bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90 disabled:opacity-100 disabled:bg-black disabled:text-white dark:disabled:bg-white dark:disabled:text-black"
-              >
-                Add
-                <ArrowUp className="ml-1.5 h-3.5 w-3.5" />
-              </Button>
-            </div>
+      <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6 lg:px-8 space-y-12 pb-24">
+        {/* Preferred Model Section */}
+        <section className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Cpu className="h-4 w-4 text-zinc-400" />
+            <h2 className="text-sm font-semibold text-zinc-900 dark:text-white">Preferred Model</h2>
           </div>
+          <select
+            value={model}
+            onChange={(e) => setModel(e.target.value)}
+            className="w-full rounded-lg border border-black/10 bg-white px-4 py-2.5 text-sm text-zinc-900 focus:border-[#0000ff] focus:outline-none dark:border-white/10 dark:bg-zinc-900 dark:text-white"
+          >
+            {MODELS.map((m) => (
+              <option key={m.value} value={m.value}>{m.label}</option>
+            ))}
+          </select>
+        </section>
 
-          {/* Search Bar (Matching Platform Knowledge search bar style) */}
-          <div className="relative w-full flex-none">
-            <Search className="text-gray-400 dark:text-gray-400 absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
-            <input
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 pr-4 h-12 w-full text-base rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-sm outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 focus:border-black/10 dark:focus:border-white/10 focus-visible:border-black/10 dark:focus-visible:border-white/10 text-gray-800 placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-400 transition-all"
-            />
+        {/* Response Style Section */}
+        <section className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Shield className="h-4 w-4 text-zinc-400" />
+            <h2 className="text-sm font-semibold text-zinc-900 dark:text-white">Response Style</h2>
           </div>
-
-          {/* Dynamic Results Grid (Floating Individual Cards, Matching Platform Knowledge style) */}
-          <div className="w-full">
-            {filteredGuardrails.length === 0 ? (
-              <div className="w-full border border-black/10 dark:border-white/10 rounded-lg bg-white/40 dark:bg-gray-900/10 py-8 px-4 text-center text-xs text-gray-400 flex flex-col items-center justify-center gap-2">
-                <Search className="h-6 w-6 text-gray-300 dark:text-gray-700" />
-                <span>No matching safety rules found</span>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-2 pb-4">
-                {filteredGuardrails.map((item) => (
-                  <div
-                    key={item.id}
-                    className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-white/90 dark:bg-gray-900/90 border border-black/5 dark:border-white/5 rounded-lg shadow-sm items-center animate-in fade-in-50 duration-150"
-                  >
-                    {/* Left Icon & Content */}
-                    <div className="col-span-10 flex items-center gap-5 min-w-0">
-                      <div className="h-8 w-8 rounded-lg bg-rose-50 dark:bg-rose-955/40 text-rose-650 dark:text-rose-455 flex items-center justify-center flex-none">
-                        <AlertCircle className="h-4 w-4" />
-                      </div>
-                      <div className="flex flex-col justify-center min-w-0">
-                        <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 leading-normal break-words">
-                          {item.text}
-                        </span>
-                        <span className="text-[9px] text-gray-400 font-medium block mt-0.5 uppercase font-mono tracking-wider">
-                          Safety Rule • {item.timestamp}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Delete Action */}
-                    <div className="col-span-2 flex items-center justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 cursor-pointer"
-                        onClick={() => setDeleteTargetId(item.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* iOS-Style Delete Confirmation Dialog */}
-      <Dialog open={deleteTargetId !== null} onOpenChange={(open) => !open && setDeleteTargetId(null)}>
-        <DialogContent className="p-0 overflow-hidden rounded-[20px] max-w-[400px] sm:max-w-[400px] border-none shadow-xl bg-white dark:bg-zinc-900 [&>button]:hidden animate-in fade-in-50 duration-150">
-          {/* Centered Content Section */}
-          <div className="px-5 pt-5 pb-4 text-center">
-            <DialogTitle className="text-[17px] font-semibold text-black dark:text-white leading-tight text-center">
-              Delete Guardrail
-            </DialogTitle>
-            <DialogDescription className="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400 leading-normal px-1 text-center">
-              Are you sure you want to remove this guardrail?
-            </DialogDescription>
-          </div>
-
-          {/* Extended Border & iOS Layout Action Buttons */}
-          <div className="border-t border-black/10 dark:border-white/10 flex h-11">
-            {/* Cancel Option */}
-            <DialogClose asChild>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {RESPONSE_STYLES.map((s) => (
               <button
-                onClick={() => setDeleteTargetId(null)}
-                className="flex-1 text-[15px] font-normal text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center border-r border-black/10 dark:border-white/10 outline-none cursor-pointer"
+                key={s.value}
+                onClick={() => setStyle(s.value)}
+                className={`flex items-center justify-between rounded-lg border p-4 text-left transition-all ${
+                  style === s.value
+                    ? 'border-[#0000ff] bg-[#0000ff]/10 text-[#0000ff] dark:text-[#8080ff]'
+                    : 'border-black/10 bg-transparent text-zinc-600 hover:bg-black/5 dark:border-white/10 dark:text-zinc-400 dark:hover:bg-white/5'
+                }`}
               >
-                Cancel
+                <span className="text-sm">{s.label}</span>
               </button>
-            </DialogClose>
-            
-            {/* Confirm Option */}
-            <DialogClose asChild>
-              <button
-                onClick={() => {
-                  if (deleteTargetId) {
-                    handleDeleteGuardrail(deleteTargetId);
-                    setDeleteTargetId(null);
-                  }
-                }}
-                className="flex-1 text-[15px] font-medium text-red-500 hover:bg-black/5 dark:hover:bg-white/5 active:bg-black/10 dark:active:bg-white/10 transition-colors h-full flex items-center justify-center outline-none cursor-pointer"
-              >
-                Delete
-              </button>
-            </DialogClose>
+            ))}
           </div>
-        </DialogContent>
-      </Dialog>
+        </section>
+        
+        <button
+          onClick={handleSave}
+          disabled={isSaving}
+          className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[#0000ff] text-sm font-medium text-white transition-all hover:bg-[#0000ff]/90 disabled:opacity-50"
+        >
+          {isSaving ? (
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+          ) : (
+            <Save className="h-4 w-4" />
+          )}
+          {isSaving ? 'Saving...' : 'Save Guardrails'}
+        </button>
+      </div>
     </div>
-  );
-};
-
-export default function GuardrailsPage() {
-  return (
-    <Suspense fallback={<div className="flex-1 h-full flex items-center justify-center text-sm text-gray-555">Loading platform guardrails...</div>}>
-      <GuardrailsContent />
-    </Suspense>
   );
 }
