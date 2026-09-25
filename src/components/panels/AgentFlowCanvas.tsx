@@ -39,6 +39,21 @@ export default function AgentFlowCanvas() {
             O1-Evaluator
           </div>
         </div>
+      
+
+      <div className="mt-8 flex flex-col items-center">
+        <button 
+          onClick={() => {
+            const graphPayload = { nodes, edges };
+            console.log("Serializing LangGraph payload to Liberty Center One:", JSON.stringify(graphPayload));
+            alert("Swarm spawned on Liberty Center One bare-metal.");
+          }}
+          className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors shadow-lg shadow-indigo-500/20"
+        >
+          Deploy Swarm to Backend
+        </button>
+      </div>
+
       </div>
     </div>
   );

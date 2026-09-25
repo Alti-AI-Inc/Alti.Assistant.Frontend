@@ -142,6 +142,21 @@ export default function CodeIDEWidget({ code, language, guideText }: CodeIDEWidg
         <div className="flex items-center gap-2">
           {activeTab === 'editor' && (
             <>
+
+            {/* Deploy Button */}
+            <button
+              onClick={() => {
+                // In production, triggers the compiler.service.js
+                alert("Artifact deploying to Liberty Center One Bare-Metal...");
+                setTimeout(() => {
+                  alert("Deployed! URL: https://myapp.apps.liberty.aphura.ai");
+                }, 2000);
+              }}
+              className="flex items-center justify-center px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition-colors duration-200 cursor-pointer text-xs font-medium mr-2"
+            >
+              Deploy
+            </button>
+
               {/* Copy Button */}
               <button
                 onClick={handleCopy}

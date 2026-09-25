@@ -5,6 +5,7 @@ export default function VoiceCallWidget({ onClose }: { onClose: () => void }) {
   const [isConnected, setIsConnected] = useState(false);
   const [isVideoActive, setIsVideoActive] = useState(false);
   const [transcript, setTranscript] = useState('');
+  const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -17,6 +18,11 @@ export default function VoiceCallWidget({ onClose }: { onClose: () => void }) {
       const data = JSON.parse(event.data);
       if (data.type === 'transcript') {
         setTranscript(prev => prev + ' ' + data.text);
+        if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+        silenceTimerRef.current = setTimeout(() => {
+           console.log("Voice input complete, sending to Supervisor Router:", data.text);
+           // In production, this dispatches to the chat action
+        }, 2000);
       }
     };
     wsRef.current.onclose = () => setIsConnected(false);
