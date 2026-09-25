@@ -14,7 +14,9 @@ interface PricingPlan {
   period: string;
   description: string;
   features: string[];
-  
+}
+
+const ALL_PLANS: PricingPlan[] = [
   {
     id: 'basic',
     name: 'Basic',
