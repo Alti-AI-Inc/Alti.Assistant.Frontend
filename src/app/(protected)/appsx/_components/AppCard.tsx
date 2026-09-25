@@ -319,13 +319,13 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
     placeholders: {},
     needsDatabaseUrl: true
   },
-  "aws-s3": {
+  "minio": {
     requiredEnv: ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_S3_BUCKET", "AWS_REGION"],
     labels: {
-      "AWS_ACCESS_KEY_ID": "AWS Access Key ID",
-      "AWS_SECRET_ACCESS_KEY": "AWS Secret Access Key",
-      "AWS_S3_BUCKET": "Target AWS S3 Bucket Name",
-      "AWS_REGION": "AWS Region"
+      "AWS_ACCESS_KEY_ID": "MinIO Access Key",
+      "AWS_SECRET_ACCESS_KEY": "MinIO Secret Key",
+      "AWS_S3_BUCKET": "Target MinIO Sovereign Storage Name",
+      "AWS_REGION": "MinIO Region"
     },
     placeholders: {
       "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
@@ -661,12 +661,12 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
       "KLAVIYO_API_KEY": "pk_xxxxxxxx"
     }
   },
-  "azure-ad": {
+  "ping-identity": {
     requiredEnv: ["AZURE_AD_CLIENT_ID", "AZURE_AD_CLIENT_SECRET", "AZURE_AD_TENANT_ID"],
     labels: {
-      "AZURE_AD_CLIENT_ID": "Azure Application (Client) ID",
-      "AZURE_AD_CLIENT_SECRET": "Azure Client Secret Credentials",
-      "AZURE_AD_TENANT_ID": "Azure Directory (Tenant) ID"
+      "AZURE_AD_CLIENT_ID": "Ping Application ID",
+      "AZURE_AD_CLIENT_SECRET": "Ping Client Secret",
+      "AZURE_AD_TENANT_ID": "Ping Tenant ID"
     },
     placeholders: {
       "AZURE_AD_CLIENT_ID": "00000000-0000-0000-0000-000000000000",
@@ -829,12 +829,12 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
       "KAFKA_CLIENT_ID": "aphura-mcp-client"
     }
   },
-  "aws": {
+  "liberty-console": {
     requiredEnv: ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_REGION"],
     labels: {
-      "AWS_ACCESS_KEY_ID": "AWS Access Key ID",
-      "AWS_SECRET_ACCESS_KEY": "AWS Secret Access Key",
-      "AWS_REGION": "AWS Region"
+      "AWS_ACCESS_KEY_ID": "MinIO Access Key",
+      "AWS_SECRET_ACCESS_KEY": "MinIO Secret Key",
+      "AWS_REGION": "MinIO Region"
     },
     placeholders: {
       "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
@@ -842,14 +842,14 @@ const MCP_BLUEPRINTS: Record<string, AppBlueprint> = {
       "AWS_REGION": "us-east-1"
     }
   },
-  "gcp": {
-    requiredEnv: ["GCP_PROJECT_ID", "GCP_SA_KEY"],
+  "liberty-cloud": {
+    requiredEnv: ["LIBERTY_PROJECT_ID", "GCP_SA_KEY"],
     labels: {
-      "GCP_PROJECT_ID": "Google Cloud Project ID Name",
-      "GCP_SA_KEY": "Google Cloud Service Account JSON Key"
+      "LIBERTY_PROJECT_ID": "Liberty Project ID",
+      "GCP_SA_KEY": "Liberty Center Key"
     },
     placeholders: {
-      "GCP_PROJECT_ID": "my-gcp-project",
+      "LIBERTY_PROJECT_ID": "my-liberty-project",
       "GCP_SA_KEY": "{\"type\": \"service_account\", ..."
     }
   },
@@ -994,7 +994,7 @@ const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bg
   pingidentity: { category: 'Cybersecurity & IAM', color: 'border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20', bgGlow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', badge: 'SSO Federation', hoverBorder: 'border-emerald-500/60' },
 
   // AI & Machine Learning
-  gemini: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'LLM API Core', hoverBorder: 'border-cyan-500/60' },
+  together: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'LLM API Core', hoverBorder: 'border-cyan-500/60' },
   weights_biases: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'ML Experimentation', hoverBorder: 'border-cyan-500/60' },
   huggingface: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Model Repository', hoverBorder: 'border-cyan-500/60' },
   pinecone: { category: 'AI & Machine Learning', color: 'border-cyan-500/40 text-cyan-600 dark:text-cyan-400 bg-cyan-50/50 dark:bg-cyan-950/20', bgGlow: 'shadow-[0_0_15px_rgba(6,182,212,0.15)]', badge: 'Vector Database', hoverBorder: 'border-cyan-500/60' },
@@ -1113,9 +1113,9 @@ const STRATEGIC_APPS_STYLE: Record<string, { category: string; color: string; bg
   hubspot_feedback: { category: 'Feedback Core', color: 'border-lime-500/40 text-lime-650 bg-lime-50/50 dark:bg-lime-950/20', bgGlow: 'shadow-[0_0_15px_rgba(132,204,22,0.15)]', badge: 'HubSpot NPS', hoverBorder: 'border-lime-500/60' },
 
   // Phase 29: Cloud Infrastructure & Storage (Slate Glow)
-  aws_s3: { category: 'Cloud Storage', color: 'border-slate-500/40 text-slate-600 bg-slate-50/50 dark:bg-slate-950/20', bgGlow: 'shadow-[0_0_15px_rgba(100,116,139,0.15)]', badge: 'AWS S3 Bucket', hoverBorder: 'border-slate-500/60' },
-  google_storage: { category: 'Cloud Storage', color: 'border-slate-500/40 text-slate-600 bg-slate-50/50 dark:bg-slate-950/20', bgGlow: 'shadow-[0_0_15px_rgba(100,116,139,0.15)]', badge: 'Google Cloud GCS', hoverBorder: 'border-slate-500/60' },
-  azure_blob: { category: 'Cloud Storage', color: 'border-slate-500/40 text-slate-600 bg-slate-50/50 dark:bg-slate-950/20', bgGlow: 'shadow-[0_0_15px_rgba(100,116,139,0.15)]', badge: 'Azure Blob', hoverBorder: 'border-slate-500/60' },
+  aws_s3: { category: 'Cloud Storage', color: 'border-slate-500/40 text-slate-600 bg-slate-50/50 dark:bg-slate-950/20', bgGlow: 'shadow-[0_0_15px_rgba(100,116,139,0.15)]', badge: 'MinIO Sovereign Storage', hoverBorder: 'border-slate-500/60' },
+  google_storage: { category: 'Cloud Storage', color: 'border-slate-500/40 text-slate-600 bg-slate-50/50 dark:bg-slate-950/20', bgGlow: 'shadow-[0_0_15px_rgba(100,116,139,0.15)]', badge: 'MinIO Sovereign Storage', hoverBorder: 'border-slate-500/60' },
+  azure_blob: { category: 'Cloud Storage', color: 'border-slate-500/40 text-slate-600 bg-slate-50/50 dark:bg-slate-950/20', bgGlow: 'shadow-[0_0_15px_rgba(100,116,139,0.15)]', badge: 'MinIO Sovereign Storage', hoverBorder: 'border-slate-500/60' },
   dropbox: { category: 'Cloud Storage', color: 'border-slate-500/40 text-slate-600 bg-slate-50/50 dark:bg-slate-950/20', bgGlow: 'shadow-[0_0_15px_rgba(100,116,139,0.15)]', badge: 'Dropbox Folder', hoverBorder: 'border-slate-500/60' },
   google_drive: { category: 'Cloud Storage', color: 'border-slate-500/40 text-slate-600 bg-slate-50/50 dark:bg-slate-950/20', bgGlow: 'shadow-[0_0_15px_rgba(100,116,139,0.15)]', badge: 'Google Drive', hoverBorder: 'border-slate-500/60' },
 

@@ -119,7 +119,7 @@ export default function DesignStudioWidget({
       <div className="h-8 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 flex items-center px-4">
         <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
           <span className="w-2 h-2 rounded-full bg-green-500"></span>
-          Connected to Gemini 3 Design Core
+          Connected to FLUX.1 Design Core
         </div>
       </div>
     </div>

@@ -131,7 +131,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
   {
     id: 's3',
-    name: 'AWS S3 Bucket',
+    name: 'MinIO Sovereign Storage',
     icon: '☁️',
     description: 'Index S3 storage buckets',
     status: 'soon',
@@ -250,7 +250,7 @@ export const useNavState = ({ side = 'left' }: { side?: 'left' | 'right' } = {})
           name: newSpaceName.trim(),
           description: `Custom Project Workspace: ${newSpaceName.trim()}`,
           instructions: '',
-          model: 'Gemini 1.5 Pro',
+          model: 'Llama 3.1 70B',
           avatar: '🤖',
           guardrails: '',
           data: backendId || undefined,

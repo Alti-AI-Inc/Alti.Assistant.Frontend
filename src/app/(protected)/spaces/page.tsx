@@ -341,7 +341,7 @@ function MyChatbotsContent() {
             instructionsList.length > 0
               ? instructionsList.map(i => i.text).join('\n\n')
               : instructions,
-          model: 'Gemini 1.5 Pro',
+          model: 'Llama 3.1 70B',
           avatar: '🤖',
           guardrails:
             guardrailsList.length > 0
@@ -550,7 +550,7 @@ function MyChatbotsContent() {
               </h2>
 
               <p className="mb-8 max-w-sm text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
-                We are training a custom model for you on Google Cloud Vertex
+                We are training a custom model for you on Together Dedicated Endpoints
                 AI. This process runs fully in the background and can take 10-20
                 minutes.
               </p>
@@ -577,7 +577,7 @@ function MyChatbotsContent() {
                   </div>
                   <div>
                     <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">
-                      Google Cloud Storage upload
+                      MinIO Sovereign Storage upload
                     </p>
                     <p className="text-[10px] text-zinc-400">
                       Saved training JSONL to secure GCS bucket.
@@ -596,7 +596,7 @@ function MyChatbotsContent() {
                     <p className="text-zinc-550 text-[10px] dark:text-zinc-400">
                       Tuning foundation model{' '}
                       <code className="rounded bg-zinc-100 px-1 py-0.5 text-[9px] dark:bg-zinc-800">
-                        gemini-1.5-flash
+                        llama-3.1-8b-instruct
                       </code>
                       ...
                     </p>
@@ -633,7 +633,7 @@ function MyChatbotsContent() {
                 </span>
                 <p className="text-red-850 font-mono text-xs leading-relaxed break-all whitespace-pre-wrap dark:text-red-300">
                   {activeBot.metadata?.tuningError ||
-                    'Pipeline execution failed without generating diagnostic logs. This can happen if GCP Vertex AI quotas are exceeded or permissions are missing.'}
+                    'Pipeline execution failed without generating diagnostic logs. This can happen if Together Dedicated quotas are exceeded or permissions are missing.'}
                 </p>
               </div>
 

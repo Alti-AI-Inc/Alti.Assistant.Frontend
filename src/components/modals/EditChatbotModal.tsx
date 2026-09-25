@@ -19,7 +19,7 @@ import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 const EMOJIS = ['🤖', '🐍', '🎨', '✍️', '⚖️', '📊', '📈', '💡', '🧠', '💬', '🚀', '💻', '🔍', '⚙️', '📅', '🔐'];
-const MODELS = ['Gemini 1.5 Pro', 'Gemini 1.5 Flash', 'Gemini 2.5 Flash', 'Gemini 2.5 Pro'];
+const MODELS = ['Llama 3.1 70B', 'Llama 3.1 8B', 'Mixtral 8x7B', 'DeepSeek V3'];
 
 export function EditChatbotModal() {
   const { isOpen, onClose, type, actionId } = useModalStore();
@@ -30,7 +30,7 @@ export function EditChatbotModal() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [instructions, setInstructions] = useState('');
-  const [model, setModel] = useState('Gemini 1.5 Pro');
+  const [model, setModel] = useState('Llama 3.1 70B');
   const [avatar, setAvatar] = useState('🤖');
   const [error, setError] = useState('');
 

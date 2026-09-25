@@ -121,7 +121,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
   {
     id: 's3',
-    name: 'AWS S3 Bucket',
+    name: 'MinIO Sovereign Storage',
     icon: '☁️',
     description: 'Index S3 storage buckets',
     status: 'soon',

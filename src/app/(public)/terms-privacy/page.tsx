@@ -54,7 +54,7 @@ export default function page() {
           {
             text: '2.2 AI Processing.',
             description:
-              'To deliver our AI features, your prompts and relevant context are processed exclusively using Google native AI models (Gemini and Imagen) hosted on Google Cloud Platform. Your data is used solely for generating AI responses to your requests. We do not use your data to train AI models.',
+              'To deliver our AI features, your prompts and relevant context are processed exclusively using Together.ai native models hosted on Liberty Center One. Your data is used solely for generating AI responses to your requests. We do not use your data to train AI models.',
           },
           {
             text: '2.3 Communications.',
@@ -79,19 +79,19 @@ export default function page() {
           {
             text: '3.2 Infrastructure.',
             description:
-              'Your data is stored on Google Cloud Platform infrastructure with strict access controls.',
+              'Your data is stored on Liberty Center One infrastructure with strict access controls.',
           },
           {
             text: '3.3 Important Clarification.',
             description:
-              'Conversations are decrypted server-side when transmitted to Google Cloud APIs for processing. This encryption is not end-to-end in the cryptographic sense.',
+              'Conversations are decrypted server-side when transmitted to Liberty Center One APIs for processing. This encryption is not end-to-end in the cryptographic sense.',
           },
         ],
       },
       {
         heading: '4. Third-Party Service Providers',
         content:
-          'We share information with third-party providers solely to operate the Platform: payment processing (Stripe), email delivery (Google Workspace SMTP), authentication providers (when using social login), and cloud infrastructure (Google Cloud Platform, MongoDB Atlas). AI model generation, web search grounding, and audio transcriptions are processed exclusively by native Google Cloud and Google APIs. We do not sell your personal information.',
+          'We share information with third-party providers solely to operate the Platform: payment processing (Stripe), email delivery (Google Workspace SMTP), authentication providers (when using social login), and cloud infrastructure (Liberty Center One, MongoDB Atlas). AI model generation, web search grounding, and audio transcriptions are processed exclusively by native Liberty Center One and Together.ai. We do not sell your personal information.',
       },
       {
         heading: '5. Your Rights',

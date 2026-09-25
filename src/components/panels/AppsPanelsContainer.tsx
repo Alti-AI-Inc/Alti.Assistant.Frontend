@@ -58,7 +58,7 @@ export const AppsPanelsContainer = () => {
     'sentry': ['SENTRY_AUTH_TOKEN'],
     'redis': ['REDIS_URL'],
     'everart': ['EVERART_API_KEY'],
-    'aws-kb-retrieval': ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_REGION'],
+    'minio-kb-retrieval': ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_REGION'],
     'google-drive': ['GOOGLE_CALENDAR_CREDENTIALS']
   };
 

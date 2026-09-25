@@ -254,10 +254,10 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "AWS S3",
-    "description": "Securely list, read, upload, and manage files inside AWS S3 buckets programmatically.",
-    "image": "https://logos.composio.dev/api/aws",
-    "app_name": "aws-s3",
+    "title": "MinIO Storage",
+    "description": "Securely list, read, upload, and manage files inside MinIO buckets programmatically.",
+    "image": "https://logos.composio.dev/api/liberty-console",
+    "app_name": "minio-s3",
     "isAvailable": true
   },
   {
@@ -464,10 +464,10 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "Azure AD (Entra ID)",
-    "description": "Access, query, and manage Microsoft Entra ID (Azure Active Directory) users, groups, and security roles.",
-    "image": "https://logos.composio.dev/api/azure",
-    "app_name": "azure-ad",
+    "title": "PingIdentity",
+    "description": "Access, query, and manage Microsoft Entra ID (PingIdentity) users, groups, and security roles.",
+    "image": "https://logos.composio.dev/api/ping",
+    "app_name": "ping-identity",
     "isAvailable": true
   },
   {
@@ -562,17 +562,17 @@ export const allApps: APP[] = [
     "isAvailable": true
   },
   {
-    "title": "AWS Console",
-    "description": "List active instances, read EC2 console logs, query S3 buckets, and view CloudWatch alert metrics inside AWS console panels.",
-    "image": "https://logos.composio.dev/api/aws",
-    "app_name": "aws",
+    "title": "Liberty Console",
+    "description": "List active instances, read EC2 console logs, query S3 buckets, and view Prometheus alert metrics inside Liberty console panels.",
+    "image": "https://logos.composio.dev/api/liberty-console",
+    "app_name": "liberty-console",
     "isAvailable": true
   },
   {
-    "title": "Google Cloud Platform",
-    "description": "Inspect GCP VM profiles, query cloud storage buckets, retrieve cloud logging events, and audit project metrics inside Google Cloud.",
+    "title": "Liberty Cluster",
+    "description": "Inspect Liberty VM profiles, query cloud storage buckets, retrieve cloud logging events, and audit project metrics inside Liberty Cloud.",
     "image": "https://logos.composio.dev/api/google",
-    "app_name": "gcp",
+    "app_name": "liberty-cloud",
     "isAvailable": true
   },
   {

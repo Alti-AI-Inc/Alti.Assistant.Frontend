@@ -131,7 +131,7 @@ const DATA_CONNECTORS: DataConnector[] = [
   },
   {
     id: 's3',
-    name: 'AWS S3 Bucket',
+    name: 'MinIO Sovereign Storage',
     icon: '☁️',
     description: 'Index S3 storage buckets',
     status: 'soon',
@@ -457,7 +457,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                                 router.push(url);
                                 return;
                               }
-                              // Jump straight into the space's most recent session, like ChatGPT
+                              // Jump straight into the space's most recent session
                               const result = await getSpaceSearchesAction(
                                 bot.id,
                               );

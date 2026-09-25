@@ -57,7 +57,7 @@ export function AddModelModal() {
       name,
       description: `Custom model trained on ${dataName}`,
       instructions,
-      model: 'Gemini 1.5 Pro',
+      model: 'Llama 3.1 70B',
       avatar: '🧠',
       data: dataSelection, // Store the selected knowledge base ID
       guardrails: guardrails, // Store the guardrails

@@ -108,7 +108,7 @@ export function VideoStudioWidget({ currentVideoUrl, status = 'idle', progress =
               activeTab === 'storyboard' ? "border-indigo-500 text-indigo-400" : "border-transparent text-slate-400 hover:text-slate-300"
             )}
           >
-            Storyboard (Gemini)
+            Storyboard (Llama 3.1)
           </button>
         </div>
 
