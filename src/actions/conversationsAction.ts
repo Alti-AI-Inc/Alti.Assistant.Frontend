@@ -76,7 +76,7 @@ export async function PostConversation(
         timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
         localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
         localTime: new Date().toLocaleTimeString('en-US'),
-        systemInstruction: await buildSystemInstruction(prompt),
+        systemInstruction: await buildSystemInstruction(message),
         ...extraParams,
       }),
     });
@@ -148,7 +148,7 @@ export async function PostConversationStream(
             timezone: typeof window !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'America/New_York',
             localDate: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
             localTime: new Date().toLocaleTimeString('en-US'),
-            systemInstruction: await buildSystemInstruction(prompt),
+            systemInstruction: await buildSystemInstruction(message),
             ...extraParams,
           }),
         });
