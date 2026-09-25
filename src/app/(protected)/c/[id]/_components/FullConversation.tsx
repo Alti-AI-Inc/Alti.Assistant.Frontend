@@ -1193,11 +1193,8 @@ const FullConversation = ({
     );
   };
 
-  const hasMessages =
-    !isNewChatRoute &&
-    activeConversation?.conversationId === conversationId &&
-    !!activeConversation?.messages?.length;
-  const showAsNewChat = isNewChatRoute && !hasMessages && !isLoadingResponse;
+  const hasMessages = activeConversation?.conversationId === conversationId && !!activeConversation?.messages?.length;
+  const showAsNewChat = !hasMessages && !isLoadingResponse;
 
   if (
     selectedOption === OPTIONS.INSTRUCTIONS ||
