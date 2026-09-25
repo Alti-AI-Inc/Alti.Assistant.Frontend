@@ -170,7 +170,7 @@ export default function PlansPage() {
                           </div>
                         </div>
 
-                        {/* Right Column: Select / Current Plan buttons for creator only */}
+                        {/* Right Column: Select / {plan.id === 'managed-storage' ? 'Current Storage' : 'Current Plan'} buttons for creator only */}
                         {isCreator && (
                           <div className="flex w-[130px] shrink-0 items-center justify-end">
                             {plan.id === currentPlanId ? (
@@ -178,7 +178,7 @@ export default function PlansPage() {
                                 type="button"
                                 className="h-9 w-full cursor-pointer rounded-[3px] border border-transparent bg-[#0000ff] text-xs font-bold text-white transition-all hover:opacity-90 active:scale-95"
                               >
-                                Current Plan
+                                {plan.id === 'managed-storage' ? 'Current Storage' : 'Current Plan'}
                               </button>
                             ) : (
                               (() => {
@@ -200,7 +200,7 @@ export default function PlansPage() {
                                     aria-disabled={isDisabled}
                                     className={`h-9 w-full rounded-[3px] text-xs font-bold ${isDisabled ? 'cursor-not-allowed bg-zinc-200 text-zinc-400' : 'bg-black text-white hover:opacity-90 active:scale-95 dark:bg-white dark:text-black'} transition-all`}
                                   >
-                                    Select Plan
+                                    {plan.id === 'managed-storage' ? 'Add Storage' : 'Select Plan'}
                                   </button>
                                 );
                               })()
