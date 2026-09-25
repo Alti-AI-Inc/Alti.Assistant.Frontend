@@ -125,9 +125,9 @@ export default function PlansPage() {
       </div>
 
       {/* Main Workspace Body */}
-      <div className="min-h-0 flex-1 overflow-y-auto px-8 py-6">
+      <div className="min-h-0 flex-1 overflow-y-auto px-8 py-3">
         <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
               {ALL_PLANS.map(
                 plan => {
                   const displayPrice = plan.price;
@@ -136,7 +136,7 @@ export default function PlansPage() {
                   return (
                     <Card
                       key={plan.id}
-                      className="w-full rounded-[5px] border-black/5 bg-white/80 p-5 shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-white/5 dark:bg-zinc-950/50"
+                      className="w-full rounded-[5px] border-black/5 bg-white/80 px-5 py-2.5 shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-white/5 dark:bg-zinc-950/50"
                     >
                       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         {/* Left Column: Pricing */}
@@ -176,7 +176,7 @@ export default function PlansPage() {
                             {plan.id === currentPlanId ? (
                               <button
                                 type="button"
-                                className="h-9 w-full cursor-pointer rounded-[3px] border border-transparent bg-[#0000ff] text-xs font-bold text-white transition-all hover:opacity-90 active:scale-95"
+                                className="h-8 w-full cursor-pointer rounded-[3px] border border-transparent bg-[#0000ff] text-xs font-bold text-white transition-all hover:opacity-90 active:scale-95"
                               >
                                 {plan.id === 'managed-storage' ? 'Current Storage' : 'Current Plan'}
                               </button>
@@ -198,7 +198,7 @@ export default function PlansPage() {
                                     }}
                                     disabled={isDisabled}
                                     aria-disabled={isDisabled}
-                                    className={`h-9 w-full rounded-[3px] text-xs font-bold ${isDisabled ? 'cursor-not-allowed bg-zinc-200 text-zinc-400' : 'bg-black text-white hover:opacity-90 active:scale-95 dark:bg-white dark:text-black'} transition-all`}
+                                    className={`h-8 w-full rounded-[3px] text-xs font-bold ${isDisabled ? 'cursor-not-allowed bg-zinc-200 text-zinc-400' : 'bg-black text-white hover:opacity-90 active:scale-95 dark:bg-white dark:text-black'} transition-all`}
                                   >
                                     {plan.id === 'managed-storage' ? 'Add Storage' : 'Select Plan'}
                                   </button>
