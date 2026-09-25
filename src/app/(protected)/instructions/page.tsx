@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Search, Plus, Trash2, FileText, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { IosConfirmModal } from '@/components/ui/ios-confirm-modal';
 
 
 const STORAGE_KEY = 'aphura_custom_instructions_array';
@@ -18,6 +19,7 @@ interface Instruction {
 export default function InstructionsPage() {
   const [instructions, setInstructions] = useState<Instruction[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [newInstruction, setNewInstruction] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -146,7 +148,7 @@ export default function InstructionsPage() {
                   {new Date(inst.createdAt).toLocaleDateString()}
                 </div>
                 <button
-                  onClick={() => handleDelete(inst.id)}
+                  onClick={() => setDeleteId(inst.id)}
                   className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-zinc-400 opacity-0 transition-all hover:bg-red-50 hover:text-red-600 group-hover:opacity-100 dark:hover:bg-red-950/30 dark:hover:text-red-400"
                   title="Delete instruction"
                 >
@@ -159,6 +161,18 @@ export default function InstructionsPage() {
           }
         </div>
 
+      
+        <IosConfirmModal
+          isOpen={deleteId !== null}
+          title="Delete Instruction"
+          description="Are you sure you want to delete this instruction?"
+          confirmText="Delete"
+          onCancel={() => setDeleteId(null)}
+          onConfirm={() => {
+            if (deleteId) handleDelete(deleteId);
+            setDeleteId(null);
+          }}
+        />
       </div>
     </div>
   );

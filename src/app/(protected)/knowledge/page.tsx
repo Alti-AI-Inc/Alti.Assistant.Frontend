@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Search, Trash2, Database, Upload, File as FileIcon, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { IosConfirmModal } from '@/components/ui/ios-confirm-modal';
 
 const STORAGE_KEY = 'aphura_knowledge_files';
 
@@ -18,6 +19,7 @@ interface KnowledgeFile {
 export default function KnowledgePage() {
   const [files, setFiles] = useState<KnowledgeFile[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -171,10 +173,7 @@ export default function KnowledgePage() {
                   {new Date(file.createdAt).toLocaleDateString()}
                 </div>
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(file.id);
-                  }}
+                  onClick={(e) => { e.stopPropagation(); setDeleteId(file.id); }}
                   className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-zinc-400 opacity-0 transition-all hover:bg-red-50 hover:text-red-600 group-hover:opacity-100 dark:hover:bg-red-950/30 dark:hover:text-red-400"
                   title="Delete file"
                 >
