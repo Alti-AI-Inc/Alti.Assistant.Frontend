@@ -145,14 +145,6 @@ export default function DevelopersPage() {
 
             {/* MCP SERVERS TAB */}
             <TabsContent value="mcp-servers" className="m-0 border-0 p-0">
-              <div className="mb-4">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Provide Aphura's capabilities to your external AI tools (like
-                  Claude Desktop or Cursor) using our Model Context Protocol
-                  (MCP) server.
-                </p>
-              </div>
-
               <div className="flex flex-col gap-4">
                 <div className="rounded-[5px] border border-black/5 bg-white p-6 shadow-md dark:border-white/5 dark:bg-zinc-950/50">
                   <div className="mb-4 flex items-center gap-3">
