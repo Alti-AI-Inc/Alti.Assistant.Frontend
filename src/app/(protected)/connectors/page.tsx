@@ -79,9 +79,13 @@ export default function ConnectorsPage() {
       ? accountsData
       : [];
 
-  const filteredToolkits = toolkits.filter((app: any) =>
-    (app.name || app.slug || '').toLowerCase().includes(search.toLowerCase()),
-  );
+  const filteredToolkits = toolkits
+    .filter((app: any) =>
+      (app.name || app.slug || '').toLowerCase().includes(search.toLowerCase()),
+    )
+    .sort((a: any, b: any) =>
+      (a.name || a.slug || '').localeCompare(b.name || b.slug || ''),
+    );
 
   const handleConnect = async (slug: string) => {
     try {
