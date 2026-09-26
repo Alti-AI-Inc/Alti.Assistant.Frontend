@@ -68,6 +68,7 @@ import {
   Presentation,
   X,
   Check,
+  Workflow,
   Headphones,
   ListTodo,
   Clock,
@@ -379,7 +380,7 @@ export default function ChatInput({
       pathname !== '/c/new-chat' &&
       pathname !== '/c/new-search' &&
       pathname !== '/c/new-research' &&
-      pathname !== '/c/new-monitor') ||
+      pathname !== '/c/new-monitor' && pathname !== '/c/new-workflow') ||
     (conversationId && !isNewChatId(conversationId)) ||
     hasStartedChat ||
     isLoadingResponse;
@@ -403,6 +404,11 @@ export default function ChatInput({
         pathname === '/c/new-monitor'
       ) {
         setSelectedOption(OPTIONS.MONITOR);
+      } else if (
+        conversationId === 'new-workflow' ||
+        pathname === '/c/new-workflow'
+      ) {
+        setSelectedOption(OPTIONS.WORKFLOW);
       } else {
         setSelectedOption(null);
       }
@@ -582,6 +588,8 @@ export default function ChatInput({
         return '/search/stream';
       case OPTIONS.MONITOR:
         return '/search/stream';
+      case OPTIONS.WORKFLOW:
+        return '/workflow/execute';
       case OPTIONS.DRAFT_DOCUMENT:
         return '/documents/assistant';
       case OPTIONS.IMAGE:
@@ -1897,6 +1905,20 @@ export default function ChatInput({
                     <span>Monitor Changes</span>
                   </div>
                   {selectedOption === OPTIONS.MONITOR && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
+                </DropdownMenuItem>
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.WORKFLOW && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  if (selectedOption === OPTIONS.WORKFLOW) {
+                    router.push('/c/new-search'); // Toggle off
+                  } else {
+                    router.push('/c/new-workflow');
+                  }
+                  setTimeout(() => textareaRef.current?.focus(), 0);
+                }}>
+                  <div className="flex items-center">
+                    <Workflow className="mr-2 h-4 w-4" />
+                    <span>Automate Workflows</span>
+                  </div>
+                  {selectedOption === OPTIONS.WORKFLOW && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -17,6 +17,7 @@ export enum OPTIONS {
   RESEARCH = 'deep-research',
   SEARCH = 'search',
   MONITOR = 'monitor',
+  WORKFLOW = 'automate-workflows',
   CODE = 'code-generation',
   // TEXT = 'text-generation',
   DRAFT_DOCUMENT = 'draft-document',
