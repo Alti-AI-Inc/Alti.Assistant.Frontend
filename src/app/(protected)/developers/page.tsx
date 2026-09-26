@@ -89,14 +89,6 @@ export default function DevelopersPage() {
 
             {/* ENDPOINTS TAB */}
             <TabsContent value="endpoints" className="m-0 border-0 p-0">
-              <div className="mb-4">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Base URL:{' '}
-                  <code className="rounded bg-black/5 px-2 py-1 text-xs text-black dark:bg-white/10 dark:text-white">
-                    https://api.aphura.com/v1
-                  </code>
-                </p>
-              </div>
 
               <div className="flex flex-col gap-2">
                 {[
