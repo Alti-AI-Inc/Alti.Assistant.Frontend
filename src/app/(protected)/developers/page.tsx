@@ -144,32 +144,6 @@ export default function DevelopersPage() {
             </TabsContent>
 
             {/* MCP SERVERS TAB */}
-            <TabsContent value="mcp-servers" className="m-0 border-0 p-0">
-              <div className="mb-4 flex items-center justify-between">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Connect Model Context Protocol (MCP) servers to give agents
-                  access to external environments.
-                </p>
-                <button className="flex h-8 items-center gap-2 rounded-[3px] bg-black px-4 text-xs font-bold text-white shadow-sm transition-all hover:opacity-90 active:scale-95 dark:bg-white dark:text-black">
-                  <Plus className="h-4 w-4" />
-                  Add MCP Server
-                </button>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <div className="rounded-[5px] bg-white p-12 text-center shadow-md dark:bg-zinc-950/50">
-                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#e1e1e1] dark:bg-zinc-900">
-                    <Server className="h-6 w-6 text-gray-400" />
-                  </div>
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-white">
-                    No MCP Servers Connected
-                  </h3>
-                  <p className="mt-1 text-xs text-gray-500">
-                    Connect a server to expand your agent's capabilities.
-                  </p>
-                </div>
-              </div>
-            </TabsContent>
           </div>
         </div>
       </Tabs>
