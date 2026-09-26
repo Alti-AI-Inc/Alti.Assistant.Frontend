@@ -1878,6 +1878,16 @@ export default function ChatInput({
                     <span>Attach Files</span>
                   </div>
                 </DropdownMenuItem>
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.SEARCH && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  router.push('/c/new-search');
+                  setTimeout(() => textareaRef.current?.focus(), 0);
+                }}>
+                  <div className="flex items-center">
+                    <Globe className="mr-2 h-4 w-4" />
+                    <span>Web Search</span>
+                  </div>
+                  {selectedOption === OPTIONS.SEARCH && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
+                </DropdownMenuItem>
                 <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.RESEARCH && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
                   if (selectedOption === OPTIONS.RESEARCH) {
                     router.push('/c/new-search'); // Toggle off

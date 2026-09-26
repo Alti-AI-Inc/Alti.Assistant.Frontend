@@ -29,11 +29,8 @@ export function useSearchHandler() {
   }: SearchHandlerArgs) => {
     if (
       selectedOption === OPTIONS.SEARCH ||
-      selectedOption === OPTIONS.MONITOR ||
       conversationId === 'new-search' ||
-      pathname === '/c/new-search' ||
-      conversationId === 'new-monitor' ||
-      pathname === '/c/new-monitor'
+      pathname === '/c/new-search'
     ) {
       try {
         const spaceId = await getOrEnsureSpaceId(accessToken);
