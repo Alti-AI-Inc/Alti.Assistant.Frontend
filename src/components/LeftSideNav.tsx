@@ -839,44 +839,6 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                           <span>Connectors</span>
                         </button>
                         <button
-                          onClick={() => router.push('/monitor')}
-                          className={cn(
-                            'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',
-                            pathname.startsWith('/monitor')
-                              ? 'bg-[#32323a] font-medium text-white shadow-[0_4px_12px_rgba(0,0,0,0.6)]'
-                              : 'bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]',
-                          )}
-                        >
-                          <Activity
-                            className={cn(
-                              'h-3.5 w-3.5 flex-shrink-0 transition-colors',
-                              pathname.startsWith('/monitor')
-                                ? 'text-white'
-                                : 'text-zinc-400 group-hover:text-white',
-                            )}
-                          />
-                          <span>Monitor Changes</span>
-                        </button>
-                        <button
-                          onClick={() => router.push('/monitor')}
-                          className={cn(
-                            'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',
-                            pathname.startsWith('/monitor')
-                              ? 'bg-[#32323a] font-medium text-white shadow-[0_4px_12px_rgba(0,0,0,0.6)]'
-                              : 'bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]',
-                          )}
-                        >
-                          <Activity
-                            className={cn(
-                              'h-3.5 w-3.5 flex-shrink-0 transition-colors',
-                              pathname.startsWith('/monitor')
-                                ? 'text-white'
-                                : 'text-zinc-400 group-hover:text-white',
-                            )}
-                          />
-                          <span>Monitor Changes</span>
-                        </button>
-                        <button
                           onClick={() => router.push('/developers')}
                           className={cn(
                             'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',

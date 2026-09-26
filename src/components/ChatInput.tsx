@@ -1,5 +1,5 @@
 'use client';
-import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
+import { Activity, ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
 import { cn } from '@/lib/utils';
 
@@ -80,6 +80,7 @@ import {
   Search,
   Globe,
   Square,
+Activity,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -1904,6 +1905,10 @@ export default function ChatInput({
                 }}>
                   <Microscope className="mr-2 h-4 w-4" />
                   <span>Deep Research</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/monitor')}>
+                  <Activity className="mr-2 h-4 w-4" />
+                  <span>Monitor Changes</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
