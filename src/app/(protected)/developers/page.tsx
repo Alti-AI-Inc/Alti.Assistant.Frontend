@@ -1,9 +1,19 @@
 'use client';
 
+import { useState } from 'react';
+
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Key, Server, TerminalSquare, Copy, Plus } from 'lucide-react';
+import { Key, Server, TerminalSquare, Copy, Plus, Check } from 'lucide-react';
 
 export default function DevelopersPage() {
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopy = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
   return (
     <div className="dark:bg-gray-955 flex h-full flex-col overflow-hidden bg-[#e1e1e1]">
       <Tabs defaultValue="api-keys" className="flex h-full w-full flex-col">
@@ -76,8 +86,15 @@ export default function DevelopersPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <button className="flex h-8 w-8 items-center justify-center rounded-[3px] bg-gray-100 text-gray-600 transition-all hover:bg-gray-200 active:scale-95 dark:bg-zinc-800 dark:text-gray-300 dark:hover:bg-zinc-700">
-                      <Copy className="h-4 w-4" />
+                    <button
+                      onClick={() => handleCopy('sk-prod-...82fa', 'apikey')}
+                      className="flex h-8 w-8 items-center justify-center rounded-[3px] bg-gray-100 text-gray-600 transition-all hover:bg-gray-200 active:scale-95 dark:bg-zinc-800 dark:text-gray-300 dark:hover:bg-zinc-700"
+                    >
+                      {copiedId === 'apikey' ? (
+                        <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
+                      ) : (
+                        <Copy className="h-4 w-4" />
+                      )}
                     </button>
                     <button className="h-8 w-[80px] shrink-0 rounded-[3px] bg-red-50 text-xs font-bold text-red-600 transition-all hover:bg-red-100 active:scale-95 dark:bg-red-900/20 dark:text-red-500 dark:hover:bg-red-900/40">
                       Revoke
