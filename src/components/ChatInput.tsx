@@ -1193,7 +1193,29 @@ export default function ChatInput({
         switch (selectedOption) {
           case OPTIONS.SEARCH:
           case OPTIONS.MONITOR:
-            return (
+            const getModeIcon = () => {
+    switch (selectedOption) {
+      case OPTIONS.RESEARCH: return <Microscope className="size-3.5" />;
+      case OPTIONS.DRAFT_DOCUMENT: return <PenTool className="size-3.5" />;
+      case OPTIONS.CODE: return <Code className="size-3.5" />;
+      case OPTIONS.DESIGN: return <Palette className="size-3.5" />;
+      case OPTIONS.VIDEO: return <Video className="size-3.5" />;
+      default: return <Globe className="size-3.5" />;
+    }
+  };
+
+  const getModeName = () => {
+    switch (selectedOption) {
+      case OPTIONS.RESEARCH: return 'Research';
+      case OPTIONS.DRAFT_DOCUMENT: return 'Writing';
+      case OPTIONS.CODE: return 'Code';
+      case OPTIONS.DESIGN: return 'Design';
+      case OPTIONS.VIDEO: return 'Video';
+      default: return 'Search';
+    }
+  };
+
+  return (
               response.data?.responseMessage?.answer ||
               response.data?.content ||
               response.data?.summary ||
@@ -1906,26 +1928,21 @@ export default function ChatInput({
 
             {/* Actions Dropdown Button */}
             <DropdownMenu>
-              <Tooltip>
-                <TooltipTrigger asChild onFocus={e => e.preventDefault()}>
                   <DropdownMenuTrigger asChild>
                     <button
                       type="button"
                       disabled={isLoadingResponse}
                       className={cn(
-                        'flex size-8 sm:size-6 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-400 transition-colors hover:text-zinc-600 focus:outline-none dark:text-zinc-500 dark:hover:text-zinc-300',
+                        'flex h-7 flex-shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-zinc-100/80 px-2.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-200 focus:outline-none dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700',
                         isLoadingResponse && 'cursor-not-allowed opacity-50',
                       )}
-                      aria-label="More actions"
+                      aria-label="Select Mode"
                     >
-                      <Plus strokeWidth={1.5} className="size-4" />
+                      {getModeIcon()}
+                      <span>{getModeName()}</span>
+                      <ChevronDown className="size-3 opacity-50" />
                     </button>
                   </DropdownMenuTrigger>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>More Options</p>
-                </TooltipContent>
-              </Tooltip>
               <DropdownMenuContent align="start" alignOffset={-12} sideOffset={16} className="w-48 rounded-[5px] shadow-md border-zinc-300 dark:border-zinc-700/80">
                 <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.SEARCH && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
                   router.push('/c/new-search');
