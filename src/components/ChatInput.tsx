@@ -2056,14 +2056,14 @@ return (
                       type="button"
                       disabled={isLoadingResponse}
                       className={cn(
-                        'flex h-10 sm:h-8 w-[98px] flex-shrink-0 cursor-pointer items-center justify-between gap-1.5 rounded-[3px] bg-zinc-100/80 px-2.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-200 focus:outline-none dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700/80',
+                        'flex h-10 sm:h-8 w-[110px] flex-shrink-0 cursor-pointer items-center justify-between gap-1.5 rounded-[3px] bg-zinc-100/80 px-2.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-200 focus:outline-none dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700/80',
                         isLoadingResponse && 'cursor-not-allowed opacity-50',
                       )}
                       aria-label="Select Mode"
                     >
                       <div className="flex items-center gap-1.5">
                         {getModeIcon()}
-                        <span className="text-left w-[50px]">{getModeName()}</span>
+                        <span className="text-left w-[64px]">{getModeName()}</span>
                       </div>
                       <ChevronDown className="size-3 opacity-50 flex-shrink-0" />
                     </button>
