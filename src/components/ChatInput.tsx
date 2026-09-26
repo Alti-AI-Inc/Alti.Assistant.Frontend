@@ -1,5 +1,5 @@
 'use client';
-import { Activity, ImageGenConfirmation } from '@/components/ImageGenConfirmation';
+import { ImageGenConfirmation } from '@/components/ImageGenConfirmation';
 import { ImageGenSuggestions } from '@/components/ImageGenSuggestions';
 import { cn } from '@/lib/utils';
 
