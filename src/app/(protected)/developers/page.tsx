@@ -89,7 +89,6 @@ export default function DevelopersPage() {
 
             {/* ENDPOINTS TAB */}
             <TabsContent value="endpoints" className="m-0 border-0 p-0">
-
               <div className="flex flex-col gap-2">
                 {[
                   // --- TEXT & LLMs (Together.ai / Core) ---
@@ -127,15 +126,15 @@ export default function DevelopersPage() {
                   },
                   {
                     method: 'POST',
-                    path: '/audio/translations',
-                    name: 'Audio Translation',
-                    desc: 'Translate audio in any language to English text',
-                  },
-                  {
-                    method: 'POST',
                     path: '/audio/speech',
                     name: 'Text-to-Speech (TTS)',
                     desc: 'Generate lifelike audio from text',
+                  },
+                  {
+                    method: 'POST',
+                    path: '/audio/translations',
+                    name: 'Audio Translation',
+                    desc: 'Translate audio in any language to English text',
                   },
 
                   // --- VISION & VIDEO ---
