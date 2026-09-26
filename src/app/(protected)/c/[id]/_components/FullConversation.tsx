@@ -1332,7 +1332,7 @@ const FullConversation = ({
           )}
         >
           {showAsNewChat && (
-            <div className="mb-6 flex justify-center">
+            <div className="mb-6 flex justify-center items-center min-h-[60px]">
               {selectedOption === OPTIONS.RESEARCH ? (
                 <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
                   <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
@@ -1343,6 +1343,12 @@ const FullConversation = ({
                 <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
                   <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
                     Monitor Changes
+                  </h1>
+                </div>
+              ) : selectedOption === OPTIONS.WORKFLOW ? (
+                <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
+                    Automate Workflows
                   </h1>
                 </div>
               ) : (
