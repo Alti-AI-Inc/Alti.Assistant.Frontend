@@ -1868,26 +1868,38 @@ export default function ChatInput({
             ref={containerRef}
             className="relative flex min-h-[52px] w-full items-center gap-1.5 rounded-[5px] border border-zinc-300 bg-white px-3 py-1.5 shadow-xs transition-all duration-300 dark:border-zinc-700/80 dark:bg-zinc-800"
           >
-            {/* Attach Files Button */}
-            <Tooltip>
-              <TooltipTrigger asChild onFocus={e => e.preventDefault()}>
+            {/* Actions Dropdown Button */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
                 <button
                   type="button"
-                  onClick={() => fileInputRef.current?.click()}
                   disabled={isLoadingResponse}
                   className={cn(
                     'flex size-8 sm:size-6 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-400 transition-colors hover:text-zinc-600 focus:outline-none dark:text-zinc-500 dark:hover:text-zinc-300',
                     isLoadingResponse && 'cursor-not-allowed opacity-50',
                   )}
-                  aria-label="Attach files"
+                  aria-label="More actions"
                 >
-                  <Paperclip strokeWidth={1.5} className="size-3.5" />
+                  <Plus strokeWidth={1.5} className="size-4" />
                 </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Attach files</p>
-              </TooltipContent>
-            </Tooltip>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-48">
+                <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
+                  <Paperclip className="mr-2 h-4 w-4" />
+                  <span>Attach Files</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {
+                  // Assuming user will type their research prompt and we handle it via backend
+                  // For now, we can insert a command or open a modal. 
+                  // I will just populate the input with a command to trigger deep research.
+                  setMessage((prev) => prev ? prev + ' /research ' : '/research ');
+                  textareaRef.current?.focus();
+                }}>
+                  <Microscope className="mr-2 h-4 w-4" />
+                  <span>Deep Research</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Textarea - Single height but auto-expanding */}
             <Textarea
