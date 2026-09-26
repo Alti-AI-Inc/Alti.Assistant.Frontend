@@ -622,7 +622,7 @@ export const useNavState = ({
       pathname.startsWith('/guardrails') ||
       pathname.startsWith('/knowledge') ||
       pathname.startsWith('/connectors') ||
-      pathname.startsWith('/developers') ||
+      pathname.startsWith('/developers') || pathname.startsWith('/monitor') ||
       pathname.startsWith('/platform-knowledge') ||
       pathname.startsWith('/legal') ||
       pathname.startsWith('/admin') ||

@@ -1,5 +1,6 @@
 'use client';
-import { createKnowledgeBaseAction } from '@/actions/knowledgeBaseAction';
+import {
+  Activity, createKnowledgeBaseAction } from '@/actions/knowledgeBaseAction';
 import { useNavState } from './left-side-nav/useNavState';
 import {
   getSpaceResearchSessionsAction,
@@ -49,12 +50,14 @@ import {
   Plus,
   Scale,
   Search,
-  Shield, Database,
+  Shield,
+  Database,
   Terminal,
   Trash2,
   Users,
   Video,
-, Code } from 'lucide-react';
+  Code,
+} from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -282,15 +285,18 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
     unreadInboxCount,
     userEmail,
     viewParam,
-    data, spaceMonitors, allFiles, isLoadingSpaceMonitors,
+    data,
+    spaceMonitors,
+    allFiles,
+    isLoadingSpaceMonitors,
     inboxItems,
     threads,
     deleteThread,
     connections,
     setThreads,
-    activeBotThreadId
+    activeBotThreadId,
   } = useNavState({ side });
-  
+
   return (
     <div className="flex h-full w-full overflow-hidden">
       {/* Column 1: Spaces Switcher (Slack style) */}
@@ -532,12 +538,12 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
 
       {/* Column 2: Secondary Content navigation panel */}
       {(isLeftSidebarOpen || !SHOW_WORKSPACES) && (
-        <div className="flex h-full min-w-0 flex-1 flex-col bg-black overflow-hidden select-none">
+        <div className="flex h-full min-w-0 flex-1 flex-col overflow-hidden bg-black select-none">
           {/* Top Bar Row */}
           {activeTab !== 'account' && isLeftSidebarOpen && (
             <div className="flex w-full flex-none items-center gap-2 border-b border-zinc-800/60 bg-black px-4 pt-3 pb-3 dark:bg-black">
               {activeBotId === null ? (
-                  /* General Mode */
+                /* General Mode */
                 <>
                   <div className="flex h-9 flex-1 items-center overflow-hidden rounded-[3px] bg-white px-2.5 shadow-sm transition-all duration-200">
                     <input
@@ -561,7 +567,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         }}
                         className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
                       >
-                        <Plus strokeWidth={1.5} className="size-4 text-zinc-800" />
+                        <Plus
+                          strokeWidth={1.5}
+                          className="size-4 text-zinc-800"
+                        />
                       </Link>
                     </TooltipTrigger>
                     <TooltipContent
@@ -650,7 +659,10 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         }}
                         className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
                       >
-                        <Plus strokeWidth={1.5} className="size-4 text-zinc-800" />
+                        <Plus
+                          strokeWidth={1.5}
+                          className="size-4 text-zinc-800"
+                        />
                       </button>
                     </TooltipTrigger>
                     <TooltipContent
@@ -665,258 +677,294 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     </TooltipContent>
                   </Tooltip>
                 </>
-              )
-            }
-          </div>
+              )}
+            </div>
           )}
 
           {/* Navigation Body or collapsed spacer */}
           {isLeftSidebarOpen ? (
             <div className="min-h-0 flex-1 overflow-y-auto">
-                {activeTab === 'account' ? (
-                  <div className="flex min-h-full flex-col justify-between px-4 pt-4 pb-4">
-                    <div className="space-y-1.5">
-                {isSuperAdmin && (
-                  <button
-                    onClick={() => router.push('/admin')}
-                    className={cn(
-                      "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
-                      pathname.startsWith('/admin')
-                        ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                        : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                    )}
-                  >
-                    <Shield className={cn("h-3.5 w-3.5 flex-shrink-0 transition-colors", pathname.startsWith('/admin') ? "text-white" : "text-zinc-400 group-hover:text-white")} />
-                    <span>Owner Platform</span>
-                  </button>
-                )}
-                {isAdmin && !isSuperAdmin && (
-                  <>
-                    <button
-                      onClick={() => router.push('/admin/plans')}
-                      className={cn(
-                        "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
-                        pathname.startsWith('/admin/plans')
-                          ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                          : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                      )}
-                    >
-                      <LayoutGrid
-                        className={cn(
-                          'h-3.5 w-3.5 flex-shrink-0 transition-colors',
-                          pathname.startsWith('/admin/plans')
-                            ? 'text-white'
-                            : 'text-zinc-400 group-hover:text-white',
-                        )}
-                      />
-                      <span>Plans</span>
-                    </button>
-
-                    <button
-                      onClick={() => router.push('/admin/team-members')}
-                      className={cn(
-                        "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
-                        pathname.startsWith('/admin/team-members')
-                          ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                          : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                      )}
-                    >
-                      <Users
-                        className={cn(
-                          'h-3.5 w-3.5 flex-shrink-0 transition-colors',
-                          pathname.startsWith('/admin/team-members')
-                            ? 'text-white'
-                            : 'text-zinc-400 group-hover:text-white',
-                        )}
-                      />
-                      <span>Members</span>
-                    </button>
-                    <button
-                    onClick={() => router.push('/instructions')}
-                    className={cn(
-                      "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
-                      pathname.startsWith('/instructions')
-                        ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                        : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                    )}
-                  >
-                    <FileText
-                      className={cn(
-                        'h-3.5 w-3.5 flex-shrink-0 transition-colors',
-                        pathname.startsWith('/instructions')
-                          ? 'text-white'
-                          : 'text-zinc-400 group-hover:text-white',
-                      )}
-                    />
-                    <span>Instructions</span>
-                  </button>
-                  <button
-                    onClick={() => router.push('/guardrails')}
-                    className={cn(
-                      "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
-                      pathname.startsWith('/guardrails')
-                        ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                        : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                    )}
-                  >
-                    <Shield
-                      className={cn(
-                        'h-3.5 w-3.5 flex-shrink-0 transition-colors',
-                        pathname.startsWith('/guardrails')
-                          ? 'text-white'
-                          : 'text-zinc-400 group-hover:text-white',
-                      )}
-                    />
-                    <span>Guardrails</span>
-                  </button>
-                  <button
-                    onClick={() => router.push('/knowledge')}
-                    className={cn(
-                      "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
-                      pathname.startsWith('/knowledge')
-                        ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                        : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                    )}
-                  >
-                    <Database
-                      className={cn(
-                        'h-3.5 w-3.5 flex-shrink-0 transition-colors',
-                        pathname.startsWith('/knowledge')
-                          ? 'text-white'
-                          : 'text-zinc-400 group-hover:text-white',
-                      )}
-                    />
-                    <span>Knowledge</span>
-                  </button>
-                  <button
-                    onClick={() => router.push('/connectors')}
-                    className={cn(
-                      "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
-                      pathname.startsWith('/connectors')
-                        ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                        : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                    )}
-                  >
-                    <svg className={cn('h-3.5 w-3.5 flex-shrink-0 transition-colors', pathname.startsWith('/connectors') ? 'text-white' : 'text-zinc-400 group-hover:text-white')} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg>
-                    <span>Connectors</span>
-                  </button>
-                  <button
-                    onClick={() => router.push('/developers')}
-                    className={cn(
-                      "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
-                      pathname.startsWith('/developers')
-                        ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                        : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                    )}
-                  >
-                    <Code
-                      className={cn(
-                        "h-3.5 w-3.5 flex-shrink-0 transition-colors",
-                        pathname.startsWith('/developers')
-                          ? "text-white"
-                          : "text-zinc-400 group-hover:text-white"
-                      )}
-                    />
-                    <span>Developers</span>
-                  </button>
-                  <button
-                      onClick={() => router.push('/admin/billing')}
-                      className={cn(
-                        "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
-                        pathname.startsWith('/admin/billing')
-                          ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                          : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                      )}
-                    >
-                      <CreditCard
-                        className={cn(
-                          'h-3.5 w-3.5 flex-shrink-0 transition-colors',
-                          pathname.startsWith('/admin/billing')
-                            ? 'text-white'
-                            : 'text-zinc-400 group-hover:text-white',
-                        )}
-                      />
-                      <span>Billing</span>
-                    </button>
-                    <button
-                      onClick={() => router.push('/admin/invoices')}
-                      className={cn(
-                        "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
-                        pathname.startsWith('/admin/invoices')
-                          ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                          : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                      )}
-                    >
-                      <FileText
-                        className={cn(
-                          'h-3.5 w-3.5 flex-shrink-0 transition-colors',
-                          pathname.startsWith('/admin/invoices')
-                            ? 'text-white'
-                            : 'text-zinc-400 group-hover:text-white',
-                        )}
-                      />
-                      <span>Invoices</span>
-                    </button>
-                  </>
-                )}
-
-
-                {!isSuperAdmin && (
-                  <>
-                  
-                  
-                  
-                  <button
-                    onClick={() => router.push('/legal')}
-                    className={cn(
-                      "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
-                      pathname.startsWith('/legal')
-                        ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                        : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
-                    )}
-                  >
-                    <Scale
-                      className={cn(
-                        'h-3.5 w-3.5 flex-shrink-0 transition-colors',
-                        pathname.startsWith('/legal')
-                          ? 'text-white'
-                          : 'text-zinc-400 group-hover:text-white',
-                      )}
-                    />
-                    <span>Legal</span>
-                  </button>
-                  </>
-                )}
-
-
-                    </div>
-
-                    <div className="mt-auto pt-4 space-y-1.5">
-
-
+              {activeTab === 'account' ? (
+                <div className="flex min-h-full flex-col justify-between px-4 pt-4 pb-4">
+                  <div className="space-y-1.5">
+                    {isSuperAdmin && (
                       <button
-                        onClick={() => onOpen({ type: 'logout' })}
-                        className="group flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] bg-[#1e1e24] text-red-400 px-3 text-left text-xs transition-all duration-150 select-none hover:bg-[#282830] hover:text-red-300 shadow-[0_2px_8px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)] focus:outline-none"
+                        onClick={() => router.push('/admin')}
+                        className={cn(
+                          'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',
+                          pathname.startsWith('/admin')
+                            ? 'bg-[#32323a] font-medium text-white shadow-[0_4px_12px_rgba(0,0,0,0.6)]'
+                            : 'bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]',
+                        )}
                       >
-                        <LogOut className="h-3.5 w-3.5 flex-shrink-0 text-red-400 transition-colors group-hover:text-red-300" />
-                        <span>Logout</span>
+                        <Shield
+                          className={cn(
+                            'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                            pathname.startsWith('/admin')
+                              ? 'text-white'
+                              : 'text-zinc-400 group-hover:text-white',
+                          )}
+                        />
+                        <span>Owner Platform</span>
                       </button>
-                    </div>
+                    )}
+                    {isAdmin && !isSuperAdmin && (
+                      <>
+                        <button
+                          onClick={() => router.push('/admin/plans')}
+                          className={cn(
+                            'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',
+                            pathname.startsWith('/admin/plans')
+                              ? 'bg-[#32323a] font-medium text-white shadow-[0_4px_12px_rgba(0,0,0,0.6)]'
+                              : 'bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]',
+                          )}
+                        >
+                          <LayoutGrid
+                            className={cn(
+                              'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                              pathname.startsWith('/admin/plans')
+                                ? 'text-white'
+                                : 'text-zinc-400 group-hover:text-white',
+                            )}
+                          />
+                          <span>Plans</span>
+                        </button>
+
+                        <button
+                          onClick={() => router.push('/admin/team-members')}
+                          className={cn(
+                            'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',
+                            pathname.startsWith('/admin/team-members')
+                              ? 'bg-[#32323a] font-medium text-white shadow-[0_4px_12px_rgba(0,0,0,0.6)]'
+                              : 'bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]',
+                          )}
+                        >
+                          <Users
+                            className={cn(
+                              'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                              pathname.startsWith('/admin/team-members')
+                                ? 'text-white'
+                                : 'text-zinc-400 group-hover:text-white',
+                            )}
+                          />
+                          <span>Members</span>
+                        </button>
+                        <button
+                          onClick={() => router.push('/instructions')}
+                          className={cn(
+                            'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',
+                            pathname.startsWith('/instructions')
+                              ? 'bg-[#32323a] font-medium text-white shadow-[0_4px_12px_rgba(0,0,0,0.6)]'
+                              : 'bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]',
+                          )}
+                        >
+                          <FileText
+                            className={cn(
+                              'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                              pathname.startsWith('/instructions')
+                                ? 'text-white'
+                                : 'text-zinc-400 group-hover:text-white',
+                            )}
+                          />
+                          <span>Instructions</span>
+                        </button>
+                        <button
+                          onClick={() => router.push('/guardrails')}
+                          className={cn(
+                            'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',
+                            pathname.startsWith('/guardrails')
+                              ? 'bg-[#32323a] font-medium text-white shadow-[0_4px_12px_rgba(0,0,0,0.6)]'
+                              : 'bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]',
+                          )}
+                        >
+                          <Shield
+                            className={cn(
+                              'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                              pathname.startsWith('/guardrails')
+                                ? 'text-white'
+                                : 'text-zinc-400 group-hover:text-white',
+                            )}
+                          />
+                          <span>Guardrails</span>
+                        </button>
+                        <button
+                          onClick={() => router.push('/knowledge')}
+                          className={cn(
+                            'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',
+                            pathname.startsWith('/knowledge')
+                              ? 'bg-[#32323a] font-medium text-white shadow-[0_4px_12px_rgba(0,0,0,0.6)]'
+                              : 'bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]',
+                          )}
+                        >
+                          <Database
+                            className={cn(
+                              'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                              pathname.startsWith('/knowledge')
+                                ? 'text-white'
+                                : 'text-zinc-400 group-hover:text-white',
+                            )}
+                          />
+                          <span>Knowledge</span>
+                        </button>
+                        <button
+                          onClick={() => router.push('/connectors')}
+                          className={cn(
+                            'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',
+                            pathname.startsWith('/connectors')
+                              ? 'bg-[#32323a] font-medium text-white shadow-[0_4px_12px_rgba(0,0,0,0.6)]'
+                              : 'bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]',
+                          )}
+                        >
+                          <svg
+                            className={cn(
+                              'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                              pathname.startsWith('/connectors')
+                                ? 'text-white'
+                                : 'text-zinc-400 group-hover:text-white',
+                            )}
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M12 22v-5" />
+                            <path d="M9 8V2" />
+                            <path d="M15 8V2" />
+                            <path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z" />
+                          </svg>
+                          <span>Connectors</span>
+                        </button>
+                        <button
+                          onClick={() => router.push('/monitor')}
+                          className={cn(
+                            'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',
+                            pathname.startsWith('/monitor')
+                              ? 'bg-[#32323a] font-medium text-white shadow-[0_4px_12px_rgba(0,0,0,0.6)]'
+                              : 'bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]',
+                          )}
+                        >
+                          <Activity
+                            className={cn(
+                              'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                              pathname.startsWith('/monitor')
+                                ? 'text-white'
+                                : 'text-zinc-400 group-hover:text-white',
+                            )}
+                          />
+                          <span>Monitor Changes</span>
+                        </button>
+                        <button
+                          onClick={() => router.push('/developers')}
+                          className={cn(
+                            'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',
+                            pathname.startsWith('/developers')
+                              ? 'bg-[#32323a] font-medium text-white shadow-[0_4px_12px_rgba(0,0,0,0.6)]'
+                              : 'bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]',
+                          )}
+                        >
+                          <Code
+                            className={cn(
+                              'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                              pathname.startsWith('/developers')
+                                ? 'text-white'
+                                : 'text-zinc-400 group-hover:text-white',
+                            )}
+                          />
+                          <span>Developers</span>
+                        </button>
+                        <button
+                          onClick={() => router.push('/admin/billing')}
+                          className={cn(
+                            'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',
+                            pathname.startsWith('/admin/billing')
+                              ? 'bg-[#32323a] font-medium text-white shadow-[0_4px_12px_rgba(0,0,0,0.6)]'
+                              : 'bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]',
+                          )}
+                        >
+                          <CreditCard
+                            className={cn(
+                              'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                              pathname.startsWith('/admin/billing')
+                                ? 'text-white'
+                                : 'text-zinc-400 group-hover:text-white',
+                            )}
+                          />
+                          <span>Billing</span>
+                        </button>
+                        <button
+                          onClick={() => router.push('/admin/invoices')}
+                          className={cn(
+                            'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',
+                            pathname.startsWith('/admin/invoices')
+                              ? 'bg-[#32323a] font-medium text-white shadow-[0_4px_12px_rgba(0,0,0,0.6)]'
+                              : 'bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]',
+                          )}
+                        >
+                          <FileText
+                            className={cn(
+                              'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                              pathname.startsWith('/admin/invoices')
+                                ? 'text-white'
+                                : 'text-zinc-400 group-hover:text-white',
+                            )}
+                          />
+                          <span>Invoices</span>
+                        </button>
+                      </>
+                    )}
+
+                    {!isSuperAdmin && (
+                      <>
+                        <button
+                          onClick={() => router.push('/legal')}
+                          className={cn(
+                            'group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] px-3 text-left text-xs shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none focus:outline-none',
+                            pathname.startsWith('/legal')
+                              ? 'bg-[#32323a] font-medium text-white shadow-[0_4px_12px_rgba(0,0,0,0.6)]'
+                              : 'bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]',
+                          )}
+                        >
+                          <Scale
+                            className={cn(
+                              'h-3.5 w-3.5 flex-shrink-0 transition-colors',
+                              pathname.startsWith('/legal')
+                                ? 'text-white'
+                                : 'text-zinc-400 group-hover:text-white',
+                            )}
+                          />
+                          <span>Legal</span>
+                        </button>
+                      </>
+                    )}
                   </div>
-            ) : activeBotId === null ? (
-              /* General Mode Chat History List */
-              <div className="flex-1 overflow-y-auto bg-black px-4 py-2 dark:bg-black">
-                <ConversationsList
-                  searchQuery={searchQuery}
-                  activeTab="search"
-                />
-              </div>
-            ) : (
-              /* Space-Specific Threads List */
-              <div className="flex-1 space-y-1.5 overflow-y-auto bg-black px-4 py-2 dark:bg-black">
+
+                  <div className="mt-auto space-y-1.5 pt-4">
+                    <button
+                      onClick={() => onOpen({ type: 'logout' })}
+                      className="group flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] bg-[#1e1e24] px-3 text-left text-xs text-red-400 shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-all duration-150 select-none hover:bg-[#282830] hover:text-red-300 hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)] focus:outline-none"
+                    >
+                      <LogOut className="h-3.5 w-3.5 flex-shrink-0 text-red-400 transition-colors group-hover:text-red-300" />
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                </div>
+              ) : activeBotId === null ? (
+                /* General Mode Chat History List */
+                <div className="flex-1 overflow-y-auto bg-black px-4 py-2 dark:bg-black">
+                  <ConversationsList
+                    searchQuery={searchQuery}
+                    activeTab="search"
+                  />
+                </div>
+              ) : (
+                /* Space-Specific Threads List */
+                <div className="flex-1 space-y-1.5 overflow-y-auto bg-black px-4 py-2 dark:bg-black">
                   {isSpaceMonitorSection
                     ? spaceMonitors
-                        .filter((monitor) => {
+                        .filter(monitor => {
                           const normalizedQuery = searchQuery.toLowerCase();
                           const name = (monitor.name || '').toLowerCase();
                           const query = (
@@ -929,7 +977,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                             query.includes(normalizedQuery)
                           );
                         })
-                        .map((monitor) => {
+                        .map(monitor => {
                           const monitorId = getMonitorId(monitor);
                           const isSelected = monitorParam === monitorId;
 
@@ -1203,7 +1251,7 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                   {isSpaceMonitorSection &&
                     !isLoadingSpaceMonitors &&
                     spaceMonitors.length > 0 &&
-                    spaceMonitors.every((monitor) => {
+                    spaceMonitors.every(monitor => {
                       const normalizedQuery = searchQuery.toLowerCase();
                       const name = (monitor.name || '').toLowerCase();
                       const query = (monitor.search?.query || '').toLowerCase();
@@ -1235,121 +1283,130 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                     </div>
                   )}
                 </div>
-            )}
-          </div>
-        ) : (
-          <div className="flex-1" />
-        )}
-
-        {/* Footer Area */}
-        <div className="sticky bottom-0 z-30 flex h-[64px] w-full flex-none flex-col justify-center border-t border-zinc-800/60 bg-black p-4 py-2.5">
-          {!isLeftSidebarOpen ? (
-            <div className="flex h-11 w-full items-center justify-center">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    onClick={toggleLeftSidebar}
-                    className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
-                  >
-                    <PanelLeftClose strokeWidth={1.5} className="size-4 rotate-180 text-zinc-800" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent
-                  side="right"
-                  className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
-                >
-                  Expand Sidebar
-                </TooltipContent>
-              </Tooltip>
-            </div>
-          ) : isLoggedIn && activeTab === 'account' ? (
-            <div className="flex h-11 w-full items-center gap-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    onClick={toggleLeftSidebar}
-                    className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
-                  >
-                    <PanelLeftClose strokeWidth={1.5} className="size-4 text-zinc-800" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent
-                  side="top"
-                  className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
-                >
-                  Collapse Sidebar
-                </TooltipContent>
-              </Tooltip>
-              <Button
-                variant="default"
-                className="flex-1 justify-center gap-2 rounded-[3px] border border-transparent bg-white font-normal text-black hover:bg-zinc-100"
-                onClick={() => {
-                  setActiveTab('search');
-                  router.push(isLoggedIn ? '/c/new-search' : '/');
-                }}
-              >
-                Return to App
-              </Button>
-            </div>
-          ) : (
-            <div className="flex h-11 w-full items-center gap-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    onClick={toggleLeftSidebar}
-                    className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
-                  >
-                    <PanelLeftClose strokeWidth={1.5} className="size-4 text-zinc-800" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent
-                  side="top"
-                  className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
-                >
-                  Collapse Sidebar
-                </TooltipContent>
-              </Tooltip>
-
-              {!isLoggedIn ? (
-                <div className="flex flex-1 items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="default"
-                    className="flex-1 cursor-pointer rounded-[3px] bg-white px-0 font-normal text-black hover:bg-zinc-100"
-                    onClick={() =>
-                      onOpen({ type: 'auth-modal', actionId: 'login' })
-                    }
-                  >
-                    Login
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="default"
-                    className="flex-1 cursor-pointer rounded-[3px] bg-white px-0 font-normal text-black hover:bg-zinc-100"
-                    onClick={() =>
-                      onOpen({ type: 'auth-modal', actionId: 'register' })
-                    }
-                  >
-                    Register
-                  </Button>
-                </div>
-              ) : (
-                <Button
-                  variant="outline"
-                  onClick={() => setActiveTab('account')}
-                  className="flex-1 cursor-pointer rounded-[3px] border border-transparent bg-white font-normal text-zinc-900 shadow-sm transition-all duration-300 outline-none select-none hover:bg-zinc-100 dark:border-transparent dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100"
-                >
-                  My Account
-                </Button>
               )}
             </div>
+          ) : (
+            <div className="flex-1" />
           )}
+
+          {/* Footer Area */}
+          <div className="sticky bottom-0 z-30 flex h-[64px] w-full flex-none flex-col justify-center border-t border-zinc-800/60 bg-black p-4 py-2.5">
+            {!isLeftSidebarOpen ? (
+              <div className="flex h-11 w-full items-center justify-center">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={toggleLeftSidebar}
+                      className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
+                    >
+                      <PanelLeftClose
+                        strokeWidth={1.5}
+                        className="size-4 rotate-180 text-zinc-800"
+                      />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="right"
+                    className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                  >
+                    Expand Sidebar
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            ) : isLoggedIn && activeTab === 'account' ? (
+              <div className="flex h-11 w-full items-center gap-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={toggleLeftSidebar}
+                      className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
+                    >
+                      <PanelLeftClose
+                        strokeWidth={1.5}
+                        className="size-4 text-zinc-800"
+                      />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                  >
+                    Collapse Sidebar
+                  </TooltipContent>
+                </Tooltip>
+                <Button
+                  variant="default"
+                  className="flex-1 justify-center gap-2 rounded-[3px] border border-transparent bg-white font-normal text-black hover:bg-zinc-100"
+                  onClick={() => {
+                    setActiveTab('search');
+                    router.push(isLoggedIn ? '/c/new-search' : '/');
+                  }}
+                >
+                  Return to App
+                </Button>
+              </div>
+            ) : (
+              <div className="flex h-11 w-full items-center gap-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      onClick={toggleLeftSidebar}
+                      className="flex size-9 flex-shrink-0 cursor-pointer items-center justify-center rounded-[3px] bg-white text-zinc-800 shadow-sm transition-all duration-200 hover:bg-zinc-100 hover:text-black focus:outline-none"
+                    >
+                      <PanelLeftClose
+                        strokeWidth={1.5}
+                        className="size-4 text-zinc-800"
+                      />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    className="border border-white/10 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_12px_rgba(0,0,0,0.5)] select-none"
+                  >
+                    Collapse Sidebar
+                  </TooltipContent>
+                </Tooltip>
+
+                {!isLoggedIn ? (
+                  <div className="flex flex-1 items-center gap-2">
+                    <Button
+                      type="button"
+                      variant="default"
+                      className="flex-1 cursor-pointer rounded-[3px] bg-white px-0 font-normal text-black hover:bg-zinc-100"
+                      onClick={() =>
+                        onOpen({ type: 'auth-modal', actionId: 'login' })
+                      }
+                    >
+                      Login
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="default"
+                      className="flex-1 cursor-pointer rounded-[3px] bg-white px-0 font-normal text-black hover:bg-zinc-100"
+                      onClick={() =>
+                        onOpen({ type: 'auth-modal', actionId: 'register' })
+                      }
+                    >
+                      Register
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="outline"
+                    onClick={() => setActiveTab('account')}
+                    className="flex-1 cursor-pointer rounded-[3px] border border-transparent bg-white font-normal text-zinc-900 shadow-sm transition-all duration-300 outline-none select-none hover:bg-zinc-100 dark:border-transparent dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100"
+                  >
+                    My Account
+                  </Button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
-    </div>
-  )}
+      )}
 
       {/* Delete Space Dialog */}
       <Dialog
