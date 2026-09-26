@@ -2065,7 +2065,7 @@ return (
                         {getModeIcon()}
                         <span className="text-left w-[64px]">{getModeName()}</span>
                       </div>
-                      <ChevronDown className="size-3 opacity-50 flex-shrink-0" />
+                      <ChevronDown className="size-3 opacity-50 flex-shrink-0 mr-1" />
                     </button>
                   </DropdownMenuTrigger>
               <DropdownMenuContent align="start" alignOffset={0} sideOffset={16} className="w-36 rounded-[5px] shadow-md border-zinc-300 dark:border-zinc-700/80">
