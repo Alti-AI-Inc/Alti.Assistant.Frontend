@@ -115,7 +115,7 @@ export async function createSpaceResearchAction(
   try {
     const authHeader = await getAuthHeader(tokenOverride);
     const response = await fetch(
-      `${API_URL}/spaces/${spaceId}/deep-research/create`,
+      `${API_URL}/research/invoke`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...authHeader },
