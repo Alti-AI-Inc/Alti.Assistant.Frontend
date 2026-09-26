@@ -272,12 +272,12 @@ export default function DevelopersPage() {
                     desc: 'Retrieve conversational memory for specific agent sessions',
                   },
 
-                  // --- STORAGE & OBJECTS (Liberty Center One) ---
+                  // --- STORAGE & OBJECTS (Aphura Cloud) ---
                   {
                     method: 'POST',
                     path: '/storage/upload',
                     name: 'Upload Object',
-                    desc: 'Securely upload files to Liberty Center One with immutable backups',
+                    desc: 'Securely upload files to Aphura infrastructure with immutable backups',
                   },
                   {
                     method: 'GET',
@@ -303,7 +303,7 @@ export default function DevelopersPage() {
                     method: 'GET',
                     path: '/knowledge/query',
                     name: 'RAG Vector Query',
-                    desc: 'Query your Liberty Center One all-flash NVMe vector database',
+                    desc: 'Query your Aphura all-flash NVMe vector database',
                   },
                   {
                     method: 'POST',
@@ -312,18 +312,18 @@ export default function DevelopersPage() {
                     desc: 'Ingest and chunk documents into the vector knowledge base',
                   },
 
-                  // --- COMPUTE & INFRA (Liberty Center One) ---
+                  // --- COMPUTE & INFRA (Aphura Cloud) ---
                   {
                     method: 'GET',
                     path: '/compute/instances',
                     name: 'GPU Instances',
-                    desc: 'List active dedicated GPU instances in Liberty Center One',
+                    desc: 'List active dedicated GPU instances on Aphura cloud',
                   },
                   {
                     method: 'POST',
                     path: '/compute/deploy',
                     name: 'Model Deployment',
-                    desc: 'Deploy a containerized model directly to the Liberty Center One backend',
+                    desc: 'Deploy a containerized model directly to Aphura backend infrastructure',
                   },
                 ].map((ep, i) => (
                   <div
