@@ -1906,7 +1906,10 @@ export default function ChatInput({
                   <Microscope className="mr-2 h-4 w-4" />
                   <span>Deep Research</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/monitor')}>
+                <DropdownMenuItem onClick={() => {
+                  setMessage((prev) => prev ? prev + ' /monitor ' : '/monitor ');
+                  textareaRef.current?.focus();
+                }}>
                   <Activity className="mr-2 h-4 w-4" />
                   <span>Monitor Changes</span>
                 </DropdownMenuItem>
