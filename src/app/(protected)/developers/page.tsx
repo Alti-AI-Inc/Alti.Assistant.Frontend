@@ -8,6 +8,35 @@ import { Key, Server, TerminalSquare, Copy, Plus, Check } from 'lucide-react';
 export default function DevelopersPage() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
+  const [apiKeys, setApiKeys] = useState([
+    {
+      id: '1',
+      key: 'sk-prod-9a8b7c6d5e4f3a2b1c',
+      createdAt: 'Sep 25, 2026',
+      status: 'Active',
+      usage: 'Never used',
+    },
+  ]);
+
+  const generateKey = () => {
+    const newKey = {
+      id: Math.random().toString(36).substring(7),
+      key: `sk-prod-${Math.random().toString(36).substring(2, 15)}`,
+      createdAt: new Date().toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+      status: 'Active',
+      usage: 'Never used',
+    };
+    setApiKeys([newKey, ...apiKeys]);
+  };
+
+  const revokeKey = (id: string) => {
+    setApiKeys(apiKeys.filter(k => k.id !== id));
+  };
+
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
@@ -58,7 +87,10 @@ export default function DevelopersPage() {
                   Manage API keys to authenticate your requests to the Aphura
                   Cloud APIs.
                 </p>
-                <button className="flex h-8 items-center gap-2 rounded-[3px] bg-black px-4 text-xs font-bold text-white shadow-sm transition-all hover:opacity-90 active:scale-95 dark:bg-white dark:text-black">
+                <button
+                  onClick={generateKey}
+                  className="flex h-8 items-center gap-2 rounded-[3px] bg-black px-4 text-xs font-bold text-white shadow-sm transition-all hover:opacity-90 active:scale-95 dark:bg-white dark:text-black"
+                >
                   <Plus className="h-4 w-4" />
                   Generate New Key
                 </button>
