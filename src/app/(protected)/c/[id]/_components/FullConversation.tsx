@@ -1333,45 +1333,11 @@ const FullConversation = ({
         >
           {showAsNewChat && (
             <div className="mb-6 flex justify-center items-center min-h-[60px]">
-              {selectedOption === OPTIONS.RESEARCH ? (
-                <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
-                    Research
-                  </h1>
-                </div>
-
-
-              ) : selectedOption === OPTIONS.CODE ? (
-                <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
-                    Code
-                  </h1>
-                </div>
-              ) : selectedOption === OPTIONS.DESIGN ? (
-                <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
-                    Design
-                  </h1>
-                </div>
-              ) : selectedOption === OPTIONS.VIDEO ? (
-                <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
-                    Video
-                  </h1>
-                </div>
-              ) : selectedOption === OPTIONS.DRAFT_DOCUMENT ? (
-                <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
-                    Write
-                  </h1>
-                </div>
-              ) : (
-                <img
-                  src="/assets/aphura-logo.png"
-                  alt="aphura"
-                  className="h-12 w-auto object-contain select-none md:h-14 dark:invert"
-                />
-              )}
+              <img
+                src="/assets/aphura-logo.png"
+                alt="aphura"
+                className="h-12 w-auto object-contain select-none md:h-14 dark:invert"
+              />
             </div>
           )}
           <ChatInput
