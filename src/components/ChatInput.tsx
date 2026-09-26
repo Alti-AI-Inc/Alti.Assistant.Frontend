@@ -2071,7 +2071,7 @@ return (
                       <ChevronDown className="size-3 opacity-50 flex-shrink-0" />
                     </button>
                   </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" alignOffset={0} sideOffset={16} className="w-[calc(var(--radix-dropdown-menu-trigger-width)+38px)] rounded-[5px] shadow-md border-zinc-300 dark:border-zinc-700/80">
+              <DropdownMenuContent align="start" alignOffset={0} sideOffset={16} className="w-[calc(var(--radix-dropdown-menu-trigger-width)+50px)] rounded-[5px] shadow-md border-zinc-300 dark:border-zinc-700/80">
                 <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.SEARCH && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
                   router.push('/c/new-search');
                   setTimeout(() => textareaRef.current?.focus(), 0);
