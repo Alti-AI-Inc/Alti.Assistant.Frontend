@@ -1881,6 +1881,29 @@ export default function ChatInput({
             ref={containerRef}
             className="relative flex min-h-[52px] w-full items-center gap-1.5 rounded-[5px] border border-zinc-300 bg-white px-3 py-1.5 shadow-xs transition-all duration-300 dark:border-zinc-700/80 dark:bg-zinc-800"
           >
+
+
+            {/* Attach Files Button */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={(e) => { e.preventDefault(); fileInputRef.current?.click(); }}
+                  disabled={isLoadingResponse}
+                  className={cn(
+                    'flex size-8 sm:size-6 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-400 transition-colors hover:text-zinc-600 focus:outline-none dark:text-zinc-500 dark:hover:text-zinc-300',
+                    isLoadingResponse && 'cursor-not-allowed opacity-50',
+                  )}
+                  aria-label="Attach files"
+                >
+                  <Paperclip strokeWidth={1.5} className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Attach Files</p>
+              </TooltipContent>
+            </Tooltip>
+
             {/* Actions Dropdown Button */}
             <DropdownMenu>
               <Tooltip>
@@ -1993,27 +2016,6 @@ export default function ChatInput({
 
               </DropdownMenuContent>
             </DropdownMenu>
-
-            {/* Attach Files Button */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={(e) => { e.preventDefault(); fileInputRef.current?.click(); }}
-                  disabled={isLoadingResponse}
-                  className={cn(
-                    'flex size-8 sm:size-6 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-400 transition-colors hover:text-zinc-600 focus:outline-none dark:text-zinc-500 dark:hover:text-zinc-300',
-                    isLoadingResponse && 'cursor-not-allowed opacity-50',
-                  )}
-                  aria-label="Attach files"
-                >
-                  <Paperclip strokeWidth={1.5} className="size-4" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Attach Files</p>
-              </TooltipContent>
-            </Tooltip>
 
             {/* Textarea - Single height but auto-expanding */}
             <Textarea
