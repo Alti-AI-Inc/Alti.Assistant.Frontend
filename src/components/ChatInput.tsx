@@ -1990,16 +1990,30 @@ export default function ChatInput({
                   {selectedOption === OPTIONS.VIDEO && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
 
-                <DropdownMenuSeparator className="bg-zinc-200 dark:bg-zinc-700/80" />
 
-                <DropdownMenuItem className="cursor-pointer flex items-center justify-between" onSelect={(e) => { e.preventDefault(); fileInputRef.current?.click(); }}>
-                  <div className="flex items-center">
-                    <Paperclip className="mr-2 h-4 w-4" />
-                    <span>Attach Files</span>
-                  </div>
-                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* Attach Files Button */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={(e) => { e.preventDefault(); fileInputRef.current?.click(); }}
+                  disabled={isLoadingResponse}
+                  className={cn(
+                    'flex size-8 sm:size-6 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-400 transition-colors hover:text-zinc-600 focus:outline-none dark:text-zinc-500 dark:hover:text-zinc-300',
+                    isLoadingResponse && 'cursor-not-allowed opacity-50',
+                  )}
+                  aria-label="Attach files"
+                >
+                  <Paperclip strokeWidth={1.5} className="size-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Attach Files</p>
+              </TooltipContent>
+            </Tooltip>
 
             {/* Textarea - Single height but auto-expanding */}
             <Textarea
