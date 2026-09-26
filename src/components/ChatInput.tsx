@@ -1963,6 +1963,10 @@ export default function ChatInput({
                         !hasMessages &&
                         !isExistingConversation
                       ? 'What do you want to monitor?'
+                      : selectedOption === OPTIONS.WORKFLOW &&
+                          !hasMessages &&
+                          !isExistingConversation
+                        ? 'What do you want to automate?'
                       : activeConversation?.knowledgebaseId && isLoading
                         ? 'Loading...'
                         : activeConversation?.knowledgebaseId &&
