@@ -1339,12 +1339,7 @@ const FullConversation = ({
                     Deep Research
                   </h1>
                 </div>
-              ) : selectedOption === OPTIONS.MONITOR ? (
-                <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
-                    Monitor Changes
-                  </h1>
-                </div>
+
 
               ) : selectedOption === OPTIONS.CODE ? (
                 <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">

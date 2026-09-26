@@ -1904,12 +1904,6 @@ export default function ChatInput({
                 </TooltipContent>
               </Tooltip>
               <DropdownMenuContent align="start" alignOffset={-12} sideOffset={16} className="w-48 rounded-[5px] shadow-md border-zinc-300 dark:border-zinc-700/80">
-                <DropdownMenuItem className="cursor-pointer flex items-center justify-between" onSelect={(e) => { e.preventDefault(); fileInputRef.current?.click(); }}>
-                  <div className="flex items-center">
-                    <Paperclip className="mr-2 h-4 w-4" />
-                    <span>Attach Files</span>
-                  </div>
-                </DropdownMenuItem>
                 <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.SEARCH && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
                   router.push('/c/new-search');
                   setTimeout(() => textareaRef.current?.focus(), 0);
@@ -1920,6 +1914,7 @@ export default function ChatInput({
                   </div>
                   {selectedOption === OPTIONS.SEARCH && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
+                
                 <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.RESEARCH && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
                   if (selectedOption === OPTIONS.RESEARCH) {
                     router.push('/c/new-search'); // Toggle off
@@ -1934,20 +1929,22 @@ export default function ChatInput({
                   </div>
                   {selectedOption === OPTIONS.RESEARCH && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
-                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.MONITOR && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
-                  if (selectedOption === OPTIONS.MONITOR) {
-                    router.push('/c/new-search'); // Toggle off
+
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.DRAFT_DOCUMENT && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  if (selectedOption === OPTIONS.DRAFT_DOCUMENT) {
+                    router.push('/c/new-search');
                   } else {
-                    router.push('/c/new-monitor');
+                    router.push('/c/new-writing');
                   }
                   setTimeout(() => textareaRef.current?.focus(), 0);
                 }}>
                   <div className="flex items-center">
-                    <Activity className="mr-2 h-4 w-4" />
-                    <span>Monitor Changes</span>
+                    <PenTool className="mr-2 h-4 w-4" />
+                    <span>Writing Agent</span>
                   </div>
-                  {selectedOption === OPTIONS.MONITOR && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
+                  {selectedOption === OPTIONS.DRAFT_DOCUMENT && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
+
                 <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.CODE && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
                   if (selectedOption === OPTIONS.CODE) {
                     router.push('/c/new-search');
@@ -1962,6 +1959,7 @@ export default function ChatInput({
                   </div>
                   {selectedOption === OPTIONS.CODE && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
+
                 <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.DESIGN && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
                   if (selectedOption === OPTIONS.DESIGN) {
                     router.push('/c/new-search');
@@ -1976,6 +1974,7 @@ export default function ChatInput({
                   </div>
                   {selectedOption === OPTIONS.DESIGN && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
+
                 <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.VIDEO && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
                   if (selectedOption === OPTIONS.VIDEO) {
                     router.push('/c/new-search');
@@ -1990,19 +1989,14 @@ export default function ChatInput({
                   </div>
                   {selectedOption === OPTIONS.VIDEO && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
-                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.DRAFT_DOCUMENT && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
-                  if (selectedOption === OPTIONS.DRAFT_DOCUMENT) {
-                    router.push('/c/new-search');
-                  } else {
-                    router.push('/c/new-writing');
-                  }
-                  setTimeout(() => textareaRef.current?.focus(), 0);
-                }}>
+
+                <DropdownMenuSeparator className="bg-zinc-200 dark:bg-zinc-700/80" />
+
+                <DropdownMenuItem className="cursor-pointer flex items-center justify-between" onSelect={(e) => { e.preventDefault(); fileInputRef.current?.click(); }}>
                   <div className="flex items-center">
-                    <PenTool className="mr-2 h-4 w-4" />
-                    <span>Writing Agent</span>
+                    <Paperclip className="mr-2 h-4 w-4" />
+                    <span>Attach Files</span>
                   </div>
-                  {selectedOption === OPTIONS.DRAFT_DOCUMENT && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
