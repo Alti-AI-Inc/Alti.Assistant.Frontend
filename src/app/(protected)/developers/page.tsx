@@ -100,11 +100,29 @@ export default function DevelopersPage() {
 
               <div className="flex flex-col gap-2">
                 {[
+                  // --- TEXT & LLMs (Together.ai / Core) ---
                   {
                     method: 'POST',
                     path: '/chat/completions',
-                    desc: 'Generate a response from an agent or model',
+                    desc: 'Generate a conversational response from an agent or model',
                   },
+                  {
+                    method: 'POST',
+                    path: '/completions',
+                    desc: 'Standard text completion and code generation',
+                  },
+                  {
+                    method: 'POST',
+                    path: '/embeddings',
+                    desc: 'Generate dense vector embeddings for text',
+                  },
+                  {
+                    method: 'POST',
+                    path: '/fine-tunes',
+                    desc: 'Create a job to fine-tune a custom model',
+                  },
+
+                  // --- AUDIO (Speech) ---
                   {
                     method: 'POST',
                     path: '/audio/transcriptions',
@@ -112,33 +130,110 @@ export default function DevelopersPage() {
                   },
                   {
                     method: 'POST',
-                    path: '/audio/speech',
-                    desc: 'Text-to-Speech (TTS): Generate audio from text',
+                    path: '/audio/translations',
+                    desc: 'Translate audio in any language to English text',
                   },
                   {
                     method: 'POST',
+                    path: '/audio/speech',
+                    desc: 'Text-to-Speech (TTS): Generate lifelike audio from text',
+                  },
+
+                  // --- VISION & VIDEO ---
+                  {
+                    method: 'POST',
                     path: '/images/generations',
-                    desc: 'Generate or manipulate images',
+                    desc: 'Generate images from text prompts',
+                  },
+                  {
+                    method: 'POST',
+                    path: '/images/edits',
+                    desc: 'Edit or extend images (Inpainting/Outpainting)',
+                  },
+                  {
+                    method: 'POST',
+                    path: '/video/generations',
+                    desc: 'Generate short video clips from text or images',
+                  },
+
+                  // --- NEURAL SEARCH (Exa.ai) ---
+                  {
+                    method: 'POST',
+                    path: '/search',
+                    desc: 'Perform meaning-based neural web search',
+                  },
+                  {
+                    method: 'POST',
+                    path: '/search/contents',
+                    desc: 'Retrieve cleanly parsed HTML/Markdown contents from URLs',
+                  },
+                  {
+                    method: 'POST',
+                    path: '/search/similar',
+                    desc: 'Find URLs similar to a given webpage',
+                  },
+
+                  // --- ACTIONS & INTEGRATIONS (Composio) ---
+                  {
+                    method: 'GET',
+                    path: '/apps',
+                    desc: 'List all available third-party integrations (GitHub, Slack, etc.)',
+                  },
+                  {
+                    method: 'POST',
+                    path: '/actions/execute',
+                    desc: 'Execute a specific action across 1500+ integrated tools',
                   },
                   {
                     method: 'GET',
+                    path: '/triggers',
+                    desc: 'List active event triggers (e.g. "New GitHub Issue")',
+                  },
+                  {
+                    method: 'POST',
+                    path: '/webhooks/register',
+                    desc: 'Register a webhook destination for incoming events',
+                  },
+
+                  // --- AGENTS & CHAINS (LangChain) ---
+                  {
+                    method: 'POST',
+                    path: '/agents/invoke',
+                    desc: 'Invoke a stateful autonomous agent',
+                  },
+                  {
+                    method: 'POST',
+                    path: '/chains/execute',
+                    desc: 'Run a complex multi-step tool chain',
+                  },
+                  {
+                    method: 'GET',
+                    path: '/memory/sessions',
+                    desc: 'Retrieve conversational memory for specific agent sessions',
+                  },
+
+                  // --- KNOWLEDGE & RAG ---
+                  {
+                    method: 'GET',
                     path: '/knowledge/query',
-                    desc: 'Query your RAG vector database',
+                    desc: 'Query your managed RAG vector database',
                   },
                   {
                     method: 'POST',
                     path: '/knowledge/upload',
-                    desc: 'Upload a file to your knowledge base',
+                    desc: 'Ingest and chunk documents into the knowledge base',
                   },
+
+                  // --- COMPUTE & INFRA (Liberty Center One) ---
                   {
                     method: 'GET',
-                    path: '/agents',
-                    desc: 'List your custom agents and their configurations',
+                    path: '/compute/instances',
+                    desc: 'List active dedicated GPU instances',
                   },
                   {
                     method: 'POST',
-                    path: '/workflows/execute',
-                    desc: 'Trigger a multi-step autonomous workflow',
+                    path: '/compute/deploy',
+                    desc: 'Deploy a containerized model to dedicated hardware',
                   },
                 ].map((ep, i) => (
                   <div
