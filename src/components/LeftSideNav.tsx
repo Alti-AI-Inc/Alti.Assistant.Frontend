@@ -1,6 +1,6 @@
 'use client';
 import {
-  Activity, createKnowledgeBaseAction } from '@/actions/knowledgeBaseAction';
+  createKnowledgeBaseAction } from '@/actions/knowledgeBaseAction';
 import { useNavState } from './left-side-nav/useNavState';
 import {
   getSpaceResearchSessionsAction,
@@ -57,6 +57,7 @@ import {
   Users,
   Video,
   Code,
+  Activity,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
