@@ -144,6 +144,75 @@ export default function DevelopersPage() {
             </TabsContent>
 
             {/* MCP SERVERS TAB */}
+            <TabsContent value="mcp-servers" className="m-0 border-0 p-0">
+              <div className="mb-4">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Provide Aphura's capabilities to your external AI tools (like
+                  Claude Desktop or Cursor) using our Model Context Protocol
+                  (MCP) server.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <div className="rounded-[5px] border border-black/5 bg-white p-6 shadow-md dark:border-white/5 dark:bg-zinc-950/50">
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[5px] bg-[#e1e1e1] p-2 shadow-sm ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10">
+                      <TerminalSquare className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                        Quickstart Command
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        Run our MCP server directly via NPX.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <pre className="overflow-x-auto rounded-[5px] bg-gray-50 p-4 text-sm text-gray-800 ring-1 ring-gray-200 dark:bg-zinc-900 dark:text-gray-300 dark:ring-white/10">
+                      <code>npx -y @aphura/mcp-server</code>
+                    </pre>
+                    <button className="absolute top-3 right-3 rounded-[3px] bg-white p-1.5 text-gray-500 shadow-sm ring-1 ring-gray-200 hover:bg-gray-50 active:scale-95 dark:bg-zinc-800 dark:text-gray-400 dark:ring-white/10 dark:hover:bg-zinc-700">
+                      <Copy className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="rounded-[5px] border border-black/5 bg-white p-6 shadow-md dark:border-white/5 dark:bg-zinc-950/50">
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[5px] bg-[#e1e1e1] p-2 shadow-sm ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10">
+                      <Server className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                        Claude Desktop Configuration
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        Add this to your claude_desktop_config.json file.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <pre className="overflow-x-auto rounded-[5px] bg-gray-50 p-4 text-sm text-gray-800 ring-1 ring-gray-200 dark:bg-zinc-900 dark:text-gray-300 dark:ring-white/10">
+                      <code>{`{
+  "mcpServers": {
+    "aphura": {
+      "command": "npx",
+      "args": ["-y", "@aphura/mcp-server"],
+      "env": {
+        "APHURA_API_KEY": "YOUR_API_KEY"
+      }
+    }
+  }
+}`}</code>
+                    </pre>
+                    <button className="absolute top-3 right-3 rounded-[3px] bg-white p-1.5 text-gray-500 shadow-sm ring-1 ring-gray-200 hover:bg-gray-50 active:scale-95 dark:bg-zinc-800 dark:text-gray-400 dark:ring-white/10 dark:hover:bg-zinc-700">
+                      <Copy className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
           </div>
         </div>
       </Tabs>
