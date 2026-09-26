@@ -19,6 +19,7 @@ export enum OPTIONS {
   MONITOR = 'monitor',
   WORKFLOW = 'automate-workflows',
   CODE = 'code-generation',
+  DESIGN = 'design-mode',
   // TEXT = 'text-generation',
   DRAFT_DOCUMENT = 'draft-document',
   IMAGE = 'image-generation',

@@ -59,6 +59,7 @@ import {
   FileText,
   FileType,
   Code,
+  Palette,
   MessageSquare,
   Microscope,
   PenLine,
@@ -409,6 +410,16 @@ export default function ChatInput({
         pathname === '/c/new-workflow'
       ) {
         setSelectedOption(OPTIONS.WORKFLOW);
+      } else if (
+        conversationId === 'new-code' ||
+        pathname === '/c/new-code'
+      ) {
+        setSelectedOption(OPTIONS.CODE);
+      } else if (
+        conversationId === 'new-design' ||
+        pathname === '/c/new-design'
+      ) {
+        setSelectedOption(OPTIONS.DESIGN);
       } else {
         setSelectedOption(null);
       }
@@ -590,6 +601,10 @@ export default function ChatInput({
         return '/monitor/execute';
       case OPTIONS.WORKFLOW:
         return '/workflow/execute';
+      case OPTIONS.CODE:
+        return '/code/stream';
+      case OPTIONS.DESIGN:
+        return '/design/stream';
       case OPTIONS.DRAFT_DOCUMENT:
         return '/documents/assistant';
       case OPTIONS.IMAGE:
@@ -1186,7 +1201,8 @@ export default function ChatInput({
               return `${explanation || 'Here is the code:'}\n\n\`\`\`${language || 'javascript'}\n${code}\n\`\`\``;
             }
             if (response.data?.fixedCode) {
-              const { fixedCode, explanation } = response.data;
+              const { fixedCode,
+  Palette, explanation } = response.data;
               return `${explanation || 'Here is the fixed code:'}\n\n\`\`\`javascript\n${fixedCode}\n\`\`\``;
             }
             return response.data?.responseMessage?.answer;
@@ -1930,6 +1946,34 @@ export default function ChatInput({
                   </div>
                   {selectedOption === OPTIONS.WORKFLOW && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.CODE && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  if (selectedOption === OPTIONS.CODE) {
+                    router.push('/c/new-search');
+                  } else {
+                    router.push('/c/new-code');
+                  }
+                  setTimeout(() => textareaRef.current?.focus(), 0);
+                }}>
+                  <div className="flex items-center">
+                    <Code className="mr-2 h-4 w-4" />
+                    <span>Code Mode</span>
+                  </div>
+                  {selectedOption === OPTIONS.CODE && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
+                </DropdownMenuItem>
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.DESIGN && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  if (selectedOption === OPTIONS.DESIGN) {
+                    router.push('/c/new-search');
+                  } else {
+                    router.push('/c/new-design');
+                  }
+                  setTimeout(() => textareaRef.current?.focus(), 0);
+                }}>
+                  <div className="flex items-center">
+                    <Palette className="mr-2 h-4 w-4" />
+                    <span>Design Mode</span>
+                  </div>
+                  {selectedOption === OPTIONS.DESIGN && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -1977,6 +2021,14 @@ export default function ChatInput({
                           !hasMessages &&
                           !isExistingConversation
                         ? 'What do you want to automate?'
+                        : selectedOption === OPTIONS.CODE &&
+                            !hasMessages &&
+                            !isExistingConversation
+                          ? 'What do you want to build?'
+                          : selectedOption === OPTIONS.DESIGN &&
+                              !hasMessages &&
+                              !isExistingConversation
+                            ? 'What do you want to design?'
                       : activeConversation?.knowledgebaseId && isLoading
                         ? 'Loading...'
                         : activeConversation?.knowledgebaseId &&

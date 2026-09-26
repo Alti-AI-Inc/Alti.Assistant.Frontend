@@ -1351,6 +1351,18 @@ const FullConversation = ({
                     Automate Workflows
                   </h1>
                 </div>
+              ) : selectedOption === OPTIONS.CODE ? (
+                <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
+                    Code Mode
+                  </h1>
+                </div>
+              ) : selectedOption === OPTIONS.DESIGN ? (
+                <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
+                    Design Mode
+                  </h1>
+                </div>
               ) : (
                 <img
                   src="/assets/aphura-logo.png"
