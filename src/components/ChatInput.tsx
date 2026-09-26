@@ -1834,44 +1834,6 @@ export default function ChatInput({
         )}
         {/* Unified Single-Height Prompt Box Container */}
         <div className="flex w-full flex-col gap-2 px-4 sm:px-0">
-          {/* Mode Badge Preview */}
-          {selectedOption &&
-            (selectedOption === OPTIONS.CODE ||
-              selectedOption === OPTIONS.IMAGE ||
-              selectedOption === OPTIONS.RESEARCH ||
-              selectedOption === OPTIONS.MONITOR) && (
-              <div className="dark:bg-zinc-850/60 animate-in fade-in mb-2 flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 duration-200 dark:border-zinc-800/80">
-                <div className="flex items-center gap-2">
-                  {selectedOption === OPTIONS.CODE ? (
-                    <Code className="size-4 text-black dark:text-white" />
-                  ) : selectedOption === OPTIONS.IMAGE ? (
-                    <ImageIcon className="size-4 text-black dark:text-white" />
-                  ) : selectedOption === OPTIONS.RESEARCH ? (
-                    <Microscope className="size-4 text-indigo-500" />
-                  ) : (
-                    <Activity className="size-4 text-emerald-500" />
-                  )}
-                  <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                    {selectedOption === OPTIONS.CODE
-                      ? 'Code Generation Mode'
-                      : selectedOption === OPTIONS.IMAGE
-                        ? 'Image Generation Mode'
-                        : selectedOption === OPTIONS.RESEARCH
-                          ? 'Deep Research Mode'
-                          : 'Monitor Changes Mode'}
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setSelectedOption(null)}
-                  className="rounded-full p-0.5 text-zinc-400 transition-colors hover:bg-black/5 hover:text-zinc-600 dark:hover:bg-white/5 dark:hover:text-zinc-200"
-                  title="Exit mode"
-                >
-                  <X className="size-3.5" />
-                </button>
-              </div>
-            )}
-
           {/* Attached files preview: shown ABOVE prompt box when in conversation */}
           {!isNewChat && attachmentsPreview}
 
