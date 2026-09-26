@@ -1369,6 +1369,12 @@ const FullConversation = ({
                     Video Director
                   </h1>
                 </div>
+              ) : selectedOption === OPTIONS.DRAFT_DOCUMENT ? (
+                <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
+                    Writing Agent
+                  </h1>
+                </div>
               ) : (
                 <img
                   src="/assets/aphura-logo.png"

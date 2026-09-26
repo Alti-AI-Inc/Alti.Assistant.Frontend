@@ -61,6 +61,7 @@ import {
   Code,
   Palette,
   Video,
+  PenTool,
   MessageSquare,
   Microscope,
   PenLine,
@@ -426,6 +427,11 @@ export default function ChatInput({
         pathname === '/c/new-video'
       ) {
         setSelectedOption(OPTIONS.VIDEO);
+      } else if (
+        conversationId === 'new-writing' ||
+        pathname === '/c/new-writing'
+      ) {
+        setSelectedOption(OPTIONS.DRAFT_DOCUMENT);
       } else {
         setSelectedOption(null);
       }
@@ -599,6 +605,8 @@ export default function ChatInput({
         return '/audio/execute';
       case OPTIONS.VIDEO:
         return '/video/execute';
+      case OPTIONS.DRAFT_DOCUMENT:
+        return '/write/stream';
       case OPTIONS.RESEARCH:
         return '/research/stream';
       case OPTIONS.SEARCH:
@@ -1209,7 +1217,8 @@ export default function ChatInput({
             if (response.data?.fixedCode) {
               const { fixedCode,
   Palette,
-  Video, explanation } = response.data;
+  Video,
+  PenTool, explanation } = response.data;
               return `${explanation || 'Here is the fixed code:'}\n\n\`\`\`javascript\n${fixedCode}\n\`\`\``;
             }
             return response.data?.responseMessage?.answer;
@@ -1995,6 +2004,20 @@ export default function ChatInput({
                   </div>
                   {selectedOption === OPTIONS.VIDEO && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.DRAFT_DOCUMENT && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  if (selectedOption === OPTIONS.DRAFT_DOCUMENT) {
+                    router.push('/c/new-search');
+                  } else {
+                    router.push('/c/new-writing');
+                  }
+                  setTimeout(() => textareaRef.current?.focus(), 0);
+                }}>
+                  <div className="flex items-center">
+                    <PenTool className="mr-2 h-4 w-4" />
+                    <span>Writing Agent</span>
+                  </div>
+                  {selectedOption === OPTIONS.DRAFT_DOCUMENT && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -2054,6 +2077,10 @@ export default function ChatInput({
                                 !hasMessages &&
                                 !isExistingConversation
                               ? 'What do you want to film?'
+                              : selectedOption === OPTIONS.DRAFT_DOCUMENT &&
+                                  !hasMessages &&
+                                  !isExistingConversation
+                                ? 'What do you want to write?'
                       : activeConversation?.knowledgebaseId && isLoading
                         ? 'Loading...'
                         : activeConversation?.knowledgebaseId &&
