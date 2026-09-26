@@ -1902,19 +1902,19 @@ export default function ChatInput({
                 </TooltipContent>
               </Tooltip>
               <DropdownMenuContent align="start" alignOffset={-12} sideOffset={16} className="w-48 rounded-[5px] shadow-md border-zinc-300 dark:border-zinc-700/80">
-                <DropdownMenuItem className="cursor-pointer" onClick={(e) => { e.preventDefault(); fileInputRef.current?.click(); }}>
+                <DropdownMenuItem className="cursor-pointer" onSelect={(e) => { e.preventDefault(); fileInputRef.current?.click(); }}>
                   <Paperclip className="mr-2 h-4 w-4" />
                   <span>Attach Files</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer" onClick={() => {
-                  setSelectedOption(OPTIONS.RESEARCH);
+                <DropdownMenuItem className="cursor-pointer" onSelect={() => {
+                  router.push('/c/new-research');
                   setTimeout(() => textareaRef.current?.focus(), 0);
                 }}>
                   <Microscope className="mr-2 h-4 w-4" />
                   <span>Deep Research</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer" onClick={() => {
-                  setSelectedOption(OPTIONS.MONITOR);
+                <DropdownMenuItem className="cursor-pointer" onSelect={() => {
+                  router.push('/c/new-monitor');
                   setTimeout(() => textareaRef.current?.focus(), 0);
                 }}>
                   <Activity className="mr-2 h-4 w-4" />
