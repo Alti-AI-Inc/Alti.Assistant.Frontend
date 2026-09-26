@@ -104,21 +104,25 @@ export default function DevelopersPage() {
                   {
                     method: 'POST',
                     path: '/chat/completions',
+                    name: 'Chat Completions',
                     desc: 'Generate a conversational response from an agent or model',
                   },
                   {
                     method: 'POST',
                     path: '/completions',
+                    name: 'Text Completion',
                     desc: 'Standard text completion and code generation',
                   },
                   {
                     method: 'POST',
                     path: '/embeddings',
+                    name: 'Embeddings',
                     desc: 'Generate dense vector embeddings for text',
                   },
                   {
                     method: 'POST',
                     path: '/fine-tunes',
+                    name: 'Fine-Tuning',
                     desc: 'Create a job to fine-tune a custom model',
                   },
 
@@ -126,33 +130,39 @@ export default function DevelopersPage() {
                   {
                     method: 'POST',
                     path: '/audio/transcriptions',
-                    desc: 'Speech-to-Text (STT): Transcribe audio to text',
+                    name: 'Speech-to-Text (STT)',
+                    desc: 'Transcribe audio to text',
                   },
                   {
                     method: 'POST',
                     path: '/audio/translations',
+                    name: 'Audio Translation',
                     desc: 'Translate audio in any language to English text',
                   },
                   {
                     method: 'POST',
                     path: '/audio/speech',
-                    desc: 'Text-to-Speech (TTS): Generate lifelike audio from text',
+                    name: 'Text-to-Speech (TTS)',
+                    desc: 'Generate lifelike audio from text',
                   },
 
                   // --- VISION & VIDEO ---
                   {
                     method: 'POST',
                     path: '/images/generations',
+                    name: 'Image Generation',
                     desc: 'Generate images from text prompts',
                   },
                   {
                     method: 'POST',
                     path: '/images/edits',
+                    name: 'Image Editing',
                     desc: 'Edit or extend images (Inpainting/Outpainting)',
                   },
                   {
                     method: 'POST',
                     path: '/video/generations',
+                    name: 'Video Generation',
                     desc: 'Generate short video clips from text or images',
                   },
 
@@ -160,16 +170,19 @@ export default function DevelopersPage() {
                   {
                     method: 'POST',
                     path: '/search',
+                    name: 'Neural Web Search',
                     desc: 'Perform meaning-based neural web search',
                   },
                   {
                     method: 'POST',
                     path: '/search/contents',
+                    name: 'Content Extraction',
                     desc: 'Retrieve cleanly parsed HTML/Markdown contents from URLs',
                   },
                   {
                     method: 'POST',
                     path: '/search/similar',
+                    name: 'Find Similar Pages',
                     desc: 'Find URLs similar to a given webpage',
                   },
 
@@ -177,21 +190,25 @@ export default function DevelopersPage() {
                   {
                     method: 'GET',
                     path: '/apps',
+                    name: 'Integrated Apps',
                     desc: 'List all available third-party integrations (GitHub, Slack, etc.)',
                   },
                   {
                     method: 'POST',
                     path: '/actions/execute',
+                    name: 'Execute Action',
                     desc: 'Execute a specific action across 1500+ integrated tools',
                   },
                   {
                     method: 'GET',
                     path: '/triggers',
+                    name: 'Event Triggers',
                     desc: 'List active event triggers (e.g. "New GitHub Issue")',
                   },
                   {
                     method: 'POST',
                     path: '/webhooks/register',
+                    name: 'Webhooks',
                     desc: 'Register a webhook destination for incoming events',
                   },
 
@@ -199,16 +216,19 @@ export default function DevelopersPage() {
                   {
                     method: 'POST',
                     path: '/agents/invoke',
+                    name: 'Invoke Agent',
                     desc: 'Invoke a stateful autonomous agent',
                   },
                   {
                     method: 'POST',
                     path: '/chains/execute',
+                    name: 'Execute Chain',
                     desc: 'Run a complex multi-step tool chain',
                   },
                   {
                     method: 'GET',
                     path: '/memory/sessions',
+                    name: 'Agent Memory',
                     desc: 'Retrieve conversational memory for specific agent sessions',
                   },
 
@@ -216,11 +236,13 @@ export default function DevelopersPage() {
                   {
                     method: 'GET',
                     path: '/knowledge/query',
+                    name: 'RAG Vector Query',
                     desc: 'Query your managed RAG vector database',
                   },
                   {
                     method: 'POST',
                     path: '/knowledge/upload',
+                    name: 'Knowledge Ingest',
                     desc: 'Ingest and chunk documents into the knowledge base',
                   },
 
@@ -228,11 +250,13 @@ export default function DevelopersPage() {
                   {
                     method: 'GET',
                     path: '/compute/instances',
+                    name: 'GPU Instances',
                     desc: 'List active dedicated GPU instances',
                   },
                   {
                     method: 'POST',
                     path: '/compute/deploy',
+                    name: 'Model Deployment',
                     desc: 'Deploy a containerized model to dedicated hardware',
                   },
                 ].map((ep, i) => (
@@ -247,9 +271,14 @@ export default function DevelopersPage() {
                         </span>
                       </div>
                       <div className="flex flex-col">
-                        <h3 className="font-mono text-sm font-bold text-gray-900 dark:text-white">
-                          {ep.path}
-                        </h3>
+                        <div className="flex items-center gap-3">
+                          <h3 className="text-sm font-bold text-gray-900 dark:text-white">
+                            {ep.name}
+                          </h3>
+                          <span className="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[10px] text-gray-400 dark:bg-zinc-800/50 dark:text-zinc-500">
+                            {ep.path}
+                          </span>
+                        </div>
                         <p className="mt-0.5 text-[11px] text-gray-500 dark:text-gray-400">
                           {ep.desc}
                         </p>
