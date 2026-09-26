@@ -1837,18 +1837,28 @@ export default function ChatInput({
           {/* Mode Badge Preview */}
           {selectedOption &&
             (selectedOption === OPTIONS.CODE ||
-              selectedOption === OPTIONS.IMAGE) && (
+              selectedOption === OPTIONS.IMAGE ||
+              selectedOption === OPTIONS.RESEARCH ||
+              selectedOption === OPTIONS.MONITOR) && (
               <div className="dark:bg-zinc-850/60 animate-in fade-in mb-2 flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 duration-200 dark:border-zinc-800/80">
                 <div className="flex items-center gap-2">
                   {selectedOption === OPTIONS.CODE ? (
                     <Code className="size-4 text-black dark:text-white" />
-                  ) : (
+                  ) : selectedOption === OPTIONS.IMAGE ? (
                     <ImageIcon className="size-4 text-black dark:text-white" />
+                  ) : selectedOption === OPTIONS.RESEARCH ? (
+                    <Microscope className="size-4 text-indigo-500" />
+                  ) : (
+                    <Activity className="size-4 text-emerald-500" />
                   )}
                   <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
                     {selectedOption === OPTIONS.CODE
                       ? 'Code Generation Mode'
-                      : 'Image Generation Mode'}
+                      : selectedOption === OPTIONS.IMAGE
+                        ? 'Image Generation Mode'
+                        : selectedOption === OPTIONS.RESEARCH
+                          ? 'Deep Research Mode'
+                          : 'Monitor Changes Mode'}
                   </span>
                 </div>
                 <button
@@ -1892,23 +1902,20 @@ export default function ChatInput({
                 </TooltipContent>
               </Tooltip>
               <DropdownMenuContent align="start" alignOffset={-12} sideOffset={16} className="w-48 rounded-[5px] shadow-md border-zinc-300 dark:border-zinc-700/80">
-                <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
+                <DropdownMenuItem className="cursor-pointer" onSelect={(e) => { e.preventDefault(); fileInputRef.current?.click(); }}>
                   <Paperclip className="mr-2 h-4 w-4" />
                   <span>Attach Files</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => {
-                  // Assuming user will type their research prompt and we handle it via backend
-                  // For now, we can insert a command or open a modal. 
-                  // I will just populate the input with a command to trigger deep research.
-                  setMessage(message ? message + ' /research ' : '/research ');
-                  textareaRef.current?.focus();
+                <DropdownMenuItem className="cursor-pointer" onSelect={() => {
+                  setSelectedOption(OPTIONS.RESEARCH);
+                  setTimeout(() => textareaRef.current?.focus(), 0);
                 }}>
                   <Microscope className="mr-2 h-4 w-4" />
                   <span>Deep Research</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => {
-                  setMessage(message ? message + ' /monitor ' : '/monitor ');
-                  textareaRef.current?.focus();
+                <DropdownMenuItem className="cursor-pointer" onSelect={() => {
+                  setSelectedOption(OPTIONS.MONITOR);
+                  setTimeout(() => textareaRef.current?.focus(), 0);
                 }}>
                   <Activity className="mr-2 h-4 w-4" />
                   <span>Monitor Changes</span>
