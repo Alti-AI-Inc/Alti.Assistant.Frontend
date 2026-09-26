@@ -1997,7 +1997,12 @@ return (
                           : pathname === '/workflows' ||
                               pathname?.startsWith('/workflows')
                             ? 'Describe your workflow...'
-                            : 'Enter prompt here...'
+                            
+                              : selectedOption === OPTIONS.SEARCH &&
+                                  !hasMessages &&
+                                  !isExistingConversation
+                                ? 'What do you want to search?'
+                                : 'Enter prompt here...'
               }
               style={{ backgroundColor: 'transparent' }}
               className="max-h-[160px] min-h-[36px] w-full flex-1 resize-none border-none bg-transparent py-2 pr-1 pl-0.5 text-base leading-5 text-gray-900 shadow-none outline-none placeholder:text-sm placeholder:text-zinc-400 focus-visible:ring-0 md:text-sm dark:text-white dark:placeholder:text-zinc-500"
