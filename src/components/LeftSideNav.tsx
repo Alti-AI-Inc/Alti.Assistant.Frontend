@@ -54,7 +54,7 @@ import {
   Trash2,
   Users,
   Video,
-} from 'lucide-react';
+, Code } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -797,8 +797,27 @@ const LeftSideNav = ({ side = 'left' }: LeftSideNavProps) => {
                         : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
                     )}
                   >
-                    <svg className={cn('h-3.5 w-3.5 flex-shrink-0 transition-colors', pathname.startsWith('/connectors') ? 'text-white' : 'text-zinc-400 group-hover:text-white')} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <svg className={cn('h-3.5 w-3.5 flex-shrink-0 transition-colors', pathname.startsWith('/connectors') ? 'text-white' : 'text-zinc-400 group-hover:text-white')} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg>
                     <span>Connectors</span>
+                  </button>
+                  <button
+                    onClick={() => router.push('/developers')}
+                    className={cn(
+                      "group mb-1.5 flex h-9 w-full cursor-pointer items-center gap-2.5 rounded-[3px] text-left text-xs transition-all duration-150 select-none shadow-[0_2px_8px_rgba(0,0,0,0.5)] px-3 focus:outline-none",
+                      pathname.startsWith('/developers')
+                        ? "bg-[#32323a] text-white font-medium shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+                        : "bg-[#1e1e24] text-zinc-200 hover:bg-[#282830] hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+                    )}
+                  >
+                    <Code
+                      className={cn(
+                        "h-3.5 w-3.5 flex-shrink-0 transition-colors",
+                        pathname.startsWith('/developers')
+                          ? "text-white"
+                          : "text-zinc-400 group-hover:text-white"
+                      )}
+                    />
+                    <span>Developers</span>
                   </button>
                   <button
                       onClick={() => router.push('/admin/billing')}
