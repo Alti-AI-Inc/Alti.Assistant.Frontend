@@ -2077,8 +2077,8 @@ return (
                   setTimeout(() => textareaRef.current?.focus(), 0);
                 }}>
                   <div className="flex items-center">
-                    <Globe className="mr-2 h-4 w-4" />
-                    <span>Search</span>
+                    <Globe className="mr-1.5 size-3.5" />
+                    <span className="text-xs font-medium">Search</span>
                   </div>
                   {selectedOption === OPTIONS.SEARCH && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
@@ -2092,8 +2092,8 @@ return (
                   setTimeout(() => textareaRef.current?.focus(), 0);
                 }}>
                   <div className="flex items-center">
-                    <Microscope className="mr-2 h-4 w-4" />
-                    <span>Research</span>
+                    <Microscope className="mr-1.5 size-3.5" />
+                    <span className="text-xs font-medium">Research</span>
                   </div>
                   {selectedOption === OPTIONS.RESEARCH && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
@@ -2107,8 +2107,8 @@ return (
                   setTimeout(() => textareaRef.current?.focus(), 0);
                 }}>
                   <div className="flex items-center">
-                    <PenTool className="mr-2 h-4 w-4" />
-                    <span>Write</span>
+                    <PenTool className="mr-1.5 size-3.5" />
+                    <span className="text-xs font-medium">Write</span>
                   </div>
                   {selectedOption === OPTIONS.DRAFT_DOCUMENT && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
@@ -2122,8 +2122,8 @@ return (
                   setTimeout(() => textareaRef.current?.focus(), 0);
                 }}>
                   <div className="flex items-center">
-                    <Code className="mr-2 h-4 w-4" />
-                    <span>Code</span>
+                    <Code className="mr-1.5 size-3.5" />
+                    <span className="text-xs font-medium">Code</span>
                   </div>
                   {selectedOption === OPTIONS.CODE && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
@@ -2137,8 +2137,8 @@ return (
                   setTimeout(() => textareaRef.current?.focus(), 0);
                 }}>
                   <div className="flex items-center">
-                    <Palette className="mr-2 h-4 w-4" />
-                    <span>Design</span>
+                    <Palette className="mr-1.5 size-3.5" />
+                    <span className="text-xs font-medium">Design</span>
                   </div>
                   {selectedOption === OPTIONS.DESIGN && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
@@ -2152,8 +2152,8 @@ return (
                   setTimeout(() => textareaRef.current?.focus(), 0);
                 }}>
                   <div className="flex items-center">
-                    <Video className="mr-2 h-4 w-4" />
-                    <span>Video</span>
+                    <Video className="mr-1.5 size-3.5" />
+                    <span className="text-xs font-medium">Video</span>
                   </div>
                   {selectedOption === OPTIONS.VIDEO && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
