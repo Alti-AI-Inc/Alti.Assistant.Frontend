@@ -1900,14 +1900,14 @@ export default function ChatInput({
                   // Assuming user will type their research prompt and we handle it via backend
                   // For now, we can insert a command or open a modal. 
                   // I will just populate the input with a command to trigger deep research.
-                  setMessage((prev) => prev ? prev + ' /research ' : '/research ');
+                  setMessage(message ? message + ' /research ' : '/research ');
                   textareaRef.current?.focus();
                 }}>
                   <Microscope className="mr-2 h-4 w-4" />
                   <span>Deep Research</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => {
-                  setMessage((prev) => prev ? prev + ' /monitor ' : '/monitor ');
+                  setMessage(message ? message + ' /monitor ' : '/monitor ');
                   textareaRef.current?.focus();
                 }}>
                   <Activity className="mr-2 h-4 w-4" />
