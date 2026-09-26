@@ -1829,7 +1829,7 @@ return (
   const getModeName = () => {
     switch (selectedOption) {
       case OPTIONS.RESEARCH: return 'Research';
-      case OPTIONS.DRAFT_DOCUMENT: return 'Writing';
+      case OPTIONS.DRAFT_DOCUMENT: return 'Write';
       case OPTIONS.CODE: return 'Code';
       case OPTIONS.DESIGN: return 'Design';
       case OPTIONS.VIDEO: return 'Video';
@@ -1927,112 +1927,7 @@ return (
             </Tooltip>
 
             {/* Actions Dropdown Button */}
-            <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button
-                      type="button"
-                      disabled={isLoadingResponse}
-                      className={cn(
-                        'flex h-7 flex-shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-zinc-100/80 px-2.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-200 focus:outline-none dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700',
-                        isLoadingResponse && 'cursor-not-allowed opacity-50',
-                      )}
-                      aria-label="Select Mode"
-                    >
-                      {getModeIcon()}
-                      <span>{getModeName()}</span>
-                      <ChevronDown className="size-3 opacity-50" />
-                    </button>
-                  </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" alignOffset={-12} sideOffset={16} className="w-48 rounded-[5px] shadow-md border-zinc-300 dark:border-zinc-700/80">
-                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.SEARCH && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
-                  router.push('/c/new-search');
-                  setTimeout(() => textareaRef.current?.focus(), 0);
-                }}>
-                  <div className="flex items-center">
-                    <Globe className="mr-2 h-4 w-4" />
-                    <span>Web Search</span>
-                  </div>
-                  {selectedOption === OPTIONS.SEARCH && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
-                </DropdownMenuItem>
-                
-                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.RESEARCH && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
-                  if (selectedOption === OPTIONS.RESEARCH) {
-                    router.push('/c/new-search'); // Toggle off
-                  } else {
-                    router.push('/c/new-research');
-                  }
-                  setTimeout(() => textareaRef.current?.focus(), 0);
-                }}>
-                  <div className="flex items-center">
-                    <Microscope className="mr-2 h-4 w-4" />
-                    <span>Deep Research</span>
-                  </div>
-                  {selectedOption === OPTIONS.RESEARCH && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
-                </DropdownMenuItem>
 
-                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.DRAFT_DOCUMENT && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
-                  if (selectedOption === OPTIONS.DRAFT_DOCUMENT) {
-                    router.push('/c/new-search');
-                  } else {
-                    router.push('/c/new-writing');
-                  }
-                  setTimeout(() => textareaRef.current?.focus(), 0);
-                }}>
-                  <div className="flex items-center">
-                    <PenTool className="mr-2 h-4 w-4" />
-                    <span>Writing Agent</span>
-                  </div>
-                  {selectedOption === OPTIONS.DRAFT_DOCUMENT && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
-                </DropdownMenuItem>
-
-                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.CODE && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
-                  if (selectedOption === OPTIONS.CODE) {
-                    router.push('/c/new-search');
-                  } else {
-                    router.push('/c/new-code');
-                  }
-                  setTimeout(() => textareaRef.current?.focus(), 0);
-                }}>
-                  <div className="flex items-center">
-                    <Code className="mr-2 h-4 w-4" />
-                    <span>Code Agent</span>
-                  </div>
-                  {selectedOption === OPTIONS.CODE && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
-                </DropdownMenuItem>
-
-                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.DESIGN && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
-                  if (selectedOption === OPTIONS.DESIGN) {
-                    router.push('/c/new-search');
-                  } else {
-                    router.push('/c/new-design');
-                  }
-                  setTimeout(() => textareaRef.current?.focus(), 0);
-                }}>
-                  <div className="flex items-center">
-                    <Palette className="mr-2 h-4 w-4" />
-                    <span>Design Studio</span>
-                  </div>
-                  {selectedOption === OPTIONS.DESIGN && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
-                </DropdownMenuItem>
-
-                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.VIDEO && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
-                  if (selectedOption === OPTIONS.VIDEO) {
-                    router.push('/c/new-search');
-                  } else {
-                    router.push('/c/new-video');
-                  }
-                  setTimeout(() => textareaRef.current?.focus(), 0);
-                }}>
-                  <div className="flex items-center">
-                    <Video className="mr-2 h-4 w-4" />
-                    <span>Video Director</span>
-                  </div>
-                  {selectedOption === OPTIONS.VIDEO && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
-                </DropdownMenuItem>
-
-
-              </DropdownMenuContent>
-            </DropdownMenu>
 
             {/* Textarea - Single height but auto-expanding */}
             <Textarea
@@ -2154,6 +2049,113 @@ return (
                 )}
               </div>
             )}
+
+                        <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type="button"
+                      disabled={isLoadingResponse}
+                      className={cn(
+                        'flex h-10 sm:h-8 flex-shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-[3px] bg-zinc-100/80 px-3 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-200 focus:outline-none dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700/80',
+                        isLoadingResponse && 'cursor-not-allowed opacity-50',
+                      )}
+                      aria-label="Select Mode"
+                    >
+                      {getModeIcon()}
+                      <span>{getModeName()}</span>
+                      <ChevronDown className="size-3 opacity-50" />
+                    </button>
+                  </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" alignOffset={-12} sideOffset={16} className="w-48 rounded-[5px] shadow-md border-zinc-300 dark:border-zinc-700/80">
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.SEARCH && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  router.push('/c/new-search');
+                  setTimeout(() => textareaRef.current?.focus(), 0);
+                }}>
+                  <div className="flex items-center">
+                    <Globe className="mr-2 h-4 w-4" />
+                    <span>Search</span>
+                  </div>
+                  {selectedOption === OPTIONS.SEARCH && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
+                </DropdownMenuItem>
+                
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.RESEARCH && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  if (selectedOption === OPTIONS.RESEARCH) {
+                    router.push('/c/new-search'); // Toggle off
+                  } else {
+                    router.push('/c/new-research');
+                  }
+                  setTimeout(() => textareaRef.current?.focus(), 0);
+                }}>
+                  <div className="flex items-center">
+                    <Microscope className="mr-2 h-4 w-4" />
+                    <span>Research</span>
+                  </div>
+                  {selectedOption === OPTIONS.RESEARCH && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.DRAFT_DOCUMENT && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  if (selectedOption === OPTIONS.DRAFT_DOCUMENT) {
+                    router.push('/c/new-search');
+                  } else {
+                    router.push('/c/new-writing');
+                  }
+                  setTimeout(() => textareaRef.current?.focus(), 0);
+                }}>
+                  <div className="flex items-center">
+                    <PenTool className="mr-2 h-4 w-4" />
+                    <span>Write</span>
+                  </div>
+                  {selectedOption === OPTIONS.DRAFT_DOCUMENT && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.CODE && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  if (selectedOption === OPTIONS.CODE) {
+                    router.push('/c/new-search');
+                  } else {
+                    router.push('/c/new-code');
+                  }
+                  setTimeout(() => textareaRef.current?.focus(), 0);
+                }}>
+                  <div className="flex items-center">
+                    <Code className="mr-2 h-4 w-4" />
+                    <span>Code</span>
+                  </div>
+                  {selectedOption === OPTIONS.CODE && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.DESIGN && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  if (selectedOption === OPTIONS.DESIGN) {
+                    router.push('/c/new-search');
+                  } else {
+                    router.push('/c/new-design');
+                  }
+                  setTimeout(() => textareaRef.current?.focus(), 0);
+                }}>
+                  <div className="flex items-center">
+                    <Palette className="mr-2 h-4 w-4" />
+                    <span>Design</span>
+                  </div>
+                  {selectedOption === OPTIONS.DESIGN && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.VIDEO && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  if (selectedOption === OPTIONS.VIDEO) {
+                    router.push('/c/new-search');
+                  } else {
+                    router.push('/c/new-video');
+                  }
+                  setTimeout(() => textareaRef.current?.focus(), 0);
+                }}>
+                  <div className="flex items-center">
+                    <Video className="mr-2 h-4 w-4" />
+                    <span>Video</span>
+                  </div>
+                  {selectedOption === OPTIONS.VIDEO && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
+                </DropdownMenuItem>
+
+
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Send Button / Mic Button - Square style */}
             <Tooltip>

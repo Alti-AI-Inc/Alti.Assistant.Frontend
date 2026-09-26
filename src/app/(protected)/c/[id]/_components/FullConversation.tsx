@@ -1336,7 +1336,7 @@ const FullConversation = ({
               {selectedOption === OPTIONS.RESEARCH ? (
                 <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
                   <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
-                    Deep Research
+                    Research
                   </h1>
                 </div>
 
@@ -1344,25 +1344,25 @@ const FullConversation = ({
               ) : selectedOption === OPTIONS.CODE ? (
                 <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
                   <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
-                    Code Agent
+                    Code
                   </h1>
                 </div>
               ) : selectedOption === OPTIONS.DESIGN ? (
                 <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
                   <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
-                    Design Studio
+                    Design
                   </h1>
                 </div>
               ) : selectedOption === OPTIONS.VIDEO ? (
                 <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
                   <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
-                    Video Director
+                    Video
                   </h1>
                 </div>
               ) : selectedOption === OPTIONS.DRAFT_DOCUMENT ? (
                 <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
                   <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
-                    Writing Agent
+                    Write
                   </h1>
                 </div>
               ) : (
