@@ -1882,7 +1882,7 @@ export default function ChatInput({
                     <Microscope className="mr-2 h-4 w-4" />
                     <span>Deep Research</span>
                   </div>
-                  {selectedOption === OPTIONS.RESEARCH && <div className="h-1.5 w-1.5 rounded-full bg-zinc-800 dark:bg-zinc-200 mr-1" />}
+                  {selectedOption === OPTIONS.RESEARCH && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
                 <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.MONITOR && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
                   if (selectedOption === OPTIONS.MONITOR) {
@@ -1896,7 +1896,7 @@ export default function ChatInput({
                     <Activity className="mr-2 h-4 w-4" />
                     <span>Monitor Changes</span>
                   </div>
-                  {selectedOption === OPTIONS.MONITOR && <div className="h-1.5 w-1.5 rounded-full bg-zinc-800 dark:bg-zinc-200 mr-1" />}
+                  {selectedOption === OPTIONS.MONITOR && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
