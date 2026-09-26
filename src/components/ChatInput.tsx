@@ -1193,29 +1193,7 @@ export default function ChatInput({
         switch (selectedOption) {
           case OPTIONS.SEARCH:
           case OPTIONS.MONITOR:
-            const getModeIcon = () => {
-    switch (selectedOption) {
-      case OPTIONS.RESEARCH: return <Microscope className="size-3.5" />;
-      case OPTIONS.DRAFT_DOCUMENT: return <PenTool className="size-3.5" />;
-      case OPTIONS.CODE: return <Code className="size-3.5" />;
-      case OPTIONS.DESIGN: return <Palette className="size-3.5" />;
-      case OPTIONS.VIDEO: return <Video className="size-3.5" />;
-      default: return <Globe className="size-3.5" />;
-    }
-  };
-
-  const getModeName = () => {
-    switch (selectedOption) {
-      case OPTIONS.RESEARCH: return 'Research';
-      case OPTIONS.DRAFT_DOCUMENT: return 'Writing';
-      case OPTIONS.CODE: return 'Code';
-      case OPTIONS.DESIGN: return 'Design';
-      case OPTIONS.VIDEO: return 'Video';
-      default: return 'Search';
-    }
-  };
-
-  return (
+return (
               response.data?.responseMessage?.answer ||
               response.data?.content ||
               response.data?.summary ||
@@ -1836,6 +1814,28 @@ export default function ChatInput({
       setSelectedFiles={setSelectedFiles}
     />
   );
+
+  const getModeIcon = () => {
+    switch (selectedOption) {
+      case OPTIONS.RESEARCH: return <Microscope className="size-3.5" />;
+      case OPTIONS.DRAFT_DOCUMENT: return <PenTool className="size-3.5" />;
+      case OPTIONS.CODE: return <Code className="size-3.5" />;
+      case OPTIONS.DESIGN: return <Palette className="size-3.5" />;
+      case OPTIONS.VIDEO: return <Video className="size-3.5" />;
+      default: return <Globe className="size-3.5" />;
+    }
+  };
+
+  const getModeName = () => {
+    switch (selectedOption) {
+      case OPTIONS.RESEARCH: return 'Research';
+      case OPTIONS.DRAFT_DOCUMENT: return 'Writing';
+      case OPTIONS.CODE: return 'Code';
+      case OPTIONS.DESIGN: return 'Design';
+      case OPTIONS.VIDEO: return 'Video';
+      default: return 'Search';
+    }
+  };
 
   return (
     <>
