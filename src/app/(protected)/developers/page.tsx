@@ -277,19 +277,19 @@ export default function DevelopersPage() {
                     method: 'POST',
                     path: '/storage/upload',
                     name: 'Upload Object',
-                    desc: 'Securely upload files to Liberty Center One block storage',
+                    desc: 'Securely upload files to Liberty Center One with immutable backups',
                   },
                   {
                     method: 'GET',
                     path: '/storage/buckets',
                     name: 'List Buckets',
-                    desc: 'Retrieve all provisioned storage buckets and usage metrics',
+                    desc: 'Retrieve all provisioned storage buckets and disaster recovery metrics',
                   },
                   {
                     method: 'GET',
                     path: '/storage/files',
                     name: 'List Objects',
-                    desc: 'List files stored in a specific bucket',
+                    desc: 'List files stored in a specific all-flash NVMe bucket',
                   },
                   {
                     method: 'DELETE',
@@ -303,13 +303,13 @@ export default function DevelopersPage() {
                     method: 'GET',
                     path: '/knowledge/query',
                     name: 'RAG Vector Query',
-                    desc: 'Query your managed RAG vector database',
+                    desc: 'Query your Liberty Center One all-flash NVMe vector database',
                   },
                   {
                     method: 'POST',
                     path: '/knowledge/upload',
                     name: 'Knowledge Ingest',
-                    desc: 'Ingest and chunk documents into the knowledge base',
+                    desc: 'Ingest and chunk documents into the vector knowledge base',
                   },
 
                   // --- COMPUTE & INFRA (Liberty Center One) ---
@@ -317,13 +317,13 @@ export default function DevelopersPage() {
                     method: 'GET',
                     path: '/compute/instances',
                     name: 'GPU Instances',
-                    desc: 'List active dedicated GPU instances',
+                    desc: 'List active dedicated GPU instances in Liberty Center One',
                   },
                   {
                     method: 'POST',
                     path: '/compute/deploy',
                     name: 'Model Deployment',
-                    desc: 'Deploy a containerized model to dedicated hardware',
+                    desc: 'Deploy a containerized model directly to the Liberty Center One backend',
                   },
                 ].map((ep, i) => (
                   <div
