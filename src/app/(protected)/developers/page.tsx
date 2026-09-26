@@ -272,6 +272,32 @@ export default function DevelopersPage() {
                     desc: 'Retrieve conversational memory for specific agent sessions',
                   },
 
+                  // --- STORAGE & OBJECTS (Liberty Center One) ---
+                  {
+                    method: 'POST',
+                    path: '/storage/upload',
+                    name: 'Upload Object',
+                    desc: 'Securely upload files to Liberty Center One block storage',
+                  },
+                  {
+                    method: 'GET',
+                    path: '/storage/buckets',
+                    name: 'List Buckets',
+                    desc: 'Retrieve all provisioned storage buckets and usage metrics',
+                  },
+                  {
+                    method: 'GET',
+                    path: '/storage/files',
+                    name: 'List Objects',
+                    desc: 'List files stored in a specific bucket',
+                  },
+                  {
+                    method: 'DELETE',
+                    path: '/storage/files/{id}',
+                    name: 'Delete Object',
+                    desc: 'Permanently remove an object from storage',
+                  },
+
                   // --- KNOWLEDGE & RAG ---
                   {
                     method: 'GET',
@@ -324,7 +350,12 @@ export default function DevelopersPage() {
                         </p>
                       </div>
                     </div>
-                    <button onClick={() => window.open('https://docs.aphura.com', '_blank')} className="h-8 w-[100px] shrink-0 rounded-[3px] bg-black text-xs font-bold text-white transition-all hover:opacity-90 active:scale-95 dark:bg-white dark:text-black">
+                    <button
+                      onClick={() =>
+                        window.open('https://docs.aphura.com', '_blank')
+                      }
+                      className="h-8 w-[100px] shrink-0 rounded-[3px] bg-black text-xs font-bold text-white transition-all hover:opacity-90 active:scale-95 dark:bg-white dark:text-black"
+                    >
                       View Docs
                     </button>
                   </div>
