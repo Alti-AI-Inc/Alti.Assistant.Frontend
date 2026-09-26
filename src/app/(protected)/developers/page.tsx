@@ -102,18 +102,43 @@ export default function DevelopersPage() {
                 {[
                   {
                     method: 'POST',
-                    path: '/agents/chat',
-                    desc: 'Send a message to an agent',
+                    path: '/chat/completions',
+                    desc: 'Generate a response from an agent or model',
+                  },
+                  {
+                    method: 'POST',
+                    path: '/audio/transcriptions',
+                    desc: 'Speech-to-Text (STT): Transcribe audio to text',
+                  },
+                  {
+                    method: 'POST',
+                    path: '/audio/speech',
+                    desc: 'Text-to-Speech (TTS): Generate audio from text',
+                  },
+                  {
+                    method: 'POST',
+                    path: '/images/generations',
+                    desc: 'Generate or manipulate images',
                   },
                   {
                     method: 'GET',
                     path: '/knowledge/query',
-                    desc: 'Query vector database',
+                    desc: 'Query your RAG vector database',
                   },
                   {
                     method: 'POST',
                     path: '/knowledge/upload',
-                    desc: 'Upload file to knowledge base',
+                    desc: 'Upload a file to your knowledge base',
+                  },
+                  {
+                    method: 'GET',
+                    path: '/agents',
+                    desc: 'List your custom agents and their configurations',
+                  },
+                  {
+                    method: 'POST',
+                    path: '/workflows/execute',
+                    desc: 'Trigger a multi-step autonomous workflow',
                   },
                 ].map((ep, i) => (
                   <div
