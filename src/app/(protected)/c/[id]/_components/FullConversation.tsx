@@ -1354,13 +1354,19 @@ const FullConversation = ({
               ) : selectedOption === OPTIONS.CODE ? (
                 <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
                   <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
-                    Code Mode
+                    Code Agent
                   </h1>
                 </div>
               ) : selectedOption === OPTIONS.DESIGN ? (
                 <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
                   <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
-                    Design Mode
+                    Design Studio
+                  </h1>
+                </div>
+              ) : selectedOption === OPTIONS.VIDEO ? (
+                <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <h1 className="text-[2.5rem] font-semibold tracking-tight text-zinc-900 dark:text-white select-none">
+                    Video Director
                   </h1>
                 </div>
               ) : (

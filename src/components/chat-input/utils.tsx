@@ -20,7 +20,8 @@ export const isNewChatId = (id?: string) => {
     id === 'new-monitor' ||
     id === 'new-workflow' ||
     id === 'new-code' ||
-    id === 'new-design'
+    id === 'new-design' ||
+    id === 'new-video'
   );
 };
 

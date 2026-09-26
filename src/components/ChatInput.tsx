@@ -60,6 +60,7 @@ import {
   FileType,
   Code,
   Palette,
+  Video,
   MessageSquare,
   Microscope,
   PenLine,
@@ -420,6 +421,11 @@ export default function ChatInput({
         pathname === '/c/new-design'
       ) {
         setSelectedOption(OPTIONS.DESIGN);
+      } else if (
+        conversationId === 'new-video' ||
+        pathname === '/c/new-video'
+      ) {
+        setSelectedOption(OPTIONS.VIDEO);
       } else {
         setSelectedOption(null);
       }
@@ -1202,7 +1208,8 @@ export default function ChatInput({
             }
             if (response.data?.fixedCode) {
               const { fixedCode,
-  Palette, explanation } = response.data;
+  Palette,
+  Video, explanation } = response.data;
               return `${explanation || 'Here is the fixed code:'}\n\n\`\`\`javascript\n${fixedCode}\n\`\`\``;
             }
             return response.data?.responseMessage?.answer;
@@ -1956,7 +1963,7 @@ export default function ChatInput({
                 }}>
                   <div className="flex items-center">
                     <Code className="mr-2 h-4 w-4" />
-                    <span>Code Mode</span>
+                    <span>Code Agent</span>
                   </div>
                   {selectedOption === OPTIONS.CODE && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
@@ -1970,9 +1977,23 @@ export default function ChatInput({
                 }}>
                   <div className="flex items-center">
                     <Palette className="mr-2 h-4 w-4" />
-                    <span>Design Mode</span>
+                    <span>Design Studio</span>
                   </div>
                   {selectedOption === OPTIONS.DESIGN && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
+                </DropdownMenuItem>
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.VIDEO && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  if (selectedOption === OPTIONS.VIDEO) {
+                    router.push('/c/new-search');
+                  } else {
+                    router.push('/c/new-video');
+                  }
+                  setTimeout(() => textareaRef.current?.focus(), 0);
+                }}>
+                  <div className="flex items-center">
+                    <Video className="mr-2 h-4 w-4" />
+                    <span>Video Director</span>
+                  </div>
+                  {selectedOption === OPTIONS.VIDEO && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -2029,6 +2050,10 @@ export default function ChatInput({
                               !hasMessages &&
                               !isExistingConversation
                             ? 'What do you want to design?'
+                            : selectedOption === OPTIONS.VIDEO &&
+                                !hasMessages &&
+                                !isExistingConversation
+                              ? 'What do you want to film?'
                       : activeConversation?.knowledgebaseId && isLoading
                         ? 'Loading...'
                         : activeConversation?.knowledgebaseId &&
