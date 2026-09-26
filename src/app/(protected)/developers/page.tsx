@@ -324,7 +324,7 @@ export default function DevelopersPage() {
                         </p>
                       </div>
                     </div>
-                    <button className="h-8 w-[100px] shrink-0 rounded-[3px] bg-black text-xs font-bold text-white transition-all hover:opacity-90 active:scale-95 dark:bg-white dark:text-black">
+                    <button onClick={() => window.open('https://docs.aphura.com', '_blank')} className="h-8 w-[100px] shrink-0 rounded-[3px] bg-black text-xs font-bold text-white transition-all hover:opacity-90 active:scale-95 dark:bg-white dark:text-black">
                       View Docs
                     </button>
                   </div>
