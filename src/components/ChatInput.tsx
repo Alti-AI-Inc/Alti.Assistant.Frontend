@@ -583,11 +583,11 @@ export default function ChatInput({
       case OPTIONS.VIDEO:
         return '/video/execute';
       case OPTIONS.RESEARCH:
-        return '/deep-research/execute';
+        return '/research/stream';
       case OPTIONS.SEARCH:
         return '/search/stream';
       case OPTIONS.MONITOR:
-        return '/search/stream';
+        return '/monitor/execute';
       case OPTIONS.WORKFLOW:
         return '/workflow/execute';
       case OPTIONS.DRAFT_DOCUMENT:
