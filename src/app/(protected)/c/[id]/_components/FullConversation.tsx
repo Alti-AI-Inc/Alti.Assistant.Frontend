@@ -159,8 +159,16 @@ const FullConversation = ({
       ? OPTIONS.SEARCH
       : conversationId === 'new-research' || pathname === '/c/new-research'
         ? OPTIONS.RESEARCH
-        : conversationId === 'new-monitor' || pathname === '/c/new-monitor'
-          ? OPTIONS.MONITOR
+      : conversationId === 'new-writing' || pathname === '/c/new-writing'
+        ? OPTIONS.DRAFT_DOCUMENT
+      : conversationId === 'new-code' || pathname === '/c/new-code'
+        ? OPTIONS.CODE
+      : conversationId === 'new-design' || pathname === '/c/new-design'
+        ? OPTIONS.DESIGN
+      : conversationId === 'new-video' || pathname === '/c/new-video'
+        ? OPTIONS.VIDEO
+      : conversationId === 'new-audio' || pathname === '/c/new-audio'
+        ? OPTIONS.AUDIO
           : null;
 
   useEffect(() => {
@@ -255,18 +263,16 @@ const FullConversation = ({
       (conversationId === 'new-chat' ||
         conversationId === 'new-search' ||
         conversationId === 'new-research' ||
-        conversationId === 'new-monitor')
+        conversationId === 'new-writing' ||
+        conversationId === 'new-code' ||
+        conversationId === 'new-design' ||
+        conversationId === 'new-video' ||
+        conversationId === 'new-audio')
     ) {
       setActiveConversation(null);
-      if (conversationId === 'new-search') {
-        setSelectedOption(OPTIONS.SEARCH);
-      } else if (conversationId === 'new-research') {
-        setSelectedOption(OPTIONS.RESEARCH);
-      } else if (conversationId === 'new-monitor') {
-        setSelectedOption(OPTIONS.MONITOR);
-      }
+      // The expectedOption useEffect handles the route-to-option sync now, so we just clear active convo
     }
-  }, [conversationId, setActiveConversation, setSelectedOption, isLoadingResponse]);
+  }, [conversationId, setActiveConversation, isLoadingResponse]);
 
   // Track which conversation's presentation metadata we've already processed
   const processedPresentationRef = useRef<string | null>(null);

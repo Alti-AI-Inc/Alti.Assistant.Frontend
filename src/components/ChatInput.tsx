@@ -1833,6 +1833,7 @@ return (
       case OPTIONS.CODE: return 'Code';
       case OPTIONS.DESIGN: return 'Design';
       case OPTIONS.VIDEO: return 'Video';
+      case OPTIONS.AUDIO: return 'Audio';
       default: return 'Search';
     }
   };
@@ -2156,6 +2157,21 @@ return (
                     <span className="text-xs font-medium">Video</span>
                   </div>
                   {selectedOption === OPTIONS.VIDEO && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
+                </DropdownMenuItem>
+                
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.AUDIO && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  if (selectedOption === OPTIONS.AUDIO) {
+                    router.push('/c/new-search');
+                  } else {
+                    router.push('/c/new-audio');
+                  }
+                  setTimeout(() => textareaRef.current?.focus(), 0);
+                }}>
+                  <div className="flex items-center">
+                    <Headphones className="mr-1.5 size-3.5" />
+                    <span className="text-xs font-medium">Audio</span>
+                  </div>
+                  {selectedOption === OPTIONS.AUDIO && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
 
 
