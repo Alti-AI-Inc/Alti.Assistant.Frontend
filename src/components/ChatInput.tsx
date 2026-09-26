@@ -1870,19 +1870,26 @@ export default function ChatInput({
           >
             {/* Actions Dropdown Button */}
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  disabled={isLoadingResponse}
-                  className={cn(
-                    'flex size-8 sm:size-6 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-400 transition-colors hover:text-zinc-600 focus:outline-none dark:text-zinc-500 dark:hover:text-zinc-300',
-                    isLoadingResponse && 'cursor-not-allowed opacity-50',
-                  )}
-                  aria-label="More actions"
-                >
-                  <Plus strokeWidth={1.5} className="size-4" />
-                </button>
-              </DropdownMenuTrigger>
+              <Tooltip>
+                <TooltipTrigger asChild onFocus={e => e.preventDefault()}>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type="button"
+                      disabled={isLoadingResponse}
+                      className={cn(
+                        'flex size-8 sm:size-6 flex-shrink-0 cursor-pointer items-center justify-center bg-transparent text-zinc-400 transition-colors hover:text-zinc-600 focus:outline-none dark:text-zinc-500 dark:hover:text-zinc-300',
+                        isLoadingResponse && 'cursor-not-allowed opacity-50',
+                      )}
+                      aria-label="More actions"
+                    >
+                      <Plus strokeWidth={1.5} className="size-4" />
+                    </button>
+                  </DropdownMenuTrigger>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>More Options</p>
+                </TooltipContent>
+              </Tooltip>
               <DropdownMenuContent align="start" className="w-48">
                 <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
                   <Paperclip className="mr-2 h-4 w-4" />
