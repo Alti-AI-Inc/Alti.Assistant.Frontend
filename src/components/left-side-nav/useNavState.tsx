@@ -180,7 +180,9 @@ export interface SpaceThread {
   [key: string]: unknown;
 }
 
-export const useNavState = ({ side = 'left' }: { side?: 'left' | 'right' } = {}) => {
+export const useNavState = ({
+  side = 'left',
+}: { side?: 'left' | 'right' } = {}) => {
   const { data } = useSession();
   const router = useRouter();
   const pathname = usePathname();
@@ -217,7 +219,7 @@ export const useNavState = ({ side = 'left' }: { side?: 'left' | 'right' } = {})
     setActiveBotThreadId,
     addBotAsync,
   } = useBotsStore();
-  const activeBot = bots.find((b) => b.id === activeBotId);
+  const activeBot = bots.find(b => b.id === activeBotId);
 
   const { data: inboxItems = [] } = useInboxQuery(
     data?.user?.id,
@@ -271,7 +273,9 @@ export const useNavState = ({ side = 'left' }: { side?: 'left' | 'right' } = {})
     }
   };
 
-  const unreadInboxCount = inboxItems.filter((item: { isRead?: boolean }) => !item.isRead).length;
+  const unreadInboxCount = inboxItems.filter(
+    (item: { isRead?: boolean }) => !item.isRead,
+  ).length;
 
   const hideSidebar =
     side === 'right' ? !isRightSidebarOpen : !isLeftSidebarOpen;
@@ -307,7 +311,7 @@ export const useNavState = ({ side = 'left' }: { side?: 'left' | 'right' } = {})
 
   useEffect(() => {
     if (botToRename) {
-      const targetBot = bots.find((b) => b.id === botToRename);
+      const targetBot = bots.find(b => b.id === botToRename);
       setRenameValue(targetBot?.name || '');
     }
   }, [botToRename, bots]);
@@ -322,10 +326,7 @@ export const useNavState = ({ side = 'left' }: { side?: 'left' | 'right' } = {})
     handleStorageChange();
 
     window.addEventListener('storage', handleStorageChange);
-    window.addEventListener(
-      'aphura_automations_updated',
-      handleStorageChange,
-    );
+    window.addEventListener('aphura_automations_updated', handleStorageChange);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
@@ -504,7 +505,9 @@ export const useNavState = ({ side = 'left' }: { side?: 'left' | 'right' } = {})
     if (connections) {
       const activeSlugs = new Set(
         connections
-          .map((account: { toolkit?: { slug?: string } }) => account.toolkit?.slug?.toLowerCase())
+          .map((account: { toolkit?: { slug?: string } }) =>
+            account.toolkit?.slug?.toLowerCase(),
+          )
           .filter((s): s is string => Boolean(s)),
       );
 
@@ -617,7 +620,9 @@ export const useNavState = ({ side = 'left' }: { side?: 'left' | 'right' } = {})
     } else if (
       pathname.startsWith('/instructions') ||
       pathname.startsWith('/guardrails') ||
-      pathname.startsWith('/knowledge') || pathname.startsWith('/connectors') ||
+      pathname.startsWith('/knowledge') ||
+      pathname.startsWith('/connectors') ||
+      pathname.startsWith('/developers') ||
       pathname.startsWith('/platform-knowledge') ||
       pathname.startsWith('/legal') ||
       pathname.startsWith('/admin') ||
@@ -626,7 +631,7 @@ export const useNavState = ({ side = 'left' }: { side?: 'left' | 'right' } = {})
       pathname.startsWith('/invite-friends')
     ) {
       setActiveTab('account');
-    } 
+    }
   }, [pathname, isLoggedIn]);
 
   // Reset active tab to search when user logs out
@@ -939,22 +944,121 @@ export const useNavState = ({ side = 'left' }: { side?: 'left' | 'right' } = {})
   const SHOW_WORKSPACES = false;
 
   return {
-    SHOW_WORKSPACES, activeAppSlug, activeBot, activeBotId, activeConnectorId, activeConversation, activeTab,
-    addBotAsync, allGuardrails, allInstructions, appsFilterTab, botToDelete, botToRename, bots, connectedAppSlugs,
-    currentEditIndex, currentTenant, deleteBot, displayedApps, dragOverAppIndex, dragOverIndex, draggedAppIndex,
-    draggedIndex, editBot, editIndexParam, filteredApps, getPlusButtonProps, getSpaceInitials, getSpaceSectionUrl,
-    getThreadIcon, handleCreateSpace, handleLogoMouseEnter, handleTabChange, hideSidebar, isAdmin, isAdminMode,
-    isAdminSection, isCreateSpaceOpen, isCreatingSpace, isGlobalAdmin, isGlobalInboxOpen, isLeftSidebarOpen, isLoggedIn,
-    isManager, isRightSidebarOpen, isSpaceMonitorSection, isSpaceResearchSection, isSuperAdmin, isTenantAdmin,
-    isTenantOwner, localAppsOrder, logoHovered, mode, monitorParam, newSpaceName, onOpen, pathname, plusProps,
-    projectTab, renameValue, reorderApps, reorderBots, researchSessions, router, searchParams, searchQuery,
-    searchSessions, selectedOption, sessionParam, setActiveBotId, setActiveBotThreadId, setActiveConversation,
-    setActiveTab, setAppsFilterTab, setBotToDelete, setBotToRename, setConnectedAppSlugs, setDragOverAppIndex,
-    setDragOverIndex, setDraggedAppIndex, setDraggedIndex, setIsCreateSpaceOpen, setIsCreatingSpace, setLocalAppsOrder,
-    setLogoHovered, setNewSpaceName, setProjectTab, setRenameValue, setResearchSessions, setSearchQuery,
-    setSearchSessions, setSelectedOption, setShowSpaceConfig, setShowStartLastMessage, setSpaceItemToDelete, setTasks,
-    setUserMessage, showSpaceConfig, spaceItemToDelete, tasks, toggleGlobalInbox, toggleLeftSidebar, toggleRightSidebar,
-    unreadInboxCount, userEmail, viewParam, data, inboxItems, spaceMonitors, allFiles: allFiles || [], isLoadingSpaceMonitors, threads: [] as SpaceThread[], deleteThread: (id: string) => {},
-    connections: [] as unknown[], setThreads: (threads: SpaceThread[]) => {}, activeBotThreadId: null
+    SHOW_WORKSPACES,
+    activeAppSlug,
+    activeBot,
+    activeBotId,
+    activeConnectorId,
+    activeConversation,
+    activeTab,
+    addBotAsync,
+    allGuardrails,
+    allInstructions,
+    appsFilterTab,
+    botToDelete,
+    botToRename,
+    bots,
+    connectedAppSlugs,
+    currentEditIndex,
+    currentTenant,
+    deleteBot,
+    displayedApps,
+    dragOverAppIndex,
+    dragOverIndex,
+    draggedAppIndex,
+    draggedIndex,
+    editBot,
+    editIndexParam,
+    filteredApps,
+    getPlusButtonProps,
+    getSpaceInitials,
+    getSpaceSectionUrl,
+    getThreadIcon,
+    handleCreateSpace,
+    handleLogoMouseEnter,
+    handleTabChange,
+    hideSidebar,
+    isAdmin,
+    isAdminMode,
+    isAdminSection,
+    isCreateSpaceOpen,
+    isCreatingSpace,
+    isGlobalAdmin,
+    isGlobalInboxOpen,
+    isLeftSidebarOpen,
+    isLoggedIn,
+    isManager,
+    isRightSidebarOpen,
+    isSpaceMonitorSection,
+    isSpaceResearchSection,
+    isSuperAdmin,
+    isTenantAdmin,
+    isTenantOwner,
+    localAppsOrder,
+    logoHovered,
+    mode,
+    monitorParam,
+    newSpaceName,
+    onOpen,
+    pathname,
+    plusProps,
+    projectTab,
+    renameValue,
+    reorderApps,
+    reorderBots,
+    researchSessions,
+    router,
+    searchParams,
+    searchQuery,
+    searchSessions,
+    selectedOption,
+    sessionParam,
+    setActiveBotId,
+    setActiveBotThreadId,
+    setActiveConversation,
+    setActiveTab,
+    setAppsFilterTab,
+    setBotToDelete,
+    setBotToRename,
+    setConnectedAppSlugs,
+    setDragOverAppIndex,
+    setDragOverIndex,
+    setDraggedAppIndex,
+    setDraggedIndex,
+    setIsCreateSpaceOpen,
+    setIsCreatingSpace,
+    setLocalAppsOrder,
+    setLogoHovered,
+    setNewSpaceName,
+    setProjectTab,
+    setRenameValue,
+    setResearchSessions,
+    setSearchQuery,
+    setSearchSessions,
+    setSelectedOption,
+    setShowSpaceConfig,
+    setShowStartLastMessage,
+    setSpaceItemToDelete,
+    setTasks,
+    setUserMessage,
+    showSpaceConfig,
+    spaceItemToDelete,
+    tasks,
+    toggleGlobalInbox,
+    toggleLeftSidebar,
+    toggleRightSidebar,
+    unreadInboxCount,
+    userEmail,
+    viewParam,
+    data,
+    inboxItems,
+    spaceMonitors,
+    allFiles: allFiles || [],
+    isLoadingSpaceMonitors,
+    threads: [] as SpaceThread[],
+    deleteThread: (id: string) => {},
+    connections: [] as unknown[],
+    setThreads: (threads: SpaceThread[]) => {},
+    activeBotThreadId: null,
   };
 };
