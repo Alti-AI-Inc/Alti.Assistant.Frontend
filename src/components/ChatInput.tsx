@@ -1890,7 +1890,7 @@ export default function ChatInput({
                   <p>More Options</p>
                 </TooltipContent>
               </Tooltip>
-              <DropdownMenuContent align="start" className="w-48">
+              <DropdownMenuContent align="start" alignOffset={-12} sideOffset={16} className="w-48 rounded-[5px] shadow-md border-zinc-300 dark:border-zinc-700/80">
                 <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
                   <Paperclip className="mr-2 h-4 w-4" />
                   <span>Attach Files</span>
