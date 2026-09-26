@@ -2066,11 +2066,9 @@ return (
                       )}
                       aria-label="Select Mode"
                     >
-                      <div className="flex items-center gap-1.5">
-                        {getModeIcon()}
-                        <span className="text-left w-[64px]">{getModeName()}</span>
-                      </div>
-                      <ChevronDown className="size-3 opacity-50 flex-shrink-0 mr-1" />
+                      {getModeIcon()}
+                      <span>{getModeName()}</span>
+                      <ChevronDown className="size-3 opacity-50 flex-shrink-0" />
                     </button>
                   </DropdownMenuTrigger>
               <DropdownMenuContent align="start" alignOffset={0} sideOffset={16} className="w-36 rounded-[5px] shadow-md border-zinc-300 dark:border-zinc-700/80">
