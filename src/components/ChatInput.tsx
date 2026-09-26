@@ -1948,20 +1948,6 @@ export default function ChatInput({
                   </div>
                   {selectedOption === OPTIONS.MONITOR && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
                 </DropdownMenuItem>
-                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.WORKFLOW && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
-                  if (selectedOption === OPTIONS.WORKFLOW) {
-                    router.push('/c/new-search'); // Toggle off
-                  } else {
-                    router.push('/c/new-workflow');
-                  }
-                  setTimeout(() => textareaRef.current?.focus(), 0);
-                }}>
-                  <div className="flex items-center">
-                    <Workflow className="mr-2 h-4 w-4" />
-                    <span>Automate Workflows</span>
-                  </div>
-                  {selectedOption === OPTIONS.WORKFLOW && <div className="h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-500 mr-1" />}
-                </DropdownMenuItem>
                 <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.CODE && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
                   if (selectedOption === OPTIONS.CODE) {
                     router.push('/c/new-search');
