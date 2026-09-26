@@ -1864,23 +1864,39 @@ export default function ChatInput({
                 </TooltipContent>
               </Tooltip>
               <DropdownMenuContent align="start" alignOffset={-12} sideOffset={16} className="w-48 rounded-[5px] shadow-md border-zinc-300 dark:border-zinc-700/80">
-                <DropdownMenuItem className="cursor-pointer" onSelect={(e) => { e.preventDefault(); fileInputRef.current?.click(); }}>
-                  <Paperclip className="mr-2 h-4 w-4" />
-                  <span>Attach Files</span>
+                <DropdownMenuItem className="cursor-pointer flex items-center justify-between" onSelect={(e) => { e.preventDefault(); fileInputRef.current?.click(); }}>
+                  <div className="flex items-center">
+                    <Paperclip className="mr-2 h-4 w-4" />
+                    <span>Attach Files</span>
+                  </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer" onSelect={() => {
-                  router.push('/c/new-research');
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.RESEARCH && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  if (selectedOption === OPTIONS.RESEARCH) {
+                    router.push('/c/new-search'); // Toggle off
+                  } else {
+                    router.push('/c/new-research');
+                  }
                   setTimeout(() => textareaRef.current?.focus(), 0);
                 }}>
-                  <Microscope className="mr-2 h-4 w-4" />
-                  <span>Deep Research</span>
+                  <div className="flex items-center">
+                    <Microscope className="mr-2 h-4 w-4" />
+                    <span>Deep Research</span>
+                  </div>
+                  {selectedOption === OPTIONS.RESEARCH && <Check className="h-4 w-4" />}
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer" onSelect={() => {
-                  router.push('/c/new-monitor');
+                <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.MONITOR && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
+                  if (selectedOption === OPTIONS.MONITOR) {
+                    router.push('/c/new-search'); // Toggle off
+                  } else {
+                    router.push('/c/new-monitor');
+                  }
                   setTimeout(() => textareaRef.current?.focus(), 0);
                 }}>
-                  <Activity className="mr-2 h-4 w-4" />
-                  <span>Monitor Changes</span>
+                  <div className="flex items-center">
+                    <Activity className="mr-2 h-4 w-4" />
+                    <span>Monitor Changes</span>
+                  </div>
+                  {selectedOption === OPTIONS.MONITOR && <Check className="h-4 w-4" />}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
