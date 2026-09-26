@@ -177,10 +177,10 @@ export default function DevelopersPage() {
                     </div>
                     <div>
                       <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                        Claude Desktop Configuration
+                        JSON Configuration
                       </h3>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Add this to your claude_desktop_config.json file.
+                        Add this to your MCP client's configuration file.
                       </p>
                     </div>
                   </div>
