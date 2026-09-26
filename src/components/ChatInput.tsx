@@ -2061,7 +2061,7 @@ return (
                       type="button"
                       disabled={isLoadingResponse}
                       className={cn(
-                        'flex h-10 sm:h-8 w-[110px] flex-shrink-0 cursor-pointer items-center justify-between gap-1.5 rounded-[3px] bg-zinc-100/80 px-2.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-200 focus:outline-none dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700/80',
+                        'flex h-10 sm:h-8 flex-shrink-0 cursor-pointer items-center gap-1.5 rounded-[3px] bg-zinc-100/80 px-2.5 text-xs font-medium text-zinc-600 transition-all duration-200 hover:bg-zinc-200 focus:outline-none dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700/80',
                         isLoadingResponse && 'cursor-not-allowed opacity-50',
                       )}
                       aria-label="Select Mode"
@@ -2071,7 +2071,7 @@ return (
                       <ChevronDown className="size-3 opacity-50 flex-shrink-0" />
                     </button>
                   </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" alignOffset={0} sideOffset={16} className="w-[148px] rounded-[5px] shadow-md border-zinc-300 dark:border-zinc-700/80">
+              <DropdownMenuContent align="start" alignOffset={0} sideOffset={16} className="w-[calc(var(--radix-dropdown-menu-trigger-width)+38px)] rounded-[5px] shadow-md border-zinc-300 dark:border-zinc-700/80">
                 <DropdownMenuItem className={cn("cursor-pointer flex items-center justify-between", selectedOption === OPTIONS.SEARCH && "bg-zinc-100 dark:bg-zinc-800")} onSelect={() => {
                   router.push('/c/new-search');
                   setTimeout(() => textareaRef.current?.focus(), 0);
