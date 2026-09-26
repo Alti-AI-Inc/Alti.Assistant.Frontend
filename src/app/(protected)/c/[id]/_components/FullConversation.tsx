@@ -272,7 +272,7 @@ const FullConversation = ({
       setActiveConversation(null);
       // The expectedOption useEffect handles the route-to-option sync now, so we just clear active convo
     }
-  }, [conversationId, setActiveConversation, isLoadingResponse]);
+  }, [conversationId, setActiveConversation, setSelectedOption, isLoadingResponse]);
 
   // Track which conversation's presentation metadata we've already processed
   const processedPresentationRef = useRef<string | null>(null);
